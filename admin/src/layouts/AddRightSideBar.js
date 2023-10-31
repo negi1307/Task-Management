@@ -81,7 +81,25 @@ export default function RightBar(props) {
                             <div class="row"></div>
                             <div class="row"></div>
                             <div className="row">
-                                <div class="col-lg-12">
+                                
+                                 <div class="">
+                                    <div class="mb-2">
+                                        <label class="form-label" for="exampleForm.ControlTextarea1">
+                                            Summary
+                                            <span class="text-danger">*</span>:
+                                        </label>
+                                        <input
+                                            placeholder="Please Enter Summary"
+                                            type="text"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('Summary')}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="">
+                            <div class="col-lg-12">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             Description <span class="text-danger">*</span>:
@@ -103,20 +121,16 @@ export default function RightBar(props) {
                                         />
                                     </div>
                                 </div>
-                            </div>
-                            <div class="">
                                 <div class="">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            Summary
-                                            <span class="text-danger">*</span>:
+                                        Attachment<span class="text-danger">*</span>:
                                         </label>
                                         <input
-                                            placeholder="Please Enter Summary"
-                                            type="text"
+                                            type="file"
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
-                                            {...register('Summary')}
+                                            {...register('Attachment')}
                                         />
                                     </div>
                                 </div>
@@ -139,6 +153,7 @@ export default function RightBar(props) {
                                         </select>
                                     </div>
                                 </div>
+                            
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">
@@ -160,39 +175,6 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            Start Date<span class="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            placeholder="Please start Date "
-                                            type="date"
-                                            min={today}
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('start_date')}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            End Date<span class="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            placeholder="Please end Date"
-                                            type="date"
-                                            disabled={watch("start_date")== ""|| watch("start_date")== undefined }
-                                                min={watch("start_date")} 
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('last_date')}
-                                        />
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
                                     <div class="mb-1">
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             {' '}
@@ -211,8 +193,42 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                             </div>
+                          
                             <div class="row">
+                            <div class="col-lg-6">
+                                    <div class="mb-2">
+                                        <label class="form-label" for="exampleForm.ControlTextarea1">
+                                            Start Date<span class="text-danger">*</span>:
+                                        </label>
+                                        <input
+                                            placeholder="Please start Date "
+                                            type="date"
+                                            min={today}
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('start_date')}
+                                        />
+                                    </div>
+                                </div>
                                 <div class="col-lg-6">
+                                    <div class="mb-2">
+                                        <label class="form-label" for="exampleForm.ControlTextarea1">
+                                            End Date<span class="text-danger">*</span>:
+                                        </label>
+                                        <input
+                                            placeholder="Please end Date"
+                                            type="date"
+                                            min={today}
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('last_date')}
+                                        />
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Status<span class="text-danger">*</span>:
@@ -227,24 +243,12 @@ export default function RightBar(props) {
                                         />
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                        Attachment<span class="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            type="file"
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('Attachment')}
-                                        />
-                                    </div>
-                                </div>
+                                
                             </div>
 
                             <div class="row"></div>
                             <div class="row">
-                                <div class="text-start d-flex align-items-end justify-content-end col">
+                                <div class="text-start d-flex align-items-center justify-content-center col">
                                     <button
                                         type="submit"
                                         class="btn btn-sm  text-white pt-1 pb-1 mt-3 web_button  btn btn-info">

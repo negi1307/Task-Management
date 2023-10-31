@@ -201,6 +201,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     };
     const onChangeProject = (e) => {
         setsprint(false);
+        
 
         dispatch(getProjectId(e.target.value));
         setProjectName(e.target.value);
@@ -216,6 +217,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         dispatch(getMilestonetId(e.target.value))
         const id = e?.target.value;
         setsprint(true);
+        
 
         dispatch(getSingleSprint({ activeStatus: 1, id: id, skip: 0 }));
 
