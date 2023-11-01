@@ -188,7 +188,7 @@ const SprintId=store?.getSprintId?.data
       status: ele?.destination?.droppableId,
   };
   dispatch(updateTaskStatus(body));
-  dispatch(getAllTask({projectId:projectId , milestoneId:milestoneId , sprintId:sprintId}));
+  dispatch(getAllTask({projectId:projectId , milestoneId:milstoneId , sprintId:SprintId}));
 };
   
   const callAlltaskData=()=>{
