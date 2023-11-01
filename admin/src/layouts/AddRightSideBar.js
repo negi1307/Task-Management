@@ -135,7 +135,7 @@ export default function RightBar(props) {
                                             {...register('Assignee')}>
                                             <option value={''}>--Select--</option>
                                             {store?.getAllUsers?.data?.response?.map((ele, ind) => (
-                                                <option value={ele?._id}> {ele?.userName} </option>
+                                                <option value={ele?._id}> {ele?.firstName} {ele?.lastName}</option>
                                             ))}
                                         </select>
                                     </div>
