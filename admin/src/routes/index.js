@@ -298,7 +298,7 @@ const AllRoutes = () => {
                         //     element: <LoadComponent component={SingleSprintDetail} />,
                         // },
                         {
-                            path: 'boards/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId',
+                            path: 'boards',
                             element: <LoadComponent component={Boards} />,
                         },
                         // {

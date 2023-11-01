@@ -76,7 +76,8 @@ const AllUsers = () => {
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>  Name</th>
+                                <th> First Name</th>
+                                <th>Last Name</th>
                                 <th>Email</th>
                                 <th> Create Date</th>                              
                                 <th>Action</th>
@@ -90,7 +91,10 @@ const AllUsers = () => {
                                         <tr className="align-middle">
                                             <th scope="row">{ind + 1}</th>
                                             <td className="cp">
-                                                <span className="namelink"> {ele?.userName} </span>
+                                                <span className="namelink"> {ele?.firstName} </span>
+                                            </td>
+                                            <td className="cp">
+                                                <span className="namelink"> {ele?.lastName} </span>
                                             </td>
                                             <td className="w-20">
                                                 <span className="namelink"> {ele?.email}</span>
