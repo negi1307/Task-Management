@@ -1,21 +1,24 @@
 import { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 import ToastHandle from '../../../../../../../constants/toaster/toaster';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSprint } from '../../../../../../../redux/sprint/action';
 import MainLoader from '../../../../../../../constants/Loader/loader';
-
+import noimage from '../../../../../../../assets/images/noimage.png';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { updateTask } from '../../../../../../../redux/actions';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const Update = ({ modal, CloseModal, editData }) => {
     console.log(editData, 'update');
-
+    const [imageShow, setImageShow] = useState(true);
     const [description, setDescription] = useState('');
+    const [data, setData] = useState({
+        image: '',
+    });
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const sucesshandel = store?.UpdateTaskReducer;
@@ -49,25 +52,25 @@ const Update = ({ modal, CloseModal, editData }) => {
     const CloseModaal = () => {
         CloseModal();
     };
-    const onSubmit = (data) => {
-        let body = {
-            taskId: editData?._id,
-            projectId: data?.projectname,
-            milestoneId: data?.Milestone,
-            sprintId: data?.Sprint,
-            summary: data?.summary,
-            description: description,
-            assigneeId: data?.Assignee,
-            reporterId: data?.Reporter,
-            priority: data?.priority,
-            startDate: data?.startDate,
-            dueDate: data?.dueDate,
-            status: data?.status,
-        };
+    console.log(editData?.projectId, ' projecttiddddddddddddddddddddddd');
+    const onSubmit = (val) => {
+        let body = new FormData();
+        body.append('taskId', editData?._id);
+        body.append('projectId', editData?.projectInfo?._id);
+        body.append('milestoneId', editData?.milestoneInfo?._id);
+        body.append('sprintId', editData?.sprintInfo?._id);
+        body.append('summary', val?.summary);
+        body.append('description', description);
+        body.append('assigneeId', val?.Assignee);
+        body.append('reporterId', val?.Reporter);
+        body.append('priority', val?.priority);
+        body.append('startDate', val?.startDate);
+        body.append('dueDate', val?.dueDate);
+        body.append('status', val?.status);
+        body.append('attachment', data?.image);
         console.log('editsprit', body);
         dispatch(updateTask(body));
     };
-
     useEffect(() => {
         reset({
             Milestone: editData?.milestoneId,
@@ -82,6 +85,8 @@ const Update = ({ modal, CloseModal, editData }) => {
             status: editData?.status,
         });
         setDescription(editData?.description);
+        setData({ ...data, image: editData?.attachment });
+        setImageShow(true);
     }, [modal]);
     console.log(editData, 'pppppp');
     const handleDate = (data) => {
@@ -103,6 +108,20 @@ const Update = ({ modal, CloseModal, editData }) => {
             ToastHandle('error', sucesshandel?.data?.message);
         }
     }, [sucesshandel]);
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        const allowedTypes = ['image/png', 'image/gif', 'image/jpeg'];
+
+        if (file && allowedTypes.includes(file.type)) {
+            setData({ ...data, image: e.target.files[0] });
+        } else {
+            ToastHandle('error', 'Please select only an image file (PNG, GIF, JPEG).');
+        }
+    };
+    const handelimageclose = () => {
+        setImageShow(false);
+        setData({ ...data, image: '' });
+    };
     return (
         <>
             <Modal show={modal} onHide={CloseModaal} size={'lg'}>
@@ -319,7 +338,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                     </Form.Label>
                                                     <Form.Control
                                                         type="date"
-                                                        min={watch("startDate")}
+                                                        min={watch('startDate')}
                                                         {...register('dueDate', { required: true })}
                                                     />{' '}
                                                     {errors.dueDate?.type === 'required' && (
@@ -346,6 +365,61 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                     </Form.Select>
                                                     {errors.status?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>
+                                                    )}
+                                                </Form.Group>
+                                            </Col>
+                                            <Col lg={6}>
+                                                <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                                    <Form.Label>
+                                                        Attachment <span className="text-danger">*</span>
+                                                    </Form.Label>
+
+                                                    {imageShow ? (
+                                                        <>
+                                                            {editData?.attachment?.length ? (
+                                                                <Col className="d-flex justify-content-center">
+                                                                    <div style={{ width: '50%', position: 'relative' }}>
+                                                                        <div className="img_div">
+                                                                            <img
+                                                                                className=" all_logo_img w-100"
+                                                                                src={editData?.attachment}
+                                                                            />
+                                                                        </div>
+                                                                        <div
+                                                                            className="cross_div"
+                                                                            style={{
+                                                                                position: 'absolute',
+                                                                                rigth: '0',
+                                                                            }}>
+                                                                            <i
+                                                                                onClick={handelimageclose}
+                                                                                className=" dripicons-cross"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                </Col>
+                                                            ) : (
+                                                                <div style={{ width: '15%', position: 'relative' }}>
+                                                                    <div className="img_div">
+                                                                        <img className="all_logo_img" src={noimage} />
+                                                                    </div>
+                                                                    <div
+                                                                        className="cross_div"
+                                                                        style={{ position: 'absolute', rigth: '0' }}>
+                                                                        <i
+                                                                            onClick={handelimageclose}
+                                                                            className=" dripicons-cross"></i>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </>
+                                                    ) : (
+                                                        <Form.Control
+                                                            type="file"
+                                                            accept="image/png, image/gif, image/jpeg"
+                                                            onChange={(e) => {
+                                                                handleImageChange(e);
+                                                            }}
+                                                        />
                                                     )}
                                                 </Form.Group>
                                             </Col>

@@ -47,6 +47,7 @@ const MileStone = React.lazy(() => import('../pages/Task-Manager/projects/milest
 // const SingleSprintDetail = React.lazy(() => import('../pages/Task-Manager/All-Sprint/Sprint'));
 const Sprint = React.lazy(() => import('../pages/Task-Manager/projects/milestone/sprint/sprint'));
 const Task = React.lazy(() => import('../pages/Task-Manager/projects/milestone/sprint/task/task'));
+const TaskBoard = React.lazy(() => import('../pages/Task-Manager/TaskBoard/taskBoard'));
 const Technology  = React.lazy(() => import('../pages/Task-Manager/Technology/technology'));
 const TechnologyCategory  = React.lazy(() => import('../pages/Task-Manager/TechnologyCategory/category'));
 const AllTaskList = React.lazy(() => import('../pages/Task-Manager/TaskList/list'));
@@ -297,7 +298,7 @@ const AllRoutes = () => {
                         //     element: <LoadComponent component={SingleSprintDetail} />,
                         // },
                         {
-                            path: 'boards',
+                            path: 'boards/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId',
                             element: <LoadComponent component={Boards} />,
                         },
                         // {
@@ -323,6 +324,10 @@ const AllRoutes = () => {
                         {
                             path: "singleSprintTask/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId" ,
                             element: <LoadComponent component={Task} />
+                        },
+                        {
+                            path: "taskBord/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId" ,
+                            element: <LoadComponent component={TaskBoard} />
                         },
                         {
                             path: 'technology',
