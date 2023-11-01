@@ -396,7 +396,7 @@ const getTasksAccToStatus = async (req, res) => {
                     }
                 }
             ])
-                .sort({ createdAt: -1 })
+                .sort({ createdAt: -1 });
             let taskCount = await taskModel.countDocuments(query);
 
             if (i == 1) {
@@ -412,9 +412,7 @@ const getTasksAccToStatus = async (req, res) => {
                 done = { tasks, taskCount };
             }
         }
-
         return res.status(200).json({ status: '200', message: "fetched successfully", Response: todo, inProgress, hold, done });
-
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }

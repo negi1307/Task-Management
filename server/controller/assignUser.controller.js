@@ -47,14 +47,15 @@ const getUserAssignments = async (req, res) => {
             query.milestoneId = { $exists: true };
         } else if (req.query.flag == 3) {
             query.sprintId = { $exists: true };
-        } 
+        }
         const result = await assignUserModel.find(query).populate([
             { path: 'projectId', select: 'projectName' },
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'firstName lastName' },
             { path: 'reporterId', select: 'role' }
-        ]);
+        ])
+            .sort({ createdAt: -1 });
         return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result })
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -141,7 +142,8 @@ const getUserTasks = async (req, res) => {
 
                 }
             }
-        ]);
+        ])
+            .sort({ createdAt: -1 });
         for (const assignment of result) {
             if (assignment.taskInfo.status === 1) {
                 todo.push(assignment);
