@@ -25,8 +25,7 @@ const tasks = mongoose.model(
             type: String
         },
         priority: {
-            type: Number,
-            default: 2 // 1=high, 2=medium, 3=low
+            type: Number,// 1=high, 2=medium, 3=low
         },
         startDate: {
             type: Date
@@ -45,8 +44,8 @@ const tasks = mongoose.model(
         attachment: {
             type: String
         },
-        attachmentType : {
-            type : String
+        attachmentType: {
+            type: String
         }
     },
         {
