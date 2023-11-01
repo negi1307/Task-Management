@@ -104,36 +104,35 @@ const SprintId=store?.getSprintId?.data
       });
       if(destColumn.title == "In Progress"){
         let body = {
-          taskId: result.draggableId,
+          taskId: result?.draggableId,
           status: 2
         }
           dispatch(updateTaskStatus(body))
-          dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
       }
       else if(destColumn.title == "Hold"){
         let body = {
-          taskId: result.draggableId,
+          taskId: result?.draggableId,
           status: 3
         }
-        dispatch(updateTaskStatus(body))
-        dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
+        console.log("update",body)
+       // dispatch(updateTaskStatus(body))
       }
       else if(destColumn.title == "Done"){
         let body = {
-          taskId: result.draggableId,
+          taskId: result?.draggableId,
           status: 4
         }
         dispatch(updateTaskStatus(body))
-        dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
       }
      else if(destColumn.title == "To-do"){
         let body = {
-          taskId: result.draggableId,
+          taskId: result?.draggableId,
           status: 1
         }
         dispatch(updateTaskStatus(body))
-        dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
+       
       }
+      dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
     } 
     else {
       const column = columns[source.droppableId];
@@ -164,7 +163,7 @@ const SprintId=store?.getSprintId?.data
       setColumns({
         [uuidv4()]: {
           title: 'To-do',
-          items: successHandle?.data?.Response?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.todo?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
         },
         [uuidv4()]: {
           title: 'In Progress',
@@ -183,22 +182,14 @@ const SprintId=store?.getSprintId?.data
     }
   }, [successHandle])
  // const [body,setBody] = useState({});
-
-  const handelupdatetask = (ele) => {
-    if(sessionStorage.getItem('destinationCol') == "To-do"){
-      
-      let body = {
-        taskId: ele.draggableId,
-        status: 2
-      }
-      
-      setTimeout(()=>{
-        dispatch(updateTaskStatus(body))   
-        },5000)
-      
-    }  
-   
-  }
+ const handelupdatetask = (ele) => {
+  let body = {
+      taskId: ele?.draggableId,
+      status: ele?.destination?.droppableId,
+  };
+  dispatch(updateTaskStatus(body));
+  dispatch(getAllTask({projectId:projectId , milestoneId:milestoneId , sprintId:sprintId}));
+};
   
   const callAlltaskData=()=>{
      dispatch(getAllTask())
@@ -229,7 +220,7 @@ const SprintId=store?.getSprintId?.data
         <RightBar  callAlltaskData={callAlltaskData} className="d-none" projectId={props.projectId} mileStoneId={props.mileStoneId} sprintId={props.sprintId} showModal={showModal} setShowModal={setShowModal}/>
      </div>
 
-      <DragDropContext  onDragEnd={(result) => onDragEnd(result, columns, setColumns)} onDragStart={(result)=>handelupdatetask(result)}
+      <DragDropContext  onDragEnd={(result) => onDragEnd(result, columns, setColumns)} 
 
       >
         {successHandle.loading ? (<MainLoader />) : <Container>

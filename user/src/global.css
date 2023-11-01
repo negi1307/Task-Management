@@ -340,7 +340,17 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
     padding-left: 0px;
 }
 
+.history {
+    display: flex;
+}
 
+.history h4 {
+    margin: 0px 0px 10px 0px;
+}
+
+.history_data_info p {
+    margin-left: 35px;
+}
 /* start header css--------------------------------------------- */
 /* .leftside-menu {
     background: #b88d42 !important;
@@ -393,3 +403,47 @@ ul.side-nav i {
 } */
 
 /* end header css ------------------------------------------------ */
+.modal_details .modal-dialog {
+    max-width: 800px !important;
+}
+
+
+/* start task card detail page ----------------------------------- */
+.cardinfo.modal-body {
+    display: flex;
+    column-gap: 50px;
+}
+
+.comments {
+    flex: 0 0 49%;
+}
+
+.comments ul li button {
+    margin-right: 10px;
+    background: #f0f1f4 !important;
+    color: #000 !important;
+}
+
+.modal_details .modal-title.h4 {
+    color: #000;
+}
+
+.comments h4 {
+    color: #000;
+    margin-bottom: 21px;
+}
+
+.comments ul li button {
+    font-weight: 600;
+}
+.addcommentname button {
+    margin-top: 15px;
+    text-align: right;
+    float: right;
+}
+.card_detail h4 {
+    color: #000;
+}
+
+
+/* end task card detail page ------------------------------------  */
