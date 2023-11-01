@@ -87,6 +87,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
             status: editData?.status,
         });
         setDescription(editData?.description);
+        setData({image: editData?.attachment });
     }, [modal]);
     console.log(editData, 'pppppp');
     const handleDate = (data) => {
