@@ -44,6 +44,9 @@ const tasks = mongoose.model(
         },
         attachment: {
             type: String
+        },
+        attachmentType : {
+            type : String
         }
     },
         {

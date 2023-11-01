@@ -35,20 +35,6 @@ const addUserAssignments = async (req, res) => {
     }
 }
 
-// // Get user assigned projects
-// const getUserAssignment = async (req, res) => {
-//     try {
-//         const result = await assignUserModel.find({ assigneeId: req.query.assigneeId, projectId: { $exists: true } }).populate([
-//             { path: 'projectId', select: 'projectName' },
-//             { path: 'assigneeId', select: 'userName' },
-//             { path: 'reporterId', select: 'userName' }
-//         ]);
-//         return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result })
-//     } catch (error) {
-//         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
-//     }
-// }
-
 // Get User assignments
 const getUserAssignments = async (req, res) => {
     try {
@@ -61,15 +47,15 @@ const getUserAssignments = async (req, res) => {
             query.milestoneId = { $exists: true };
         } else if (req.query.flag == 3) {
             query.sprintId = { $exists: true };
-        } 
+        }
         const result = await assignUserModel.find(query).populate([
             { path: 'projectId', select: 'projectName' },
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
-            { path: 'taskId', select: 'summary' },
-            { path: 'assigneeId', select: 'userName' },
+            { path: 'assigneeId', select: 'firstName lastName' },
             { path: 'reporterId', select: 'role' }
-        ]);
+        ])
+            .sort({ createdAt: -1 });
         return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result })
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -156,7 +142,8 @@ const getUserTasks = async (req, res) => {
 
                 }
             }
-        ]);
+        ])
+            .sort({ createdAt: -1 });
         for (const assignment of result) {
             if (assignment.taskInfo.status === 1) {
                 todo.push(assignment);
