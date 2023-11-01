@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const path = require('path');
 const taskModel = require('../models/task.model');
 const assignUserModel = require('../models/assignUser.model');
 const historyModel = require('../models/history.model');
@@ -14,6 +15,8 @@ const createtask = async (req, res) => {
         } else {
             const lastTask = await taskModel.countDocuments();
             const taskMannualId = lastTask + 1;
+            const attachmentPath = `http://localhost:8000/upload/${req.file.originalname}`;
+            const fileExtension = path.extname(attachmentPath).toLowerCase();
             const task = await taskModel.create({
                 taskMannualId,
                 projectId,
@@ -23,7 +26,8 @@ const createtask = async (req, res) => {
                 description,
                 startDate,
                 dueDate,
-                attachment: `http://localhost:8000/upload/${req.file.originalname}`,
+                attachment: attachmentPath,
+                attachmentType: fileExtension
             });
             if (task && req.user.role === 1) {
                 const assignedUser = await assignUserModel.create({
@@ -169,6 +173,7 @@ const getTasks = async (req, res) => {
                     status: { $first: '$status' },
                     activeStatus: { $first: '$activeStatus' },
                     attachment: { $first: '$attachment' },
+                    attachmentType: { $first: '$attachmentType' },
                     projectInfo: { $first: { $arrayElemAt: ['$projects', 0] } },
                     milestoneInfo: { $first: { $arrayElemAt: ['$milestones', 0] } },
                     sprintInfo: { $first: { $arrayElemAt: ['$sprints', 0] } },
@@ -189,6 +194,8 @@ const getTasks = async (req, res) => {
 const updateTask = async (req, res) => {
     try {
         const taskId = req.body.taskId;
+        const attachmentPath = `http://localhost:8000/upload/${req.file.originalname}`;
+        const fileExtension = path.extname(attachmentPath).toLowerCase();
         const obj = {
             summary: req.body.summary,
             description: req.body.description,
@@ -196,7 +203,8 @@ const updateTask = async (req, res) => {
             startDate: req.body.startDate,
             dueDate: req.body.dueDate,
             status: req.body.status,
-            attachment: `http://localhost:8000/upload/${req.file.originalname}`
+            attachment: attachmentPath,
+            attachmentType: fileExtension
         };
         const secObj = {
             assigneeId: req.body.assigneeId,
@@ -379,6 +387,7 @@ const getTasksAccToStatus = async (req, res) => {
                         status: { $first: '$status' },
                         activeStatus: { $first: '$activeStatus' },
                         attachment: { $first: '$attachment' },
+                        attachmentType: { $first: '$attachmentType' },
                         projectInfo: { $first: { $arrayElemAt: ['$projects', 0] } },
                         milestoneInfo: { $first: { $arrayElemAt: ['$milestones', 0] } },
                         sprintInfo: { $first: { $arrayElemAt: ['$sprints', 0] } },
@@ -387,6 +396,7 @@ const getTasksAccToStatus = async (req, res) => {
                     }
                 }
             ])
+                .sort({ createdAt: -1 })
             let taskCount = await taskModel.countDocuments(query);
 
             if (i == 1) {
