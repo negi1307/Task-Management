@@ -6,7 +6,7 @@ import { columnsFromBackend } from './data';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
 import { Link } from 'react-router-dom';
-
+import { useParams } from 'react-router-dom';
 import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
@@ -58,6 +58,7 @@ const Title = styled.span`
 `;
 
 const Boards = (props) => {
+    const { projectId, milestoneId, spriteId } = useParams();
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.getAllTaskReducer;
@@ -70,8 +71,8 @@ const Boards = (props) => {
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
     const sprintId = store?.getSprintId?.data;
-    const projectId = store?.getProjectId?.data;
-    const milestoneId = store?.getMilestoneId?.data;
+    // const projectId = store?.getProjectId?.data;
+    // const milestoneId = store?.getMilestoneId?.data;
     const onDragEnd = (result, columns, setColumns) => {
         console.log('colun', result);
 
@@ -113,8 +114,8 @@ const Boards = (props) => {
     };
 
     useEffect(() => {
-        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: sprintId }));
-    }, [render, sprintId]);
+        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
+    }, [render]);
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
             setColumns({
@@ -283,9 +284,9 @@ const Boards = (props) => {
                 </button>
                 <RightBar
                     className="d-none"
-                    projectId={props.projectId}
-                    mileStoneId={props.mileStoneId}
-                    sprintId={props.sprintId}
+                    projectId={projectId}
+                    mileStoneId={milestoneId}
+                    sprintId={spriteId}
                     showModal={showModal}
                     setShowModal={setShowModal}
                 />
