@@ -234,7 +234,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                                     <form onSubmit={handleSubmit(onSubmit)}>
                                         <input type="hidden" value={item.id} {...register('taskid')} />
                                         <input type="text" id="exampleForm.ControlTextarea1" class="form-control" placeholder='Add Comment' {...register('comment')} />
-                                      <button type="button" class="mybutton btn btn-info">Add Task</button>
+                                      <button type="submit" class="mybutton btn btn-info">Add</button>
                                     </form>
 
                                 </div>
@@ -263,51 +263,67 @@ const TaskCard = ({ item, index, closeModal }) => {
                     </div>
 
                     <div class="card_detail">
+                        <h4>Details</h4>
                         <ul style={{ listStyle: 'none' }}>
                             <li>
-                                <b> Summary: </b>
+                                <label>Summary:</label> 
+                                {item?.taskInfo?.summary}
                             </li>
-                            <li>{item?.taskInfo?.summary}</li>
-                            <br />
-                            <br />
+                            
+
+                            
+                          
                             <li>
-                                <b>Description:</b>
-                            </li>
-                            <li>
-                            <div
+                            <label>Description:</label>
+                                
+                                <div className='description'
                                     dangerouslySetInnerHTML={{
                                         __html: item?.taskInfo?.description,
                                     }}></div>
                             </li>
-                            <br />
-                            <br />
+                           
+                          
                             <li>
-                                <b>Start Date :</b>
+                            <label>Start Date:</label>
+                              
+                                {item?.startDate ? moment(item?.taskInfo?.startDate).format('ll') : ''}
                             </li>
-                            <li>{item?.startDate ? moment(item?.taskInfo?.startDate).format('ll') : ''}</li>
-                            <br />
-                            <br />
+                           
+                            
                             <li>
-                                <b>Priority</b>
+                            <label> Priority:</label>
+                               
+                                {item.taskInfo?.priority ? 'medium' : ''}
                             </li>
-                            <li>{item.taskInfo?.priority ? 'medium' : ''}</li>
-                            <br />
-                            <br />
+                          
+                            
                             <li>
-                                <b>End Date </b>
+                            <label>End Date: </label>
+                                
+                                {item?.taskInfo?.dueDate ? moment(item?.dueDate).format('ll') : ''}
                             </li>
-                            <li>{item?.taskInfo?.dueDate ? moment(item?.dueDate).format('ll') : ''}</li>
-                            <br />
-                            <br />
-                            <li>Assignee Name</li>
-                            <li>{item?.assigneeInfo?.userName} </li>
-                            <br />
-                            <br />
-                            <li>Reporter</li>
-                            <li>{item.taskInfo?.reporterInfo?.role}</li> <br />
-                            <br />
-                            <li>Project Name</li>
-                            <li>{item.taskInfo?.projectName}</li>
+                 
+                           
+                            <li>
+                            <label> Assignee Name:</label>
+                           
+                            {item?.assigneeInfo?.userName}
+                            </li>
+                    
+                         
+                            <li>
+                            <label> Reporter:</label>
+                           
+                            {item.taskInfo?.reporterInfo?.role}
+                            </li>
+                             
+                         
+                            <li>
+                            <label>Project Name:</label>
+                            
+                            {item.taskInfo?.projectName}
+                            </li>
+                            
 
 
                         </ul>
