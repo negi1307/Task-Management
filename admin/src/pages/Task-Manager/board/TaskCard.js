@@ -101,12 +101,12 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                 </button>
                             </div>
 
-                            <p
+                            <a href="#"
                                 onClick={() => {
                                     handleDetailPage(item);
                                 }}>
                                 {item.summary}
-                            </p>
+                            </a>
                             <p>
                                 <div
                                     dangerouslySetInnerHTML={{

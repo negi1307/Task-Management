@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Row, Col, Breadcrumb, Badge } from 'react-bootstrap';
 import styled from '@emotion/styled';
 import { columnsFromBackend } from './data';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -10,6 +11,7 @@ import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
 import { updateTaskStatus } from '../../../../src/redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
+
 import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
 
@@ -53,7 +55,7 @@ const Title = styled.span`
     align-self: flex-start;
 `;
 
-const Boards = (props) => { 
+const Boards = (props) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.getAllTaskReducer;
@@ -62,12 +64,12 @@ const Boards = (props) => {
     const updatehandel = store?.UpdateTaskReducer;
     const Createhandel = store?.createTaskReducer;
     const [render, setRender] = useState(false);
-    
+
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
-   const sprintId = store?.getSprintId?.data
-    const projectId=store?.getProjectId?.data
-    const milestoneId = store?.getMilestoneId?.data
+    const sprintId = store?.getSprintId?.data;
+    const projectId = store?.getProjectId?.data;
+    const milestoneId = store?.getMilestoneId?.data;
     const onDragEnd = (result, columns, setColumns) => {
         console.log('colun', result);
 
@@ -109,8 +111,8 @@ const Boards = (props) => {
     };
 
     useEffect(() => {
-        dispatch(getAllTask({projectId:projectId , milestoneId:milestoneId , sprintId:sprintId}));
-    }, [render , sprintId]);
+        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: sprintId }));
+    }, [render, sprintId]);
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
             setColumns({
@@ -147,18 +149,18 @@ const Boards = (props) => {
             status: ele?.destination?.droppableId,
         };
         dispatch(updateTaskStatus(body));
-        dispatch(getAllTask({projectId:projectId , milestoneId:milestoneId , sprintId:sprintId}));
+        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: sprintId }));
     };
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
         }
     };
- 
+
     useEffect(() => {
         if (statushandle?.data?.status == 200) {
             ToastHandle('success', statushandle?.data?.message);
-            closeModal("render");
+            closeModal('render');
         } else if (statushandle?.data?.status == 400) {
             ToastHandle('error', statushandle?.data?.message);
         } else if (statushandle?.data?.status == 500) {
@@ -176,7 +178,7 @@ const Boards = (props) => {
         }
     }, [deletehandel]);
     useEffect(() => {
-        console.log(updatehandel?.data?.status , "////////")
+        console.log(updatehandel?.data?.status, '////////');
         if (updatehandel?.data?.status == 200) {
             closeModal('render');
             ToastHandle('success', 'Updated Successfully');
@@ -187,7 +189,7 @@ const Boards = (props) => {
         }
     }, [updatehandel]);
     useEffect(() => {
-        console.log(Createhandel?.data?.status , "////////")
+        console.log(Createhandel?.data?.status, '////////');
         if (Createhandel?.data?.status == 200) {
             closeModal('render');
             ToastHandle('success', Createhandel?.data?.message);
@@ -197,19 +199,56 @@ const Boards = (props) => {
             ToastHandle('error', Createhandel?.data?.message);
         }
     }, [Createhandel]);
-   useEffect(() => {
-    let body = {
-        status :1,
-        skip: 0    
-    };
-    dispatch(getAllProjects(body));
-    dispatch(getsingleMileStone({ id:"" ,activeStatus: 1 ,skip:0 , mileStoneId:""  }));
-    dispatch(getSingleSprint({ activeStatus: 1, id: "" ,skip:0 }));
-}, [])
+    useEffect(() => {
+        let body = {
+            status: 1,
+            skip: 0,
+        };
+        dispatch(getAllProjects(body));
+        dispatch(getsingleMileStone({ id: '', activeStatus: 1, skip: 0, mileStoneId: '' }));
+        dispatch(getSingleSprint({ activeStatus: 1, id: '', skip: 0 }));
+    }, []);
     return (
         <>
-            <div className="add_task">
-                <button
+            <div className="add_task row d-flex">
+                <div  className='col-lg-8 d-flex '>
+                <div >
+                    {' '}
+                    <h4 className="page-title">
+                        {' '}
+                        To-Do :
+                        <Badge className="badge-success-lighten ms-1">{successHandle?.data?.Response?.taskCount}</Badge>
+                    </h4>{' '}
+                </div>
+                <div className='ms-3'>
+                    {' '}
+                    <h4 className="page-title">
+                        {' '}
+                        In-Progress :
+                        <Badge className="badge-success-lighten ms-1">
+                            {successHandle?.data?.inProgress?.taskCount}
+                        </Badge>
+                    </h4>{' '}
+                </div>
+                <div className='ms-3'>
+                    {' '}
+                    <h4 className="page-title">
+                        {' '}
+                        Hold :
+                        <Badge className="badge-success-lighten ms-1">{successHandle?.data?.hold?.taskCount}</Badge>
+                    </h4>{' '}
+                </div>
+                <div className='ms-3'>
+                    {' '}
+                    <h4 className="page-title">
+                        {' '}
+                        Done :
+                        <Badge className="badge-success-lighten ms-1">{successHandle?.data?.done?.taskCount}</Badge>
+                    </h4>{' '}
+                </div>
+                </div>
+               <div className='col-lg-4'>
+               <button
                     type="button"
                     className="mybutton btn btn-info"
                     onClick={() => {
@@ -226,6 +265,8 @@ const Boards = (props) => {
                     showModal={showModal}
                     setShowModal={setShowModal}
                 />
+               </div>
+              
             </div>
 
             <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
@@ -233,7 +274,7 @@ const Boards = (props) => {
                     <MainLoader />
                 ) : (
                     <Container>
-                        <TaskColumnStyles >
+                        <TaskColumnStyles>
                             {Object.entries(columns).map(([columnId, column], index) => {
                                 return (
                                     <Droppable key={columnId} droppableId={columnId}>
@@ -244,7 +285,12 @@ const Boards = (props) => {
                                                 {...provided.droppableProps}>
                                                 <Title class="">{column.title}</Title>
                                                 {column.items.map((item, index) => (
-                                                    <TaskCard key={item} item={item} index={index} closeModal={closeModal} />
+                                                    <TaskCard
+                                                        key={item}
+                                                        item={item}
+                                                        index={index}
+                                                        closeModal={closeModal}
+                                                    />
                                                 ))}
                                                 {provided.placeholder}
                                             </TaskList>
@@ -256,7 +302,6 @@ const Boards = (props) => {
                     </Container>
                 )}
             </DragDropContext>
-         
         </>
     );
 };
