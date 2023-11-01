@@ -436,5 +436,10 @@ ul.side-nav i {
 .comments ul li button {
     font-weight: 600;
 }
+.addcommentname button {
+    margin-top: 15px;
+    text-align: right;
+    float: right;
+}
 
 /* end task card detail page ------------------------------------  */
