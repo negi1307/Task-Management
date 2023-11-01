@@ -10,7 +10,8 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useState } from 'react';
 
 export default function RightBar(props) {
-    const { showModal, setShowModal, content, projectId, mileStoneId, sprintId,callAlltaskData } = props;
+    
+    const { showModal, setShowModal, content,callAlltaskData } = props;
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [description, setDescription] = useState('');
@@ -21,6 +22,12 @@ export default function RightBar(props) {
 
 
     const id = store?.Auth?.user?.userId
+    
+const projectId=store?.getProjectId?.data
+const milstoneId=store?.getMilestoneId?.data
+const SprintId=store?.getSprintId?.data
+
+    const[fileData,setFile]=useState(null)
    
     const {
         register,
@@ -37,26 +44,23 @@ export default function RightBar(props) {
 
 
     const onSubmit = (e) => {
-        const dataList = {
-            projectId: sessionStorage.getItem('projectId'),
-            milestoneId: sessionStorage.getItem('mileStoneId'),
-            sprintId: sessionStorage.getItem('sprintId'),
-            summary: e.Summary,
-            description: description,
-            assigneeId: e.Assignee,
-            reporterId: e.Report,
-            priority: e.priority,
-            startDate: e.start_date,
-            dueDate: e.last_date,
-            status: 1,
-        };
-        if (
-            sessionStorage.getItem('projectId') !== '' &&
-            sessionStorage.getItem('mileStoneId') !== '' &&
-            sessionStorage.getItem('sprintId') !== ''
-        ) {
+        const formData=new FormData()
+        formData.append('projectId',projectId)
+        formData.append('milestoneId',milstoneId)
+        formData.append('sprintId',SprintId)
+        formData.append('summary',e.Summary)
+        formData.append('description',description)
+        formData.append('assigneeId',e.Assignee)
+        formData.append('reporterId',e.Report)
+        formData.append('priority',e.priority)
+        formData.append('startDate',e.start_date)
+        formData.append('dueDate',e.last_date)
+        formData.append('status',1)
+        formData.append('attachment',e.attachment[0]);
+        
+        if ( projectId !== '' &&  milstoneId !== '' && SprintId !== '') {
             
-            dispatch(createTask(dataList));
+            dispatch(createTask(formData));
             setTimeout(() => {
                 callAlltaskData();
             }, 1000);
@@ -66,9 +70,6 @@ export default function RightBar(props) {
             alert('plsease select project');
         }
 
-        sessionStorage.setItem('projectId', '');
-        sessionStorage.setItem('mileStoneId', '');
-        sessionStorage.setItem('sprintId', '');
         setValue('Summary', '')
         setValue('Description', '')
         setValue('Assignee', '')
@@ -76,8 +77,7 @@ export default function RightBar(props) {
         setValue('priority', '')
         setValue('start_date', '')
         setValue('last_date', '')
-
-
+        setValue('attachment', '')
         setShowModal(false);
     };
 
@@ -197,7 +197,7 @@ export default function RightBar(props) {
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-12">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Summary
@@ -213,8 +213,8 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="">
-                                <div class="">
+                            <div class="row">
+                                <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Assignee
@@ -236,7 +236,7 @@ export default function RightBar(props) {
                                         {/* <input placeholder="Please Enter Assignee" type="text" id="exampleForm.ControlTextarea1" class="form-control" {...register("Assignee")} /> */}
                                     </div>
                                 </div>
-                                <div class="">
+                                <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             Report <span class="text-danger">*</span>:
@@ -257,8 +257,8 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="">
-                                <div class="">
+                            <div class="row">
+                                <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Start Date<span class="text-danger">*</span>:
@@ -272,7 +272,7 @@ export default function RightBar(props) {
                                         />
                                     </div>
                                 </div>
-                                <div class="">
+                                <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             End Date<span class="text-danger">*</span>:
@@ -297,7 +297,7 @@ export default function RightBar(props) {
                                         <select
                                             name="Priority"
                                             class="form-select"
-                                            id="exampleForm.ControlInput1"
+                                            id="exampleForm.ControlInput2"
                                             disabled={true}
                                             {...register('priority')} >
                                             <option>Medium</option>
@@ -309,7 +309,7 @@ export default function RightBar(props) {
                                 </div>
                                 <div class="">
                                     <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
+                                        <label class="form-label" for="exampleForm.ControlTextarea3">
                                             Status<span class="text-danger">*</span>:
                                         </label>
                                         <input
@@ -323,7 +323,20 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="">
+                                    <div class="mb-2">
+                                        <label class="form-label" for="exampleForm.ControlTextarea1">
+                                           Attachment<span class="text-danger">*</span>:
+                                        </label>
+                                        <input
+                                            placeholder="Please start Date "
+                                            type="file"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('attachment')}
+                                        />
+                                    </div>
+                                </div>
                             <div class=""></div>
                             <div class="row">
                                 <div class="text-start d-flex align-items-end justify-content-end col">
