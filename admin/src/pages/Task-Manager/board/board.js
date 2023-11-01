@@ -60,7 +60,7 @@ const Title = styled.span`
     align-self: flex-start;
 `;
 
-const Boards = (props) => {
+const Boards = () => {
     const { projectId, milestoneId, spriteId } = useParams();
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -225,7 +225,7 @@ const Boards = (props) => {
                 <div className="project_name">
                     <h3>{projectNameHeading}</h3>
                 </div>
-                <div className="taskinfo">
+                {/* <div className="taskinfo">
                     <ul>
                     <li>
                             {' '}
@@ -241,7 +241,7 @@ const Boards = (props) => {
                         </li>
                        
                     </ul>
-                </div>
+                </div> */}
             </div>
             <div className="add_task row d-flex">
                 <div  className='col-lg-8 d-flex '>
