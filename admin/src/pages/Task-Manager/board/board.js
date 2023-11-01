@@ -5,6 +5,8 @@ import styled from '@emotion/styled';
 import { columnsFromBackend } from './data';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
+import { Link } from 'react-router-dom';
+
 import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
@@ -64,7 +66,7 @@ const Boards = (props) => {
     const updatehandel = store?.UpdateTaskReducer;
     const Createhandel = store?.createTaskReducer;
     const [render, setRender] = useState(false);
-
+    const [projectNameHeading, setProjectName] = useState('Select Project Name');
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
     const sprintId = store?.getSprintId?.data;
@@ -210,6 +212,28 @@ const Boards = (props) => {
     }, []);
     return (
         <>
+           <div className="project_detail">
+                <div className="project_name">
+                    <h3>{projectNameHeading}</h3>
+                </div>
+                <div className="taskinfo">
+                    <ul>
+                    <li>
+                            {' '}
+                            <Link to="/summary">Summary</Link>{' '}
+                        </li>
+                        <li>
+                            {' '}
+                            <Link to="/taskList">List</Link>{' '}
+                        </li>
+                        <li>
+                            {' '}
+                            <Link to="/dashboard/boards">Board</Link>{' '}
+                        </li>
+                       
+                    </ul>
+                </div>
+            </div>
             <div className="add_task row d-flex">
                 <div  className='col-lg-8 d-flex '>
                 <div >

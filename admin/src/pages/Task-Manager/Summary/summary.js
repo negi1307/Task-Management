@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, ProgressBar, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Chart from 'react-apexcharts';
+import { Link } from 'react-router-dom';
 import { getPriorityGraphAction, getTaskSummmaryDetail, getTaskWeekCountAction } from '../../../redux/Summary/action';
 import { Last } from 'react-bootstrap/esm/PageItem';
 const Summary = () => {
@@ -86,6 +87,27 @@ const Summary = () => {
     ];
 
     return (
+        <>
+        <div className="project_detail">
+               
+                <div className="taskinfo">
+                    <ul>
+                    <li>
+                            {' '}
+                            <Link to="/summary">Summary</Link>{' '}
+                        </li>
+                        <li>
+                            {' '}
+                            <Link to="/taskList">List</Link>{' '}
+                        </li>
+                        <li>
+                            {' '}
+                            <Link to="/dashboard/boards">Board</Link>{' '}
+                        </li>
+                       
+                    </ul>
+                </div>
+            </div>
         <div className="all_bg">
             <div className="container">
                 <div className="row">
@@ -466,6 +488,7 @@ const Summary = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 

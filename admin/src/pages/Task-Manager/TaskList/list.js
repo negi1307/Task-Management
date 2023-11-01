@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { ListGroup, Container, Row, Col, Link, Table, Button, Form, Card } from 'react-bootstrap';
+import { ListGroup, Container, Row, Col,  Table, Button, Form, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { TaskStatusAction, deleteTask, getsingleSprintTask } from '../../../redux/task/action';
@@ -8,6 +8,7 @@ import MainLoader from '../../../constants/Loader/loader';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { Modal } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import ToastHandle from '../../../constants/toaster/toaster';
 import Create from './modal/create'; 
 import { getAllRoles, getAllUsers } from '../../../redux/actions';
@@ -121,6 +122,26 @@ const TaskList = () => {
         <>
             <Card>
                 <Card.Body>
+                <div className="project_detail">
+               
+               <div className="taskinfo">
+                   <ul>
+                   <li>
+                           {' '}
+                           <Link to="/summary">Summary</Link>{' '}
+                       </li>
+                       <li>
+                           {' '}
+                           <Link to="/taskList">List</Link>{' '}
+                       </li>
+                       <li>
+                           {' '}
+                           <Link to="/dashboard/boards">Board</Link>{' '}
+                       </li>
+                      
+                   </ul>
+               </div>
+           </div>
                     <div className="row mx-auto mt-2">
                         <div className="d-flex col-4">
                             <div className="row d-flex align-items-center">

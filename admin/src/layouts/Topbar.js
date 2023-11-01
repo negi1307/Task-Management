@@ -137,7 +137,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const getsingleMilestoneData = store?.getSigleMileStone?.data?.response;
     console.log(getsingleMilestoneData, "responseeeeeeeeeeeeeeeeee")
     const getAllSingleSprints = store?.getAllSingleSprints?.data?.response;
-    const [projectNameHeading, setProjectName] = useState('Select Project Name');
+    
     const [mileStoneId, setMileStoneId] = useState('');
     const [sprintId, setSprintId] = useState('');
     const [mileStoneData, setmileStoneData] = useState([]);
@@ -203,7 +203,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         setsprint(false);
 
         dispatch(getProjectId(e.target.value));
-        setProjectName(e.target.value);
+       
         const id = e.target.value;
         setmilestoneid(true);
         if (id) {
@@ -370,28 +370,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                 </div>
 
             </div>
-            <div className="project_detail">
-                <div className="project_name">
-                    <h3>{projectNameHeading}</h3>
-                </div>
-                <div className="taskinfo">
-                    <ul>
-                    <li>
-                            {' '}
-                            <Link to="/summary">Summary</Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="/taskList">List</Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="/dashboard/boards">Board</Link>{' '}
-                        </li>
-                       
-                    </ul>
-                </div>
-            </div>
+         
         </>
     );
 };
