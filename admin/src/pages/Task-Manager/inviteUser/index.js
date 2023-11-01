@@ -21,9 +21,10 @@ const InviteUser = () => {
     } = useForm();
     const onSubmit = (data) => {
         let body = {
-            userName: data?.title,
+            firstName: data?.title,
             password: data?.password,
             email: data?.email,
+            lastName:data?.lastName,
             roleId: roleid
         }
         dispatch(inviteUser(body))
@@ -59,6 +60,24 @@ const InviteUser = () => {
                         </Form.Group>
                     </Col>
                     <Col lg={4}>
+                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
+                            <Form.Label>
+                             Last Name<span className="text-danger">*</span>:
+                            </Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Please Enter  Last Name"
+                                {...register('lastName', { required: true })}
+                            />
+                            {errors.lastName?.type === 'required' && (
+                                <span className="text-danger"> This feild is required *</span>
+                            )}
+                        </Form.Group>
+                    </Col>
+                    
+                </Row>
+                <Row>
+                <Col lg={4}>
                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>
                                 Email<span className="text-danger">*</span>:
@@ -73,8 +92,6 @@ const InviteUser = () => {
                             )}
                         </Form.Group>
                     </Col>
-                </Row>
-                <Row>
                     <Col lg={4}>
                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>

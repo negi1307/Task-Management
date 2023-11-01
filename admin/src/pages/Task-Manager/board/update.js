@@ -87,6 +87,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
             status: editData?.status,
         });
         setDescription(editData?.description);
+        setData({image: editData?.attachment });
     }, [modal]);
     console.log(editData, 'pppppp');
     const handleDate = (data) => {
@@ -257,7 +258,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     <Form.Select {...register('Assignee', { required: true })}>
                                                         <option value={''}>--Select--</option>
                                                         {store?.getAllUsers?.data?.response?.map((ele, ind) => (
-                                                            <option value={ele?._id}> {ele?.userName} </option>
+                                                            <option value={ele?._id}> {ele?.firstName} {ele?.lastName}</option>
                                                         ))}
                                                     </Form.Select>
                                                     {errors.Assignee?.type === 'required' && (

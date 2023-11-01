@@ -12,20 +12,21 @@ export default function RightBar(props) {
         handleSubmit,watch,
         formState: { errors },
     } = useForm();
-    const { showModal, setShowModal, content } = props;
+    const { showModal, setShowModal, content ,projectId,mileStoneId,sprintId} = props;
+
     const store = useSelector((state) => state);
     const [description, setDescription] = useState('');
-    const projectId = store?.getProjectId?.data;
-    const milestoneId = store?.getMilestoneId?.data;
-    const sprintid = store?.getSprintId?.data;
+    // const projectId = store?.getProjectId?.data;
+    // const milestoneId = store?.getMilestoneId?.data;
+    // const sprintid = store?.getSprintId?.data;
     // const sucesshandel =store?.createTaskReducer?.data
     const today = new Date().toISOString().split('T')[0];
     const dispatch = useDispatch();
     const onSubmit = (e) => {
         let body = new FormData();
         body.append("projectId", projectId)
-        body.append("milestoneId", milestoneId)
-        body.append("sprintId", sprintid)
+        body.append("milestoneId", mileStoneId)
+        body.append("sprintId", sprintId)
         body.append("summary", e.Summary)
         body.append("description",description)
         body.append("assigneeId",e.Assignee)
@@ -35,7 +36,7 @@ export default function RightBar(props) {
         body.append("dueDate",e.last_date)
         body.append("status",1)
         body.append("attachment",e.Attachment[0])
-        if (projectId !== '' && milestoneId !== '' && sprintid !== '') {
+        if (projectId !== '' && mileStoneId !== '' && sprintId !== '') {
             dispatch(createTask(body));
         } else {
             alert('plsease select project');
@@ -134,7 +135,7 @@ export default function RightBar(props) {
                                             {...register('Assignee')}>
                                             <option value={''}>--Select--</option>
                                             {store?.getAllUsers?.data?.response?.map((ele, ind) => (
-                                                <option value={ele?._id}> {ele?.userName} </option>
+                                                <option value={ele?._id}> {ele?.firstName} {ele?.lastName}</option>
                                             ))}
                                         </select>
                                     </div>

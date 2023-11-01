@@ -115,7 +115,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                             </p>
                             <div className=" d-flex">
                                 <h5 className="m-0 p-0"> Assignee :</h5>
-                                <p className="ms-2 p-0">{item?.assignees?.assigneeInfo?.userName}</p>
+                                <p className="ms-2 p-0">{item?.assignees?.assigneeInfo?.firstName} {item?.assignees?.assigneeInfo?.lastName}</p>
                             </div>
                             <div className="secondary-details">
                                 <p>
