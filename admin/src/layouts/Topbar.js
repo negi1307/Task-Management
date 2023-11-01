@@ -133,16 +133,16 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [isopen, setIsopen] = useState(false);
-    const allProjects = store?.getProject?.data?.response;
-    const getsingleMilestoneData = store?.getSigleMileStone?.data?.response;
-    console.log(getsingleMilestoneData, "responseeeeeeeeeeeeeeeeee")
-    const getAllSingleSprints = store?.getAllSingleSprints?.data?.response;
+    // const allProjects = store?.getProject?.data?.response;
+    // const getsingleMilestoneData = store?.getSigleMileStone?.data?.response;
+    // console.log(getsingleMilestoneData, "responseeeeeeeeeeeeeeeeee")
+    // const getAllSingleSprints = store?.getAllSingleSprints?.data?.response;
     
-    const [mileStoneId, setMileStoneId] = useState('');
-    const [sprintId, setSprintId] = useState('');
-    const [mileStoneData, setmileStoneData] = useState([]);
-    const [milestoneid, setmilestoneid] = useState(false);
-    const [sptint, setsprint] = useState(false);
+    // const [mileStoneId, setMileStoneId] = useState('');
+    // const [sprintId, setSprintId] = useState('');
+    // const [mileStoneData, setmileStoneData] = useState([]);
+    // const [milestoneid, setmilestoneid] = useState(false);
+    // const [sptint, setsprint] = useState(false);
 
 
     const navbarCssClasses = navCssClasses || '';
@@ -190,42 +190,42 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         dispatch(showRightSidebar());
     };
 
-    const handleProject = () => {
-        setmilestoneid(false);
+    // const handleProject = () => {
+    //     setmilestoneid(false);
 
-        let data = {
-            status: 1,
-            skip: 1,
-        };
-        dispatch(getAllProjects(data));
-    };
-    const onChangeProject = (e) => {
-        setsprint(false);
+    //     let data = {
+    //         status: 1,
+    //         skip: 1,
+    //     };
+    //     dispatch(getAllProjects(data));
+    // };
+    // const onChangeProject = (e) => {
+    //     setsprint(false);
 
-        dispatch(getProjectId(e.target.value));
+    //     dispatch(getProjectId(e.target.value));
        
-        const id = e.target.value;
-        setmilestoneid(true);
-        if (id) {
-            dispatch(getsingleMileStone({ id: id, activeStatus: 1, skip: 0, mileStoneId: "" }));
-        }
+    //     const id = e.target.value;
+    //     setmilestoneid(true);
+    //     if (id) {
+    //         dispatch(getsingleMileStone({ id: id, activeStatus: 1, skip: 0, mileStoneId: "" }));
+    //     }
 
-    };
-    const onChangeMilestone = (e) => {
+    // };
+    // const onChangeMilestone = (e) => {
 
-        dispatch(getMilestonetId(e.target.value))
-        const id = e?.target.value;
-        setsprint(true);
+    //     dispatch(getMilestonetId(e.target.value))
+    //     const id = e?.target.value;
+    //     setsprint(true);
 
-        dispatch(getSingleSprint({ activeStatus: 1, id: id, skip: 0 }));
+    //     dispatch(getSingleSprint({ activeStatus: 1, id: id, skip: 0 }));
 
-    };
-    const sprinthandel = (e) => {
-        dispatch(getSprintId(e.target.value));
-        setsprint(false);
+    // };
+    // const sprinthandel = (e) => {
+    //     dispatch(getSprintId(e.target.value));
+    //     setsprint(false);
 
 
-    }
+    // }
     return (
         <>
 
@@ -269,7 +269,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                 </div>
                             </div>
 
-                            <div className="dropdown mx-2">
+                            {/* <div className="dropdown mx-2">
                                 <button className=" bg-white border-0 dropdown-toggle" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false"
                                     onClick={handleProject}>
                                     Projects
@@ -315,7 +315,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
                                         </li>
                                     </ul>
-                            </div>
+                            </div> */}
                         </div>
 
                         <ul className="list-unstyled topbar-menu float-end mb-0 topbarr">

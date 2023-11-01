@@ -3,9 +3,12 @@ import { Card, ProgressBar, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Chart from 'react-apexcharts';
 import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getPriorityGraphAction, getTaskSummmaryDetail, getTaskWeekCountAction } from '../../../redux/Summary/action';
 import { Last } from 'react-bootstrap/esm/PageItem';
 const Summary = () => {
+    const { projectId, milestoneId, spriteId } = useParams();
+    console.log(projectId,"projectIdddddddddddddddddddddddddddd")
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.getTaskSummaryReducer;
@@ -90,23 +93,7 @@ const Summary = () => {
         <>
         <div className="project_detail">
                
-                <div className="taskinfo">
-                    <ul>
-                    <li>
-                            {' '}
-                            <Link to="/summary">Summary</Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="/taskList">List</Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="/dashboard/boards">Board</Link>{' '}
-                        </li>
-                       
-                    </ul>
-                </div>
+               
             </div>
         <div className="all_bg">
             <div className="container">

@@ -25,6 +25,9 @@ import {
     getSingleSprint,
     getsingleMileStone,
 } from '../../../redux/actions';
+import { getSprintId } from '../../../redux/sprint/reducres';
+import { getMilestoneId, getMilestonetId } from '../../../redux/milestone/reducer';
+import { getProjectId } from '../../../redux/projects/reducers';
 
 const Container = styled.div`
     display: flex;
@@ -112,6 +115,11 @@ const Boards = (props) => {
             });
         }
     };
+// useEffect(() => {
+//   dispatch(getProjectId( projectId));
+//   dispatch(getMilestoneId(milestoneId));
+//   dispatch(getSprintId(spriteId))
+// }, [])
 
     useEffect(() => {
         dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
@@ -152,7 +160,7 @@ const Boards = (props) => {
             status: ele?.destination?.droppableId,
         };
         dispatch(updateTaskStatus(body));
-        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: sprintId }));
+        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
     };
     const closeModal = (val) => {
         if (val == 'render') {
@@ -229,7 +237,7 @@ const Boards = (props) => {
                         </li>
                         <li>
                             {' '}
-                            <Link to="/dashboard/boards">Board</Link>{' '}
+                            <Link   to={`/dashboard/boards/projectId=/${projectId}&milestoneId=/${milestoneId}&spriteId=/${spriteId}`}>Board</Link>{' '}
                         </li>
                        
                     </ul>
