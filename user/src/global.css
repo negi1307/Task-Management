@@ -441,5 +441,9 @@ ul.side-nav i {
     text-align: right;
     float: right;
 }
+.card_detail h4 {
+    color: #000;
+}
+
 
 /* end task card detail page ------------------------------------  */
