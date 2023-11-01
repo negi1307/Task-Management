@@ -3,6 +3,7 @@ const path = require('path');
 const taskModel = require('../models/task.model');
 const assignUserModel = require('../models/assignUser.model');
 const historyModel = require('../models/history.model');
+const { log } = require('console');
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -194,8 +195,9 @@ const getTasks = async (req, res) => {
 const updateTask = async (req, res) => {
     try {
         const taskId = req.body.taskId;
-        const attachmentPath = `http://localhost:8000/upload/${req.file.originalname}`;
-        const fileExtension = path.extname(attachmentPath).toLowerCase();
+        console.log(req.file);
+        const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : req.body.attachment;
+        const fileExtension = req.file ? req.file.mimetype:  undefined;
         const obj = {
             summary: req.body.summary,
             description: req.body.description,
