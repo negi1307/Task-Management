@@ -161,7 +161,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                                     </p>
                                 </div>
                             </div>
-                            <p>Assignee: &nbsp; {item?.assigneeInfo?.userName}</p>
+                            <p>Assignee: &nbsp; {item?.assigneeInfo?.userName.charAt(0)}</p>
 
                         </TaskInformation>
                     </div>
@@ -234,7 +234,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                                     <form onSubmit={handleSubmit(onSubmit)}>
                                         <input type="hidden" value={item.id} {...register('taskid')} />
                                         <input type="text" id="exampleForm.ControlTextarea1" class="form-control" placeholder='Add Comment' {...register('comment')} />
-                                        <button type="submit">Add</button>
+                                      <button type="button" class="mybutton btn btn-info">Add Task</button>
                                     </form>
 
                                 </div>
