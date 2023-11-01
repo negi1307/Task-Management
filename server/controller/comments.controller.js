@@ -5,7 +5,7 @@ const addComment = async (req, res) => {
     try {
         const result = await commentsModel.create({
             taskId: req.body.taskId,
-            userId: req.body.userId,
+            userId: req.user._id,
             comment: req.body.comment
         })
         return res.status(200).json({ status: "200", message: "Comment added Successfully", response: result });

@@ -62,8 +62,10 @@ const getUserAssignments = async (req, res) => {
     }
 }
 
+// Get A Users All tasks &  Search tasks
 const getUserTasks = async (req, res) => {
     try {
+        let { projectId, milestoneId, sprintId, searchString } = req.query;
         let todo = [];
         let inProgress = [];
         let hold = [];
@@ -71,8 +73,8 @@ const getUserTasks = async (req, res) => {
         const query = {
             assigneeId: new mongoose.Types.ObjectId(req.user._id)
         };
-        if (req.query.projectId && req.query.milestoneId && req.query.sprintId) {
-            const taskfind = await taskModel.find({ projectId: req.query.projectId, milestoneId: req.query.milestoneId, sprintId: req.query.sprintId });
+        if (projectId && milestoneId && sprintId) {
+            const taskfind = await taskModel.find({ projectId, milestoneId, sprintId })
             const taskIds = taskfind.map(id => {
                 return id._id
             })
@@ -139,23 +141,24 @@ const getUserTasks = async (req, res) => {
                     taskInfo: { $first: { $arrayElemAt: ['$taskDetail', 0] } },
                     assigneeInfo: { $first: { $arrayElemAt: ['$assigneeInfo', 0] } },
                     reporterInfo: { $first: { $arrayElemAt: ['$reporterInfo', 0] } },
-
                 }
             }
         ])
             .sort({ createdAt: -1 });
         for (const assignment of result) {
-            if (assignment.taskInfo.status === 1) {
-                todo.push(assignment);
-            } else if (assignment.taskInfo.status === 2) {
-                inProgress.push(assignment);
-            } else if (assignment.taskInfo.status === 3) {
-                hold.push(assignment);
-            } else if (assignment.taskInfo.status === 4) {
-                done.push(assignment);
+            const summary = assignment.taskInfo.summary;
+            if (new RegExp(searchString, 'i').test(summary)) {
+                if (assignment.taskInfo.status === 1) {
+                    todo.push(assignment);
+                } else if (assignment.taskInfo.status === 2) {
+                    inProgress.push(assignment);
+                } else if (assignment.taskInfo.status === 3) {
+                    hold.push(assignment);
+                } else if (assignment.taskInfo.status === 4) {
+                    done.push(assignment);
+                }
             }
         }
-
         return res.status(200).json({
             status: "200",
             message: "Data Fetched Successfully",
