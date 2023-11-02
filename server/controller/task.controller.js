@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const taskModel = require('../models/task.model');
 const assignUserModel = require('../models/assignUser.model');
 const historyModel = require('../models/history.model');
+const userModel = require("../models/users.model");
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -26,10 +27,11 @@ const createtask = async (req, res) => {
                 attachment: `http://localhost:8000/upload/${req.file.originalname}`,
                 attachmentType: req.file.mimetype
             });
-            if (task && req.user.role === 1) {
+            if (task) {
+                const admin = await userModel.findOne({role:1}).select("_id roleId");
                 const assignedUser = await assignUserModel.create({
-                    assigneeId: assigneeId, // One who is doing work
-                    reporterId: reporterId, // one who will assignee report after work done
+                    assigneeId: req.user.role === 1 ?  assigneeId : req.user._id, // One who is doing work
+                    reporterId: req.user.role === 1 ? reporterId : admin.roleId, // one who will assignee report after work done
                     taskId: task._id
                 })
                 return res.status(200).json({ status: "200", message: "Task created successfully", response: task, assignedUser });
