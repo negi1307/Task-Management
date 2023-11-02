@@ -133,6 +133,14 @@ const getUserTasks = async (req, res) => {
                 },
             },
             {
+                $lookup: {
+                    from: 'comments',
+                    localField: '_id',
+                    foreignField: 'taskId',
+                    as: 'comments',
+                },
+            },
+            {
                 $group: {
                     _id: '$_id',
                     projectInfo: { $first: { $arrayElemAt: ['$projectDetail', 0] } },
@@ -141,6 +149,7 @@ const getUserTasks = async (req, res) => {
                     taskInfo: { $first: { $arrayElemAt: ['$taskDetail', 0] } },
                     assigneeInfo: { $first: { $arrayElemAt: ['$assigneeInfo', 0] } },
                     reporterInfo: { $first: { $arrayElemAt: ['$reporterInfo', 0] } },
+                    comments: { $first: { $arrayElemAt: [['$comments'], 0] } },
                 }
             }
         ])
