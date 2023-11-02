@@ -13,7 +13,8 @@ import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
 import { updateTaskStatus } from '../../../../src/redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
-
+import Form from 'react-bootstrap/Form';
+import { useForm } from 'react-hook-form';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
 
@@ -74,8 +75,17 @@ const Boards = () => {
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
     const sprintId = store?.getSprintId?.data;
+    const CreateCommenthandel = store?.AddCommentReducer
     // const projectId = store?.getProjectId?.data;
     // const milestoneId = store?.getMilestoneId?.data;
+    const {
+        register,
+        handleSubmit,
+        control,
+        watch,
+        reset,
+        formState: { errors },
+    } = useForm();
     const onDragEnd = (result, columns, setColumns) => {
         console.log('colun', result);
 
@@ -203,6 +213,7 @@ const Boards = () => {
         console.log(Createhandel?.data?.status, '////////');
         if (Createhandel?.data?.status == 200) {
             closeModal('render');
+           reset()
             ToastHandle('success', Createhandel?.data?.message);
         } else if (Createhandel?.data?.status == 400) {
             ToastHandle('error', Createhandel?.data?.message);
@@ -210,6 +221,15 @@ const Boards = () => {
             ToastHandle('error', Createhandel?.data?.message);
         }
     }, [Createhandel]);
+    useEffect(() => {
+        if (CreateCommenthandel?.data?.status == 200) {
+            ToastHandle('success', CreateCommenthandel?.data?.message);
+        } else if (CreateCommenthandel?.data?.status == 400) {
+            ToastHandle('error', CreateCommenthandel?.data?.message);
+        } else if (CreateCommenthandel?.data?.status == 500) {
+            ToastHandle('error', CreateCommenthandel?.data?.message);
+        }
+    }, [CreateCommenthandel]);
     useEffect(() => {
         let body = {
             status: 1,
@@ -223,7 +243,7 @@ const Boards = () => {
         <>
            <div className="project_detail">
                 <div className="project_name">
-                    <h3>{projectNameHeading}</h3>
+                    {/* <h3>{projectNameHeading}</h3> */}
                 </div>
                 {/* <div className="taskinfo">
                     <ul>
@@ -277,6 +297,14 @@ const Boards = () => {
                         {' '}
                         Done :
                         <Badge className="badge-success-lighten ms-1">{successHandle?.data?.done?.taskCount}</Badge>
+                    </h4>{' '}
+                </div>
+                <div className='ms-3'>
+                    {' '}
+                    <h4 className="page-title">
+                        {' '}
+                        Due Task:
+                        <Badge className="badge-success-lighten ms-1">{successHandle?.data?.dueTasksCount}</Badge>
                     </h4>{' '}
                 </div>
                 </div>
