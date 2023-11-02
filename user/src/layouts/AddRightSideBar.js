@@ -55,15 +55,15 @@ const SprintId=store?.getSprintId?.data
         formData.append('priority',e.priority)
         formData.append('startDate',e.start_date)
         formData.append('dueDate',e.last_date)
-        formData.append('status',1)
         formData.append('attachment',e.attachment[0]);
         
         if ( projectId !== '' &&  milstoneId !== '' && SprintId !== '') {
             
             dispatch(createTask(formData));
-            setTimeout(() => {
-                callAlltaskData();
-            }, 1000);
+            console.log("formdata",formData)
+            // setTimeout(() => {
+            //     callAlltaskData();
+            // }, 1000);
             
             
         } else {
@@ -227,7 +227,7 @@ const SprintId=store?.getSprintId?.data
                                             id="exampleForm.ControlInput1"
                                             {...register('Assignee')}>
                                             <option value="">--Select--</option>
-                                            {getAllUserData?.map((items, index) => <option key={index} value={items._id}>{items.userName}</option>)}
+                                            {getAllUserData?.map((items, index) => <option key={index} value={items._id}>{items.firstName}</option>)}
                                             {/* {store?.getAllAssignee?.data?.response?.map((item,index)=> <option value={item?.assigneeId?._id}>{item?.assigneeId?.userName} </option>)} */}
 
 
@@ -298,11 +298,11 @@ const SprintId=store?.getSprintId?.data
                                             name="Priority"
                                             class="form-select"
                                             id="exampleForm.ControlInput2"
-                                            disabled={true}
+                                            
                                             {...register('priority')} >
-                                            <option>Medium</option>
+                                           
                                             <option value="1">High</option>
-                                            <option selected value="2">Medium</option>
+                                            <option value="2">Medium</option>
                                             <option value="3">Low</option>
                                         </select>
                                     </div>

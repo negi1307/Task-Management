@@ -24,12 +24,6 @@ const SUMMARY_TYPE={
     GET_WEEK_COUNTS_RESET:"GET_WEEK_COUNTS_RESET",
 
 
-
-
-
-
-    
-  
-
-
 }
+
+export default SUMMARY_TYPE ;

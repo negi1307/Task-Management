@@ -50,7 +50,6 @@ const TaskCard = ({ item, index, closeModal }) => {
     const userId = store?.Auth?.user?.userId;
     const getComments = item?.comments;
     const historyData = store?.getHistoryData?.data?.response;
-    console.log("history data", historyData)
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
@@ -85,7 +84,6 @@ const TaskCard = ({ item, index, closeModal }) => {
         }
 
     }, [])
-    console.log("allCommenttttttttttttttttttttt", allComment)
     const [show, setShow] = useState(false);
 
     const handleClose = () => {
@@ -161,7 +159,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                                     </p>
                                 </div>
                             </div>
-                            <p>Assignee: &nbsp; {item?.assigneeInfo?.userName.charAt(0)}</p>
+                            <p>Assignee: &nbsp; {item?.assigneeInfo?.firstName}</p>
 
                         </TaskInformation>
                     </div>
@@ -211,7 +209,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                                         <div className='taskcardinfo'>
                                             <table>
 
-                                                {allComment?.map((comm, inc) =>
+                                                {/* {allComment?.map((comm, inc) =>
                                                     <tr key={inc}>
                                                         <td>{comm?.comment}</td>
                                                         <td>
@@ -221,7 +219,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                )}
+                                                )} */}
 
 
                                             </table>
@@ -269,10 +267,6 @@ const TaskCard = ({ item, index, closeModal }) => {
                                 <label>Summary:</label> 
                                 {item?.taskInfo?.summary}
                             </li>
-                            
-
-                            
-                          
                             <li>
                             <label>Description:</label>
                                 

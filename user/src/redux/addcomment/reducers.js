@@ -25,11 +25,11 @@ const GETHISTORY_INITAL_STATE={
 }
 
 
-// const GET_ALL_COMMENT={
-//     data: [],
-//     message: "",
-//     loading: false
-// }
+const GET_ALL_COMMENT_INITAL_STATE={
+    data: [],
+    message: "",
+    loading: false
+}
 
 export const addComments = (state = ADD_ALL_COMMENT, action) => {
     switch (action.type) {
@@ -57,6 +57,32 @@ export const addComments = (state = ADD_ALL_COMMENT, action) => {
     }
 };
 
+
+export const getAllComment = (state = GET_ALL_COMMENT_INITAL_STATE, action) => {
+    switch (action.type) {
+        case Addcomment.GET_COMMENT_LOADING:
+            return {
+                data: GET_ALL_COMMENT_INITAL_STATE.data,
+                loading: true,
+            };
+        case Addcomment.GET_COMMENT_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case Addcomment.GET_COMMENT_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
 export const deleteComment = (state = DELETE_COMMENT, action) => {
     switch (action.type) {
         case Addcomment.DELETE_TASK_LOADING:
@@ -147,3 +173,4 @@ export const getHistoryData = (state = GETHISTORY_INITAL_STATE, action) => {
 
     }
 };
+
