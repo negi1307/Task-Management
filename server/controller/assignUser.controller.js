@@ -146,15 +146,15 @@ const getUserTasks = async (req, res) => {
         ])
             .sort({ createdAt: -1 });
         for (const assignment of result) {
-            const summary = assignment.taskInfo.summary;
+            const summary = assignment?.taskInfo?.summary;
             if (new RegExp(searchString, 'i').test(summary)) {
-                if (assignment.taskInfo.status === 1) {
+                if (assignment?.taskInfo?.status === 1) {
                     todo.push(assignment);
-                } else if (assignment.taskInfo.status === 2) {
+                } else if (assignment?.taskInfo?.status === 2) {
                     inProgress.push(assignment);
-                } else if (assignment.taskInfo.status === 3) {
+                } else if (assignment?.taskInfo?.status === 3) {
                     hold.push(assignment);
-                } else if (assignment.taskInfo.status === 4) {
+                } else if (assignment?.taskInfo?.status === 4) {
                     done.push(assignment);
                 }
             }
