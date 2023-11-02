@@ -39,3 +39,11 @@ export const getComment= (data): AuthAction => ({
     type: TASK_TYPES.GET_COMMENT,
     payload: data
 })
+export const deleteComment= (data): AuthAction => ({
+    type: TASK_TYPES.DELETE_COMMENT,
+    payload: data
+})
+export const gettaskId= (data): AuthAction => ({
+    type: "taskid",
+    payload: data
+})

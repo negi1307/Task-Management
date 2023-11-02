@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import TASK_TYPES from './constant';
-import { AddCommentApi, GetTaskSummaryApi, TaskStatusApi, UpdateTaskApi, createTaskApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi,updateTaskStatusApi } from './api';
+import { AddCommentApi, GetTaskSummaryApi, TaskStatusApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi,updateTaskStatusApi } from './api';
 
 function* createTaskFunction({ payload }) {
     try {
@@ -319,6 +319,42 @@ function* getCommentFunction({ payload }) {
 
     }
 }
+function* deleteCommentFunction({ payload }) {
+    try {
+        yield put({
+            type: TASK_TYPES.DELETE_COMMENT_LOADING,
+            payload: {}
+        })
+        const response = yield call(deleteCommentApi, { payload });
+        if (response.data.status) {
+            yield put({
+                type: TASK_TYPES.DELETE_COMMENT_SUCCESS,
+                payload: { ...response.data },
+            });
+            yield put({
+                type: TASK_TYPES.DELETE_COMMENT_RESET,
+                payload: {},
+            });
+        }
+        else {
+            yield put({
+                type: TASK_TYPES.DELETE_COMMENT_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: TASK_TYPES.DELETE_COMMENT_ERROR,
+            payload: { message: error?.message }
+        });
+        yield put({
+            type: TASK_TYPES.DELETE_COMMENT_RESET,
+            payload: {},
+        });
+
+    }
+}
 export function* createTaskSaga(): any {
     yield takeEvery(TASK_TYPES.CREATE_TASK, createTaskFunction);
 }
@@ -346,6 +382,9 @@ export function* AddCommentSaga(): any {
 export function* getCommentSaga(): any {
     yield takeEvery(TASK_TYPES.GET_COMMENT, getCommentFunction);
 }
+export function* deleteCommentSaga(): any {
+    yield takeEvery(TASK_TYPES.DELETE_COMMENT, deleteCommentFunction);
+}
 function* AllTaskSaga(): any {
     yield all([
         fork(createTaskSaga),
@@ -357,6 +396,7 @@ function* AllTaskSaga(): any {
         fork(TaskStatusSaga),
         fork(AddCommentSaga),
         fork(getCommentSaga),
+        fork(deleteCommentSaga),
     ])
 }
 export default AllTaskSaga;

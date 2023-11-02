@@ -30,3 +30,6 @@ export function AddCommentApi(data): any {
 export function getCommentApi(data): any {
     return api.get(URL.GetComment  + data?.payload?.taskId);
 }
+export function deleteCommentApi(data): any {
+    return api.delete(URL.deleteComment  + data?.payload?.taskId);
+}

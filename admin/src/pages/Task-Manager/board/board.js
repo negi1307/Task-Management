@@ -11,7 +11,7 @@ import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
-import { updateTaskStatus } from '../../../../src/redux/task/action';
+import { getComment, updateTaskStatus } from '../../../../src/redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
@@ -23,9 +23,9 @@ import {
     getAllProjects,
     getAllRoles,
     getAllUsers,
-    getSingleSprint,
     getsingleMileStone,
 } from '../../../redux/actions';
+import {getSingleSprint} from "../../../redux/sprint/action"
 import { getSprintId } from '../../../redux/sprint/reducres';
 import { getMilestoneId, getMilestonetId } from '../../../redux/milestone/reducer';
 import { getProjectId } from '../../../redux/projects/reducers';
@@ -75,7 +75,9 @@ const Boards = () => {
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
     const sprintId = store?.getSprintId?.data;
+    const taskId = store?.getTaskId?.data;
     const CreateCommenthandel = store?.AddCommentReducer
+    const deleteCommenthandel= store?.deleteCommentReducer
     // const projectId = store?.getProjectId?.data;
     // const milestoneId = store?.getMilestoneId?.data;
     const {
@@ -230,6 +232,16 @@ const Boards = () => {
             ToastHandle('error', CreateCommenthandel?.data?.message);
         }
     }, [CreateCommenthandel]);
+    useEffect(() => {
+        if (deleteCommenthandel?.data?.status == 200) {
+            ToastHandle('success', deleteCommenthandel?.data?.message);
+            dispatch(getComment({taskId:taskId}))
+        } else if (deleteCommenthandel?.data?.status == 400) {
+            ToastHandle('error', deleteCommenthandel?.data?.message);
+        } else if (deleteCommenthandel?.data?.status == 500) {
+            ToastHandle('error', deleteCommenthandel?.data?.message);
+        }
+    }, [deleteCommenthandel]);
     useEffect(() => {
         let body = {
             status: 1,
