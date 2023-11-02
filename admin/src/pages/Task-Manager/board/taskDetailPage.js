@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import moment from 'moment';
-import { AddComment, getComment } from '../../../redux/task/action';
+import { AddComment, deleteComment, getComment } from '../../../redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 const TaskDetailPage = ({ modal, editData, closeModal }) => {
@@ -33,7 +33,9 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
         dispatch(getComment({ taskId: editData?.id }));
         setValue('comment', '');
     };
-
+const handeldelete=(data)=>{
+dispatch(deleteComment({taskId:data?._id}))
+}
     return (
         <>
             <Modal show={modal} onHide={closeModal} size={'lg'}>
@@ -127,8 +129,8 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                 <ul style={{listStyle:"none"}}>
                                                     <li className='font-18'>{ele?.comment}</li>
                                                     <div className='d-flex'>
-                                                        <p>Edit</p>
-                                                        <p className='ms-2'>Delete</p>
+                                                        {/* <p>Edit</p> */}
+                                                        <p className='ms-2 cp' onClick={()=>handeldelete(ele)}>Delete</p>
                                                     </div>
                                                 </ul>
                                             ))}

@@ -50,6 +50,11 @@ const GET_COMMENT__INITIAL_STATE = {
     loading:false,
     message:""
 }
+const DELETE_COMMENT__INITIAL_STATE = {
+    data:[],
+    loading:false,
+    message:""
+}
 export const createTaskReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case TASK_TYPES.CREATE_TASK_LOADING:
@@ -304,6 +309,49 @@ export const getComment = (state = GET_COMMENT__INITIAL_STATE, action) => {
                 loading: false,
                 message: action?.payload,
             };
+        default:
+            return { ...state };
+
+    }
+};
+export const deleteCommentReducer = (state = DELETE_COMMENT__INITIAL_STATE, action) => {
+    switch (action.type) {
+        case TASK_TYPES.DELETE_COMMENT_LOADING:
+            return {
+                data: DELETE_COMMENT__INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.DELETE_COMMENT_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+        case TASK_TYPES.DELETE_COMMENT_RESET:
+            return {
+                data: DELETE_COMMENT__INITIAL_STATE.data,
+                loading: false
+            }
+
+        case TASK_TYPES.DELETE_COMMENT_ERROR:
+            return {
+                data: [],
+                status: 403,
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+export const getTaskId = (state = {data:""}, action) => {
+    switch (action.type) {
+        case "taskid":
+            return {
+                data: action.payload,
+                
+            };
+      
         default:
             return { ...state };
 
