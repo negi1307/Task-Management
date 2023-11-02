@@ -15,11 +15,8 @@ const createtask = async (req, res) => {
             return res.status(400).json({ status: '400', message: 'Task already exists' });
         } else {
             const lastTask = await taskModel.countDocuments();
-            const taskMannualId = lastTask + 1;
-            const attachmentPath = `http://localhost:8000/upload/${req.file.originalname}`;
-            const fileExtension = path.extname(attachmentPath).toLowerCase();
             const task = await taskModel.create({
-                taskMannualId,
+                taskMannualId:lastTask + 1,
                 projectId,
                 milestoneId,
                 sprintId,
@@ -28,8 +25,8 @@ const createtask = async (req, res) => {
                 priority,
                 startDate,
                 dueDate,
-                attachment: attachmentPath,
-                attachmentType: fileExtension
+                attachment: `http://localhost:8000/upload/${req.file.originalname}`,
+                attachmentType: req.file.mimetype
             });
             if (task && req.user.role === 1) {
                 const assignedUser = await assignUserModel.create({
@@ -40,7 +37,7 @@ const createtask = async (req, res) => {
                 return res.status(200).json({ status: "200", message: "Task created successfully", response: task, assignedUser });
             }
             else {
-                return res.status(200).json({ status: "400", message: "Task Not created" });
+                return res.status(200).json({ status: "200", message: "Task created successfully", response: task });
             }
         }
     } catch (error) {
