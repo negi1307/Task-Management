@@ -51,6 +51,7 @@ const Title = styled.span`
 const Boards = (props) => {  
   const dispatch = useDispatch();
   const store = useSelector(state => state)
+  console.log("storeeeee board",store)
   
   const successHandle = store?.getAllTaskReducer;
   const statushandle = store?.updateTaskStatus;
@@ -181,6 +182,7 @@ const SprintId=store?.getSprintId?.data
       })
     }
   }, [successHandle])
+
  // const [body,setBody] = useState({});
  const handelupdatetask = (ele) => {
   let body = {
@@ -192,7 +194,7 @@ const SprintId=store?.getSprintId?.data
 };
   
   const callAlltaskData=()=>{
-     dispatch(getAllTask())
+    dispatch(getAllTask({projectId:projectId , milestoneId:milstoneId , sprintId:SprintId}));
   }
 
   

@@ -25,8 +25,8 @@ export function getHistoryApi(data): any {
 }
 
 
-// export function getTaskCommentApi(data): any {
+export function getTaskCommentApi(data): any {
     
-//     return api.get(URL.GetComment+data?.payload.taskId)
+    return api.get(URL.GetComment+data?.payload.taskId)
     
-// }
+}

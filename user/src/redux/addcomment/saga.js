@@ -2,6 +2,7 @@ import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import Addcomment from '../addcomment/constants';
 import { addTaskCommentApi,deleteTask,updateTask,getHistoryApi } from '../addcomment/api';
 
+
 function* addTaskCommentFunction({ payload }) {
     try {
         yield put({
@@ -140,6 +141,7 @@ function* getHistroryFunction({ payload }) {
 
     }
 }
+
 export function* addAllTaskCommentsSaga(): any {
     yield takeEvery(Addcomment.ADD_COMMENT, addTaskCommentFunction);
 }
@@ -156,9 +158,7 @@ export function* getHistrorySaga(): any {
     yield takeEvery(Addcomment.GET_HISTORY, getHistroryFunction);
 }
 
-// export function* getAllTaskCommentsSaga(): any {
-//     yield takeEvery(Addcomment.GET_COMMENT, getTaskCommentFunction);
-// }
+
 function* Addcommentsaga(): any {
     yield all([
 
@@ -166,7 +166,7 @@ function* Addcommentsaga(): any {
         fork(deleteTaskCommentsSaga),
         fork(updateTaskCommentsSaga),
         fork(getHistrorySaga)
-        // fork(getAllTaskCommentsSaga)
+     
 
 
     ])

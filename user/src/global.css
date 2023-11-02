@@ -445,5 +445,27 @@ ul.side-nav i {
     color: #000;
 }
 
+.description p {
+    margin-bottom: 0px;
+}
 
+.card_detail label {
+    margin-right: 30px;
+}
+
+.card_detail ul li {
+    display: flex;
+}
+
+.card_detail ul li {
+    margin-bottom: 13px;
+}
+
+.card_detail {
+    flex: 0 0 45%;
+}
+.card_detail {
+    padding-left: 30px;
+    box-shadow: 0 14px 28px rgb(152 152 152 / 25%), 0 10px 10px rgb(204 204 204 / 22%);
+}
 /* end task card detail page ------------------------------------  */
