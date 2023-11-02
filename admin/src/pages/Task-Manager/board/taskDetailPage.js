@@ -1,21 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import moment from 'moment';
+import { AddComment, getComment } from '../../../redux/task/action';
+import ToastHandle from '../../../constants/toaster/toaster';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 const TaskDetailPage = ({ modal, editData, closeModal }) => {
-    console.log(editData, 'dataaaaaaaaaa');
+    const store = useSelector((state) => state);
+    const dispatch = useDispatch();
+    const [connectComponent, setConnectComponent] = useState('All');
+    const getCommentData = store?.getComment?.data?.response;
+    const connectComponentCheck = (type) => {
+        setConnectComponent(type);
+    };
     const {
         register,
         handleSubmit,
         control,
+        setValue,
         watch,
         reset,
         formState: { errors },
     } = useForm();
+    const onSubmit = (val) => {
+        let body = {
+            taskId: editData?._id,
+            comment: val?.comment,
+        };
+        dispatch(AddComment(body));
+        dispatch(getComment({ taskId: editData?.id }));
+        setValue('comment', '');
+    };
+
     return (
-        
         <>
             <Modal show={modal} onHide={closeModal} size={'lg'}>
                 <Row className="m-0 p-0">
@@ -40,6 +59,9 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                             <Row>
                                 <Col lg={12}>
                                     <Button
+                                        onClick={() => {
+                                            connectComponentCheck('All');
+                                        }}
                                         style={{
                                             backgroundColor: '#f3f3f3',
                                             borderColor: '#f3f3f3',
@@ -49,37 +71,75 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                         All
                                     </Button>
                                     <Button
+                                        onClick={() => {
+                                            connectComponentCheck('Comments');
+                                        }}
                                         style={{
                                             backgroundColor: '#f3f3f3',
                                             borderColor: '#f3f3f3',
                                             color: 'black',
                                             boxShadow: 'none',
-                                        }} className='ms-2'>
+                                        }}
+                                        className="ms-2">
                                         Comments
                                     </Button>
                                     <Button
+                                        onClick={() => {
+                                            connectComponentCheck('History');
+                                        }}
                                         style={{
                                             backgroundColor: '#f3f3f3',
                                             borderColor: '#f3f3f3',
                                             color: 'black',
                                             boxShadow: 'none',
-                                        }}className='ms-2'>
+                                        }}
+                                        className="ms-2">
                                         History
                                     </Button>
                                 </Col>
                             </Row>
-                            <Row>
-                                
-                                <Col lg={12}>
-                                        <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                            <Form.Control type="text" {...register('comment', { required: true })} />
-                                            {/* {errors.comment?.type === 'required' && (
+                            {connectComponent === 'All' ? (
+                                ''
+                            ) : connectComponent === 'Comments' ? (
+                                <>
+                                    <form onSubmit={handleSubmit(onSubmit)}>
+                                        <Row className="mt-2">
+                                            <Col lg={10}>
+                                                <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="Add comment"
+                                                        {...register('comment', { required: true })}
+                                                    />
+                                                    {/* {errors.comment?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )} */}
-                                        </Form.Group>
-                                    
-                                </Col>
-                            </Row>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col lg={2}>
+                                                <Button type="submit">Add</Button>
+                                            </Col>
+                                        </Row>
+                                    </form>
+                                    <Row>
+                                        
+                                            {getCommentData?.map((ele, ind) => (
+                                                <ul style={{listStyle:"none"}}>
+                                                    <li className='font-18'>{ele?.comment}</li>
+                                                    <div className='d-flex'>
+                                                        <p>Edit</p>
+                                                        <p className='ms-2'>Delete</p>
+                                                    </div>
+                                                </ul>
+                                            ))}
+                                        
+                                    </Row>
+                                </>
+                            ) : connectComponent === 'History' ? (
+                                ''
+                            ) : (
+                                ''
+                            )}
                         </Col>
                         <Col lg={6}>
                             <Card className="p-2">
