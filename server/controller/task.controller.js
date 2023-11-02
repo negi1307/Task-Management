@@ -36,9 +36,6 @@ const createtask = async (req, res) => {
                 })
                 return res.status(200).json({ status: "200", message: "Task created successfully", response: task, assignedUser });
             }
-            else {
-                return res.status(200).json({ status: "200", message: "Task created successfully", response: task });
-            }
         }
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
