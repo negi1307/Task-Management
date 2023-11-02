@@ -9,7 +9,9 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 export default function RightBar(props) {
     const {
         register,
-        handleSubmit,watch,
+        handleSubmit,
+        setValue,
+        watch,
         formState: { errors },
     } = useForm();
     const { showModal, setShowModal, content ,projectId,mileStoneId,sprintId} = props;
@@ -41,6 +43,14 @@ export default function RightBar(props) {
         } else {
             alert('plsease select project');
         }
+        setValue("Summary","")
+        setValue("Assignee","")
+        setValue("Report","")
+        setValue("priority","")
+        setValue("start_date","")
+        setValue("last_date","")
+        setValue("Attachment","")
+        setDescription("")
         setShowModal(false);
     };
     useEffect(() => {

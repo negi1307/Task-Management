@@ -24,3 +24,9 @@ export function updateTaskStatusApi(data): any {
 export function TaskStatusApi(data): any {
     return api.update(URL.TaskStatus, data.payload);
 }
+export function AddCommentApi(data): any {
+    return api.create(URL.ADDCOMMENT, data.payload);
+}
+export function getCommentApi(data): any {
+    return api.get(URL.GetComment  + data?.payload?.taskId);
+}
