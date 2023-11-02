@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
-const path = require('path');
 const taskModel = require('../models/task.model');
 const assignUserModel = require('../models/assignUser.model');
 const historyModel = require('../models/history.model');
-const { log } = require('console');
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -16,7 +14,7 @@ const createtask = async (req, res) => {
         } else {
             const lastTask = await taskModel.countDocuments();
             const task = await taskModel.create({
-                taskMannualId:lastTask + 1,
+                taskMannualId: lastTask + 1,
                 projectId,
                 milestoneId,
                 sprintId,
@@ -176,9 +174,9 @@ const getTasks = async (req, res) => {
                     assignees: { $first: { $arrayElemAt: [['$assignees'], 0] } },
                 }
             },
-            { $skip:(parseInt(skip) - 1) * pageSize }, // Skip the specified number of documents
-  { $limit:pageSize },
-  { $sort:{ createdAt: -1 } }
+            { $skip: (parseInt(skip) - 1) * pageSize }, // Skip the specified number of documents
+            { $limit: pageSize },
+            { $sort: { createdAt: -1 } }
         ])
         totalPages = Math.ceil(totalCount / pageSize);
         return res.status(200).json({ status: "200", message: "All Tasks fetched successfully", response: tasks, totalCount, totalPages });
@@ -393,11 +391,11 @@ const getTasksAccToStatus = async (req, res) => {
                         milestoneInfo: { $first: { $arrayElemAt: ['$milestones', 0] } },
                         sprintInfo: { $first: { $arrayElemAt: ['$sprints', 0] } },
                         assignees: { $first: { $arrayElemAt: [['$assignees'], 0] } },
-                        comments: { $push: '$comments' },
+                        comments: { $first: { $arrayElemAt: [['$comments'], 0] } },
                     }
-                }
+                },
+                { $sort: { createdAt: -1 } }
             ])
-                .sort({ createdAt: -1 });
             let taskCount = await taskModel.countDocuments(query);
 
             if (i == 1) {
