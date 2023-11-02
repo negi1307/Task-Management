@@ -205,7 +205,7 @@ const TaskList = () => {
                                                             />
                                                         </td>
 
-                                                        <td>{item?.assignees?.assigneeInfo?.userName}</td>
+                                                        <td>{item?.assignees?.assigneeInfo?.firstName} {item?.assignees?.assigneeInfo?.lastName}</td>
                                                         <td>{item?.assignees?.reporterInfo?.role}</td>
                                                         <td>
                                                             {item?.priority == 1

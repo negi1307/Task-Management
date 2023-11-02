@@ -264,7 +264,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                     <Form.Select {...register('Assignee', { required: true })}>
                                                         <option value={''}>--Select--</option>
                                                         {store?.getAllUsers?.data?.response?.map((ele, ind) => (
-                                                            <option value={ele?._id}> {ele?.userName} </option>
+                                                            <option value={ele?._id}> {ele?.firstName} {ele?.LastName} </option>
                                                         ))}
                                                     </Form.Select>
                                                     {errors.Assignee?.type === 'required' && (
