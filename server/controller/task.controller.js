@@ -50,24 +50,20 @@ const createtask = async (req, res) => {
           reporterId: req.user.role === 1 ? reporterId : admin.roleId, // one who will assignee report after work done
           taskId: task._id,
         });
-        return res
-          .status(200)
-          .json({
-            status: "200",
-            message: "Task created successfully",
-            response: task,
-            assignedUser,
-          });
+        return res.status(200).json({
+          status: "200",
+          message: "Task created successfully",
+          response: task,
+          assignedUser,
+        });
       }
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: "500",
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
 
@@ -207,23 +203,19 @@ const getTasks = async (req, res) => {
       { $sort: { createdAt: -1 } },
     ]);
     totalPages = Math.ceil(totalCount / pageSize);
-    return res
-      .status(200)
-      .json({
-        status: "200",
-        message: "All Tasks fetched successfully",
-        response: tasks,
-        totalCount,
-        totalPages,
-      });
+    return res.status(200).json({
+      status: "200",
+      message: "All Tasks fetched successfully",
+      response: tasks,
+      totalCount,
+      totalPages,
+    });
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: "500",
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
 
@@ -259,13 +251,11 @@ const updateTask = async (req, res) => {
       .status(200)
       .json({ status: "200", message: "Task updated successfully" });
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: "500",
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
 
@@ -278,13 +268,11 @@ const deleteTask = async (req, res) => {
       .status(200)
       .json({ status: "200", message: "Task Deleted successfully" });
   } catch (err) {
-    return res
-      .status(200)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: err.message,
-      });
+    return res.status(200).json({
+      status: "500",
+      message: "Something went wrong",
+      error: err.message,
+    });
   }
 };
 
@@ -312,13 +300,11 @@ const updateTaskStatus = async (req, res) => {
       .status(200)
       .json({ status: "200", message: "Task Status updated successfully" });
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: "500",
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
 
@@ -330,20 +316,16 @@ const updateTaskActiveStatus = async (req, res) => {
       { activeStatus: req.body.activeStatus },
       { new: true }
     );
-    return res
-      .status(200)
-      .json({
-        status: "200",
-        message: "Task Active Inactive Status updated successfully",
-      });
+    return res.status(200).json({
+      status: "200",
+      message: "Task Active Inactive Status updated successfully",
+    });
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: "500",
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
 
@@ -473,6 +455,8 @@ const getTasksAccToStatus = async (req, res) => {
             activeStatus: { $first: "$activeStatus" },
             attachment: { $first: "$attachment" },
             attachmentType: { $first: "$attachmentType" },
+            createdAt: { $first: "$createdAt" },
+            updatedAt: { $first: "$updatedAt" },
             projectInfo: { $first: { $arrayElemAt: ["$projects", 0] } },
             milestoneInfo: { $first: { $arrayElemAt: ["$milestones", 0] } },
             sprintInfo: { $first: { $arrayElemAt: ["$sprints", 0] } },
@@ -501,25 +485,21 @@ const getTasksAccToStatus = async (req, res) => {
     query.dueDate = { $lt: now };
     query.status = { $ne: 4 };
     const dueTasksCount = await taskModel.countDocuments(query);
-    return res
-      .status(200)
-      .json({
-        status: "200",
-        message: "fetched successfully",
-        Response: todo,
-        inProgress,
-        hold,
-        done,
-        dueTasksCount,
-      });
+    return res.status(200).json({
+      status: "200",
+      message: "fetched successfully",
+      Response: todo,
+      inProgress,
+      hold,
+      done,
+      dueTasksCount,
+    });
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: "500",
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
 
@@ -536,13 +516,11 @@ const getPriorityTasks = async (req, res) => {
         { name: "mediumPriority", count: secondPriority },
         { name: "lowPriority", count: thirdPriority },
       ];
-      return res
-        .status(200)
-        .json({
-          status: "200",
-          message: "Prioity wise tasks for Admin fetched successfully",
-          response: taskPriorityCount,
-        });
+      return res.status(200).json({
+        status: "200",
+        message: "Prioity wise tasks for Admin fetched successfully",
+        response: taskPriorityCount,
+      });
     } else {
       const assigneeTasks = await assignUserModel.find({
         assigneeId: req.user._id,
@@ -567,22 +545,18 @@ const getPriorityTasks = async (req, res) => {
         { name: "mediumPriority", count: secondPriority },
         { name: "lowPriority", count: thirdPriority },
       ];
-      return res
-        .status(200)
-        .json({
-          status: "200",
-          message: "Priority wise tasks for User fetched successfully",
-          response: taskPriorityCount,
-        });
+      return res.status(200).json({
+        status: "200",
+        message: "Priority wise tasks for User fetched successfully",
+        response: taskPriorityCount,
+      });
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: "500",
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
 
@@ -616,13 +590,11 @@ const getTasksStatusCount = async (req, res) => {
         { name: "hold", count: holdCount },
         { name: "Done", count: doneCount },
       ];
-      return res
-        .status(200)
-        .json({
-          status: "200",
-          message: "Tasks count for Admin fetched successfully",
-          response: taskStatusCount,
-        });
+      return res.status(200).json({
+        status: "200",
+        message: "Tasks count for Admin fetched successfully",
+        response: taskStatusCount,
+      });
     } else {
       const assigneeTasks = await assignUserModel.find({
         assigneeId: req.user._id,
@@ -656,22 +628,18 @@ const getTasksStatusCount = async (req, res) => {
         { name: "hold", count: holdCount },
         { name: "Done", count: doneCount },
       ];
-      return res
-        .status(200)
-        .json({
-          status: "200",
-          message: "Tasks count for User fetched successfully",
-          response: taskStatusCount,
-        });
+      return res.status(200).json({
+        status: "200",
+        message: "Tasks count for User fetched successfully",
+        response: taskStatusCount,
+      });
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: "500",
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
 
@@ -680,13 +648,11 @@ const getTasksCount = async (req, res) => {
   try {
     if (req.user.role === 1) {
       const tasksCount = await taskModel.countDocuments();
-      return res
-        .status(200)
-        .json({
-          status: "200",
-          message: "Tasks count for admin fetched successfully",
-          response: { tasksCount },
-        });
+      return res.status(200).json({
+        status: "200",
+        message: "Tasks count for admin fetched successfully",
+        response: { tasksCount },
+      });
     } else {
       const assigneeTasks = await assignUserModel.find({
         assigneeId: req.user._id,
@@ -696,22 +662,18 @@ const getTasksCount = async (req, res) => {
       const tasksCount = await taskModel.countDocuments({
         _id: { $in: taskIds },
       });
-      return res
-        .status(200)
-        .json({
-          status: "200",
-          message: "Tasks count for user fetched successfully",
-          response: { tasksCount },
-        });
+      return res.status(200).json({
+        status: "200",
+        message: "Tasks count for user fetched successfully",
+        response: { tasksCount },
+      });
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: "500",
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
 
@@ -757,13 +719,11 @@ const getTasksWeekCount = async (req, res) => {
         status: { $ne: 4 },
         dueDate: { $lte: now, $gte: sevenDaysAgo },
       });
-      return res
-        .status(200)
-        .json({
-          status: "200",
-          message: "Tasks count fetched successfully",
-          response: { doneCount, updatedCount: result, createdCount, dueCount },
-        });
+      return res.status(200).json({
+        status: "200",
+        message: "Tasks count fetched successfully",
+        response: { doneCount, updatedCount: result, createdCount, dueCount },
+      });
     } else {
       const assigneeTasks = await assignUserModel.find({
         assigneeId: req.user._id,
@@ -809,22 +769,18 @@ const getTasksWeekCount = async (req, res) => {
         status: { $ne: 4 },
         dueDate: { $lte: now, $gte: sevenDaysAgo },
       });
-      return res
-        .status(200)
-        .json({
-          status: "200",
-          message: "Tasks count fetched successfully",
-          response: { doneCount, updatedCount: result, createdCount, dueCount },
-        });
+      return res.status(200).json({
+        status: "200",
+        message: "Tasks count fetched successfully",
+        response: { doneCount, updatedCount: result, createdCount, dueCount },
+      });
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({
+      status: "500",
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
 
