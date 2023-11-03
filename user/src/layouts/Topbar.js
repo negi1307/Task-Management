@@ -388,13 +388,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                 <div className='taskinfo' >
                     <ul>
                         <li> <Link to="summary">Summary</Link>  </li>
-                        <li> <Link to="summary">List</Link> </li>
+                        {/* <li> <Link to="/tasklist">List</Link> </li> */}
                         <li> <Link to="/boards">Board</Link>  </li>
-                        <li> <Link to="">Calendar</Link>  </li>
-                        <li> <Link to="">TimeLine</Link>  </li>
-                        <li> <Link to="">Pages</Link>  </li>
-                        <li> <Link to="">Report </Link>  </li>
-                        <li> <Link to="">Issues</Link>  </li>
+                      
                     </ul>
                 </div>
             </div>

@@ -53,7 +53,6 @@ const verifyEmployee = async (req, res, next) => {
         }
         const bearerToken = headerToken.split(' ');
         const token = bearerToken[1];
-        console.log(token);
         jwt.verify(token, process.env.SECRET_ACCESS_TOKEN, async (err, user) => {
             if (err) {
                 return res.status(401).json({ message: 'jwt token is expired' })

@@ -20,7 +20,7 @@ export const getHistory = (data) => ({
     payload: data
 })
 
-// export const getComment = (data) => ({
-//     type: Addcomment.GET_COMMENT,
-//     payload: data
-// })
+export const getComment = (data) => ({
+    type: Addcomment.GET_COMMENT,
+    payload: data
+})

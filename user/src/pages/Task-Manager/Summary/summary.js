@@ -1,31 +1,93 @@
 import React from 'react'
 import { Card, ProgressBar } from 'react-bootstrap';
 import Chart from 'react-apexcharts';
+import {getPriorityTaskBoard,getweekTaskBoard,getTaskStatusCount,getTaskCount} from '../../../redux/Summary/action'
+import { useDispatch, useSelector, dispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useState } from 'react';
+
 const Summary = () => {
-  const apexDonutOpts = {
-    chart: {
-        height: 340,
-        type: 'donut',
-    },
-    colors: ['#727cf5', '#0acf97', '#fa5c7c', '#ffbc00'],
-    legend: {
-        show: false,
-    },
-    responsive: [
-        {
-            breakpoint: 376,
-            options: {
-                chart: {
-                    width: 250,
-                    height: 250,
-                },
-                legend: {
-                    position: 'bottom',
-                },
-            },
-        },
-    ],
+  const store=useSelector(state=>state)
+  console.log("priorty dataaaaaaaaaaaaaaaaaa",store)
+  const [priorityGraph,setPriorityGraph]=useState([])
+  const PriorityGraphDta=store?.getPriorityTaskBoard;
+  const weekTaskCount=store?.getWeekCountTaskBoard?.data?.response
+  const StatusCount=store?.getTaskStatusCount;
+  const TaskCount=store?.getTaskCount?.data?.response
+  const [StatusCountDonut,setStatusCount]=useState([])
+  console.log("PriorityGraphDtaaa",PriorityGraphDta)
+  const dispatch=useDispatch()
+  useEffect(()=>{
+    dispatch(getPriorityTaskBoard())
+    dispatch(getweekTaskBoard())
+    dispatch(getTaskStatusCount())
+    dispatch(getTaskCount())
+   
+    
+  },[])
+  useEffect(() => {
+    if (PriorityGraphDta?.data?.status == 200) {
+      setPriorityGraph(PriorityGraphDta?.data?.response)
+    }
+}, [PriorityGraphDta]);
+useEffect(() => {
+  if (StatusCount?.data?.status == 200) {
+    setStatusCount(StatusCount?.data?.response)
+  }
+}, [StatusCount]);
+const apexDonutOpts = {
+  chart: {
+      height: 340,
+      type: 'donut',
+  },
+  labels: StatusCountDonut?.map((ele, i) => {
+      return ele.name;
+  }),
+  colors: ['#727cf5', '#0acf97', '#fa5c7c', '#ffbc00'],
+  legend: {
+      show: false,
+  },
+  responsive: [
+      {
+          breakpoint: 376,
+          options: {
+              chart: {
+                  width: 250,
+                  height: 250,
+              },
+              legend: {
+                  position: 'bottom',
+              },
+          },
+      },
+  ],
 };
+const options = {
+  chart: {
+      type: 'bar',
+  },
+  plotOptions: {
+      bar: {
+          horizontal: false,
+          endingShape: 'rounded',
+      },
+  },
+  // colors: ['#FF5733', '#FFC300', '#DAF7A6', '#5DADE2', '#AF7AC5'], // Specify different colors for each bar
+  dataLabels: {
+      enabled: false,
+  },
+  xaxis: {
+      categories: priorityGraph?.map((ele, ind) => ele?.name),
+  },
+  colors: ['#727cf5', '#0acf97', '#fa5c7c'],
+};
+
+const series = [
+  {
+      name: 'Series 1',
+      data: priorityGraph?.map((ele, ind) => ele?.count),
+  },
+];
 
 const apexDonutData = [44, 55, 41, 17];
   return (
@@ -39,10 +101,10 @@ const apexDonutData = [44, 55, 41, 17];
             </div>
             <div className="mx-3 ">
               <b>
-                <h5 className="mb-0 mt-1 text-secondary">0 done</h5>
+                <h5 className="mb-0 mt-1 text-secondary">{weekTaskCount?.createdCount}</h5>
               </b>
               <b>
-                <p className="m-0 text-secondary">in the last 7 days</p>
+                <p className="m-0 text-secondary">createdCount in the last 7 days</p>
               </b>
             </div>
           </div>
@@ -54,7 +116,7 @@ const apexDonutData = [44, 55, 41, 17];
             </div>
             <div className="mx-3 ">
               <b>
-                <h5 className="mb-0 mt-1 text-secondary">0 updated</h5>
+                <h5 className="mb-0 mt-1 text-secondary">{weekTaskCount?.updatedCount}</h5>
               </b>
               <b>
                 <p className="m-0 text-secondary">in the last 7 days</p>
@@ -69,7 +131,7 @@ const apexDonutData = [44, 55, 41, 17];
             </div>
             <div className="mx-3 ">
               <b>
-                <h5 className="mb-0 mt-1 text-secondary">0 created</h5>
+                <h5 className="mb-0 mt-1 text-secondary">{weekTaskCount?.dueCount}</h5>
               </b>
               <b>
                 <p className="m-0 text-secondary">in the last 7 days</p>
@@ -84,7 +146,7 @@ const apexDonutData = [44, 55, 41, 17];
             </div>
             <div className="mx-3 ">
               <b>
-                <h5 className="mb-0 mt-1 text-secondary">0 due</h5>
+                <h5 className="mb-0 mt-1 text-secondary">{weekTaskCount?.doneCount}</h5>
               </b>
               <b>
                 <p className="m-0 text-secondary">in the last 7 days</p>
@@ -100,41 +162,43 @@ const apexDonutData = [44, 55, 41, 17];
               <h5 className="mb-3"><b>States overview</b></h5>
               <h6>Get a snapshot of the States of your items. <a href className="text-decoration-none">View
                   all items</a></h6>
+                 
             </div>
             <div className="chart_div ">
               <div className="donut-chart">
               <Chart
                     options={apexDonutOpts}
-                    series={apexDonutData}
+                    series={StatusCountDonut?.map((ele, i) => {
+                                            return ele.count;
+                                        })}
                     type="donut"
                     height={222}
                     className="apex-charts mb-4 mt-4"
                 />
                 <ul className="legend mx-4">
-                  <li><span className="color" style={{backgroundColor: 'rgb(217, 216, 216)'}} />Open
-                  </li>
-                  <li><span className="color" style={{backgroundColor: 'rgb(244, 108, 108)'}} />To Do
+                  {/* <li><span className="color" style={{backgroundColor: 'rgb(217, 216, 216)'}} />Open
+                  </li> */}
+                  <li><span className="color" style={{backgroundColor: 'rgb(244, 108, 108)'}} />To-do
+                  
                   </li>
                   <li><span className="color" style={{backgroundColor: 'rgb(100, 100, 245)'}} />In
                     Progress</li>
                   <li><span className="color" style={{backgroundColor: 'rgb(187, 125, 245)'}} />In
                     Review</li>
-                  <li><span className="color" style={{backgroundColor: '#71d871'}} />Cancelled</li>
+                  {/* <li><span className="color" style={{backgroundColor: '#71d871'}} />Cancelled</li> */}
                   <li><span className="color" style={{backgroundColor: '#59d3ec'}} />done</li>
-                  <li><span className="color" style={{backgroundColor: '#f1cc36'}} />Rejected</li>
+                  {/* <li><span className="color" style={{backgroundColor: '#f1cc36'}} />Rejected</li> */}
                   <li><b>Total</b></li>
                 </ul>
               </div>
               <div className="donut-chart2">
                 <ul className="legend ">
-                  <li><span className="text-primary">0</span></li>
-                  <li><span className="text-primary">0</span></li>
-                  <li><span className="text-primary">0</span></li>
-                  <li><span className="text-primary">0</span></li>
-                  <li><span className="text-primary">0</span></li>
-                  <li><span className="text-primary">1</span></li>
-                  <li><span className="text-primary">0</span></li>
-                  <li><span className="text-primary">1</span></li>
+                {StatusCountDonut?.map((item,index)=> <li><span className="text-primary">{item?.count}</span></li>)}
+
+                
+                 
+             
+             
                 </ul>
               </div>
             </div>
@@ -289,76 +353,7 @@ const apexDonutData = [44, 55, 41, 17];
               <h5 className="mb-3"><b>Priority breakdown</b></h5>
               <h6>You"ll need to create a few items before you can start prioritizing work. <a href className="text-decoration-none">
                   Create an item</a></h6>
-              <div className="row mt-4">
-                <div className="col-1 text-secondary ">
-                  <p className="px-4 mt-2 ">5</p>
-                </div>
-                <div className="col-11 p-1">
-                  <hr className="border-2 " />
-                </div>
-              </div>
-              <div className="row ">
-                <div className="col-1 text-secondary ">
-                  <p className="px-4 mt-2 ">4</p>
-                </div>
-                <div className="col-11 p-1">
-                  <hr className="border-2 " />
-                </div>
-              </div>
-              <div className="row ">
-                <div className="col-1 text-secondary ">
-                  <p className="px-4 mt-2 ">3</p>
-                </div>
-                <div className="col-11 p-1">
-                  <hr className="border-2 " />
-                </div>
-              </div>
-              <div className="row ">
-                <div className="col-1 text-secondary ">
-                  <p className="px-4 mt-2 ">2</p>
-                </div>
-                <div className="col-11 p-1">
-                  <hr className="border-2 " />
-                </div>
-              </div>
-              <div className="row ">
-                <div className="col-1 text-secondary ">
-                  <p className="px-4 mt-2 ">1</p>
-                </div>
-                <div className="col-11 p-1">
-                  <hr className="border-2 " />
-                </div>
-              </div>
-              <div className="row ">
-                <div className="col-1 text-secondary ">
-                  <p className="px-4 mt-2 ">0</p>
-                </div>
-                <div className="col-11 p-1">
-                  <hr className="border-2 " />
-                </div>
-              </div>
-              <div className="row mt-1">
-                <div className="col-3 text-center">
-                  <i className="bi bi-chevron-double-up i_f text-danger" />
-                  <h6 className="text-primary">Highest</h6>
-                </div>
-                <div className="col-2 text-center">
-                  <i className="bi bi-chevron-up i_f text-danger" />
-                  <h6 className="text-primary">High</h6>
-                </div>
-                <div className="col-2 text-center">
-                  <span className="i_f text-warning"><b> =</b></span>
-                  <h6 className="text-primary">Medium</h6>
-                </div>
-                <div className="col-2 text-center">
-                  <i className="bi bi-chevron-down i_f text-primary" />
-                  <h6 className="text-primary">Low</h6>
-                </div>
-                <div className="col-3 text-center">
-                  <i className="bi bi-chevron-double-down i_f text-primary" />
-                  <h6 className="text-primary">Lowest</h6>
-                </div>
-              </div>
+                  <Chart options={options} series={series} type="bar" height={350} />
             </div>
           </div>
         </div>
@@ -368,6 +363,7 @@ const apexDonutData = [44, 55, 41, 17];
               <h5 className="mb-3"><b>Types of work</b></h5>
               <h6>You"ll need to create a few items for your project to get started . <a href className="text-decoration-none">
                   Create an item</a></h6>
+                  <h4>Task Count: {TaskCount?.tasksCount}</h4>
             </div>
             <div className="p-4">
               <div className="row ">
