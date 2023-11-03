@@ -388,6 +388,8 @@ const getTasksAccToStatus = async (req, res) => {
                         activeStatus: { $first: '$activeStatus' },
                         attachment: { $first: '$attachment' },
                         attachmentType: { $first: '$attachmentType' },
+                        createdAt : { $first: '$createdAt' },
+                        updatedAt : { $first: '$updatedAt' },
                         projectInfo: { $first: { $arrayElemAt: ['$projects', 0] } },
                         milestoneInfo: { $first: { $arrayElemAt: ['$milestones', 0] } },
                         sprintInfo: { $first: { $arrayElemAt: ['$sprints', 0] } },
