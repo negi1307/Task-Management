@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import styled from '@emotion/styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteTask } from '../../../redux/task/action';
+import { deleteTask, getComment, gettaskId } from '../../../redux/task/action';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
 import ToastHandle from '../../../constants/toaster/toaster';
@@ -77,6 +77,8 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
     const handleDetailPage = (data) => {
         setOpenDetailPage(true);
         setDetailData(data);
+        dispatch(getComment({taskId:data?.id}))
+        dispatch(gettaskId(data?.id))
     };
     const closeDetailPage = () => {
         setOpenDetailPage(false);
@@ -101,12 +103,12 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                 </button>
                             </div>
 
-                            <p
+                            <a href="#"
                                 onClick={() => {
                                     handleDetailPage(item);
                                 }}>
                                 {item.summary}
-                            </p>
+                            </a>
                             <p>
                                 <div
                                     dangerouslySetInnerHTML={{
@@ -115,7 +117,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                             </p>
                             <div className=" d-flex">
                                 <h5 className="m-0 p-0"> Assignee :</h5>
-                                <p className="ms-2 p-0">{item?.assignees?.assigneeInfo?.userName}</p>
+                                <p className="ms-2 p-0">{item?.assignees?.assigneeInfo?.firstName} {item?.assignees?.assigneeInfo?.lastName}</p>
                             </div>
                             <div className="secondary-details">
                                 <p>

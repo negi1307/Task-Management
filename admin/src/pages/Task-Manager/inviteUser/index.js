@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
-import { inviteUser } from "../../../redux/user/action"
+import { getAllRoles, inviteUser } from '../../../redux/user/action';
 import ToastHandle from '../../../constants/toaster/toaster';
 const InviteUser = () => {
     const dispatch = useDispatch();
 
     const store = useSelector((state) => state);
     const successHandle = store?.createUser?.data;
-   const  roleid = store?.Auth?.user?.id
+    const roleid = store?.Auth?.user?.id;
     const {
         register,
         handleSubmit,
@@ -21,23 +21,27 @@ const InviteUser = () => {
     } = useForm();
     const onSubmit = (data) => {
         let body = {
-            userName: data?.title,
+            firstName: data?.title,
             password: data?.password,
             email: data?.email,
-            roleId: roleid
-        }
-        dispatch(inviteUser(body))
-    }
+            lastName: data?.lastName,
+            roleId: data?.role,
+        };
+        dispatch(inviteUser(body));
+    };
+    useEffect(() => {
+        dispatch(getAllRoles());
+    }, []);
     useEffect(() => {
         if (successHandle?.status == 200) {
-            ToastHandle('success', "User created successfully");
-            reset()
+            ToastHandle('success', 'User created successfully');
+            reset();
         } else if (successHandle?.status == 400) {
-            ToastHandle('error', successHandle?.data?.message);
+            ToastHandle('error', successHandle?.message);
         } else if (successHandle?.status == 500) {
-            ToastHandle('error', successHandle?.data?.message);
+            ToastHandle('error', successHandle?.message);
         }
-    }, [successHandle])
+    }, [successHandle]);
 
     return (
         <>
@@ -59,6 +63,23 @@ const InviteUser = () => {
                         </Form.Group>
                     </Col>
                     <Col lg={4}>
+                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
+                            <Form.Label>
+                                Last Name<span className="text-danger">*</span>:
+                            </Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Please Enter  Last Name"
+                                {...register('lastName', { required: true })}
+                            />
+                            {errors.lastName?.type === 'required' && (
+                                <span className="text-danger"> This feild is required *</span>
+                            )}
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col lg={4}>
                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>
                                 Email<span className="text-danger">*</span>:
@@ -73,8 +94,6 @@ const InviteUser = () => {
                             )}
                         </Form.Group>
                     </Col>
-                </Row>
-                <Row>
                     <Col lg={4}>
                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>
@@ -90,10 +109,33 @@ const InviteUser = () => {
                             )}
                         </Form.Group>
                     </Col>
+                   
                 </Row>
                 <Row>
-                    <Col> <Button type="submit">Invite</Button></Col>
-
+                <Col lg={4}>
+                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                            <Form.Label>
+                                Role<span className="text-danger">*</span>:
+                            </Form.Label>
+                            <select
+                                name="Reporter"
+                                
+                                class="form-select"
+                                id="exampleForm.ControlInput1"
+                                {...register('role')}>
+                                <option value={''}>--Select--</option>
+                                {store?.getAllRoles?.data?.response?.map((ele, ind) => (
+                                    <option value={ele?._id}> {ele?.role} </option>
+                                ))}
+                            </select>
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        {' '}
+                        <Button type="submit">Invite</Button>
+                    </Col>
                 </Row>
             </Form>
         </>

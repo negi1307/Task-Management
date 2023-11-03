@@ -31,3 +31,19 @@ export const TaskStatusAction = (data): AuthAction => ({
     type: TASK_TYPES.TASK_STATUS,
     payload: data
 })
+export const AddComment= (data): AuthAction => ({
+    type: TASK_TYPES.ADD_COMMENT,
+    payload: data
+})
+export const getComment= (data): AuthAction => ({
+    type: TASK_TYPES.GET_COMMENT,
+    payload: data
+})
+export const deleteComment= (data): AuthAction => ({
+    type: TASK_TYPES.DELETE_COMMENT,
+    payload: data
+})
+export const gettaskId= (data): AuthAction => ({
+    type: "taskid",
+    payload: data
+})

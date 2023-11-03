@@ -11,8 +11,9 @@ import AllUsersSaga from './user/saga';
 import  AllTechnologySaga from './technology/saga';
 import AllAssigneeSaga from './assigneeid/saga';
 import Addcommentsaga from './addcomment/saga';
+import AllSummarySaga from './Summary/saga'
 
 export default function* rootSaga(): any {
     yield all([authSaga(), layoutSaga() , AllProjectSaga(),AllMileStonesSaga() ,AllSprintSaga(),
-        AllTaskSaga( ),AllUsersSaga(), AllTechnologySaga(),AllAssigneeSaga(),Addcommentsaga()]);
+        AllTaskSaga( ),AllUsersSaga(), AllTechnologySaga(),AllAssigneeSaga(),Addcommentsaga(),AllSummarySaga()]);
 }

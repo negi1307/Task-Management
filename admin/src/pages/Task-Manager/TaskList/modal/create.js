@@ -13,7 +13,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const Create = ({ modal, CloseModal }) => {
     const {
         register,
-        handleSubmit,
+        handleSubmit,watch,
         formState: { errors },
     } = useForm();
     const store = useSelector((state) => state);
@@ -27,20 +27,22 @@ const Create = ({ modal, CloseModal }) => {
     const dispatch = useDispatch();
 
     const onSubmit = (e) => {
-        const dataList = {
-            projectId: projectId,
-            milestoneId: milestoneId,
-            sprintId: sprintid,
-            summary: e.summary,
-            description: description,
-            assigneeId: e.Assignee,
-            reporterId: e.Reporter,
-            priority: e.Priority,
-            startDate: e.startdate,
-            dueDate: e.dueDate,
-        };
+      
+        let body = new FormData();
+        body.append("projectId", projectId)
+        body.append("milestoneId", milestoneId)
+        body.append("sprintId", sprintid)
+        body.append("summary", e.summary)
+        body.append("description",description)
+        body.append("assigneeId",e.Assignee)
+        body.append("reporterId",e.Reporter)
+        body.append("priority", e.Priority)
+        body.append("startDate",e.startdate)
+        body.append("dueDate",e.dueDate)
+        body.append("status",1)
+        body.append("attachment",e.Attachment[0])
         if (projectId !== '' && milestoneId !== '' && sprintid !== '') {
-            dispatch(createTask(dataList));
+            dispatch(createTask(body));
         } else {
             alert('plsease select project');
         }
@@ -136,7 +138,7 @@ const Create = ({ modal, CloseModal }) => {
                                             <Form.Select {...register('Assignee', { required: true })}>
                                                 <option value={''}>--Select--</option>
                                                 {store?.getAllUsers?.data?.response?.map((ele, ind) => (
-                                                    <option value={ele?._id}> {ele?.userName} </option>
+                                                    <option value={ele?._id}> {ele?.firstName} {ele?.lastName}</option>
                                                 ))}
                                             </Form.Select>
                                             {errors.Assignee?.type === 'required' && (
@@ -210,7 +212,8 @@ const Create = ({ modal, CloseModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                min={today}
+                                                disabled={watch("startdate")== ""|| watch("startdate")== undefined }
+                                                min={watch("startdate")} 
                                                 {...register('dueDate', { required: true })}
                                             />{' '}
                                             {errors.dueDate?.type === 'required' && (
@@ -234,6 +237,22 @@ const Create = ({ modal, CloseModal }) => {
                                                 {...register('status', { required: true, disabled: true })}
                                             />
                                             {errors.status?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
+                                        </Form.Group>
+                                    </Col>
+                                    <Col lg={6}>
+                                        <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                            <Form.Label>
+                                                {' '}
+                                                Attachment <span className="text-danger">*</span>:
+                                            </Form.Label>
+                                            <Form.Control
+                                                type="file"
+                                                placeholder="To-Do"
+                                                {...register('Attachment', { required: true })}
+                                            />
+                                            {errors.Attachment?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>
