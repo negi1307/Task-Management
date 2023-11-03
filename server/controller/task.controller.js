@@ -166,6 +166,8 @@ const getTasks = async (req, res) => {
                     status: { $first: '$status' },
                     activeStatus: { $first: '$activeStatus' },
                     attachment: { $first: '$attachment' },
+                    createdAt : { $first: '$createdAt' },
+                    updatedAt : { $first: '$updatedAt' },
                     attachmentType: { $first: '$attachmentType' },
                     projectInfo: { $first: { $arrayElemAt: ['$projects', 0] } },
                     milestoneInfo: { $first: { $arrayElemAt: ['$milestones', 0] } },
