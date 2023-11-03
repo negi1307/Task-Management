@@ -60,10 +60,9 @@ const SprintId=store?.getSprintId?.data
         if ( projectId !== '' &&  milstoneId !== '' && SprintId !== '') {
             
             dispatch(createTask(formData));
-            console.log("formdata",formData)
-            // setTimeout(() => {
-            //     callAlltaskData();
-            // }, 1000);
+            setTimeout(() => {
+                callAlltaskData();
+            }, 600);
             
             
         } else {
@@ -166,11 +165,11 @@ const SprintId=store?.getSprintId?.data
                             <div class="row">
                               
                                 <div class="col-lg-12">
-                                    <div class="mb-2">
+                                    <div class="mb-2 textarea_section">
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             Description <span class="text-danger">*</span>:
-                                        </label>
-                                        <CKEditor
+                                        </label><br/>
+                                        {/* <CKEditor
                                             editor={ClassicEditor}
                                             config={{
                                                 ckfinder: {
@@ -183,9 +182,13 @@ const SprintId=store?.getSprintId?.data
                                                 const data = editor.getData();
                                                 setDescription(data);
                                             }}
-                                        />
+                                        /> */}
                                         
-
+                                            <textarea col='5' row='4'  onChange={(e) => {
+                                                
+                                                setDescription(e.target.value);
+                                            }}>
+                                            </textarea>
 
                                          {/* <input
                                             placeholder="Please Enter Description"
