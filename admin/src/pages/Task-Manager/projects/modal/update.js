@@ -80,6 +80,7 @@ const Update = ({ modal, closeModal, editData }) => {
         selectedList.forEach((element) => {
             getTechnology.filter((ele) => {
                 if (ele?.techName === element) {
+                    console.log(ele?.techName);
                     arr.push(ele);
                     return setAddValue(arr);
                 }
@@ -91,7 +92,7 @@ const Update = ({ modal, closeModal, editData }) => {
             return ele?.techName == selectItem;
         });
         setAddValue([...addValue, add[0]]);
-        console.log(addValue, 'addvalue info');
+
     };
 
     const onSubmit = (data) => {
@@ -212,7 +213,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                min={watch("startDate")}
+                                                min={watch('startDate')}
                                                 {...register('endDate', { required: true })}
                                                 placeholder="Please end Date"
                                             />
