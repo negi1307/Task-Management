@@ -174,9 +174,9 @@ const Task = () => {
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-
-                                                    <th> Description</th>
                                                     <th> Summary</th>
+                                                    <th> Description</th>
+                                                   
                                                     <th> Start Date</th>
                                                     <th> End Date</th>
                                                     <th>Status</th>

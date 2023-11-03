@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import TASK_TYPES from './constant';
-import { GetTaskSummaryApi, TaskStatusApi, UpdateTaskApi, createTaskApi, deleteTaskApi, getAllTaskApi, getSingleSprintTaskApi,updateTaskStatusApi } from './api';
+import { AddCommentApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi,updateTaskStatusApi } from './api';
 
 function* createTaskFunction({ payload }) {
     try {
@@ -248,7 +248,149 @@ function* TaskStatusFunction({ payload }) {
 
     }
 }
+function* addCommentFunction({ payload }) {
+    try {
+        yield put({
+            type: TASK_TYPES.ADD_COMMENT_LOADING,
+            payload: {}
+        })
+        
+        const response = yield call(AddCommentApi, { payload });
+    //   alert(response)
+        if (response.data.status) {
+            yield put({
+                type: TASK_TYPES.ADD_COMMENT_SUCCESS,
+                payload: { ...response.data },
+            });
+            yield put({
+                type: TASK_TYPES.ADD_COMMENT_RESET,
+                payload: {},
+            });
+        }
+        else {
+            yield put({
+                type: TASK_TYPES.ADD_COMMENT_ERROR,
+                payload: { ...response.data }
+            });
+        }
 
+    } catch (error) {
+        yield put({
+            type: TASK_TYPES.ADD_COMMENT_ERROR,
+            payload: { message: error?.message }
+        });
+
+    }
+}
+
+function* getCommentFunction({ payload }) {
+    try {
+        yield put({
+            type: TASK_TYPES.GET_COMMENT_LOADING,
+            payload: {}
+        })
+        const response = yield call(getCommentApi, { payload });
+        if (response.data.status) {
+            yield put({
+                type: TASK_TYPES.GET_COMMENT_SUCCESS,
+                payload: { ...response.data },
+            });
+            // yield put({
+            //     type: TASK_TYPES.GET_COMMENT_RESET,
+            //     payload: {},
+            // });
+        }
+        else {
+            yield put({
+                type: TASK_TYPES.GET_COMMENT_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: TASK_TYPES.GET_COMMENT_ERROR,
+            payload: { message: error?.message }
+        });
+        yield put({
+            type: TASK_TYPES.GET_COMMENT_RESET,
+            payload: {},
+        });
+
+    }
+}
+function* deleteCommentFunction({ payload }) {
+    try {
+        yield put({
+            type: TASK_TYPES.DELETE_COMMENT_LOADING,
+            payload: {}
+        })
+        const response = yield call(deleteCommentApi, { payload });
+        if (response.data.status) {
+            yield put({
+                type: TASK_TYPES.DELETE_COMMENT_SUCCESS,
+                payload: { ...response.data },
+            });
+            yield put({
+                type: TASK_TYPES.DELETE_COMMENT_RESET,
+                payload: {},
+            });
+        }
+        else {
+            yield put({
+                type: TASK_TYPES.DELETE_COMMENT_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: TASK_TYPES.DELETE_COMMENT_ERROR,
+            payload: { message: error?.message }
+        });
+        yield put({
+            type: TASK_TYPES.DELETE_COMMENT_RESET,
+            payload: {},
+        });
+
+    }
+}
+function* updateCommentFunction({ payload }) {
+    try {
+        yield put({
+            type: TASK_TYPES.UPDATE_COMMENT_LOADING,
+            payload: {}
+        })
+        const response = yield call(UpdateCommentApi, { payload });
+        if (response.data.status) {
+            yield put({
+                type: TASK_TYPES.UPDATE_COMMENT_SUCCESS,
+                payload: { ...response.data },
+            });
+            yield put({
+                type: TASK_TYPES.UPDATE_COMMENT_RESET,
+                payload: {},
+            });
+        }
+        else {
+            yield put({
+                type: TASK_TYPES.UPDATE_COMMENT_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: TASK_TYPES.UPDATE_COMMENT_ERROR,
+            payload: { message: error?.message }
+        });
+        yield put({
+            type: TASK_TYPES.UPDATE_COMMENT_RESET,
+            payload: {},
+        });
+
+    }
+}
 export function* createTaskSaga(): any {
     yield takeEvery(TASK_TYPES.CREATE_TASK, createTaskFunction);
 }
@@ -270,7 +412,18 @@ export function* updateTaskStatusSaga(): any {
 export function* TaskStatusSaga(): any {
     yield takeEvery(TASK_TYPES.TASK_STATUS, TaskStatusFunction);
 }
-
+export function* AddCommentSaga(): any {
+    yield takeEvery(TASK_TYPES.ADD_COMMENT, addCommentFunction);
+}
+export function* getCommentSaga(): any {
+    yield takeEvery(TASK_TYPES.GET_COMMENT, getCommentFunction);
+}
+export function* deleteCommentSaga(): any {
+    yield takeEvery(TASK_TYPES.DELETE_COMMENT, deleteCommentFunction);
+}
+export function* updateCommentSaga(): any {
+    yield takeEvery(TASK_TYPES.UPDATE_COMMENT, updateCommentFunction);
+}
 function* AllTaskSaga(): any {
     yield all([
         fork(createTaskSaga),
@@ -280,7 +433,10 @@ function* AllTaskSaga(): any {
         fork(deleteTaskSaga),
         fork(updateTaskStatusSaga),
         fork(TaskStatusSaga),
-        
+        fork(AddCommentSaga),
+        fork(getCommentSaga),
+        fork(deleteCommentSaga),
+        fork(updateCommentSaga)
     ])
 }
 export default AllTaskSaga;
