@@ -33,3 +33,6 @@ export function getCommentApi(data): any {
 export function deleteCommentApi(data): any {
     return api.delete(URL.deleteComment  + data?.payload?.taskId);
 }
+export function UpdateCommentApi(data): any {
+    return api.update(URL.updateComment, data.payload);
+}

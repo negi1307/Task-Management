@@ -33,9 +33,9 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
         dispatch(getComment({ taskId: editData?.id }));
         setValue('comment', '');
     };
-const handeldelete=(data)=>{
-dispatch(deleteComment({taskId:data?._id}))
-}
+    // const handeldelete = (data) => {
+    //     dispatch(deleteComment({ taskId: data?._id }));
+    // };
     return (
         <>
             <Modal show={modal} onHide={closeModal} size={'lg'}>
@@ -124,17 +124,31 @@ dispatch(deleteComment({taskId:data?._id}))
                                         </Row>
                                     </form>
                                     <Row>
-                                        
-                                            {getCommentData?.map((ele, ind) => (
-                                                <ul style={{listStyle:"none"}}>
-                                                    <li className='font-18'>{ele?.comment}</li>
-                                                    <div className='d-flex'>
-                                                        {/* <p>Edit</p> */}
-                                                        <p className='ms-2 cp' onClick={()=>handeldelete(ele)}>Delete</p>
-                                                    </div>
-                                                </ul>
-                                            ))}
-                                        
+                                        {getCommentData?.map((ele, ind) => (
+                                            <ul style={{ listStyle: 'none' }}>
+                                                <div className="d-flex">
+                                                    <span
+                                                        style={{
+                                                            backgroundColor: '#605e5a',
+                                                            borderRadius: '100%',
+                                                            padding: '9px',
+                                                            color: 'white',
+                                                            fontWeight: '800',
+                                                        }}>
+                                                        {ele?.userId?.firstName.charAt(0)}
+                                                        {ele?.userId?.lastName.charAt(0)}
+                                                    </span>
+                                                    <div className=''> <li className="font-18 ms-2 ">{ele?.comment}</li></div>
+                                                   
+                                                </div>
+                                                <div className="d-flex m-0 p-0">
+                                                    <p className="ms-4 ps-2 p-0">Edit</p>
+                                                    {/* <p className="ms-2 cp  p-0" onClick={() => handeldelete(ele)}>
+                                                        Delete
+                                                    </p> */}
+                                                </div>
+                                            </ul>
+                                        ))}
                                     </Row>
                                 </>
                             ) : connectComponent === 'History' ? (
