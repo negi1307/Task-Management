@@ -15,6 +15,7 @@ import {getsingleMileStone} from '../../../redux/milestone/action'
 import {getAllMilstoneSprints} from '../../../redux/sprint/action'
 import {getAllProjects} from '../../../redux/projects/action'
 import {getHistory} from '../../../redux/addcomment/actions'
+import {getTaskStatusCount} from '../../../redux/Summary/action'
 
 const Container = styled.div`
   display: flex;
@@ -51,7 +52,10 @@ const Title = styled.span`
 const Boards = (props) => {  
   const dispatch = useDispatch();
   const store = useSelector(state => state)
-  console.log("storeeeee board",store)
+  const taskStatusCount=store?.getTaskStatusCount?.data?.response
+  const taskStatusCountdata=store?.getAllTaskReducer?.data
+
+ 
   
   const successHandle = store?.getAllTaskReducer;
   const statushandle = store?.updateTaskStatus;
@@ -74,6 +78,11 @@ const SprintId=store?.getSprintId?.data
 
   
   }, [SprintId])
+
+  useEffect(()=>{
+    dispatch(getTaskStatusCount())
+    
+  },[])
 
   const [showModal, setShowModal] = useState(false);
   const [destinationId, setDestinationId] = useState('');
@@ -190,11 +199,11 @@ const SprintId=store?.getSprintId?.data
       status: ele?.destination?.droppableId,
   };
   dispatch(updateTaskStatus(body));
-  dispatch(getAllTask({projectId:projectId , milestoneId:milstoneId , sprintId:SprintId}));
+  dispatch(getAllTask({id:projectId , milestoneId:milstoneId , sprintId:SprintId}));
 };
   
   const callAlltaskData=()=>{
-    dispatch(getAllTask({projectId:projectId , milestoneId:milstoneId , sprintId:SprintId}));
+    dispatch(getAllTask({id:projectId , milestoneId:milstoneId , sprintId:SprintId}));
   }
 
   
@@ -206,7 +215,32 @@ const SprintId=store?.getSprintId?.data
   return (
 
     <>
-
+    <div class="status">
+    <h4>Task Status Count</h4>
+    <ul>
+      <li>TO-DO:
+        {taskStatusCountdata?.todo?.taskCount}
+      </li>
+      <li>In-Progress:
+        {taskStatusCountdata?.inProgress?.taskCount}
+      </li>
+      <li>Hold:
+        {taskStatusCountdata?.hold?.taskCount}
+      </li>
+      <li>Done:
+        {taskStatusCountdata?.done?.taskCount}
+      </li>
+    </ul>
+      {/* <ul>
+        
+        {taskStatusCount?.map((item,index)=>
+        
+        
+          <li>{item.name} : {item.count}</li>
+        )}
+        
+      </ul> */}
+    </div>
      <div className='add_task'>
      <button
           type="button"
