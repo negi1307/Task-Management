@@ -13,7 +13,6 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 const Projects = () => {
-
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [openModal, setOpenModal] = useState(false);
@@ -83,24 +82,23 @@ const Projects = () => {
             setStatus(1);
             let data = {
                 status: 1,
-                skip 
+                skip,
             };
             dispatch(getAllProjects(data));
         } else {
             setStatus(0);
             let data = {
                 status: 0,
-                skip
+                skip,
             };
             dispatch(getAllProjects(data));
         }
     };
     useEffect(() => {
-        console.log(skip)
+        console.log(skip);
         let body = {
             status: status,
             skip: skip,
-            
         };
         dispatch(getAllProjects(body));
     }, [render]);
@@ -116,15 +114,29 @@ const Projects = () => {
     }, [deletehandle]);
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getAllProjects({status: status, skip: value  }));
+        dispatch(getAllProjects({ status: status, skip: value }));
     };
     return (
         <>
             <div>
                 <Card>
                     <Card.Body>
-                        <div className="row mx-auto mt-2">
-                            <div className="d-flex col-4">
+                        <div className="row mx-auto">
+                            <div className="row d-flex align-items-center">
+                                <div className="col-auto  cp add_color_gray">
+                                    <p className="p-0 m-0 p-1 cp">Hold</p>
+                                </div>
+                                <div className="col-auto  cp add_color_gray">
+                                    <p className="p-0 m-0 p-1 cp">Live</p>
+                                </div>
+                                <div className="col-auto  cp add_color_gray">
+                                    <p className="p-0 m-0 p-1 cp">Completed</p>
+                                </div>
+                                <div className="col-auto  cp add_color_gray">
+                                    <p className=" p-0 m-0 p-1 cp">Todo</p>
+                                </div>
+                            </div>
+                            <div className="d-flex col-4 mt-3">
                                 <div className="row d-flex align-items-center">
                                     <div className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
                                         <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
@@ -231,22 +243,22 @@ const Projects = () => {
                                 </tbody>
                             </Table>
                         )}
+                        <Row>
+                            <Col lg={12} className="d-flex justify-content-end my-3">
+                                {store?.getProject?.data?.totalPages > 0 && (
+                                    <Stack spacing={2}>
+                                        <Pagination
+                                            defaultPage={skip}
+                                            count={store?.getProject?.data?.totalPages}
+                                            color="primary"
+                                            variant="outlined"
+                                            onChange={handlePaginationChange}
+                                        />
+                                    </Stack>
+                                )}
+                            </Col>
+                        </Row>
                     </Card.Body>
-                    <Row>
-                        <Col lg={12} className="d-flex justify-content-end mt-3">
-                            {store?.getProject?.data?.totalPages > 0 && (
-                                <Stack spacing={2}>
-                                    <Pagination
-                                        defaultPage={skip}
-                                        count={store?.getProject?.data?.totalPages}
-                                        color="primary"
-                                        variant="outlined"
-                                        onChange={handlePaginationChange}
-                                    />
-                                </Stack>
-                            )}
-                        </Col>
-                    </Row>
                 </Card>
 
                 <Create modal={openModal} closeModal={closeModal} />
