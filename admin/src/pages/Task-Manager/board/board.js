@@ -78,6 +78,7 @@ const Boards = () => {
     const taskId = store?.getTaskId?.data;
     const CreateCommenthandel = store?.AddCommentReducer
     const deleteCommenthandel= store?.deleteCommentReducer
+    const [loader,setloader] = useState(false);
     // const projectId = store?.getProjectId?.data;
     // const milestoneId = store?.getMilestoneId?.data;
     const {
@@ -172,7 +173,7 @@ const Boards = () => {
             status: ele?.destination?.droppableId,
         };
         dispatch(updateTaskStatus(body));
-        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
+        setloader(true)
     };
     const closeModal = (val) => {
         if (val == 'render') {
@@ -201,7 +202,7 @@ const Boards = () => {
         }
     }, [deletehandel]);
     useEffect(() => {
-        console.log(updatehandel?.data?.status, '////////');
+        
         if (updatehandel?.data?.status == 200) {
             closeModal('render');
             ToastHandle('success', 'Updated Successfully');
@@ -210,9 +211,19 @@ const Boards = () => {
         } else if (updatehandel?.data?.status == 500) {
             ToastHandle('error', updatehandel?.data?.message);
         }
+        setloader(false)
     }, [updatehandel]);
     useEffect(() => {
-        console.log(Createhandel?.data?.status, '////////');
+     if (successHandle.loading){
+        setloader(true);
+     }
+     else{
+        setloader(false)
+     }
+    }, [successHandle,loader])
+    
+    useEffect(() => {
+       
         if (Createhandel?.data?.status == 200) {
             closeModal('render');
            reset()
@@ -343,7 +354,7 @@ const Boards = () => {
             </div>
 
             <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
-                {successHandle.loading ? (
+                {loader ? (
                     <MainLoader />
                 ) : (
                     <Container>
