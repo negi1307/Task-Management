@@ -9,7 +9,7 @@ const accessToken = (userId) => {
         };
         const options = {
             issuer: "TASKMANAGER",
-            expiresIn: "7d",
+            expiresIn: '12h',
         };
         const secret = process.env.SECRET_ACCESS_TOKEN;
         jwt.sign(payload, secret, options, (err, token) => {
