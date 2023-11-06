@@ -3,7 +3,7 @@ const projectModel = require('../models/project.model');
 // Add a new Project
 const addProject = async (req, res) => {
     try {
-        const { projectName, clientName, technology, startDate, endDate, projectDesc, projectType } = req.body;
+        const { projectName, clientName, technology, startDate, endDate, projectDesc, projectType,projectStatus } = req.body;
 
         const projectNameRegex = new RegExp(`^${projectName}$`, 'i');
         const existingProjectName = await projectModel.findOne({ projectName: projectNameRegex });
@@ -17,7 +17,8 @@ const addProject = async (req, res) => {
                 startDate,
                 endDate,
                 projectDesc,
-                projectType
+                projectType,
+                projectStatus
             })
             return res.status(200).json({ status: '200', message: 'Project created successfully', response: result });
         }
@@ -30,24 +31,28 @@ const addProject = async (req, res) => {
 const getProjects = async (req, res) => {
     try {
         const pageSize = 10;
-        if (parseInt(req.query.skip) === 0) {
-            if (req.query.projectId) {
-                const project = await projectModel.findById({ _id: req.query.projectId });
-                return res.status(200).json({ status: '200', message: 'Project Details fetched successfully', response: project })
-            } else {
-                const projects = await projectModel.find({ activeStatus: req.query.activeStatus }).populate('technology', 'techName')
-                    .sort({ createdAt: -1 })
-                return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects })
-            }
-        } else {
-            const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus });
-            const projects = await projectModel.find({ activeStatus: req.query.activeStatus }).populate('technology', 'techName')
-                .sort({ createdAt: -1 })
-                .limit(pageSize)
-                .skip((parseInt(req.query.skip) - 1) * pageSize);
-            const totalPages = Math.ceil(totalCount / pageSize);
+        const projectStatus = parseInt(req.query.projectStatus);
 
-            return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects, totalCount, totalPages })
+        if (projectStatus === 1 || projectStatus === 2 || projectStatus === 3) {
+            if (parseInt(req.query.skip) === 0) {
+                if (req.query.projectId) {
+                    const project = await projectModel.findById({ _id: req.query.projectId });
+                    return res.status(200).json({ status: '200', message: 'Project Details fetched successfully', response: project })
+                } else {
+                    const projects = await projectModel.find({ activeStatus: req.query.activeStatus ,projectStatus}).populate('technology', 'techName')
+                        .sort({ createdAt: -1 })
+                    return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects })
+                }
+            } else {
+                const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus,projectStatus});
+                const projects = await projectModel.find({ activeStatus: req.query.activeStatus,projectStatus}).populate('technology', 'techName')
+                    .sort({ createdAt: -1 })
+                    .limit(pageSize)
+                    .skip((parseInt(req.query.skip) - 1) * pageSize);
+                const totalPages = Math.ceil(totalCount / pageSize);
+    
+                return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects, totalCount, totalPages })
+            }
         }
     } catch (error) {
         return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message });
