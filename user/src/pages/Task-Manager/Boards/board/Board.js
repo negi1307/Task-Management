@@ -49,6 +49,8 @@ const Board = ({
       return;
     }
 
+    
+
     // dropped nowhere
     if (!result.destination) {
       return;

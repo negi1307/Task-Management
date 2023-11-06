@@ -34,7 +34,7 @@ import {
     UpdateTechnologyCategoryReducer,
     deleteTechnologyCategory,
 } from './technology/reducer';
-import { addComments,deleteComment,updateComment,getHistoryData,getAllComment } from './addcomment/reducers';
+import { addComments,deleteComment,updateComment,getHistoryData,getAllComment,getTaskId } from './addcomment/reducers';
 import {getPriorityTaskBoard,getWeekCountTaskBoard,getTaskStatusCount,getTaskCount} from './Summary/reducer'
 
 export default (combineReducers({
@@ -84,5 +84,6 @@ export default (combineReducers({
     getWeekCountTaskBoard,
     getTaskStatusCount,
     getTaskCount,
-    getAllComment
+    getAllComment,
+    getTaskId
 }): any);

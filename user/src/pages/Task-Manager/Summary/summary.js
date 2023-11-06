@@ -94,74 +94,74 @@ const apexDonutData = [44, 55, 41, 17];
     <div className="all_bg">
     <div className="container">
       <div className="row">
-        <div className="col  border_clr  m-2 rounded-4 bg-white">
-          <div className="d-flex  p-4">
-            <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
-              <i className="bi bi-check-lg w-size" />
+        <div className="col  border_clr  m-2 rounded-4 bg-white date">
+          <div className="d-flex countstatus">
+            <div className="bg_clrr bg_info_clr ">
+            <i class="fa fa-check" aria-hidden="true"></i>
             </div>
-            <div className="mx-3 ">
-              <b>
-                <h5 className="mb-0 mt-1 text-secondary">{weekTaskCount?.createdCount}</h5>
-              </b>
-              <b>
-                <p className="m-0 text-secondary">createdCount in the last 7 days</p>
-              </b>
+            <div className="mx-3 class_info ">
+            
+                <h5 className="mb-0 mt-1 text-secondary count">
+                
+               {weekTaskCount?.doneCount}  <span>Done</span></h5>
             </div>
+          
           </div>
+          <p className="m-0 text-secondary">
+                 Count in the last 7 days</p>
         </div>
-        <div className="col  border_clr  m-2 rounded-4 bg-white">
-          <div className="d-flex  p-4">
-            <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
-              <i className="bi bi-pencil-fill w-size" />
+        <div className="col  border_clr  m-2 rounded-4 bg-white date">
+          <div className="d-flex countstatus">
+            <div className="bg_clrr bg_info_clr2">
+            <i class="fa fa-plus" aria-hidden="true"></i>
             </div>
             <div className="mx-3 ">
-              <b>
-                <h5 className="mb-0 mt-1 text-secondary">{weekTaskCount?.updatedCount}</h5>
-              </b>
-              <b>
-                <p className="m-0 text-secondary">in the last 7 days</p>
-              </b>
+                <h5 className="mb-0 mt-1 text-secondary count">  {weekTaskCount?.createdCount}  <span>Created</span></h5>
             </div>
           </div>
+          <p className="m-0 text-secondary">Count in the last 7 days</p>
         </div>
-        <div className="col  border_clr  m-2 rounded-4 bg-white">
-          <div className="d-flex  p-4">
-            <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
-              <i className="bi bi-plus-lg w-size " />
+        <div className="col  border_clr  m-2 rounded-4 bg-white date">
+          <div className="d-flex countstatus ">
+            <div className="bg_clrr bg_info_clr3">
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
             </div>
             <div className="mx-3 ">
-              <b>
-                <h5 className="mb-0 mt-1 text-secondary">{weekTaskCount?.dueCount}</h5>
-              </b>
-              <b>
-                <p className="m-0 text-secondary">in the last 7 days</p>
-              </b>
+            
+                <h5 className="mb-0 mt-1 text-secondary count"> {weekTaskCount?.updatedCount}  <span>Updated</span></h5>
+          
+            
             </div>
           </div>
+          
+          <p className="m-0 text-secondary">
+               Count in the last 7 days</p>
         </div>
-        <div className="col  border_clr  m-2 rounded-4 bg-white">
-          <div className="d-flex  p-4">
-            <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
-              <i className="bi bi-calendar-week w-size" />
+        <div className="col  border_clr  m-2 rounded-4 bg-white date">
+          <div className="d-flex countstatus">
+            <div className="bg_clrr bg_info_clr4 ">
+            <i class="fa fa-calendar" aria-hidden="true"></i>
             </div>
             <div className="mx-3 ">
-              <b>
-                <h5 className="mb-0 mt-1 text-secondary">{weekTaskCount?.doneCount}</h5>
-              </b>
-              <b>
-                <p className="m-0 text-secondary">in the last 7 days</p>
-              </b>
+              
+                <h5 className="mb-0 mt-1 text-secondary count">{weekTaskCount?.dueCount}  <span>Due</span></h5>
+              
+            
+              
             </div>
           </div>
+          
+          <p className="m-0 text-secondary">
+           
+          Count in the last 7 days</p>
         </div>
       </div>
       <div className="row">
         <div className="col border_clr  m-2 rounded-4 bg-white">
           <div className="p-4 ">
             <div className="col-10">
-              <h5 className="mb-3"><b>States overview</b></h5>
-              <h6>Get a snapshot of the States of your items. <a href className="text-decoration-none">View
-                  all items</a></h6>
+              <h5 className="mb-3 states">States overview</h5>
+             
                  
             </div>
             <div className="chart_div ">
@@ -175,7 +175,7 @@ const apexDonutData = [44, 55, 41, 17];
                     height={222}
                     className="apex-charts mb-4 mt-4"
                 />
-                <ul className="legend mx-4">
+                <ul className="legend">
                   {/* <li><span className="color" style={{backgroundColor: 'rgb(217, 216, 216)'}} />Open
                   </li> */}
                   <li><span className="color" style={{backgroundColor: 'rgb(244, 108, 108)'}} />To-do
@@ -183,22 +183,17 @@ const apexDonutData = [44, 55, 41, 17];
                   </li>
                   <li><span className="color" style={{backgroundColor: 'rgb(100, 100, 245)'}} />In
                     Progress</li>
-                  <li><span className="color" style={{backgroundColor: 'rgb(187, 125, 245)'}} />In
-                    Review</li>
+                  <li><span className="color" style={{backgroundColor: 'rgb(187, 125, 245)'}} />Hold</li>
                   {/* <li><span className="color" style={{backgroundColor: '#71d871'}} />Cancelled</li> */}
                   <li><span className="color" style={{backgroundColor: '#59d3ec'}} />done</li>
                   {/* <li><span className="color" style={{backgroundColor: '#f1cc36'}} />Rejected</li> */}
-                  <li><b>Total</b></li>
+                  
                 </ul>
               </div>
               <div className="donut-chart2">
                 <ul className="legend ">
                 {StatusCountDonut?.map((item,index)=> <li><span className="text-primary">{item?.count}</span></li>)}
 
-                
-                 
-             
-             
                 </ul>
               </div>
             </div>
@@ -207,8 +202,8 @@ const apexDonutData = [44, 55, 41, 17];
         <div className="col border_clr  m-2 rounded-4 bg-white">
           <div className="p-4 ">
             <div className="col-10">
-              <h5 className="mb-3"><b>Recent activity</b></h5>
-              <h6>Stay up to date with what"s happening across the project.</h6>
+              <h5 className="mb-3 states">Recent activity</h5>
+             
             </div>
             <div className="scrollable-content">
               <div className="col-10 mt-4">
@@ -218,7 +213,7 @@ const apexDonutData = [44, 55, 41, 17];
                 <div className="row">
                   <div className="col-2">
                     <div className="bg-dark rounded-circle text-center ">
-                      <h6 className="text-white mb-0 p-3">NN</h6>
+                    <p className='p-2 mt-1 text-white'>HH</p>  
                     </div>
                   </div>
                   <div className="col-10"><a href className="text-decoration-none mx-1">Nisha
@@ -232,7 +227,7 @@ const apexDonutData = [44, 55, 41, 17];
                 <div className="row">
                   <div className="col-2">
                     <div className="bg-dark rounded-circle text-center ">
-                      <h6 className="text-white mb-0 p-3">NN</h6>
+                    <p className='p-2 mt-1 text-white'>HH</p>  
                     </div>
                   </div>
                   <div className="col-10"><a href className="text-decoration-none mx-1">Nisha
@@ -246,7 +241,7 @@ const apexDonutData = [44, 55, 41, 17];
                 <div className="row">
                   <div className="col-2">
                     <div className="bg-dark rounded-circle text-center ">
-                      <h6 className="text-white mb-0 p-3">NN</h6>
+                    <p className='p-2 mt-1 text-white'>HH</p>  
                     </div>
                   </div>
                   <div className="col-10"><a href className="text-decoration-none mx-1">Nisha
@@ -260,7 +255,7 @@ const apexDonutData = [44, 55, 41, 17];
                 <div className="row">
                   <div className="col-2">
                     <div className="bg-dark rounded-circle text-center ">
-                      <h6 className="text-white mb-0 p-3">NN</h6>
+                    <p className='p-2 mt-1 text-white'>HH</p>  
                     </div>
                   </div>
                   <div className="col-10"><a href className="text-decoration-none mx-1">Nisha
@@ -274,7 +269,7 @@ const apexDonutData = [44, 55, 41, 17];
                 <div className="row">
                   <div className="col-2">
                     <div className="bg-dark rounded-circle text-center ">
-                      <h6 className="text-white mb-0 p-3">NN</h6>
+                    <p className='p-2 mt-1 text-white'>HH</p>  
                     </div>
                   </div>
                   <div className="col-10"><a href className="text-decoration-none mx-1">Nisha
@@ -288,7 +283,7 @@ const apexDonutData = [44, 55, 41, 17];
                 <div className="row">
                   <div className="col-2">
                     <div className="bg-dark rounded-circle text-center ">
-                      <h6 className="text-white mb-0 p-3">NN</h6>
+                    <p className='p-2 mt-1 text-white'>HH</p>  
                     </div>
                   </div>
                   <div className="col-10"><a href className="text-decoration-none mx-1">Nisha
@@ -302,7 +297,7 @@ const apexDonutData = [44, 55, 41, 17];
                 <div className="row">
                   <div className="col-2">
                     <div className="bg-dark rounded-circle text-center ">
-                      <h6 className="text-white mb-0 p-3">NN</h6>
+                    <p className='p-2 mt-1 text-white'>HH</p>  
                     </div>
                   </div>
                   <div className="col-10"><a href className="text-decoration-none mx-1">Nisha
@@ -316,7 +311,7 @@ const apexDonutData = [44, 55, 41, 17];
                 <div className="row">
                   <div className="col-2">
                     <div className="bg-dark rounded-circle text-center ">
-                      <h6 className="text-white mb-0 p-3">NN</h6>
+                    <p className='p-2 mt-1 text-white'>HH</p>  
                     </div>
                   </div>
                   <div className="col-10"><a href className="text-decoration-none mx-1">Nisha
@@ -330,7 +325,7 @@ const apexDonutData = [44, 55, 41, 17];
                 <div className="row">
                   <div className="col-2">
                     <div className="bg-dark rounded-circle text-center ">
-                      <h6 className="text-white mb-0 p-3">NN</h6>
+                 <p className='p-2 mt-1 text-white'>HH</p>  
                     </div>
                   </div>
                   <div className="col-10"><a href className="text-decoration-none mx-1">Nisha
@@ -350,9 +345,8 @@ const apexDonutData = [44, 55, 41, 17];
         <div className="col border_clr  m-2 rounded-4 bg-white">
           <div className="p-4 ">
             <div className="col-12">
-              <h5 className="mb-3"><b>Priority breakdown</b></h5>
-              <h6>You"ll need to create a few items before you can start prioritizing work. <a href className="text-decoration-none">
-                  Create an item</a></h6>
+              <h5 className="mb-3 states">Priority breakdown</h5>
+             
                   <Chart options={options} series={series} type="bar" height={350} />
             </div>
           </div>
@@ -360,28 +354,29 @@ const apexDonutData = [44, 55, 41, 17];
         <div className="col border_clr  m-2 rounded-4 bg-white">
           <div className="p-4 ">
             <div className="col-12">
-              <h5 className="mb-3"><b>Types of work</b></h5>
-              <h6>You"ll need to create a few items for your project to get started . <a href className="text-decoration-none">
-                  Create an item</a></h6>
+              <h5 className="mb-3 states">Types of work</h5>
+              
                   <h4>Task Count: {TaskCount?.tasksCount}</h4>
             </div>
             <div className="p-4">
               <div className="row ">
                 <div className="col">
                   <p className="text-secondary">Type</p>  
-                  <div className="d-flex mb-4">
-                    <i className="bi bi-check-square-fill mx-2 icon_s" style={{color: '#59d3ec'}} />
+                  <div className="d-flex mb-4 ">
+                  <i class="fa fa-check-square mx-1 icon_s" aria-hidden="true"  style={{color: '#59d3ec'}}></i>
+                   
                     <p className="mb-0">Task</p>
                   </div>
                   <div className="d-flex mb-4">
-                    <div style={{backgroundColor: '#59d3ec', color: 'aliceblue'}} className="rounded-2 mx-2">
-                      <i className="bi bi-subtract mx-1   " /> 
+                    <div style={{backgroundColor: '#59d3ec', color: 'aliceblue'}} className="rounded-2 mx-1">
+                     
+                      <i class="fa fa-clone mx-1" aria-hidden="true"></i> 
                     </div>
                     <p className="mb-0">Sub-task</p>
                   </div>
                   <div className="d-flex mb-4">
-                    <div style={{backgroundColor: '#59d3ec', color: 'aliceblue'}} className="rounded-2 mx-2">
-                      <i className="bi bi-gear-wide mx-1" />
+                    <div style={{backgroundColor: '#59d3ec', color: 'aliceblue'}} className="rounded-2 mx-1 ">
+                    <i class="fa fa-cog p-1 " aria-hidden="true"></i>
                     </div>
                     <p className="mb-0">Manage types</p>
                   </div>
