@@ -7,7 +7,7 @@ export function addProjectApi(data): any {
 }
 export function getProjectApi(data): any {
     console.log(data,"okok")
-    return api.get(`${URL.GetAllProject}${data.payload.status}&skip=${data.payload?.skip}`)
+    return api.get(`${URL.GetAllProject}${data.payload.status}&skip=${data.payload?.skip}&projectStatus=${data.payload?.projectStatus}`)
 }
 export function updateProjectApi(data): any {
     console.log("updatedataaaa",data.payload)

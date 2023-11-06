@@ -48,6 +48,7 @@ const Create = ({ modal, closeModal }) => {
             startDate: data?.startDate,
             endDate: data?.endDate,
             projectType: data?.project_type,
+            projectStatus : data?.status,
             technology: addValue
         };
         dispatch(addProject(body));
@@ -237,14 +238,13 @@ const Create = ({ modal, closeModal }) => {
                                             <Form.Label>
                                                 Status<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                {...register('status', { required: true, disabled: true })}
-                                                placeholder="Live"
-                                            />
-                                            {errors.status?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
+                                            <Form.Select {...register('status', { required: true })}>
+                                                <option>select </option>
+                                                <option value="1">Live</option>
+                                                <option value="2">Hold</option>
+                                                <option value=" 3">Complete</option>
+                                                <option value="4"> To-Do</option>
+                                            </Form.Select>
                                         </Form.Group>
                                         
                                     </Col>
