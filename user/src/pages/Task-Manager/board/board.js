@@ -15,6 +15,9 @@ import {getsingleMileStone} from '../../../redux/milestone/action'
 import {getAllMilstoneSprints} from '../../../redux/sprint/action'
 import {getAllProjects} from '../../../redux/projects/action'
 import {getHistory} from '../../../redux/addcomment/actions'
+import {getTaskStatusCount} from '../../../redux/Summary/action'
+import { addComment, getComment, updateComment, deleteComment,getCommentId } from '../../../redux/addcomment/actions';
+import Taskdetail from './taskdetail'
 
 const Container = styled.div`
   display: flex;
@@ -51,32 +54,39 @@ const Title = styled.span`
 const Boards = (props) => {  
   const dispatch = useDispatch();
   const store = useSelector(state => state)
-  console.log("storeeeee board",store)
-  
-  const successHandle = store?.getAllTaskReducer;
-  const statushandle = store?.updateTaskStatus;
+  const taskStatusCount=store?.getTaskStatusCount?.data?.response
+  // for status count on board page(get all task api)============================
+  const taskStatusCountdata=store?.getAllTaskReducer?.data
+   // for status count on board page (get all task api)============================
+
  
-const projectId=store?.getProjectId?.data
-const milstoneId=store?.getMilestoneId?.data
-const SprintId=store?.getSprintId?.data
-
-
+  
+const successHandle = store?.getAllTaskReducer;
+const statushandle = store?.updateTaskStatus;
+ 
+const projectId=store?.getProjectId?.data;
+const milstoneId=store?.getMilestoneId?.data;
+const SprintId=store?.getSprintId?.data;
 
   useEffect(() => {
-    dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
-    
+    dispatch(getAllTask({id:projectId , milestoneId:milstoneId,sprintId:SprintId }))    
+   
+  }, [SprintId])
+
+  useEffect(()=>{
     let body = {
       status :1,
       skip: 0    
   };
+  dispatch(getAllProjects(body)); 
+  },[])
 
-  dispatch(getAllProjects(body));
-
-  
-  }, [SprintId])
+  useEffect(()=>{
+    dispatch(getTaskStatusCount())
+    
+  },[])
 
   const [showModal, setShowModal] = useState(false);
-  const [destinationId, setDestinationId] = useState('');
   const [columns, setColumns] = useState(columnsFromBackend);
 
   const onDragEnd = (result, columns, setColumns) => {
@@ -115,8 +125,7 @@ const SprintId=store?.getSprintId?.data
           taskId: result?.draggableId,
           status: 3
         }
-        console.log("update",body)
-       // dispatch(updateTaskStatus(body))
+        dispatch(updateTaskStatus(body))
       }
       else if(destColumn.title == "Done"){
         let body = {
@@ -133,7 +142,9 @@ const SprintId=store?.getSprintId?.data
         dispatch(updateTaskStatus(body))
        
       }
-      dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
+      setTimeout(() => {
+        dispatch(getAllTask({id:projectId , milestoneId:milstoneId,sprintId:SprintId })) 
+      }, 30);
     } 
     else {
       const column = columns[source.droppableId];
@@ -184,17 +195,23 @@ const SprintId=store?.getSprintId?.data
   }, [successHandle])
 
  // const [body,setBody] = useState({});
- const handelupdatetask = (ele) => {
-  let body = {
-      taskId: ele?.draggableId,
-      status: ele?.destination?.droppableId,
-  };
-  dispatch(updateTaskStatus(body));
-  dispatch(getAllTask({projectId:projectId , milestoneId:milstoneId , sprintId:SprintId}));
+
+const[commentdata,setCommentData] = useState([]);
+const [showTaskModel, setshowTaskModel] = useState(false);
+const historyData = store?.getHistoryData?.data?.response;
+const userId = store?.Auth?.user?.userId;
+const showTaskDetailMOdel =(item)=>{
+  setshowTaskModel(true);
+  setCommentData(item);
+  dispatch(getComment({taskId:item?.taskInfo?._id}));
+}
+
+const closeTaskDetailMOdel = () => {
+  setshowTaskModel(false);
 };
   
   const callAlltaskData=()=>{
-    dispatch(getAllTask({projectId:projectId , milestoneId:milstoneId , sprintId:SprintId}));
+    dispatch(getAllTask({id:projectId , milestoneId:milstoneId , sprintId:SprintId}));
   }
 
   
@@ -206,7 +223,32 @@ const SprintId=store?.getSprintId?.data
   return (
 
     <>
-
+    <div class="status">
+    <h4>Task Status Count</h4>
+    <ul>
+      <li>TO-DO:
+        {taskStatusCountdata?.todo?.taskCount}
+      </li>
+      <li>In-Progress:
+        {taskStatusCountdata?.inProgress?.taskCount}
+      </li>
+      <li>Hold:
+        {taskStatusCountdata?.hold?.taskCount}
+      </li>
+      <li>Done:
+        {taskStatusCountdata?.done?.taskCount}
+      </li>
+    </ul>
+      {/* <ul>
+        
+        {taskStatusCount?.map((item,index)=>
+        
+        
+          <li>{item.name} : {item.count}</li>
+        )}
+        
+      </ul> */}
+    </div>
      <div className='add_task'>
      <button
           type="button"
@@ -240,7 +282,7 @@ const SprintId=store?.getSprintId?.data
                     > 
                       <Title class="">{column.title}</Title>
                       {column.items.map((item, index) => (
-                        <TaskCard  key={item.id} item={item} index={index}  />
+                        <TaskCard showTaskDetailMOdel={showTaskDetailMOdel}  key={item.id} item={item} index={index}  />
                       ))}
                       {provided.placeholder}
                     </TaskList>
@@ -252,7 +294,7 @@ const SprintId=store?.getSprintId?.data
         </Container>}
 
       </DragDropContext>
-     
+      <Taskdetail closeTaskDetailMOdel={closeTaskDetailMOdel} show={showTaskModel} item={commentdata} historyData={historyData} userId={userId}  />
     
     </>
 

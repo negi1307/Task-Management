@@ -174,3 +174,16 @@ export const getHistoryData = (state = GETHISTORY_INITAL_STATE, action) => {
     }
 };
 
+export const getTaskId = (state = {data:""}, action) => {
+    switch (action.type) {
+        case "getTaskId":
+            return {
+                data: action.payload,                
+            };
+      
+        default:
+            return { ...state };
+
+    }
+};
+
