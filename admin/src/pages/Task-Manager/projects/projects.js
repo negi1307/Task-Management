@@ -13,7 +13,6 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 const Projects = () => {
-
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [openModal, setOpenModal] = useState(false);
@@ -81,26 +80,18 @@ const Projects = () => {
     const handleActive = (val) => {
         if (val) {
             setStatus(1);
-            let data = {
-                status: 1,
-                skip 
-            };
-            dispatch(getAllProjects(data));
+            setSkip(1);
+            dispatch(getAllProjects({ status: 1, skip: 1 }));
         } else {
             setStatus(0);
-            let data = {
-                status: 0,
-                skip
-            };
-            dispatch(getAllProjects(data));
+            setSkip(1);
+            dispatch(getAllProjects({ status: 0, skip: 1 }));
         }
     };
     useEffect(() => {
-        console.log(skip)
         let body = {
             status: status,
             skip: skip,
-            
         };
         dispatch(getAllProjects(body));
     }, [render]);
@@ -116,7 +107,7 @@ const Projects = () => {
     }, [deletehandle]);
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getAllProjects({status: status, skip: value  }));
+        dispatch(getAllProjects({ status: status, skip: value }));
     };
     return (
         <>
@@ -133,7 +124,7 @@ const Projects = () => {
                                     </div>
                                     <div className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
                                         <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
-                                            Deactive
+                                            Inactive
                                         </p>
                                     </div>
                                 </div>

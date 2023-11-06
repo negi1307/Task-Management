@@ -8,10 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateMileStone } from '../../../../../redux/milestone/action';
 // import MainLoader from '../../../../constants/Loader/loader';
 import { Container, Form } from 'react-bootstrap';
-import { EditorState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 const Update = ({ modal, closeModal, editData }) => {
@@ -28,17 +24,13 @@ const Update = ({ modal, closeModal, editData }) => {
     const startdate2 = editData?.startDate;
     const minimumStartDate = findMinimumStartDate(startdate1, startdate2);
     //
-    
-    const [description, setDescription] = useState('');
-    const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
-    console.log(editorState, 'stttttt');
     useEffect(() => {
         reset({
             title: editData?.title,
             startDate: handleDate(editData?.startDate),
             endDate: handleDate(editData?.completionDate),
+            description: editData?.description,
         });
-        setDescription(editData?.description);
     }, [modal]);
     const handleDate = (data) => {
         let date = new Date(data);
@@ -52,7 +44,7 @@ const Update = ({ modal, closeModal, editData }) => {
         let body = {
             milestoneId: editData?._id,
             title: data?.title,
-            description: description,
+            description: data?.description,
             startDate: data?.startDate,
             completionDate: data?.endDate,
         };
@@ -107,11 +99,11 @@ const Update = ({ modal, closeModal, editData }) => {
                                 <Col lg={12}>
                                     <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                         <Form.Label>
-                                            Title<span className="text-danger">*</span>:
+                                            Milestone Name<span className="text-danger">*</span>:
                                         </Form.Label>
                                         <Form.Control
                                             type="text"
-                                            placeholder="Please Enter Project Name"
+                                            placeholder="Please Enter  Milestone Name"
                                             {...register('title', { required: true })}
                                         />
                                         {errors.title?.type === 'required' && (
@@ -120,27 +112,20 @@ const Update = ({ modal, closeModal, editData }) => {
                                     </Form.Group>
                                 </Col>
                                 <Col lg={12}>
-                                    <Form.Group
-                                        className="mb-2 border d-flex align-content-center flex-column"
-                                        controlId="exampleForm.ControlTextarea1">
+                                    <Form.Group className="mb-2 " controlId="exampleForm.ControlTextarea1">
                                         <Form.Label className="mb-0">
                                             Description <span className="text-danger">*</span>:
                                         </Form.Label>
-                                        <CKEditor
-                                            config={{
-                                                ckfinder: {
-                                                    // Upload the images to the server using the CKFinder QuickUpload command.
-                                                    uploadUrl:
-                                                        'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
-                                                },
-                                            }}
-                                            editor={ClassicEditor}
-                                            data={description}
-                                            onChange={(event, editor) => {
-                                                const data = editor.getData();
-                                                setDescription(data);
-                                            }}
+                                        <Form.Control
+                                            as="textarea"
+                                            placeholder="Please Enter Description"
+                                            rows={3}
+                                            type="text"
+                                            {...register('description', { required: true })}
                                         />
+                                        {errors.description?.type === 'required' && (
+                                            <span className="text-danger"> This feild is required *</span>
+                                        )}
                                     </Form.Group>
                                 </Col>
 
@@ -153,7 +138,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             type="date"
                                             min={handleDate(minimumStartDate)}
                                             {...register('startDate', { required: true })}
-                                            placeholder="Please start Date "
+                                            placeholder="Please Enter start Date "
                                         />
                                         {errors.startDate?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
@@ -167,9 +152,9 @@ const Update = ({ modal, closeModal, editData }) => {
                                         </Form.Label>
                                         <Form.Control
                                             type="date"
-                                            min={watch("startDate")}
+                                            min={watch('startDate')}
                                             {...register('endDate', { required: true })}
-                                            placeholder="Please end Date"
+                                            placeholder="Please Enter end Date"
                                         />
                                         {errors.endDate?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
