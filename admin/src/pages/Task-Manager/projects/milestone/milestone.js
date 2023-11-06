@@ -45,8 +45,8 @@ const Milestone = () => {
             let data = {
                 id: id,
                 activeStatus: 1,
-                skip
-                , mileStoneId: ""
+                skip,
+                mileStoneId: '',
             };
             dispatch(getsingleMileStone(data));
         } else {
@@ -54,14 +54,15 @@ const Milestone = () => {
             let data = {
                 id: id,
                 activeStatus: 0,
-                skip, mileStoneId: ""
+                skip,
+                mileStoneId: '',
             };
             dispatch(getsingleMileStone(data));
         }
     };
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getsingleMileStone({ id: id, activeStatus: status, skip: value, mileStoneId: "" }));
+        dispatch(getsingleMileStone({ id: id, activeStatus: status, skip: value, mileStoneId: '' }));
     };
     const handleStatusChange = (e, data) => {
         if (e.target.checked) {
@@ -109,7 +110,7 @@ const Milestone = () => {
         }
     }, [deletehandle]);
     useEffect(() => {
-        dispatch(getsingleMileStone({ id: id, activeStatus: status, skip, mileStoneId: "" }));
+        dispatch(getsingleMileStone({ id: id, activeStatus: status, skip, mileStoneId: '' }));
     }, [render]);
 
     return (
@@ -135,17 +136,17 @@ const Milestone = () => {
                     <MainLoader />
                 ) : (
                     <>
-
                         <Card className="mx-0">
                             <Card.Body>
                                 <Col className="mx-0" lg={12}>
-                                    <Row >
+                                    <Row>
                                         <div className="row   ">
                                             <div className="d-flex col-4">
                                                 <div className="row d-flex align-items-center">
                                                     <div
-                                                        className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'
-                                                            }`}>
+                                                        className={`col-auto  cp ${
+                                                            status == 1 ? 'Active_data' : 'InActive_data'
+                                                        }`}>
                                                         <p
                                                             className="p-0 m-0 p-1 cp"
                                                             onClick={() => handleActive(true)}>
@@ -153,12 +154,13 @@ const Milestone = () => {
                                                         </p>
                                                     </div>
                                                     <div
-                                                        className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'
-                                                            }`}>
+                                                        className={`col-auto  cp ${
+                                                            status == 0 ? 'Active_data' : 'InActive_data'
+                                                        }`}>
                                                         <p
                                                             className=" p-0 m-0 p-1 cp"
                                                             onClick={() => handleActive(false)}>
-                                                            Deactive
+                                                            Inactive
                                                         </p>
                                                     </div>
                                                 </div>
@@ -171,8 +173,6 @@ const Milestone = () => {
                                                     onClick={() => {
                                                         setOpenModel(true);
                                                     }}
-
-
                                                     variant="info"
                                                     type="submit"
                                                     className="btn fs-5  text-white p-1   web_button">
@@ -198,14 +198,7 @@ const Milestone = () => {
                                                         <tr>
                                                             <td>{(skip - 1) * 10 + index + 1}</td>
                                                             <td>{item?.title}</td>
-                                                            <td>
-                                                                {' '}
-                                                                <div
-                                                                    dangerouslySetInnerHTML={{
-                                                                        __html: item?.description,
-                                                                    }}
-                                                                />
-                                                            </td>
+                                                            <td>{item?.description}</td>
 
                                                             <td> {moment(item?.startDate).format('L')}</td>
                                                             <td>{moment(item?.completionDate).format('L')}</td>

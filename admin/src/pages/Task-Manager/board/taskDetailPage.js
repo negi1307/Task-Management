@@ -41,7 +41,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
             dispatch(UpdateCommentAction(body));
             setButtonChange(true);
         }
-        dispatch(getComment({ taskId: editData?.id }));
+        // dispatch(getComment({ taskId: editData?.id }));
         setValue('comment', '');
     };
     const handeldelete = (data) => {

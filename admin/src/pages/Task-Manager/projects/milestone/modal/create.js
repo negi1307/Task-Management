@@ -9,15 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addAllmilstones } from '../../../../../redux/milestone/action';
 import ToastHandle from '../../../../../constants/toaster/toaster';
 import MainLoader from './../../../../../constants/Loader/loader';
-// import { CKEditor } from '@ckeditor/ckeditor5-react';
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import ReactQuill from 'react-quill';
-// import 'react-quill/dist/quill.snow.css';
-import "../../../../../../node_modules/react-quill/dist/quill.snow.css";
+import '../../../../../../node_modules/react-quill/dist/quill.snow.css';
 const Create = ({ modal, closeModal }) => {
-    
     const store = useSelector((state) => state);
-    const [description, setDescription] = useState('');
     const sucesshandel = store?.addAllmilstones;
     const loaderhandel = store?.addAllmilstones;
     // disable previous date
@@ -37,10 +31,9 @@ const Create = ({ modal, closeModal }) => {
         const milStones = {
             projectId: id,
             title: data.Title,
-            description: description,
+            description: data?.description,
             startDate: data.Start_date,
             completionDate: data.End_date,
-            
         };
         dispatch(addAllmilstones(milStones));
         closeModal();
@@ -93,7 +86,11 @@ const Create = ({ modal, closeModal }) => {
                                                 {' '}
                                                 Milestone Name<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control type="text" {...register('Title', { required: true })} />
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Please Enter  Milestone Name"
+                                                {...register('Title', { required: true })}
+                                            />
                                             {errors.Title?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
@@ -104,24 +101,17 @@ const Create = ({ modal, closeModal }) => {
                                             <Form.Label>
                                                 Description <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            {/* <CKEditor
-                                                editor={ClassicEditor}
-                                                config={{
-                                                    ckfinder: {
-                                                        uploadUrl:
-                                                            'https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
-                                                    },
-                                                }}
-                                                data=""
-                                                onChange={(event, editor) => {
-                                                    const data = editor.getData();
-                                                    setDescription(data);
-                                                }}
-                                            /> */}
-                                            <ReactQuill theme="snow" value={description} onChange={(event, editor) => {
-                                                    // const data = editor.getData();
-                                                    setDescription(event);
-                                                }} />
+
+                                            <Form.Control
+                                                as="textarea"
+                                                rows={3}
+                                                type="text"
+                                                placeholder="Please Enter Description"
+                                                {...register('description', { required: true })}
+                                            />
+                                            {errors.description?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
                                         </Form.Group>
                                     </Col>
                                     <Col lg={12}>
@@ -148,8 +138,8 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                disabled={watch("Start_date")== ""|| watch("Start_date")== undefined }
-                                                min={watch("Start_date")} 
+                                                disabled={watch('Start_date') == '' || watch('Start_date') == undefined}
+                                                min={watch('Start_date')}
                                                 {...register('End_date', { required: true })}
                                             />{' '}
                                             {errors.End_date?.type === 'required' && (

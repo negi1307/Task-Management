@@ -127,7 +127,7 @@ const Sprint = () => {
                                         <div
                                             className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
                                             <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
-                                                Deactive
+                                                Inactive
                                             </p>
                                         </div>
                                     </div>

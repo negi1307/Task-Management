@@ -60,7 +60,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
         let body = new FormData();
         body.append("taskId", editData?._id)
         body.append("summary", val?.summary)
-        body.append("description", description)
+        body.append("description", val?.description)
         body.append("assigneeId", val?.Assignee)
         body.append("reporterId", val?.Reporter)
         body.append("priority", val?.priority)
@@ -85,8 +85,8 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
             Reporter: editData?.assignees?.reporterId,
             priority: editData?.priority,
             status: editData?.status,
+            description:editData?.description
         });
-        setDescription(editData?.description);
         setData({image: editData?.attachment });
     }, [modal]);
     console.log(editData, 'pppppp');
@@ -231,21 +231,10 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         {' '}
                                                         Description<span className="text-danger">*</span>:
                                                     </Form.Label>
-                                                    <CKEditor
-                                                        config={{
-                                                            ckfinder: {
-                                                                // Upload the images to the server using the CKFinder QuickUpload command.
-                                                                uploadUrl:
-                                                                    'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
-                                                            },
-                                                        }}
-                                                        editor={ClassicEditor}
-                                                        data={description}
-                                                        onChange={(event, editor) => {
-                                                            const data = editor.getData();
-                                                            setDescription(data);
-                                                        }}
-                                                    />
+                                                    <Form.Control  as="textarea" rows={3} type="text" {...register('description', { required: true })} />
+                                            {errors.description?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
                                                 </Form.Group>
                                             </Col>
                                             <Col lg={6}>
