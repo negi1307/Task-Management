@@ -79,6 +79,13 @@ const getMilestones = async (req, res) => {
         if (!milestones) {
             return res.status(404).json({ status: "404", message: "No milestones found" });
         }
+        //  // Calculate leftDays for the single milestone
+        //  const currentDate = new Date();
+        //  const completionDate = milestones.completionDate;
+        //  const timeDifference = completionDate - currentDate;
+        //  const leftDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+ 
+        //  milestones = { ...milestones.toObject(), leftDays };
         return res.status(200).json({ status: "200", message: "Milestones fetched successfully", response: milestones });
     } catch (error) {
         return res.status(500).json({ status: "500", message: 'Something went wrong', error: error.message });
