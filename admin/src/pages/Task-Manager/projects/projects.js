@@ -25,6 +25,7 @@ const Projects = () => {
     const getProjectList = store?.getProject;
     const deletehandle = store?.deleteProject?.data;
     const [status, setStatus] = useState(1);
+    const [projectStatus, setprojectStatus] = useState(1);
     const [checkedData, setCheckedData] = useState();
     const [checkedStatus, setCheckedStatus] = useState();
     const [statusModal, setStatusModal] = useState(false);
@@ -67,7 +68,6 @@ const Projects = () => {
         }
         setStatusModal(false);
     };
-    console.log(checkedData, 'oooooooooooooooooooooooooooo');
     const handleStatusChange = (e, data) => {
         if (e.target.checked) {
             setCheckedStatus(true);
@@ -81,17 +81,18 @@ const Projects = () => {
         if (val) {
             setStatus(1);
             setSkip(1);
-            dispatch(getAllProjects({ status: 1, skip: 1 }));
+            dispatch(getAllProjects({ status: 1, skip: 1, projectStatus: projectStatus }));
         } else {
             setStatus(0);
             setSkip(1);
-            dispatch(getAllProjects({ status: 0, skip: 1 }));
+            dispatch(getAllProjects({ status: 0, skip: 1, projectStatus: projectStatus }));
         }
     };
     useEffect(() => {
         let body = {
             status: status,
             skip: skip,
+            projectStatus: projectStatus,
         };
         dispatch(getAllProjects(body));
     }, [render]);
@@ -107,7 +108,26 @@ const Projects = () => {
     }, [deletehandle]);
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getAllProjects({ status: status, skip: value }));
+        dispatch(getAllProjects({ status: status, skip: value, projectStatus: projectStatus }));
+    };
+    const handleProjectStatus = (val) => {
+        if (val == '1') {
+            setprojectStatus(1);
+            setSkip(1);
+            dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 1 }));
+        } else if (val == '2') {
+            setprojectStatus(2);
+            setSkip(1);
+            dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 2 }));
+        } else if (val == '3') {
+            setSkip(1);
+            setprojectStatus(3);
+            dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 3 }));
+        } else {
+            setSkip(1);
+            setprojectStatus(4);
+            dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 4 }));
+        }
     };
     return (
         <>
@@ -116,17 +136,26 @@ const Projects = () => {
                     <Card.Body>
                         <div className="row mx-auto">
                             <div className="row d-flex align-items-center">
-                                <div className="col-auto  cp add_color_gray">
-                                    <p className="p-0 m-0 p-1 cp">Hold</p>
+                                <div className={`col-auto  cp ${projectStatus == 1 ? 'Active_data' : 'InActive_data'}`}>
+                                    <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('1')}>
+                                        Live
+                                    </p>
                                 </div>
-                                <div className="col-auto  cp add_color_gray">
-                                    <p className="p-0 m-0 p-1 cp">Live</p>
+                                <div className={`col-auto  cp ${projectStatus == 2 ? 'Active_data' : 'InActive_data'}`}>
+                                    <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('2')}>
+                                        Hold
+                                    </p>
                                 </div>
-                                <div className="col-auto  cp add_color_gray">
-                                    <p className="p-0 m-0 p-1 cp">Completed</p>
+
+                                <div className={`col-auto  cp ${projectStatus == 3 ? 'Active_data' : 'InActive_data'}`}>
+                                    <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('3')}>
+                                        Completed
+                                    </p>
                                 </div>
-                                <div className="col-auto  cp add_color_gray">
-                                    <p className=" p-0 m-0 p-1 cp">Todo</p>
+                                <div className={`col-auto  cp ${projectStatus == 4 ? 'Active_data' : 'InActive_data'}`}>
+                                    <p className=" p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('4')}>
+                                        Todo
+                                    </p>
                                 </div>
                             </div>
                             <div className="d-flex col-4 mt-3">
