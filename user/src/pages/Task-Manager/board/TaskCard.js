@@ -12,7 +12,7 @@ import UpdateTask from '../board/update';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { addComment, getComment, updateComment, deleteComment,getCommentId } from '../../../redux/addcomment/actions';
 import { getsingleMileStone } from '../../../redux/milestone/action';
-import Taskdetail from './taskdetail'
+
 
 // import CustomAvatar from '../TableComponents/CustomAvatar'
 
@@ -42,10 +42,9 @@ const TaskInformation = styled.div`
     }
 `;
 
-const TaskCard = ({ item, index, closeModal }) => {
+const TaskCard = ({ item, index, closeModal,showTaskDetailMOdel }) => {
     
     const store = useSelector(state => state)
-    console.log("items data", item)
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
@@ -55,8 +54,6 @@ const TaskCard = ({ item, index, closeModal }) => {
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
-
-        //dispatch(getsingleMileStone({id:editData?.projectInfo?._id,status:1}))
     };
     const {
         register,
@@ -65,10 +62,6 @@ const TaskCard = ({ item, index, closeModal }) => {
         formState: { errors },
     } = useForm();
 
-
-    // useEffect(()=>{
-    //     dispatch(getComment())
-    // },[])
     const closeupdatemodal = (val) => {
         closeModal('render');
         setOpenEditModal(false);
@@ -80,28 +73,9 @@ const TaskCard = ({ item, index, closeModal }) => {
         dispatch(deleteTask({ taskId: id }));
         dispatch(getAllTask());
     };
-    const [allComment, setComment] = useState([])
-
-    useEffect(() => {
-        for (let i = 0; i < getComments?.length; i++) {
-            setComment(getComments[i]);
-        }
-
-    }, [])
-  
-    const [show, setShow] = useState(false);
+    
+    
     const[commentId,setCommentId] = useState('');
-
-    const handleClose = () => {
-        setShow(false);
-    };
-    const[commentdata,setCommentData] = useState([]);
-    const handleShow =useCallback((item)=>{
-        setShow(true);
-        setCommentData(item);
-        //dispatch(getComment({taskId:item?.taskInfo?._id}));
-    },[])
-  
 
     const [showData, setShowData] = useState(false);
 
@@ -116,7 +90,6 @@ const TaskCard = ({ item, index, closeModal }) => {
         setValue("comment", item?.comment);
     }
     const DeleteData = (id) => {
-
         dispatch(deleteComment({ commentId: id }));
     }
     return (
@@ -124,7 +97,7 @@ const TaskCard = ({ item, index, closeModal }) => {
             <Draggable key={item?.taskInfo?._id} draggableId={item?.taskInfo?._id} index={index}>
                 {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                        <TaskInformation>
+                        <TaskInformation onClick={()=>showTaskDetailMOdel(item)}>
                             {/* <div className="action_icon">
                                 <button
                                     type="button"
@@ -137,7 +110,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                                     <i class="mdi mdi-delete m-0 p-0"></i>
                                 </button>
                             </div> */}
-                            <div onClick={()=>handleShow(item)}>
+                            <div >
                                 <p>{item?.taskInfo?.summary}</p>
                                 <div
                                     dangerouslySetInnerHTML={{
@@ -157,7 +130,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                 )}
             </Draggable>
 
-          <Taskdetail handleClose={handleClose} show={show} item={item} historyData={historyData} userId={userId}  />
+         
 
             <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
         </>
