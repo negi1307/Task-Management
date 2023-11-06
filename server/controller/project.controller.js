@@ -32,8 +32,7 @@ const getProjects = async (req, res) => {
     try {
         const pageSize = 10;
         const projectStatus = parseInt(req.query.projectStatus);
-
-        if (projectStatus === 1 || projectStatus === 2 || projectStatus === 3) {
+        if (projectStatus) {
             if (parseInt(req.query.skip) === 0) {
                 if (req.query.projectId) {
                     const project = await projectModel.findById({ _id: req.query.projectId });
@@ -53,6 +52,9 @@ const getProjects = async (req, res) => {
     
                 return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects, totalCount, totalPages })
             }
+        }
+        else{
+            res.status(200).json({status:201,message:"Invalid or missing projectStatus. It should be 1, 2,3 or 4"})
         }
     } catch (error) {
         return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message });

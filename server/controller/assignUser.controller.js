@@ -39,7 +39,7 @@ const addUserAssignments = async (req, res) => {
 const getUserAssignments = async (req, res) => {
     try {
         const query = {
-            assigneeId: req.query.assigneeId
+            assigneeId: req.user._id
         };
         if (req.query.flag == 1) {
             query.projectId = { $exists: true };
