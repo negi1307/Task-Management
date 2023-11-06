@@ -46,7 +46,7 @@ const InviteUser = () => {
     return (
         <>
             <Form onSubmit={handleSubmit(onSubmit)}>
-                <Row>
+                <Row className="pt-4">
                     <Col lg={4}>
                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                             <Form.Label>
@@ -109,17 +109,15 @@ const InviteUser = () => {
                             )}
                         </Form.Group>
                     </Col>
-                   
                 </Row>
                 <Row>
-                <Col lg={4}>
+                    <Col lg={4}>
                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>
                                 Role<span className="text-danger">*</span>:
                             </Form.Label>
                             <select
                                 name="Reporter"
-                                
                                 class="form-select"
                                 id="exampleForm.ControlInput1"
                                 {...register('role')}>
@@ -134,7 +132,7 @@ const InviteUser = () => {
                 <Row>
                     <Col>
                         {' '}
-                        <Button type="submit">Invite</Button>
+                        <Button type="submit web_button">Invite</Button>
                     </Col>
                 </Row>
             </Form>
