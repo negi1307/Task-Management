@@ -10,14 +10,17 @@ import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 const TaskDetailPage = ({ modal, editData, closeModal }) => {
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
+    const [date, setDate] = useState('');
+    // setDate(editData?.createdAt);
+    console.log(editData?.createdAt, 'attttt');
+    // if (editData?.createdAt) {
+    //     setDate(editData?.createdAt);
+    // }
     const [connectComponent, setConnectComponent] = useState('All');
     const getCommentData = store?.getComment?.data?.response;
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
     };
-    // setDate(editData?.)
-    console.log(editData, 'editttt');
-    const [date, setDate] = useState('');
     const {
         register,
         handleSubmit,
@@ -190,6 +193,14 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                 __html: editData?.description,
                                             }}
                                         />
+                                    </p>
+                                </div>
+                                <div className=" d-flex">
+                                    <h4 className="m-0 p-0"> Start Time</h4>
+                                    <p className="ms-2 p-0">
+                                        {new Date(editData?.updatedAt).getUTCHours() +
+                                            ':' +
+                                            new Date(editData?.updatedAt).getUTCMinutes()}
                                     </p>
                                 </div>
                                 <div className=" d-flex">

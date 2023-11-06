@@ -42,8 +42,8 @@ const TaskInformation = styled.div`
 `;
 
 const TaskCard = ({ item, index, closeModal }) => {
-    const store = useSelector(state => state)
-    console.log("items data", item)
+    const store = useSelector((state) => state);
+    console.log('items data', item);
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
@@ -63,27 +63,23 @@ const TaskCard = ({ item, index, closeModal }) => {
         formState: { errors },
     } = useForm();
 
-
-
     const closeupdatemodal = (val) => {
         closeModal('render');
         setOpenEditModal(false);
     };
     const dispatch = useDispatch();
 
-
     const deleteData = (id) => {
         dispatch(deleteTask({ taskId: id }));
         dispatch(getAllTask());
     };
-    const [allComment, setComment] = useState([])
+    const [allComment, setComment] = useState([]);
 
     useEffect(() => {
         for (let i = 0; i < getComments?.length; i++) {
             setComment(getComments[i]);
         }
-
-    }, [])
+    }, []);
     const [show, setShow] = useState(false);
 
     const handleClose = () => {
@@ -95,39 +91,34 @@ const TaskCard = ({ item, index, closeModal }) => {
 
     const handleCloseData = () => setShowData(false);
     const handleShowData = () => {
-        setShowData(true)
-
+        setShowData(true);
     };
     const [getCommentId, setCommentId] = useState('');
     const onSubmit = (e) => {
-
-        if (getCommentId == "") {
+        if (getCommentId == '') {
             const commentData = {
                 userId: userId,
                 taskId: e.taskid,
-                comment: e.comment
-            }
-            dispatch(addComment(commentData))
-        }
-        else {
+                comment: e.comment,
+            };
+            dispatch(addComment(commentData));
+        } else {
             const body = {
                 commentId: getCommentId,
-                comment: e.comment
-            }
+                comment: e.comment,
+            };
 
-            dispatch(updateComment(body))
-
+            dispatch(updateComment(body));
         }
-    }
+    };
 
     const EditData = (item) => {
         setCommentId(item?._id);
-        setValue("comment", item?.comment);
-    }
+        setValue('comment', item?.comment);
+    };
     const DeleteData = (id) => {
-
         dispatch(deleteComment({ commentId: id }));
-    }
+    };
     return (
         <>
             <Draggable key={item?.taskInfo?._id} draggableId={item?.taskInfo?._id} index={index}>
@@ -155,29 +146,27 @@ const TaskCard = ({ item, index, closeModal }) => {
 
                                 <div className="secondary-details">
                                     <p>
-                                        <span>{item?.taskInfo?.startDate ? moment(item?.taskInfo?.startDate).format('ll') : ''}</span>
+                                        <span>
+                                            {item?.taskInfo?.startDate
+                                                ? moment(item?.taskInfo?.startDate).format('ll')
+                                                : ''}
+                                        </span>
                                     </p>
                                 </div>
                             </div>
                             <p>Assignee: &nbsp; {item?.assigneeInfo?.firstName}</p>
-
                         </TaskInformation>
                     </div>
                 )}
             </Draggable>
 
-            <Modal show={show} onHide={handleClose} backdrop="static" className='modal_details'>
+            <Modal show={show} onHide={handleClose} backdrop="static" className="modal_details">
                 <Modal.Header closeButton>
                     <Modal.Title>Task Details</Modal.Title>
                 </Modal.Header>
-                <Modal.Body className='cardinfo'>
-                    
-
-                    
-                    <div className='comments'>
+                <Modal.Body className="cardinfo">
+                    <div className="comments">
                         <h4>Activity</h4>
-
-
 
                         {/* <div className="history">
                             history:
@@ -188,27 +177,62 @@ const TaskCard = ({ item, index, closeModal }) => {
                         </div> */}
                         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">All</button>
+                                <button
+                                    class="nav-link active"
+                                    id="pills-home-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#pills-home"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="pills-home"
+                                    aria-selected="true">
+                                    All
+                                </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Comments</button>
+                                <button
+                                    class="nav-link"
+                                    id="pills-profile-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#pills-profile"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="pills-profile"
+                                    aria-selected="false">
+                                    Comments
+                                </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">History</button>
+                                <button
+                                    class="nav-link"
+                                    id="pills-contact-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#pills-contact"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="pills-contact"
+                                    aria-selected="false">
+                                    History
+                                </button>
                             </li>
-
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
-                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
-
-                            </div>
-                            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
-                                <div className='addcommentname'>
-                                    <div className='edit_delte'>
-
-                                        <div className='taskcardinfo'>
+                            <div
+                                class="tab-pane fade show active"
+                                id="pills-home"
+                                role="tabpanel"
+                                aria-labelledby="pills-home-tab"
+                                tabindex="0"></div>
+                            <div
+                                class="tab-pane fade"
+                                id="pills-profile"
+                                role="tabpanel"
+                                aria-labelledby="pills-profile-tab"
+                                tabindex="0">
+                                <div className="addcommentname">
+                                    <div className="edit_delte">
+                                        <div className="taskcardinfo">
                                             <table>
-
                                                 {/* {allComment?.map((comm, inc) =>
                                                     <tr key={inc}>
                                                         <td>{comm?.comment}</td>
@@ -220,43 +244,52 @@ const TaskCard = ({ item, index, closeModal }) => {
                                                         </td>
                                                     </tr>
                                                 )} */}
-
-
                                             </table>
-
                                         </div>
-
                                     </div>
-
 
                                     <form onSubmit={handleSubmit(onSubmit)}>
                                         <input type="hidden" value={item.id} {...register('taskid')} />
-                                        <input type="text" id="exampleForm.ControlTextarea1" class="form-control" placeholder='Add Comment' {...register('comment')} />
-                                      <button type="submit" class="mybutton btn btn-info">Add</button>
+                                        <input
+                                            type="text"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            placeholder="Add Comment"
+                                            {...register('comment')}
+                                        />
+                                        <button type="submit" class="mybutton btn btn-info">
+                                            Add
+                                        </button>
                                     </form>
-
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
-                            
+                            <div
+                                class="tab-pane fade"
+                                id="pills-contact"
+                                role="tabpanel"
+                                aria-labelledby="pills-contact-tab"
+                                tabindex="0">
                                 <div className="history">
-                                <div className='history_data_info'>
-                                {historyData?.map((datainfo, index) =>
-                                        <h4>{datainfo.currentStatus}</h4>
-                                    )}
-
-                                </div>
-                                   <div className='history_data_info'>
-                                   {historyData?.map((datainfo, index) =>
-                                        <p>{datainfo?.taskId?.summary}</p>
-                                    )}
-                                   </div>
-                                  
-                                 
-
+                                    <div className="history_data_info">
+                                        {historyData?.map((datainfo, index) => (
+                                            <h4>{datainfo.currentStatus}</h4>
+                                        ))}
+                                    </div>
+                                    <div className="history_data_info">
+                                        {historyData?.map((datainfo, index) => (
+                                            <p>{datainfo?.taskId?.summary}</p>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="pills-disabled" role="tabpanel" aria-labelledby="pills-disabled-tab" tabindex="0">...</div>
+                            <div
+                                class="tab-pane fade"
+                                id="pills-disabled"
+                                role="tabpanel"
+                                aria-labelledby="pills-disabled-tab"
+                                tabindex="0">
+                                ...
+                            </div>
                         </div>
                     </div>
 
@@ -264,62 +297,54 @@ const TaskCard = ({ item, index, closeModal }) => {
                         <h4>Details</h4>
                         <ul style={{ listStyle: 'none' }}>
                             <li>
-                                <label>Summary:</label> 
+                                <label>Summary:</label>
                                 {item?.taskInfo?.summary}
                             </li>
                             <li>
-                            <label>Description:</label>
-                                
-                                <div className='description'
+                                <label>Description:</label>
+
+                                <div
+                                    className="description"
                                     dangerouslySetInnerHTML={{
                                         __html: item?.taskInfo?.description,
                                     }}></div>
                             </li>
-                           
-                          
+
                             <li>
-                            <label>Start Date:</label>
-                              
+                                <label>Start Date:</label>
+
                                 {item?.startDate ? moment(item?.taskInfo?.startDate).format('ll') : ''}
                             </li>
-                           
-                            
+
                             <li>
-                            <label> Priority:</label>
-                               
+                                <label> Priority:</label>
+
                                 {item.taskInfo?.priority ? 'medium' : ''}
                             </li>
-                          
-                            
+
                             <li>
-                            <label>End Date: </label>
-                                
+                                <label>End Date: </label>
+
                                 {item?.taskInfo?.dueDate ? moment(item?.dueDate).format('ll') : ''}
                             </li>
-                 
-                           
-                            <li>
-                            <label> Assignee Name:</label>
-                           
-                            {item?.assigneeInfo?.userName}
-                            </li>
-                    
-                         
-                            <li>
-                            <label> Reporter:</label>
-                           
-                            {item.taskInfo?.reporterInfo?.role}
-                            </li>
-                             
-                         
-                            <li>
-                            <label>Project Name:</label>
-                            
-                            {item.taskInfo?.projectName}
-                            </li>
-                            
 
+                            <li>
+                                <label> Assignee Name:</label>
 
+                                {item?.assigneeInfo?.userName}
+                            </li>
+
+                            <li>
+                                <label> Reporter:</label>
+
+                                {item.taskInfo?.reporterInfo?.role}
+                            </li>
+
+                            <li>
+                                <label>Project Name:</label>
+
+                                {item.taskInfo?.projectName}
+                            </li>
                         </ul>
                     </div>
                 </Modal.Body>
@@ -403,8 +428,8 @@ const TaskCard = ({ item, index, closeModal }) => {
                                         onChange={(event, editor) => {
                                             const data = editor.getData();
                                         }}
-                                        onBlur={(event, editor) => { }}
-                                        onFocus={(event, editor) => { }}
+                                        onBlur={(event, editor) => {}}
+                                        onFocus={(event, editor) => {}}
                                     />
                                     {/* <input placeholder="Please Enter Description" type="text" id="exampleForm.ControlInput1" class="form-control" name="Description" /> */}
                                 </div>
@@ -503,9 +528,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                             </button>
                         </div>
                     </form>
-
                 </Modal.Body>
-
 
                 {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseData}>
