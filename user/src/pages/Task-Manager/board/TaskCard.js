@@ -26,7 +26,7 @@ const TaskInformation = styled.div`
     min-height: 106px;
     border-radius: 5px;
     max-width: 311px;
-    / background: ${({ isDragging }) => (isDragging ? 'rgba(255, 59, 59, 0.15)' : 'white')}; /
+    /* background: ${({ isDragging }) => (isDragging ? 'rgba(255, 59, 59, 0.15)' : 'white')}; */
     background: white;
     margin-top: 15px;
 

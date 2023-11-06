@@ -175,7 +175,7 @@ const Projects = () => {
                                                     <span className="namelink"> {ele?.clientName}</span>
                                                 </td>
                                                 <td>
-                                                    <span className="namelink"> {ele?.project_type}</span>
+                                                    <span className="namelink"> {ele?.projectType}</span>
                                                 </td>
                                                 <td>
                                                     <span className="namelink">
@@ -191,8 +191,7 @@ const Projects = () => {
                                                 <td>
                                                     <Form.Check
                                                         type="switch"
-                                                        checked={ele?.activeStatus
-                                                        }
+                                                        checked={ele?.activeStatus}
                                                         onChange={(e) => handleStatusChange(e, ele)}
                                                     />
                                                 </td>
@@ -225,7 +224,7 @@ const Projects = () => {
 
                 <Create modal={openModal} closeModal={closeModal} />
                 <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
-                
+
                 <Modal show={statusModal} onHide={() => setStatusModal(false)}>
                     <Modal.Body>
                         Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this Project ?
@@ -244,7 +243,6 @@ const Projects = () => {
                     </Modal.Footer>
                 </Modal>
             </div>
-            
         </>
     );
 };

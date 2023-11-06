@@ -2,16 +2,17 @@
 import Modal from 'react-bootstrap/Modal';
 import { useForm } from 'react-hook-form';
 import moment from 'moment';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback,useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { addComment, getComment, updateComment, deleteComment,getCommentId } from '../../../redux/addcomment/actions';
+import Attachments from './../../apps/Tasks/Details/Attachments';
 
 const Taskdetail=(props)=>{
     const dispatch = useDispatch();
     const store = useSelector(state => state)
-    var showMOdel = props.show ;
+
     const allComments = store?.getAllComment?.data?.response;
-    console.log("stotre data", allComments)
     const {
         register,
         handleSubmit,
@@ -19,8 +20,9 @@ const Taskdetail=(props)=>{
         formState: { errors },
     } = useForm();
  
+    
     const [getCommentIdDta, setCommentId] = useState('');
-    const onSubmitComment = useCallback((e)=>{
+    const onSubmitComment = (e)=>{
         if (getCommentIdDta == "") {
             const commentData = {
                 userId: props.userId,
@@ -39,11 +41,42 @@ const Taskdetail=(props)=>{
 
         }
         
-    },[])
+    }
   
+  
+    const downloadFile =  (file) => {
+        fetch(file).then((response) => {
+            response.blob().then((blob) => {             
+                const fileURL = window.URL.createObjectURL(blob);
+                let alink = document.createElement("a");
+                alink.href = fileURL;
+                alink.download = getfileNameFromUrl(file);
+                alink.click();
+            });
+        });
+     };
+     const getfileNameFromUrl = (url)=>{
+        var filename = "";
+        if(url != ""){
+            filename = new URL(url).pathname.split('/').pop();
+            getfileNameExt(url);
+        }
+       
+        return filename;
+     }
+     const getfileNameExt = (url)=>{
+        var ext = "";
+        if(url != ""){
+            ext = new URL(url).pathname.split('.').pop();
+        }
+        return ext;
+     }
+
+
+
     return(
         <>
-          <Modal  show={showMOdel} size={'sm'} onHide={props.handleClose} backdrop="static" className='modal_details'>
+          <Modal  show={props.show} size={'sm'} onHide={props.closeTaskDetailMOdel} backdrop="static" className='modal_details'>
                 <Modal.Header closeButton>
                     <Modal.Title>Task Details</Modal.Title>
                 </Modal.Header>
@@ -75,7 +108,7 @@ const Taskdetail=(props)=>{
                                         <div className='taskcardinfo'>
                                          {allComments?.map((comm,index)=>
                                                 <p>{comm?.comment}</p>
-                                    )}
+                                               )}
                                             <table>
 
                                                 {/* {allComment?.map((comm, inc) =>
@@ -150,7 +183,7 @@ const Taskdetail=(props)=>{
                             <li>
                             <label>Start Date:</label>
                               
-                                {props.item?.startDate?moment(props.item?.taskInfo?.startDate).format('ll') : ''}
+                                {props.item?.taskInfo?.startDate?moment(props.item?.taskInfo?.startDate).format('ll') : ''}
                             </li>
                            
                             
@@ -171,23 +204,52 @@ const Taskdetail=(props)=>{
                             <li>
                             <label> Assignee Name:</label>
                            
-                            {props.item?.assigneeInfo?.userName}
+                            {props.item?.assigneeInfo?.firstName}
                             </li>
                     
                          
                             <li>
                             <label> Reporter:</label>
                            
-                            {props.item.taskInfo?.reporterInfo?.role}
+                            {props.item.reporterInfo?.role}
                             </li>
                              
                          
                             <li>
                             <label>Project Name:</label>
                             
-                            {props.item.taskInfo?.projectName}
+                            {props.item.projectInfo?.projectName}
                             </li>
-                            
+                            <li>
+                                <label>
+                                Attachment:
+                                </label>                                
+                                
+                                {
+                                (() => {
+                                    const ext =  props.item.taskInfo?.attachment?getfileNameExt(props.item.taskInfo?.attachment) : "";
+                                    if(ext == "png" || ext == "jpg" || ext == "jpeg") {
+                                            return (                                               
+                                                <img src={props.item?.taskInfo?.attachment} title={props.item.taskInfo?.attachment?getfileNameFromUrl(props.item.taskInfo?.attachment):""} width={150} height={100} />
+                                            )
+                                        } 
+                                    else if(ext == "pdf"){
+                                        return (
+                                            <a href={props.item?.taskInfo?.attachment} title={props.item.taskInfo?.attachment?getfileNameFromUrl(props.item.taskInfo?.attachment):""}> <i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>
+                                            )
+                                    }
+                                    else if(ext == "docx" || ext == "doc"){
+                                        return (
+                                            <a href={props.item?.taskInfo?.attachment}>{props.item.taskInfo?.attachment?getfileNameFromUrl(props.item.taskInfo?.attachment):""}</a>
+                                            )
+                                     }
+                                })()  
+                              } 
+                            </li>
+                            <li>
+                            {/* <button type='button' onClick={()=>downloadFile(props.item.taskInfo?.attachment)}>Download</button> */}
+
+                            </li>
 
 
                         </ul>
