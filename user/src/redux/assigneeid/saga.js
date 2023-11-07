@@ -1,13 +1,13 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
-import Assigntype from '../assigneeid/constant'
-import {getAssigneeApi} from '../assigneeid/api'
+import Assigntype from '../assigneeid/constant';
+import { getAssigneeApi } from '../assigneeid/api';
 
 function* getAllAssigneeFunction({ payload }) {
     try {
         yield put({
             type: Assigntype.GET_ASSIGNEE_LOADING,
-            payload: {}
-        })
+            payload: {},
+        });
         const response = yield call(getAssigneeApi, { payload });
         if (response.data.status) {
             yield put({
@@ -18,20 +18,17 @@ function* getAllAssigneeFunction({ payload }) {
             //     type: MileStoneType.GET_ALL_MILESTONES_RESET,
             //     payload: {},
             // });
-        }
-        else {
+        } else {
             yield put({
                 type: Assigntype.GET_ASSIGNEE_ERROR,
-                payload: { ...response.data }
+                payload: { ...response.data },
             });
         }
-
     } catch (error) {
         yield put({
             type: Assigntype.GET_ASSIGNEE_ERROR,
-            payload: { message: error?.message }
+            payload: { message: error?.message },
         });
-
     }
 }
 export function* getAllAssignedSaga(): any {
@@ -39,12 +36,7 @@ export function* getAllAssignedSaga(): any {
 }
 
 function* AllAssigneeSaga(): any {
-    yield all([
-
-        fork(getAllAssignedSaga),
-
-
-    ])
+    yield all([fork(getAllAssignedSaga)]);
 }
 
 export default AllAssigneeSaga;

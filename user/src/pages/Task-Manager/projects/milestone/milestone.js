@@ -30,7 +30,7 @@ const Milestone = () => {
     const [checkedData, setCheckedData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const [editData, setEditData] = useState();
-    const deletehandle = store?.deleteMileStone?.data
+    const deletehandle = store?.deleteMileStone?.data;
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -67,14 +67,14 @@ const Milestone = () => {
         if (checkedStatus) {
             let body = {
                 id: checkedData._id,
-                status: true
-            }
+                status: true,
+            };
             dispatch(deleteMileStone(body));
         } else {
             let body = {
                 id: checkedData._id,
-                status: false
-            }
+                status: false,
+            };
             dispatch(deleteMileStone(body));
         }
         setStatusModal(false);
@@ -98,128 +98,110 @@ const Milestone = () => {
         } else if (deletehandle?.status == 500) {
             ToastHandle('error', deletehandle?.message);
         }
-    }, [deletehandle])
+    }, [deletehandle]);
     useEffect(() => {
         dispatch(getProjectsById(id));
-        dispatch(getsingleMileStone({id:id ,status:status}));
+        dispatch(getsingleMileStone({ id: id, status: status }));
     }, [render]);
-
 
     return (
         <>
             {/* {/ <h1>{id}</h1> /} */}
-            <Container className="my-3">
-                <Row>
-                    <Col className="text-end" lg={12}>
-                        <Button
-                            onClick={() => {
-                                setOpenModel(true);
-                            }}
-                            // onClick={handleCreate}
+            {/* <Container className="my-3"> */}
+            {/* <Row>
+                <Col className="text-end" lg={12}>
+                    <Button
+                        onClick={() => {
+                            setOpenModel(true);
+                        }}
+                        // onClick={handleCreate}
 
-                            // onClick={(e)=>{handleCreate(e,"ghjkl")}}
+                        // onClick={(e)=>{handleCreate(e,"ghjkl")}}
 
-                            variant="info"
-                            type="submit"
-                            className="btn fs-5  text-white p-1   web_button">
-                            Add Milestone
-                        </Button>
-                    </Col>
-                </Row>
-                {loaderhandel.loading ? (
-                    <MainLoader />
-                ) : (
-                    <>
-                        <Row>
-                            <Col lg={12}>
+                        variant="info"
+                        type="submit"
+                        className="btn fs-5  text-white p-1   web_button">
+                        Add Milestone
+                    </Button>
+                </Col>
+            </Row> */}
+            {loaderhandel.loading ? (
+                <MainLoader />
+            ) : (
+                <>
+                    <Card className="mt-3">
+                        <Card.Body>
+                            <Col className="mx-auto" lg={12}>
                                 <Row>
-                                    <Col className="text-center" lg={12}>
-                                        <h4> Project</h4>
-                                    </Col>
-                                    <Row>
-                                        <Col lg={12} className='d-flex justify-content-between'>
-                                            <div className='d-flex'><h5 className='p-0 m-0'>Project Name :</h5>
-                                                <p className='p-0 m-0'>{GetDataById?.projectName}</p></div>
-                                            <div className='d-flex '><h5 className='p-0 m-0'>Client Name :</h5>
-                                                <p className='p-0 m-0'>{GetDataById?.clientName}</p></div>
-                                            <div className='d-flex '><h5 className='p-0 m-0'>Project Type :</h5>
-                                                <p className='p-0 m-0'>{GetDataById?.projectType}</p></div>
-                                            <div className='d-flex '><h5 className='p-0 m-0'>Project Start Date :</h5>
-                                                <p className='p-0 m-0'> {moment(GetDataById?.startDate).format('L')}</p></div>
-                                            <div className='d-flex '><h5 className='p-0 m-0'>Project End Date :</h5>
-                                                <p className='p-0 m-0'> {moment(GetDataById?.endDate).format('L')}</p></div>
-                                        </Col>
-                                    </Row>
-
-
-
-
-                                </Row>
-                            </Col>
-
-
-                        </Row>
-                        <Card className='mt-3'>
-                            <Card.Body>
-                                <Col className="mx-auto" lg={12}>
-                                    <Row>
-                                        <div className="row mx-auto mt-2">
-                                            <div className="d-flex col-4">
-                                                <div className="row d-flex align-items-center">
-                                                    <div
-                                                        className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
-                                                        <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
-                                                            Active
-                                                        </p>
-                                                    </div>
-                                                    <div
-                                                        className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
-                                                        <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
-                                                            Deactive
-                                                        </p>
-                                                    </div>
+                                    <div className="row mx-auto mt-2">
+                                        <div className="d-flex col-4">
+                                            <div className="row d-flex align-items-center">
+                                                <div
+                                                    className={`col-auto  cp ${
+                                                        status == 1 ? 'Active_data' : 'InActive_data'
+                                                    }`}>
+                                                    <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
+                                                        Active
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    className={`col-auto  cp ${
+                                                        status == 0 ? 'Active_data' : 'InActive_data'
+                                                    }`}>
+                                                    <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
+                                                        Deactive
+                                                    </p>
                                                 </div>
                                             </div>
-                                            <div className="col-4 d-flex align-items-center justify-content-center">
-                                                <h4 className="header-title heading_data"> Milestones</h4>
-                                            </div>
                                         </div>
-                                        <Col className="" lg={12}>
-
-                                            <Table striped>
-                                                <thead >
+                                        <div className="col-4 d-flex align-items-center justify-content-center">
+                                            <h4 className="header-title heading_data"> Milestones</h4>
+                                        </div>
+                                    </div>
+                                    <Col className="" lg={12}>
+                                        <Table striped>
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th> MileStone Name</th>
+                                                    <th> Description</th>
+                                                    <th> Start Date</th>
+                                                    <th> End Date</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {GetSinglemilstonesData?.map((item, index) => (
                                                     <tr>
-                                                        <th>#</th>
-                                                        <th> MileStone Name</th>
-                                                        <th> Description</th>
-                                                        <th> Start Date</th>
-                                                        <th> End Date</th>
-                                                        <th>Status</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {GetSinglemilstonesData?.map((item, index) => (
-                                                        <tr>
-                                                            <td>{index + 1}</td>
-                                                            <td>{item?.title}</td>
-                                                            <td>  <div
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: item?.description,
-                                                    }}
-                                                /></td>
+                                                        <td>{index + 1}</td>
+                                                        <td>{item?.title}</td>
+                                                        <td>
+                                                            {' '}
+                                                            <div
+                                                                dangerouslySetInnerHTML={{
+                                                                    __html: item?.description,
+                                                                }}
+                                                            />
+                                                        </td>
 
-                                                            <td> {moment(item?.start_date).format('L')}</td>
-                                                            <td>{moment(item?.completion_date).format('L')}</td>
-                                                            <td> <Form.Check
+                                                        <td> {moment(item?.start_date).format('L')}</td>
+                                                        <td>{moment(item?.completion_date).format('L')}</td>
+                                                        <td>
+                                                            {' '}
+                                                            <Form.Check
                                                                 type="switch"
                                                                 checked={item?.status}
                                                                 onChange={(e) => handleStatusChange(e, item)}
-                                                            /></td>
-                                                            <td> <Row>
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            {' '}
+                                                            <Row>
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0 ">
-                                                                        <Link to={`/dashboard/singleMilestonesprint/projectId=/${item?.project_id}&milestoneId=/${item?._id}`}>
+                                                                        <Link
+                                                                            to={`/dashboard/singleMilestonesprint/projectId=/${item?.project_id}&milestoneId=/${item?._id}`}>
                                                                             <i className="mdi mdi-eye m-0 p-0"></i>
                                                                         </Link>
                                                                     </p>
@@ -228,47 +210,44 @@ const Milestone = () => {
                                                                             onClick={() => {
                                                                                 handelUpdate(item);
                                                                             }}
-                                                                            className="uil-edit-alt m-0 p-0"
-                                                                        ></i>
+                                                                            className="uil-edit-alt m-0 p-0"></i>
                                                                     </p>
-
                                                                 </Col>
-                                                            </Row></td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </Table>
+                                                            </Row>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </Table>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </Card.Body>
+                    </Card>
+                </>
+            )}
 
-                                        </Col>
-                                    </Row>
-                                </Col>
-                            </Card.Body>
-                        </Card>
-                    </>
-
-                )}
-
-                <Create modal={openModel} closeModal={closeModal} />
-                <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
-                {/* delete modal */}
-                <Modal show={statusModal} onHide={() => setStatusModal(false)}>
-                    <Modal.Body>
-                        Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this MileStone?
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button
-                            variant="secondary"
-                            onClick={() => {
-                                setStatusModal(false);
-                            }}>
-                            No
-                        </Button>
-                        <Button className=" web_button " variant="primary" onClick={() => handleYes()}>
-                            Yes
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            </Container>
+            <Create modal={openModel} closeModal={closeModal} />
+            <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
+            {/* delete modal */}
+            <Modal show={statusModal} onHide={() => setStatusModal(false)}>
+                <Modal.Body>
+                    Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this MileStone?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            setStatusModal(false);
+                        }}>
+                        No
+                    </Button>
+                    <Button className=" web_button " variant="primary" onClick={() => handleYes()}>
+                        Yes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            {/* </Container> */}
         </>
     );
 };

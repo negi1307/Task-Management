@@ -3,7 +3,14 @@ import { combineReducers } from 'redux';
 
 import Auth from './auth/reducers';
 import Layout from './layout/reducers';
-import { addProject, getProject, updateProject, deleteProject, getProjectById,getProjectId } from './projects/reducers';
+import {
+    addProject,
+    getProject,
+    updateProject,
+    deleteProject,
+    getProjectById,
+    getProjectId,
+} from './projects/reducers';
 import {
     getAllMileStones,
     deleteMileStone,
@@ -11,7 +18,7 @@ import {
     updateMilestone,
     addAllmilstones,
     getSigleMileStone,
-    getMilestoneId
+    getMilestoneId,
 } from './milestone/reducer';
 import {
     addSprint,
@@ -20,10 +27,16 @@ import {
     getSingleSprintReducer,
     updateSprint,
     getAllSingleSprints,
-    getSprintId
+    getSprintId,
 } from './sprint/reducres';
-import { createTaskReducer, getSigleSprintTask, getAllTaskReducer, UpdateTaskReducer,deleteTask } from './task/reducer';
-import { getAllUsers, deleteUser, createUser ,getAllRoles} from './user/reducer';
+import {
+    createTaskReducer,
+    getSigleSprintTask,
+    getAllTaskReducer,
+    UpdateTaskReducer,
+    deleteTask,
+} from './task/reducer';
+import { getAllUsers, deleteUser, createUser, getAllRoles } from './user/reducer';
 import {
     createTechnologyReducer,
     getAllTechnologyReducer,
@@ -34,8 +47,16 @@ import {
     UpdateTechnologyCategoryReducer,
     deleteTechnologyCategory,
 } from './technology/reducer';
-import { addComments,deleteComment,updateComment,getHistoryData,getAllComment,getTaskId } from './addcomment/reducers';
-import {getPriorityTaskBoard,getWeekCountTaskBoard,getTaskStatusCount,getTaskCount} from './Summary/reducer'
+import {
+    addComments,
+    deleteComment,
+    updateComment,
+    getHistoryData,
+    getAllComment,
+    getTaskId,
+} from './addcomment/reducers';
+import { getPriorityTaskBoard, getWeekCountTaskBoard, getTaskStatusCount, getTaskCount } from './Summary/reducer';
+import { getAllAssignee } from './assigneeid/reducer';
 
 export default (combineReducers({
     Auth,
@@ -79,11 +100,13 @@ export default (combineReducers({
     getSprintId,
     addComments,
     deleteComment,
-    updateComment,getHistoryData,
+    updateComment,
+    getHistoryData,
     getPriorityTaskBoard,
     getWeekCountTaskBoard,
     getTaskStatusCount,
     getTaskCount,
     getAllComment,
-    getTaskId
+    getTaskId,
+    getAllAssignee,
 }): any);

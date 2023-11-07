@@ -6,7 +6,13 @@ import classNames from 'classnames';
 import '../global.css';
 
 // actions
-import { showRightSidebar, changeSidebarType, getsingleMileStone, getMilestonetId, getSprintId } from '../redux/actions';
+import {
+    showRightSidebar,
+    changeSidebarType,
+    getsingleMileStone,
+    getMilestonetId,
+    getSprintId,
+} from '../redux/actions';
 import { getAllProjects } from '../../src/redux/projects/action';
 import { getallMileStones, getMileStoneById } from '../redux/actions';
 import { getAllSprint, getSingleSprint } from '../redux/actions';
@@ -137,13 +143,12 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     // const getsingleMilestoneData = store?.getSigleMileStone?.data?.response;
     // console.log(getsingleMilestoneData, "responseeeeeeeeeeeeeeeeee")
     // const getAllSingleSprints = store?.getAllSingleSprints?.data?.response;
-    
+
     // const [mileStoneId, setMileStoneId] = useState('');
     // const [sprintId, setSprintId] = useState('');
     // const [mileStoneData, setmileStoneData] = useState([]);
     // const [milestoneid, setmilestoneid] = useState(false);
     // const [sptint, setsprint] = useState(false);
-
 
     const navbarCssClasses = navCssClasses || '';
     const containerCssClasses = !hideLogo ? 'container-fluid' : '';
@@ -152,8 +157,6 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         layoutType: state.Layout.layoutType,
         leftSideBarType: state.Layout.leftSideBarType,
     }));
-
-
 
     /**
      * Toggle the leftmenu when having mobile screen
@@ -203,7 +206,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     //     setsprint(false);
 
     //     dispatch(getProjectId(e.target.value));
-       
+
     //     const id = e.target.value;
     //     setmilestoneid(true);
     //     if (id) {
@@ -224,11 +227,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     //     dispatch(getSprintId(e.target.value));
     //     setsprint(false);
 
-
     // }
     return (
         <>
-
             <div className={classNames('navbar-custom', navbarCssClasses)}>
                 <div className={containerCssClasses}>
                     <div className="topbarinfo">
@@ -242,29 +243,28 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                 </span>
                             </Link>
                         )}
-                        <div className='d-flex align-items-center'>
+                        <div className="d-flex align-items-center">
                             <div className="lefbar_info">
                                 {(layoutType === layoutConstants.LAYOUT_VERTICAL ||
                                     layoutType === layoutConstants.LAYOUT_FULL) && (
-                                        <button className="button-menu-mobile open-left" onClick={handleLeftMenuCallBack}>
-                                            <i className="mdi mdi-menu" />
-                                        </button>
-                                    )}
+                                    <button className="button-menu-mobile open-left" onClick={handleLeftMenuCallBack}>
+                                        <i className="mdi mdi-menu" />
+                                    </button>
+                                )}
                                 <div class="menuinfo">
                                     <ul>
-                                        <li>
+                                        <li className="list_padding">
                                             <Link to="">Apps</Link>
                                         </li>
-                                        <li>
+                                        <li className="list_padding">
                                             <Link to="">Filters</Link>
                                         </li>
-                                        <li>
+                                        <li className="list_padding">
                                             <Link to="">Dashboard</Link>
                                         </li>
-                                        <li>
+                                        <li className="list_padding">
                                             <Link to="">Teams</Link>
                                         </li>
-
                                     </ul>
                                 </div>
                             </div>
@@ -319,8 +319,6 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                         </div>
 
                         <ul className="list-unstyled topbar-menu float-end mb-0 topbarr">
-
-
                             <li className="notification-list">
                                 <button
                                     className="nav-link dropdown-toggle end-bar-toggle arrow-none btn btn-link shadow-none"
@@ -365,12 +363,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </Link>
                         )}
                         <TopbarSearch />
-
                     </div>
                 </div>
-
             </div>
-         
         </>
     );
 };

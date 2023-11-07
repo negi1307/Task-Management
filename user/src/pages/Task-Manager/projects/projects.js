@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import MainLoader from '../../../constants/Loader/loader';
 import ToastHandle from '../../../constants/toaster/toaster';
 import moment from 'moment';
+import { getassignee } from '../../../redux/assigneeid/actions';
 
 const Projects = () => {
     const dispatch = useDispatch();
@@ -25,10 +26,14 @@ const Projects = () => {
     const [checkedData, setCheckedData] = useState();
     const [checkedStatus, setCheckedStatus] = useState();
     const [statusModal, setStatusModal] = useState(false);
+    const getAssignedProjectsHandle = store?.getAllAssignee;
     const handeldelete = (ele) => {
         setdeleteId(ele?._id);
         setDeleteModal(true);
     };
+    useEffect(() => {
+        dispatch(getassignee({ flag: 1 }));
+    }, []);
     const handelCreate = () => {
         setOpenModal(true);
     };
@@ -64,6 +69,7 @@ const Projects = () => {
         }
         setStatusModal(false);
     };
+    console.log(store, 'storeeeeeee');
     console.log(checkedData, 'oooooooooooooooooooooooooooo');
     const handleStatusChange = (e, data) => {
         if (e.target.checked) {
@@ -90,12 +96,12 @@ const Projects = () => {
             dispatch(getAllProjects(data));
         }
     };
-    useEffect(() => {
-        let body = {
-            status: status,
-        };
-        dispatch(getAllProjects(body));
-    }, [render]);
+    // useEffect(() => {
+    //     let body = {
+    //         status: status,
+    //     };
+    //     dispatch(getAllProjects(body));
+    // }, [render]);
     useEffect(() => {
         if (deletehandle?.status == 200) {
             ToastHandle('success', deletehandle?.message);
@@ -106,7 +112,6 @@ const Projects = () => {
             ToastHandle('error', deletehandle?.message);
         }
     }, [deletehandle]);
-
     return (
         <>
             <div>
@@ -165,12 +170,12 @@ const Projects = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {store?.getProject?.data?.response?.map((ele, ind) => {
+                                    {getAssignedProjectsHandle?.data?.response?.map((ele, ind) => {
                                         return (
                                             <tr className="align-middle">
                                                 <th scope="row">{ind + 1}</th>
                                                 <td className="cp">
-                                                    <span className="namelink"> {ele?.projectName} </span>
+                                                    <span className="namelink"> {ele?.projectId?.projectName} </span>
                                                 </td>
                                                 <td className="w-20">
                                                     <span className="namelink"> {ele?.clientName}</span>

@@ -70,6 +70,7 @@ const Boards = () => {
     const deletehandel = store?.deleteTask;
     const updatehandel = store?.UpdateTaskReducer;
     const Createhandel = store?.createTaskReducer;
+    const updateComment = store?.updateCommentReducer;
     const [render, setRender] = useState(false);
     const [projectNameHeading, setProjectName] = useState('Select Project Name');
     const [showModal, setShowModal] = useState(false);
@@ -237,6 +238,7 @@ const Boards = () => {
     useEffect(() => {
         if (CreateCommenthandel?.data?.status == 200) {
             ToastHandle('success', CreateCommenthandel?.data?.message);
+            dispatch(getComment({taskId:taskId}))
         } else if (CreateCommenthandel?.data?.status == 400) {
             ToastHandle('error', CreateCommenthandel?.data?.message);
         } else if (CreateCommenthandel?.data?.status == 500) {
@@ -253,6 +255,16 @@ const Boards = () => {
             ToastHandle('error', deleteCommenthandel?.data?.message);
         }
     }, [deleteCommenthandel]);
+    useEffect(() => {
+        if (updateComment?.data?.status == 200) {
+            ToastHandle('success', updateComment?.data?.message);
+            dispatch(getComment({taskId:taskId}))
+        } else if (updateComment?.data?.status == 400) {
+            ToastHandle('error', updateComment?.data?.message);
+        } else if (updateComment?.data?.status == 500) {
+            ToastHandle('error', updateComment?.data?.message);
+        }
+    }, [updateComment]);
     useEffect(() => {
         let body = {
             status: 1,

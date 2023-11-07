@@ -51,6 +51,7 @@ const addUserAssignments = async (req, res) => {
 
 // Get User assignments
 const getUserAssignments = async (req, res) => {
+  console.log(req.query);
   try {
     const query = {
       assigneeId: req.user._id,
