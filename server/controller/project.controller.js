@@ -11,6 +11,7 @@ const addProject = async (req, res) => {
       endDate,
       projectDesc,
       projectType,
+      projectStatus,
     } = req.body;
 
     const projectNameRegex = new RegExp(`^${projectName}$`, "i");
@@ -30,19 +31,24 @@ const addProject = async (req, res) => {
         endDate,
         projectDesc,
         projectType,
+        projectStatus,
       });
-      return res.status(200).json({
-        status: "200",
-        message: "Project created successfully",
-        response: result,
-      });
+      return res
+        .status(200)
+        .json({
+          status: "200",
+          message: "Project created successfully",
+          response: result,
+        });
     }
   } catch (error) {
-    return res.status(200).json({
-      status: "500",
-      message: "Something went wrong",
-      error: error.message,
-    });
+    return res
+      .status(200)
+      .json({
+        status: "500",
+        message: "Something went wrong",
+        error: error.message,
+      });
   }
 };
 
@@ -50,57 +56,72 @@ const addProject = async (req, res) => {
 const getProjects = async (req, res) => {
   try {
     const pageSize = 10;
-    if (parseInt(req.query.skip) === 0) {
-      if (req.query.projectId) {
-        const project = await projectModel.findById({
-          _id: req.query.projectId,
-        });
-        return res.status(200).json({
-          status: "200",
-          message: "Project Details fetched successfully",
-          response: project,
-        });
+    const projectStatus = parseInt(req.query.projectStatus);
+    if (projectStatus) {
+      if (parseInt(req.query.skip) === 0) {
+        if (req.query.projectId) {
+          const project = await projectModel.findById({
+            _id: req.query.projectId,
+          });
+          return res
+            .status(200)
+            .json({
+              status: "200",
+              message: "Project Details fetched successfully",
+              response: project,
+            });
+        } else {
+          const projects = await projectModel
+            .find({ activeStatus: req.query.activeStatus, projectStatus })
+            .populate("technology", "techName")
+            .sort({ createdAt: -1 });
+          return res
+            .status(200)
+            .json({
+              status: "200",
+              message: "Projects fetched successfully",
+              response: projects,
+            });
+        }
       } else {
-        const projects = await projectModel
-          .find({ activeStatus: req.query.activeStatus })
-          .populate("technology", "techName")
-          .sort({ createdAt: -1 });
-        return res.status(200).json({
-          status: "200",
-          message: "Projects fetched successfully",
-          response: projects,
+        const totalCount = await projectModel.countDocuments({
+          activeStatus: req.query.activeStatus,
+          projectStatus,
         });
+        const projects = await projectModel
+          .find({ activeStatus: req.query.activeStatus, projectStatus })
+          .populate("technology", "techName")
+          .sort({ createdAt: -1 })
+          .limit(pageSize)
+          .skip((parseInt(req.query.skip) - 1) * pageSize);
+        const totalPages = Math.ceil(totalCount / pageSize);
+
+        return res
+          .status(200)
+          .json({
+            status: "200",
+            message: "Projects fetched successfully",
+            response: projects,
+            totalCount,
+            totalPages,
+          });
       }
-    }
-    // else if(){
-
-    // }
-    else {
-      const totalCount = await projectModel.countDocuments({
-        activeStatus: req.query.activeStatus,
-      });
-      const projects = await projectModel
-        .find({ activeStatus: req.query.activeStatus })
-        .populate("technology", "techName")
-        .sort({ createdAt: -1 })
-        .limit(pageSize)
-        .skip((parseInt(req.query.skip) - 1) * pageSize);
-      const totalPages = Math.ceil(totalCount / pageSize);
-
-      return res.status(200).json({
-        status: "200",
-        message: "Projects fetched successfully",
-        response: projects,
-        totalCount,
-        totalPages,
-      });
+    } else {
+      res
+        .status(200)
+        .json({
+          status: 201,
+          message: "Invalid or missing projectStatus. It should be 1, 2,3 or 4",
+        });
     }
   } catch (error) {
-    return res.status(200).json({
-      status: "500",
-      message: "Something went wrong",
-      error: error.message,
-    });
+    return res
+      .status(200)
+      .json({
+        status: "500",
+        message: "Something went wrong",
+        error: error.message,
+      });
   }
 };
 

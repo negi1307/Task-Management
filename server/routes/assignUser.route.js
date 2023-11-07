@@ -14,5 +14,16 @@ assignUserRoute.get(
   verifyEmployee,
   assignUser.getUserAssignments
 );
+assignUserRoute.post(
+  "/addUserAssignments",
+  verifyAdmin,
+  assignUser.addUserAssignments
+);
+assignUserRoute.get("/getUserTasks", verifyEmployee, assignUser.getUserTasks);
+assignUserRoute.get(
+  "/getUserAssignments",
+  verifyEmployee,
+  assignUser.getUserAssignments
+);
 
 module.exports = assignUserRoute;

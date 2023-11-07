@@ -8,7 +8,7 @@ const accessToken = (userId) => {
     };
     const options = {
       issuer: "TASKMANAGER",
-      expiresIn: "7d",
+      expiresIn: "12h",
     };
     const secret = process.env.SECRET_ACCESS_TOKEN;
     jwt.sign(payload, secret, options, (err, token) => {
@@ -26,7 +26,6 @@ const verifyAdmin = async (req, res, next) => {
     }
     const bearerToken = headerToken.split(" ");
     const token = bearerToken[1];
-
     jwt.verify(token, process.env.SECRET_ACCESS_TOKEN, async (err, user) => {
       if (err) {
         return res.status(401).json({ message: "jwt token is expired" });
@@ -53,7 +52,6 @@ const verifyEmployee = async (req, res, next) => {
     }
     const bearerToken = headerToken.split(" ");
     const token = bearerToken[1];
-    // console.log(req);
     jwt.verify(token, process.env.SECRET_ACCESS_TOKEN, async (err, user) => {
       if (err) {
         return res.status(401).json({ message: "jwt token is expired" });
@@ -62,9 +60,11 @@ const verifyEmployee = async (req, res, next) => {
       if (req.user.roleId.role === "Employee") {
         next();
       } else {
-        return res.status(403).json({
-          message: "Access denied. Only the authenciated users are allowed.",
-        });
+        return res
+          .status(403)
+          .json({
+            message: "Access denied. Only the authenciated users are allowed.",
+          });
       }
     });
   } catch (error) {

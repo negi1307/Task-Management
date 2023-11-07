@@ -52,14 +52,9 @@ const addUserAssignments = async (req, res) => {
 // Get User assignments
 const getUserAssignments = async (req, res) => {
   try {
-    const user = req.user;
-    console.log(user);
     const query = {
-      // assigneeId: req.query.assigneeId,
-      userId: req.userId,
+      assigneeId: req.user._id,
     };
-    console.log(query);
-
     if (req.query.flag == 1) {
       query.projectId = { $exists: true };
     } else if (req.query.flag == 2) {
@@ -67,7 +62,6 @@ const getUserAssignments = async (req, res) => {
     } else if (req.query.flag == 3) {
       query.sprintId = { $exists: true };
     }
-
     const result = await assignUserModel
       .find(query)
       .populate([

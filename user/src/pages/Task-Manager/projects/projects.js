@@ -75,6 +75,7 @@ const Projects = () => {
         setStatusModal(true);
     };
     const handleActive = (val) => {
+        console.log(val);
         if (val) {
             setStatus(1);
             let data = {
