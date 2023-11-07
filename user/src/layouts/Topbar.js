@@ -162,7 +162,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
     useEffect(() => {
         let data = {
+        
             status: 1,
+            projectstatus:1            
         };
         dispatch(getAllProjects(data));
         //dispatch(getallMileStones({status:1}))
@@ -418,10 +420,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             <Link to="summary">Summary</Link>{' '}
                         </li>
                         {/* <li> <Link to="/tasklist">List</Link> </li> */}
-                        <li>
-                            {' '}
-                            <Link to="/boards">Board</Link>{' '}
-                        </li>
+                        <li> <Link to="/boards">Board</Link>  </li>
+                    
+
                     </ul>
                 </div>
             </div>

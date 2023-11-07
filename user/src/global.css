@@ -563,4 +563,53 @@ h5.count {
     color: #39afd1;
 }
 
+.card_detail .i.fa.fa-file-pdf-o {
+    color: red !important;
+    font-size: 22px;
+}
+
+.card_detail i {
+    font-size: 55px;
+    color: red;
+}
+.taskcardinfo span {
+    height: 30px;
+    font-weight: 800;
+    width: 30px;
+    background: #3294b0;
+    border-radius: 100%;
+    /* padding: 10px; */
+    font-size: 20px;
+    /* margin-top: 20px !important; */
+    display: inline-block;
+    text-align: center;
+    color: #fff;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+td.user_name {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+td.user_name p {
+    margin-bottom: 0px;
+}
+
+tr.task_comment_info td {
+    width: 100%;
+    flex: 0 0 100%;
+}
+
+td.user_name {
+    font-size: 18px;
+    color: #4e4949;
+    font-weight: 500;
+}
+
+td.user_comment {
+    font-size: 18px;
+}
+
 /* end status count------------------------------------------- */

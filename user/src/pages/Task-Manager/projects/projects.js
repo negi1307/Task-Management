@@ -78,20 +78,29 @@ const Projects = () => {
         if (val) {
             setStatus(1);
             let data = {
-                status: 1,
+            
+            status: 1,     
+            projectstatus:1
             };
             dispatch(getAllProjects(data));
         } else {
             setStatus(0);
             let data = {
-                status: 0,
+        
+            status: 1,
+            projectstatus:1
+
             };
             dispatch(getAllProjects(data));
         }
     };
     useEffect(() => {
         let body = {
-            status: status,
+        
+            status: 1,
+            
+            projectstatus:1
+
         };
         dispatch(getAllProjects(body));
     }, [render]);
