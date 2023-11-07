@@ -18,6 +18,8 @@ import {getHistory} from '../../../redux/addcomment/actions'
 import {getTaskStatusCount} from '../../../redux/Summary/action'
 import { addComment, getComment, updateComment, deleteComment,getCommentId } from '../../../redux/addcomment/actions';
 import Taskdetail from './taskdetail'
+import { useForm } from "react-hook-form";
+
 
 const Container = styled.div`
   display: flex;
@@ -51,9 +53,12 @@ const Title = styled.span`
 `;
 
 
-const Boards = (props) => {  
+const Boards = (props) => { 
+ 
   const dispatch = useDispatch();
   const store = useSelector(state => state)
+  const { register,setValue} = useForm();
+
   const taskStatusCount=store?.getTaskStatusCount?.data?.response
   // for status count on board page(get all task api)============================
   const taskStatusCountdata=store?.getAllTaskReducer?.data
@@ -69,14 +74,15 @@ const milstoneId=store?.getMilestoneId?.data;
 const SprintId=store?.getSprintId?.data;
 
   useEffect(() => {
-    dispatch(getAllTask({id:projectId , milestoneId:milstoneId,sprintId:SprintId }))    
+    dispatch(getAllTask({id:projectId , milestoneId:milstoneId,sprintId:SprintId,searchString:"" }))    
+    
    
   }, [SprintId])
 
   useEffect(()=>{
     let body = {
       status :1,
-      skip: 0    
+      projectstatus:1    
   };
   dispatch(getAllProjects(body)); 
   },[])
@@ -143,7 +149,7 @@ const SprintId=store?.getSprintId?.data;
        
       }
       setTimeout(() => {
-        dispatch(getAllTask({id:projectId , milestoneId:milstoneId,sprintId:SprintId })) 
+        dispatch(getAllTask({id:projectId , milestoneId:milstoneId,sprintId:SprintId,searchString:""  })) 
       }, 30);
     } 
     else {
@@ -200,6 +206,11 @@ const[commentdata,setCommentData] = useState([]);
 const [showTaskModel, setshowTaskModel] = useState(false);
 const historyData = store?.getHistoryData?.data?.response;
 const userId = store?.Auth?.user?.userId;
+
+const selectUserTask=store?.getAllTaskReducer?.data?.done?.tasks?.taskInfo
+
+console.log("selectUserTask",selectUserTask)
+
 const showTaskDetailMOdel =(item)=>{
   setshowTaskModel(true);
   setCommentData(item);
@@ -211,7 +222,7 @@ const closeTaskDetailMOdel = () => {
 };
   
   const callAlltaskData=()=>{
-    dispatch(getAllTask({id:projectId , milestoneId:milstoneId , sprintId:SprintId}));
+    dispatch(getAllTask({id:projectId , milestoneId:milstoneId , sprintId:SprintId,searchString:"" }));
   }
 
   
@@ -220,6 +231,17 @@ const closeTaskDetailMOdel = () => {
   
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  
+
+  const selectTask=(e)=>{
+
+    if(e.target.value!==''){
+      setTimeout(() => {
+        dispatch(getAllTask({id:projectId , milestoneId:milstoneId , sprintId:SprintId,searchString:e.target.value}))
+      }, 500);
+    }
+  }
   return (
 
     <>
@@ -238,11 +260,18 @@ const closeTaskDetailMOdel = () => {
       <li>Done:
         {taskStatusCountdata?.done?.taskCount}
       </li>
+      <li>
+        <input type="search"
+         placeholder='Search here...'
+         onKeyUp={selectTask}
+          {...register("textSearch")}
+         />
+
+      </li>
     </ul>
       {/* <ul>
         
         {taskStatusCount?.map((item,index)=>
-        
         
           <li>{item.name} : {item.count}</li>
         )}
