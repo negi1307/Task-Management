@@ -184,22 +184,20 @@ const getUserTasks = async (req, res) => {
 // All assignees of A project
 const projectUserList = async (req, res) => {
     try {
-        const projectId = req.query.projectId;
-        const milestoneId = req.query.milestoneId;
-        const sprintId = req.query.sprintId;
+        const { projectId, milestoneId, sprintId } = req.query;
         const taskfind = await taskModel.find({projectId, milestoneId, sprintId });
         const taskIds = taskfind.map(task => task._id);
         const assignees = await assignUserModel
         .find({ taskId: { $in: taskIds } })
         .populate([
             { path: 'assigneeId', select: 'firstName lastName' },
-            { path: 'reporterId', select: 'role' }
+            { path: 'reporterId', select: 'role' },
+            { path: 'taskId' }
         ])
-        .populate("taskId");
         return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: assignees })
     } 
     catch (error) {
-        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+        return res.status(400).json({ status: "400", message: "Fill all the required fields", error: error.message });
     };
 }
 
