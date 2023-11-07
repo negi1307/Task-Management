@@ -184,7 +184,10 @@ const getUserTasks = async (req, res) => {
 // All assignees of A project
 const projectUserList = async (req, res) => {
     try {
-        const taskfind = await taskModel.find({ projectId: req.query.projectId });
+        const projectId = req.query.projectId;
+        const milestoneId = req.query.milestoneId;
+        const sprintId = req.query.sprintId;
+        const taskfind = await taskModel.find({projectId, milestoneId, sprintId });
         const taskIds = taskfind.map(task => task._id);
         const assignees = await assignUserModel
         .find({ taskId: { $in: taskIds } })
