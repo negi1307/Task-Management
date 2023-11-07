@@ -420,16 +420,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             <Link to="summary">Summary</Link>{' '}
                         </li>
                         {/* <li> <Link to="/tasklist">List</Link> </li> */}
-<<<<<<< HEAD
                         <li> <Link to="/boards">Board</Link>  </li>
                     
 
-=======
-                        <li>
-                            {' '}
-                            <Link to="/boards">Board</Link>{' '}
-                        </li>
->>>>>>> e71011872e95d600874024e782e1597a8311b628
                     </ul>
                 </div>
             </div>

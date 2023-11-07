@@ -12,7 +12,7 @@ import AppMenu from './Menu';
 // images
 import logoSm from '../assets/images/logo_sm.png';
 import logoDark from '../assets/images/logo-dark.png';
-import rtlogo from '../assets/images/rtlogo.png';
+// import rtlogo from '../assets/images/rtlogo.png';
 import logoDarkSm from '../assets/images/logo_sm_dark.png';
 import logo from '../assets/images/logo.png';
 import helpBoxImage from '../assets/images/help-icon.svg';
@@ -101,7 +101,7 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                                 <img src={isLight ? logoDark : logoImg} alt="logo" height="25" />
                             </span>
                             <span className="logo-sm">
-                                <img src={isLight ? rtlogo : rtlogo} alt="logo" height="20" />
+                                {/* <img src={isLight ? rtlogo : rtlogo} alt="logo" height="20" /> */}
                             </span>
                         </Link>
 
@@ -110,7 +110,7 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                                 <img src={isLight ? logoDark : logoImg} alt="logo" height="16" />
                             </span>
                             <span className="logo-sm">
-                                <img src={isLight ? rtlogo : rtlogo} alt="logo" height="20" />
+                                {/* <img src={isLight ? rtlogo : rtlogo} alt="logo" height="20" /> */}
                             </span>
                         </Link>
                     </>
