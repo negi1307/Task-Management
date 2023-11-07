@@ -267,8 +267,9 @@ const Boards = () => {
     }, [updateComment]);
     useEffect(() => {
         let body = {
-            status: 1,
+            status: "",
             skip: 0,
+            projectStatus:""
         };
         dispatch(getAllProjects(body));
         dispatch(getsingleMileStone({ id: '', activeStatus: 1, skip: 0, mileStoneId: '' }));
