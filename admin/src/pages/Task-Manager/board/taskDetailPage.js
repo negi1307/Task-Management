@@ -318,7 +318,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                 </div>
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0 me-2">Attachment:</h4>
-                                    <img style={{width:"10rem", height:"10rem"}} className="img_style" src={editData?.attachmentType !== "application/pdf" ? editData?.attachment : pdfImage} />
+                                    <img style={{width:"10rem", height:"10rem"}}  className="img_style" src={editData?.attachmentType !== "application/pdf" ? editData?.attachment : pdfImage} />
                                     {/* <img src={editData?.attachment} /> */}
                                 </div>
                             </Card>

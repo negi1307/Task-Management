@@ -36,3 +36,6 @@ export function deleteCommentApi(data): any {
 export function UpdateCommentApi(data): any {
     return api.update(URL.updateComment, data.payload);
 }
+export function GetAssignUserApi(data): any {
+    return api.get(`${URL.GetAssignUser}${data.payload.projectId}&milestoneId=${data.payload.milestoneId}&sprintId=${data.payload.sprintId}`);
+}
