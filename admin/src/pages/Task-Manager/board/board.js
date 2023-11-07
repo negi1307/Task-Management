@@ -11,13 +11,13 @@ import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
-import { getComment, updateTaskStatus } from '../../../../src/redux/task/action';
+import { getAssignUserAction, getComment, updateTaskStatus } from '../../../../src/redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
-
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { deleteTask, getAllProjects, getAllRoles, getAllUsers, getsingleMileStone } from '../../../redux/actions';
 import { getSingleSprint } from '../../../redux/sprint/action';
 import { getSprintId } from '../../../redux/sprint/reducres';
@@ -65,6 +65,7 @@ const Boards = () => {
     const updatehandel = store?.UpdateTaskReducer;
     const Createhandel = store?.createTaskReducer;
     const updateComment = store?.updateCommentReducer;
+    const AssignUserName = store?.getAssignUserReducer?.data?.response;
     const [render, setRender] = useState(false);
     const [projectNameHeading, setProjectName] = useState('Select Project Name');
     const [showModal, setShowModal] = useState(false);
@@ -266,6 +267,7 @@ const Boards = () => {
         dispatch(getAllProjects(body));
         dispatch(getsingleMileStone({ id: '', activeStatus: 1, skip: 0, mileStoneId: '' }));
         dispatch(getSingleSprint({ activeStatus: 1, id: '', skip: 0 }));
+        dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
     }, []);
     const handleSearchChange = (e) => {
         e.preventDefault();
@@ -343,7 +345,7 @@ const Boards = () => {
                             <Badge className="badge-success-lighten ms-1">{successHandle?.data?.done?.taskCount}</Badge>
                         </h4>{' '}
                     </div>
-                    <div className="ms-3">
+                    <div className="ms-3 me-2">
                         {' '}
                         <h4 className="page-title">
                             {' '}
@@ -351,6 +353,32 @@ const Boards = () => {
                             <Badge className="badge-success-lighten ms-1">{successHandle?.data?.dueTasksCount}</Badge>
                         </h4>{' '}
                     </div>
+                    {AssignUserName?.map((ele, ind) => (
+                        <>
+                            <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                    <Tooltip id="tooltip1">
+                                        {ele?.assigneeId?.firstName}
+                                        {ele?.assigneeId?.lastName}
+                                    </Tooltip>
+                                }>
+                                <div className="mt-1 cp">
+                                    <span
+                                        style={{
+                                            backgroundColor: '#605e5a',
+                                            borderRadius: '100%',
+                                            padding: '9px',
+                                            color: 'white',
+                                            fontWeight: '800',
+                                        }}>
+                                        {ele?.assigneeId?.firstName.charAt(0)}
+                                        {ele?.assigneeId?.lastName.charAt(0)}
+                                    </span>
+                                </div>
+                            </OverlayTrigger>
+                        </>
+                    ))}
                 </div>
 
                 <div className="col-lg-4 d-flex justify-content-end">

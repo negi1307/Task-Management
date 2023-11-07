@@ -138,23 +138,23 @@ const Projects = () => {
                             <div className="row d-flex align-items-center">
                                 <div className={`col-auto  cp ${projectStatus == 1 ? 'Active_data' : 'InActive_data'}`}>
                                     <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('1')}>
-                                        Live
+                                    Todo
                                     </p>
                                 </div>
                                 <div className={`col-auto  cp ${projectStatus == 2 ? 'Active_data' : 'InActive_data'}`}>
                                     <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('2')}>
-                                        Hold
+                                       Live
                                     </p>
                                 </div>
 
                                 <div className={`col-auto  cp ${projectStatus == 3 ? 'Active_data' : 'InActive_data'}`}>
                                     <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('3')}>
-                                        Completed
+                                        Hold
                                     </p>
                                 </div>
                                 <div className={`col-auto  cp ${projectStatus == 4 ? 'Active_data' : 'InActive_data'}`}>
                                     <p className=" p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('4')}>
-                                        Todo
+                                        Completed
                                     </p>
                                 </div>
                             </div>

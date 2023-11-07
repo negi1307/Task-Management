@@ -13,6 +13,7 @@ import { getSingleSprint, getsingleMileStone, updateTask } from '../../../redux/
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import noimage from '../../../assets/images/noimage.png';
+import pdfImage from "../../../assets/images/pdff-removebg-preview.png"
 const UpdateTask = ({ modal, closeModal, editData }) => {
     console.log(editData, 'update');
     const [data, setData] = useState({
@@ -100,13 +101,14 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     };
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-        const allowedTypes = ['image/png', 'image/gif', 'image/jpeg'];
+        setData({ ...data, image: e.target.files[0] });
+        // // const allowedTypes = ['image/png', 'image/gif', 'image/jpeg'];
 
-        if (file && allowedTypes.includes(file.type)) {
-            setData({ ...data, image: e.target.files[0] });
-        } else {
-            ToastHandle('error', 'Please select only an image file (PNG, GIF, JPEG).');
-        }
+        // if (file && allowedTypes.includes(file.type)) {
+            
+        // } else {
+        //     ToastHandle('error', 'Please select only an image file (PNG, GIF, JPEG).');
+        // }
     };
     const handelimageclose = () => {
         setImageShow(false);
@@ -363,11 +365,12 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         <Col className="d-flex justify-content-center">
                                                             <div style={{ width: '50%', position: 'relative' }}>
                                                                 <div className="img_div">
-                                                                    <img
+                                                                    {/* <img
                                                                         className=" all_logo_img w-100"
                                                                         src={editData?.attachment}
-                                                                    />
-                                                                </div>
+                                                                    /> */}
+                                                                     <img  className=" all_logo_img w-100" src={editData?.attachmentType !== "application/pdf" ? editData?.attachment : pdfImage} />
+                                                                </div> 
                                                                 <div
                                                                     className="cross_div"
                                                                     style={{ position: 'absolute', rigth: '0' }}>
@@ -395,7 +398,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                             ) : (
                                                 <Form.Control
                                                     type="file"
-                                                    accept="image/png, image/gif, image/jpeg"
+                                                    // accept="image/png, image/gif, image/jpeg"
                                                     onChange={(e) => {
                                                         handleImageChange(e);
                                                     }}

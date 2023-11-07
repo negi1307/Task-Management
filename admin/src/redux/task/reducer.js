@@ -60,6 +60,11 @@ const UPDATE_COMMENT__INITIAL_STATE = {
     loading:false,
     message:""
 }
+const ASSIGN_USER_INITIAL_STATE = {
+    data:[],
+    loading:false,
+    message:""
+}
 export const createTaskReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case TASK_TYPES.CREATE_TASK_LOADING:
@@ -387,6 +392,31 @@ export const getTaskId = (state = {data:""}, action) => {
                 
             };
       
+        default:
+            return { ...state };
+
+    }
+};
+export const getAssignUserReducer = (state = ASSIGN_USER_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case TASK_TYPES.GET_ASSIGN_USER_LOADING:
+            return {
+                data: ASSIGN_USER_INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.GET_ASSIGN_USER_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case TASK_TYPES.GET_ASSIGN_USER_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
         default:
             return { ...state };
 
