@@ -216,13 +216,23 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
 }
 
 .all_bg{
-    background-color: rgb(218, 235, 255);
+    padding: 70px 0px;
+    background-color: rgb(202 129 255 / 7%);
 }
 .bg_clr{
     background-color:rgb(238, 236, 236);
 }
 .w-size{
     font-size: 20px;
+}
+.date p {
+    font-weight: 600;
+    margin-top: 17px !important;
+    font-size: 16px;
+}
+
+.count {
+    color: #c181ff !important;
 }
 .border_clr{
     border:1px solid rgb(209, 208, 208);
@@ -239,15 +249,9 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
     display: flex;
     
     align-items: center;
-    max-width: 600px;
+ 
 }
-.donut-chart2{
-    display: flex;
-    padding-left: 19%;
-    
-    align-items: center;
-    max-width: 600px;
-}
+
 
 .chart {
     position: relative;
@@ -340,7 +344,17 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
     padding-left: 0px;
 }
 
+.history {
+    display: flex;
+}
 
+.history h4 {
+    margin: 0px 0px 10px 0px;
+}
+
+.history_data_info p {
+    margin-left: 35px;
+}
 /* start header css--------------------------------------------- */
 /* .leftside-menu {
     background: #b88d42 !important;
@@ -393,3 +407,160 @@ ul.side-nav i {
 } */
 
 /* end header css ------------------------------------------------ */
+.modal_details .modal-dialog {
+    max-width: 800px ;
+}
+
+
+/* start task card detail page ----------------------------------- */
+.cardinfo.modal-body {
+    display: flex;
+    column-gap: 50px;
+}
+
+.comments {
+    flex: 0 0 49%;
+}
+
+.comments ul li button {
+    margin-right: 10px;
+    background: #f0f1f4 !important;
+    color: #000 !important;
+}
+
+.modal_details .modal-title.h4 {
+    color: #000;
+}
+
+.comments h4 {
+    color: #000;
+    margin-bottom: 21px;
+}
+
+.comments ul li button {
+    font-weight: 600;
+}
+.addcommentname button {
+    margin-top: 15px;
+    text-align: right;
+    float: right;
+}
+.card_detail h4 {
+    color: #000;
+}
+
+.description p {
+    margin-bottom: 0px;
+}
+
+.card_detail label {
+    margin-right: 30px;
+}
+
+.card_detail ul li {
+    display: flex;
+}
+
+.card_detail ul li {
+    margin-bottom: 13px;
+}
+
+.card_detail {
+    flex: 0 0 45%;
+}
+.card_detail {
+    padding-left: 30px;
+    box-shadow: 0 14px 28px rgb(152 152 152 / 25%), 0 10px 10px rgb(204 204 204 / 22%);
+}
+/* end task card detail page ------------------------------------  */
+
+/* start summary page------------------------------- */
+
+.bg_clrr {
+    width: 45px;
+    height: 45px;
+    background: #a541dcb8;
+    border-radius: 100%;
+    color: #fff;
+    text-align: center;
+    font-size: 23px !important;
+    line-height: 45px !important;
+}
+
+h5.states {
+    color: #000;
+    font-size: 22px;
+}
+
+.chart_div {
+   
+    align-items: center;
+}
+
+ul.legend {
+    margin-bottom: 0px;
+}
+
+ul.legend li {
+    font-size: 17px;
+    font-weight: 600;
+}
+ul.legend li span {
+    color: green !important;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.donut-chart2 {
+    margin-left: 34px;
+}
+.date {
+    border-top: 3px solid #bd43bda8;
+}
+h5.count {
+    font-size: 25px;
+    color: #be76e6 !important;
+    font-weight: 800;
+}
+
+.countstatus {
+    justify-content: center;
+    align-items: center;
+}
+
+.date {
+    text-align: center;
+    padding: 37px 13px;
+}
+
+.textarea_section textarea {
+    width: 100%;
+}
+/* end summary page-------------------------------------------- */
+
+/* start status count----------------------------------------- */
+.status ul {
+    margin-bottom: 0px;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+}
+
+.status ul li {
+    margin-right: 58px;
+    font-size: 20px;
+    color: #39afd1;
+    font-weight: 600;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+}
+
+.status h4 {
+    font-size: 20px;
+    color: #39afd1;
+}
+
+/* end status count------------------------------------------- */

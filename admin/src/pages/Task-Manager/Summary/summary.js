@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Card, ProgressBar, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Chart from 'react-apexcharts';
+import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getPriorityGraphAction, getTaskSummmaryDetail, getTaskWeekCountAction } from '../../../redux/Summary/action';
 import { Last } from 'react-bootstrap/esm/PageItem';
 const Summary = () => {
+    const { projectId, milestoneId, spriteId } = useParams();
+    console.log(projectId,"projectIdddddddddddddddddddddddddddd")
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.getTaskSummaryReducer;
@@ -86,6 +90,11 @@ const Summary = () => {
     ];
 
     return (
+        <>
+        <div className="project_detail">
+               
+               
+            </div>
         <div className="all_bg">
             <div className="container">
                 <div className="row">
@@ -96,7 +105,7 @@ const Summary = () => {
                             </div>
                             <div className="mx-3 ">
                                 <b>
-                                    <h5 className="mb-0 mt-1 text-secondary">{lastWeekCount?.doneCount ? lastWeekCount?.doneCount : "0"} done</h5>
+                                    <h5 className="mb-0 mt-1 text-secondary">{lastWeekCount?.doneCount ? lastWeekCount?.doneCount : "0"} task done</h5>
                                 </b>
                                 <b>
                                     <p className="m-0 text-secondary">in the last 7 days</p>
@@ -111,7 +120,7 @@ const Summary = () => {
                             </div>
                             <div className="mx-3 ">
                                 <b>
-                                    <h5 className="mb-0 mt-1 text-secondary">{lastWeekCount?.updatedCount ?lastWeekCount?.updatedCount :"0"} updated</h5>
+                                    <h5 className="mb-0 mt-1 text-secondary">{lastWeekCount?.updatedCount ?lastWeekCount?.updatedCount :"0"} task updated</h5>
                                 </b>
                                 <b>
                                     <p className="m-0 text-secondary">in the last 7 days</p>
@@ -126,7 +135,7 @@ const Summary = () => {
                             </div>
                             <div className="mx-3 ">
                                 <b>
-                                    <h5 className="mb-0 mt-1 text-secondary">{lastWeekCount?.createdCount ?lastWeekCount?.createdCount :"0"} created</h5>
+                                    <h5 className="mb-0 mt-1 text-secondary">{lastWeekCount?.createdCount ?lastWeekCount?.createdCount :"0"} task Add</h5>
                                 </b>
                                 <b>
                                     <p className="m-0 text-secondary">in the last 7 days</p>
@@ -141,7 +150,7 @@ const Summary = () => {
                             </div>
                             <div className="mx-3 ">
                                 <b>
-                                    <h5 className="mb-0 mt-1 text-secondary">{lastWeekCount?.dueCount ? lastWeekCount?.dueCount :"0"} due</h5>
+                                    <h5 className="mb-0 mt-1 text-secondary">{lastWeekCount?.dueCount ? lastWeekCount?.dueCount :"0"} task due</h5>
                                 </b>
                                 <b>
                                     <p className="m-0 text-secondary">in the last 7 days</p>
@@ -157,12 +166,7 @@ const Summary = () => {
                                 <h5 className="mb-3">
                                     <b>States overview</b>
                                 </h5>
-                                <h6>
-                                    Get a snapshot of the States of your items.{' '}
-                                    <a href className="text-decoration-none">
-                                        View all items
-                                    </a>
-                                </h6>
+                               
                             </div>
                             <div className="chart_div ">
                                 <div className="donut-chart">
@@ -392,12 +396,7 @@ const Summary = () => {
                                 <h5 className="mb-3">
                                     <b>Priority breakdown</b>
                                 </h5>
-                                <h6>
-                                    You"ll need to create a few items before you can start prioritizing work.{' '}
-                                    <a href className="text-decoration-none">
-                                        Create an item
-                                    </a>
-                                </h6>
+                               
                                 <Chart options={options} series={series} type="bar" height={350} />
                             </div>
                         </div>
@@ -408,12 +407,7 @@ const Summary = () => {
                                 <h5 className="mb-3">
                                     <b>Types of work</b>
                                 </h5>
-                                <h6>
-                                    You"ll need to create a few items for your project to get started .{' '}
-                                    <a href className="text-decoration-none">
-                                        Create an item
-                                    </a>
-                                </h6>
+                                
                             </div>
                             <div className="p-4">
                                 <div className="row ">
@@ -466,6 +460,7 @@ const Summary = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 

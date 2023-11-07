@@ -6,28 +6,32 @@ const { accessToken } = require("../middleware/jwt.auth");
 // Register a user or invite a user 
 const registerUser = async (req, res) => {
   try {
-    const existingUser = await userModel.findOne({ email: req.body.email });
+    const { firstName, lastName, email, password, roleId } = req.body;
+
+    const existingUser = await userModel.findOne({ email });
     if (existingUser) {
       return res.status(200).json({ status: "400", message: "Email already exists" });
     }
-    const hashedPassword = await bcrypt.hash(req.body.password, 9);
-    const result = await userModel.create({
-      userName: req.body.userName,
-      email: req.body.email,
-      password: hashedPassword,
-      plainPassword: req.body.password,
-      roleId: req.body.roleId,
-      role: 2
-    });
-    if (result) {
-      await nodemailer.emailSender(result);
-      return res.status(200).json({ status: "200", message: "User created Successfully", response: result });
-    } else {
-      return res.status(400).json({ status: "400", message: 'User not created' });
+    else {
+      const hashedPassword = await bcrypt.hash(password, 9);
+      const result = await userModel.create({
+        firstName,
+        lastName,
+        email,
+        password: hashedPassword,
+        plainPassword: password,
+        roleId,
+        role: 2
+      });
+      if (result) {
+        await nodemailer.emailSender(result);
+        return res.status(200).json({ status: "200", message: "User created Successfully", response: result });
+      } else {
+        return res.status(400).json({ status: "400", message: 'User not created' });
+      }
     }
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ status: "500", message: "Something went wrong" });
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 }
 

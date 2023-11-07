@@ -6,7 +6,13 @@ import classNames from 'classnames';
 import '../global.css';
 
 // actions
-import { showRightSidebar, changeSidebarType, getsingleMileStone, getMilestonetId, getSprintId } from '../redux/actions';
+import {
+    showRightSidebar,
+    changeSidebarType,
+    getsingleMileStone,
+    getMilestonetId,
+    getSprintId,
+} from '../redux/actions';
 import { getAllProjects } from '../../src/redux/projects/action';
 import { getallMileStones, getMileStoneById } from '../redux/actions';
 import { getAllSprint, getSingleSprint } from '../redux/actions';
@@ -133,17 +139,16 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [isopen, setIsopen] = useState(false);
-    const allProjects = store?.getProject?.data?.response;
-    const getsingleMilestoneData = store?.getSigleMileStone?.data?.response;
-    console.log(getsingleMilestoneData, "responseeeeeeeeeeeeeeeeee")
-    const getAllSingleSprints = store?.getAllSingleSprints?.data?.response;
-    const [projectNameHeading, setProjectName] = useState('Select Project Name');
-    const [mileStoneId, setMileStoneId] = useState('');
-    const [sprintId, setSprintId] = useState('');
-    const [mileStoneData, setmileStoneData] = useState([]);
-    const [milestoneid, setmilestoneid] = useState(false);
-    const [sptint, setsprint] = useState(false);
+    // const allProjects = store?.getProject?.data?.response;
+    // const getsingleMilestoneData = store?.getSigleMileStone?.data?.response;
+    // console.log(getsingleMilestoneData, "responseeeeeeeeeeeeeeeeee")
+    // const getAllSingleSprints = store?.getAllSingleSprints?.data?.response;
 
+    // const [mileStoneId, setMileStoneId] = useState('');
+    // const [sprintId, setSprintId] = useState('');
+    // const [mileStoneData, setmileStoneData] = useState([]);
+    // const [milestoneid, setmilestoneid] = useState(false);
+    // const [sptint, setsprint] = useState(false);
 
     const navbarCssClasses = navCssClasses || '';
     const containerCssClasses = !hideLogo ? 'container-fluid' : '';
@@ -152,8 +157,6 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         layoutType: state.Layout.layoutType,
         leftSideBarType: state.Layout.leftSideBarType,
     }));
-
-
 
     /**
      * Toggle the leftmenu when having mobile screen
@@ -190,45 +193,43 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         dispatch(showRightSidebar());
     };
 
-    const handleProject = () => {
-        setmilestoneid(false);
+    // const handleProject = () => {
+    //     setmilestoneid(false);
 
-        let data = {
-            status: 1,
-            skip: 1,
-        };
-        dispatch(getAllProjects(data));
-    };
-    const onChangeProject = (e) => {
-        setsprint(false);
+    //     let data = {
+    //         status: 1,
+    //         skip: 1,
+    //     };
+    //     dispatch(getAllProjects(data));
+    // };
+    // const onChangeProject = (e) => {
+    //     setsprint(false);
 
-        dispatch(getProjectId(e.target.value));
-        setProjectName(e.target.value);
-        const id = e.target.value;
-        setmilestoneid(true);
-        if (id) {
-            dispatch(getsingleMileStone({ id: id, activeStatus: 1, skip: 0, mileStoneId: "" }));
-        }
+    //     dispatch(getProjectId(e.target.value));
 
-    };
-    const onChangeMilestone = (e) => {
+    //     const id = e.target.value;
+    //     setmilestoneid(true);
+    //     if (id) {
+    //         dispatch(getsingleMileStone({ id: id, activeStatus: 1, skip: 0, mileStoneId: "" }));
+    //     }
 
-        dispatch(getMilestonetId(e.target.value))
-        const id = e?.target.value;
-        setsprint(true);
+    // };
+    // const onChangeMilestone = (e) => {
 
-        dispatch(getSingleSprint({ activeStatus: 1, id: id, skip: 0 }));
+    //     dispatch(getMilestonetId(e.target.value))
+    //     const id = e?.target.value;
+    //     setsprint(true);
 
-    };
-    const sprinthandel = (e) => {
-        dispatch(getSprintId(e.target.value));
-        setsprint(false);
+    //     dispatch(getSingleSprint({ activeStatus: 1, id: id, skip: 0 }));
 
+    // };
+    // const sprinthandel = (e) => {
+    //     dispatch(getSprintId(e.target.value));
+    //     setsprint(false);
 
-    }
+    // }
     return (
         <>
-
             <div className={classNames('navbar-custom', navbarCssClasses)}>
                 <div className={containerCssClasses}>
                     <div className="topbarinfo">
@@ -242,34 +243,33 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                 </span>
                             </Link>
                         )}
-                        <div className='d-flex align-items-center'>
+                        <div className="d-flex align-items-center">
                             <div className="lefbar_info">
                                 {(layoutType === layoutConstants.LAYOUT_VERTICAL ||
                                     layoutType === layoutConstants.LAYOUT_FULL) && (
-                                        <button className="button-menu-mobile open-left" onClick={handleLeftMenuCallBack}>
-                                            <i className="mdi mdi-menu" />
-                                        </button>
-                                    )}
+                                    <button className="button-menu-mobile open-left" onClick={handleLeftMenuCallBack}>
+                                        <i className="mdi mdi-menu" />
+                                    </button>
+                                )}
                                 <div class="menuinfo">
                                     <ul>
-                                        <li>
+                                        <li className="list_padding">
                                             <Link to="">Apps</Link>
                                         </li>
-                                        <li>
+                                        <li className="list_padding">
                                             <Link to="">Filters</Link>
                                         </li>
-                                        <li>
+                                        <li className="list_padding">
                                             <Link to="">Dashboard</Link>
                                         </li>
-                                        <li>
+                                        <li className="list_padding">
                                             <Link to="">Teams</Link>
                                         </li>
-
                                     </ul>
                                 </div>
                             </div>
 
-                            <div className="dropdown mx-2">
+                            {/* <div className="dropdown mx-2">
                                 <button className=" bg-white border-0 dropdown-toggle" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false"
                                     onClick={handleProject}>
                                     Projects
@@ -315,12 +315,10 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
                                         </li>
                                     </ul>
-                            </div>
+                            </div> */}
                         </div>
 
                         <ul className="list-unstyled topbar-menu float-end mb-0 topbarr">
-
-
                             <li className="notification-list">
                                 <button
                                     className="nav-link dropdown-toggle end-bar-toggle arrow-none btn btn-link shadow-none"
@@ -365,31 +363,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </Link>
                         )}
                         <TopbarSearch />
-
                     </div>
-                </div>
-
-            </div>
-            <div className="project_detail">
-                <div className="project_name">
-                    <h3>{projectNameHeading}</h3>
-                </div>
-                <div className="taskinfo">
-                    <ul>
-                    <li>
-                            {' '}
-                            <Link to="/summary">Summary</Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="/taskList">List</Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="/dashboard/boards">Board</Link>{' '}
-                        </li>
-                       
-                    </ul>
                 </div>
             </div>
         </>

@@ -28,7 +28,8 @@ export const SingleMilestone = "/milestone/getMilestones?"
 //==============================================================================
 
 export const SingleSprintTask = "/task/getSprintTasks?sprintId="
-export const GetAllTask = "/task/getTasksAccToStatus?"
+export const GetAllTask = "/assignUser/getUserTasks?"
+
 export const UpdateTask = "/task/updateTask"
 export const DeleteTask = "/task/deletetask?"
 export const UpdateTaskStatus = "/task/updateTaskStatus"
@@ -47,10 +48,15 @@ export const GetAssignee ="/assignUser/getUserAssignments?assigneeId="
 
 //add comment data
 export const AddTaskComment="/comments/addComment"
-// export const GetComment="/task/getTasksAccToStatus?projectId="
+export const GetComment="/comments/getTaskComment?taskId="
 
 export const delteTaskComment="/comments/deleteComment?";
 export const updateTaskComment="/comments/updateComment";
 
 export const getHistory="/history/getHistory";
+
+export const getPriorityTaskboard="/task/getPriorityTasks";
+export const getWeekTaskCount="/task/getTasksWeekCount";
+export const getTaskStatusCount="/task/getTasksStatusCount";
+export const getTaskCount="/task/getTasksCount";
 

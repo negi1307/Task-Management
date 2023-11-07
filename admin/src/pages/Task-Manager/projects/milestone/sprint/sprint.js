@@ -127,7 +127,7 @@ const Sprint = () => {
                                         <div
                                             className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
                                             <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
-                                                Deactive
+                                                Inactive
                                             </p>
                                         </div>
                                     </div>
@@ -193,7 +193,7 @@ const Sprint = () => {
                                                             <Col>
                                                                 <p className="action-icon m-0 p-0 ">
                                                                     <Link
-                                                                        to={`/dashboard/singleSprintTask/projectId=/${item?.projectId?._id}&milestoneId=/${item?.milestoneId?._id}&spriteId=/${item?._id}`}>
+                                                                        to={`/dashboard/taskBord/projectId=/${item?.projectId?._id}&milestoneId=/${item?.milestoneId?._id}&spriteId=/${item?._id}`}>
                                                                         <i className="mdi mdi-eye m-0 p-0"></i>
                                                                     </Link>
                                                                 </p>

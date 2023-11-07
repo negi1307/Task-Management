@@ -13,6 +13,7 @@ import { getSingleSprint, getsingleMileStone, updateTask } from '../../../redux/
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import noimage from '../../../assets/images/noimage.png';
+import pdfImage from "../../../assets/images/pdff-removebg-preview.png"
 const UpdateTask = ({ modal, closeModal, editData }) => {
     console.log(editData, 'update');
     const [data, setData] = useState({
@@ -60,7 +61,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
         let body = new FormData();
         body.append("taskId", editData?._id)
         body.append("summary", val?.summary)
-        body.append("description", description)
+        body.append("description", val?.description)
         body.append("assigneeId", val?.Assignee)
         body.append("reporterId", val?.Reporter)
         body.append("priority", val?.priority)
@@ -85,8 +86,9 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
             Reporter: editData?.assignees?.reporterId,
             priority: editData?.priority,
             status: editData?.status,
+            description:editData?.description
         });
-        setDescription(editData?.description);
+        setData({image: editData?.attachment });
     }, [modal]);
     console.log(editData, 'pppppp');
     const handleDate = (data) => {
@@ -99,13 +101,14 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     };
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-        const allowedTypes = ['image/png', 'image/gif', 'image/jpeg'];
+        setData({ ...data, image: e.target.files[0] });
+        // // const allowedTypes = ['image/png', 'image/gif', 'image/jpeg'];
 
-        if (file && allowedTypes.includes(file.type)) {
-            setData({ ...data, image: e.target.files[0] });
-        } else {
-            ToastHandle('error', 'Please select only an image file (PNG, GIF, JPEG).');
-        }
+        // if (file && allowedTypes.includes(file.type)) {
+            
+        // } else {
+        //     ToastHandle('error', 'Please select only an image file (PNG, GIF, JPEG).');
+        // }
     };
     const handelimageclose = () => {
         setImageShow(false);
@@ -230,21 +233,10 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         {' '}
                                                         Description<span className="text-danger">*</span>:
                                                     </Form.Label>
-                                                    <CKEditor
-                                                        config={{
-                                                            ckfinder: {
-                                                                // Upload the images to the server using the CKFinder QuickUpload command.
-                                                                uploadUrl:
-                                                                    'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
-                                                            },
-                                                        }}
-                                                        editor={ClassicEditor}
-                                                        data={description}
-                                                        onChange={(event, editor) => {
-                                                            const data = editor.getData();
-                                                            setDescription(data);
-                                                        }}
-                                                    />
+                                                    <Form.Control  as="textarea" rows={3} type="text" {...register('description', { required: true })} />
+                                            {errors.description?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
                                                 </Form.Group>
                                             </Col>
                                             <Col lg={6}>
@@ -257,7 +249,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     <Form.Select {...register('Assignee', { required: true })}>
                                                         <option value={''}>--Select--</option>
                                                         {store?.getAllUsers?.data?.response?.map((ele, ind) => (
-                                                            <option value={ele?._id}> {ele?.userName} </option>
+                                                            <option value={ele?._id}> {ele?.firstName} {ele?.lastName}</option>
                                                         ))}
                                                     </Form.Select>
                                                     {errors.Assignee?.type === 'required' && (
@@ -373,11 +365,12 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         <Col className="d-flex justify-content-center">
                                                             <div style={{ width: '50%', position: 'relative' }}>
                                                                 <div className="img_div">
-                                                                    <img
+                                                                    {/* <img
                                                                         className=" all_logo_img w-100"
                                                                         src={editData?.attachment}
-                                                                    />
-                                                                </div>
+                                                                    /> */}
+                                                                     <img  className=" all_logo_img w-100" src={editData?.attachmentType !== "application/pdf" ? editData?.attachment : pdfImage} />
+                                                                </div> 
                                                                 <div
                                                                     className="cross_div"
                                                                     style={{ position: 'absolute', rigth: '0' }}>
@@ -405,7 +398,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                             ) : (
                                                 <Form.Control
                                                     type="file"
-                                                    accept="image/png, image/gif, image/jpeg"
+                                                    // accept="image/png, image/gif, image/jpeg"
                                                     onChange={(e) => {
                                                         handleImageChange(e);
                                                     }}

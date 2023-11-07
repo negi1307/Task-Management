@@ -76,7 +76,7 @@ function* getAllTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getAllTaskApi, { payload });
-        console.log(response,"bbbvvv")
+        console.log("get All TAsk Data",response)
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_ALL_TASK_SUCCESS,

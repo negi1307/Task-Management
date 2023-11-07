@@ -5,24 +5,24 @@ import styled from '@emotion/styled';
 import { columnsFromBackend } from './data';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
+import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
-import { updateTaskStatus } from '../../../../src/redux/task/action';
+import { getAssignUserAction, getComment, updateTaskStatus } from '../../../../src/redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
-
+import Form from 'react-bootstrap/Form';
+import { useForm } from 'react-hook-form';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
-
-import {
-    deleteTask,
-    getAllProjects,
-    getAllRoles,
-    getAllUsers,
-    getSingleSprint,
-    getsingleMileStone,
-} from '../../../redux/actions';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { deleteTask, getAllProjects, getAllRoles, getAllUsers, getsingleMileStone } from '../../../redux/actions';
+import { getSingleSprint } from '../../../redux/sprint/action';
+import { getSprintId } from '../../../redux/sprint/reducres';
+import { getMilestoneId, getMilestonetId } from '../../../redux/milestone/reducer';
+import { getProjectId } from '../../../redux/projects/reducers';
 
 const Container = styled.div`
     display: flex;
@@ -55,7 +55,8 @@ const Title = styled.span`
     align-self: flex-start;
 `;
 
-const Boards = (props) => {
+const Boards = () => {
+    const { projectId, milestoneId, spriteId } = useParams();
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.getAllTaskReducer;
@@ -63,13 +64,28 @@ const Boards = (props) => {
     const deletehandel = store?.deleteTask;
     const updatehandel = store?.UpdateTaskReducer;
     const Createhandel = store?.createTaskReducer;
+    const updateComment = store?.updateCommentReducer;
+    const AssignUserName = store?.getAssignUserReducer?.data?.response;
     const [render, setRender] = useState(false);
-
+    const [projectNameHeading, setProjectName] = useState('Select Project Name');
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
     const sprintId = store?.getSprintId?.data;
-    const projectId = store?.getProjectId?.data;
-    const milestoneId = store?.getMilestoneId?.data;
+    const taskId = store?.getTaskId?.data;
+    const CreateCommenthandel = store?.AddCommentReducer;
+    const deleteCommenthandel = store?.deleteCommentReducer;
+    const [loader, setloader] = useState(false);
+    const [search, setSearch] = useState('');
+    // const projectId = store?.getProjectId?.data;
+    // const milestoneId = store?.getMilestoneId?.data;
+    const {
+        register,
+        handleSubmit,
+        control,
+        watch,
+        reset,
+        formState: { errors },
+    } = useForm();
     const onDragEnd = (result, columns, setColumns) => {
         console.log('colun', result);
 
@@ -109,10 +125,15 @@ const Boards = (props) => {
             });
         }
     };
+    // useEffect(() => {
+    //   dispatch(getProjectId( projectId));
+    //   dispatch(getMilestoneId(milestoneId));
+    //   dispatch(getSprintId(spriteId))
+    // }, [])
 
     useEffect(() => {
-        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: sprintId }));
-    }, [render, sprintId]);
+        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
+    }, [render]);
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
             setColumns({
@@ -149,7 +170,7 @@ const Boards = (props) => {
             status: ele?.destination?.droppableId,
         };
         dispatch(updateTaskStatus(body));
-        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: sprintId }));
+        setloader(true);
     };
     const closeModal = (val) => {
         if (val == 'render') {
@@ -178,7 +199,6 @@ const Boards = (props) => {
         }
     }, [deletehandel]);
     useEffect(() => {
-        console.log(updatehandel?.data?.status, '////////');
         if (updatehandel?.data?.status == 200) {
             closeModal('render');
             ToastHandle('success', 'Updated Successfully');
@@ -187,11 +207,20 @@ const Boards = (props) => {
         } else if (updatehandel?.data?.status == 500) {
             ToastHandle('error', updatehandel?.data?.message);
         }
+        setloader(false);
     }, [updatehandel]);
     useEffect(() => {
-        console.log(Createhandel?.data?.status, '////////');
+        if (successHandle.loading) {
+            setloader(true);
+        } else {
+            setloader(false);
+        }
+    }, [successHandle, loader]);
+
+    useEffect(() => {
         if (Createhandel?.data?.status == 200) {
             closeModal('render');
+            reset();
             ToastHandle('success', Createhandel?.data?.message);
         } else if (Createhandel?.data?.status == 400) {
             ToastHandle('error', Createhandel?.data?.message);
@@ -200,77 +229,208 @@ const Boards = (props) => {
         }
     }, [Createhandel]);
     useEffect(() => {
+        if (CreateCommenthandel?.data?.status == 200) {
+            ToastHandle('success', CreateCommenthandel?.data?.message);
+            dispatch(getComment({ taskId: taskId }));
+        } else if (CreateCommenthandel?.data?.status == 400) {
+            ToastHandle('error', CreateCommenthandel?.data?.message);
+        } else if (CreateCommenthandel?.data?.status == 500) {
+            ToastHandle('error', CreateCommenthandel?.data?.message);
+        }
+    }, [CreateCommenthandel]);
+    useEffect(() => {
+        if (deleteCommenthandel?.data?.status == 200) {
+            ToastHandle('success', deleteCommenthandel?.data?.message);
+            dispatch(getComment({ taskId: taskId }));
+        } else if (deleteCommenthandel?.data?.status == 400) {
+            ToastHandle('error', deleteCommenthandel?.data?.message);
+        } else if (deleteCommenthandel?.data?.status == 500) {
+            ToastHandle('error', deleteCommenthandel?.data?.message);
+        }
+    }, [deleteCommenthandel]);
+    useEffect(() => {
+        if (updateComment?.data?.status == 200) {
+            ToastHandle('success', updateComment?.data?.message);
+            dispatch(getComment({ taskId: taskId }));
+        } else if (updateComment?.data?.status == 400) {
+            ToastHandle('error', updateComment?.data?.message);
+        } else if (updateComment?.data?.status == 500) {
+            ToastHandle('error', updateComment?.data?.message);
+        }
+    }, [updateComment]);
+    useEffect(() => {
         let body = {
-            status: 1,
+            status: '',
             skip: 0,
+            projectStatus: '',
         };
         dispatch(getAllProjects(body));
         dispatch(getsingleMileStone({ id: '', activeStatus: 1, skip: 0, mileStoneId: '' }));
         dispatch(getSingleSprint({ activeStatus: 1, id: '', skip: 0 }));
+        dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
     }, []);
+    const handleSearchChange = (e) => {
+        e.preventDefault();
+        setSearch(e.target.value);
+        dispatch(
+            getAllTask({
+                projectId: projectId,
+                milestoneId: milestoneId,
+                sprintId: spriteId,
+                searchString: e.target.value,
+            })
+        );
+    };
+    // const handleSearch=()=>{
+    //     dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId ,searchString : search}));
+    //     setSkip(1)
+    // }
     return (
         <>
+            <div className="project_detail">
+                <div className="project_name">{/* <h3>{projectNameHeading}</h3> */}</div>
+                {/* <div className="taskinfo">
+                    <ul>
+                    <li>
+                            {' '}
+                            <Link to="/summary">Summary</Link>{' '}
+                        </li>
+                        <li>
+                            {' '}
+                            <Link to="/taskList">List</Link>{' '}
+                        </li>
+                        <li>
+                            {' '}
+                            <Link   to={`/dashboard/boards/projectId=/${projectId}&milestoneId=/${milestoneId}&spriteId=/${spriteId}`}>Board</Link>{' '}
+                        </li>
+                       
+                    </ul>
+                </div> */}
+            </div>
             <div className="add_task row d-flex">
-                <div  className='col-lg-8 d-flex '>
-                <div >
-                    {' '}
-                    <h4 className="page-title">
+                <div className="col-lg-8 d-flex ">
+                    <div>
                         {' '}
-                        To-Do :
-                        <Badge className="badge-success-lighten ms-1">{successHandle?.data?.Response?.taskCount}</Badge>
-                    </h4>{' '}
-                </div>
-                <div className='ms-3'>
-                    {' '}
-                    <h4 className="page-title">
+                        <h4 className="page-title">
+                            {' '}
+                            To-Do :
+                            <Badge className="badge-success-lighten ms-1">
+                                {successHandle?.data?.Response?.taskCount}
+                            </Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3">
                         {' '}
-                        In-Progress :
-                        <Badge className="badge-success-lighten ms-1">
-                            {successHandle?.data?.inProgress?.taskCount}
-                        </Badge>
-                    </h4>{' '}
-                </div>
-                <div className='ms-3'>
-                    {' '}
-                    <h4 className="page-title">
+                        <h4 className="page-title">
+                            {' '}
+                            In-Progress :
+                            <Badge className="badge-success-lighten ms-1">
+                                {successHandle?.data?.inProgress?.taskCount}
+                            </Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3">
                         {' '}
-                        Hold :
-                        <Badge className="badge-success-lighten ms-1">{successHandle?.data?.hold?.taskCount}</Badge>
-                    </h4>{' '}
-                </div>
-                <div className='ms-3'>
-                    {' '}
-                    <h4 className="page-title">
+                        <h4 className="page-title">
+                            {' '}
+                            Hold :
+                            <Badge className="badge-success-lighten ms-1">{successHandle?.data?.hold?.taskCount}</Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3">
                         {' '}
-                        Done :
-                        <Badge className="badge-success-lighten ms-1">{successHandle?.data?.done?.taskCount}</Badge>
-                    </h4>{' '}
+                        <h4 className="page-title">
+                            {' '}
+                            Done :
+                            <Badge className="badge-success-lighten ms-1">{successHandle?.data?.done?.taskCount}</Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3 me-2">
+                        {' '}
+                        <h4 className="page-title">
+                            {' '}
+                            Due Task:
+                            <Badge className="badge-success-lighten ms-1">{successHandle?.data?.dueTasksCount}</Badge>
+                        </h4>{' '}
+                    </div>
+                    {AssignUserName?.map((ele, ind) => (
+                        <>
+                            <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                    <Tooltip id="tooltip1">
+                                        {ele?.assigneeId?.firstName}
+                                        {ele?.assigneeId?.lastName}
+                                    </Tooltip>
+                                }>
+                                <div className="mt-1 cp">
+                                    <span
+                                        style={{
+                                            backgroundColor: '#605e5a',
+                                            borderRadius: '100%',
+                                            padding: '9px',
+                                            color: 'white',
+                                            fontWeight: '800',
+                                        }}>
+                                        {ele?.assigneeId?.firstName.charAt(0)}
+                                        {ele?.assigneeId?.lastName.charAt(0)}
+                                    </span>
+                                </div>
+                            </OverlayTrigger>
+                        </>
+                    ))}
                 </div>
+
+                <div className="col-lg-4 d-flex justify-content-end">
+                    <div className="page-title-box">
+                        <div className="">
+                            <form className="d-flex text  align-items-center mb-2 pb-1 ">
+                                <div className="app-search px-0">
+                                    <div className=" position-relative ">
+                                        <input
+                                            type="text"
+                                            value={search}
+                                            onChange={(e) => {
+                                                handleSearchChange(e);
+                                            }}
+                                            className="form-control"
+                                            placeholder="Search "
+                                        />
+                                        <span className="mdi mdi-magnify search-icon"></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div>
+                        {/* <Button className="web_button ms-2" variant="info" onClick={handleSearch}>
+                                    <i className="mdi mdi-magnify search-icon"></i>
+                                 </Button> */}
+                    </div>
+                    <div className="ms-2">
+                        <button
+                            type="button"
+                            className="mybutton btn btn-info"
+                            onClick={() => {
+                                console.log('button click');
+                                setShowModal(!showModal);
+                            }}>
+                            Add Task
+                        </button>
+                        <RightBar
+                            className="d-none"
+                            projectId={projectId}
+                            mileStoneId={milestoneId}
+                            sprintId={spriteId}
+                            showModal={showModal}
+                            setShowModal={setShowModal}
+                        />
+                    </div>
                 </div>
-               <div className='col-lg-4'>
-               <button
-                    type="button"
-                    className="mybutton btn btn-info"
-                    onClick={() => {
-                        console.log('button click');
-                        setShowModal(!showModal);
-                    }}>
-                    Add Task
-                </button>
-                <RightBar
-                    className="d-none"
-                    projectId={props.projectId}
-                    mileStoneId={props.mileStoneId}
-                    sprintId={props.sprintId}
-                    showModal={showModal}
-                    setShowModal={setShowModal}
-                />
-               </div>
-              
             </div>
 
             <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
-                {successHandle.loading ? (
+                {loader ? (
                     <MainLoader />
                 ) : (
                     <Container>

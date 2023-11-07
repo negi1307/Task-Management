@@ -12,6 +12,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
     const dispatch = useDispatch();
     const [description, setDescription] = useState('');
+    console.log(description,"descriptionnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
     const store = useSelector((state) => state);
     const errorhandel = store?.createTaskReducer;
       // disable previous date
@@ -197,7 +198,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                 <Form.Select {...register('Assignee', { required: true })}>
                                                     <option value={''}>--Select--</option>
                                                     {store?.getAllUsers?.data?.response?.map((ele, ind) => (
-                                                        <option value={ele?._id}> {ele?.userName} </option>
+                                                        <option value={ele?._id}> {ele?.firstName}{ele?.lastName} </option>
                                                     ))}
                                                 </Form.Select>
                                                 {errors.Assignee?.type === 'required' && (

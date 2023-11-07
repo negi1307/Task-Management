@@ -201,8 +201,7 @@ export const getMilestoneId = (state = {data:""}, action) => {
     switch (action.type) {
         case "milestoneId":
             return {
-                data: action.payload,
-                
+                data: action.payload               
             };
       
         default:

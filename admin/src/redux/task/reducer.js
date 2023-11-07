@@ -40,7 +40,31 @@ const GET_TASK_SUMMARY_INITIAL_STATE = {
     loading:false,
     message:""
 }
-
+const ADD_COMMENT__INITIAL_STATE = {
+    data:[],
+    loading:false,
+    message:""
+}
+const GET_COMMENT__INITIAL_STATE = {
+    data:[],
+    loading:false,
+    message:""
+}
+const DELETE_COMMENT__INITIAL_STATE = {
+    data:[],
+    loading:false,
+    message:""
+}
+const UPDATE_COMMENT__INITIAL_STATE = {
+    data:[],
+    loading:false,
+    message:""
+}
+const ASSIGN_USER_INITIAL_STATE = {
+    data:[],
+    loading:false,
+    message:""
+}
 export const createTaskReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case TASK_TYPES.CREATE_TASK_LOADING:
@@ -242,4 +266,159 @@ export const TaskStatusReducer= (state = STATUS_TASK_INITIAL_STATE, action) => {
 
     }
 };
+export const AddCommentReducer = (state = ADD_COMMENT__INITIAL_STATE, action) => {
+    switch (action.type) {
+        case TASK_TYPES.ADD_COMMENT_LOADING:
+            return {
+                data: ADD_COMMENT__INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.ADD_COMMENT_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+        case TASK_TYPES.ADD_COMMENT_RESET:
+            return {
+                data: ADD_COMMENT__INITIAL_STATE.data,
+                loading: false,
+            };
+        case TASK_TYPES.ADD_COMMENT_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
 
+    }
+};
+export const getComment = (state = GET_COMMENT__INITIAL_STATE, action) => {
+    switch (action.type) {
+        case TASK_TYPES.GET_COMMENT_LOADING:
+            return {
+                data: GET_COMMENT__INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.GET_COMMENT_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+        case TASK_TYPES.GET_COMMENT_RESET:
+            return {
+                data: GET_COMMENT__INITIAL_STATE.data,
+                loading: false
+            }
+
+        case TASK_TYPES.GET_COMMENT_ERROR:
+            return {
+                data: [],
+                status: 403,
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+export const deleteCommentReducer = (state = DELETE_COMMENT__INITIAL_STATE, action) => {
+    switch (action.type) {
+        case TASK_TYPES.DELETE_COMMENT_LOADING:
+            return {
+                data: DELETE_COMMENT__INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.DELETE_COMMENT_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+        case TASK_TYPES.DELETE_COMMENT_RESET:
+            return {
+                data: DELETE_COMMENT__INITIAL_STATE.data,
+                loading: false
+            }
+
+        case TASK_TYPES.DELETE_COMMENT_ERROR:
+            return {
+                data: [],
+                status: 403,
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+export const updateCommentReducer = (state = UPDATE_COMMENT__INITIAL_STATE, action) => {
+    switch (action.type) {
+        case TASK_TYPES.UPDATE_COMMENT_LOADING:
+            return {
+                data: UPDATE_COMMENT__INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.UPDATE_COMMENT_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+        case TASK_TYPES.UPDATE_COMMENT_RESET:
+            return {
+                data: UPDATE_COMMENT__INITIAL_STATE.data,
+                loading: false
+            }
+
+        case TASK_TYPES.UPDATE_COMMENT_ERROR:
+            return {
+                data: [],
+                status: 403,
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+export const getTaskId = (state = {data:""}, action) => {
+    switch (action.type) {
+        case "taskid":
+            return {
+                data: action.payload,
+                
+            };
+      
+        default:
+            return { ...state };
+
+    }
+};
+export const getAssignUserReducer = (state = ASSIGN_USER_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case TASK_TYPES.GET_ASSIGN_USER_LOADING:
+            return {
+                data: ASSIGN_USER_INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.GET_ASSIGN_USER_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case TASK_TYPES.GET_ASSIGN_USER_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
