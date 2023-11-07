@@ -39,7 +39,7 @@ const addUserAssignments = async (req, res) => {
 const getUserAssignments = async (req, res) => {
     try {
         const query = {
-            assigneeId: req.query.assigneeId
+            assigneeId: req.user._id
         };
         if (req.query.flag == 1) {
             query.projectId = { $exists: true };
@@ -181,8 +181,29 @@ const getUserTasks = async (req, res) => {
     }
 }
 
+// All assignees of A project
+const projectUserList = async (req, res) => {
+    try {
+        const projectId = req.query.projectId;
+        const milestoneId = req.query.milestoneId;
+        const sprintId = req.query.sprintId;
+        const taskfind = await taskModel.find({projectId, milestoneId, sprintId });
+        const taskIds = taskfind.map(task => task._id);
+        const assignees = await assignUserModel
+        .find({ taskId: { $in: taskIds } })
+        .populate([
+            { path: 'assigneeId', select: 'firstName lastName' },
+            { path: 'reporterId', select: 'role' }
+        ])
+        .populate("taskId");
+        return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: assignees })
+    } 
+    catch (error) {
+        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+    };
+}
 
 
 
 
-module.exports = { addUserAssignments,/* getUserAssignment,*/ getUserAssignments, getUserTasks }
+module.exports = { addUserAssignments,/* getUserAssignment,*/ getUserAssignments, getUserTasks,projectUserList }
