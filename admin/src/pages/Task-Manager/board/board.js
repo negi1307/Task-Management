@@ -18,14 +18,8 @@ import { useForm } from 'react-hook-form';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
 
-import {
-    deleteTask,
-    getAllProjects,
-    getAllRoles,
-    getAllUsers,
-    getsingleMileStone,
-} from '../../../redux/actions';
-import {getSingleSprint} from "../../../redux/sprint/action"
+import { deleteTask, getAllProjects, getAllRoles, getAllUsers, getsingleMileStone } from '../../../redux/actions';
+import { getSingleSprint } from '../../../redux/sprint/action';
 import { getSprintId } from '../../../redux/sprint/reducres';
 import { getMilestoneId, getMilestonetId } from '../../../redux/milestone/reducer';
 import { getProjectId } from '../../../redux/projects/reducers';
@@ -77,9 +71,10 @@ const Boards = () => {
     const [columns, setColumns] = useState(columnsFromBackend);
     const sprintId = store?.getSprintId?.data;
     const taskId = store?.getTaskId?.data;
-    const CreateCommenthandel = store?.AddCommentReducer
-    const deleteCommenthandel= store?.deleteCommentReducer
-    const [loader,setloader] = useState(false);
+    const CreateCommenthandel = store?.AddCommentReducer;
+    const deleteCommenthandel = store?.deleteCommentReducer;
+    const [loader, setloader] = useState(false);
+    const [search, setSearch] = useState('');
     // const projectId = store?.getProjectId?.data;
     // const milestoneId = store?.getMilestoneId?.data;
     const {
@@ -129,14 +124,14 @@ const Boards = () => {
             });
         }
     };
-// useEffect(() => {
-//   dispatch(getProjectId( projectId));
-//   dispatch(getMilestoneId(milestoneId));
-//   dispatch(getSprintId(spriteId))
-// }, [])
+    // useEffect(() => {
+    //   dispatch(getProjectId( projectId));
+    //   dispatch(getMilestoneId(milestoneId));
+    //   dispatch(getSprintId(spriteId))
+    // }, [])
 
     useEffect(() => {
-        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
+        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
     }, [render]);
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
@@ -174,7 +169,7 @@ const Boards = () => {
             status: ele?.destination?.droppableId,
         };
         dispatch(updateTaskStatus(body));
-        setloader(true)
+        setloader(true);
     };
     const closeModal = (val) => {
         if (val == 'render') {
@@ -203,7 +198,6 @@ const Boards = () => {
         }
     }, [deletehandel]);
     useEffect(() => {
-        
         if (updatehandel?.data?.status == 200) {
             closeModal('render');
             ToastHandle('success', 'Updated Successfully');
@@ -212,22 +206,20 @@ const Boards = () => {
         } else if (updatehandel?.data?.status == 500) {
             ToastHandle('error', updatehandel?.data?.message);
         }
-        setloader(false)
+        setloader(false);
     }, [updatehandel]);
     useEffect(() => {
-     if (successHandle.loading){
-        setloader(true);
-     }
-     else{
-        setloader(false)
-     }
-    }, [successHandle,loader])
-    
+        if (successHandle.loading) {
+            setloader(true);
+        } else {
+            setloader(false);
+        }
+    }, [successHandle, loader]);
+
     useEffect(() => {
-       
         if (Createhandel?.data?.status == 200) {
             closeModal('render');
-           reset()
+            reset();
             ToastHandle('success', Createhandel?.data?.message);
         } else if (Createhandel?.data?.status == 400) {
             ToastHandle('error', Createhandel?.data?.message);
@@ -238,7 +230,7 @@ const Boards = () => {
     useEffect(() => {
         if (CreateCommenthandel?.data?.status == 200) {
             ToastHandle('success', CreateCommenthandel?.data?.message);
-            dispatch(getComment({taskId:taskId}))
+            dispatch(getComment({ taskId: taskId }));
         } else if (CreateCommenthandel?.data?.status == 400) {
             ToastHandle('error', CreateCommenthandel?.data?.message);
         } else if (CreateCommenthandel?.data?.status == 500) {
@@ -248,7 +240,7 @@ const Boards = () => {
     useEffect(() => {
         if (deleteCommenthandel?.data?.status == 200) {
             ToastHandle('success', deleteCommenthandel?.data?.message);
-            dispatch(getComment({taskId:taskId}))
+            dispatch(getComment({ taskId: taskId }));
         } else if (deleteCommenthandel?.data?.status == 400) {
             ToastHandle('error', deleteCommenthandel?.data?.message);
         } else if (deleteCommenthandel?.data?.status == 500) {
@@ -258,7 +250,7 @@ const Boards = () => {
     useEffect(() => {
         if (updateComment?.data?.status == 200) {
             ToastHandle('success', updateComment?.data?.message);
-            dispatch(getComment({taskId:taskId}))
+            dispatch(getComment({ taskId: taskId }));
         } else if (updateComment?.data?.status == 400) {
             ToastHandle('error', updateComment?.data?.message);
         } else if (updateComment?.data?.status == 500) {
@@ -267,20 +259,34 @@ const Boards = () => {
     }, [updateComment]);
     useEffect(() => {
         let body = {
-            status: "",
+            status: '',
             skip: 0,
-            projectStatus:""
+            projectStatus: '',
         };
         dispatch(getAllProjects(body));
         dispatch(getsingleMileStone({ id: '', activeStatus: 1, skip: 0, mileStoneId: '' }));
         dispatch(getSingleSprint({ activeStatus: 1, id: '', skip: 0 }));
     }, []);
+    const handleSearchChange = (e) => {
+        e.preventDefault();
+        setSearch(e.target.value);
+        dispatch(
+            getAllTask({
+                projectId: projectId,
+                milestoneId: milestoneId,
+                sprintId: spriteId,
+                searchString: e.target.value,
+            })
+        );
+    };
+    // const handleSearch=()=>{
+    //     dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId ,searchString : search}));
+    //     setSkip(1)
+    // }
     return (
         <>
-           <div className="project_detail">
-                <div className="project_name">
-                    {/* <h3>{projectNameHeading}</h3> */}
-                </div>
+            <div className="project_detail">
+                <div className="project_name">{/* <h3>{projectNameHeading}</h3> */}</div>
                 {/* <div className="taskinfo">
                     <ul>
                     <li>
@@ -300,70 +306,99 @@ const Boards = () => {
                 </div> */}
             </div>
             <div className="add_task row d-flex">
-                <div  className='col-lg-8 d-flex '>
-                <div >
-                    {' '}
-                    <h4 className="page-title">
+                <div className="col-lg-8 d-flex ">
+                    <div>
                         {' '}
-                        To-Do :
-                        <Badge className="badge-success-lighten ms-1">{successHandle?.data?.Response?.taskCount}</Badge>
-                    </h4>{' '}
-                </div>
-                <div className='ms-3'>
-                    {' '}
-                    <h4 className="page-title">
+                        <h4 className="page-title">
+                            {' '}
+                            To-Do :
+                            <Badge className="badge-success-lighten ms-1">
+                                {successHandle?.data?.Response?.taskCount}
+                            </Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3">
                         {' '}
-                        In-Progress :
-                        <Badge className="badge-success-lighten ms-1">
-                            {successHandle?.data?.inProgress?.taskCount}
-                        </Badge>
-                    </h4>{' '}
-                </div>
-                <div className='ms-3'>
-                    {' '}
-                    <h4 className="page-title">
+                        <h4 className="page-title">
+                            {' '}
+                            In-Progress :
+                            <Badge className="badge-success-lighten ms-1">
+                                {successHandle?.data?.inProgress?.taskCount}
+                            </Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3">
                         {' '}
-                        Hold :
-                        <Badge className="badge-success-lighten ms-1">{successHandle?.data?.hold?.taskCount}</Badge>
-                    </h4>{' '}
-                </div>
-                <div className='ms-3'>
-                    {' '}
-                    <h4 className="page-title">
+                        <h4 className="page-title">
+                            {' '}
+                            Hold :
+                            <Badge className="badge-success-lighten ms-1">{successHandle?.data?.hold?.taskCount}</Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3">
                         {' '}
-                        Done :
-                        <Badge className="badge-success-lighten ms-1">{successHandle?.data?.done?.taskCount}</Badge>
-                    </h4>{' '}
-                </div>
-                <div className='ms-3'>
-                    {' '}
-                    <h4 className="page-title">
+                        <h4 className="page-title">
+                            {' '}
+                            Done :
+                            <Badge className="badge-success-lighten ms-1">{successHandle?.data?.done?.taskCount}</Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3">
                         {' '}
-                        Due Task:
-                        <Badge className="badge-success-lighten ms-1">{successHandle?.data?.dueTasksCount}</Badge>
-                    </h4>{' '}
+                        <h4 className="page-title">
+                            {' '}
+                            Due Task:
+                            <Badge className="badge-success-lighten ms-1">{successHandle?.data?.dueTasksCount}</Badge>
+                        </h4>{' '}
+                    </div>
                 </div>
+
+                <div className="col-lg-4 d-flex justify-content-end">
+                    <div className="page-title-box">
+                        <div className="">
+                            <form className="d-flex text  align-items-center mb-2 pb-1 ">
+                                <div className="app-search px-0">
+                                    <div className=" position-relative ">
+                                        <input
+                                            type="text"
+                                            value={search}
+                                            onChange={(e) => {
+                                                handleSearchChange(e);
+                                            }}
+                                            className="form-control"
+                                            placeholder="Search "
+                                        />
+                                        <span className="mdi mdi-magnify search-icon"></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div>
+                        {/* <Button className="web_button ms-2" variant="info" onClick={handleSearch}>
+                                    <i className="mdi mdi-magnify search-icon"></i>
+                                 </Button> */}
+                    </div>
+                    <div className="ms-2">
+                        <button
+                            type="button"
+                            className="mybutton btn btn-info"
+                            onClick={() => {
+                                console.log('button click');
+                                setShowModal(!showModal);
+                            }}>
+                            Add Task
+                        </button>
+                        <RightBar
+                            className="d-none"
+                            projectId={projectId}
+                            mileStoneId={milestoneId}
+                            sprintId={spriteId}
+                            showModal={showModal}
+                            setShowModal={setShowModal}
+                        />
+                    </div>
                 </div>
-               <div className='col-lg-4'>
-               <button
-                    type="button"
-                    className="mybutton btn btn-info"
-                    onClick={() => {
-                        console.log('button click');
-                        setShowModal(!showModal);
-                    }}>
-                    Add Task
-                </button>
-                <RightBar
-                    className="d-none"
-                    projectId={projectId}
-                    mileStoneId={milestoneId}
-                    sprintId={spriteId}
-                    showModal={showModal}
-                    setShowModal={setShowModal}
-                />
-               </div>
-              
             </div>
 
             <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
