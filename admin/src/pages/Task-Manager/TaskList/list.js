@@ -46,20 +46,22 @@ const TaskList = () => {
     const handleActive = (val) => {
         if (val) {
             setStatus(1);
+            setSkip(1);
             setActiveStatus(true);
             let data = {
                 id: '',
                 activeStatus: true,
-                skip: skip,
+                skip: 1,
             };
             dispatch(getsingleSprintTask(data));
         } else {
             setStatus(0);
+            setSkip(1);
             setActiveStatus(false);
             let data = {
                 id: '',
                 activeStatus: false,
-                skip: skip,
+                skip: 1,
             };
             dispatch(getsingleSprintTask(data));
         }
@@ -88,21 +90,9 @@ const TaskList = () => {
             dispatch(TaskStatusAction(body));
         }
         setStatusModal(false);
-        setStatus(1);
-    };
-    const handelUpdate = (data) => {
-        setEditData(data);
-        SetEditOpenModal(true);
-    };
-
-    const CloseUpdateModal = (val) => {
-        if (val == 'render') {
-            setRender(!render);
-        }
-        SetEditOpenModal(false);
     };
     useEffect(() => {
-        dispatch(getsingleSprintTask({ id: '', activeStatus: true, skip: 1 }));
+        dispatch(getsingleSprintTask({ id: '', activeStatus: true, skip: skip }));
     }, [render]);
     useEffect(() => {
         dispatch(getAllRoles());
@@ -122,24 +112,6 @@ const TaskList = () => {
         <>
             <Card>
                 <Card.Body>
-                    <div className="project_detail">
-                        <div className="taskinfo">
-                            <ul>
-                                <li>
-                                    {' '}
-                                    <Link to="/summary">Summary</Link>{' '}
-                                </li>
-                                <li>
-                                    {' '}
-                                    <Link to="/taskList">List</Link>{' '}
-                                </li>
-                                <li>
-                                    {' '}
-                                    <Link to="/dashboard/boards">Board</Link>{' '}
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                     <div className="row mx-auto mt-2">
                         <div className="d-flex col-4">
                             <div className="row d-flex align-items-center">
@@ -150,7 +122,7 @@ const TaskList = () => {
                                 </div>
                                 <div className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
                                     <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
-                                        Deactive
+                                        Inactive
                                     </p>
                                 </div>
                             </div>
@@ -194,7 +166,7 @@ const TaskList = () => {
                                             <tbody>
                                                 {getSingleSprintTask?.map((item, index) => (
                                                     <tr>
-                                                        <td>{(skip - 1) * 5 + index + 1}</td>
+                                                        <td>{(skip - 1) * 10 + index + 1}</td>
                                                         <td>{item?.summary}</td>
                                                         <td>
                                                             {' '}
@@ -205,7 +177,10 @@ const TaskList = () => {
                                                             />
                                                         </td>
 
-                                                        <td>{item?.assignees?.assigneeInfo?.firstName} {item?.assignees?.assigneeInfo?.lastName}</td>
+                                                        <td>
+                                                            {item?.assignees?.assigneeInfo?.firstName}{' '}
+                                                            {item?.assignees?.assigneeInfo?.lastName}
+                                                        </td>
                                                         <td>{item?.assignees?.reporterInfo?.role}</td>
                                                         <td>
                                                             {item?.priority == 1
@@ -270,7 +245,7 @@ const TaskList = () => {
             {/* delete modal */}
             <Modal show={statusModal} onHide={() => setStatusModal(false)}>
                 <Modal.Body>
-                    Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this Task ?
+                    Are you sure you want to {!checkedStatus ? 'Inactivate' : 'activate'} this Task ?
                 </Modal.Body>
                 <Modal.Footer>
                     <Button

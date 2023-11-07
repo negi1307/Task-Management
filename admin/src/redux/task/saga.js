@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import TASK_TYPES from './constant';
-import { AddCommentApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi,updateTaskStatusApi } from './api';
+import { AddCommentApi, GetAssignUserApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi,updateTaskStatusApi } from './api';
 
 function* createTaskFunction({ payload }) {
     try {
@@ -391,6 +391,38 @@ function* updateCommentFunction({ payload }) {
 
     }
 }
+function* AssignUserFunction({ payload }) {
+    try {
+        yield put({
+            type: TASK_TYPES.GET_ASSIGN_USER_LOADING,
+            payload: {}
+        })
+        const response = yield call(GetAssignUserApi, { payload });
+        if (response.data.status) {
+            yield put({
+                type: TASK_TYPES.GET_ASSIGN_USER_SUCCESS,
+                payload: { ...response.data },
+            });
+            // yield put({
+            //     type: TASK_TYPES.GET_ASSIGN_USER_RESET,
+            //     payload: {},
+            // });
+        }
+        else {
+            yield put({
+                type: TASK_TYPES.GET_ASSIGN_USER_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: TASK_TYPES.GET_ASSIGN_USER_ERROR,
+            payload: { message: error?.message }
+        });
+
+    }
+}
 export function* createTaskSaga(): any {
     yield takeEvery(TASK_TYPES.CREATE_TASK, createTaskFunction);
 }
@@ -424,6 +456,9 @@ export function* deleteCommentSaga(): any {
 export function* updateCommentSaga(): any {
     yield takeEvery(TASK_TYPES.UPDATE_COMMENT, updateCommentFunction);
 }
+export function* getAssignUserSaga(): any {
+    yield takeEvery(TASK_TYPES. GET_ASSIGN_USER, AssignUserFunction);
+}
 function* AllTaskSaga(): any {
     yield all([
         fork(createTaskSaga),
@@ -436,7 +471,8 @@ function* AllTaskSaga(): any {
         fork(AddCommentSaga),
         fork(getCommentSaga),
         fork(deleteCommentSaga),
-        fork(updateCommentSaga)
+        fork(updateCommentSaga),
+        fork(getAssignUserSaga)
     ])
 }
 export default AllTaskSaga;

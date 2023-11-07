@@ -13,7 +13,6 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 const Projects = () => {
-
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [openModal, setOpenModal] = useState(false);
@@ -26,6 +25,7 @@ const Projects = () => {
     const getProjectList = store?.getProject;
     const deletehandle = store?.deleteProject?.data;
     const [status, setStatus] = useState(1);
+    const [projectStatus, setprojectStatus] = useState(1);
     const [checkedData, setCheckedData] = useState();
     const [checkedStatus, setCheckedStatus] = useState();
     const [statusModal, setStatusModal] = useState(false);
@@ -68,7 +68,6 @@ const Projects = () => {
         }
         setStatusModal(false);
     };
-    console.log(checkedData, 'oooooooooooooooooooooooooooo');
     const handleStatusChange = (e, data) => {
         if (e.target.checked) {
             setCheckedStatus(true);
@@ -81,26 +80,19 @@ const Projects = () => {
     const handleActive = (val) => {
         if (val) {
             setStatus(1);
-            let data = {
-                status: 1,
-                skip 
-            };
-            dispatch(getAllProjects(data));
+            setSkip(1);
+            dispatch(getAllProjects({ status: 1, skip: 1, projectStatus: projectStatus }));
         } else {
             setStatus(0);
-            let data = {
-                status: 0,
-                skip
-            };
-            dispatch(getAllProjects(data));
+            setSkip(1);
+            dispatch(getAllProjects({ status: 0, skip: 1, projectStatus: projectStatus }));
         }
     };
     useEffect(() => {
-        console.log(skip)
         let body = {
             status: status,
             skip: skip,
-            
+            projectStatus: projectStatus,
         };
         dispatch(getAllProjects(body));
     }, [render]);
@@ -116,15 +108,57 @@ const Projects = () => {
     }, [deletehandle]);
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getAllProjects({status: status, skip: value  }));
+        dispatch(getAllProjects({ status: status, skip: value, projectStatus: projectStatus }));
+    };
+    const handleProjectStatus = (val) => {
+        if (val == '1') {
+            setprojectStatus(1);
+            setSkip(1);
+            dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 1 }));
+        } else if (val == '2') {
+            setprojectStatus(2);
+            setSkip(1);
+            dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 2 }));
+        } else if (val == '3') {
+            setSkip(1);
+            setprojectStatus(3);
+            dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 3 }));
+        } else {
+            setSkip(1);
+            setprojectStatus(4);
+            dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 4 }));
+        }
     };
     return (
         <>
             <div>
                 <Card>
                     <Card.Body>
-                        <div className="row mx-auto mt-2">
-                            <div className="d-flex col-4">
+                        <div className="row mx-auto">
+                            <div className="row d-flex align-items-center">
+                                <div className={`col-auto  cp ${projectStatus == 1 ? 'Active_data' : 'InActive_data'}`}>
+                                    <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('1')}>
+                                    Todo
+                                    </p>
+                                </div>
+                                <div className={`col-auto  cp ${projectStatus == 2 ? 'Active_data' : 'InActive_data'}`}>
+                                    <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('2')}>
+                                       Live
+                                    </p>
+                                </div>
+
+                                <div className={`col-auto  cp ${projectStatus == 3 ? 'Active_data' : 'InActive_data'}`}>
+                                    <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('3')}>
+                                        Hold
+                                    </p>
+                                </div>
+                                <div className={`col-auto  cp ${projectStatus == 4 ? 'Active_data' : 'InActive_data'}`}>
+                                    <p className=" p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('4')}>
+                                        Completed
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="d-flex col-4 mt-3">
                                 <div className="row d-flex align-items-center">
                                     <div className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
                                         <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
@@ -133,7 +167,7 @@ const Projects = () => {
                                     </div>
                                     <div className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
                                         <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
-                                            Deactive
+                                            Inactive
                                         </p>
                                     </div>
                                 </div>
@@ -231,22 +265,22 @@ const Projects = () => {
                                 </tbody>
                             </Table>
                         )}
+                        <Row>
+                            <Col lg={12} className="d-flex justify-content-end my-3">
+                                {store?.getProject?.data?.totalPages > 0 && (
+                                    <Stack spacing={2}>
+                                        <Pagination
+                                            defaultPage={skip}
+                                            count={store?.getProject?.data?.totalPages}
+                                            color="primary"
+                                            variant="outlined"
+                                            onChange={handlePaginationChange}
+                                        />
+                                    </Stack>
+                                )}
+                            </Col>
+                        </Row>
                     </Card.Body>
-                    <Row>
-                        <Col lg={12} className="d-flex justify-content-end mt-3">
-                            {store?.getProject?.data?.totalPages > 0 && (
-                                <Stack spacing={2}>
-                                    <Pagination
-                                        defaultPage={skip}
-                                        count={store?.getProject?.data?.totalPages}
-                                        color="primary"
-                                        variant="outlined"
-                                        onChange={handlePaginationChange}
-                                    />
-                                </Stack>
-                            )}
-                        </Col>
-                    </Row>
                 </Card>
 
                 <Create modal={openModal} closeModal={closeModal} />

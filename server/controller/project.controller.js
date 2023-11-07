@@ -28,38 +28,76 @@ const addProject = async (req, res) => {
 }
 
 // Get all Projects WRT status
+// const getProjects = async (req, res) => {
+//     try {
+//         const pageSize = 10;
+//         // const projectStatus = parseInt(req.query.projectStatus);
+//         // if (projectStatus) {
+//             if (parseInt(req.query.skip) === 0) {
+//                 if (req.query.projectId) {
+//                     const project = await projectModel.findById({ _id: req.query.projectId });
+//                     return res.status(200).json({ status: '200', message: 'Project Details fetched successfully', response: project })
+//                 } else {
+//                     const projectStatus = parseInt(req.query.projectStatus);
+//                     const projects = await projectModel.find({ activeStatus: req.query.activeStatus ,projectStatus}).populate('technology', 'techName')
+//                         .sort({ createdAt: -1 })
+//                     return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects })
+//                 }
+//             } else {
+//                 const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus,projectStatus});
+//                 const projects = await projectModel.find({ activeStatus: req.query.activeStatus,projectStatus}).populate('technology', 'techName')
+//                     .sort({ createdAt: -1 })
+//                     .limit(pageSize)
+//                     .skip((parseInt(req.query.skip) - 1) * pageSize);
+//                 const totalPages = Math.ceil(totalCount / pageSize);
+    
+//                 return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects, totalCount, totalPages })
+//             }
+//         // }
+//         // else{
+//         //     res.status(200).json({status:201,message:"Invalid or missing projectStatus. It should be 1, 2,3 or 4"})
+//         // }
+//     } catch (error) {
+//         return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message });
+//     }
+// } 
 const getProjects = async (req, res) => {
     try {
         const pageSize = 10;
         const projectStatus = parseInt(req.query.projectStatus);
-        if (projectStatus) {
+        const skip = parseInt(req.query.skip);
+
+        if (skip === 0 && !projectStatus && !req.query.projectId && !req.query.activeStatus) {
+            // If skip is 0 and all other fields are empty, send the whole data.
+            const projects = await projectModel.find().populate('technology', 'techName')
+                .sort({ createdAt: -1 });
+            return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects });
+        } else {
             if (parseInt(req.query.skip) === 0) {
                 if (req.query.projectId) {
                     const project = await projectModel.findById({ _id: req.query.projectId });
-                    return res.status(200).json({ status: '200', message: 'Project Details fetched successfully', response: project })
+                    return res.status(200).json({ status: '200', message: 'Project Details fetched successfully', response: project });
                 } else {
-                    const projects = await projectModel.find({ activeStatus: req.query.activeStatus ,projectStatus}).populate('technology', 'techName')
-                        .sort({ createdAt: -1 })
-                    return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects })
+                    const projects = await projectModel.find({ activeStatus: req.query.activeStatus, projectStatus }).populate('technology', 'techName')
+                        .sort({ createdAt: -1 });
+                    return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects });
                 }
             } else {
-                const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus,projectStatus});
-                const projects = await projectModel.find({ activeStatus: req.query.activeStatus,projectStatus}).populate('technology', 'techName')
+                const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus, projectStatus });
+                const projects = await projectModel.find({ activeStatus: req.query.activeStatus, projectStatus }).populate('technology', 'techName')
                     .sort({ createdAt: -1 })
                     .limit(pageSize)
-                    .skip((parseInt(req.query.skip) - 1) * pageSize);
+                    .skip((skip - 1) * pageSize);
                 const totalPages = Math.ceil(totalCount / pageSize);
-    
-                return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects, totalCount, totalPages })
+
+                return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects, totalCount, totalPages });
             }
         }
-        else{
-            res.status(200).json({status:201,message:"Invalid or missing projectStatus. It should be 1, 2,3 or 4"})
-        }
     } catch (error) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message });
+        return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });
     }
 }
+
 
 // Update a project
 const updateProject = async (req, res) => {
@@ -75,7 +113,7 @@ const updateProject = async (req, res) => {
 const updateStatus = async (req, res) => {
     try {
         await projectModel.findByIdAndUpdate({ _id: req.body.projectId }, { activeStatus: req.body.activeStatus });
-        return res.status(200).json({ status: '200', message: 'Project Active InActive status updated Successfully' });
+        return res.status(200).json({ status: '200', message: 'Project status updated Successfully' });
     } catch (error) {
         return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
     }
