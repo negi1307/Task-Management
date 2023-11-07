@@ -181,8 +181,26 @@ const getUserTasks = async (req, res) => {
     }
 }
 
+// All assignees of A project
+const projectUserList = async (req, res) => {
+    try {
+        const taskfind = await taskModel.find({ projectId: req.query.projectId });
+        const taskIds = taskfind.map(task => task._id);
+        const assignees = await assignUserModel
+        .find({ taskId: { $in: taskIds } })
+        .populate([
+            { path: 'assigneeId', select: 'firstName lastName' },
+            { path: 'reporterId', select: 'role' }
+        ])
+        .populate("taskId");
+        return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: assignees })
+    } 
+    catch (error) {
+        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+    };
+}
 
 
 
 
-module.exports = { addUserAssignments,/* getUserAssignment,*/ getUserAssignments, getUserTasks }
+module.exports = { addUserAssignments,/* getUserAssignment,*/ getUserAssignments, getUserTasks,projectUserList }
