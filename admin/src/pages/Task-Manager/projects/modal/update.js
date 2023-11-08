@@ -229,11 +229,11 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('project_type', { required: true })}>
-                                                <option>Choose an Project Type </option>
+                                                <option value="">Choose an Project Type </option>
                                                 <option value="T&M">T&M</option>
-                                                <option value="Fixed Cost">Fixed Cost</option>
-                                                <option value=" Hourly">Hourly</option>
-                                                <option value="Dedicated team">Dedicated team</option>
+                                                <option value="FC">FC</option>
+                                                <option value=" HR">HR</option>
+                                                <option value="DT">DT</option>
                                             </Form.Select>
                                             {errors.project_type?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
