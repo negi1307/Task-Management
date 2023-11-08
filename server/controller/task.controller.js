@@ -465,10 +465,10 @@ const getTasksStatusCount = async (req, res) => {
         const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // Calculate the date 7 days ago
 
         if (req.user.role === 1) {
-            const todoCount = await taskModel.countDocuments({ status: 1, createdAt: { $gte: sevenDaysAgo } });
-            const inProgressCount = await taskModel.countDocuments({ status: 2, createdAt: { $gte: sevenDaysAgo } });
-            const holdCount = await taskModel.countDocuments({ status: 3, createdAt: { $gte: sevenDaysAgo } });
-            const doneCount = await taskModel.countDocuments({ status: 4, createdAt: { $gte: sevenDaysAgo } });
+            const todoCount = await taskModel.countDocuments({ status: 1, createdAt: { $gte: sevenDaysAgo },activeStatus:true });
+            const inProgressCount = await taskModel.countDocuments({ status: 2, createdAt: { $gte: sevenDaysAgo },activeStatus:true  });
+            const holdCount = await taskModel.countDocuments({ status: 3, createdAt: { $gte: sevenDaysAgo },activeStatus:true  });
+            const doneCount = await taskModel.countDocuments({ status: 4, createdAt: { $gte: sevenDaysAgo },activeStatus:true  });
 
             const taskStatusCount = [
                 { name: 'todo', count: todoCount },
@@ -481,10 +481,10 @@ const getTasksStatusCount = async (req, res) => {
             const assigneeTasks = await assignUserModel.find({ assigneeId: req.user._id });
             let taskIds = assigneeTasks.map(id => id.taskId);
 
-            const todoCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 1, createdAt: { $gte: sevenDaysAgo } });
-            const inProgressCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 2, createdAt: { $gte: sevenDaysAgo } });
-            const holdCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 3, createdAt: { $gte: sevenDaysAgo } });
-            const doneCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 4, createdAt: { $gte: sevenDaysAgo } });
+            const todoCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 1, createdAt: { $gte: sevenDaysAgo },activeStatus:true  });
+            const inProgressCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 2, createdAt: { $gte: sevenDaysAgo },activeStatus:true  });
+            const holdCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 3, createdAt: { $gte: sevenDaysAgo },activeStatus:true  });
+            const doneCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 4, createdAt: { $gte: sevenDaysAgo },activeStatus:true  });
 
             const taskStatusCount = [
                 { name: 'todo', count: todoCount },
