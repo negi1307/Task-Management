@@ -123,8 +123,8 @@ const getProjects = async (req, res) => {
             endDate: 1,
             daysLeft: {
               $divide: [
-                { $subtract: ["$endDate", "$startDate"] }, // Calculate the difference in milliseconds
-                1000 * 60 * 60 * 24, // Convert milliseconds to days
+                { $subtract: ["$endDate", "$startDate"] }, 
+                1000 * 60 * 60 * 24,
               ],
             },
           },
@@ -218,11 +218,16 @@ const getProjects = async (req, res) => {
             });
         }
       } else {
-        let active=JSON.parse(req.query.activeStatus);
-        let status=parseInt(req.query.projectStatus);
- 
-         const projects = await projectModel.aggregate([
-            { $match: { activeStatus: active,projectStatus:status} },
+        let active;
+           if (req.query.activeStatus == 1) {
+            active= true;
+          } else {
+            active=false;
+          }
+        
+         let status=parseInt(req.query.projectStatus);
+          const projects = await projectModel.aggregate([
+            { $match: { activeStatus: JSON.parse(active),projectStatus:status} },
             {
               $lookup: {
                 from: "technologies",
