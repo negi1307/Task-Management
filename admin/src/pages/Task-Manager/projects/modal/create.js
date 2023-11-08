@@ -163,11 +163,11 @@ const Create = ({ modal, closeModal }) => {
                                                 Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('project_type', { required: true })}>
-                                                <option>Choose an Project Type </option>
+                                                <option >Choose an Project Type </option>
                                                 <option value="T&M">T&M</option>
-                                                <option value="Fixed Cost">Fixed Cost</option>
-                                                <option value=" Hourly">Hourly</option>
-                                                <option value="Dedicated team">Dedicated team</option>
+                                                <option value="FC">FC</option>
+                                                <option value=" HR">HR</option>
+                                                <option value="DT">DT</option>
                                             </Form.Select>
                                             {errors.project_type?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
@@ -239,7 +239,7 @@ const Create = ({ modal, closeModal }) => {
                                                 Status<span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('status', { required: true })}>
-                                                <option>select </option>
+                                                <option>--select--</option>
                                                 <option value="1">To-Do</option>
                                                 <option value="2">Live</option>
                                                 <option value="3">Hold</option>
