@@ -194,7 +194,19 @@ const projectUserList = async (req, res) => {
             { path: 'reporterId', select: 'role' },
             { path: 'taskId' }
         ])
-        return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: assignees })
+         // Create a map to store unique assigneeIds
+         const uniqueAssigneesMap = new Map();
+
+         // Filter out duplicate assigneeIds
+         const uniqueAssignees = [];
+         assignees.forEach((assignee) => {
+             const assigneeId = assignee.assigneeId._id.toString();
+             if (!uniqueAssigneesMap.has(assigneeId)) {
+                 uniqueAssigneesMap.set(assigneeId, true);
+                 uniqueAssignees.push(assignee);
+             }
+         });        
+        return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: uniqueAssignees })
     } 
     catch (error) {
         return res.status(400).json({ status: "400", message: "Fill all the required fields", error: error.message });
