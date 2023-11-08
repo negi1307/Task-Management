@@ -67,17 +67,26 @@ const getUserTasks = async (req, res) => {
     try {
         var pageSize = 10;
         let now = new Date();
-        let { flag, activeStatus, searchString, skip } = req.query;
+        let { flag, activeStatus, searchString, projectId, milestoneId, sprintId, skip } = req.query;
         const query = {
-            assigneeId: new mongoose.Types.ObjectId(req.user._id),
+            // assigneeId: new mongoose.Types.ObjectId(req.user._id),
+            projectId: new mongoose.Types.ObjectId(projectId),
+            milestoneId: new mongoose.Types.ObjectId(milestoneId),
+            sprintId: new mongoose.Types.ObjectId(sprintId),
         };
+        const taskIds = await taskModel.distinct('_id', query);
         // Flag = 1 :- Tasks acc to Status, Flag = 2 :- List of tasks
         if (flag == 1) {
             activeStatus = true
         }
-        const result = await assignUserModel.aggregate([
+
+        let queries =   [
             {
-                $match: query
+                $match: {
+                    taskId: {
+                        $in: taskIds
+                    },
+                }
             },
             {
                 $lookup: {
@@ -136,12 +145,9 @@ const getUserTasks = async (req, res) => {
             {
                 $sort: { createdAt: -1 }
             },
-            {
-                $skip: (parseInt(skip) - 1) * pageSize
-            },
-            {
-                $limit: pageSize
-            },
+            { $sort: { createdAt: -1 }},
+            { $sort: { createdAt: -1 }},
+           
             flag == 1 ? {
                 $group: {
                     _id: 'all',
@@ -206,9 +212,29 @@ const getUserTasks = async (req, res) => {
                 {
                     $group: {
                         _id: 'all',
-                        taskInfo: { $push: '$taskInfo' },
-                        assigneeInfo: { $first: '$assigneeInfo' },
-                        reporterInfo: { $first: '$reporterInfo' },
+                        taskInfo: {
+                            $push: {
+                                _id: '$taskInfo._id',
+                                taskMannualId: '$taskInfo.taskMannualId',
+                                projectId: '$taskInfo.projectId',
+                                milestoneId: '$taskInfo.milestoneId',
+                                sprintId: '$taskInfo.sprintId',
+                                summary: '$taskInfo.summary',
+                                description: '$taskInfo.description',
+                                priority: '$taskInfo.priority',
+                                startDate: '$taskInfo.startDate',
+                                dueDate: '$taskInfo.dueDate',
+                                status: '$taskInfo.status',
+                                activeStatus: '$taskInfo.activeStatus',
+                                attachment: '$taskInfo.attachment',
+                                attachmentType: '$taskInfo.attachmentType',
+                                createdAt: '$taskInfo.createdAt',
+                                updatedAt: '$taskInfo.updatedAt',
+                                __v: '$taskInfo.__v',
+                                assigneeInfo: '$assigneeInfo',
+                                reporterInfo: '$reporterInfo'
+                            }
+                        },
                         totalCount: { $sum: 1 }
                     }
                 },
@@ -269,14 +295,22 @@ const getUserTasks = async (req, res) => {
                     }
                     : {
                         _id: 0,
-                        assigneeInfo: 1, 
+                        assigneeInfo: 1,
                         reporterInfo: 1,
                         taskInfo: 1,
                         totalCount: 1
                     },
             },
-        ]);
-        const totalCount = result[0]?.totalCount || 0;
+
+        ]
+        let counts = [{totalCount:0}]
+        if(flag != "1"){
+            counts = await assignUserModel.aggregate(queries);
+            queries[8] = {$skip: (parseInt(skip) - 1) * pageSize}
+            queries[9] = { $limit: pageSize};
+        }
+        const result = await assignUserModel.aggregate(queries);
+       const totalCount = counts[0]?.totalCount 
         const totalPages = Math.ceil(totalCount / pageSize);
         return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result, totalCount, totalPages });
     } catch (error) {
@@ -290,17 +324,17 @@ const projectUserList = async (req, res) => {
         const projectId = req.query.projectId;
         const milestoneId = req.query.milestoneId;
         const sprintId = req.query.sprintId;
-        const taskfind = await taskModel.find({projectId, milestoneId, sprintId });
+        const taskfind = await taskModel.find({ projectId, milestoneId, sprintId });
         const taskIds = taskfind.map(task => task._id);
         const assignees = await assignUserModel
-        .find({ taskId: { $in: taskIds } })
-        .populate([
-            { path: 'assigneeId', select: 'firstName lastName' },
-            { path: 'reporterId', select: 'role' }
-        ])
-        .populate("taskId");
+            .find({ taskId: { $in: taskIds } })
+            .populate([
+                { path: 'assigneeId', select: 'firstName lastName' },
+                { path: 'reporterId', select: 'role' }
+            ])
+            .populate("taskId");
         return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: assignees })
-    } 
+    }
     catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     };
@@ -309,4 +343,4 @@ const projectUserList = async (req, res) => {
 
 
 
-module.exports = { addUserAssignments,/* getUserAssignment,*/ getUserAssignments, getUserTasks,projectUserList }
+module.exports = { addUserAssignments,/* getUserAssignment,*/ getUserAssignments, getUserTasks, projectUserList }
