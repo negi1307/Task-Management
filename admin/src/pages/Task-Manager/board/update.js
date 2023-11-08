@@ -13,19 +13,17 @@ import { getSingleSprint, getsingleMileStone, updateTask } from '../../../redux/
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import noimage from '../../../assets/images/noimage.png';
-import pdfImage from "../../../assets/images/pdff-removebg-preview.png"
+import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 const UpdateTask = ({ modal, closeModal, editData }) => {
     console.log(editData, 'update');
     const [data, setData] = useState({
         image: '',
-
     });
     const [description, setDescription] = useState('');
     const [imageShow, setImageShow] = useState(true);
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
 
-  
     const loaderhandel = store?.UpdateTaskReducer;
     // disable previous date
     const today = new Date().toISOString().split('T')[0];
@@ -44,7 +42,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const date1 = new Date();
     const date2 = editData?.dueDate;
     const minimumEndDate = findMinimumEndDate(date1, date2);
-    // 
+    //
     const {
         register,
         handleSubmit,
@@ -56,20 +54,20 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const CloseModaal = () => {
         closeModal();
     };
-   
+
     const onSubmit = (val) => {
         let body = new FormData();
-        body.append("taskId", editData?._id)
-        body.append("summary", val?.summary)
-        body.append("description", val?.description)
-        body.append("assigneeId", val?.Assignee)
-        body.append("reporterId", val?.Reporter)
-        body.append("priority", val?.priority)
-        body.append("startDate", val?.startDate)
-        body.append("dueDate", val?.dueDate)
-        body.append("status", val?.status)
-        body.append("attachment", data?.image)
-   
+        body.append('taskId', editData?._id);
+        body.append('summary', val?.summary);
+        body.append('description', val?.description);
+        body.append('assigneeId', val?.Assignee);
+        body.append('reporterId', val?.Reporter);
+        body.append('priority', val?.priority);
+        body.append('startDate', val?.startDate);
+        body.append('dueDate', val?.dueDate);
+        body.append('status', val?.status);
+        body.append('attachment', data?.image);
+
         console.log('editsprit', body);
         dispatch(updateTask(body));
     };
@@ -86,9 +84,9 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
             Reporter: editData?.assignees?.reporterId,
             priority: editData?.priority,
             status: editData?.status,
-            description:editData?.description
+            description: editData?.description,
         });
-        setData({image: editData?.attachment });
+        setData({ image: editData?.attachment });
     }, [modal]);
     console.log(editData, 'pppppp');
     const handleDate = (data) => {
@@ -105,7 +103,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
         // // const allowedTypes = ['image/png', 'image/gif', 'image/jpeg'];
 
         // if (file && allowedTypes.includes(file.type)) {
-            
+
         // } else {
         //     ToastHandle('error', 'Please select only an image file (PNG, GIF, JPEG).');
         // }
@@ -150,14 +148,12 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
 
                                                     <Form.Select
                                                         {...register('projectname', {
-                                                            required: true, disabled:true
-                                                           
-                                                        })}
-                                                        
-                                                       >
+                                                            required: true,
+                                                            disabled: true,
+                                                        })}>
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getProject?.data?.response?.map((ele, ind) => (
-                                                            <option value={ele?._id} > {ele?.projectName} </option>
+                                                            <option value={ele?._id}> {ele?.projectName} </option>
                                                         ))}
                                                     </Form.Select>
                                                     {errors.projectname?.type === 'required' && (
@@ -173,8 +169,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
 
                                                     <Form.Select
-                                                        {...register('Milestone', { required: true,disabled:true  })}
-                                                        >
+                                                        {...register('Milestone', { required: true, disabled: true })}>
                                                         <option value={''}>--Select--</option>
                                                         {store?.getSigleMileStone?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.title} </option>
@@ -196,7 +191,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
 
                                                     <Form.Select
-                                                        {...register('Sprint', { required: true,  disabled:true })}>
+                                                        {...register('Sprint', { required: true, disabled: true })}>
                                                         <option value={''}>--Select--</option>
                                                         {store?.getAllSingleSprints?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.sprintName} </option>
@@ -233,10 +228,15 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         {' '}
                                                         Description<span className="text-danger">*</span>:
                                                     </Form.Label>
-                                                    <Form.Control  as="textarea" rows={3} type="text" {...register('description', { required: true })} />
-                                            {errors.description?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
+                                                    <Form.Control
+                                                        as="textarea"
+                                                        rows={3}
+                                                        type="text"
+                                                        {...register('description', { required: true })}
+                                                    />
+                                                    {errors.description?.type === 'required' && (
+                                                        <span className="text-danger"> This feild is required *</span>
+                                                    )}
                                                 </Form.Group>
                                             </Col>
                                             <Col lg={6}>
@@ -249,7 +249,10 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     <Form.Select {...register('Assignee', { required: true })}>
                                                         <option value={''}>--Select--</option>
                                                         {store?.getAllUsers?.data?.response?.map((ele, ind) => (
-                                                            <option value={ele?._id}> {ele?.firstName} {ele?.lastName}</option>
+                                                            <option value={ele?._id}>
+                                                                {' '}
+                                                                {ele?.firstName} {ele?.lastName}
+                                                            </option>
                                                         ))}
                                                     </Form.Select>
                                                     {errors.Assignee?.type === 'required' && (
@@ -354,58 +357,75 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                 </Form.Group>
                                             </Col>
                                             <Col>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label>
-                                                Attachment <span className="text-danger">*</span>
-                                            </Form.Label>
-
-                                            {imageShow ? (
-                                                <>
-                                                    {editData?.attachment?.length ? (
-                                                        <Col className="d-flex justify-content-center">
-                                                            <div style={{ width: '50%', position: 'relative' }}>
-                                                                <div className="img_div">
-                                                                    {/* <img
+                                                <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                                    <Form.Label>
+                                                        Attachment <span className="text-danger">*</span>
+                                                    </Form.Label>
+                                                    <a
+                                                        href={editData?.attachment}
+                                                        download
+                                                        target="_blank"
+                                                        className="align_icon_dowl">
+                                                        <i className="dripicons-download download_color"></i>
+                                                    </a>
+                                                    {imageShow ? (
+                                                        <>
+                                                            {editData?.attachment?.length ? (
+                                                                <Col className="d-flex justify-content-center">
+                                                                    <div style={{ width: '50%', position: 'relative' }}>
+                                                                        <div className="img_div">
+                                                                            {/* <img
                                                                         className=" all_logo_img w-100"
                                                                         src={editData?.attachment}
                                                                     /> */}
-                                                                     <img  className=" all_logo_img w-100" src={editData?.attachmentType !== "application/pdf" ? editData?.attachment : pdfImage} />
-                                                                </div> 
-                                                                <div
-                                                                    className="cross_div"
-                                                                    style={{ position: 'absolute', rigth: '0' }}>
-                                                                    <i
-                                                                        onClick={handelimageclose}
-                                                                        className=" dripicons-cross"></i>
+                                                                            <img
+                                                                                className=" all_logo_img w-100"
+                                                                                src={
+                                                                                    editData?.attachmentType !==
+                                                                                    'application/pdf'
+                                                                                        ? editData?.attachment
+                                                                                        : pdfImage
+                                                                                }
+                                                                            />
+                                                                        </div>
+                                                                        <div
+                                                                            className="cross_div"
+                                                                            style={{
+                                                                                position: 'absolute',
+                                                                                rigth: '0',
+                                                                            }}>
+                                                                            <i
+                                                                                onClick={handelimageclose}
+                                                                                className=" dripicons-cross"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                </Col>
+                                                            ) : (
+                                                                <div style={{ width: '15%', position: 'relative' }}>
+                                                                    <div className="img_div">
+                                                                        <img className="all_logo_img" src={noimage} />
+                                                                    </div>
+                                                                    <div
+                                                                        className="cross_div"
+                                                                        style={{ position: 'absolute', rigth: '0' }}>
+                                                                        <i
+                                                                            onClick={handelimageclose}
+                                                                            className=" dripicons-cross"></i>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        </Col>
+                                                            )}
+                                                        </>
                                                     ) : (
-                                                        <div style={{ width: '15%', position: 'relative' }}>
-                                                            <div className="img_div">
-                                                                <img className="all_logo_img" src={noimage} />
-                                                            </div>
-                                                            <div
-                                                                className="cross_div"
-                                                                style={{ position: 'absolute', rigth: '0' }}>
-                                                                <i
-                                                                    onClick={handelimageclose}
-                                                                    className=" dripicons-cross"></i>
-                                                            </div>
-                                                        </div>
+                                                        <Form.Control
+                                                            type="file"
+                                                            // accept="image/png, image/gif, image/jpeg"
+                                                            onChange={(e) => {
+                                                                handleImageChange(e);
+                                                            }}
+                                                        />
                                                     )}
-                                                </>
-                                            ) : (
-                                                <Form.Control
-                                                    type="file"
-                                                    // accept="image/png, image/gif, image/jpeg"
-                                                    onChange={(e) => {
-                                                        handleImageChange(e);
-                                                    }}
-                                                />
-                                            )}
-                                        </Form.Group>
-                                    </Col>
+                                                </Form.Group>
+                                            </Col>
                                         </Row>
                                     </Col>
                                 </Row>
@@ -428,5 +448,4 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     );
 };
 
-
-export default UpdateTask
+export default UpdateTask;
