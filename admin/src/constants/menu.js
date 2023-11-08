@@ -43,13 +43,13 @@
             },
         ]
     },
-    // {
-    //     key: 'technology',
-    //     label: 'Technology',
-    //     url: 'dashboard/technology',
-    //     icon: 'uil-technology',
+    {
+        key: 'customer',
+        label: 'Customer',
+        url: 'dashboard/customer',
+        icon: 'uil-users-alt',
 
-    // },
+    },
    
   
 ];
