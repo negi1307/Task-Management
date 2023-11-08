@@ -48,7 +48,7 @@ export const GetAssignee ="/assignUser/getUserAssignments?assigneeId="
 
 //add comment data
 export const AddTaskComment="/comments/addComment"
-export const GetComment="/comments/getTaskComment?"
+export const GetComment="/comments/getTaskComment?taskId="
 
 export const delteTaskComment="/comments/deleteComment?";
 export const updateTaskComment="/comments/updateComment";
@@ -59,4 +59,5 @@ export const getPriorityTaskboard="/task/getPriorityTasks";
 export const getWeekTaskCount="/task/getTasksWeekCount";
 export const getTaskStatusCount="/task/getTasksStatusCount";
 export const getTaskCount="/task/getTasksCount";
+
 

@@ -216,13 +216,23 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
 }
 
 .all_bg{
-    background-color: rgb(218, 235, 255);
+    padding: 70px 0px;
+    background-color: rgb(202 129 255 / 7%);
 }
 .bg_clr{
     background-color:rgb(238, 236, 236);
 }
 .w-size{
     font-size: 20px;
+}
+.date p {
+    font-weight: 600;
+    margin-top: 17px !important;
+    font-size: 16px;
+}
+
+.count {
+    color: #c181ff !important;
 }
 .border_clr{
     border:1px solid rgb(209, 208, 208);
@@ -239,15 +249,9 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
     display: flex;
     
     align-items: center;
-    max-width: 600px;
+ 
 }
-.donut-chart2{
-    display: flex;
-    padding-left: 19%;
-    
-    align-items: center;
-    max-width: 600px;
-}
+
 
 .chart {
     position: relative;
@@ -404,7 +408,7 @@ ul.side-nav i {
 
 /* end header css ------------------------------------------------ */
 .modal_details .modal-dialog {
-    max-width: 800px !important;
+    max-width: 800px ;
 }
 
 
@@ -469,3 +473,143 @@ ul.side-nav i {
     box-shadow: 0 14px 28px rgb(152 152 152 / 25%), 0 10px 10px rgb(204 204 204 / 22%);
 }
 /* end task card detail page ------------------------------------  */
+
+/* start summary page------------------------------- */
+
+.bg_clrr {
+    width: 45px;
+    height: 45px;
+    background: #a541dcb8;
+    border-radius: 100%;
+    color: #fff;
+    text-align: center;
+    font-size: 23px !important;
+    line-height: 45px !important;
+}
+
+h5.states {
+    color: #000;
+    font-size: 22px;
+}
+
+.chart_div {
+   
+    align-items: center;
+}
+
+ul.legend {
+    margin-bottom: 0px;
+}
+
+ul.legend li {
+    font-size: 17px;
+    font-weight: 600;
+}
+ul.legend li span {
+    color: green !important;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.donut-chart2 {
+    margin-left: 34px;
+}
+.date {
+    border-top: 3px solid #bd43bda8;
+}
+h5.count {
+    font-size: 25px;
+    color: #be76e6 !important;
+    font-weight: 800;
+}
+
+.countstatus {
+    justify-content: center;
+    align-items: center;
+}
+
+.date {
+    text-align: center;
+    padding: 37px 13px;
+}
+
+.textarea_section textarea {
+    width: 100%;
+}
+/* end summary page-------------------------------------------- */
+
+/* start status count----------------------------------------- */
+.status ul {
+    margin-bottom: 0px;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+}
+
+.status ul li {
+    margin-right: 58px;
+    font-size: 20px;
+    color: #39afd1;
+    font-weight: 600;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+}
+
+.status h4 {
+    font-size: 20px;
+    color: #39afd1;
+}
+
+.card_detail .i.fa.fa-file-pdf-o {
+    color: red !important;
+    font-size: 22px;
+}
+
+.card_detail i {
+    font-size: 55px;
+    color: red;
+}
+.taskcardinfo span {
+    height: 30px;
+    font-weight: 800;
+    width: 30px;
+    background: #3294b0;
+    border-radius: 100%;
+    /* padding: 10px; */
+    font-size: 20px;
+    /* margin-top: 20px !important; */
+    display: inline-block;
+    text-align: center;
+    color: #fff;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+td.user_name {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+td.user_name p {
+    margin-bottom: 0px;
+}
+
+tr.task_comment_info td {
+    width: 100%;
+    flex: 0 0 100%;
+}
+
+td.user_name {
+    font-size: 18px;
+    color: #4e4949;
+    font-weight: 500;
+}
+
+td.user_comment {
+    font-size: 18px;
+}
+
+/* end status count------------------------------------------- */

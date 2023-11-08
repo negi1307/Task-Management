@@ -22,8 +22,8 @@ const Update = ({ modal, closeModal, editData }) => {
     const loaderhandel = store?.updateSprint;
     // disable previous date
     const today = new Date().toISOString().split('T')[0];
-     // start date
-     function findMinimumStartDate(startdate1, startdate2) {
+    // start date
+    function findMinimumStartDate(startdate1, startdate2) {
         return new Date(Math.min(new Date(startdate1), new Date(startdate2)));
     }
     const startdate1 = new Date();
@@ -53,7 +53,7 @@ const Update = ({ modal, closeModal, editData }) => {
         let body = {
             sprintId: editData?._id,
             sprintName: data?.title,
-            sprintDesc: description,
+            sprintDesc: data?.description,
             startDate: data?.startDate,
             endDate: data?.endDate,
         };
@@ -65,8 +65,8 @@ const Update = ({ modal, closeModal, editData }) => {
             title: editData?.sprintName,
             startDate: handleDate(editData?.startDate),
             endDate: handleDate(editData?.endDate),
+            description: editData?.sprintDesc,
         });
-        setDescription(editData?.sprintDesc);
     }, [modal]);
     console.log(editData, 'pppppp');
     const handleDate = (data) => {
@@ -131,21 +131,16 @@ const Update = ({ modal, closeModal, editData }) => {
                                             <Form.Label>
                                                 Description <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <CKEditor
-                                                config={{
-                                                    ckfinder: {
-                                                        // Upload the images to the server using the CKFinder QuickUpload command.
-                                                        uploadUrl:
-                                                            'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
-                                                    },
-                                                }}
-                                                editor={ClassicEditor}
-                                                data={description}
-                                                onChange={(event, editor) => {
-                                                    const data = editor.getData();
-                                                    setDescription(data);
-                                                }}
+                                            <Form.Control
+                                                as="textarea"
+                                                rows={3}
+                                                placeholder="Please Enter Description"
+                                                type="text"
+                                                {...register('description', { required: true })}
                                             />
+                                            {errors.description?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
                                         </Form.Group>
                                     </Col>
 
@@ -172,7 +167,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                min={watch("startDate")}
+                                                min={watch('startDate')}
                                                 {...register('endDate', { required: true })}
                                                 placeholder="Please end Date"
                                             />
