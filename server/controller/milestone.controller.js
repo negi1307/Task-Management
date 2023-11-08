@@ -93,6 +93,4 @@ const getMilestones = async (req, res) => {
 }
 
 
-module.exports = {
-    addMilestone, updateMilestone, updateStatus, getMilestones
-}
+module.exports = { addMilestone, updateMilestone, updateStatus, getMilestones }

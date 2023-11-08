@@ -32,7 +32,7 @@ const loginTimeRecord = async (req, res) => {
         if (!userId) {
             return res.status(400).json({ message: "User ID is missing in the query parameters" });
         }
-        const loginRecords = await userLoginModel.find({ userId: userId });
+        const loginRecords = await userLoginModel.find({ userId: userId }).populate("userId")
         if (loginRecords.length === 0) {
             return res.status(404).json({ message: "No login records found for the specified user" });
         }
