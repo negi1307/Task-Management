@@ -142,7 +142,8 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                             <h4 className="m-0 p-0"> {ele?.userId?.firstName}</h4>
                                                             <h4 className="ps-1 m-0 p-0"> {ele?.userId?.lastName}</h4>
                                                             <p className="ps-1 m-0 p-0">
-                                                                {moment(ele?.createdAt).format('LT')}{' '}
+                                                                {/* {moment(ele?.createdAt).format('LT')}{' '} */}
+                                                                {moment(ele?.createdAt).calendar()  }
                                                             </p>
                                                             {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
                                                         </div>
