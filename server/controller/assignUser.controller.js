@@ -62,59 +62,22 @@ const getUserAssignments = async (req, res) => {
     }
 }
 
-// Get A Users All tasks &  Search tasks
+// Get A Users All tasks Acc to status & Search tasks & List of tasks
 const getUserTasks = async (req, res) => {
     try {
-        let { projectId, milestoneId, sprintId, searchString } = req.query;
-        let todo = [];
-        let inProgress = [];
-        let hold = [];
-        let done = [];
+        var pageSize = 10;
+        let now = new Date();
+        let { flag, activeStatus, searchString, skip } = req.query;
         const query = {
-            assigneeId: new mongoose.Types.ObjectId(req.user._id)
+            assigneeId: new mongoose.Types.ObjectId(req.user._id),
         };
-        if (projectId && milestoneId && sprintId) {
-            const taskfind = await taskModel.find({ projectId, milestoneId, sprintId })
-            const taskIds = taskfind.map(id => {
-                return id._id
-            })
-            query.taskId = { $in: taskIds }
+        // Flag = 1 :- Tasks acc to Status, Flag = 2 :- List of tasks
+        if (flag == 1) {
+            activeStatus = true
         }
         const result = await assignUserModel.aggregate([
             {
                 $match: query
-            },
-            {
-                $lookup: {
-                    from: 'tasks',
-                    localField: 'taskId',
-                    foreignField: '_id',
-                    as: 'taskDetail'
-                }
-            },
-            {
-                $lookup: {
-                    from: 'projects',
-                    localField: 'taskDetail.projectId',
-                    foreignField: '_id',
-                    as: 'projectDetail'
-                }
-            },
-            {
-                $lookup: {
-                    from: 'milestones',
-                    localField: 'taskDetail.milestoneId',
-                    foreignField: '_id',
-                    as: 'milestoneDetail',
-                },
-            },
-            {
-                $lookup: {
-                    from: 'sprints',
-                    localField: 'taskDetail.sprintId',
-                    foreignField: '_id',
-                    as: 'sprintDetail',
-                },
             },
             {
                 $lookup: {
@@ -134,55 +97,191 @@ const getUserTasks = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'comments',
-                    localField: '_id',
-                    foreignField: 'taskId',
-                    as: 'comments',
-                },
+                    from: 'tasks',
+                    let: { taskId: '$taskId' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ['$_id', '$$taskId'] },
+                                        {
+                                            $eq: ['$activeStatus', JSON.parse(activeStatus)]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $match: {
+                                summary: {
+                                    $regex: `.*${searchString.replace(/\s+/g, '\\s+')}.*`,
+                                    $options: 'i'
+                                }
+                            }
+                        }
+                    ],
+                    as: 'taskInfo'
+                }
             },
             {
+                $unwind: '$taskInfo'
+            },
+            {
+                $unwind: '$assigneeInfo'
+            },
+            {
+                $unwind: '$reporterInfo'
+            },
+            {
+                $sort: { createdAt: -1 }
+            },
+            {
+                $skip: (parseInt(skip) - 1) * pageSize
+            },
+            {
+                $limit: pageSize
+            },
+            flag == 1 ? {
                 $group: {
-                    _id: '$_id',
-                    projectInfo: { $first: { $arrayElemAt: ['$projectDetail', 0] } },
-                    milestoneInfo: { $first: { $arrayElemAt: ['$milestoneDetail', 0] } },
-                    sprintInfo: { $first: { $arrayElemAt: ['$sprintDetail', 0] } },
-                    taskInfo: { $first: { $arrayElemAt: ['$taskDetail', 0] } },
-                    assigneeInfo: { $first: { $arrayElemAt: ['$assigneeInfo', 0] } },
-                    reporterInfo: { $first: { $arrayElemAt: ['$reporterInfo', 0] } },
-                    comments: { $first: { $arrayElemAt: [['$comments'], 0] } },
+                    _id: 'all',
+                    Todo: {
+                        $push: {
+                            $cond: {
+                                if: { $eq: ['$taskInfo.status', 1] },
+                                then: '$$ROOT', // Push the entire document
+                                else: null // Don't push if status is not "completed"
+                            }
+                        }
+                    },
+                    Inprogress: {
+                        $push: {
+                            $cond: {
+                                if: { $eq: ['$taskInfo.status', 2] },
+                                then: '$$ROOT', // Push the entire document
+                                else: null // Don't push if status is not "in progress"
+                            }
+                        }
+                    },
+                    Hold: {
+                        $push: {
+                            $cond: {
+                                if: { $eq: ['$taskInfo.status', 3] },
+                                then: '$$ROOT', // Push the entire document
+                                else: null // Don't push if status is not "on hold"
+                            }
+                        }
+                    },
+                    Done: {
+                        $push: {
+                            $cond: {
+                                if: { $eq: ['$taskInfo.status', 4] },
+                                then: '$$ROOT', // Push the entire document
+                                else: null // Don't push if status is not "done"
+                            }
+                        }
+                    },
+                    TodoCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 1] }, then: 1, else: 0 } } },
+                    InprogressCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 2] }, then: 1, else: 0 } } },
+                    HoldCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 3] }, then: 1, else: 0 } } },
+                    DoneCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 4] }, then: 1, else: 0 } } },
+                    totalCount: { $sum: 1 },
+                    DueTasksCount: {
+                        $sum: {
+                            $cond: {
+                                if: {
+                                    $and: [
+                                        { $lt: ['$taskInfo.dueDate', now] },
+                                        { $ne: ['$taskInfo.status', 4] }
+                                    ]
+                                },
+                                then: 1,
+                                else: 0
+                            }
+                        }
+                    },
+
                 }
-            }
-        ])
-            .sort({ createdAt: -1 });
-        for (const assignment of result) {
-            const summary = assignment?.taskInfo?.summary;
-            if (new RegExp(searchString, 'i').test(summary)) {
-                if (assignment?.taskInfo?.status === 1) {
-                    todo.push(assignment);
-                } else if (assignment?.taskInfo?.status === 2) {
-                    inProgress.push(assignment);
-                } else if (assignment?.taskInfo?.status === 3) {
-                    hold.push(assignment);
-                } else if (assignment?.taskInfo?.status === 4) {
-                    done.push(assignment);
+            } :
+                {
+                    $group: {
+                        _id: 'all',
+                        taskInfo: { $push: '$taskInfo' },
+                        assigneeInfo: { $first: '$assigneeInfo' },
+                        reporterInfo: { $first: '$reporterInfo' },
+                        totalCount: { $sum: 1 }
+                    }
+                },
+            {
+                $match: {
+                    "Todo": { $ne: [null] },
+                    "Inprogress": { $ne: [null] },
+                    "Hold": { $ne: [null] },
+                    "Done": { $ne: [null] }
                 }
-            }
-        }
-        return res.status(200).json({
-            status: "200",
-            message: "Data Fetched Successfully",
-            todo: { tasks: todo, taskCount: todo.length },
-            inProgress: { tasks: inProgress, taskCount: inProgress.length },
-            hold: { tasks: hold, taskCount: hold.length },
-            done: { tasks: done, taskCount: done.length }
-        });
+            },
+            {
+                $addFields: {
+                    Todo: {
+                        $filter: {
+                            input: '$Todo',
+                            as: 'task',
+                            cond: { $ne: ['$$task', null] }
+                        }
+                    },
+                    Inprogress: {
+                        $filter: {
+                            input: '$Inprogress',
+                            as: 'task',
+                            cond: { $ne: ['$$task', null] }
+                        }
+                    },
+                    Hold: {
+                        $filter: {
+                            input: '$Hold',
+                            as: 'task',
+                            cond: { $ne: ['$$task', null] }
+                        }
+                    },
+                    Done: {
+                        $filter: {
+                            input: '$Done',
+                            as: 'task',
+                            cond: { $ne: ['$$task', null] }
+                        }
+                    },
+                }
+            },
+            {
+                $project: flag == 1
+                    ? {
+                        _id: 0,
+                        Todo: 1,
+                        Inprogress: 1,
+                        Hold: 1,
+                        Done: 1,
+                        TodoCount: 1,
+                        InprogressCount: 1,
+                        HoldCount: 1,
+                        DoneCount: 1,
+                        totalCount: 1,
+                        DueTasksCount: 1
+                    }
+                    : {
+                        _id: 0,
+                        assigneeInfo: 1, 
+                        reporterInfo: 1,
+                        taskInfo: 1,
+                        totalCount: 1
+                    },
+            },
+        ]);
+        const totalCount = result[0]?.totalCount || 0;
+        const totalPages = Math.ceil(totalCount / pageSize);
+        return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result, totalCount, totalPages });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
 }
 
-
-
-
-
-module.exports = { addUserAssignments,/* getUserAssignment,*/ getUserAssignments, getUserTasks }
+module.exports = { addUserAssignments, getUserAssignments, getUserTasks }
