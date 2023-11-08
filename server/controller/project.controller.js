@@ -311,26 +311,14 @@ const updateProject = async (req, res) => {
 
 // update A project ActiveStatus
 const updateStatus = async (req, res) => {
-  try {
-    await projectModel.findByIdAndUpdate(
-      { _id: req.body.projectId },
-      { activeStatus: req.body.activeStatus }
-    );
-    return res
-      .status(200)
-      .json({
-        status: "200",
-        message: "Project Active InActive status updated Successfully",
-      });
-  } catch (error) {
-    return res
-      .status(200)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
-  }
-};
+    try {
+        await projectModel.findByIdAndUpdate({ _id: req.body.projectId }, { activeStatus: req.body.activeStatus });
+        return res.status(200).json({ status: '200', message: 'Project status updated Successfully' });
+    } catch (error) {
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+    }
+}
+
+
 
 module.exports = { addProject, getProjects, updateProject, updateStatus };
