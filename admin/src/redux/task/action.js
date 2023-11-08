@@ -51,3 +51,7 @@ export const gettaskId= (data): AuthAction => ({
     type: "taskid",
     payload: data
 })
+export const getAssignUserAction= (data): AuthAction => ({
+    type: TASK_TYPES.GET_ASSIGN_USER,
+    payload: data
+})

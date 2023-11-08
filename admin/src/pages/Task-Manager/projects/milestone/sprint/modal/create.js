@@ -8,13 +8,10 @@ import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
 import { addSprint } from '../../../../../../redux/sprint/action';
 import ToastHandle from '../../../../../../constants/toaster/toaster';
 import MainLoader from '../../../../../../constants/Loader/loader';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.addSprint;
-    const [description, setDescription] = useState('');
     // disable previous date
     const today = new Date().toISOString().split('T')[0];
     //
@@ -26,13 +23,13 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
         reset,
         formState: { errors },
     } = useForm();
-console.log(projectId,"projectId")
+    console.log(projectId, 'projectId');
     const onSubmit = (val) => {
         let body = {
             projectId: projectId,
             milestoneId: milestoneId,
             sprintName: val?.Name,
-            sprintDesc: description,
+            sprintDesc: val?.description,
             startDate: val?.Startdate,
             endDate: val?.Enddate,
         };
@@ -82,9 +79,13 @@ console.log(projectId,"projectId")
                                         <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
                                                 {' '}
-                                                Name <span className="text-danger">*</span>:
+                                                Sprint Name <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control type="text" {...register('Name', { required: true })} />
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Please Enter Sprint Name"
+                                                {...register('Name', { required: true })}
+                                            />
                                             {errors.Name?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
@@ -95,20 +96,16 @@ console.log(projectId,"projectId")
                                             <Form.Label>
                                                 Description <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <CKEditor
-                                                editor={ClassicEditor}
-                                                config={{
-                                                    ckfinder: {
-                                                        uploadUrl:
-                                                            'https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
-                                                    },
-                                                }}
-                                                data=""
-                                                onChange={(event, editor) => {
-                                                    const data = editor.getData();
-                                                    setDescription(data);
-                                                }}
+                                            <Form.Control
+                                                as="textarea"
+                                                rows={3}
+                                                type="text"
+                                                placeholder="Please Enter Description"
+                                                {...register('description', { required: true })}
                                             />
+                                            {errors.description?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
                                         </Form.Group>
                                     </Col>
                                     <Col lg={12}>
@@ -135,8 +132,8 @@ console.log(projectId,"projectId")
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                disabled={watch("Startdate")== ""|| watch("Startdate")== undefined }
-                                                min={watch("Startdate")} 
+                                                disabled={watch('Startdate') == '' || watch('Startdate') == undefined}
+                                                min={watch('Startdate')}
                                                 {...register('Enddate', { required: true })}
                                             />{' '}
                                             {errors.Enddate?.type === 'required' && (

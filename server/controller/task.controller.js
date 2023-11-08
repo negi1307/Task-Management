@@ -388,6 +388,8 @@ const getTasksAccToStatus = async (req, res) => {
                         activeStatus: { $first: '$activeStatus' },
                         attachment: { $first: '$attachment' },
                         attachmentType: { $first: '$attachmentType' },
+                        createdAt : { $first: '$createdAt' },
+                        updatedAt : { $first: '$updatedAt' },
                         projectInfo: { $first: { $arrayElemAt: ['$projects', 0] } },
                         milestoneInfo: { $first: { $arrayElemAt: ['$milestones', 0] } },
                         sprintInfo: { $first: { $arrayElemAt: ['$sprints', 0] } },
@@ -431,9 +433,9 @@ const getPriorityTasks = async (req, res) => {
             const thirdPriority = await taskModel.countDocuments({ priority: 3 });
 
             const taskPriorityCount = [
-                { name: 'highPriority', count: firstPriority },
-                { name: 'mediumPriority', count: secondPriority },
-                { name: 'lowPriority', count: thirdPriority }
+                { name: 'High', count: firstPriority },
+                { name: 'Medium', count: secondPriority },
+                { name: 'Low', count: thirdPriority }
             ];
             return res.status(200).json({ status: '200', message: "Prioity wise tasks for Admin fetched successfully", response: taskPriorityCount });
         } else {
@@ -445,9 +447,9 @@ const getPriorityTasks = async (req, res) => {
             const thirdPriority = await taskModel.countDocuments({ _id: { $in: taskIds }, priority: 3 });
 
             const taskPriorityCount = [
-                { name: 'highPriority', count: firstPriority },
-                { name: 'mediumPriority', count: secondPriority },
-                { name: 'lowPriority', count: thirdPriority }
+                { name: 'High', count: firstPriority },
+                { name: 'Medium', count: secondPriority },
+                { name: 'Low', count: thirdPriority }
             ];
             return res.status(200).json({ status: '200', message: 'Priority wise tasks for User fetched successfully', response: taskPriorityCount })
         }

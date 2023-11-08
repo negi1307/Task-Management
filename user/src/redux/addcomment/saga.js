@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import Addcomment from '../addcomment/constants';
-import { addTaskCommentApi,deleteTask,updateTask,getHistoryApi } from '../addcomment/api';
+import { addTaskCommentApi,deleteTask,updateTask,getHistoryApi,getTaskCommentApi } from '../addcomment/api';
 
 
 function* addTaskCommentFunction({ payload }) {
@@ -35,7 +35,38 @@ function* addTaskCommentFunction({ payload }) {
 
     }
 }
+function* getCommentsFunction({ payload }) {
+    try {
+        yield put({
+            type: Addcomment.GET_COMMENT_LOADING,
+            payload: {}
+        })
+        const response = yield call(getTaskCommentApi, { payload });
+        if (response.data.status) {
+            yield put({
+                type: Addcomment.GET_COMMENT_SUCCESS,
+                payload: { ...response.data },
+            });
+            // yield put({
+            //     type: Addcomment.GET_ALL_MILESTONES_RESET,
+            //     payload: {},
+            // });
+        }
+        else {
+            yield put({
+                type: Addcomment.GET_COMMENT_ERROR,
+                payload: { ...response.data }
+            });
+        }
 
+    } catch (error) {
+        yield put({
+            type: Addcomment.GET_COMMENT_ERROR,
+            payload: { message: error?.message }
+        });
+
+    }
+}
 function* deleteTaskCommentFunction({ payload }) {
     try {
         yield put({
@@ -158,6 +189,10 @@ export function* getHistrorySaga(): any {
     yield takeEvery(Addcomment.GET_HISTORY, getHistroryFunction);
 }
 
+export function* getCommetSaga(): any {
+    yield takeEvery(Addcomment.GET_COMMENT, getCommentsFunction);
+}
+
 
 function* Addcommentsaga(): any {
     yield all([
@@ -165,7 +200,8 @@ function* Addcommentsaga(): any {
         fork(addAllTaskCommentsSaga),
         fork(deleteTaskCommentsSaga),
         fork(updateTaskCommentsSaga),
-        fork(getHistrorySaga)
+        fork(getHistrorySaga),
+        fork(getCommetSaga)
      
 
 

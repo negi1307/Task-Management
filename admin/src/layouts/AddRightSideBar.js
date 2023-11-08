@@ -2,11 +2,8 @@ import react, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { createTask, getAllRoles, getAllUsers, getSingleSprint } from '../redux/actions';
-import { useParams } from 'react-router-dom';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Form from 'react-bootstrap/Form';
 import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default function RightBar(props) {
     const {
@@ -20,7 +17,6 @@ export default function RightBar(props) {
     const { showModal, setShowModal, content, projectId, mileStoneId, sprintId } = props;
 
     const store = useSelector((state) => state);
-    const [description, setDescription] = useState('');
     // const projectId = store?.getProjectId?.data;
     // const milestoneId = store?.getMilestoneId?.data;
     // const sprintid = store?.getSprintId?.data;
@@ -33,7 +29,7 @@ export default function RightBar(props) {
         body.append('milestoneId', mileStoneId);
         body.append('sprintId', sprintId);
         body.append('summary', e.Summary);
-        body.append('description', description);
+        body.append('description', e.description);
         body.append('assigneeId', e.Assignee);
         body.append('reporterId', e.Report);
         body.append('priority', e.priority);
@@ -53,7 +49,7 @@ export default function RightBar(props) {
         setValue('start_date', '');
         setValue('last_date', '');
         setValue('Attachment', '');
-        setDescription('');
+        setValue('description', '');
         setShowModal(false);
     };
     useEffect(() => {
@@ -181,20 +177,16 @@ export default function RightBar(props) {
                                             Description <span class="text-danger">*</span>:
                                         </label>
 
-                                        <CKEditor
-                                            editor={ClassicEditor}
-                                            config={{
-                                                ckfinder: {
-                                                    uploadUrl:
-                                                        'https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
-                                                },
-                                            }}
-                                            data=""
-                                            onChange={(event, editor) => {
-                                                const data = editor.getData();
-                                                setDescription(data);
-                                            }}
+                                        <Form.Control
+                                            as="textarea"
+                                            placeholder="Please Enter Description"
+                                            rows={3}
+                                            type="text"
+                                            {...register('description', { required: true })}
                                         />
+                                        {errors.description?.type === 'required' && (
+                                            <span className="text-danger"> This feild is required *</span>
+                                        )}
                                     </div>
                                 </div>
                             </div>
