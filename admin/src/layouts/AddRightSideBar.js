@@ -168,6 +168,9 @@ export default function RightBar(props) {
                                         class="form-control"
                                         {...register('Summary')}
                                     />
+                                    {errors.Summary?.type === 'required' && (
+                                            <span className="text-danger"> This feild is required *</span>
+                                        )}
                                 </div>
                             </div>
                             <div className="row">
@@ -211,6 +214,9 @@ export default function RightBar(props) {
                                                 </option>
                                             ))}
                                         </select>
+                                        {errors.Assignee?.type === 'required' && (
+                                            <span className="text-danger"> This feild is required *</span>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -231,6 +237,9 @@ export default function RightBar(props) {
                                                 <option value={ele?._id}> {ele?.role} </option>
                                             ))}
                                         </select>
+                                        {errors.Report?.type === 'required' && (
+                                            <span className="text-danger"> This feild is required *</span>
+                                        )}
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -246,6 +255,9 @@ export default function RightBar(props) {
                                             class="form-control"
                                             {...register('start_date')}
                                         />
+                                        {errors.start_date?.type === 'required' && (
+                                            <span className="text-danger"> This feild is required *</span>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -264,6 +276,9 @@ export default function RightBar(props) {
                                             class="form-control"
                                             {...register('last_date')}
                                         />
+                                        {errors.last_date?.type === 'required' && (
+                                            <span className="text-danger"> This feild is required *</span>
+                                        )}
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -282,6 +297,9 @@ export default function RightBar(props) {
                                             <option value="2">Medium</option>
                                             <option value="3">Low</option>
                                         </select>
+                                        {errors.priority?.type === 'required' && (
+                                            <span className="text-danger"> This feild is required *</span>
+                                        )}
                                     </div>
                                 </div>
                             </div>

@@ -31,6 +31,9 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             },
             projectType : {
                 type : String
+            },
+            days:{
+                type: Number
             }
         },
         {
