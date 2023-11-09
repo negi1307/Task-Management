@@ -133,6 +133,7 @@ const getUserTasks = async (req, res) => {
             milestoneId: new mongoose.Types.ObjectId(milestoneId),
             sprintId: new mongoose.Types.ObjectId(sprintId),
         };
+        
         const taskIds = await taskModel.distinct('_id', query);
         // Flag = 1 :- Tasks acc to Status, Flag = 2 :- List of tasks
         if (flag == 1) {
