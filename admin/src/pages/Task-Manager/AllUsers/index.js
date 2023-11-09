@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef  } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { ListGroup, Container, Row, Col, Table, Button, Card, CloseButton } from 'react-bootstrap';
@@ -9,10 +9,12 @@ import MainLoader from '../../../constants/Loader/loader';
 import ToastHandle from '../../../constants/toaster/toaster';
 import { deleteUser, getAllUsers, getCSVdata } from '../../../redux/user/action';
 import HeaderMain from '../header/HeaderMain';
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from 'react-csv'
 // import Update from './Sprint/update';
 const AllUsers = () => {
     const store = useSelector((state) => state);
+    const csvLink = useRef()
+    
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const [deleteId, setdeleteId] = useState();
@@ -20,9 +22,11 @@ const AllUsers = () => {
     const getUsers = store?.getAllUsers;
     const deletehandle = store?.deleteUser;
     const [deletemodal, setDeleteModal] = useState(false);
-    const [csvdownload,setcsvdownload] = useState();
+    const [csvdownload, setcsvdownload] = useState([]);
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
+    const csvdownloaddata = store?.getCsvDataReducer?.data?.loginRecords
+    console.log(csvdownloaddata,"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
     // const handelUpdate = (data) => {
     //     setEditData(data);
     //     setOpenEditModal(true);
@@ -62,10 +66,12 @@ const AllUsers = () => {
             ToastHandle('error', deletehandle?.data?.message);
         }
     }, [deletehandle]);
-const handelCsvDownload=(ele)=>{
-    dispatch(getCSVdata(ele?._id))
-    // setcsvdownload()
-}
+    const handelCsvDownload = (ele) => {
+        dispatch(getCSVdata(ele?._id));
+        // setcsvdownload(csvdownloaddata);
+        // csvLink.current.link.click()
+    };
+
     return (
         <div>
             <Card>
@@ -128,8 +134,14 @@ const handelCsvDownload=(ele)=>{
                                                     </Row>
                                                 </td>
                                                 <td>
-<button onClick={()=>handelCsvDownload(ele)}></button>
-
+                                                    <button onClick={() => handelCsvDownload(ele)}></button>
+                                                    <CSVLink
+                                                        data={csvdownload}
+                                                        filename="userdata.csv"
+                                                        className="hidden"
+                                                        ref={csvLink}
+                                                        target="_blank"
+                                                    />
                                                 </td>
                                             </tr>
                                         );

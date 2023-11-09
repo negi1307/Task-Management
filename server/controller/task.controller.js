@@ -75,7 +75,7 @@ const createtask = async (req, res) => {
 };
 
 
-const  task_list=async(query,totalCount,skip,arr)=>{
+const  task_list=async(query,totalCount,pageSize,skip,arr)=>{
    
     var tasks = await taskModel.aggregate([
         {
@@ -195,34 +195,34 @@ const getTasks = async (req, res) => {
     var totalPages = 0;
     var totalCount = 0;
      const query = {};
-    // if (req.query.sprintId && !req.query.taskStatus=="") {
-    //     let query={};
-
-    //   if(parseInt(req.query.skip)===0) {
-    //     const taskStatus = JSON.parse(req.query.taskStatus);
-
-    //     query.sprintId=new mongoose.Types.ObjectId(req.query.sprintId);
-    //     query.status=taskStatus;
-    //    query.activeStatus=JSON.parse(req.query.activeStatus);
-
-    //    totalCount = await taskModel.countDocuments(query);
-    //    var pageSize = totalCount === 0 ? 1 : totalCount;
-    //    var skip = 1;
-    //    let arr=[];
-    //    task_list(query,totalCount,pageSize,skip,arr).then((arr)=>{
-    //   console.log(arr)
-    //    })
-
-    // return res.status(200).json({response:tasks})     }
-    //  if(parseInt(req.query.skip)===1){
-    //   let arr=[];
-    //     //  task_list(query,tasks).then(tasks =>{
-    //     //   console.log(tasks);
-    //     // });    
+    if (!req.query.sprintId && !req.query.taskStatus=="" && parseInt(req.query.skip)===1 ) {
+        let query={};
+         const taskStatus = JSON.parse(req.query.taskStatus);
+         query.activeStatus=JSON.parse(req.query.activeStatus)
+        query.status=taskStatus;
  
+       totalCount = await taskModel.countDocuments(query);
+        var pageSize = 10;
+        var skip = 1;
+       let arr=[];
+       totalPages = Math.ceil(totalCount / pageSize);
+
+      const reponseCheck = await  task_list(query,totalCount,pageSize,skip,arr);
+       const [tasks]=reponseCheck;
+    return  reponseCheck?res
+       .status(200)
+       .json({
+         status: "200",
+         message: "All Tasks fetched successfully",
+         response: tasks,
+         totalCount,
+         totalPages,
+       }):null 
     //  }
+     
       
-    // }
+    }
+
     if (parseInt(req.query.skip) === 0) {
       if (req.query.sprintId) {
         totalCount = await taskModel.countDocuments(query);
@@ -236,10 +236,9 @@ const getTasks = async (req, res) => {
         totalCount = await taskModel.countDocuments(query);
         var pageSize = totalCount === 0 ? 1 : totalCount;
         var skip = 1;
-      }
+       }
     } else {
-      console.log("2");
-      query.activeStatus = JSON.parse(req.query.activeStatus);
+       query.activeStatus = JSON.parse(req.query.activeStatus);
       var pageSize = 10;
       var skip = parseInt(req.query.skip);
     }
