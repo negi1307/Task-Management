@@ -25,7 +25,6 @@ const AllMillStones = () => {
         setDeleteModal(true);
     };
     const handeldYes = () => {
-
         dispatch(deleteMileStone(deleteId));
         setDeleteModal(false);
     };
@@ -39,15 +38,16 @@ const AllMillStones = () => {
         }
         setOpenEditModal(false);
     };
-    const [statusMilstone, setStatusMilstone] = useState(1)
+    const [statusMilstone, setStatusMilstone] = useState(1);
     const milstonesPrnt = (id) => {
-        setStatusMilstone(id)
-
-    }
+        setStatusMilstone(id);
+    };
     useEffect(() => {
-        dispatch(getallMileStones({
-            status: statusMilstone
-        }));
+        dispatch(
+            getallMileStones({
+                status: statusMilstone,
+            })
+        );
     }, [render, statusMilstone]);
     useEffect(() => {
         if (deletemessagehandle?.data?.status == 200) {
@@ -95,12 +95,13 @@ const AllMillStones = () => {
                             </thead>
                             <tbody>
                                 {getallmilestones?.map((ele, ind) => {
-                                    console.log(ele?.status, 'apidata')
+                                    console.log(ele?.status, 'apidata');
                                     return (
                                         <tr className="align-middle">
                                             <th scope="row">{ind + 1}</th>
                                             <td>
-                                                <span className="namelink">{ele?.project_id?.projectName}</span></td>
+                                                <span className="namelink">{ele?.project_id?.projectName}</span>
+                                            </td>
                                             <td className="cp">
                                                 <span className="namelink">{ele?.title}</span>
                                             </td>
@@ -116,17 +117,43 @@ const AllMillStones = () => {
                                                 </span>
                                             </td>
                                             <td>
-                                                {ele?.status ?
-
+                                                {ele?.status ? (
                                                     <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" checked={ele?.status ? true : false} onClick={() => { handeldelete(ele) }} role="switch" id="flexSwitchCheckChecked" />
-                                                        <label class="form-check-label text-success" for="flexSwitchCheckChecked">Active</label>
-                                                    </div> :
-                                                    <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" checked={ele?.status ? true : false} onClick={() => { handeldelete(ele) }} role="switch" id="flexSwitchCheckChecked" />
-                                                        <label class="form-check-label text-danger" for="flexSwitchCheckChecked">Deactive</label>
+                                                        <input
+                                                            class="form-check-input"
+                                                            type="checkbox"
+                                                            checked={ele?.status ? true : false}
+                                                            onClick={() => {
+                                                                handeldelete(ele);
+                                                            }}
+                                                            role="switch"
+                                                            id="flexSwitchCheckChecked"
+                                                        />
+                                                        <label
+                                                            class="form-check-label text-success"
+                                                            for="flexSwitchCheckChecked">
+                                                            Active
+                                                        </label>
                                                     </div>
-                                                }
+                                                ) : (
+                                                    <div class="form-check form-switch">
+                                                        <input
+                                                            class="form-check-input"
+                                                            type="checkbox"
+                                                            checked={ele?.status ? true : false}
+                                                            onClick={() => {
+                                                                handeldelete(ele);
+                                                            }}
+                                                            role="switch"
+                                                            id="flexSwitchCheckChecked"
+                                                        />
+                                                        <label
+                                                            class="form-check-label text-danger"
+                                                            for="flexSwitchCheckChecked">
+                                                            Deactive
+                                                        </label>
+                                                    </div>
+                                                )}
                                             </td>
 
                                             <td>
@@ -142,8 +169,7 @@ const AllMillStones = () => {
                                                                 className="uil-edit-alt m-0 p-0"
                                                                 onClick={() => {
                                                                     handelUpdate(ele);
-                                                                }}
-                                                            ></i>
+                                                                }}></i>
                                                         </p>
                                                         {/* <p className="action-icon m-0 p-0  ">
                                                             <i
