@@ -11,8 +11,8 @@ import { getAllProjects } from '../../src/redux/projects/action';
 import { getallMileStones, getMileStoneById } from '../redux/actions';
 import { getAllSprint, getSingleSprint } from '../redux/actions';
 // components
-import LanguageDropdown from '../components/LanguageDropdown';
-import NotificationDropdown from '../components/NotificationDropdown';
+// import LanguageDropdown from '../components/LanguageDropdown';
+// import NotificationDropdown from '../components/NotificationDropdown';
 import ProfileDropdown from '../components/ProfileDropdown';
 import SearchDropdown from '../components/SearchDropdown';
 import TopbarSearch from '../components/TopbarSearch';
@@ -40,6 +40,8 @@ import { getProjectId } from '../../src/redux/projects/action';
 import { getMilestoneId } from '../../src/redux/milestone/action';
 import { getSprintId } from '../../src/redux/sprint/action';
 import { getTaskStatusCount } from '../../src/redux/Summary/action';
+import { addLoginTime } from '../../src/redux/user/action';
+import Filter from '../pages/Task-Manager/board/Modal/Filter';
 
 // get the notifications
 const Notifications = [
@@ -143,12 +145,14 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     console.log('storeeeeeee', store);
     const [isopen, setIsopen] = useState(false);
     const allProjects = store?.getProject?.data?.response;
-
+    const loginTimeMessage = store?.createUserTime?.message;
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
     const getAllSingleSprints = store?.getAllSingleSprints?.data?.Response;
-    //==============================================================================================
-
-    //========================================================================================================
+    //=====================================user login time=========================================================
+    useEffect(() => {
+        dispatch(addLoginTime());
+    }, []);
+    //=======================================user login time=================================================================
 
     const [projectNameHeading, setProjectName] = useState('Select Project Name');
 
@@ -162,9 +166,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
     useEffect(() => {
         let data = {
-        
             status: 1,
-            projectstatus:1            
+            projectstatus: 1,
         };
         dispatch(getAllProjects(data));
         //dispatch(getallMileStones({status:1}))
@@ -220,14 +223,19 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                 break;
         }
     };
-
+    const [modal, setModal] = useState(false);
+    const closemodal = () => {
+        setModal(false);
+    };
     /**
      * Toggles the right sidebar
      */
     const handleRightSideBar = () => {
         dispatch(showRightSidebar());
     };
-
+    const loginTime = () => {
+        alert(loginTimeMessage.message);
+    };
     return (
         <>
             <div className={classNames('navbar-custom', navbarCssClasses)}>
@@ -258,7 +266,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="" className="list_padding">
+                                        <Link onClick={() => setModal(true)} className="list_padding">
                                             Filters
                                         </Link>
                                     </li>
@@ -304,6 +312,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                             </select>
                                         </div>
                                     </li>
+
                                     <li>
                                         <div class="project_names">
                                             <select
@@ -342,6 +351,11 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </select>
                             </div>
                             </li> */}
+                                    <li>
+                                        <button type="submit" onClick={loginTime}>
+                                            Start
+                                        </button>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -420,12 +434,14 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             <Link to="summary">Summary</Link>{' '}
                         </li>
                         {/* <li> <Link to="/tasklist">List</Link> </li> */}
-                        <li> <Link to="/boards">Board</Link>  </li>
-                    
-
+                        <li>
+                            {' '}
+                            <Link to="/boards">Board</Link>{' '}
+                        </li>
                     </ul>
                 </div>
             </div>
+            <Filter modal={modal} closeModal={closemodal} />
         </>
     );
 };
