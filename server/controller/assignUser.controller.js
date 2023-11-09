@@ -65,55 +65,57 @@ const addUserAssignments = async (req, res) => {
 // Get Project , milestones, and sprints of users
 const getUserAssignments = async (req, res) => {
     try {
+        let pageSize = 10;
+        const { flag, skip } = req.query;
         const taskIds = await assignUserModel.distinct('taskId', { assigneeId: req.user._id });
-
-        const project = await taskModel.aggregate([
-            {
-                $match: {
-                    _id: { $in: taskIds }
+        if (flag == 1) {
+            const projectDetails = await taskModel.find({ _id: taskIds, projectId: { $exists: true } }).populate('projectId')
+                .sort({ createdAt: -1 })
+                .limit(pageSize)
+                .skip((parseInt(skip) - 1) * pageSize);
+            const uniqueProjectDetails = projectDetails.reduce((acc, project) => {
+                const existingProject = acc.find(item => item.projectId && item.projectId.equals(project.projectId._id));
+                if (!existingProject) {
+                    acc.push(project);
                 }
-            },
-            {
-                $lookup: {
-                    from: 'projects', 
-                    localField: 'projectId',
-                    foreignField: '_id',
-                    as: 'ProjectInfo'
+                return acc;
+            }, []);
+            const totalCount = uniqueProjectDetails.length;
+            const totalPages = Math.ceil(totalCount / pageSize);
+            return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: uniqueProjectDetails, totalCount, totalPages });
+        }
+        if (flag == 2) {
+            const milestoneDetails = await taskModel.find({ _id: taskIds, projectId: req.query.projectId, milestoneId: { $exists: true } }).populate('milestoneId')
+                .sort({ createdAt: -1 })
+                .limit(pageSize)
+                .skip((parseInt(skip) - 1) * pageSize);
+            const uniqueMilestoneDetails = milestoneDetails.reduce((acc, milestone) => {
+                const existingMilestone = acc.find(item => item.milestoneId && item.milestoneId.equals(milestone.milestoneId._id));
+                if (!existingMilestone) {
+                    acc.push(milestone);
                 }
-            },
-            {
-                $unwind: '$ProjectInfo' 
-            },
-            {
-                $lookup: {
-                    from: 'milestones', 
-                    localField: 'milestoneId', 
-                    foreignField: '_id', 
-                    as: 'MilestoneInfo'
+                return acc;
+            }, []);
+            const totalCount = uniqueMilestoneDetails.length;
+            const totalPages = Math.ceil(totalCount / pageSize);
+            return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: uniqueMilestoneDetails, totalCount, totalPages });
+        }
+        if (flag == 3) {
+            const sprintDetails = await taskModel.find({ _id: taskIds, milestoneId: req.query.milestoneId, sprintId: { $exists: true } }).populate('sprintId')
+                .sort({ createdAt: -1 })
+                .limit(pageSize)
+                .skip((parseInt(skip) - 1) * pageSize);
+            const uniqueSprintDetails = sprintDetails.reduce((acc, sprint) => {
+                const existingSprint = acc.find(item => item.sprintId && item.sprintId.equals(sprint.sprintId._id));
+                if (!existingSprint) {
+                    acc.push(sprint);
                 }
-            },
-            {
-                $unwind: '$MilestoneInfo'
-            },
-            {
-                $lookup: {
-                    from: 'sprints', 
-                    localField: 'sprintId', 
-                    foreignField: '_id', 
-                    as: 'SprintInfo'
-                }
-            },
-            {
-                $group: {
-                    _id: '$_id',
-                    ProjectInfo: { $first: '$ProjectInfo' },
-                    MilestoneInfo: { $push: '$MilestoneInfo' },
-                    sprintInfo: { $push: '$SprintInfo' }
-                }
-            }
-        ]);
-
-        return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: project });
+                return acc;
+            }, []);
+            const totalCount = uniqueSprintDetails.length;
+            const totalPages = Math.ceil(totalCount / pageSize);
+            return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: uniqueSprintDetails, totalCount, totalPages });
+        }
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
@@ -131,6 +133,7 @@ const getUserTasks = async (req, res) => {
             milestoneId: new mongoose.Types.ObjectId(milestoneId),
             sprintId: new mongoose.Types.ObjectId(sprintId),
         };
+        
         const taskIds = await taskModel.distinct('_id', query);
         // Flag = 1 :- Tasks acc to Status, Flag = 2 :- List of tasks
         if (flag == 1) {
