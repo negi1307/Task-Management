@@ -243,33 +243,36 @@ const closeTaskDetailMOdel = () => {
     }
   }
   return (
-
-    <>
-    <div class="status">
-    <h4>Task Status Count</h4>
-    <ul>
-      <li>TO-DO:
-        {taskStatusCountdata?.todo?.taskCount}
-      </li>
-      <li>In-Progress:
-        {taskStatusCountdata?.inProgress?.taskCount}
-      </li>
-      <li>Hold:
-        {taskStatusCountdata?.hold?.taskCount}
-      </li>
-      <li>Done:
-        {taskStatusCountdata?.done?.taskCount}
-      </li>
-      <li>
-        <input type="search"
-         placeholder='Search here...'
-         onKeyUp={selectTask}
-          {...register("textSearch")}
-         />
-
-      </li>
-    </ul>
-      {/* <ul>
+      <>
+          <div class="status">
+              <h4>Task Status Count</h4>
+              <ul>
+                  <li>
+                      TO-DO:
+                      {taskStatusCountdata?.todo?.taskCount}
+                  </li>
+                  <li>
+                      In-Progress:
+                      {taskStatusCountdata?.inProgress?.taskCount}
+                  </li>
+                  <li>
+                      Hold:
+                      {taskStatusCountdata?.hold?.taskCount}
+                  </li>
+                  <li>
+                      Done:
+                      {taskStatusCountdata?.done?.taskCount}
+                  </li>
+                  <li>
+                      <input
+                          type="search"
+                          placeholder="Search here..."
+                          onKeyUp={selectTask}
+                          {...register('textSearch')}
+                      />
+                  </li>
+              </ul>
+              {/* <ul>
         
         {taskStatusCount?.map((item,index)=>
         
@@ -277,56 +280,66 @@ const closeTaskDetailMOdel = () => {
         )}
         
       </ul> */}
-    </div>
-     <div className='add_task'>
-     <button
-          type="button"
-          className="mybutton btn btn-info"
-          onClick={() => {
-            console.log("button click");
-            setShowModal(!showModal);
-            
-          }}
-        >
-          Add Task
-        </button>
-        <RightBar  callAlltaskData={callAlltaskData} className="d-none" projectId={props.projectId} mileStoneId={props.mileStoneId} sprintId={props.sprintId} showModal={showModal} setShowModal={setShowModal}/>
-     </div>
+          </div>
+          <div className="add_task">
+              <button
+                  type="button"
+                  className="mybutton btn btn-info web_button"
+                  onClick={() => {
+                      console.log('button click');
+                      setShowModal(!showModal);
+                  }}>
+                  Add Task
+              </button>
+              <RightBar
+                  callAlltaskData={callAlltaskData}
+                  className="d-none"
+                  projectId={props.projectId}
+                  mileStoneId={props.mileStoneId}
+                  sprintId={props.sprintId}
+                  showModal={showModal}
+                  setShowModal={setShowModal}
+              />
+          </div>
 
-      <DragDropContext  onDragEnd={(result) => onDragEnd(result, columns, setColumns)} 
-
-      >
-        {successHandle.loading ? (<MainLoader />) : <Container>
-          <TaskColumnStyles >
-            {Object.entries(columns).map(([columnId, column], index) => {
-             
-              return (
-                <Droppable key={columnId} droppableId={columnId}>
-                
-                  {(provided, snapshot) => (
-                    <TaskList class="three" 
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      
-                    > 
-                      <Title class="">{column.title}</Title>
-                      {column.items.map((item, index) => (
-                        <TaskCard showTaskDetailMOdel={showTaskDetailMOdel}  key={item.id} item={item} index={index}  />
-                      ))}
-                      {provided.placeholder}
-                    </TaskList>
-                  )}
-                </Droppable>
-              );
-            })}
-          </TaskColumnStyles>
-        </Container>}
-
-      </DragDropContext>
-      <Taskdetail closeTaskDetailMOdel={closeTaskDetailMOdel} show={showTaskModel} item={commentdata} historyData={historyData} userId={userId}  />
-    
-    </>
-
+          <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
+              {successHandle.loading ? (
+                  <MainLoader />
+              ) : (
+                  <Container>
+                      <TaskColumnStyles>
+                          {Object.entries(columns).map(([columnId, column], index) => {
+                              return (
+                                  <Droppable key={columnId} droppableId={columnId}>
+                                      {(provided, snapshot) => (
+                                          <TaskList class="three" ref={provided.innerRef} {...provided.droppableProps}>
+                                              <Title class="">{column.title}</Title>
+                                              {column.items.map((item, index) => (
+                                                  <TaskCard
+                                                      showTaskDetailMOdel={showTaskDetailMOdel}
+                                                      key={item.id}
+                                                      item={item}
+                                                      index={index}
+                                                  />
+                                              ))}
+                                              {provided.placeholder}
+                                          </TaskList>
+                                      )}
+                                  </Droppable>
+                              );
+                          })}
+                      </TaskColumnStyles>
+                  </Container>
+              )}
+          </DragDropContext>
+          <Taskdetail
+              closeTaskDetailMOdel={closeTaskDetailMOdel}
+              show={showTaskModel}
+              item={commentdata}
+              historyData={historyData}
+              userId={userId}
+          />
+      </>
   );
 };
 

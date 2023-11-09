@@ -463,3 +463,10 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     color: #37216c;
     border-radius: 10px;
 }
+.add_round {
+    border-radius: 20px;
+}
+.css-1com30x {
+    height: 41.3rem !important;
+    overflow-y: scroll !important;
+}

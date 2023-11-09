@@ -15,18 +15,15 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 const Update = ({ modal, closeModal, editData }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    const sucesshandel = store?.updateMilestone
-    const [editorState, setEditorState] = useState(
-        () => EditorState.createEmpty(),
-    );
-    console.log(editorState, 'stttttt')
+    const sucesshandel = store?.updateMilestone;
+    const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+    console.log(editorState, 'stttttt');
     useEffect(() => {
         reset({
             title: editData?.title,
             Description: editData?.description,
             startDate: handleDate(editData?.start_date),
             endDate: handleDate(editData?.completion_date),
-
         });
     }, [modal]);
     const handleDate = (data) => {
@@ -46,8 +43,8 @@ const Update = ({ modal, closeModal, editData }) => {
             start_date: data?.startDate,
             completion_date: data?.endDate,
         };
-        dispatch(updateMileStone(body)); closeModal('render');
-
+        dispatch(updateMileStone(body));
+        closeModal('render');
     };
 
     const {
@@ -59,12 +56,12 @@ const Update = ({ modal, closeModal, editData }) => {
         formState: { errors },
     } = useForm();
     const CloseModal = () => {
-        closeModal()
-    }
+        closeModal();
+    };
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
             // console.log(sucesshandel, sucesshandel?.message);
-            ToastHandle('success', "Updated Successfully");
+            ToastHandle('success', 'Updated Successfully');
             closeModal('render');
         } else if (sucesshandel?.data?.status == 400) {
             ToastHandle('error', sucesshandel?.data?.message);
@@ -74,7 +71,7 @@ const Update = ({ modal, closeModal, editData }) => {
     }, [sucesshandel]);
     return (
         <>
-            <Modal show={modal} onHide={CloseModal} >
+            <Modal show={modal} className="add_round" onHide={CloseModal}>
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
@@ -91,7 +88,7 @@ const Update = ({ modal, closeModal, editData }) => {
                 </Row>
 
                 <Modal.Body className="py-0">
-                    <Card className="p-3">
+                    <div className="p-3">
                         <Form onSubmit={handleSubmit(onSubmit)}>
                             <Row>
                                 <Col lg={12}>
@@ -110,16 +107,13 @@ const Update = ({ modal, closeModal, editData }) => {
                                     </Form.Group>
                                 </Col>
                                 <Col lg={12}>
-                                    <Form.Group className="mb-2 border d-flex align-content-center flex-column" controlId="exampleForm.ControlTextarea1">
-                                        <Form.Label className='mb-0'>
+                                    <Form.Group
+                                        className="mb-2 border d-flex align-content-center flex-column"
+                                        controlId="exampleForm.ControlTextarea1">
+                                        <Form.Label className="mb-0">
                                             Description <span className="text-danger">*</span>:
                                         </Form.Label>
-                                        <Editor
-
-                                            editorState={editorState}
-                                            onEditorStateChange={setEditorState}
-
-                                        />
+                                        <Editor editorState={editorState} onEditorStateChange={setEditorState} />
                                         {/* <Form.Control
                                                 type="text"
                                                 placeholder="Please Enter Client Name"
@@ -173,12 +167,11 @@ const Update = ({ modal, closeModal, editData }) => {
                                 </Col>
                             </Row>
                         </Form>
-                    </Card>
+                    </div>
                 </Modal.Body>
-
             </Modal>
         </>
-    )
-}
+    );
+};
 
-export default Update
+export default Update;
