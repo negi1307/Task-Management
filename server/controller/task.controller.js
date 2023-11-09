@@ -7,7 +7,7 @@ const userModel = require("../models/users.model");
 // Create or add tasks
 const createtask = async (req, res) => {
     try {
-        const { projectId, milestoneId, sprintId, summary, description, priority, assigneeId, reporterId, startDate, dueDate } = req.body;
+        const { projectId, milestoneId, sprintId, summary, description, priority, assigneeId, reporterId, startDate, dueDate, taskId } = req.body;
 
         const existingTask = await taskModel.findOne({ summary: new RegExp(`^${summary}$`, 'i'), sprintId: sprintId });
         if (existingTask) {
@@ -25,7 +25,8 @@ const createtask = async (req, res) => {
                 startDate,
                 dueDate,
                 attachment: `http://localhost:8000/upload/${req.file.originalname}`,
-                attachmentType: req.file.mimetype
+                attachmentType: req.file.mimetype,
+                taskId
             });
             if (task) {
                 const admin = await userModel.findOne({role:1}).select("_id roleId");
