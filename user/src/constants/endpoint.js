@@ -60,4 +60,6 @@ export const getWeekTaskCount="/task/getTasksWeekCount";
 export const getTaskStatusCount="/task/getTasksStatusCount";
 export const getTaskCount="/task/getTasksCount";
 
+// user login time api-----------------------------
 
+export const userLoginTime="/userLogin/loginTime"
