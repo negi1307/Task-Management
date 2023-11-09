@@ -27,7 +27,7 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             },
             projectStatus: {
                 type: Number,
-                // default: 1 // status : 1- live, 2 : hold, 3 : completed 
+                // default: 1 // status :1-todo, 2- live, 3 : hold, 4 : completed 
             },
             projectType : {
                 type : String

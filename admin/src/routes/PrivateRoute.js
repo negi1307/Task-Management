@@ -1,5 +1,7 @@
+import React, { Suspense } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { APICore } from '../helpers/api/apiCore';
+const Topbar = React.lazy(() => import('../layouts/Topbar'));
 
 type PrivateRouteProps = {
     component: React.ComponentType,
@@ -11,6 +13,8 @@ type PrivateRouteProps = {
  * @param {*} param0
  * @returns
  */
+const loading = () => <div className=""></div>;
+
 const PrivateRoute = ({ component: RouteComponent, roles, ...rest }: PrivateRouteProps) => {
     let location = useLocation();
     const api = new APICore();
@@ -29,7 +33,14 @@ const PrivateRoute = ({ component: RouteComponent, roles, ...rest }: PrivateRout
         return <Navigate to={{ pathname: '/' }} />;
     }
 
-    return <RouteComponent />;
+    return (
+        <>
+            {/* <Suspense fallback={loading()}>
+                <Topbar />
+            </Suspense> */}
+            <RouteComponent />;
+        </>
+    );
 };
 
 export default PrivateRoute;

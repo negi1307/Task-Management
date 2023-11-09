@@ -51,6 +51,7 @@ const getTasks = async (req, res) => {
         const query = {};
         if (parseInt(req.query.skip) === 0) {
             if (req.query.sprintId) {
+                console.log("1")
                 totalCount = await taskModel.countDocuments(query);
                 query.sprintId = new mongoose.Types.ObjectId(req.query.sprintId);
                 query.activeStatus = JSON.parse(req.query.activeStatus);
@@ -66,6 +67,7 @@ const getTasks = async (req, res) => {
             }
         }
         else {
+            console.log("2")
             query.activeStatus = JSON.parse(req.query.activeStatus);
             var pageSize = 10;
             var skip = parseInt(req.query.skip);
@@ -228,7 +230,8 @@ const deleteTask = async (req, res) => {
     } catch (err) {
         return res.status(200).json({ status: '500', message: 'Something went wrong', error: err.message })
     }
-}
+};
+
 
 // update Status of a task
 const updateTaskStatus = async (req, res,) => {
@@ -253,14 +256,19 @@ const updateTaskStatus = async (req, res,) => {
 }
 
 // update Active inactive Status of a task
-const updateTaskActiveStatus = async (req, res,) => {
+const updateTaskActiveStatus = async (req, res) => {
     try {
-        await taskModel.findByIdAndUpdate({ _id: req.body.taskId }, { activeStatus: req.body.activeStatus }, { new: true });
-        return res.status(200).json({ status: "200", message: "Task Active Inactive Status updated successfully" });
+        let status;
+       const data= await taskModel.findByIdAndUpdate({ _id: req.body.taskId }, { activeStatus: req.body.activeStatus }, { new: true });
+       if(data){
+        req.body.activeStatus==false?status="Deactivated": status="Activated";
+       }
+        return res.status(200).json({ status: "200", message: `Task has been ${status} successfully` });
     } catch (error) {
-        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.stack });
     }
 }
+    
 
 // Get tasks according to status
 const getTasksAccToStatus = async (req, res) => {
