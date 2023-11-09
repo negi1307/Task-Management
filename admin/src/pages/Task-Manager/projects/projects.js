@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Row, Button, Col, Form, Card, Table, CloseButton, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
@@ -11,6 +11,8 @@ import ToastHandle from '../../../constants/toaster/toaster';
 import moment from 'moment';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import HeaderMain from '../header/HeaderMain';
+const loading = () => <div className=""></div>;
 
 const Projects = () => {
     const dispatch = useDispatch();
@@ -134,16 +136,17 @@ const Projects = () => {
             <div>
                 <Card>
                     <Card.Body>
+                        <HeaderMain />
                         <div className="row mx-auto">
                             <div className="row d-flex align-items-center">
                                 <div className={`col-auto  cp ${projectStatus == 1 ? 'Active_data' : 'InActive_data'}`}>
                                     <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('1')}>
-                                    Todo
+                                        Todo
                                     </p>
                                 </div>
                                 <div className={`col-auto  cp ${projectStatus == 2 ? 'Active_data' : 'InActive_data'}`}>
                                     <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('2')}>
-                                       Live
+                                        Live
                                     </p>
                                 </div>
 
@@ -268,7 +271,7 @@ const Projects = () => {
                             </Table>
                         )}
                         <Row>
-                            <Col lg={12} className="d-flex justify-content-end my-3">
+                            <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
                                 {store?.getProject?.data?.totalPages > 0 && (
                                     <Stack spacing={2}>
                                         <Pagination
