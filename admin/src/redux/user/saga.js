@@ -148,11 +148,12 @@ function* getCsvFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getCsvDataApi, { payload });
-        console.log(response , "dddddddd")
+        console.log(response?.data?.loginRecords , "dddddddd")
         if (response.data.status) {
             yield put({
                 type: USERS_TYPES.GET_CSV_DATA_SUCCESS,
                 payload: { ...response.data },
+                
             });
             // yield put({
             //     type: USERS_TYPES.GET_CSV_DATA_RESET,
