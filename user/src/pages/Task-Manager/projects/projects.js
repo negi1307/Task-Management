@@ -13,6 +13,7 @@ import moment from 'moment';
 const Projects = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    const projectDataInfo=store?.getProject?.data?.response
     const [openModal, setOpenModal] = useState(false);
     const [render, setRender] = useState(false);
     const [deleteId, setdeleteId] = useState();
@@ -78,7 +79,6 @@ const Projects = () => {
         if (val) {
             setStatus(1);
             let data = {
-            
             status: 1,     
             projectstatus:1
             };
@@ -96,10 +96,10 @@ const Projects = () => {
     };
     useEffect(() => {
         let body = {
-        
-            status: 1,
-            
-            projectstatus:1
+            flag:1,
+            projectId:'',
+            milestoneId:'',
+            skip:1
 
         };
         dispatch(getAllProjects(body));
@@ -173,28 +173,28 @@ const Projects = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {store?.getProject?.data?.response?.map((ele, ind) => {
+                                    {projectDataInfo?.map((ele, ind) => {
                                         return (
                                             <tr className="align-middle">
                                                 <th scope="row">{ind + 1}</th>
                                                 <td className="cp">
-                                                    <span className="namelink"> {ele?.projectName} </span>
+                                                    <span className="namelink"> {ele?.projectId?.projectName} </span>
                                                 </td>
                                                 <td className="w-20">
-                                                    <span className="namelink"> {ele?.clientName}</span>
+                                                    <span className="namelink"> {ele?.projectId?.clientName}</span>
                                                 </td>
                                                 <td>
-                                                    <span className="namelink"> {ele?.project_type}</span>
+                                                    <span className="namelink"> {ele?.projectId?.projectType}</span>
                                                 </td>
                                                 <td>
                                                     <span className="namelink">
-                                                        {moment(ele?.startDate).format('L')}
+                                                        {moment(ele?.projectId?.startDate).format('L')}
                                                     </span>
                                                 </td>
                                                 <td>
                                                     <span className="namelink">
                                                         {' '}
-                                                        {moment(ele?.endDate).format('L')}
+                                                        {moment(ele?.projectId?.endDate).format('L')}
                                                     </span>
                                                 </td>
                                                 <td>
@@ -209,7 +209,7 @@ const Projects = () => {
                                                     <Row>
                                                         <Col>
                                                             <p className="action-icon m-0 p-0 ">
-                                                                <Link to={`/dashboard/projects/${ele?._id}`}>
+                                                                <Link to={`/dashboard/projects/${ele?.projectId?._id}`}>
                                                                     <i className="mdi mdi-eye m-0 p-0"></i>
                                                                 </Link>
                                                             </p>

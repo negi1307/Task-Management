@@ -331,7 +331,7 @@ const AllRoutes = () => {
                             element: <LoadComponent component={Technology} />,
                         },
                         {
-                            path: 'boards',
+                            path: 'boards/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId',
                             element: <LoadComponent component={Boards} />,
                         },
                         {

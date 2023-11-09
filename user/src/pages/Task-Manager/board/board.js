@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { columnsFromBackend } from './data';
 import { DragDropContext, Droppable,Draggable } from 'react-beautiful-dnd';
@@ -54,7 +55,7 @@ const Title = styled.span`
 
 
 const Boards = (props) => { 
- 
+  const { projectId, milestoneId ,spriteId } = useParams()
   const dispatch = useDispatch();
   const store = useSelector(state => state)
   const { register,setValue} = useForm();
@@ -69,15 +70,25 @@ const Boards = (props) => {
 const successHandle = store?.getAllTaskReducer;
 const statushandle = store?.updateTaskStatus;
  
-const projectId=store?.getProjectId?.data;
+// const projectId=store?.getProjectId?.data;
+console.log("projectId",projectId)
 const milstoneId=store?.getMilestoneId?.data;
 const SprintId=store?.getSprintId?.data;
 
   useEffect(() => {
-    dispatch(getAllTask({id:projectId , milestoneId:milstoneId,sprintId:SprintId,searchString:"" }))    
+    let body={
+      flag:1,
+      activeStatus:true,
+      searchString:"",
+      projectId:projectId,
+      milestoneId:milestoneId,
+      sprintId:spriteId,
+      skip:1
+    }
+    dispatch(getAllTask(body))    
     
    
-  }, [SprintId])
+  }, [])
 
   useEffect(()=>{
     let body = {
@@ -181,20 +192,20 @@ const SprintId=store?.getSprintId?.data;
       setColumns({
         [uuidv4()]: {
           title: 'To-do',
-          items: successHandle?.data?.todo?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.response?.Todo?.map((ele) => { return { ...ele, id: ele._id } }),
         },
         [uuidv4()]: {
           title: 'In Progress',
-          items: successHandle?.data?.inProgress?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.response?.Inprogress?.map((ele) => { return { ...ele, id: ele._id } }),
         },
         
         [uuidv4()]: {
           title: 'Hold',
-          items: successHandle?.data?.hold?.tasks?.map((ele) => { return { ...ele, id: ele._id }}),
+          items: successHandle?.data?.response?.Hold?.map((ele) => { return { ...ele, id: ele._id }}),
       },
         [uuidv4()]: {
           title: 'Done',
-          items: successHandle?.data?.done?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.response?.Done?.map((ele) => { return { ...ele, id: ele._id } }),
         },
       })
     }
