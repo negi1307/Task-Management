@@ -208,7 +208,7 @@ const Projects = () => {
                                         <th>Project Type</th>
                                         <th>Project Start Date</th>
                                         <th>Days Left</th>
-                                        <th>Project End Date</th>
+                                        {/* <th>Project End Date</th> */}
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -233,12 +233,12 @@ const Projects = () => {
                                                     </span>
                                                 </td>
                                                 <td>{ele?.daysLeft}</td>
-                                                <td>
+                                                {/* <td>
                                                     <span className="namelink">
                                                         {' '}
                                                         {moment(ele?.endDate).format('L')}
                                                     </span>
-                                                </td>
+                                                </td> */}
                                                 <td>
                                                     <Form.Check
                                                         type="switch"
