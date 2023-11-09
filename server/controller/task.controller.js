@@ -73,126 +73,126 @@ const createtask = async (req, res) => {
 };
 
 
-// const  task_list=async(query,arr)=>{
+const  task_list=async(query,totalCount,skip,arr)=>{
    
-    // var tasks = await taskModel.aggregate([
-    //     {
-    //       $match: query,
-    //     },
-    //     {
-    //       $lookup: {
-    //         from: "projects",
-    //         localField: "projectId",
-    //         foreignField: "_id",
-    //         as: "projects",
-    //       },
-    //     },
-    //     {
-    //       $lookup: {
-    //         from: "milestones",
-    //         localField: "milestoneId",
-    //         foreignField: "_id",
-    //         as: "milestones",
-    //       },
-    //     },
-    //     {
-    //       $lookup: {
-    //         from: "sprints",
-    //         localField: "sprintId",
-    //         foreignField: "_id",
-    //         as: "sprints",
-    //       },
-    //     },
-    //     {
-    //       $lookup: {
-    //         from: "assignusers",
-    //         localField: "_id",
-    //         foreignField: "taskId",
-    //         as: "assignees",
-    //       },
-    //     },
-    //     {
-    //       $lookup: {
-    //         from: "users",
-    //         localField: "assignees.assigneeId",
-    //         foreignField: "_id",
-    //         as: "assigneeInfo",
-    //       },
-    //     },
-    //     {
-    //       $lookup: {
-    //         from: "roles",
-    //         localField: "assignees.reporterId",
-    //         foreignField: "_id",
-    //         as: "reporterInfo",
-    //       },
-    //     },
-    //     {
-    //       $unwind: "$assignees", // Unwind the assignees array
-    //     },
-    //     {
-    //       $addFields: {
-    //         "assignees.assigneeInfo": {
-    //           $arrayElemAt: [
-    //             {
-    //               $filter: {
-    //                 input: "$assigneeInfo",
-    //                 as: "info",
-    //                 cond: { $eq: ["$$info._id", "$assignees.assigneeId"] },
-    //               },
-    //             },
-    //             0,
-    //           ],
-    //         },
-    //         "assignees.reporterId": "$assignees.reporterId",
-    //         "assignees.reporterInfo": {
-    //           $arrayElemAt: [
-    //             {
-    //               $filter: {
-    //                 input: "$reporterInfo",
-    //                 as: "reporter",
-    //                 cond: { $eq: ["$$reporter._id", "$assignees.reporterId"] },
-    //               },
-    //             },
-    //             0,
-    //           ],
-    //         },
-    //       },
-    //     },
-    //     {
-    //       $group: {
-    //         _id: "$_id",
-    //         taskMannualId: { $first: "$taskMannualId" },
-    //         summary: { $first: "$summary" },
-    //         description: { $first: "$description" },
-    //         priority: { $first: "$priority" },
-    //         startDate: { $first: "$startDate" },
-    //         dueDate: { $first: "$dueDate" },
-    //         status: { $first: "$status" },
-    //         activeStatus: { $first: "$activeStatus" },
-    //         attachment: { $first: "$attachment" },
-    //         createdAt: { $first: "$createdAt" },
-    //         updatedAt: { $first: "$updatedAt" },
-    //         attachmentType: { $first: "$attachmentType" },
-    //         projectInfo: { $first: { $arrayElemAt: ["$projects", 0] } },
-    //         milestoneInfo: { $first: { $arrayElemAt: ["$milestones", 0] } },
-    //         sprintInfo: { $first: { $arrayElemAt: ["$sprints", 0] } },
-    //         assignees: { $first: { $arrayElemAt: [["$assignees"], 0] } },
-    //       },
-    //     },
-    //     // { $skip: (parseInt(1) - 1) * pageSize }, // Skip the specified number of documents
-    //     // { $limit: pageSize },
-    //     // { $sort: { createdAt: -1 } },
-    //   ]);
-//       arr.push(tasks)
-//         return arr;
-// }
+    var tasks = await taskModel.aggregate([
+        {
+          $match: query,
+        },
+        {
+          $lookup: {
+            from: "projects",
+            localField: "projectId",
+            foreignField: "_id",
+            as: "projects",
+          },
+        },
+        {
+          $lookup: {
+            from: "milestones",
+            localField: "milestoneId",
+            foreignField: "_id",
+            as: "milestones",
+          },
+        },
+        {
+          $lookup: {
+            from: "sprints",
+            localField: "sprintId",
+            foreignField: "_id",
+            as: "sprints",
+          },
+        },
+        {
+          $lookup: {
+            from: "assignusers",
+            localField: "_id",
+            foreignField: "taskId",
+            as: "assignees",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "assignees.assigneeId",
+            foreignField: "_id",
+            as: "assigneeInfo",
+          },
+        },
+        {
+          $lookup: {
+            from: "roles",
+            localField: "assignees.reporterId",
+            foreignField: "_id",
+            as: "reporterInfo",
+          },
+        },
+        {
+          $unwind: "$assignees", // Unwind the assignees array
+        },
+        {
+          $addFields: {
+            "assignees.assigneeInfo": {
+              $arrayElemAt: [
+                {
+                  $filter: {
+                    input: "$assigneeInfo",
+                    as: "info",
+                    cond: { $eq: ["$$info._id", "$assignees.assigneeId"] },
+                  },
+                },
+                0,
+              ],
+            },
+            "assignees.reporterId": "$assignees.reporterId",
+            "assignees.reporterInfo": {
+              $arrayElemAt: [
+                {
+                  $filter: {
+                    input: "$reporterInfo",
+                    as: "reporter",
+                    cond: { $eq: ["$$reporter._id", "$assignees.reporterId"] },
+                  },
+                },
+                0,
+              ],
+            },
+          },
+        },
+        {
+          $group: {
+            _id: "$_id",
+            taskMannualId: { $first: "$taskMannualId" },
+            summary: { $first: "$summary" },
+            description: { $first: "$description" },
+            priority: { $first: "$priority" },
+            startDate: { $first: "$startDate" },
+            dueDate: { $first: "$dueDate" },
+            status: { $first: "$status" },
+            activeStatus: { $first: "$activeStatus" },
+            attachment: { $first: "$attachment" },
+            createdAt: { $first: "$createdAt" },
+            updatedAt: { $first: "$updatedAt" },
+            attachmentType: { $first: "$attachmentType" },
+            projectInfo: { $first: { $arrayElemAt: ["$projects", 0] } },
+            milestoneInfo: { $first: { $arrayElemAt: ["$milestones", 0] } },
+            sprintInfo: { $first: { $arrayElemAt: ["$sprints", 0] } },
+            assignees: { $first: { $arrayElemAt: [["$assignees"], 0] } },
+          },
+        },
+        { $skip: (parseInt(skip) - 1) * pageSize }, // Skip the specified number of documents
+        { $limit: pageSize },
+        { $sort: { createdAt: -1 } },
+      ]);
+      arr.push(tasks)
+        return arr;
+}
 // Get All tasks And Sprint id,s all tasks
 const getTasks = async (req, res) => {
   try {
     var totalPages = 0;
     var totalCount = 0;
-    const query = {};
+     const query = {};
     // if (req.query.sprintId && !req.query.taskStatus=="") {
     //     let query={};
 
@@ -207,7 +207,7 @@ const getTasks = async (req, res) => {
     //    var pageSize = totalCount === 0 ? 1 : totalCount;
     //    var skip = 1;
     //    let arr=[];
-    //    task_list(query,arr).then((arr)=>{
+    //    task_list(query,totalCount,pageSize,skip,arr).then((arr)=>{
     //   console.log(arr)
     //    })
 
@@ -347,9 +347,9 @@ const getTasks = async (req, res) => {
           assignees: { $first: { $arrayElemAt: [["$assignees"], 0] } },
         },
       },
-      // { $skip: (parseInt(1) - 1) * pageSize }, // Skip the specified number of documents
-      // { $limit: pageSize },
-      // { $sort: { createdAt: -1 } },
+      { $skip: (parseInt(skip) - 1) * pageSize }, // Skip the specified number of documents
+      { $limit: pageSize },
+      { $sort: { createdAt: -1 } },
     ]);
 
     totalPages = Math.ceil(totalCount / pageSize);

@@ -65,7 +65,7 @@ const getAMilestoneAllSprints = async (req, res) => {
                       foreignField: "_id",
                       as: "projectId"
                     }
-                },{
+                },{$unwind:"$projectId"},{
                     $project:{
                          "projectId._id":1,
                             "projectId.projectName":1,
@@ -98,13 +98,15 @@ const getAMilestoneAllSprints = async (req, res) => {
                       foreignField: "_id",
                       as: "projectId"
                     }
-                },{ $lookup:
+                },{$unwind:"$projectId"},{ $lookup:
                     {
                       from: "milestones",
                       localField:"milestoneId",
                       foreignField: "_id",
                       as: "milestoneId"
-                    }},{
+                    }
+                },
+                {$unwind:"$milestoneId"},{
                     $project:{
                          "projectId._id":1,
                         "projectId.projectName":1,
@@ -145,13 +147,13 @@ const getAMilestoneAllSprints = async (req, res) => {
                   foreignField: "_id",
                   as: "projectId"
                 }
-            },{ $lookup:
+            },{$unwind:"$projectId"},{ $lookup:
                 {
                   from: "milestones",
                   localField:"milestoneId",
                   foreignField: "_id",
                   as: "milestoneId"
-                }},{
+                }},{$unwind:"$milestoneId"},{
                 $project:{
                      "projectId._id":1,
                     "projectId.projectName":1,
