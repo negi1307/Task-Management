@@ -26,6 +26,7 @@ import AppsDropdown from '../components/AppsDropdown/';
 
 // images
 import profilePic from '../assets/images/users/avatar-1.jpg';
+import logoImg from '../assets/images/logo/rowthtech.jpg';
 import avatar1 from '../assets/images/users/avatar-2.jpg';
 import avatar2 from '../assets/images/users/avatar-4.jpg';
 import logoSmDark from '../assets/images/logo_sm_dark.png';
@@ -236,7 +237,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                         {!hideLogo && (
                             <Link to="/" className="topnav-logo">
                                 <span className="topnav-logo-lg">
-                                    <img src={logo} alt="logo" height="16" />
+                                    <img src={logoImg} alt="logo" height="20" />
                                 </span>
                                 <span className="topnav-logo-sm">
                                     <img src={topbarDark ? logoSmLight : logoSmDark} alt="logo" height="16" />
@@ -268,54 +269,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                     </ul>
                                 </div>
                             </div>
-
-                            {/* <div className="dropdown mx-2">
-                                <button className=" bg-white border-0 dropdown-toggle" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false"
-                                    onClick={handleProject}>
-                                    Projects
-                                </button>
-                                    <ul className="dropdown-menu border_zero" aria-labelledby="dropdownMenuButton">
-                                        <li>
-                                            {allProjects?.map((item, index) => (
-                                                <li className="dropdown-item"
-                                                    onClick={onChangeProject}
-                                                >
-                                                    <option className="project_opt" key={index} value={item?._id}
-                                                    >
-                                                        {item?.projectName}
-                                                    </option>
-                                                </li>
-                                            ))}
-                                            {getsingleMilestoneData?.length ? (
-                                                <ul className="dropdown-menu dropdown-submenu border_zero  ">
-                                                    <li>
-                                                        {getsingleMilestoneData?.map((item, index) => (
-                                                            <option className="project_opt drop_s" onClick={onChangeMilestone} key={index} value={item?._id}
-                                                            >
-                                                                {item?.title}
-                                                            </option>
-                                                        ))}
-
-                                                        {sptint ? (
-                                                            <ul className="dropdown-menu dropdown-submenu border_zero ">
-                                                                {getAllSingleSprints?.map((item, index) => (
-                                                                    <li
-                                                                    >
-                                                                        <option className="dropdown-item drop_s"
-                                                                            onClick={sprinthandel} key={index} value={item?._id}>
-                                                                            {item?.sprintName}
-                                                                        </option>
-                                                                    </li>
-                                                                ))}
-                                                            </ul>
-                                                        ) : (<div></div>)}
-                                                    </li>
-                                                </ul>
-                                            ) : (<div></div>)}
-
-                                        </li>
-                                    </ul>
-                            </div> */}
+                            \
                         </div>
 
                         <ul className="list-unstyled topbar-menu float-end mb-0 topbarr">
@@ -336,9 +290,6 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </li>
                         </ul>
 
-                        {/* {/ toggle for vertical layout /} */}
-
-                        {/* {/ toggle for horizontal layout /} */}
                         {layoutType === layoutConstants.LAYOUT_HORIZONTAL && (
                             <Link
                                 to="#"
@@ -352,7 +303,6 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </Link>
                         )}
 
-                        {/* {/ toggle for detached layout /} */}
                         {layoutType === layoutConstants.LAYOUT_DETACHED && (
                             <Link to="#" className="button-menu-mobile disable-btn" onClick={handleLeftMenuCallBack}>
                                 <div className="lines">
