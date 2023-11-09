@@ -191,6 +191,7 @@ const getMilestones = async (req, res) => {
         //     .populate('projectId', 'projectName')
         //     .sort({ createdAt: -1 });
       } else {
+        console.log("Project------------")
         milestones = await milestoneModel
         .aggregate([
           {
@@ -236,16 +237,16 @@ const getMilestones = async (req, res) => {
         //   .sort({ createdAt: -1 });
       }
     } else {
-       const totalCount = await milestoneModel.countDocuments({
-        projectId: req.query.projectId,
+         const totalCount = await milestoneModel.countDocuments({
+        projectId:req.query.projectId,
         activeStatus: JSON.parse(status),
       });
       milestones = await milestoneModel
         .aggregate([
           {
             $match: {
-                projectId: req.query.projectId,
-              activeStatus: status
+                projectId:  ObjectId(req.query.projectId),
+              activeStatus: JSON.parse(status)
              },
           },
           {
