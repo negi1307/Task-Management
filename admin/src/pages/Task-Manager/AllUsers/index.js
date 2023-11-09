@@ -7,8 +7,9 @@ import Modal from 'react-bootstrap/Modal';
 import moment from 'moment';
 import MainLoader from '../../../constants/Loader/loader';
 import ToastHandle from '../../../constants/toaster/toaster';
-import { deleteUser, getAllUsers } from '../../../redux/user/action';
+import { deleteUser, getAllUsers, getCSVdata } from '../../../redux/user/action';
 import HeaderMain from '../header/HeaderMain';
+import { CSVLink, CSVDownload } from "react-csv";
 // import Update from './Sprint/update';
 const AllUsers = () => {
     const store = useSelector((state) => state);
@@ -19,6 +20,7 @@ const AllUsers = () => {
     const getUsers = store?.getAllUsers;
     const deletehandle = store?.deleteUser;
     const [deletemodal, setDeleteModal] = useState(false);
+    const [csvdownload,setcsvdownload] = useState();
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     // const handelUpdate = (data) => {
@@ -43,6 +45,7 @@ const AllUsers = () => {
 
     useEffect(() => {
         dispatch(getAllUsers());
+        // dispatch(getCSVdata())
     }, [render]);
     useEffect(() => {
         if (getUsers?.data?.status == 200) {
@@ -59,7 +62,10 @@ const AllUsers = () => {
             ToastHandle('error', deletehandle?.data?.message);
         }
     }, [deletehandle]);
-
+const handelCsvDownload=(ele)=>{
+    dispatch(getCSVdata(ele?._id))
+    // setcsvdownload()
+}
     return (
         <div>
             <Card>
@@ -120,6 +126,10 @@ const AllUsers = () => {
                                                             </p>
                                                         </Col>
                                                     </Row>
+                                                </td>
+                                                <td>
+<button onClick={()=>handelCsvDownload(ele)}></button>
+
                                                 </td>
                                             </tr>
                                         );
