@@ -55,6 +55,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openDetailPage, setOpenDetailPage] = useState(false);
     const [detailData, setDetailData] = useState();
+    const [isOpen, setIsOpen] = useState(false);
     const store = useSelector((state) => state);
 
     const dispatch = useDispatch();
@@ -77,52 +78,105 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
     const handleDetailPage = (data) => {
         setOpenDetailPage(true);
         setDetailData(data);
-        dispatch(getComment({taskId:data?.id}))
-        dispatch(gettaskId(data?.id))
+        dispatch(getComment({ taskId: data?.id }));
+        dispatch(gettaskId(data?.id));
     };
     const closeDetailPage = () => {
         setOpenDetailPage(false);
     };
-
+    function toggle() {
+        setIsOpen((isOpen) => !isOpen);
+    }
     return (
         <>
             <Draggable key={item.id} draggableId={item.id} index={index}>
                 {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                        <TaskInformation>
-                            <div className="action_icon">
-                                <button type="button">
-                                    <i
-                                        class="uil-edit-alt m-0 p-0"
-                                        onClick={() => {
-                                            handelUpdate(item);
-                                        }}></i>
-                                </button>
-                                <button type="button" onClick={() => deleteData(item?.id)}>
-                                    <i class="mdi mdi-delete m-0 p-0"></i>
-                                </button>
-                            </div>
-
-                            <a href="#"
-                                onClick={() => {
-                                    handleDetailPage(item);
-                                }}>
-                                {item.summary}
-                            </a>
-                            <p>
-                                <div
-                                    dangerouslySetInnerHTML={{
-                                        __html: item?.description,
-                                    }}></div>
-                            </p>
-                            <div className=" d-flex">
-                                <h5 className="m-0 p-0"> Assignee :</h5>
-                                <p className="ms-2 p-0">{item?.assignees?.assigneeInfo?.firstName} {item?.assignees?.assigneeInfo?.lastName}</p>
-                            </div>
-                            <div className="secondary-details">
-                                <p>
-                                    <span>{item?.startDate ? moment(item?.startDate).format('ll') : ''}</span>
-                                </p>
+                        <TaskInformation className="py-2 pe-0">
+                            <div className="row w-100">
+                                <div className="col-12">
+                                    <div className="row">
+                                        <div className="col-6 d-flex align-items-center">
+                                            <a
+                                                href="#"
+                                                onClick={() => {
+                                                    handleDetailPage(item);
+                                                }}>
+                                                {item.summary}
+                                            </a>
+                                        </div>
+                                        <div className="col-6 pe-0">
+                                            <div className="action_icon position-relative">
+                                                <div className="col-12 d-flex align-items-center justify-content-end">
+                                                    <i
+                                                        onClick={toggle}
+                                                        class="fa fa-ellipsis-h cp bg-light p-2 rounded-3"
+                                                        aria-hidden="true"></i>
+                                                </div>
+                                                {isOpen && (
+                                                    <div className="row position-absolute add_position ">
+                                                        <div className="col-12 border p-2 bg-white">
+                                                            <div className="row">
+                                                                <div className="col-12 pb-2 d-flex align-items-center justify-content-start">
+                                                                    <h4 className="m-0 p-0">Action</h4>
+                                                                </div>
+                                                                <div className="col-12 pb-2 d-flex align-items-center justify-content-start">
+                                                                    <button type="button " className="m-0 p-0">
+                                                                        <i
+                                                                            class="uil-edit-alt m-0 p-0 me-2"
+                                                                            onClick={() => {
+                                                                                handelUpdate(item);
+                                                                            }}></i>
+                                                                        Edit
+                                                                    </button>
+                                                                </div>
+                                                                <div className="col-12 d-flex align-items-center justify-content-start">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="m-0 p-0"
+                                                                        onClick={() => deleteData(item?.id)}>
+                                                                        <i class="mdi mdi-delete m-0 p-0 me-2"></i>
+                                                                        Delete
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-12 py-2">
+                                    <p className="m-0 p-0">
+                                        <div
+                                            dangerouslySetInnerHTML={{
+                                                __html: item?.description,
+                                            }}></div>
+                                    </p>
+                                </div>
+                                <div className="col-12">
+                                    <div className="row">
+                                        <div className="col-6 d-flex align-items-center">
+                                            <div className="secondary-details">
+                                                <p>
+                                                    <span>
+                                                        {item?.startDate ? moment(item?.startDate).format('ll') : ''}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="col-6">
+                                            <div className=" d-flex">
+                                                <h5 className="m-0 p-0"> Assignee :</h5>
+                                                <p className="ms-2 p-0">
+                                                    {item?.assignees?.assigneeInfo?.firstName}{' '}
+                                                    {item?.assignees?.assigneeInfo?.lastName}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </TaskInformation>
                     </div>

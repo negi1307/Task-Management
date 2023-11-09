@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './global.css'
+import './global.css';
 import './i18n';
 
 import App from './App';
@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 ReactDOM.render(
     <Provider store={configureStore({})}>
         <App />
-        <ToastContainer/>
+        <ToastContainer />
     </Provider>,
     document.getElementById('root')
 );

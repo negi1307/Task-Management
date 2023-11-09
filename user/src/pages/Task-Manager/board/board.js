@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { columnsFromBackend } from './data';
 import { DragDropContext, Droppable,Draggable } from 'react-beautiful-dnd';
@@ -20,6 +19,7 @@ import {getTaskStatusCount} from '../../../redux/Summary/action'
 import { addComment, getComment, updateComment, deleteComment,getCommentId } from '../../../redux/addcomment/actions';
 import Taskdetail from './taskdetail'
 import { useForm } from "react-hook-form";
+import { useParams } from 'react-router-dom';
 
 
 const Container = styled.div`
@@ -82,7 +82,7 @@ const SprintId=store?.getSprintId?.data;
       searchString:"",
       projectId:projectId,
       milestoneId:milestoneId,
-      sprintId:spriteId,
+      sprintId:SprintId,
       skip:1
     }
     dispatch(getAllTask(body))    
@@ -192,20 +192,20 @@ const SprintId=store?.getSprintId?.data;
       setColumns({
         [uuidv4()]: {
           title: 'To-do',
-          items: successHandle?.data?.response?.Todo?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.todo?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
         },
         [uuidv4()]: {
           title: 'In Progress',
-          items: successHandle?.data?.response?.Inprogress?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.inProgress?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
         },
         
         [uuidv4()]: {
           title: 'Hold',
-          items: successHandle?.data?.response?.Hold?.map((ele) => { return { ...ele, id: ele._id }}),
+          items: successHandle?.data?.hold?.tasks?.map((ele) => { return { ...ele, id: ele._id }}),
       },
         [uuidv4()]: {
           title: 'Done',
-          items: successHandle?.data?.response?.Done?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.done?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
         },
       })
     }

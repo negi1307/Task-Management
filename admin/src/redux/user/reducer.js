@@ -23,6 +23,12 @@ const GET_ALL_ROLES_INITIAL_STATE = {
     message: "",
     loading: false
 }
+
+const GET_CSV_FILE_INITIAL_STATE = {
+    data: [],
+    message: "",
+    loading: false
+}
 export const getAllUsers = (state = GET_ALL_USER_INITIAL_STATE, action) => {
     switch (action.type) {
         case USERS_TYPES.GET_ALL_USERS_LOADING:
@@ -123,6 +129,31 @@ export const getAllRoles = (state = GET_ALL_ROLES_INITIAL_STATE, action) => {
 
 
         case USERS_TYPES.GET_ALL_ROLES_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+export const getCsvDataReducer = (state = GET_CSV_FILE_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case USERS_TYPES.GET_CSV_DATA_LOADING:
+            return {
+                data: GET_CSV_FILE_INITIAL_STATE.data,
+                loading: true,
+            };
+        case USERS_TYPES.GET_CSV_DATA_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case USERS_TYPES.GET_CSV_DATA_ERROR:
             return {
                 data: [],
                 loading: false,
