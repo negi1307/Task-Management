@@ -136,10 +136,10 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
 }
 
 .modal-header button {
-    box-shadow: 0px 2px 6px 0px rgba(57, 175, 209, 0.5);
+    /* box-shadow: 0px 2px 6px 0px rgba(57, 175, 209, 0.5); */
     color: #fff;
-    background-color: #39afd1;
-    border-color: #39afd1;
+    background-color: #37216c;
+    border-color: #37216c;
     border: 0px;
 }
 
@@ -473,4 +473,14 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
 .add_height_task {
     height: 78vh !important;
     overflow-y: scroll !important;
+}
+.add_position {
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    transform: translate(-12px, 40px);
+    display: flex;
+    align-items: center;
+    justify-content: end;
 }
