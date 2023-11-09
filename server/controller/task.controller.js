@@ -195,10 +195,10 @@ const getTasks = async (req, res) => {
     var totalPages = 0;
     var totalCount = 0;
      const query = {};
-    if (!req.query.sprintId && !req.query.taskStatus=="" && parseInt(req.query.skip)===1) {
+    if (!req.query.sprintId && !req.query.taskStatus=="" && parseInt(req.query.skip)===1 ) {
         let query={};
          const taskStatus = JSON.parse(req.query.taskStatus);
-
+         query.activeStatus=JSON.parse(req.query.activeStatus)
         query.status=taskStatus;
  
        totalCount = await taskModel.countDocuments(query);
@@ -236,7 +236,7 @@ const getTasks = async (req, res) => {
         totalCount = await taskModel.countDocuments(query);
         var pageSize = totalCount === 0 ? 1 : totalCount;
         var skip = 1;
-      }
+       }
     } else {
        query.activeStatus = JSON.parse(req.query.activeStatus);
       var pageSize = 10;
