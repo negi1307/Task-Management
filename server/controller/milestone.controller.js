@@ -99,7 +99,7 @@ const getMilestones = async (req, res) => {
     let milestones = null;
 
     if (req.query.milestoneId) {
-        milestones = await milestoneModel
+         milestones = await milestoneModel
         .aggregate([
           {
             $match: {
@@ -113,7 +113,9 @@ const getMilestones = async (req, res) => {
               foreignField: "_id",
               as: "projectId", 
             },
-          },
+            
+          },            { $unwind: "$projectId" },
+
           {
               $project:{
                   _id:1,
@@ -146,6 +148,7 @@ const getMilestones = async (req, res) => {
           .json({ status: "404", message: "Milestone not found" });
       }
     } else if (parseInt(req.query.skip) === 0) {
+ 
       if (req.query.projectId) {
         
          milestones = await milestoneModel
@@ -164,6 +167,7 @@ const getMilestones = async (req, res) => {
                 as: "projectId", 
               },
             },
+            { $unwind: "$projectId" },
             {
                 $project:{
                     _id:1,
@@ -191,8 +195,7 @@ const getMilestones = async (req, res) => {
         //     .populate('projectId', 'projectName')
         //     .sort({ createdAt: -1 });
       } else {
-        console.log("Project------------")
-        milestones = await milestoneModel
+         milestones = await milestoneModel
         .aggregate([
           {
             $match: {
@@ -206,7 +209,8 @@ const getMilestones = async (req, res) => {
               foreignField: "_id",
               as: "projectId", 
             },
-          },
+          },            { $unwind: "$projectId" },
+
           {
               $project:{
                   _id:1,
@@ -237,6 +241,7 @@ const getMilestones = async (req, res) => {
         //   .sort({ createdAt: -1 });
       }
     } else {
+ 
          const totalCount = await milestoneModel.countDocuments({
         projectId:req.query.projectId,
         activeStatus: JSON.parse(status),
@@ -256,7 +261,7 @@ const getMilestones = async (req, res) => {
               foreignField: "_id",
               as: "projectId", 
             },
-          },
+          },   { $unwind: "$projectId" },
           {
               $project:{
                   _id:1,
