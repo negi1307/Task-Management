@@ -116,7 +116,8 @@ const Taskdetail = (props) => {
                                                         <tr>  <td className='user_comment'>{comm?.comment}</td>
 
                                                             <td>
-                                                                {moment(comm?.createdAt).add(24, 'hours').format("LT")}
+                                                                {/* {moment(comm?.createdAt).add(24, 'hours').format("LT")} */}
+                                                                {moment(comm?.createdAt).format("HH:mm")}
 
                                                             </td>
                                                         </tr>
