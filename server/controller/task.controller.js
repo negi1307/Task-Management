@@ -50,6 +50,7 @@ const getTasks = async (req, res) => {
         const query = {};
         if (parseInt(req.query.skip) === 0) {
             if (req.query.sprintId) {
+                console.log("1")
                 totalCount = await taskModel.countDocuments(query);
                 query.sprintId = new mongoose.Types.ObjectId(req.query.sprintId);
                 query.activeStatus = JSON.parse(req.query.activeStatus);
@@ -65,6 +66,7 @@ const getTasks = async (req, res) => {
             }
         }
         else {
+            console.log("2")
             query.activeStatus = JSON.parse(req.query.activeStatus);
             var pageSize = 10;
             var skip = parseInt(req.query.skip);
