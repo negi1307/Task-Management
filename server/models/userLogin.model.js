@@ -4,7 +4,7 @@ const userLogin = mongoose.model(
     'userLogin', mongoose.Schema({
         userId: {
             type: mongoose.Types.ObjectId,
-            ref: 'users'
+            ref: 'User'
         },
         loginTime:{
             type:String

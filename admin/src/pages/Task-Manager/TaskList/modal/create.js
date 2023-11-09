@@ -13,7 +13,8 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const Create = ({ modal, CloseModal }) => {
     const {
         register,
-        handleSubmit,watch,
+        handleSubmit,
+        watch,
         formState: { errors },
     } = useForm();
     const store = useSelector((state) => state);
@@ -27,20 +28,19 @@ const Create = ({ modal, CloseModal }) => {
     const dispatch = useDispatch();
 
     const onSubmit = (e) => {
-      
         let body = new FormData();
-        body.append("projectId", projectId)
-        body.append("milestoneId", milestoneId)
-        body.append("sprintId", sprintid)
-        body.append("summary", e.summary)
-        body.append("description",description)
-        body.append("assigneeId",e.Assignee)
-        body.append("reporterId",e.Reporter)
-        body.append("priority", e.Priority)
-        body.append("startDate",e.startdate)
-        body.append("dueDate",e.dueDate)
-        body.append("status",1)
-        body.append("attachment",e.Attachment[0])
+        body.append('projectId', projectId);
+        body.append('milestoneId', milestoneId);
+        body.append('sprintId', sprintid);
+        body.append('summary', e.summary);
+        body.append('description', description);
+        body.append('assigneeId', e.Assignee);
+        body.append('reporterId', e.Reporter);
+        body.append('priority', e.Priority);
+        body.append('startDate', e.startdate);
+        body.append('dueDate', e.dueDate);
+        body.append('status', 1);
+        body.append('attachment', e.Attachment[0]);
         if (projectId !== '' && milestoneId !== '' && sprintid !== '') {
             dispatch(createTask(body));
         } else {
@@ -80,7 +80,7 @@ const Create = ({ modal, CloseModal }) => {
                 </Col>
             </Row>
             <Modal.Body className="py-0">
-                <Card className="p-2">
+                <div className="p-2">
                     <Form onSubmit={handleSubmit(onSubmit)}>
                         <Row>
                             <Col lg={12}></Col>
@@ -138,7 +138,10 @@ const Create = ({ modal, CloseModal }) => {
                                             <Form.Select {...register('Assignee', { required: true })}>
                                                 <option value={''}>--Select--</option>
                                                 {store?.getAllUsers?.data?.response?.map((ele, ind) => (
-                                                    <option value={ele?._id}> {ele?.firstName} {ele?.lastName}</option>
+                                                    <option value={ele?._id}>
+                                                        {' '}
+                                                        {ele?.firstName} {ele?.lastName}
+                                                    </option>
                                                 ))}
                                             </Form.Select>
                                             {errors.Assignee?.type === 'required' && (
@@ -212,8 +215,8 @@ const Create = ({ modal, CloseModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                disabled={watch("startdate")== ""|| watch("startdate")== undefined }
-                                                min={watch("startdate")} 
+                                                disabled={watch('startdate') == '' || watch('startdate') == undefined}
+                                                min={watch('startdate')}
                                                 {...register('dueDate', { required: true })}
                                             />{' '}
                                             {errors.dueDate?.type === 'required' && (
@@ -271,7 +274,7 @@ const Create = ({ modal, CloseModal }) => {
                             </Col>
                         </Row>
                     </Form>
-                </Card>
+                </div>
             </Modal.Body>
         </Modal>
     );

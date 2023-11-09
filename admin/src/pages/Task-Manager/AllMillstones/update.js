@@ -74,7 +74,7 @@ const Update = ({ modal, closeModal, editData }) => {
     }, [sucesshandel]);
     return (
         <>
-            <Modal show={modal} onHide={CloseModal} >
+            <Modal show={modal} className="add_round" onHide={CloseModal} >
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
@@ -91,7 +91,7 @@ const Update = ({ modal, closeModal, editData }) => {
                 </Row>
 
                 <Modal.Body className="py-0">
-                    <Card className="p-3">
+                    <div className="p-3">
                         <Form onSubmit={handleSubmit(onSubmit)}>
                             <Row>
                                 <Col lg={12}>
@@ -173,7 +173,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                 </Col>
                             </Row>
                         </Form>
-                    </Card>
+                    </d>
                 </Modal.Body>
 
             </Modal>
