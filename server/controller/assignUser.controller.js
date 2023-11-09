@@ -133,7 +133,6 @@ const getUserTasks = async (req, res) => {
             milestoneId: new mongoose.Types.ObjectId(milestoneId),
             sprintId: new mongoose.Types.ObjectId(sprintId),
         };
-        
         const taskIds = await taskModel.distinct('_id', query);
         // Flag = 1 :- Tasks acc to Status, Flag = 2 :- List of tasks
         if (flag == 1) {
@@ -298,14 +297,14 @@ const getUserTasks = async (req, res) => {
                         totalCount: { $sum: 1 }
                     }
                 },
-            {
-                $match: {
-                    "Todo": { $ne: [null] },
-                    "Inprogress": { $ne: [null] },
-                    "Hold": { $ne: [null] },
-                    "Done": { $ne: [null] }
-                }
-            },
+            // {
+            //     $match: {
+            //         "Todo": { $ne: [null] },
+            //         "Inprogress": { $ne: [null] },
+            //         "Hold": { $ne: [null] },
+            //         "Done": { $ne: [null] }
+            //     }
+            // },
             {
                 $addFields: {
                     Todo: {
@@ -372,7 +371,7 @@ const getUserTasks = async (req, res) => {
         const result = await assignUserModel.aggregate(queries);
         const totalCount = counts[0]?.totalCount
         const totalPages = Math.ceil(totalCount / pageSize);
-        return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result, totalCount, totalPages });
+        return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result[0], totalCount, totalPages });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
