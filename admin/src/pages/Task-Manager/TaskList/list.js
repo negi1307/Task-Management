@@ -26,7 +26,7 @@ const TaskList = () => {
     const [render, setRender] = useState(false);
     const [statusModal, setStatusModal] = useState(false);
     const [activeStatus, setActiveStatus] = useState(true);
-
+    const [taskStatus, settaskStatus] = useState(1);
     const getSingleSprintTask = store?.getSigleSprintTask?.data?.response;
     const deletehandle = store?.TaskStatusReducer?.data;
     const loaderhandel = store?.getSigleSprintTask;
@@ -113,7 +113,30 @@ const TaskList = () => {
             <Card>
                 <Card.Body>
                     <div className="row mx-auto mt-2">
-                        <div className="d-flex col-4">
+                    <div className="row d-flex align-items-center">
+                                <div className={`col-auto  cp ${taskStatus == 1 ? 'Active_data' : 'InActive_data'}`}>
+                                    <p className="p-0 m-0 p-1 cp" onClick={() => settaskStatus('1')}>
+                                        Todo
+                                    </p>
+                                </div>
+                                <div className={`col-auto  cp ${taskStatus == 2 ? 'Active_data' : 'InActive_data'}`}>
+                                    <p className="p-0 m-0 p-1 cp" onClick={() => settaskStatus('2')}>
+                                        In Progress
+                                    </p>
+                                </div>
+
+                                <div className={`col-auto  cp ${taskStatus == 3 ? 'Active_data' : 'InActive_data'}`}>
+                                    <p className="p-0 m-0 p-1 cp" onClick={() => settaskStatus('3')}>
+                                        Hold
+                                    </p>
+                                </div>
+                                <div className={`col-auto  cp ${taskStatus == 4 ? 'Active_data' : 'InActive_data'}`}>
+                                    <p className=" p-0 m-0 p-1 cp" onClick={() => settaskStatus('4')}>
+                                        Done
+                                    </p>
+                                </div>
+                            </div>
+                        <div className="d-flex col-4 mt-2">
                             <div className="row d-flex align-items-center">
                                 <div className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
                                     <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
