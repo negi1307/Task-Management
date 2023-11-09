@@ -26,6 +26,7 @@ const AllUsers = () => {
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const csvdownloaddata = store?.getCsvDataReducer?.data?.loginRecords
+    const [dataa, setDataa] = useState([])
     console.log(csvdownloaddata,"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
     // const handelUpdate = (data) => {
     //     setEditData(data);
@@ -67,11 +68,15 @@ const AllUsers = () => {
         }
     }, [deletehandle]);
     const handelCsvDownload = (ele) => {
-        dispatch(getCSVdata(ele?._id));
-        // setcsvdownload(csvdownloaddata);
-        // csvLink.current.link.click()
+     dispatch(getCSVdata(ele?._id));
+        setcsvdownload(csvdownloaddata, "getttttttt");
+        console.log(csvdownloaddata, "dattaaaaaaaaa")
+        if(csvdownloaddata){
+            setDataa(csvdownloaddata)
+        }
+        csvLink.current.link.click()
     };
-
+console.log( dataa,"bvcxcvbnmmmmmmmmmmmmmmmmmmmmm")
     return (
         <div>
             <Card>
@@ -135,13 +140,13 @@ const AllUsers = () => {
                                                 </td>
                                                 <td>
                                                     <button onClick={() => handelCsvDownload(ele)}></button>
-                                                    <CSVLink
-                                                        data={csvdownload}
+                                                    {/* <CSVLink
+                                                        data={csvdownloaddata}
                                                         filename="userdata.csv"
                                                         className="hidden"
                                                         ref={csvLink}
                                                         target="_blank"
-                                                    />
+                                                    /> */}
                                                 </td>
                                             </tr>
                                         );
