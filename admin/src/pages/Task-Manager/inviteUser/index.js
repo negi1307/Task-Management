@@ -133,7 +133,9 @@ const InviteUser = () => {
                     <Row>
                         <Col>
                             {' '}
-                            <Button type="submit web_button">Invite</Button>
+                            <Button type="submit" className=" web_button">
+                                Invite
+                            </Button>
                         </Col>
                     </Row>
                 </Form>

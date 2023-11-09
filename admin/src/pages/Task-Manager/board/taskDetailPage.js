@@ -15,6 +15,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
     const [connectComponent, setConnectComponent] = useState('All');
     const [buttonChange, setButtonChange] = useState(true);
     const [commentId, setCommentId] = useState();
+    const [commentTextUpdate, setCommentTextUpdate] = useState(false)
     const getCommentData = store?.getComment?.data?.response;
     const connectComponentCheck = (type) => {
         setConnectComponent(type);

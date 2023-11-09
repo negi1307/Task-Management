@@ -467,6 +467,10 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     border-radius: 20px;
 }
 .css-1com30x {
-    height: 41.3rem !important;
+    height: 67vh !important;
+    overflow-y: scroll !important;
+}
+.add_height_task {
+    height: 78vh !important;
     overflow-y: scroll !important;
 }
