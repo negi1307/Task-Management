@@ -87,6 +87,8 @@ const addProject = async (req, res) => {
 //         return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message });
 //     }
 // }
+
+
 const getProjects = async (req, res) => {
   try {
     const pageSize = 10;
@@ -130,7 +132,9 @@ const getProjects = async (req, res) => {
               ],
             },
           },
-        },
+        },{
+          $sort: { startDate: 1 } 
+        }
       ]);
       return res
         .status(200)
@@ -142,7 +146,6 @@ const getProjects = async (req, res) => {
     } else {
       if (parseInt(req.query.skip) === 0) {
         if (req.query.projectId) {
-            
           // const project = await projectModel.findById({ _id: req.query.projectId });
           const project = await projectModel.aggregate([{$match:{_id:ObjectId(req.query.projectId) }},
             {
@@ -172,7 +175,9 @@ const getProjects = async (req, res) => {
                   ],
                 },
               },
-            },
+            },{
+              $sort: { startDate: 1 } 
+            }
           ]);
           return res
             .status(200)
@@ -211,8 +216,10 @@ const getProjects = async (req, res) => {
                   ],
                 },
               },
-            },
-          ]).sort({ createdAt: -1 });
+            },{
+              $sort: { startDate: 1 } 
+            }
+          ])
           // const projects = await projectModel.find({ activeStatus: req.query.activeStatus, projectStatus }).populate('technology', 'techName')
           // .sort({ createdAt: -1 });
           return res
@@ -261,7 +268,9 @@ const getProjects = async (req, res) => {
                   ],
                 },
               },
-            },
+            },{
+              $sort: { startDate: 1 } 
+            }
           ])
           .sort({ createdAt: -1 })
           .limit(pageSize)
