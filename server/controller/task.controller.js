@@ -19,6 +19,7 @@ const createtask = async (req, res) => {
       reporterId,
       startDate,
       dueDate,
+      taskId
     } = req.body;
 
     const existingTask = await taskModel.findOne({
@@ -43,6 +44,7 @@ const createtask = async (req, res) => {
         dueDate,
         attachment: `http://localhost:8000/upload/${req.file.originalname}`,
         attachmentType: req.file.mimetype,
+        taskId
       });
       if (task) {
         const admin = await userModel.findOne({ role: 1 }).select("_id roleId");
