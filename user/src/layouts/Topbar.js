@@ -11,8 +11,8 @@ import { getAllProjects } from '../../src/redux/projects/action';
 import { getallMileStones, getMileStoneById } from '../redux/actions';
 import { getAllSprint, getSingleSprint } from '../redux/actions';
 // components
-import LanguageDropdown from '../components/LanguageDropdown';
-import NotificationDropdown from '../components/NotificationDropdown';
+// import LanguageDropdown from '../components/LanguageDropdown';
+// import NotificationDropdown from '../components/NotificationDropdown';
 import ProfileDropdown from '../components/ProfileDropdown';
 import SearchDropdown from '../components/SearchDropdown';
 import TopbarSearch from '../components/TopbarSearch';
@@ -40,6 +40,7 @@ import { getProjectId } from '../../src/redux/projects/action';
 import { getMilestoneId } from '../../src/redux/milestone/action';
 import { getSprintId } from '../../src/redux/sprint/action';
 import { getTaskStatusCount } from '../../src/redux/Summary/action';
+import {addLoginTime} from '../../src/redux/user/action'
 
 // get the notifications
 const Notifications = [
@@ -143,12 +144,16 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     console.log('storeeeeeee', store);
     const [isopen, setIsopen] = useState(false);
     const allProjects = store?.getProject?.data?.response;
-
+    const loginTimeMessage=store?.createUserTime?.message;
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
     const getAllSingleSprints = store?.getAllSingleSprints?.data?.Response;
-    //==============================================================================================
-
-    //========================================================================================================
+    //=====================================user login time=========================================================
+        useEffect(()=>{
+            
+                dispatch(addLoginTime())
+        
+        },[])
+    //=======================================user login time=================================================================
 
     const [projectNameHeading, setProjectName] = useState('Select Project Name');
 
@@ -227,7 +232,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const handleRightSideBar = () => {
         dispatch(showRightSidebar());
     };
-
+    const loginTime=()=>{
+        alert(loginTimeMessage.message)
+    }
     return (
         <>
             <div className={classNames('navbar-custom', navbarCssClasses)}>
@@ -304,6 +311,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                             </select>
                                         </div>
                                     </li>
+                                    
                                     <li>
                                         <div class="project_names">
                                             <select
@@ -342,6 +350,11 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </select>
                             </div>
                             </li> */}
+                            <li>
+                                        <button type="submit" onClick={loginTime}>
+                                                    Start 
+                                        </button>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
