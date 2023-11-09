@@ -82,11 +82,12 @@ const Create = ({ modal, closeModal }) => {
     };
 
     const addhandle = (selectedList, selectItem) => {
+        console.log(selectedList, selectItem,"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn");
         const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
         });
         setAddValue([...addValue, add[0]._id]);
-        console.log(addValue, 'addvalue info');
+        // console.log(addValue, 'addvalue info');
     };
 
     useEffect(() => {
