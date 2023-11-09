@@ -110,121 +110,119 @@ const TaskList = () => {
     }, [deletehandle]);
     return (
         <>
-            <Card>
-                <Card.Body>
-                    <div className="row mx-auto mt-2">
-                    <div className="row d-flex align-items-center">
-                                <div className={`col-auto  cp ${taskStatus == 1 ? 'Active_data' : 'InActive_data'}`}>
-                                    <p className="p-0 m-0 p-1 cp" onClick={() => settaskStatus('1')}>
-                                        Todo
-                                    </p>
-                                </div>
-                                <div className={`col-auto  cp ${taskStatus == 2 ? 'Active_data' : 'InActive_data'}`}>
-                                    <p className="p-0 m-0 p-1 cp" onClick={() => settaskStatus('2')}>
-                                        In Progress
-                                    </p>
-                                </div>
-
-                                <div className={`col-auto  cp ${taskStatus == 3 ? 'Active_data' : 'InActive_data'}`}>
-                                    <p className="p-0 m-0 p-1 cp" onClick={() => settaskStatus('3')}>
-                                        Hold
-                                    </p>
-                                </div>
-                                <div className={`col-auto  cp ${taskStatus == 4 ? 'Active_data' : 'InActive_data'}`}>
-                                    <p className=" p-0 m-0 p-1 cp" onClick={() => settaskStatus('4')}>
-                                        Done
-                                    </p>
-                                </div>
-                            </div>
-                        <div className="d-flex col-4 mt-2">
-                            <div className="row d-flex align-items-center">
-                                <div className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
-                                    <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
-                                        Active
-                                    </p>
-                                </div>
-                                <div className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
-                                    <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
-                                        Inactive
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-4 d-flex align-items-center justify-content-center">
-                            <h4 className="header-title heading_data"> Tasks</h4>
-                        </div>
-                        {status == 1 ? (
-                            <div className="col-4 d-flex align-items-center justify-content-end pe-0">
-                                <Button className="web_button" variant="info" onClick={handleCreate}>
-                                    Create Task
-                                </Button>
-                            </div>
-                        ) : (
-                            ''
-                        )}
+            <div className="row mx-auto">
+                <div className="row d-flex align-items-center">
+                    <div className={`col-auto  cp ${taskStatus == 1 ? 'Active_data' : 'InActive_data'}`}>
+                        <p className="p-0 m-0 p-1 cp" onClick={() => settaskStatus('1')}>
+                            Todo
+                        </p>
                     </div>
-                    {loaderhandel.loading ? (
-                        <MainLoader />
-                    ) : (
+                    <div className={`col-auto  cp ${taskStatus == 2 ? 'Active_data' : 'InActive_data'}`}>
+                        <p className="p-0 m-0 p-1 cp" onClick={() => settaskStatus('2')}>
+                            In Progress
+                        </p>
+                    </div>
+
+                    <div className={`col-auto  cp ${taskStatus == 3 ? 'Active_data' : 'InActive_data'}`}>
+                        <p className="p-0 m-0 p-1 cp" onClick={() => settaskStatus('3')}>
+                            Hold
+                        </p>
+                    </div>
+                    <div className={`col-auto  cp ${taskStatus == 4 ? 'Active_data' : 'InActive_data'}`}>
+                        <p className=" p-0 m-0 p-1 cp" onClick={() => settaskStatus('4')}>
+                            Done
+                        </p>
+                    </div>
+                </div>
+                <div className="d-flex col-4 mt-2">
+                    <div className="row d-flex align-items-center">
+                        <div className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
+                            <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
+                                Active
+                            </p>
+                        </div>
+                        <div className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
+                            <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
+                                Inactive
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-4 d-flex align-items-center justify-content-center">
+                    <h4 className="header-title heading_data"> Tasks</h4>
+                </div>
+                {status == 1 ? (
+                    <div className="col-4 d-flex align-items-center justify-content-end pe-0">
+                        <Button className="web_button" variant="info" onClick={handleCreate}>
+                            Create Task
+                        </Button>
+                    </div>
+                ) : (
+                    ''
+                )}
+            </div>
+            {loaderhandel.loading ? (
+                <MainLoader />
+            ) : (
+                <Row>
+                    <Col className="mx-auto" lg={12}>
                         <Row>
-                            <Col className="mx-auto" lg={12}>
-                                <Row>
-                                    <Col className="" lg={12}>
-                                        <Table striped>
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
+                            <Col className="" lg={12}>
+                                <Table striped>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
 
-                                                    <th> Description</th>
-                                                    <th> Summary</th>
+                                            <th> Description</th>
+                                            <th> Summary</th>
 
-                                                    <th>Assignee</th>
-                                                    <th>Reporter</th>
-                                                    <th>Priority</th>
-                                                    <th> Start Date</th>
-                                                    <th> End Date</th>
-                                                    <th>Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {getSingleSprintTask?.map((item, index) => (
-                                                    <tr>
-                                                        <td>{(skip - 1) * 10 + index + 1}</td>
-                                                        <td>{item?.summary}</td>
-                                                        <td>
-                                                            {' '}
-                                                            <div
-                                                                dangerouslySetInnerHTML={{
-                                                                    __html: item?.description,
-                                                                }}
-                                                            />
-                                                        </td>
+                                            <th>Assignee</th>
+                                            <th>Reporter</th>
+                                            <th>Priority</th>
+                                            <th> Start Date</th>
+                                            <th> End Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {getSingleSprintTask?.map((item, index) => (
+                                            <tr>
+                                                <td>{(skip - 1) * 10 + index + 1}</td>
+                                                <td>{item?.summary}</td>
+                                                <td>
+                                                    {' '}
+                                                    <div
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: item?.description,
+                                                        }}
+                                                    />
+                                                </td>
 
-                                                        <td>
-                                                            {item?.assignees?.assigneeInfo?.firstName}{' '}
-                                                            {item?.assignees?.assigneeInfo?.lastName}
-                                                        </td>
-                                                        <td>{item?.assignees?.reporterInfo?.role}</td>
-                                                        <td>
-                                                            {item?.priority == 1
-                                                                ? 'High'
-                                                                : '' || item?.priority == 2
-                                                                ? 'Medium'
-                                                                : '' || item?.priority == 3
-                                                                ? 'Low'
-                                                                : ''}
-                                                        </td>
-                                                        <td> {moment(item?.startDate).format('L')}</td>
-                                                        <td>{moment(item?.dueDate).format('L')}</td>
-                                                        <td>
-                                                            <Form.Check
-                                                                type="switch"
-                                                                checked={item?.activeStatus}
-                                                                onChange={(e) => handleStatusChange(e, item)}
-                                                            />
-                                                        </td>
-                                                        <td>
-                                                            {/* <Row>
+                                                <td>
+                                                    {item?.assignees?.assigneeInfo?.firstName}{' '}
+                                                    {item?.assignees?.assigneeInfo?.lastName}
+                                                </td>
+                                                <td>{item?.assignees?.reporterInfo?.role}</td>
+                                                <td>
+                                                    {item?.priority == 1
+                                                        ? 'High'
+                                                        : '' || item?.priority == 2
+                                                        ? 'Medium'
+                                                        : '' || item?.priority == 3
+                                                        ? 'Low'
+                                                        : ''}
+                                                </td>
+                                                <td> {moment(item?.startDate).format('L')}</td>
+                                                <td>{moment(item?.dueDate).format('L')}</td>
+                                                <td>
+                                                    <Form.Check
+                                                        type="switch"
+                                                        checked={item?.activeStatus}
+                                                        onChange={(e) => handleStatusChange(e, item)}
+                                                    />
+                                                </td>
+                                                <td>
+                                                    {/* <Row>
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0  ">
                                                                         <i
@@ -235,37 +233,35 @@ const TaskList = () => {
                                                                     </p>
                                                                 </Col>
                                                             </Row> */}
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </Table>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col lg={12} className="d-flex justify-content-end mt-3">
-                                        {store?.getSigleSprintTask?.data?.totalPages > 0 && (
-                                            <Stack spacing={2}>
-                                                <Pagination
-                                                    defaultPage={skip}
-                                                    count={store?.getSigleSprintTask?.data?.totalPages}
-                                                    color="primary"
-                                                    variant="outlined"
-                                                    onChange={handlePaginationChange}
-                                                />
-                                            </Stack>
-                                        )}
-                                    </Col>
-                                </Row>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </Table>
                             </Col>
                         </Row>
-                    )}
-                </Card.Body>
-            </Card>
+                        <Row>
+                            <Col lg={12} className="d-flex justify-content-end mt-3">
+                                {store?.getSigleSprintTask?.data?.totalPages > 0 && (
+                                    <Stack spacing={2}>
+                                        <Pagination
+                                            defaultPage={skip}
+                                            count={store?.getSigleSprintTask?.data?.totalPages}
+                                            color="primary"
+                                            variant="outlined"
+                                            onChange={handlePaginationChange}
+                                        />
+                                    </Stack>
+                                )}
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+            )}
 
             <Create modal={openModal} CloseModal={CloseModal} />
-            {/* <Update modal={editopenModal} CloseModal={CloseUpdateModal} editData={editData} /> */}
-            {/* delete modal */}
+            {/* {/ <Update modal={editopenModal} CloseModal={CloseUpdateModal} editData={editData} /> /}
+            {/ delete modal /} */}
             <Modal show={statusModal} onHide={() => setStatusModal(false)}>
                 <Modal.Body>
                     Are you sure you want to {!checkedStatus ? 'Inactivate' : 'activate'} this Task ?
