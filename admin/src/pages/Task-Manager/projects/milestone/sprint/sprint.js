@@ -54,7 +54,7 @@ const Sprint = () => {
             let data = {
                 id: milestoneId,
                 activeStatus: 1,
-                skip
+                skip,
             };
             dispatch(getSingleSprint(data));
         } else {
@@ -62,7 +62,7 @@ const Sprint = () => {
             let data = {
                 id: milestoneId,
                 activeStatus: 0,
-                skip
+                skip,
             };
             dispatch(getSingleSprint(data));
         }
@@ -94,7 +94,7 @@ const Sprint = () => {
     };
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getSingleSprint({ activeStatus: status, id: milestoneId ,skip: value}));
+        dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip: value }));
     };
     useEffect(() => {
         if (deletehandle?.status == 200) {
@@ -107,7 +107,7 @@ const Sprint = () => {
         }
     }, [deletehandle]);
     useEffect(() => {
-        dispatch(getSingleSprint({ activeStatus: status, id: milestoneId ,skip }));
+        dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
     }, [render]);
     return (
         <>
@@ -180,7 +180,7 @@ const Sprint = () => {
                                                     <td> {moment(item?.startDate).format('L')}</td>
                                                     <td>{moment(item?.endDate).format('L')}</td>
                                                     <td>
-                                                        {' '}
+                                                        {console.log(item, 'ppppppppppp')}
                                                         <Form.Check
                                                             type="switch"
                                                             checked={item?.activeStatus}
@@ -216,20 +216,20 @@ const Sprint = () => {
                         </Row>
                     </Col>
                     <Row>
-                                    <Col lg={12} className="d-flex justify-content-end mt-3">
-                                        {store?.getAllSingleSprints?.data?.totalPages > 0 && (
-                                          <Stack spacing={2}>
-                                                <Pagination
-                                                    defaultPage={skip}
-                                                    count={store?.getAllSingleSprints?.data?.totalPages}
-                                                    color="primary"
-                                                    variant="outlined"
-                                                    onChange={handlePaginationChange}
-                                                />
-                                            </Stack>
-                                        )}
-                                    </Col>
-                                </Row>
+                        <Col lg={12} className="d-flex justify-content-end mt-3">
+                            {store?.getAllSingleSprints?.data?.totalPages > 0 && (
+                                <Stack spacing={2}>
+                                    <Pagination
+                                        defaultPage={skip}
+                                        count={store?.getAllSingleSprints?.data?.totalPages}
+                                        color="primary"
+                                        variant="outlined"
+                                        onChange={handlePaginationChange}
+                                    />
+                                </Stack>
+                            )}
+                        </Col>
+                    </Row>
                 </Card.Body>
             </Card>
             <Create modal={openModal} CloseModal={CloseModal} projectId={projectId} milestoneId={milestoneId} />
