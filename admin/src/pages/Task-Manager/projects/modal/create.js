@@ -240,10 +240,10 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Select {...register('status', { required: true })}>
                                                 <option>select </option>
-                                                <option value="1">Live</option>
-                                                <option value="2">Hold</option>
-                                                <option value=" 3">Complete</option>
-                                                <option value="4"> To-Do</option>
+                                                <option value="1">To-Do</option>
+                                                <option value="2">Live</option>
+                                                <option value="3">Hold</option>
+                                                <option value="4">Completed</option>
                                             </Form.Select>
                                         </Form.Group>
                                         

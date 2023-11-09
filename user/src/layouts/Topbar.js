@@ -40,6 +40,7 @@ import { getProjectId } from '../../src/redux/projects/action';
 import { getMilestoneId } from '../../src/redux/milestone/action';
 import { getSprintId } from '../../src/redux/sprint/action';
 import { getTaskStatusCount } from '../../src/redux/Summary/action';
+import Filter from '../pages/Task-Manager/board/Modal/Filter';
 
 // get the notifications
 const Notifications = [
@@ -218,7 +219,10 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                 break;
         }
     };
-
+    const [modal, setModal] = useState(false);
+    const closemodal = () => {
+        setModal(false);
+    };
     /**
      * Toggles the right sidebar
      */
@@ -256,7 +260,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="" className="list_padding">
+                                        <Link onClick={() => setModal(true)} className="list_padding">
                                             Filters
                                         </Link>
                                     </li>
@@ -270,7 +274,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                             Teams
                                         </Link>
                                     </li>
-                                    <li>
+                                    {/*<li>
                                         <div class="project_names">
                                             <select
                                                 name="ddlProject"
@@ -317,7 +321,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                                 ))}
                                             </select>
                                         </div>
-                                    </li>
+                                    </li> */}
                                     {/* <li>
                             <div class="project_names">
                                                         <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeProject}>
@@ -425,6 +429,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                     </ul>
                 </div>
             </div>
+            <Filter modal={modal} closeModal={closemodal} />
         </>
     );
 };

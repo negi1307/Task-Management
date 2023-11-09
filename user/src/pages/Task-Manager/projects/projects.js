@@ -81,19 +81,19 @@ const Projects = () => {
         setStatusModal(true);
     };
     const handleActive = (val) => {
-        console.log(val);
+        console.log(val, 'valllllll');
         if (val) {
             setStatus(1);
-            let data = {
-                status: 1,
-            };
-            dispatch(getAllProjects(data));
+            // let data = {
+            //     status: 1,
+            // };
+            dispatch(getassignee({ flag: 1 }));
         } else {
             setStatus(0);
-            let data = {
-                status: 0,
-            };
-            dispatch(getAllProjects(data));
+            // let data = {
+            //     status: 0,
+            // };
+            dispatch(getassignee({ flag: 1 }));
         }
     };
     // useEffect(() => {
@@ -135,7 +135,7 @@ const Projects = () => {
                             <div className="col-4 d-flex align-items-center justify-content-center">
                                 <h4 className="header-title heading_data"> Projects</h4>
                             </div>
-                            {status == 1 ? (
+                            {/* {status == 1 ? (
                                 <div className="col-4 d-flex align-items-center justify-content-end pe-0">
                                     <Button
                                         className="web_button"
@@ -147,8 +147,8 @@ const Projects = () => {
                                     </Button>
                                 </div>
                             ) : (
-                                ''
-                            )}
+                                '' 
+                            )} */}
                         </div>
 
                         {getProjectList?.loading ? (

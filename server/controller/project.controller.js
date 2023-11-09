@@ -184,16 +184,17 @@ const updateStatus = async (req, res) => {
       { _id: req.body.projectId },
       { activeStatus: req.body.activeStatus }
     );
-    return res.status(200).json({
-      status: "200",
-      message: "Project Active InActive status updated Successfully",
-    });
+    return res
+      .status(200)
+      .json({ status: "200", message: "Project status updated Successfully" });
   } catch (error) {
-    return res.status(200).json({
-      status: "500",
-      message: "Something went wrong",
-      error: error.message,
-    });
+    return res
+      .status(200)
+      .json({
+        status: "500",
+        message: "Something went wrong",
+        error: error.message,
+      });
   }
 };
 
