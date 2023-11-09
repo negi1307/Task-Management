@@ -39,13 +39,13 @@
 
             .show {
                 &.nav-link {
-                    color: #{map-get($grays, "700")};
+                    color: #{map-get($grays, '700')};
                 }
             }
         }
         .nav-link {
             padding: 0;
-            color: #{map-get($grays, "600")};
+            color: #{map-get($grays, '600')};
             min-width: 32px;
             display: block;
             text-align: center;
@@ -170,11 +170,11 @@
     .notify-item {
         padding: 10px 20px;
         &.unread-noti {
-            background-color: #{tint-color(map-get($grays, "100"), 15%)};
+            background-color: #{tint-color(map-get($grays, '100'), 15%)};
         }
         &.read-noti {
             background-color: transparent;
-            border: #{$border-width} solid #{map-get($grays, "200")};
+            border: #{$border-width} solid #{map-get($grays, '200')};
         }
         .card-body {
             padding: 14px;
@@ -208,7 +208,7 @@
             margin-bottom: 0;
             overflow: hidden;
             margin-left: 45px;
-            
+
             b {
                 font-weight: 500;
             }
@@ -240,17 +240,17 @@
 }
 
 .nav-user {
-    padding: calc(#{$topbar-height - 39px} * 0.5) 20px calc(#{$topbar-height - 39px} * 0.5) 57px !important;
+    padding: calc(0px * 0.5) 0px calc(0px * 0.5) 61px !important;
     text-align: left !important;
     position: relative;
-    background-color: #{lighten(map-get($grays, "100"), 2.5%)};
-    border: #{($border-width) solid map-get($grays, "100")};
+    // background-color: #{lighten(map-get($grays, "100"), 2.5%)};
+    // border: #{($border-width) solid map-get($grays, '100')};
     border-width: 0 1px;
-    min-height: $topbar-height;
+    // min-height: $topbar-height;
 
     .account-user-avatar {
         position: absolute;
-        top: calc(#{$topbar-height - 32px} * 0.5);
+        top: calc(#{$topbar-height -8px} * 0.5);
         left: 15px;
 
         img {
@@ -271,7 +271,7 @@
 
 .button-menu-mobile {
     border: none;
-    color: #{map-get($grays, "900")};
+    color: #{map-get($grays, '900')};
     height: $topbar-height;
     line-height: $topbar-height;
     width: 60px;
@@ -292,7 +292,7 @@
     }
 }
 
-[data-keep-enlarged="true"] {
+[data-keep-enlarged='true'] {
     .navbar-custom {
         padding-left: 0;
     }
@@ -382,7 +382,7 @@
 // Scrollable Layout
 
 @include media-breakpoint-up(lg) {
-    body[data-leftbar-compact-mode="scrollable"]:not([data-layout-mode="boxed"]):not([data-layout="topnav"]) {
+    body[data-leftbar-compact-mode='scrollable']:not([data-layout-mode='boxed']):not([data-layout='topnav']) {
         .navbar-custom {
             position: absolute;
         }
@@ -418,7 +418,7 @@
         }
         span,
         .react-select__placeholder {
-            color: #{map-get($grays, "600")};
+            color: #{map-get($grays, '600')};
         }
     }
 
@@ -429,14 +429,14 @@
     }
 }
 
-body[data-layout-mode="boxed"] {
+body[data-layout-mode='boxed'] {
     .navbar-custom {
         position: relative;
         left: 0 !important;
         margin: -$topbar-height (-$grid-gutter-width * 0.5) 0;
     }
 
-    &[data-layout="topnav"] {
+    &[data-layout='topnav'] {
         .navbar-custom {
             margin: 0;
         }
@@ -444,46 +444,46 @@ body[data-layout-mode="boxed"] {
 }
 
 // Dark mode
-body[data-layout-color="dark"] {
+body[data-layout-color='dark'] {
     .navbar-custom {
         .topbar-menu {
             li {
                 .show {
                     &.nav-link {
-                        color: #{map-get($dark-grays, "700")};
+                        color: #{map-get($dark-grays, '700')};
                     }
                 }
             }
             .nav-link {
-                color: #{map-get($dark-grays, "600")};
+                color: #{map-get($dark-grays, '600')};
             }
         }
     }
     .notification-list {
         .notify-item {
             &.unread-noti {
-                background-color: #{tint-color(map-get($dark-grays, "300"), 1%)};
+                background-color: #{tint-color(map-get($dark-grays, '300'), 1%)};
             }
             &.read-noti {
-                border: #{$border-width} solid #{map-get($dark-grays, "300")};
+                border: #{$border-width} solid #{map-get($dark-grays, '300')};
             }
         }
     }
 
     .button-menu-mobile {
-        color: #{map-get($dark-grays, "900")};
+        color: #{map-get($dark-grays, '900')};
     }
 
     .nav-user {
-        background-color: #{lighten(map-get($dark-grays, "100"), 2.5%)};
-        border: #{($border-width) solid map-get($dark-grays, "100")};
+        background-color: #{lighten(map-get($dark-grays, '100'), 2.5%)};
+        border: #{($border-width) solid map-get($dark-grays, '100')};
     }
 
     .topnav-navbar-dark {
         .app-search {
             span,
             .react-select__placeholder {
-                color: #{map-get($dark-grays, "600")};
+                color: #{map-get($dark-grays, '600')};
             }
         }
     }

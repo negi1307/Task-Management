@@ -36,8 +36,9 @@
 .content-page {
     margin-left: $leftbar-width;
     overflow: hidden;
-    padding: $topbar-height 12px 65px;
+    padding: 30px 25px 25px 25px;
     min-height: 100vh;
+    background: #311c64 !important;
 }
 
 // Left Side-menu (Default dark)
