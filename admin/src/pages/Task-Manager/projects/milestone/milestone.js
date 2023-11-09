@@ -188,7 +188,8 @@ const Milestone = () => {
                                                         <th> MileStone Name</th>
                                                         <th> Description</th>
                                                         <th> Start Date</th>
-                                                        <th> End Date</th>
+                                                        <th>Days Left</th>
+                                                        {/* <th> End Date</th> */}
                                                         <th>Status</th>
                                                         <th>Action</th>
                                                     </tr>
@@ -201,7 +202,8 @@ const Milestone = () => {
                                                             <td>{item?.description}</td>
 
                                                             <td> {moment(item?.startDate).format('L')}</td>
-                                                            <td>{moment(item?.completionDate).format('L')}</td>
+                                                            <td>{item?.daysLeft}</td>
+                                                            {/* <td>{moment(item?.completionDate).format('L')}</td> */}
                                                             <td>
                                                                 {' '}
                                                                 <Form.Check
