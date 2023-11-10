@@ -1,6 +1,6 @@
 // end points
 export const AddProject = "/project/addProject";
-export const GetAllProject = "/assignUser/getUserAssignments?flag=";
+export const GetAllProject = "/project/getProjects?activeStatus=";
 export const UpdateProjectDetails = "/project/update";
 export const DeleteProject = "/project/updateStatus";
 // // 
