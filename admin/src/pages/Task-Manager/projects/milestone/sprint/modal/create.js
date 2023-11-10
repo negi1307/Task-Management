@@ -72,7 +72,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
                     <MainLoader />
                 ) : (
                     <Modal.Body className="py-0">
-                        <Card className="p-2">
+                        <div className="p-2">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={12}>
@@ -153,7 +153,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
                                     </Col>
                                 </Row>
                             </Form>
-                        </Card>
+                        </div>
                     </Modal.Body>
                 )}
             </Modal>

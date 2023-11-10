@@ -17,3 +17,7 @@ export const getAllRoles = (data): AuthAction => ({
     type: ALL_USERS.GET_ALL_ROLES,
     payload: data
 })
+export const getCSVdata = (data): AuthAction => ({
+    type: ALL_USERS.GET_CSV_DATA,
+    payload: data
+})

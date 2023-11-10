@@ -76,7 +76,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
             comment: data?.updated_comment,
         };
         dispatch(UpdateCommentAction(body));
-        // setInputForUpdate(false);
+        setInputForUpdate(false);
         console.log(data, allCommetUpdateId);
     };
     return (
@@ -173,15 +173,16 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                             {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
                                                         </div>
                                                         {inputForUpdate === ind ? (
-                                                            <Row className="mt-2">
+                                                           
                                                                 <form onSubmit={handleSubmit(submitUpdateComment)}>
+                                                                     <Row className="mt-2 d-flex" >
                                                                     <Col lg={9}>
                                                                         <Form.Group
                                                                             className="mb-1"
                                                                             controlId="exampleForm.ControlInput1">
                                                                             <Form.Control
                                                                                 type="text"
-                                                                                placeholder="Add comment"
+                                                                                placeholder="Update comment"
                                                                                 {...register(`updated_comment`)}
                                                                             />
                                                                         </Form.Group>
@@ -189,8 +190,9 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                                     <Col className="m-0 p-0" lg={1}>
                                                                         <Button type="submit">Update</Button>
                                                                     </Col>
+                                                                    </Row>
                                                                 </form>
-                                                            </Row>
+                                                            
                                                         ) : (
                                                             <>
                                                                 <div className="m-0 p-0">

@@ -34,7 +34,7 @@ const Create = ({ modal, closeModal }) => {
         reset,
         formState: { errors },
     } = useForm();
-    console.log(addValue,"select")
+    console.log(addValue, 'select');
     const onSubmit = (data) => {
         let body = {
             projectName: data?.projectName,
@@ -42,8 +42,8 @@ const Create = ({ modal, closeModal }) => {
             startDate: data?.startDate,
             endDate: data?.endDate,
             project_type: data?.project_type,
-            technology:addValue,
-            projectStatus: data?.projectDec,   
+            technology: addValue,
+            projectStatus: data?.projectDec,
         };
         dispatch(addProject(body));
     };
@@ -63,27 +63,24 @@ const Create = ({ modal, closeModal }) => {
     const removehandle = (selectedList, removedItem) => {
         const remove = getTechnology.filter((ele, ind) => {
             return ele?.techName == removedItem;
-        }); 
+        });
         // make a separate copy of the array
-        var index = addValue.indexOf(remove[0]._id)
+        var index = addValue.indexOf(remove[0]._id);
         if (index !== -1) {
             addValue.splice(index, 1);
-            setAddValue(addValue)
-            console.log("remove",addValue)
+            setAddValue(addValue);
+            console.log('remove', addValue);
+        } else {
+            setAddValue(null);
         }
-        else{
-            setAddValue(null)
-        }     
-       
-        
     };
-    const addhandle=(selectedList,selectItem)=> {
-             const add = getTechnology.filter((ele, ind) => {
+    const addhandle = (selectedList, selectItem) => {
+        const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
-        }); 
-        setAddValue([...addValue, add[0]._id])
-        console.log(addValue,"addvalue info")  
-    }
+        });
+        setAddValue([...addValue, add[0]._id]);
+        console.log(addValue, 'addvalue info');
+    };
     useEffect(() => {
         const getTechnologyname = [];
         dispatch(getAllTechnology({ status: true }));
@@ -95,7 +92,7 @@ const Create = ({ modal, closeModal }) => {
 
     return (
         <>
-            <Modal show={modal} onHide={closeModal} size="lg">
+            <Modal show={modal} className="add_round" onHide={closeModal} size="lg">
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
@@ -116,7 +113,7 @@ const Create = ({ modal, closeModal }) => {
                             <MainLoader />
                         </>
                     ) : (
-                        <Card className="p-3">
+                        <div className="p-3">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={6}>
@@ -186,8 +183,6 @@ const Create = ({ modal, closeModal }) => {
                                                 options={selected}
                                                 showCheckbox
                                             />
-                                            
-
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -241,8 +236,6 @@ const Create = ({ modal, closeModal }) => {
                                             )}
                                         </Form.Group>
                                     </Col>
-                                    
-                                  
                                 </Row>
                                 <Row>
                                     <Col className="text-start d-flex align-items-center justify-content-center">
@@ -255,7 +248,7 @@ const Create = ({ modal, closeModal }) => {
                                     </Col>
                                 </Row>
                             </Form>
-                        </Card>
+                        </div>
                     )}
                 </Modal.Body>
             </Modal>

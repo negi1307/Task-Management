@@ -13,7 +13,7 @@ const ErrorPageNotFound = (): React$Element<React$FragmentType> => {
                 <div className="container">
                     <Row className="justify-content-center">
                         <Col md={8} lg={6} xl={5} xxl={4}>
-                            <Card>
+                            <div>
                                 {/* logo */}
                                 <Card.Header className="pt-4 pb-4 text-center bg-primary">
                                     <Link to="/">
@@ -23,7 +23,7 @@ const ErrorPageNotFound = (): React$Element<React$FragmentType> => {
                                     </Link>
                                 </Card.Header>
 
-                                <Card.Body className="p-4">
+                                <Card.Body className="p-4 bg-white">
                                     <div className="text-center">
                                         <h1 className="text-error">
                                             4<i className="mdi mdi-emoticon-sad"></i>4
@@ -40,7 +40,7 @@ const ErrorPageNotFound = (): React$Element<React$FragmentType> => {
                                         </Link>
                                     </div>
                                 </Card.Body>
-                            </Card>
+                            </div>
                         </Col>
                     </Row>
                 </div>

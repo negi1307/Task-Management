@@ -45,97 +45,101 @@ const InviteUser = () => {
 
     return (
         <>
-            <Form onSubmit={handleSubmit(onSubmit)}>
-                <Row className="pt-4">
-                    <Col lg={4}>
-                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-                            <Form.Label>
-                                Name<span className="text-danger">*</span>:
-                            </Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Please Enter  Name"
-                                {...register('title', { required: true })}
-                            />
-                            {errors.title?.type === 'required' && (
-                                <span className="text-danger"> This feild is required *</span>
-                            )}
-                        </Form.Group>
-                    </Col>
-                    <Col lg={4}>
-                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-                            <Form.Label>
-                                Last Name<span className="text-danger">*</span>:
-                            </Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Please Enter  Last Name"
-                                {...register('lastName', { required: true })}
-                            />
-                            {errors.lastName?.type === 'required' && (
-                                <span className="text-danger"> This feild is required *</span>
-                            )}
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg={4}>
-                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                            <Form.Label>
-                                Email<span className="text-danger">*</span>:
-                            </Form.Label>
-                            <Form.Control
-                                type="mail"
-                                placeholder="Please Enter e-mail"
-                                {...register('email', { required: true })}
-                            />
-                            {errors.email?.type === 'required' && (
-                                <span className="text-danger"> This feild is required *</span>
-                            )}
-                        </Form.Group>
-                    </Col>
-                    <Col lg={4}>
-                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                            <Form.Label>
-                                Password<span className="text-danger">*</span>:
-                            </Form.Label>
-                            <Form.Control
-                                type="password"
-                                {...register('password', { required: true })}
-                                placeholder="Please enter password"
-                            />
-                            {errors.password?.type === 'required' && (
-                                <span className="text-danger"> This feild is required *</span>
-                            )}
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg={4}>
-                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                            <Form.Label>
-                                Role<span className="text-danger">*</span>:
-                            </Form.Label>
-                            <select
-                                name="Reporter"
-                                class="form-select"
-                                id="exampleForm.ControlInput1"
-                                {...register('role')}>
-                                <option value={''}>--Select--</option>
-                                {store?.getAllRoles?.data?.response?.map((ele, ind) => (
-                                    <option value={ele?._id}> {ele?.role} </option>
-                                ))}
-                            </select>
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        {' '}
-                        <Button type="submit web_button">Invite</Button>
-                    </Col>
-                </Row>
-            </Form>
+            <div className="card px-3">
+                <Form onSubmit={handleSubmit(onSubmit)}>
+                    <Row className="pt-4">
+                        <Col lg={4}>
+                            <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
+                                <Form.Label>
+                                    Name<span className="text-danger">*</span>:
+                                </Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Please Enter  Name"
+                                    {...register('title', { required: true })}
+                                />
+                                {errors.title?.type === 'required' && (
+                                    <span className="text-danger"> This feild is required *</span>
+                                )}
+                            </Form.Group>
+                        </Col>
+                        <Col lg={4}>
+                            <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
+                                <Form.Label>
+                                    Last Name<span className="text-danger">*</span>:
+                                </Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Please Enter  Last Name"
+                                    {...register('lastName', { required: true })}
+                                />
+                                {errors.lastName?.type === 'required' && (
+                                    <span className="text-danger"> This feild is required *</span>
+                                )}
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col lg={4}>
+                            <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                <Form.Label>
+                                    Email<span className="text-danger">*</span>:
+                                </Form.Label>
+                                <Form.Control
+                                    type="mail"
+                                    placeholder="Please Enter e-mail"
+                                    {...register('email', { required: true })}
+                                />
+                                {errors.email?.type === 'required' && (
+                                    <span className="text-danger"> This feild is required *</span>
+                                )}
+                            </Form.Group>
+                        </Col>
+                        <Col lg={4}>
+                            <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                <Form.Label>
+                                    Password<span className="text-danger">*</span>:
+                                </Form.Label>
+                                <Form.Control
+                                    type="password"
+                                    {...register('password', { required: true })}
+                                    placeholder="Please enter password"
+                                />
+                                {errors.password?.type === 'required' && (
+                                    <span className="text-danger"> This feild is required *</span>
+                                )}
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col lg={4}>
+                            <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                <Form.Label>
+                                    Role<span className="text-danger">*</span>:
+                                </Form.Label>
+                                <select
+                                    name="Reporter"
+                                    class="form-select"
+                                    id="exampleForm.ControlInput1"
+                                    {...register('role')}>
+                                    <option value={''}>--Select--</option>
+                                    {store?.getAllRoles?.data?.response?.map((ele, ind) => (
+                                        <option value={ele?._id}> {ele?.role} </option>
+                                    ))}
+                                </select>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            {' '}
+                            <Button type="submit" className=" web_button">
+                                Invite
+                            </Button>
+                        </Col>
+                    </Row>
+                </Form>
+            </div>
         </>
     );
 };

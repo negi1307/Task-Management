@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { ListGroup, Container, Row, Col, Table, Button, Card, CloseButton } from 'react-bootstrap';
@@ -7,11 +7,13 @@ import Modal from 'react-bootstrap/Modal';
 import moment from 'moment';
 import MainLoader from '../../../constants/Loader/loader';
 import ToastHandle from '../../../constants/toaster/toaster';
-import { deleteUser, getAllUsers } from '../../../redux/user/action';
+import { deleteUser, getAllUsers, getCSVdata } from '../../../redux/user/action';
 import HeaderMain from '../header/HeaderMain';
+import { CSVLink } from 'react-csv';
 // import Update from './Sprint/update';
 const AllUsers = () => {
     const store = useSelector((state) => state);
+    const csvLink = useRef();
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const [deleteId, setdeleteId] = useState();
@@ -19,8 +21,11 @@ const AllUsers = () => {
     const getUsers = store?.getAllUsers;
     const deletehandle = store?.deleteUser;
     const [deletemodal, setDeleteModal] = useState(false);
+    const [csvdownload, setcsvdownload] = useState([]);
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
+    const csvdownloaddata = store?.getCsvDataReducer;
+    console.log(csvdownloaddata, 'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
     // const handelUpdate = (data) => {
     //     setEditData(data);
     //     setOpenEditModal(true);
@@ -43,6 +48,7 @@ const AllUsers = () => {
 
     useEffect(() => {
         dispatch(getAllUsers());
+        // dispatch(getCSVdata())
     }, [render]);
     useEffect(() => {
         if (getUsers?.data?.status == 200) {
@@ -59,6 +65,27 @@ const AllUsers = () => {
             ToastHandle('error', deletehandle?.data?.message);
         }
     }, [deletehandle]);
+    const handelCsvDownload = (ele) => {
+        dispatch(getCSVdata(ele?._id));
+    };
+    useEffect(() => {
+        if (csvdownloaddata?.data?.status == 200 && csvdownloaddata?.data?.length !== 0) {
+            setcsvdownload(
+                csvdownloaddata?.data?.loginRecords?.map((ele) => {
+                    return {
+                        id: ele?._id,
+                        firstname: ele?.userId?.firstName,
+                        lastname: ele?.userId?.lastName,
+                        loginTime: ele?.loginTime,
+                    };
+                })
+            );
+            setTimeout(() => {
+                //    document.getElementById("csvid").click()
+                csvLink.current.link.click();
+            }, 1000);
+        }
+    }, [csvdownloaddata]);
 
     return (
         <div>
@@ -78,10 +105,10 @@ const AllUsers = () => {
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th> First Name</th>
+                                    <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Email</th>
-                                    <th> Create Date</th>
+                                    <th>Create Date</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -96,7 +123,7 @@ const AllUsers = () => {
                                                     <span className="namelink"> {ele?.firstName} </span>
                                                 </td>
                                                 <td className="cp">
-                                                    <span className="namelink"> {ele?.lastName} </span>
+                                                    <span className="namelink"> {ele?.lastName} </span>{' '}
                                                 </td>
                                                 <td className="w-20">
                                                     <span className="namelink"> {ele?.email}</span>
@@ -121,6 +148,9 @@ const AllUsers = () => {
                                                         </Col>
                                                     </Row>
                                                 </td>
+                                                <td>
+                                                    <button onClick={() => handelCsvDownload(ele)}></button>
+                                                </td>
                                             </tr>
                                         );
                                     })}
@@ -128,6 +158,15 @@ const AllUsers = () => {
                             </tbody>
                         </Table>
                     )}
+                    <CSVLink
+                        data={csvdownload}
+                        filename="userdata.csv"
+                        className="hidden"
+                        ref={csvLink}
+                        id={`csvid`}
+                        target="_blank">
+                        <span></span>
+                    </CSVLink>
                 </Card.Body>
             </Card>
             {/* delete modal */}

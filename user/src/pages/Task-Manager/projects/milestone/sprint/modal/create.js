@@ -29,10 +29,9 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
             project_id: projectId,
             milestone_id: milestoneId,
             sprintName: val?.Name,
-            sprintDesc:description,
+            sprintDesc: description,
             startDate: val?.Startdate,
             endDate: val?.Enddate,
-        
         };
         dispatch(addSprint(body));
     };
@@ -73,7 +72,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
                     <MainLoader />
                 ) : (
                     <Modal.Body className="py-0">
-                        <Card className="p-2">
+                        <div className="p-2">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={12}>
@@ -133,7 +132,6 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
                                             )}
                                         </Form.Group>
                                     </Col>
-                 
                                 </Row>
                                 <Row>
                                     <Col className="text-start d-flex align-items-center justify-content-center">
@@ -146,7 +144,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
                                     </Col>
                                 </Row>
                             </Form>
-                        </Card>
+                        </div>
                     </Modal.Body>
                 )}
             </Modal>
