@@ -9,6 +9,7 @@ import { createTask } from '../../../../redux/task/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { getSingleSprint, getsingleMileStone } from '../../../../redux/actions';
 
 const Create = ({ modal, CloseModal }) => {
     const {
@@ -63,12 +64,14 @@ const Create = ({ modal, CloseModal }) => {
             ToastHandle('error', Createhandel?.data?.message);
         }
     }, [Createhandel]);
-    const handelProject=(ele)=>{
-console.log(ele ,"ppppppppppppppppppppppppppp")
+    const handelProject=(e)=>{
+        dispatch(getsingleMileStone({ id: e.target.value, activeStatus: 1 ,skip:0, mileStoneId:""  }));
     }
-    const handelmilestone=(ele)=>{
-console.log(ele,"wwwwwwwwwwwww")
+    const handelmilestone=(e)=>{
+        dispatch(getSingleSprint({ activeStatus: 1, id: e.target.value , skip:0}));
     }
+    
+ 
     return (
         <Modal show={modal} onHide={handleClose} size="lg">
             <Row className="m-0 p-0">
@@ -139,7 +142,7 @@ console.log(ele,"wwwwwwwwwwwww")
                                                 </Form.Label>
 
                                                 <Form.Select {...register('Sprint', { required: true})}>
-                                                    {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
+                                                    {store?.getAllSingleSprints?.data?.response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.sprintName} </option>
                                                     ))}
                                                 </Form.Select>
