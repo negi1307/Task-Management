@@ -207,6 +207,7 @@ const getProjects = async (req, res) => {
                 as: "technology",
               },
             },
+            
             {
               $project: {
                 "technology.techName": 1,
