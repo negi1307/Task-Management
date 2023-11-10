@@ -1,4 +1,4 @@
-body{
+body {
     font-family: 'Open Sans', sans-serif !important;
 }
 
@@ -14,16 +14,15 @@ body{
     background: #b5b4b4;
     color: white;
 }
-.cp{
+.cp {
     cursor: pointer;
-
 }
-.topbarinfo{
+.topbarinfo {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
-.lefbar_info{
+.lefbar_info {
     display: flex;
     align-items: center;
 }
@@ -80,7 +79,11 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
     padding-right: 14px;
 }
 
-.taskinfo ul li a {color: #323b47 !important;font-size: 14px;font-weight: 600;}
+.taskinfo ul li a {
+    color: #323b47 !important;
+    font-size: 14px;
+    font-weight: 600;
+}
 
 .taskinfo {
     margin-bottom: 10px;
@@ -103,9 +106,9 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
     -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
     -o-transition: opacity 0.3s linear, right 0.3s ease-out;
     transition: opacity 0.3s linear, right 0.3s ease-out;
-  }
-  
-  .rightBar.show {
+}
+
+.rightBar.show {
     right: 0px;
     display: block;
     z-index: 1002;
@@ -113,12 +116,12 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
     -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
     -o-transition: opacity 0.3s linear, right 0.3s ease-out;
     transition: opacity 0.3s linear, right 0.3s ease-out;
-  }
-  .rightBar.show {
+}
+.rightBar.show {
     z-index: 1002;
 }
 
- .modal-header button {
+.modal-header button {
     box-shadow: 0px 2px 6px 0px rgba(57, 175, 209, 0.5);
     color: #fff;
     background-color: #39afd1;
@@ -127,15 +130,13 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
 }
 
 .modal-header {
+    display: flex !important;
 
-    display: flex!important;
-    
-    border: 100%!important;
+    border: 100% !important;
 
-   
     /* border-radius: 100%; */
 }
-.modal-header button{
+.modal-header button {
     position: absolute;
     right: 10px;
 }
@@ -174,11 +175,9 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
     border-right: 0px;
     border-top: 0px;
     color: #323b47 !important;
-    border-bottom:none;
+    border-bottom: none;
     max-width: 123px;
 }
-
-
 
 .action_icon {
     display: flex;
@@ -195,15 +194,13 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
 .action_icon button:first-child {
     margin-right: 8px;
 }
-.update_btn{
+.update_btn {
     text-align: center;
 }
 
 .action_icon button i {
     font-size: 20px;
 }
-
-
 
 .addcomment {
     width: 100%;
@@ -215,14 +212,14 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
     margin-bottom: 15px;
 }
 
-.all_bg{
+.all_bg {
     padding: 70px 0px;
     background-color: rgb(202 129 255 / 7%);
 }
-.bg_clr{
-    background-color:rgb(238, 236, 236);
+.bg_clr {
+    background-color: rgb(238, 236, 236);
 }
-.w-size{
+.w-size {
     font-size: 20px;
 }
 .date p {
@@ -234,31 +231,28 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
 .count {
     color: #c181ff !important;
 }
-.border_clr{
-    border:1px solid rgb(209, 208, 208);
+.border_clr {
+    border: 1px solid rgb(209, 208, 208);
 }
 .chart_div {
     display: flex;
-   
+
     height: 36vh;
     margin: 0;
-  
 }
 
 .donut-chart {
     display: flex;
-    
-    align-items: center;
- 
-}
 
+    align-items: center;
+}
 
 .chart {
     position: relative;
     width: 245px;
     height: 245px;
     border-radius: 50%;
-    background-color:#59d3ec;
+    background-color: #59d3ec;
     text-align: center;
     margin: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -273,7 +267,7 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
     background-color: var(--color);
     transform: rotate(var(--angle));
 }
-.h1-clr{
+.h1-clr {
     color: #59d3ec;
 }
 
@@ -303,24 +297,22 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
     width: 20px;
     height: 20px;
     margin-right: 10px;
-    border-radius:5px;
+    border-radius: 5px;
 }
-.day_date{
+.day_date {
     font-size: 12px;
 }
 .scrollable-content {
     height: 300px; /* Set the desired height for the scrollable area */
     overflow: auto;
 }
-.i_f{
+.i_f {
     font-size: 38px;
     font-weight: 400;
-
 }
-.icon_s{
+.icon_s {
     font-size: 22px;
 }
-
 
 /* add comment */
 .showall ul li {
@@ -408,9 +400,8 @@ ul.side-nav i {
 
 /* end header css ------------------------------------------------ */
 .modal_details .modal-dialog {
-    max-width: 800px ;
+    max-width: 800px;
 }
-
 
 /* start task card detail page ----------------------------------- */
 .cardinfo.modal-body {
@@ -493,7 +484,6 @@ h5.states {
 }
 
 .chart_div {
-   
     align-items: center;
 }
 
@@ -563,4 +553,107 @@ h5.count {
     color: #39afd1;
 }
 
+.card_detail .i.fa.fa-file-pdf-o {
+    color: red !important;
+    font-size: 22px;
+}
+
+.card_detail i {
+    font-size: 55px;
+    color: red;
+}
+.taskcardinfo span {
+    height: 30px;
+    font-weight: 800;
+    width: 30px;
+    background: #3294b0;
+    border-radius: 100%;
+    /* padding: 10px; */
+    font-size: 20px;
+    /* margin-top: 20px !important; */
+    display: inline-block;
+    text-align: center;
+    color: #fff;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+td.user_name {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+td.user_name p {
+    margin-bottom: 0px;
+}
+
+tr.task_comment_info td {
+    width: 100%;
+    flex: 0 0 100%;
+}
+
+td.user_name {
+    font-size: 18px;
+    color: #4e4949;
+    font-weight: 500;
+}
+
+td.user_comment {
+    font-size: 18px;
+}
+
 /* end status count------------------------------------------- */
+/* Filter */
+.round_icons {
+    background-color: orange;
+    color: black;
+    width: 35px;
+    border-radius: 100%;
+    height: 35px;
+}
+
+.checkboxStyle {
+    border: 1px solid grey;
+    width: fit-content;
+    height: 35px;
+    border-radius: 30px;
+}
+
+.darkCheckBox {
+    /* border: 1px solid grey; */
+    border-radius: 30px;
+    height: 35px;
+    width: fit-content;
+    background-color: rgb(229, 229, 229);
+}
+.done label {
+    color: green;
+    background: #8bf3d4;
+    padding: 0px 10px;
+    margin-left: 4px;
+}
+
+.cancelled label {
+    color: green;
+    background: #8bf3d4;
+    padding: 0px 10px;
+    margin-left: 4px;
+}
+.progresss label,
+.review label {
+    padding: 0px 10px;
+    margin-left: 4px;
+    color: blue;
+    background: #b2b2f7;
+}
+.round_icons:nth-child(2n + 1) {
+    background: red;
+}
+
+.round_icons:nth-child(4n + 1) {
+    background: #6feb6f;
+}
+
+.round_icons:nth-child(3n + 1) {
+    background: #ec616c;
+}

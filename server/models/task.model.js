@@ -46,6 +46,10 @@ const tasks = mongoose.model(
         },
         attachmentType: {
             type: String
+        },
+        taskId:{
+            type:mongoose.Types.ObjectId,
+            ref:"tasks"
         }
     },
         {

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const userRoutes = require("./users.route");
+const userLoginRoute = require("./userLogin.route");
 const taskRoutes = require("./task.route");
 const projectRoute = require("./project.route");
 const sprintRoute = require("./sprint.route");
@@ -14,6 +15,7 @@ const historyRoute = require("./history.route");
 
 
 router.use("/users", userRoutes);
+router.use("/userLogin",userLoginRoute);
 router.use("/task", taskRoutes);
 router.use("/project", projectRoute);
 router.use("/sprint", sprintRoute);

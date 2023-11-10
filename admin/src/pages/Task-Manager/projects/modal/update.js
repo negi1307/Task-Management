@@ -90,6 +90,7 @@ const Update = ({ modal, closeModal, editData }) => {
         const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
         });
+        console.log(add[0], 'addddd');
         setAddValue([...addValue, add[0]]);
         console.log(addValue, 'addvalue info');
     };
@@ -106,7 +107,7 @@ const Update = ({ modal, closeModal, editData }) => {
             projectStatus: data?.projectstatus,
         };
         console.log('fsadsadsadsa', addValue);
-        dispatch(updateProject(body));
+        // dispatch(updateProject(body));
     };
     const selectedValues = editData?.technology?.map((item) => {
         return item.techName;
@@ -133,7 +134,7 @@ const Update = ({ modal, closeModal, editData }) => {
 
     return (
         <>
-            <Modal show={modal} onHide={closeModal} size="lg">
+            <Modal show={modal} className="add_round" onHide={closeModal} size="lg">
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
@@ -154,7 +155,7 @@ const Update = ({ modal, closeModal, editData }) => {
                     </>
                 ) : (
                     <Modal.Body className="py-0">
-                        <Card className="p-3">
+                        <div className="p-3">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={6}>
@@ -212,7 +213,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                min={watch("startDate")}
+                                                min={watch('startDate')}
                                                 {...register('endDate', { required: true })}
                                                 placeholder="Please end Date"
                                             />
@@ -229,11 +230,11 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('project_type', { required: true })}>
-                                                <option>Choose an Project Type </option>
+                                                <option value="">Choose an Project Type </option>
                                                 <option value="T&M">T&M</option>
-                                                <option value="Fixed Cost">Fixed Cost</option>
-                                                <option value=" Hourly">Hourly</option>
-                                                <option value="Dedicated team">Dedicated team</option>
+                                                <option value="FC">FC</option>
+                                                <option value=" HR">HR</option>
+                                                <option value="DT">DT</option>
                                             </Form.Select>
                                             {errors.project_type?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
@@ -276,7 +277,6 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 <option value="2">Live</option>
                                                 <option value="3">Hold</option>
                                                 <option value="4">Completed</option>
-                                                
                                             </Form.Select>
                                             {errors.projectstatus?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
@@ -296,7 +296,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                     </Col>
                                 </Row>
                             </Form>
-                        </Card>
+                        </div>
                     </Modal.Body>
                 )}
             </Modal>

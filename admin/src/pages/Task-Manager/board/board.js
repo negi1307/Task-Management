@@ -133,6 +133,7 @@ const Boards = () => {
 
     useEffect(() => {
         dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
+        dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
     }, [render]);
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
@@ -267,7 +268,6 @@ const Boards = () => {
         dispatch(getAllProjects(body));
         dispatch(getsingleMileStone({ id: '', activeStatus: 1, skip: 0, mileStoneId: '' }));
         dispatch(getSingleSprint({ activeStatus: 1, id: '', skip: 0 }));
-        dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
     }, []);
     const handleSearchChange = (e) => {
         e.preventDefault();
@@ -410,7 +410,7 @@ const Boards = () => {
                     <div className="ms-2">
                         <button
                             type="button"
-                            className="mybutton btn btn-info"
+                            className="mybutton btn btn-info web_button"
                             onClick={() => {
                                 console.log('button click');
                                 setShowModal(!showModal);

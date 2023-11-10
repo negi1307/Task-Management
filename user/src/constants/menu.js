@@ -7,6 +7,13 @@ const MENU_ITEMS = [
         url: 'dashboard/boards',
         icon: 'uil-chart',
     },
+   
+    {
+        key: 'projects',
+        label: 'projects',
+        url: 'dashboard/projects',
+        icon: 'uil-chart',
+    },
 
 ];
 
