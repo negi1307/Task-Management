@@ -14,6 +14,7 @@ import { addComment, getComment, updateComment, deleteComment,getCommentId } fro
 import { getsingleMileStone } from '../../../redux/milestone/action';
 
 
+
 // import CustomAvatar from '../TableComponents/CustomAvatar'
 
 import moment from 'moment';
@@ -43,7 +44,7 @@ const TaskInformation = styled.div`
 `;
 
 const TaskCard = ({ item, index, closeModal,showTaskDetailMOdel }) => {
-    
+    console.log("itmmmem")
     const store = useSelector(state => state)
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
@@ -51,6 +52,7 @@ const TaskCard = ({ item, index, closeModal,showTaskDetailMOdel }) => {
     const userId = store?.Auth?.user?.userId;
     const getComments = item?.comments;
     const historyData = store?.getHistoryData?.data?.response;
+    
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
@@ -92,6 +94,7 @@ const TaskCard = ({ item, index, closeModal,showTaskDetailMOdel }) => {
     const DeleteData = (id) => {
         dispatch(deleteComment({ commentId: id }));
     }
+// console.log(item ,"item")
     return (
         <>
             <Draggable key={item?.taskInfo?._id} draggableId={item?.taskInfo?._id} index={index}>
@@ -112,6 +115,7 @@ const TaskCard = ({ item, index, closeModal,showTaskDetailMOdel }) => {
                             </div> */}
                             <div >
                                 <p>{item?.taskInfo?.summary}</p>
+                                
                                 <div
                                     dangerouslySetInnerHTML={{
                                         __html: item?.taskInfo?.description,

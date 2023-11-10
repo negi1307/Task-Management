@@ -1,23 +1,27 @@
-
-
 import { useEffect } from 'react'
 import {getAllTask} from '../../../redux/task/action'
 import { useSelector,useDispatch } from 'react-redux'
 import { ListGroup, Container, Row, Col, Table, Button, Form, Card } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 
 
 const ListTask=()=>{
     const store=useSelector(state=>state)
-    console.log("listtaskk",store)
     const dispatch=useDispatch()
-    const listTaskData=store?.getAllTaskReducer?.data
-     
-const projectId=store?.getProjectId?.data
-const milstoneId=store?.getMilestoneId?.data
-const SprintId=store?.getSprintId?.data
-
+    const listTaskData=store?.getAllTaskReducer?.data?.response
+    const { projectId, milestoneId ,spriteId } = useParams()
+    console.log("projectId",projectId)
   useEffect(() => {
-    dispatch(getAllTask({id:'' , mileStoneId:'',sprintId:''}))  
+    let body={
+        flag:2,
+        status:true,
+        searchString:"",
+        projectId:projectId,
+        milestoneId:milestoneId,
+        sprintId:spriteId,
+        skip:1
+      }
+      dispatch(getAllTask(body))   
   }, [])
 
     return(
@@ -42,6 +46,15 @@ const SprintId=store?.getSprintId?.data
                                                     <th>Status</th>
                                                 </tr>
                                             </thead>
+                                            <tbody>
+                                            {/* {listTaskData?.map((item,index)=>
+                                                    <tr>
+                                                    <td>{item?.taskInfo.summary}</td>
+                                                </tr>
+                                                
+                                            )} */}
+                                            </tbody>
+                                            
                                             {/* <tbody>
                                                 {listTaskData?.map((item,index)=>
                                                 <tr>
