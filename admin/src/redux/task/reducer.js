@@ -410,7 +410,11 @@ export const getAssignUserReducer = (state = ASSIGN_USER_INITIAL_STATE, action) 
                 loading: false,
             };
 
-
+            // case TASK_TYPES.GET_ASSIGN_USER_RESET:
+            //     return {
+            //         data: ASSIGN_USER_INITIAL_STATE.data,
+            //         loading: false
+            //     }
         case TASK_TYPES.GET_ASSIGN_USER_ERROR:
             return {
                 data: [],

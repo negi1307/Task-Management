@@ -73,10 +73,10 @@ const AllUsers = () => {
             setcsvdownload(
                 csvdownloaddata?.data?.loginRecords?.map((ele) => {
                     return {
-                        id: ele?._id,
-                        firstname: ele?.userId?.firstName,
-                        lastname: ele?.userId?.lastName,
-                        loginTime: ele?.loginTime,
+                        ID : ele?._id,
+                        FirstName: ele?.userId?.firstName,
+                        LastName: ele?.userId?.lastName,
+                        LoginTime: moment(ele?.loginTime).format('LLL')
                     };
                 })
             );
@@ -85,7 +85,20 @@ const AllUsers = () => {
                 csvLink.current.link.click();
             }, 1000);
         }
+       
+                
     }, [csvdownloaddata]);
+    // useEffect(() => {
+    //     if (csvdownloaddata?.data?.status == 200) {
+    //         ToastHandle('success', csvdownloaddata?.data?.message);
+    //         // closeupdatemodal('render');
+    //     } else if (csvdownloaddata?.data?.status == 404) {
+    //         ToastHandle('error', csvdownloaddata?.data?.message);
+    //     } else if (csvdownloaddata?.data?.status == 500) {
+    //         ToastHandle('error', csvdownloaddata?.data?.message);
+    //     }
+    // }, [csvdownloaddata])
+    
 
     return (
         <div>
@@ -149,7 +162,9 @@ const AllUsers = () => {
                                                     </Row>
                                                 </td>
                                                 <td>
-                                                    <button onClick={() => handelCsvDownload(ele)}></button>
+                                                    <i
+                                                        className="mdi mdi-download m-0 p-0 cp font-20"
+                                                        onClick={() => handelCsvDownload(ele)}></i>
                                                 </td>
                                             </tr>
                                         );

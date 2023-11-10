@@ -112,6 +112,7 @@ const getProjects = async (req, res) => {
         {
           $project: {
             "technology.techName": 1,
+            "technology._id":1,
             projectName:1,
             clientName:1,
             activeStatus: 1,
@@ -165,6 +166,7 @@ const getProjects = async (req, res) => {
         {
           $project: {
             "technology.techName": 1,
+            "technology._id":1,
             projectName:1,
             clientName:1,
             activeStatus: 1,
@@ -205,9 +207,11 @@ const getProjects = async (req, res) => {
                 as: "technology",
               },
             },
+            
             {
               $project: {
                 "technology.techName": 1,
+                "technology._id":1,
                 projectName:1,
                 clientName:1,
                 activeStatus: 1,
@@ -249,6 +253,7 @@ const getProjects = async (req, res) => {
             {
               $project: {
                 "technology.techName": 1,
+                "technology._id":1,
                 projectName:1,
                 clientName:1,
                 activeStatus: 1,
@@ -296,6 +301,7 @@ const getProjects = async (req, res) => {
             {
               $project: {
                 "technology.techName": 1,
+                "technology._id":1,
                 projectName:1,
                 clientName:1,
                 activeStatus: 1,
