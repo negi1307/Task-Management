@@ -55,6 +55,7 @@ const Update = ({ modal, closeModal, editData }) => {
         return formattedDate;
     };
     useEffect(() => {
+        console.log(editData, 'dattatatatatatat');
         setFinalTechnology(editData?.technology);
         setAddValue(editData?.technology);
         reset({
