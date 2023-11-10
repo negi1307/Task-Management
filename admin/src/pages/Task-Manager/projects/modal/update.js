@@ -90,6 +90,7 @@ const Update = ({ modal, closeModal, editData }) => {
         const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
         });
+        console.log(add[0], 'addddd');
         setAddValue([...addValue, add[0]]);
         console.log(addValue, 'addvalue info');
     };
@@ -106,7 +107,7 @@ const Update = ({ modal, closeModal, editData }) => {
             projectStatus: data?.projectstatus,
         };
         console.log('fsadsadsadsa', addValue);
-        dispatch(updateProject(body));
+        // dispatch(updateProject(body));
     };
     const selectedValues = editData?.technology?.map((item) => {
         return item.techName;

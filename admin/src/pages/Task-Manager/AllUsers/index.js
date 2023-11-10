@@ -14,7 +14,6 @@ import { CSVLink } from 'react-csv';
 const AllUsers = () => {
     const store = useSelector((state) => state);
     const csvLink = useRef();
-
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const [deleteId, setdeleteId] = useState();
@@ -119,10 +118,10 @@ const AllUsers = () => {
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th> First Name</th>
+                                    <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Email</th>
-                                    <th> Create Date</th>
+                                    <th>Create Date</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
