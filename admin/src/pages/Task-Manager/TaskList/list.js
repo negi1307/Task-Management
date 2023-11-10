@@ -123,9 +123,7 @@ const TaskList = () => {
             projectStatus:""
         };
         dispatch(getAllProjects(body));
-        dispatch(getsingleMileStone({ id: projectId, activeStatus: 1 ,skip:0, mileStoneId:""  }));
-        // dispatch(getSprintById({ status: 1, id: milestoneId }));
-        dispatch(getSingleSprint({ activeStatus: 1, id: milestoneId , skip:1}));
+      
     }, [render]);
     const handleTaskStatus = (val) => {
         if (val == '1') {

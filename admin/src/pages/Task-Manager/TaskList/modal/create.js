@@ -9,16 +9,19 @@ import { createTask } from '../../../../redux/task/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { getSingleSprint, getsingleMileStone } from '../../../../redux/actions';
 
 const Create = ({ modal, CloseModal }) => {
     const {
         register,
         handleSubmit,
-        watch,
+        watch,setValue,
         formState: { errors },
     } = useForm();
     const store = useSelector((state) => state);
     const [description, setDescription] = useState('');
+    const [milestoneDisable,setMilestoneDisable]=useState(true)
+    const [sprintDisable,setsprintDisable]=useState(true)
     const projectId = store?.getProjectId?.data;
     const milestoneId = store?.getMilestoneId?.data;
     const sprintid = store?.getSprintId?.data;
@@ -29,11 +32,11 @@ const Create = ({ modal, CloseModal }) => {
 
     const onSubmit = (e) => {
         let body = new FormData();
-        body.append('projectId', projectId);
-        body.append('milestoneId', milestoneId);
-        body.append('sprintId', sprintid);
+        body.append('projectId', e.projectname);
+        body.append('milestoneId', e.Milestone);
+        body.append('sprintId', e.Sprint);
         body.append('summary', e.summary);
-        body.append('description', description);
+        body.append('description', e.description);
         body.append('assigneeId', e.Assignee);
         body.append('reporterId', e.Reporter);
         body.append('priority', e.Priority);
@@ -41,11 +44,18 @@ const Create = ({ modal, CloseModal }) => {
         body.append('dueDate', e.dueDate);
         body.append('status', 1);
         body.append('attachment', e.Attachment[0]);
-        if (projectId !== '' && milestoneId !== '' && sprintid !== '') {
+        
             dispatch(createTask(body));
-        } else {
-            alert('plsease select project');
-        }
+            setValue('projectname', '');
+            setValue('Milestone', '');
+            setValue('description', '');
+            setValue('Sprint', '');
+            setValue('summary', '');
+            setValue('Assignee', '');
+            setValue('Reporter', '');
+            setValue('Priority', '');
+            setValue('startdate', '');
+            setValue('dueDate', '');
         // setShowModal(false);
     };
 
@@ -63,12 +73,16 @@ const Create = ({ modal, CloseModal }) => {
             ToastHandle('error', Createhandel?.data?.message);
         }
     }, [Createhandel]);
-    const handelProject=(ele)=>{
-console.log(ele ,"ppppppppppppppppppppppppppp")
+    const handelProject=(e)=>{
+        dispatch(getsingleMileStone({ id: e.target.value, activeStatus: 1 ,skip:0, mileStoneId:""  }));
+        setMilestoneDisable(false)
     }
-    const handelmilestone=(ele)=>{
-console.log(ele,"wwwwwwwwwwwww")
+    const handelmilestone=(e)=>{
+        dispatch(getSingleSprint({ activeStatus: 1, id: e.target.value , skip:0}));
+        setsprintDisable(false)
     }
+    
+ 
     return (
         <Modal show={modal} onHide={handleClose} size="lg">
             <Row className="m-0 p-0">
@@ -100,7 +114,7 @@ console.log(ele,"wwwwwwwwwwwww")
 
                                             <Form.Select 
                                                 {...register('projectname', { required: true, })} onChange={handelProject}>
-                                                {/* <option value={''}>--Select--</option> */}
+                                                <option value={''}>--Select--</option>
                                                 {store?.getProject?.data?.response?.map((ele, ind) => (
                                                     <option value={ele?._id} > {ele?.projectName} </option>
                                                 ))}
@@ -117,8 +131,8 @@ console.log(ele,"wwwwwwwwwwwww")
                                                 Milestone<span className="text-danger">*</span>:
                                             </Form.Label>
 
-                                            <Form.Select {...register('Milestone', { required: true, })} onChange={handelmilestone}>
-                                                {/* <option value={''}>--Select--</option> */}
+                                            <Form.Select {...register('Milestone', { required: true, })} onChange={handelmilestone} disabled={milestoneDisable}>
+                                                <option value={''}>--Select--</option>
                                                 {store?.getSigleMileStone?.data?.response?.map((ele, ind) => (
                                                     <option value={ele?._id} key={ele?._id}> {ele?.title} </option>
                                                 ))}
@@ -138,8 +152,9 @@ console.log(ele,"wwwwwwwwwwwww")
                                                     Sprint <span className="text-danger">*</span>:
                                                 </Form.Label>
 
-                                                <Form.Select {...register('Sprint', { required: true})}>
-                                                    {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
+                                                <Form.Select {...register('Sprint', { required: true ,})}disabled={sprintDisable}>
+                                                    <option>--select--</option>
+                                                    {store?.getAllSingleSprints?.data?.response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.sprintName} </option>
                                                     ))}
                                                 </Form.Select>
@@ -175,20 +190,16 @@ console.log(ele,"wwwwwwwwwwwww")
                                                 {' '}
                                                 Description<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <CKEditor
-                                                editor={ClassicEditor}
-                                                config={{
-                                                    ckfinder: {
-                                                        uploadUrl:
-                                                            'https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
-                                                    },
-                                                }}
-                                                data=""
-                                                onChange={(event, editor) => {
-                                                    const data = editor.getData();
-                                                    setDescription(data);
-                                                }}
+                                            <Form.Control
+                                                as="textarea"
+                                                rows={3}
+                                                type="text"
+                                                placeholder="Please Enter Description"
+                                                {...register('description', { required: true })}
                                             />
+                                            {errors.description?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
                                         </Form.Group>
                                     </Col>
                                     <Col lg={6}>

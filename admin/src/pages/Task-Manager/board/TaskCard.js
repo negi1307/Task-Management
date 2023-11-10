@@ -50,6 +50,7 @@ const TaskInformation = styled.div`
 `;
 
 const TaskCard = ({ item, index, Column, closeModal }) => {
+    console.log(item,"item")
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState();
     const [editData, setEditData] = useState();
