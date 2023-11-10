@@ -35,7 +35,7 @@ const TaskList = () => {
     };
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getsingleSprintTask({ id: '', skip: value, activeStatus: activeStatus }));
+        dispatch(getsingleSprintTask({ id: '', skip: value, activeStatus: activeStatus ,taskStatus:taskStatus}));
     };
     const CloseModal = (val) => {
         if (val == 'render') {
@@ -47,24 +47,29 @@ const TaskList = () => {
         if (val) {
             setStatus(1);
             setSkip(1);
-            setActiveStatus(true);
+            
             let data = {
                 id: '',
                 activeStatus: true,
                 skip: 1,
+                taskStatus:taskStatus
             };
             dispatch(getsingleSprintTask(data));
+           
         } else {
             setStatus(0);
             setSkip(1);
-            setActiveStatus(false);
+       
             let data = {
                 id: '',
                 activeStatus: false,
                 skip: 1,
+                taskStatus:taskStatus
             };
             dispatch(getsingleSprintTask(data));
+                 
         }
+        
     };
     const handleStatusChange = (e, data) => {
         if (e.target.checked) {
@@ -92,7 +97,7 @@ const TaskList = () => {
         setStatusModal(false);
     };
     useEffect(() => {
-        dispatch(getsingleSprintTask({ id: '', activeStatus: true, skip: skip }));
+        dispatch(getsingleSprintTask({ id: '', taskStatus:taskStatus, activeStatus: true, skip: skip }));
     }, [render]);
     useEffect(() => {
         dispatch(getAllRoles());
@@ -108,28 +113,47 @@ const TaskList = () => {
             ToastHandle('error', deletehandle?.message);
         }
     }, [deletehandle]);
+    const handleTaskStatus = (val) => {
+        if (val == '1') {
+            settaskStatus(1);
+            setSkip(1);
+            dispatch(getsingleSprintTask({ id: '' ,activeStatus: true, skip: 1, taskStatus: 1 }));
+        } else if (val == '2') {
+            settaskStatus(2);
+            setSkip(1);
+            dispatch(getsingleSprintTask({ id: '' ,activeStatus: true, skip: 1, taskStatus: 2 }));
+        } else if (val == '3') {
+            setSkip(1);
+            settaskStatus(3);
+            dispatch(getsingleSprintTask({ id: '' ,activeStatus: true, skip: 1, taskStatus: 3 }));
+        } else {
+            setSkip(1);
+            settaskStatus(4);
+            dispatch(getsingleSprintTask({ id: '' ,activeStatus: true, skip: 1, taskStatus: 4 }));
+        }
+    };
     return (
         <>
             <div className="row mx-auto">
                 <div className="row d-flex align-items-center">
                     <div className={`col-auto  cp ${taskStatus == 1 ? 'Active_data' : 'InActive_data'}`}>
-                        <p className="p-0 m-0 p-1 cp" onClick={() => settaskStatus('1')}>
+                        <p className="p-0 m-0 p-1 cp" onClick={() => handleTaskStatus('1')}>
                             Todo
                         </p>
                     </div>
                     <div className={`col-auto  cp ${taskStatus == 2 ? 'Active_data' : 'InActive_data'}`}>
-                        <p className="p-0 m-0 p-1 cp" onClick={() => settaskStatus('2')}>
+                        <p className="p-0 m-0 p-1 cp" onClick={() => handleTaskStatus('2')}>
                             In Progress
-                        </p>
+                        </p> 
                     </div>
 
                     <div className={`col-auto  cp ${taskStatus == 3 ? 'Active_data' : 'InActive_data'}`}>
-                        <p className="p-0 m-0 p-1 cp" onClick={() => settaskStatus('3')}>
+                        <p className="p-0 m-0 p-1 cp" onClick={() => handleTaskStatus('3')}>
                             Hold
                         </p>
                     </div>
                     <div className={`col-auto  cp ${taskStatus == 4 ? 'Active_data' : 'InActive_data'}`}>
-                        <p className=" p-0 m-0 p-1 cp" onClick={() => settaskStatus('4')}>
+                        <p className=" p-0 m-0 p-1 cp" onClick={() => handleTaskStatus('4')}>
                             Done
                         </p>
                     </div>
@@ -151,7 +175,7 @@ const TaskList = () => {
                 <div className="col-4 d-flex align-items-center justify-content-center">
                     <h4 className="header-title heading_data"> Tasks</h4>
                 </div>
-                {status == 1 ? (
+                {status == 1 && taskStatus==1 ? (
                     <div className="col-4 d-flex align-items-center justify-content-end pe-0">
                         <Button className="web_button" variant="info" onClick={handleCreate}>
                             Create Task

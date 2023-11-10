@@ -159,7 +159,8 @@ const Sprint = () => {
                                                 <th>SprintName</th>
                                                 <th>Sprint Description</th>
                                                 <th>Sprint Start Date</th>
-                                                <th>Sprint End Date</th>
+                                                <th>Days Left</th>
+                                                {/* <th>Sprint End Date</th> */}
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
@@ -178,7 +179,8 @@ const Sprint = () => {
                                                     </td>
 
                                                     <td> {moment(item?.startDate).format('L')}</td>
-                                                    <td>{moment(item?.endDate).format('L')}</td>
+                                                    <td>{item?.daysLeft}</td>
+                                                    {/* <td>{moment(item?.endDate).format('L')}</td> */}
                                                     <td>
                                                         {console.log(item, 'ppppppppppp')}
                                                         <Form.Check
