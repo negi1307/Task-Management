@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
 import ToastHandle from '../../../constants/toaster/toaster';
 import UpdateTask from './update';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 // import CustomAvatar from '../TableComponents/CustomAvatar'
 // import { ReactComponent as RedArrow } from '../../assets/icons/High.svg'
 // import { ReactComponent as YellowArrow } from '../../assets/icons/Medium.svg'
@@ -158,7 +159,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                 <div className="col-12">
                                     <div className="row">
                                         <div className="col-6 d-flex align-items-center">
-                                            <div className="secondary-details">
+                                            <div className="secondary-details d-flex align-items-center">
                                                 <p>
                                                     <span>
                                                         {item?.startDate ? moment(item?.startDate).format('ll') : ''}
@@ -166,13 +167,35 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="col-6">
+                                        <div className="col-6 d-flex align-items-center justify-content-end">
                                             <div className=" d-flex">
-                                                <h5 className="m-0 p-0"> Assignee :</h5>
-                                                <p className="ms-2 p-0">
+                                                {/* <h5 className="m-0 p-0"> Assignee :</h5> */}
+                                                <OverlayTrigger
+                                placement="top"
+                                overlay={
+                                    <Tooltip id="tooltip1">
+                                        {item?.assignees?.assigneeInfo?.firstName}{' '}
+                                                    {item?.assignees?.assigneeInfo?.lastName}
+                                    </Tooltip>
+                                }>
+                                <div className="mt-1 cp">
+                                    <span
+                                        style={{
+                                            backgroundColor: '#605e5a',
+                                            borderRadius: '100%',
+                                            padding: '9px',
+                                            color: 'white',
+                                            fontWeight: '800',
+                                        }}>
+                                        {item?.assignees?.assigneeInfo?.firstName.charAt(0)}
+                                        {item?.assignees?.assigneeInfo?.lastName.charAt(0)}
+                                    </span>
+                                </div>
+                            </OverlayTrigger>
+                                                {/* <p className="ms-2 p-0">
                                                     {item?.assignees?.assigneeInfo?.firstName}{' '}
                                                     {item?.assignees?.assigneeInfo?.lastName}
-                                                </p>
+                                                </p> */}
                                             </div>
                                         </div>
                                     </div>
