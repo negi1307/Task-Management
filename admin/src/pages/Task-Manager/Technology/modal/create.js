@@ -24,7 +24,7 @@ const Create = ({ modal, closeModal }) => {
     } = useForm();
     const onSubmit = (data) => {
         let body = {
-            techCategory_id:data?.category,
+            techCategory_id: data?.category,
             techName: data?.technologyName,
         };
         dispatch(createTechnology(body));
@@ -47,11 +47,11 @@ const Create = ({ modal, closeModal }) => {
             status: true,
         };
         dispatch(getAllTechnologyCategory(body));
-    }, [])
-    
+    }, []);
+
     return (
         <>
-            <Modal show={modal} onHide={closeModal}>
+            <Modal show={modal} className="add_round" onHide={closeModal}>
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
@@ -70,9 +70,9 @@ const Create = ({ modal, closeModal }) => {
                     <MainLoader />
                 ) : (
                     <Modal.Body className="py-0">
-                        <Card className="p-2">
+                        <div className="p-2">
                             <Form onSubmit={handleSubmit(onSubmit)}>
-                            <Row>
+                                <Row>
                                     <Col lg={12}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Row>
@@ -82,14 +82,14 @@ const Create = ({ modal, closeModal }) => {
                                                     </Form.Label>
                                                 </Col>
                                                 <Col lg={8}>
-                                                    <Form.Select
-                                                        {...register('category', { required: true })}
-                                                    >
-                                                      <option value={''}>--Select--</option>
-                                                {store?.getAllTechnologyCategoryReducer?.data?.response?.map((ele, ind) => (
-                                                    <option value={ele?._id}> {ele?.name} </option>
-                                                ))}
-                                                </Form.Select>
+                                                    <Form.Select {...register('category', { required: true })}>
+                                                        <option value={''}>--Select--</option>
+                                                        {store?.getAllTechnologyCategoryReducer?.data?.response?.map(
+                                                            (ele, ind) => (
+                                                                <option value={ele?._id}> {ele?.name} </option>
+                                                            )
+                                                        )}
+                                                    </Form.Select>
                                                     {errors.category?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>
                                                     )}
@@ -133,7 +133,7 @@ const Create = ({ modal, closeModal }) => {
                                     </Col>
                                 </Row>
                             </Form>
-                        </Card>
+                        </div>
                     </Modal.Body>
                 )}
             </Modal>

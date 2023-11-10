@@ -31,7 +31,7 @@ const Update = ({ modal, closeModal, editData }) => {
     ];
     const [selected, setSelected] = useState([]);
     const [addValue, setAddValue] = useState([]);
-    console.log("addvalueeeee",addValue)
+    console.log('addvalueeeee', addValue);
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     const handleDate = (data) => {
         let date = new Date(data);
@@ -89,7 +89,6 @@ const Update = ({ modal, closeModal, editData }) => {
             project_type: data?.project_type,
             technology: addValue,
             projectStatus: data?.projectstatus,
-           
         };
 
         dispatch(updateProject(body));
@@ -120,7 +119,7 @@ const Update = ({ modal, closeModal, editData }) => {
 
     return (
         <>
-            <Modal show={modal} onHide={closeModal} size="lg">
+            <Modal show={modal} className="add_round" onHide={closeModal} size="lg">
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
@@ -141,7 +140,7 @@ const Update = ({ modal, closeModal, editData }) => {
                     </>
                 ) : (
                     <Modal.Body className="py-0">
-                        <Card className="p-3">
+                        <div className="p-3">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={6}>
@@ -279,7 +278,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                     </Col>
                                 </Row>
                             </Form>
-                        </Card>
+                        </div>
                     </Modal.Body>
                 )}
             </Modal>

@@ -1,5 +1,4 @@
 const userLoginModel = require("../models/userLogin.model");
-const userModel = require("../models/users.model")
 
 // login time is save in the DB
 const userLogin = async (req, res) => {

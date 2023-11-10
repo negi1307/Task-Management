@@ -9,17 +9,19 @@ import ToastHandle from '../../../constants/toaster/toaster';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 const TaskDetailPage = ({ modal, editData, closeModal }) => {
-    console.log(editData, 'editdataaaaaaaaaaa');
+    // console.log(editData, 'editdataaaaaaaaaaa');
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [connectComponent, setConnectComponent] = useState('All');
     const [buttonChange, setButtonChange] = useState(true);
     const [commentId, setCommentId] = useState();
-    const [commentTextUpdate, setCommentTextUpdate] = useState(false)
+    const [commentTextUpdate, setCommentTextUpdate] = useState(false);
     const getCommentData = store?.getComment?.data?.response;
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
     };
+    const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
+    const [inputForUpdate, setInputForUpdate] = useState('');
     const {
         register,
         handleSubmit,
@@ -51,9 +53,31 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
         dispatch(deleteComment({ taskId: data?._id }));
     };
     const handelUpdate = (data) => {
+        console.log(data);
         setCommentId(data?._id);
         setValue('comment', data?.comment);
         setButtonChange(false);
+    };
+    const handelUpdateAll = (data, indx) => {
+        console.log(indx);
+        setAllCommetUpdateId(data?._id);
+        console.log(data?._id, 'in my id');
+        reset({
+            updated_comment: data?.comment,
+        });
+        setInputForUpdate(indx);
+        console.log(data, allCommetUpdateId);
+
+        // console.log(body);
+    };
+    const submitUpdateComment = (data) => {
+        let body = {
+            commentId: allCommetUpdateId,
+            comment: data?.updated_comment,
+        };
+        dispatch(UpdateCommentAction(body));
+        setInputForUpdate(false);
+        console.log(data, allCommetUpdateId);
     };
     return (
         <>
@@ -148,19 +172,46 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                             </p>
                                                             {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
                                                         </div>
-                                                        <div className="m-0 p-0">
-                                                            <li className="font-18  ">{ele?.comment}</li>
-                                                        </div>
-                                                        <div className="d-flex m-0 p-0">
-                                                            <p className=" p-0" onClick={() => handelUpdate(ele)}>
-                                                                Edit
-                                                            </p>
-                                                            <p
-                                                                className=" cp  p-0 ps-2"
-                                                                onClick={() => handeldelete(ele)}>
-                                                                Delete
-                                                            </p>
-                                                        </div>
+                                                        {inputForUpdate === ind ? (
+                                                           
+                                                                <form onSubmit={handleSubmit(submitUpdateComment)}>
+                                                                     <Row className="mt-2 d-flex" >
+                                                                    <Col lg={9}>
+                                                                        <Form.Group
+                                                                            className="mb-1"
+                                                                            controlId="exampleForm.ControlInput1">
+                                                                            <Form.Control
+                                                                                type="text"
+                                                                                placeholder="Update comment"
+                                                                                {...register(`updated_comment`)}
+                                                                            />
+                                                                        </Form.Group>
+                                                                    </Col>
+                                                                    <Col className="m-0 p-0" lg={1}>
+                                                                        <Button type="submit">Update</Button>
+                                                                    </Col>
+                                                                    </Row>
+                                                                </form>
+                                                            
+                                                        ) : (
+                                                            <>
+                                                                <div className="m-0 p-0">
+                                                                    <li className="font-18  ">{ele?.comment}</li>
+                                                                </div>
+                                                                <div className="d-flex m-0 p-0">
+                                                                    <p
+                                                                        className=" p-0"
+                                                                        onClick={() => handelUpdateAll(ele, ind)}>
+                                                                        Edit
+                                                                    </p>
+                                                                    <p
+                                                                        className=" cp  p-0 ps-2"
+                                                                        onClick={() => handeldelete(ele)}>
+                                                                        Delete
+                                                                    </p>
+                                                                </div>
+                                                            </>
+                                                        )}
                                                     </Col>
                                                 </Col>
                                             </Row>

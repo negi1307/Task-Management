@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
 import { createTask } from '../../../../../redux/task/action';
 import ToastHandle from '../../../../../constants/toaster/toaster';
-const Create = ({ modal, CloseModal ,data }) => {
+const Create = ({ modal, CloseModal, data }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const errorhandel = store?.createTaskReducer;
@@ -21,24 +21,24 @@ const Create = ({ modal, CloseModal ,data }) => {
     } = useForm();
 
     const onSubmit = (val) => {
-          let body={
-            sprint_id: data?._id ,
-            milestone_id:data?.milestone_id,
-            project_id: data?.project_id ,
-            task_name:val?.Name,
-            task_summery:val?.summary,
-            start_time:val?.Startdate,
-            end_time:val?.Enddate,
-            status:val?.status,
-            module:val?.module,
-            original_estimate:val?.estimatedate,
-            actual_time:val?.actualtime,
-            due_date:val?.dueDate
-          }
-          dispatch( createTask(body))
+        let body = {
+            sprint_id: data?._id,
+            milestone_id: data?.milestone_id,
+            project_id: data?.project_id,
+            task_name: val?.Name,
+            task_summery: val?.summary,
+            start_time: val?.Startdate,
+            end_time: val?.Enddate,
+            status: val?.status,
+            module: val?.module,
+            original_estimate: val?.estimatedate,
+            actual_time: val?.actualtime,
+            due_date: val?.dueDate,
+        };
+        dispatch(createTask(body));
     };
     const handleClose = () => {
-        reset()
+        reset();
         CloseModal();
     };
     useEffect(() => {
@@ -95,7 +95,7 @@ const Create = ({ modal, CloseModal ,data }) => {
                                                     Status<span className="text-danger">*</span>:
                                                 </Form.Label>
                                                 <Form.Select {...register('status', { required: true })}>
-                                                <option >---Select---</option>
+                                                    <option>---Select---</option>
                                                     <option value="1">To Do</option>
                                                     <option value="2">In Progress</option>
                                                     <option value="3">Done</option>
