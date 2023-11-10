@@ -25,7 +25,7 @@ const Update = ({ modal, closeModal, editData }) => {
 
     useEffect(() => {
         reset({
-            category:editData?.techCategory_id?._id,
+            category: editData?.techCategory_id?._id,
             TechnologyName: editData?.techName,
         });
     }, [modal]);
@@ -34,7 +34,7 @@ const Update = ({ modal, closeModal, editData }) => {
     const onSubmit = (data) => {
         let body = {
             id: editData?._id,
-            techCategory_id: data?.category ,
+            techCategory_id: data?.category,
             techName: data?.TechnologyName,
         };
         dispatch(updateTechnology(body));
@@ -44,7 +44,7 @@ const Update = ({ modal, closeModal, editData }) => {
             status: true,
         };
         dispatch(getAllTechnologyCategory(body));
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
@@ -77,7 +77,7 @@ const Update = ({ modal, closeModal, editData }) => {
                     <MainLoader />
                 ) : (
                     <Modal.Body className="py-0">
-                        <Card className="p-2">
+                        <div className="p-2">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={12}>
@@ -140,7 +140,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                     </Col>
                                 </Row>
                             </Form>
-                        </Card>
+                        </div>
                     </Modal.Body>
                 )}
             </Modal>
