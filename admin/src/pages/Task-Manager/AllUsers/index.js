@@ -25,7 +25,7 @@ const AllUsers = () => {
     const [csvdownload, setcsvdownload] = useState([]);
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
-    const csvdownloaddata = store?.getCsvDataReducer?.data?.loginRecords
+    const csvdownloaddata = store?.getCsvDataReducer
     console.log(csvdownloaddata,"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
     // const handelUpdate = (data) => {
     //     setEditData(data);
@@ -67,11 +67,20 @@ const AllUsers = () => {
         }
     }, [deletehandle]);
     const handelCsvDownload = (ele) => {
-        dispatch(getCSVdata(ele?._id));
-        // setcsvdownload(csvdownloaddata);
-        // csvLink.current.link.click()
+     dispatch(getCSVdata(ele?._id));
+       
+       
     };
-
+    useEffect(() => {
+     if (csvdownloaddata?.data?.status == 200 && csvdownloaddata?.data?.length !== 0){
+        setcsvdownload(csvdownloaddata?.data?.loginRecords?.map((ele)=> {return { id: ele?._id ,firstname:ele?.userId?.firstName , lastname:ele?.userId?.lastName , loginTime:ele?.loginTime}}))
+        setTimeout(() => {
+        //    document.getElementById("csvid").click() 
+        csvLink.current.link.click()
+        }, 1000);
+     }
+    }, [csvdownloaddata])
+    
     return (
         <div>
             <Card>
@@ -108,8 +117,8 @@ const AllUsers = () => {
                                                     <span className="namelink"> {ele?.firstName} </span>
                                                 </td>
                                                 <td className="cp">
-                                                    <span className="namelink"> {ele?.lastName} </span>
-                                                </td>
+                                                    
+                                                         <span className="namelink"> {ele?.lastName} </span>                                               </td>
                                                 <td className="w-20">
                                                     <span className="namelink"> {ele?.email}</span>
                                                 </td>
@@ -135,13 +144,7 @@ const AllUsers = () => {
                                                 </td>
                                                 <td>
                                                     <button onClick={() => handelCsvDownload(ele)}></button>
-                                                    <CSVLink
-                                                        data={csvdownload}
-                                                        filename="userdata.csv"
-                                                        className="hidden"
-                                                        ref={csvLink}
-                                                        target="_blank"
-                                                    />
+                                               
                                                 </td>
                                             </tr>
                                         );
@@ -150,6 +153,14 @@ const AllUsers = () => {
                             </tbody>
                         </Table>
                     )}
+                    <CSVLink
+                                                            data={csvdownload}
+                                                            filename="userdata.csv"
+                                                            className="hidden"
+                                                            ref={csvLink}
+                                                            id={`csvid`}
+                                                            target="_blank"
+                                                        ><span ></span></CSVLink>
                 </Card.Body>
             </Card>
             {/* delete modal */}

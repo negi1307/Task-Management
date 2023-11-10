@@ -20,8 +20,8 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
     };
-    const [allCommentVal, setAllCommentVal] = useState('');
-    const [inputForUpdate, setInputForUpdate] = useState(false);
+    const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
+    const [inputForUpdate, setInputForUpdate] = useState('');
     const {
         register,
         handleSubmit,
@@ -58,17 +58,26 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
         setValue('comment', data?.comment);
         setButtonChange(false);
     };
-    const handelUpdateAll = (data) => {
+    const handelUpdateAll = (data, indx) => {
+        console.log(indx);
+        setAllCommetUpdateId(data?._id);
+        console.log(data?._id, 'in my id');
         reset({
             updated_comment: data?.comment,
         });
-        setInputForUpdate(true);
-        console.log(data);
-        // let body = {
-        //     commentId: commentId,
-        //     comment: val?.comment,
-        // };
-        // dispatch(UpdateCommentAction(body));
+        setInputForUpdate(indx);
+        console.log(data, allCommetUpdateId);
+
+        // console.log(body);
+    };
+    const submitUpdateComment = (data) => {
+        let body = {
+            commentId: allCommetUpdateId,
+            comment: data?.updated_comment,
+        };
+        dispatch(UpdateCommentAction(body));
+        setInputForUpdate(false);
+        console.log(data, allCommetUpdateId);
     };
     return (
         <>
@@ -163,16 +172,17 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                             </p>
                                                             {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
                                                         </div>
-                                                        {inputForUpdate ? (
-                                                            <Row className="mt-2">
-                                                                <form onSubmit={handleSubmit(handelUpdateAll)}>
+                                                        {inputForUpdate === ind ? (
+                                                           
+                                                                <form onSubmit={handleSubmit(submitUpdateComment)}>
+                                                                     <Row className="mt-2 d-flex" >
                                                                     <Col lg={9}>
                                                                         <Form.Group
                                                                             className="mb-1"
                                                                             controlId="exampleForm.ControlInput1">
                                                                             <Form.Control
                                                                                 type="text"
-                                                                                placeholder="Add comment"
+                                                                                placeholder="Update comment"
                                                                                 {...register(`updated_comment`)}
                                                                             />
                                                                         </Form.Group>
@@ -180,8 +190,9 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                                     <Col className="m-0 p-0" lg={1}>
                                                                         <Button type="submit">Update</Button>
                                                                     </Col>
+                                                                    </Row>
                                                                 </form>
-                                                            </Row>
+                                                            
                                                         ) : (
                                                             <>
                                                                 <div className="m-0 p-0">
@@ -190,7 +201,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                                 <div className="d-flex m-0 p-0">
                                                                     <p
                                                                         className=" p-0"
-                                                                        onClick={() => handelUpdateAll(ele)}>
+                                                                        onClick={() => handelUpdateAll(ele, ind)}>
                                                                         Edit
                                                                     </p>
                                                                     <p
