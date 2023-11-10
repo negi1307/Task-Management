@@ -78,11 +78,8 @@ const addProject = async (req, res) => {
 const getProjects = async (req, res) => {
   try {
    let active;
-          if (req.query.activeStatus == 1) {
-            active= true;
-          } else {
-            active=false;
-          }
+          if (req.query.activeStatus == 1) { active= true}  
+          else { active=false}
      const pageSize = 10;
   
    if(req.query.activeStatus && !req.query.skip && !req.query.projectId){
@@ -120,23 +117,11 @@ const getProjects = async (req, res) => {
         }
       ]);  
  
-      return res
-      .status(200)
-      .json({
-        status: "200",
-        message: "Project Details fetched successfully",
-        response: projects,
-      });
+      return res.status(200).json({status: "200", message: "Project Details fetched successfully",response: projects});
      }
      const projectStatus = parseInt(req.query.projectStatus)
-
      const skip = parseInt(req.query.skip)
-    if (
-      skip === 0 &&
-      !projectStatus &&
-      !req.query.projectId &&
-      !req.query.activeStatus
-    ) {
+    if (skip === 0 && !projectStatus && !req.query.projectId && !req.query.activeStatus) {
       // If skip is 0 and all other fields are empty, send the whole data.
       // const projects = await projectModel.find().populate('technology', 'techName') .sort({ createdAt: -1 });
       const projects = await projectModel.aggregate([
@@ -248,8 +233,6 @@ const getProjects = async (req, res) => {
           return res.status(200).json({status: "200",message: "Projects fetched successfully",response: projects});
         }
       } else {
-        
-        
          let status=parseInt(req.query.projectStatus);
           const projects = await projectModel.aggregate([
             { $match: { activeStatus: JSON.parse(active),projectStatus:status} },
@@ -296,7 +279,6 @@ const getProjects = async (req, res) => {
         //   .limit(pageSize)
         //   .skip((skip - 1) * pageSize);
         const totalPages = Math.ceil(totalCount / pageSize);
-
         return res.status(200).json({status: "200",message: "Projects fetched successfully",response: projects,totalCount,totalPages});
       }
     }
