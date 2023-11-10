@@ -10,7 +10,7 @@ import ToastHandle from '../../../../constants/toaster/toaster';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { getSingleSprint, getsingleMileStone } from '../../../../redux/actions';
-
+import moment from 'moment';
 const Create = ({ modal, CloseModal }) => {
     const {
         register,
@@ -48,6 +48,8 @@ const Create = ({ modal, CloseModal }) => {
             dispatch(createTask(body));
             setValue('projectname', '');
             setValue('Milestone', '');
+            setsprintDisable(true)
+            setMilestoneDisable(true)
             setValue('description', '');
             setValue('Sprint', '');
             setValue('summary', '');
