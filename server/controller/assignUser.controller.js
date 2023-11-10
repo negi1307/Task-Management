@@ -19,54 +19,23 @@ const addUserAssignments = async (req, res) => {
 
     const alreadyAssigned = await assignUserModel.findOne(query);
     if (alreadyAssigned) {
-      return res
-        .status(200)
-        .json({
-          status: "400",
-          message: `This ${
-            projectId || milestoneId || sprintId || taskId
-          } is already assigned to the User ${assigneeId}`,
-        });
+      return res.status(200).json({status: "400",message: `This ${projectId || milestoneId || sprintId || taskId} is already assigned to the User ${assigneeId}`});
     } else {
-      const result = await assignUserModel.create({
-        projectId,
-        milestoneId,
-        sprintId,
-        taskId,
-        assigneeId,
-        reporterId,
-      });
-      return res
-        .status(200)
-        .json({
-          status: "200",
-          message: "Assigned Successfully",
-          response: result,
-        });
+      const result = await assignUserModel.create({projectId,milestoneId,sprintId,taskId,assigneeId,reporterId});
+      return res.status(200).json({status: "200",message: "Assigned Successfully",response: result});
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({status: "500",message: "Something went wrong",error: error.message});
   }
 };
 
 // // Get User assignments
 // const getUserAssignmentss = async (req, res) => {
 //     try {
-//         const query = {
-//             assigneeId: req.user._id
-//         };
-//         if (req.query.flag == 1) {
-//             query.projectId = { $exists: true };
-//         } else if (req.query.flag == 2) {
-//             query.milestoneId = { $exists: true };
-//         } else if (req.query.flag == 3) {
-//             query.sprintId = { $exists: true };
+//         const query = { assigneeId: req.user._id };
+//         if (req.query.flag == 1) { query.projectId = { $exists: true };
+//         } else if (req.query.flag == 2) { query.milestoneId = { $exists: true };
+//         } else if (req.query.flag == 3) { query.sprintId = { $exists: true };
 //         }
 //         const result = await assignUserModel.find(query).populate([
 //             { path: 'projectId', select: 'projectName' },
@@ -87,9 +56,7 @@ const getUserAssignments = async (req, res) => {
   try {
     let pageSize = 10;
     const { flag, skip } = req.query;
-    const taskIds = await assignUserModel.distinct("taskId", {
-      assigneeId: req.user._id,
-    });
+    const taskIds = await assignUserModel.distinct("taskId", {assigneeId: req.user._id});
     if (flag == 1) {
       const projectDetails = await taskModel
         .find({ _id: taskIds, projectId: { $exists: true } })
@@ -98,104 +65,48 @@ const getUserAssignments = async (req, res) => {
         .limit(pageSize)
         .skip((parseInt(skip) - 1) * pageSize);
       const uniqueProjectDetails = projectDetails.reduce((acc, project) => {
-        const existingProject = acc.find(
-          (item) =>
-            item.projectId && item.projectId.equals(project.projectId._id)
-        );
-        if (!existingProject) {
-          acc.push(project);
-        }
+        const existingProject = acc.find((item) =>item.projectId && item.projectId.equals(project.projectId._id));
+        if (!existingProject) {acc.push(project)}
         return acc;
       }, []);
       const totalCount = uniqueProjectDetails.length;
       const totalPages = Math.ceil(totalCount / pageSize);
-      return res
-        .status(200)
-        .json({
-          status: "200",
-          message: "Data Fetched Successfully",
-          response: uniqueProjectDetails,
-          totalCount,
-          totalPages,
-        });
+      return res.status(200).json({status: "200",message: "Data Fetched Successfully",response: uniqueProjectDetails,totalCount,totalPages});
     }
     if (flag == 2) {
       const milestoneDetails = await taskModel
-        .find({
-          _id: taskIds,
-          projectId: req.query.projectId,
-          milestoneId: { $exists: true },
-        })
-        .populate("milestoneId")
-        .sort({ createdAt: -1 })
-        .limit(pageSize)
-        .skip((parseInt(skip) - 1) * pageSize);
-      const uniqueMilestoneDetails = milestoneDetails.reduce(
-        (acc, milestone) => {
-          const existingMilestone = acc.find(
-            (item) =>
-              item.milestoneId &&
-              item.milestoneId.equals(milestone.milestoneId._id)
-          );
-          if (!existingMilestone) {
-            acc.push(milestone);
-          }
+        .find({ _id: taskIds,projectId: req.query.projectId,milestoneId: { $exists: true }}).populate("milestoneId").sort({ createdAt: -1 })
+        .limit(pageSize).skip((parseInt(skip) - 1) * pageSize);
+      const uniqueMilestoneDetails = milestoneDetails.reduce((acc, milestone) => {const existingMilestone = acc.find(
+            (item) =>item.milestoneId && item.milestoneId.equals(milestone.milestoneId._id));
+          if (!existingMilestone) {acc.push(milestone)}
           return acc;
         },
         []
       );
       const totalCount = uniqueMilestoneDetails.length;
       const totalPages = Math.ceil(totalCount / pageSize);
-      return res
-        .status(200)
-        .json({
-          status: "200",
-          message: "Data Fetched Successfully",
-          response: uniqueMilestoneDetails,
-          totalCount,
-          totalPages,
-        });
+      return res.status(200).json({status: "200",message: "Data Fetched Successfully",response: uniqueMilestoneDetails,totalCount, totalPages});
     }
     if (flag == 3) {
       const sprintDetails = await taskModel
-        .find({
-          _id: taskIds,
-          milestoneId: req.query.milestoneId,
-          sprintId: { $exists: true },
-        })
+        .find({_id: taskIds, milestoneId: req.query.milestoneId,sprintId: { $exists: true }})
         .populate("sprintId")
         .sort({ createdAt: -1 })
         .limit(pageSize)
         .skip((parseInt(skip) - 1) * pageSize);
-      const uniqueSprintDetails = sprintDetails.reduce((acc, sprint) => {
-        const existingSprint = acc.find(
+      const uniqueSprintDetails = sprintDetails.reduce((acc, sprint) => {const existingSprint = acc.find(
           (item) => item.sprintId && item.sprintId.equals(sprint.sprintId._id)
         );
-        if (!existingSprint) {
-          acc.push(sprint);
-        }
+        if (!existingSprint) {acc.push(sprint)}
         return acc;
       }, []);
       const totalCount = uniqueSprintDetails.length;
       const totalPages = Math.ceil(totalCount / pageSize);
-      return res
-        .status(200)
-        .json({
-          status: "200",
-          message: "Data Fetched Successfully",
-          response: uniqueSprintDetails,
-          totalCount,
-          totalPages,
-        });
+      return res.status(200).json({status: "200",message: "Data Fetched Successfully",response: uniqueSprintDetails,totalCount,totalPages});
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({status: "500",message: "Something went wrong",error: error.message});
   }
 };
 
@@ -213,17 +124,11 @@ const getUserTasks = async (req, res) => {
         };
         const taskIds = await taskModel.distinct('_id', query);
         // Flag = 1 :- Tasks acc to Status, Flag = 2 :- List of tasks
-        if (flag == 1) {
-            activeStatus = true
-        }
+        if (flag == 1) {activeStatus = true }
 
     let queries = [
       {
-        $match: {
-          taskId: {
-            $in: taskIds,
-          },
-        },
+        $match: {taskId: {$in: taskIds}},
       },
       {
         $lookup: {
@@ -251,40 +156,24 @@ const getUserTasks = async (req, res) => {
                 $expr: {
                   $and: [
                     { $eq: ["$_id", "$$taskId"] },
-                    {
-                      $eq: ["$activeStatus", JSON.parse(activeStatus)],
-                    },
+                    { $eq: ["$activeStatus", JSON.parse(activeStatus)] },
                   ],
                 },
               },
             },
             {
-              $match: {
-                summary: {
-                  $regex: `.*${searchString.replace(/\s+/g, "\\s+")}.*`,
-                  $options: "i",
-                },
-              },
+              $match: {summary: {$regex: `.*${searchString.replace(/\s+/g, "\\s+")}.*`, $options: "i" }},
             },
           ],
           as: "taskInfo",
         },
       },
-      {
-        $unwind: "$taskInfo",
-      },
-      {
-        $unwind: "$assigneeInfo",
-      },
-      {
-        $unwind: "$reporterInfo",
-      },
-      {
-        $sort: { createdAt: -1 },
-      },
-      { $sort: { createdAt: -1 } },
-      { $sort: { createdAt: -1 } },
-
+      {$unwind: "$taskInfo"},
+      {$unwind: "$assigneeInfo"},
+      {$unwind: "$reporterInfo"},
+      {$sort: { createdAt: -1 }},
+      {$sort: { createdAt: -1 }},
+      {$sort: { createdAt: -1 }},
             flag == 1 ? {
                 $group: {
                     _id: 'all',
@@ -332,15 +221,7 @@ const getUserTasks = async (req, res) => {
                     DueTasksCount: {
                         $sum: {
                             $cond: {
-                                if: {
-                                    $and: [
-                                        { $lt: ['$taskInfo.dueDate', now] },
-                                        { $ne: ['$taskInfo.status', 4] }
-                                    ]
-                                },
-                                then: 1,
-                                else: 0
-                            }
+                                if: {$and: [{ $lt: ['$taskInfo.dueDate', now] },{ $ne: ['$taskInfo.status', 4] }] },then: 1, else: 0}
                         }
                     },
 
@@ -461,46 +342,23 @@ const projectUserList = async (req, res) => {
     const { projectId, milestoneId, sprintId } = req.query;
     const taskfind = await taskModel.find({ projectId, milestoneId, sprintId });
     const taskIds = taskfind.map((task) => task._id);
-    const assignees = await assignUserModel
-      .find({ taskId: { $in: taskIds } })
-      .populate([
+    const assignees = await assignUserModel.find({ taskId: { $in: taskIds } }).populate([
         { path: "assigneeId", select: "firstName lastName" },
         { path: "reporterId", select: "role" },
         { path: "taskId" },
       ]);
     // Create a map to store unique assigneeIds
     const uniqueAssigneesMap = new Map();
-
     // Filter out duplicate assigneeIds
     const uniqueAssignees = [];
     assignees.forEach((assignee) => {
       const assigneeId = assignee.assigneeId._id.toString();
-      if (!uniqueAssigneesMap.has(assigneeId)) {
-        uniqueAssigneesMap.set(assigneeId, true);
-        uniqueAssignees.push(assignee);
-      }
+      if (!uniqueAssigneesMap.has(assigneeId)) {uniqueAssigneesMap.set(assigneeId, true);uniqueAssignees.push(assignee)}
     });
-    return res
-      .status(200)
-      .json({
-        status: "200",
-        message: "Data Fetched Successfully",
-        response: uniqueAssignees,
-      });
+    return res.status(200).json({status: "200",message: "Data Fetched Successfully",response: uniqueAssignees});
   } catch (error) {
-    return res
-      .status(400)
-      .json({
-        status: "400",
-        message: "Fill all the required fields",
-        error: error.message,
-      });
+    return res.status(400).json({status: "400",message: "Fill all the required fields",error: error.message});
   }
 };
 
-module.exports = {
-  addUserAssignments,
-  getUserAssignments,
-  getUserTasks,
-  projectUserList,
-};
+module.exports = {addUserAssignments,getUserAssignments,getUserTasks,projectUserList};

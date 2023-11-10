@@ -1,5 +1,4 @@
 const userLoginModel = require("../models/userLogin.model");
-const userModel = require("../models/users.model");
 
 // login time is save in the DB
 const userLogin = async (req, res) => {
@@ -40,31 +39,25 @@ const loginTimeRecord = async (req, res) => {
   try {
     const userId = req.query.userId;
     if (!userId) {
-      return res
-        .status(200)
-        .json({
-          status: 400,
-          message: "User ID is missing in the query parameters",
-        });
+      return res.status(200).json({
+        status: 400,
+        message: "User ID is missing in the query parameters",
+      });
     }
     const loginRecords = await userLoginModel
       .find({ userId: userId })
       .populate("userId");
     if (loginRecords.length === 0) {
-      return res
-        .status(200)
-        .json({
-          status: 404,
-          message: "No login records found for the specified user",
-        });
-    }
-    return res
-      .status(200)
-      .json({
-        status: 200,
-        message: "Login records fetched successfully",
-        loginRecords,
+      return res.status(200).json({
+        status: 404,
+        message: "No login records found for the specified user",
       });
+    }
+    return res.status(200).json({
+      status: 200,
+      message: "Login records fetched successfully",
+      loginRecords,
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ status: 500, message: "Server error" });
