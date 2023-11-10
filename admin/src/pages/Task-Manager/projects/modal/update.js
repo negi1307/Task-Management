@@ -113,6 +113,7 @@ const Update = ({ modal, closeModal, editData }) => {
     const selectedValues = editData?.technology?.map((item) => {
         return item.techName;
     });
+    console.log(selected, 'aadadasa');
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
             ToastHandle('success', 'Updated Successfully');
