@@ -63,6 +63,12 @@ const Create = ({ modal, CloseModal }) => {
             ToastHandle('error', Createhandel?.data?.message);
         }
     }, [Createhandel]);
+    const handelProject=(ele)=>{
+console.log(ele ,"ppppppppppppppppppppppppppp")
+    }
+    const handelmilestone=(ele)=>{
+console.log(ele,"wwwwwwwwwwwww")
+    }
     return (
         <Modal show={modal} onHide={handleClose} size="lg">
             <Row className="m-0 p-0">
@@ -83,10 +89,66 @@ const Create = ({ modal, CloseModal }) => {
                 <div className="p-2">
                     <Form onSubmit={handleSubmit(onSubmit)}>
                         <Row>
-                            <Col lg={12}></Col>
                             <Col lg={12}>
                                 <Row>
                                     <Col lg={6}>
+                                        <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                            <Form.Label>
+                                                {' '}
+                                                Project<span className="text-danger">*</span>:
+                                            </Form.Label>
+
+                                            <Form.Select 
+                                                {...register('projectname', { required: true, })} onChange={handelProject}>
+                                                {/* <option value={''}>--Select--</option> */}
+                                                {store?.getProject?.data?.response?.map((ele, ind) => (
+                                                    <option value={ele?._id} > {ele?.projectName} </option>
+                                                ))}
+                                            </Form.Select>
+                                            {errors.projectname?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
+                                        </Form.Group>
+                                    </Col>
+                                    <Col lg={6}>
+                                        <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                            <Form.Label>
+                                                {' '}
+                                                Milestone<span className="text-danger">*</span>:
+                                            </Form.Label>
+
+                                            <Form.Select {...register('Milestone', { required: true, })} onChange={handelmilestone}>
+                                                {/* <option value={''}>--Select--</option> */}
+                                                {store?.getSigleMileStone?.data?.response?.map((ele, ind) => (
+                                                    <option value={ele?._id} key={ele?._id}> {ele?.title} </option>
+                                                ))}
+                                            </Form.Select>
+                                            {errors.Milestone?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col lg={12}>
+                                    <Row>
+                                        <Col lg={6}>
+                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                <Form.Label>
+                                                    Sprint <span className="text-danger">*</span>:
+                                                </Form.Label>
+
+                                                <Form.Select {...register('Sprint', { required: true})}>
+                                                    {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
+                                                        <option value={ele?._id}> {ele?.sprintName} </option>
+                                                    ))}
+                                                </Form.Select>
+                                                {errors.Sprint?.type === 'required' && (
+                                                    <span className="text-danger"> This feild is required *</span>
+                                                )}
+                                            </Form.Group>
+                                        </Col>
+                                        <Col lg={6}>
                                         <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
                                                 {' '}
@@ -102,8 +164,9 @@ const Create = ({ modal, CloseModal }) => {
                                             )}
                                         </Form.Group>
                                     </Col>
-                                </Row>
-                            </Col>
+                                    </Row>
+                                </Col>
+                        
                             <Col lg={12}>
                                 <Row>
                                     <Col lg={6}>

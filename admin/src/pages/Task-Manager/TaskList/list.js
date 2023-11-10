@@ -11,7 +11,8 @@ import { Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ToastHandle from '../../../constants/toaster/toaster';
 import Create from './modal/create';
-import { getAllRoles, getAllUsers } from '../../../redux/actions';
+import { getAllProjects } from '../../../redux/projects/action';
+import { getAllRoles, getAllUsers, getSingleSprint, getsingleMileStone } from '../../../redux/actions';
 const TaskList = () => {
     const { projectId, milestoneId, spriteId } = useParams();
     const [skip, setSkip] = useState(1);
@@ -69,7 +70,6 @@ const TaskList = () => {
             dispatch(getsingleSprintTask(data));
                  
         }
-        
     };
     const handleStatusChange = (e, data) => {
         if (e.target.checked) {
@@ -87,14 +87,17 @@ const TaskList = () => {
                 activeStatus: true,
             };
             dispatch(TaskStatusAction(body));
+           
         } else {
             let body = {
                 taskId: checkedData._id,
                 activeStatus: false,
             };
             dispatch(TaskStatusAction(body));
+            
         }
         setStatusModal(false);
+        setStatus(1);
     };
     useEffect(() => {
         dispatch(getsingleSprintTask({ id: '', taskStatus:taskStatus, activeStatus: true, skip: skip }));
@@ -113,6 +116,17 @@ const TaskList = () => {
             ToastHandle('error', deletehandle?.message);
         }
     }, [deletehandle]);
+    useEffect(() => {
+        let body = {
+            status: 1,
+            skip:"",
+            projectStatus:""
+        };
+        dispatch(getAllProjects(body));
+        dispatch(getsingleMileStone({ id: projectId, activeStatus: 1 ,skip:0, mileStoneId:""  }));
+        // dispatch(getSprintById({ status: 1, id: milestoneId }));
+        dispatch(getSingleSprint({ activeStatus: 1, id: milestoneId , skip:1}));
+    }, [render]);
     const handleTaskStatus = (val) => {
         if (val == '1') {
             settaskStatus(1);
