@@ -9,6 +9,7 @@ export function getSingleSprintTaskApi(data): any {
     return api.get(`${URL.SingleSprintTask}${data.payload.id}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}`);
 }
 export function getAllTaskApi(data): any {
+    console.log(data,"hlohlohlo")
 
     return api.get(URL.GetAllTask+data.payload.flag+"&activeStatus="+data.payload.status+"&searchString="+data.payload.searchString+"&projectId="+data.payload.projectId+"&milestoneId="+data.payload.milestoneId+"&sprintId="+data.payload.sprintId+"&skip="+data.payload.skip);
 }

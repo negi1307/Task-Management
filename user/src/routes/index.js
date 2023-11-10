@@ -51,7 +51,7 @@ const Technology  = React.lazy(() => import('../pages/Task-Manager/Technology/te
 const TechnologyCategory  = React.lazy(() => import('../pages/Task-Manager/TechnologyCategory/category'));
 const Summary  = React.lazy(() => import('../pages/Task-Manager/Summary/summary'));
 const Tasklist  = React.lazy(() => import('../pages/Task-Manager/ListTask/listtask'));
-const Board = React.lazy(() => import('../pages/Task-Manager/board/board'));
+//const Board = React.lazy(() => import('../pages/Task-Manager/board/board'));
      
 // AllSprint
 const AllSprint = React.lazy(() => import('../pages/Task-Manager/All-Sprint'));
@@ -331,12 +331,20 @@ const AllRoutes = () => {
                             element: <LoadComponent component={Technology} />,
                         },
                         {
+                            path: 'boards',
+                            element: <LoadComponent component={Boards} />,
+                        },
+                        {
                             path: 'boards/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId',
                             element: <LoadComponent component={Boards} />,
                         },
                         {
                             path: 'technologyCategory',
                             element: <LoadComponent component={TechnologyCategory} />,
+                        },
+                        {
+                            path: 'tasklist/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId',
+                            element: <LoadComponent component={Tasklist} />,
                         },
                         
                     ],
@@ -358,6 +366,7 @@ const AllRoutes = () => {
                     path: 'tasklist',
                     element: <LoadComponent component={Tasklist} />,
                 },
+               
                 {
                     path: 'boards',
                     element: <LoadComponent component={Boards} />,

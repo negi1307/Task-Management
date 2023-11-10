@@ -121,7 +121,7 @@ const Projects = () => {
                 <Card>
                     <Card.Body>
                         <div className="row mx-auto mt-2">
-                            <div className="d-flex col-4">
+                            {/* <div className="d-flex col-4">
                                 <div className="row d-flex align-items-center">
                                     <div className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
                                         <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
@@ -134,20 +134,20 @@ const Projects = () => {
                                         </p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="col-4 d-flex align-items-center justify-content-center">
                                 <h4 className="header-title heading_data"> Projects</h4>
                             </div>
                             {status == 1 ? (
                                 <div className="col-4 d-flex align-items-center justify-content-end pe-0">
-                                    <Button
+                                    {/* <Button
                                         className="web_button"
                                         variant="info"
                                         onClick={() => {
                                             handelCreate();
                                         }}>
                                         Add Projects
-                                    </Button>
+                                    </Button> */}
                                 </div>
                             ) : (
                                 ''
