@@ -485,3 +485,7 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     justify-content: end;
     z-index: 99999;
 }
+.form-switch .form-check-input {
+    width: 2.5em !important;
+    margin-left: -2.5em !important;
+}
