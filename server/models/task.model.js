@@ -49,7 +49,7 @@ const tasks = mongoose.model(
         },
         taskId:{
             type:mongoose.Types.ObjectId,
-            ref:"tasks"
+            ref:"Task"
         }
     },
         {
