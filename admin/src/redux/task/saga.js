@@ -398,7 +398,7 @@ function* AssignUserFunction({ payload }) {
             payload: {}
         })
         const response = yield call(GetAssignUserApi, { payload });
-        if (response.data.status) {
+        if (response.data.status == 200) {
             yield put({
                 type: TASK_TYPES.GET_ASSIGN_USER_SUCCESS,
                 payload: { ...response.data },
@@ -407,6 +407,16 @@ function* AssignUserFunction({ payload }) {
             //     type: TASK_TYPES.GET_ASSIGN_USER_RESET,
             //     payload: {},
             // });
+        }
+        else if(response.data.status == 404){
+            // yield put({
+            //     type: TASK_TYPES.GET_ASSIGN_USER_ERROR,
+            //     payload: { ...response.data }
+            // });
+             yield put({
+                type: TASK_TYPES.GET_ASSIGN_USER_RESET,
+                payload: {},
+            });
         }
         else {
             yield put({

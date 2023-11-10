@@ -91,10 +91,60 @@ const addProject = async (req, res) => {
 
 const getProjects = async (req, res) => {
   try {
-    const pageSize = 10;
-    const projectStatus = parseInt(req.query.projectStatus);
-    const skip = parseInt(req.query.skip);
+   let active;
+          if (req.query.activeStatus == 1) {
+            active= true;
+          } else {
+            active=false;
+          }
+     const pageSize = 10;
+  
+   if(req.query.activeStatus && !req.query.skip && !req.query.projectId){
+       const projects = await projectModel.aggregate([{$match:{activeStatus:JSON.parse(active)}},
+        {
+          $lookup: {
+            from: "technologies",
+            localField: "technology",
+            foreignField: "_id",
+            as: "technology",
+          },
+        },
+        {
+          $project: {
+            "technology.techName": 1,
+            "technology._id":1,
+            projectName:1,
+            clientName:1,
+            activeStatus: 1,
+            projectStatus: 1,
+            projectType: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            startDate: 1,
+            endDate: 1,
+            daysLeft: {
+              $divide: [
+                { $subtract: ["$endDate", "$startDate"] }, 
+                1000 * 60 * 60 * 24,
+              ],
+            },
+          },
+        },{
+          $sort: { startDate: 1 } 
+        }
+      ]);  
+ 
+      return res
+      .status(200)
+      .json({
+        status: "200",
+        message: "Project Details fetched successfully",
+        response: projects,
+      });
+     }
+     const projectStatus = parseInt(req.query.projectStatus)
 
+     const skip = parseInt(req.query.skip)
     if (
       skip === 0 &&
       !projectStatus &&
@@ -116,6 +166,7 @@ const getProjects = async (req, res) => {
         {
           $project: {
             "technology.techName": 1,
+            "technology._id":1,
             projectName:1,
             clientName:1,
             activeStatus: 1,
@@ -156,9 +207,11 @@ const getProjects = async (req, res) => {
                 as: "technology",
               },
             },
+            
             {
               $project: {
                 "technology.techName": 1,
+                "technology._id":1,
                 projectName:1,
                 clientName:1,
                 activeStatus: 1,
@@ -200,6 +253,7 @@ const getProjects = async (req, res) => {
             {
               $project: {
                 "technology.techName": 1,
+                "technology._id":1,
                 projectName:1,
                 clientName:1,
                 activeStatus: 1,
@@ -231,12 +285,7 @@ const getProjects = async (req, res) => {
             });
         }
       } else {
-        let active;
-           if (req.query.activeStatus == 1) {
-            active= true;
-          } else {
-            active=false;
-          }
+        
         
          let status=parseInt(req.query.projectStatus);
           const projects = await projectModel.aggregate([
@@ -252,6 +301,7 @@ const getProjects = async (req, res) => {
             {
               $project: {
                 "technology.techName": 1,
+                "technology._id":1,
                 projectName:1,
                 clientName:1,
                 activeStatus: 1,
