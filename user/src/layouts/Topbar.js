@@ -7,7 +7,7 @@ import MainLoader from '../constants/Loader/loader';
 
 // actions
 import { showRightSidebar, changeSidebarType } from '../redux/actions';
-import { getAllProjects } from '../../src/redux/projects/action';
+// import { getAllProjects } from '../../src/redux/projects/action';
 import { getallMileStones, getMileStoneById } from '../redux/actions';
 import { getAllSprint, getSingleSprint } from '../redux/actions';
 // components
@@ -42,6 +42,7 @@ import { getSprintId } from '../../src/redux/sprint/action';
 import { getTaskStatusCount } from '../../src/redux/Summary/action';
 import { addLoginTime } from '../../src/redux/user/action';
 import Filter from '../pages/Task-Manager/board/Modal/Filter';
+import { useParams } from 'react-router-dom';
 
 // get the notifications
 const Notifications = [
@@ -144,14 +145,18 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const store = useSelector((state) => state);
     console.log('storeeeeeee', store);
     const [isopen, setIsopen] = useState(false);
+    const [startLoginTime,setLoginTime]=useState(false)
     const allProjects = store?.getProject?.data?.response;
     const loginTimeMessage = store?.createUserTime?.message;
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
     const getAllSingleSprints = store?.getAllSingleSprints?.data?.Response;
+    const{projectId,milestoneId,spriteId}=useParams();
     //=====================================user login time=========================================================
-    useEffect(() => {
-        dispatch(addLoginTime());
-    }, []);
+        useEffect(()=>{
+            
+                dispatch(addLoginTime())
+
+        },[])
     //=======================================user login time=================================================================
 
     const [projectNameHeading, setProjectName] = useState('Select Project Name');
@@ -164,15 +169,14 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         leftSideBarType: state.Layout.leftSideBarType,
     }));
 
-    useEffect(() => {
-        let data = {
-            status: 1,
-            projectstatus: 1,
-        };
-        dispatch(getAllProjects(data));
-        //dispatch(getallMileStones({status:1}))
-        // dispatch(getProjectMilestones({projectId:projectId,status:1}))
-    }, []);
+    // useEffect(() => {
+    //     let data = {
+    //         status: 1,
+    //         projectstatus: 1,
+    //     };
+    //     dispatch(getAllProjects(data));
+
+    // }, []);
 
     const onChangeProject = (e) => {
         if (e.target.value !== '') {
@@ -433,7 +437,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             {' '}
                             <Link to="summary">Summary</Link>{' '}
                         </li>
-                        {/* <li> <Link to="/tasklist">List</Link> </li> */}
+                        <li> <Link to="/tasklist">List</Link> </li>
                         <li>
                             {' '}
                             <Link to="/boards">Board</Link>{' '}

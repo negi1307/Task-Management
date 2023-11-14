@@ -9,10 +9,13 @@ import MainLoader from '../../../constants/Loader/loader';
 import ToastHandle from '../../../constants/toaster/toaster';
 import Update from './update';
 import ActiveDeactiveIndex from './activeDeactive/ActiveDeactiveIndex';
+import { getAllProjects } from '../../../redux/projects/action';
 const AllMillStones = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    const getallmilestones = store?.getAllMileStones?.data?.response;
+    const getallmilestones = store?.getProject?.data?.response;
+    console.log("getallmilestones,,,,,,,,",getallmilestones)
+
     const loaderhandle = store?.getAllMileStones;
     const deletemessagehandle = store?.deleteMileStone;
     const [deletemodal, setDeleteModal] = useState(false);
@@ -60,6 +63,10 @@ const AllMillStones = () => {
         }
     }, [deletemessagehandle]);
 
+    useEffect(()=>{
+        dispatch(getAllProjects())
+    },[])
+
     return (
         <>
             <div>
@@ -90,7 +97,7 @@ const AllMillStones = () => {
                                     <th>Status</th>
                                     {/* <th>Status</th> */}
 
-                                    <th>Action</th>
+                                    <th>Actionsds</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -100,9 +107,10 @@ const AllMillStones = () => {
                                         <tr className="align-middle">
                                             <th scope="row">{ind + 1}</th>
                                             <td>
-                                                <span className="namelink">{ele?.project_id?.projectName}</span></td>
+                                                {/* <span className="namelink">{ele?.id?.projectName}</span></td> */}
+                                                </td>
                                             <td className="cp">
-                                                <span className="namelink">{ele?.title}</span>
+                                                <span className="namelink">{ele?.MilestoneInfo?.title}</span>
                                             </td>
                                             <td className="w-20">
                                                 <span className="namelink">{ele?.description}</span>
