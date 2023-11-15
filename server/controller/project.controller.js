@@ -20,9 +20,7 @@ const addProject = async (req, res) => {
       projectName: projectNameRegex,
     });
     if (existingProjectName) {
-      return res
-        .status(200)
-        .json({ status: "400", message: "Project Name Already exist" });
+      return res.status(200).json({ status: "400", message: "Project Name Already exist" });
     } else {
       const result = await projectModel.create({
         projectName,
@@ -34,22 +32,10 @@ const addProject = async (req, res) => {
         projectType,
         projectStatus,
       });
-      return res
-        .status(200)
-        .json({
-          status: "200",
-          message: "Project created successfully",
-          response: result,
-        });
+      return res.status(200).json({status: "200",message: "Project created successfully",response: result });
     }
   } catch (error) {
-    return res
-      .status(200)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(200).json({status: "500",message: "Something went wrong",error: error.message});
   }
 };
 
@@ -92,11 +78,8 @@ const addProject = async (req, res) => {
 const getProjects = async (req, res) => {
   try {
    let active;
-          if (req.query.activeStatus == 1) {
-            active= true;
-          } else {
-            active=false;
-          }
+          if (req.query.activeStatus == 1) { active= true}  
+          else { active=false}
      const pageSize = 10;
   
    if(req.query.activeStatus && !req.query.skip && !req.query.projectId){
@@ -134,26 +117,13 @@ const getProjects = async (req, res) => {
         }
       ]);  
  
-      return res
-      .status(200)
-      .json({
-        status: "200",
-        message: "Project Details fetched successfully",
-        response: projects,
-      });
+      return res.status(200).json({status: "200", message: "Project Details fetched successfully",response: projects});
      }
      const projectStatus = parseInt(req.query.projectStatus)
-
      const skip = parseInt(req.query.skip)
-    if (
-      skip === 0 &&
-      !projectStatus &&
-      !req.query.projectId &&
-      !req.query.activeStatus
-    ) {
+    if (skip === 0 && !projectStatus && !req.query.projectId && !req.query.activeStatus) {
       // If skip is 0 and all other fields are empty, send the whole data.
       // const projects = await projectModel.find().populate('technology', 'techName') .sort({ createdAt: -1 });
-
       const projects = await projectModel.aggregate([
         {
           $lookup: {
@@ -176,24 +146,14 @@ const getProjects = async (req, res) => {
             updatedAt: 1,
             startDate: 1,
             endDate: 1,
-            daysLeft: {
-              $divide: [
-                { $subtract: ["$endDate", "$startDate"] }, 
-                1000 * 60 * 60 * 24,
-              ],
-            },
+            daysLeft: {$divide: [{ $subtract: ["$endDate", "$startDate"] },1000 * 60 * 60 * 24]},
           },
-        },{
+        },
+        {
           $sort: { startDate: 1 } 
         }
       ]);
-      return res
-        .status(200)
-        .json({
-          status: "200",
-          message: "Projects fetched successfully 1",
-          response: projects,
-        });
+      return res.status(200).json({status: "200",message: "Projects fetched successfully 1",response: projects});
     } else {
       if (parseInt(req.query.skip) === 0) {
         if (req.query.projectId) {
@@ -232,13 +192,7 @@ const getProjects = async (req, res) => {
               $sort: { startDate: 1 } 
             }
           ]);
-          return res
-            .status(200)
-            .json({
-              status: "200",
-              message: "Project Details fetched successfully",
-              response: project,
-            });
+          return res.status(200).json({status: "200",message: "Project Details fetched successfully",response: project});
         } else {
           const projects = await projectModel.aggregate([
             { $match: { activeStatus: JSON.parse(req.query.activeStatus),projectStatus: parseInt(req.query.projectStatus) } },
@@ -276,17 +230,9 @@ const getProjects = async (req, res) => {
           ])
           // const projects = await projectModel.find({ activeStatus: req.query.activeStatus, projectStatus }).populate('technology', 'techName')
           // .sort({ createdAt: -1 });
-          return res
-            .status(200)
-            .json({
-              status: "200",
-              message: "Projects fetched successfully",
-              response: projects,
-            });
+          return res.status(200).json({status: "200",message: "Projects fetched successfully",response: projects});
         }
       } else {
-        
-        
          let status=parseInt(req.query.projectStatus);
           const projects = await projectModel.aggregate([
             { $match: { activeStatus: JSON.parse(active),projectStatus:status} },
@@ -325,10 +271,7 @@ const getProjects = async (req, res) => {
           .sort({ createdAt: -1 })
           .limit(pageSize)
           .skip((skip - 1) * pageSize);
-        const totalCount = await projectModel.countDocuments({
-          activeStatus: req.query.activeStatus,
-          projectStatus,
-        });
+        const totalCount = await projectModel.countDocuments({activeStatus: req.query.activeStatus,projectStatus});
         // const projects = await projectModel
         //   .find({ activeStatus: req.query.activeStatus, projectStatus })
         //   .populate("technology", "techName")
@@ -336,48 +279,21 @@ const getProjects = async (req, res) => {
         //   .limit(pageSize)
         //   .skip((skip - 1) * pageSize);
         const totalPages = Math.ceil(totalCount / pageSize);
-
-        return res
-          .status(200)
-          .json({
-            status: "200",
-            message: "Projects fetched successfully",
-            response: projects,
-            totalCount,
-            totalPages,
-          });
+        return res.status(200).json({status: "200",message: "Projects fetched successfully",response: projects,totalCount,totalPages});
       }
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(500).json({status: "500",message: "Something went wrong",error: error.message});
   }
 };
 
 // Update a project
 const updateProject = async (req, res) => {
   try {
-    await projectModel.findByIdAndUpdate(
-      { _id: req.body.projectId },
-      req.body,
-      { new: true }
-    );
-    return res
-      .status(200)
-      .json({ status: "200", message: "Project updated successfully" });
+    await projectModel.findByIdAndUpdate({ _id: req.body.projectId },req.body,{ new: true });
+    return res.status(200).json({ status: "200", message: "Project updated successfully" });
   } catch (error) {
-    return res
-      .status(200)
-      .json({
-        status: "500",
-        message: "Something went wrong",
-        error: error.message,
-      });
+    return res.status(200).json({status: "500", message: "Something went wrong", error: error.message});
   }
 };
 

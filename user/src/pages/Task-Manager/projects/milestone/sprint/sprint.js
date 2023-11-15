@@ -10,8 +10,10 @@ import ToastHandle from '../../../../../constants/toaster/toaster';
 import Update from './modal/update';
 import { Link } from 'react-router-dom';
 import MainLoader from '../../../../../constants/Loader/loader';
+import {getAllProjects} from '../../../../../redux/projects/action'
 const Sprint = () => {
     const { projectId, milestoneId } = useParams()
+    console.log(projectId,"bvcxcvbnbvcxcvbnmnbvcxn")
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
@@ -23,7 +25,8 @@ const Sprint = () => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openModal, SetOpenModal] = useState(false);
     const [editData, setEditData] = useState();
-    const GetAllSingleSprintData = store?.getAllSingleSprints?.data?.Response;
+    const GetAllSingleSprintData = store?.getProject?.data?.response;
+    console.log(GetAllSingleSprintData,'jjkkjkkyawsdfghjnmk')
     const deletehandle = store?.deleteSprint?.data
     const loaderhandel = store?.getAllSingleSprints;
     const handelUpdate = (data) => {
@@ -97,9 +100,20 @@ const Sprint = () => {
             ToastHandle('error', deletehandle?.message);
         }
     }, [deletehandle])
-    useEffect(() => {
-        dispatch(getSingleSprint({status:status ,id:milestoneId}));
-    }, [render]);
+    // useEffect(() => {
+    //     dispatch(getSingleSprint({status:status ,id:milestoneId}));
+    // }, [render]);
+    useEffect(()=>{
+        let body = {
+            flag:3,
+            projectId:projectId,
+            milestoneId:milestoneId,
+            skip:1
+    
+        };
+        
+        dispatch(getAllProjects(body))
+    },[])
     return (
         <>
             <Card>
@@ -108,7 +122,7 @@ const Sprint = () => {
                     <Col className="mx-auto" lg={12}>
                         <Row>
 
-                            <div className="row mx-auto mt-2">
+                            {/* <div className="row mx-auto mt-2">
                             <div className="d-flex col-4">
                                 <div className="row d-flex align-items-center">
                                     <div
@@ -137,7 +151,7 @@ const Sprint = () => {
                                 Add Sprint
                             </Button>
                             </div> : ""}
-                        </div>
+                        </div> */}
                         {loaderhandel.loading ? (
                     <MainLoader />
                 ) : (
@@ -161,16 +175,16 @@ const Sprint = () => {
                                         {GetAllSingleSprintData?.map((item, index) =>
                                             <tr>
                                                 <td>{index + 1}</td>
-                                                <td>{item?.sprintName}</td>
+                                                <td>{item?.sprintId?.sprintName}</td>
                                                 <td>
                                                 <div
                                                     dangerouslySetInnerHTML={{
-                                                        __html: item?.sprintDesc,
+                                                        __html: item?.sprintId?.sprintDesc,
                                                     }}
                                                 /></td>
 
-                                                <td>  {moment(item?.startDate).format('L')}</td>
-                                                <td>{moment(item?.endDate).format('L')}</td>
+                                                <td>  {moment(item?.sprintId?.startDate).format('L')}</td>
+                                                <td>{moment(item?.sprintId?.endDate).format('L')}</td>
                                                 <td> <Form.Check
                                                                 type="switch"
                                                                 checked={item?.status}
@@ -179,7 +193,7 @@ const Sprint = () => {
                                                             <td> <Row>
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0 ">
-                                                                        <Link to={`/dashboard/singleSprintTask/projectId=/${item?.project_id}&milestoneId=/${item?.milestone_id}&spriteId=/${item?._id}`}>
+                                                                        <Link to={`/dashboard/boards/projectId=/${item?.projectId}&milestoneId=/${item?.milestoneId}&spriteId=/${item?.sprintId?._id}`}>
                                                                             <i className="mdi mdi-eye m-0 p-0"></i>
                                                                         </Link>
                                                                     </p>

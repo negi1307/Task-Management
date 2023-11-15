@@ -50,6 +50,7 @@ const TaskInformation = styled.div`
 `;
 
 const TaskCard = ({ item, index, Column, closeModal }) => {
+    console.log(item, 'item');
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState();
     const [editData, setEditData] = useState();
@@ -157,41 +158,41 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                     </p>
                                 </div>
                                 <div className="col-12">
-                                    <div className="row">
+                                    <div className="row mb-1">
                                         <div className="col-6 d-flex align-items-center">
                                             <div className="secondary-details d-flex align-items-center">
-                                                <p>
+                                                <p className="m-0 p-0">
                                                     <span>
                                                         {item?.startDate ? moment(item?.startDate).format('ll') : ''}
                                                     </span>
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="col-6 d-flex align-items-center justify-content-end">
+                                        <div className="col-6 d-flex align-items-center justify-content-end pe-0">
                                             <div className=" d-flex">
                                                 {/* <h5 className="m-0 p-0"> Assignee :</h5> */}
                                                 <OverlayTrigger
-                                placement="top"
-                                overlay={
-                                    <Tooltip id="tooltip1">
-                                        {item?.assignees?.assigneeInfo?.firstName}{' '}
-                                                    {item?.assignees?.assigneeInfo?.lastName}
-                                    </Tooltip>
-                                }>
-                                <div className="mt-1 cp">
-                                    <span
-                                        style={{
-                                            backgroundColor: '#605e5a',
-                                            borderRadius: '100%',
-                                            padding: '9px',
-                                            color: 'white',
-                                            fontWeight: '800',
-                                        }}>
-                                        {item?.assignees?.assigneeInfo?.firstName.charAt(0)}
-                                        {item?.assignees?.assigneeInfo?.lastName.charAt(0)}
-                                    </span>
-                                </div>
-                            </OverlayTrigger>
+                                                    placement="top"
+                                                    overlay={
+                                                        <Tooltip id="tooltip1">
+                                                            {item?.assignees?.assigneeInfo?.firstName}{' '}
+                                                            {item?.assignees?.assigneeInfo?.lastName}
+                                                        </Tooltip>
+                                                    }>
+                                                    <div className="mt-1 cp">
+                                                        <span
+                                                            style={{
+                                                                backgroundColor: '#605e5a',
+                                                                borderRadius: '100%',
+                                                                padding: '7px',
+                                                                color: 'white',
+                                                                fontWeight: '800',
+                                                            }}>
+                                                            {item?.assignees?.assigneeInfo?.firstName.charAt(0)}
+                                                            {item?.assignees?.assigneeInfo?.lastName.charAt(0)}
+                                                        </span>
+                                                    </div>
+                                                </OverlayTrigger>
                                                 {/* <p className="ms-2 p-0">
                                                     {item?.assignees?.assigneeInfo?.firstName}{' '}
                                                     {item?.assignees?.assigneeInfo?.lastName}

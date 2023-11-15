@@ -107,7 +107,7 @@ const Update = ({ modal, closeModal, editData }) => {
             projectStatus: data?.projectstatus,
         };
         console.log('fsadsadsadsa', addValue);
-        // dispatch(updateProject(body));
+        dispatch(updateProject(body));
     };
     const selectedValues = editData?.technology?.map((item) => {
         return item.techName;
