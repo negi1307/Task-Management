@@ -7,7 +7,7 @@ const userLogin = async (req, res) => {
     if (!userId) {
       return res
         .status(400)
-        .json({ message: "User ID is missing in the token" });
+        .json({ status: 400, message: "User ID is missing in the token" });
     }
     const today = new Date();
     const existingRecord = await userLoginModel.findOne({
@@ -27,10 +27,10 @@ const userLogin = async (req, res) => {
     }
     return res
       .status(200)
-      .json({ message: "Login time recorded successfully" });
+      .json({ status: 200, message: "Login time recorded successfully" });
   } catch (error) {
     console.error(error);
-    return res.status(400).json({ message: "Server error" });
+    return res.status(400).json({ status: 400, message: "Server error" });
   }
 };
 

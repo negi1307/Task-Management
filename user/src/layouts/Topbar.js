@@ -44,6 +44,8 @@ import { addLoginTime } from '../../src/redux/user/action';
 import Filter from '../pages/Task-Manager/board/Modal/Filter';
 import { useParams } from 'react-router-dom';
 import Buttons from '../pages/uikit/Buttons';
+import ToastHandle from '../constants/toaster/toaster';
+import { Button } from 'react-bootstrap';
 
 // get the notifications
 const Notifications = [
@@ -148,7 +150,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const [isopen, setIsopen] = useState(false);
     const [startLoginTime, setLoginTime] = useState(false);
     const allProjects = store?.getProject?.data?.response;
-    const loginTimeMessage = store?.createUserTime?.message;
+    const loginTimeMessage = store?.createUserTime;
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
     const getAllSingleSprints = store?.getAllSingleSprints?.data?.Response;
     const { projectId, milestoneId, spriteId } = useParams();
@@ -238,10 +240,33 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const handleRightSideBar = () => {
         dispatch(showRightSidebar());
     };
+    const [showButton, setShowButton] = useState();
+    useEffect(() => {
+        if (sessionStorage?.getItem('startButton')) {
+            setShowButton(false);
+        } else {
+            setShowButton(true);
+        }
+    }, []);
+    const token = sessionStorage.getItem('hyper_user');
     const loginTime = () => {
         dispatch(addLoginTime());
-        // alert(loginTimeMessage.message);
-        console.log(loginTimeMessage);
+        sessionStorage.setItem('startButton', true);
+        console.log(sessionStorage?.getItem('startButton'), 'llakakokokjkkkas');
+        if (sessionStorage?.getItem('startButton')) {
+            setShowButton(false);
+        }
+        console.log(token?.token, 'tokennnnnnn');
+        console.log(token, 'tokennnnnnn');
+    };
+    useEffect(() => {
+        if (loginTimeMessage?.data?.status == 200) {
+            ToastHandle('success', loginTimeMessage?.data?.message);
+        }
+    }, [loginTimeMessage]);
+    const logoutTime = () => {
+        sessionStorage.removeItem('startButton');
+        setShowButton(true);
     };
     return (
         <>
@@ -287,7 +312,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                             Teams
                                         </Link>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <div class="project_names">
                                             <select
                                                 name="ddlProject"
@@ -335,7 +360,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                                 ))}
                                             </select>
                                         </div>
-                                    </li>
+                                    </li> */}
                                     {/* <li>
                             <div class="project_names">
                                                         <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeProject}>
@@ -358,11 +383,19 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </select>
                             </div>
                             </li> */}
-                                    <li>
-                                        <button type="submit" onClick={loginTime}>
-                                            Start
-                                        </button>
-                                    </li>
+                                    {showButton ? (
+                                        <li>
+                                            <Button type="submit" onClick={loginTime}>
+                                                Start
+                                            </Button>
+                                        </li>
+                                    ) : (
+                                        <li>
+                                            <Button type="submit" onClick={logoutTime}>
+                                                Stop
+                                            </Button>
+                                        </li>
+                                    )}
                                 </ul>
                             </div>
                         </div>
