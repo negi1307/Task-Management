@@ -142,7 +142,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const [isopen, setIsopen] = useState(false);
     // const allProjects = store?.getProject?.data?.response;
     // const getsingleMilestoneData = store?.getSigleMileStone?.data?.response;
-    // console.log(getsingleMilestoneData, "responseeeeeeeeeeeeeeeeee")
+
     // const getAllSingleSprints = store?.getAllSingleSprints?.data?.response;
 
     // const [mileStoneId, setMileStoneId] = useState('');
