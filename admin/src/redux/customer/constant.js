@@ -25,4 +25,4 @@ const PreSaleType = {
     DELETE_PRE_SALE_ERROR: "DELETE_PRE_SALE_ERROR",
 };
 
-export default MileStoneType;
+export default PreSaleType;

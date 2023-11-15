@@ -1,8 +1,11 @@
 import React from "react";
 import { Row, Col, Button, Modal, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-
+import { addPreSalesData } from "../../../../redux/customer/action";
+import { useSelector,useDispatch } from "react-redux";
 const CustomerCreateFrom = (props) => {
+    const store=useSelector((state)=>state);
+    const dispatch=useDispatch()
     const { onHide } = props
     const {
         register,
@@ -11,7 +14,14 @@ const CustomerCreateFrom = (props) => {
         formState: { errors },
     } = useForm();
     const onSubmit = (data) => {
-
+        dispatch(addPreSalesData({
+            clientName:data?.name,
+            projectName:data?.project,
+            description:data?.description,
+            stage:data?.stage,
+            type:data?.type,
+            status:data?.status
+        }))
     };
 
     return (<>
@@ -84,12 +94,47 @@ const CustomerCreateFrom = (props) => {
                                 </Form.Label>
                                 <Form.Select {...register('status', { required: true })}>
                                     <option value='' hidden selected> --select--</option>
-                                    <option value="1">To-Do</option>
-                                    <option value="2">Live</option>
-                                    <option value="3">Hold</option>
-                                    <option value="4">Completed</option>
+                                    <option value="CONVERTED">CONVERTED</option>
+                                    <option value="NOT-CONVERTED">NOT-CONVERTED</option>
                                 </Form.Select>
                                 {errors?.status?.type === 'required' && (
+                                    <span className="text-danger"> This feild is required *</span>
+                                )}
+                            </Form.Group>
+                        </Col>
+                    </Row>
+
+                    <Row>
+                        <Col lg={6}>
+                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                <Form.Label>
+                                STAGE<span className="text-danger">*</span>:
+                                </Form.Label>
+                                <Form.Select {...register('stage', { required: true })}>
+                                    <option value='' hidden selected> --select--</option>
+                                    <option value="HOTE">HOT</option>
+                                    <option value="COLD">COLD</option>
+                                    <option value="MEDIUM">MEDIUM</option>
+                                    
+                                </Form.Select>
+                                {errors?.stage?.type === 'required' && (
+                                    <span className="text-danger"> This feild is required *</span>
+                                )}
+                            </Form.Group>
+                        </Col>
+                        <Col lg={6}>
+                            <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                <Form.Label>
+                                TYPE<span className="text-danger">*</span>:
+                                </Form.Label>
+                                <Form.Select {...register('type', { required: true })}>
+                                    <option value='' hidden selected> --select--</option>
+                                    <option value="WEB">WEB</option>
+                                    <option value="MOBILE">MOBILE</option>                                    
+                                </Form.Select>
+
+
+                                {errors?.type?.type === 'required' && (
                                     <span className="text-danger"> This feild is required *</span>
                                 )}
                             </Form.Group>

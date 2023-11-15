@@ -1,12 +1,22 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import CustomerTable from "./customerTable/CustomerTable";
 import HeaderMain from "../header/HeaderMain";
 import {Button,Card} from "react-bootstrap"
 import CustomerCreateFrom from "./customerCreate/CustomerCreateForm";
+import { useDispatch } from "react-redux";
+import { getPreSalesData } from "../../../redux/customer/action";
 const CustomerIndex =()=>{
+    const dispatch = useDispatch();
+
     const [modalShow, setModalShow] = useState(false);
 
     const [activeCustomer,setActiveCustomer]=useState(true)
+
+
+
+    useEffect(() => {
+        dispatch(getPreSalesData());
+    }, []);
 
     return(<>
     <Card>
