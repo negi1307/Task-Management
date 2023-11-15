@@ -63,7 +63,7 @@ const CreateCategory = ({ modal, closeModal }) => {
                     <MainLoader />
                 ) : (
                     <Modal.Body className="py-0">
-                        <Card className="p-2">
+                        <div className="p-2">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={12}>
@@ -71,7 +71,7 @@ const CreateCategory = ({ modal, closeModal }) => {
                                             <Row>
                                                 <Col lg={4}>
                                                     <Form.Label>
-                                                    Category Name <span className="text-danger">*</span>:
+                                                        Category Name <span className="text-danger">*</span>:
                                                     </Form.Label>
                                                 </Col>
                                                 <Col lg={8}>
@@ -95,12 +95,12 @@ const CreateCategory = ({ modal, closeModal }) => {
                                             variant="info"
                                             type="submit"
                                             className="btn btn-sm  text-white pt-1 pb-1  web_button ">
-                                            Add 
+                                            Add
                                         </Button>
                                     </Col>
                                 </Row>
                             </Form>
-                        </Card>
+                        </div>
                     </Modal.Body>
                 )}
             </Modal>

@@ -19,6 +19,7 @@ import {getTaskStatusCount} from '../../../redux/Summary/action'
 import { addComment, getComment, updateComment, deleteComment,getCommentId } from '../../../redux/addcomment/actions';
 import Taskdetail from './taskdetail'
 import { useForm } from "react-hook-form";
+import { useParams } from 'react-router-dom';
 
 
 const Container = styled.div`
@@ -54,7 +55,8 @@ const Title = styled.span`
 
 
 const Boards = (props) => { 
- 
+  const { projectId, milestoneId ,spriteId } = useParams()
+  console.log(spriteId,projectId, milestoneId ,"sprintttt")
   const dispatch = useDispatch();
   const store = useSelector(state => state)
   const { register,setValue} = useForm();
@@ -67,17 +69,26 @@ const Boards = (props) => {
  
   
 const successHandle = store?.getAllTaskReducer;
+console.log(successHandle ,"success")
 const statushandle = store?.updateTaskStatus;
- 
-const projectId=store?.getProjectId?.data;
-const milstoneId=store?.getMilestoneId?.data;
-const SprintId=store?.getSprintId?.data;
+
 
   useEffect(() => {
-    dispatch(getAllTask({id:projectId , milestoneId:milstoneId,sprintId:SprintId,searchString:"" }))    
+    
+    let body={
+      flag:1,
+      status:true,
+      searchString:"",
+      projectId:projectId,
+       milestoneId:milestoneId,
+      sprintId:spriteId,
+      skip:1
+    }
+    
+    dispatch(getAllTask(body))    
     
    
-  }, [SprintId])
+  }, [])
 
   useEffect(()=>{
     let body = {
@@ -149,7 +160,16 @@ const SprintId=store?.getSprintId?.data;
        
       }
       setTimeout(() => {
-        dispatch(getAllTask({id:projectId , milestoneId:milstoneId,sprintId:SprintId,searchString:""  })) 
+        let body={
+          flag:1,
+          status:true,
+          searchString:"",
+          projectId:projectId,
+          milestoneId:milestoneId,
+          sprintId:spriteId,
+          skip:1
+        }
+        dispatch(getAllTask(body))  
       }, 30);
     } 
     else {
@@ -181,20 +201,21 @@ const SprintId=store?.getSprintId?.data;
       setColumns({
         [uuidv4()]: {
           title: 'To-do',
-          items: successHandle?.data?.todo?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.response?.Todo?.map((ele) => { return { ...ele, id: ele._id } }),
+         
         },
         [uuidv4()]: {
           title: 'In Progress',
-          items: successHandle?.data?.inProgress?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.response?.Inprogress?.map((ele) => { return { ...ele, id: ele._id } }),
         },
         
         [uuidv4()]: {
           title: 'Hold',
-          items: successHandle?.data?.hold?.tasks?.map((ele) => { return { ...ele, id: ele._id }}),
+          items: successHandle?.data?.response?.Hold?.map((ele) => { return { ...ele, id: ele._id }}),
       },
         [uuidv4()]: {
           title: 'Done',
-          items: successHandle?.data?.done?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.response?.Done?.map((ele) => { return { ...ele, id: ele._id } }),
         },
       })
     }
@@ -222,11 +243,22 @@ const closeTaskDetailMOdel = () => {
 };
   
   const callAlltaskData=()=>{
-    dispatch(getAllTask({id:projectId , milestoneId:milstoneId , sprintId:SprintId,searchString:"" }));
+    let body={
+      flag:1,
+      status:true,
+      searchString:"",
+      projectId:projectId,
+      milestoneId:milestoneId,
+      sprintId:spriteId,
+      skip:1
+    }
+    dispatch(getAllTask(body))  
   }
-
-  
- 
+  const closeModal = (val) => {
+    if (val == 'render') {
+        setRender(!render);
+    }
+};
   const [show, setShow] = useState(false);
   
   const handleClose = () => setShow(false);
@@ -238,7 +270,16 @@ const closeTaskDetailMOdel = () => {
 
     if(e.target.value!==''){
       setTimeout(() => {
-        dispatch(getAllTask({id:projectId , milestoneId:milstoneId , sprintId:SprintId,searchString:e.target.value}))
+        let body={
+          flag:1,
+          status:true,
+          searchString:e.target.value,
+          projectId:projectId,
+          milestoneId:milestoneId,
+          sprintId:spriteId,
+          skip:1
+        }
+        dispatch(getAllTask(body))  
       }, 500);
     }
   }
@@ -298,8 +339,10 @@ const closeTaskDetailMOdel = () => {
       >
         {successHandle.loading ? (<MainLoader />) : <Container>
           <TaskColumnStyles >
-            {Object.entries(columns).map(([columnId, column], index) => {
-             
+          
+
+            
+               {Object.entries(columns)?.map(([columnId, column], index) => {
               return (
                 <Droppable key={columnId} droppableId={columnId}>
                 
@@ -310,15 +353,20 @@ const closeTaskDetailMOdel = () => {
                       
                     > 
                       <Title class="">{column.title}</Title>
-                      {column.items.map((item, index) => (
-                        <TaskCard showTaskDetailMOdel={showTaskDetailMOdel}  key={item.id} item={item} index={index}  />
+                     
+                      {column?.items?.map((item, index) =>                       
+                      (
+                        <TaskCard showTaskDetailMOdel={showTaskDetailMOdel}  key={item} item={item} index={index}  closeModal={closeModal}/>
                       ))}
                       {provided.placeholder}
+                      
                     </TaskList>
                   )}
                 </Droppable>
               );
             })}
+            
+           
           </TaskColumnStyles>
         </Container>}
 

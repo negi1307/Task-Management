@@ -8,7 +8,7 @@ import { getPriorityGraphAction, getTaskSummmaryDetail, getTaskWeekCountAction }
 import { Last } from 'react-bootstrap/esm/PageItem';
 const Summary = () => {
     const { projectId, milestoneId, spriteId } = useParams();
-    console.log(projectId,"projectIdddddddddddddddddddddddddddd")
+    console.log(projectId, 'projectIdddddddddddddddddddddddddddd');
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.getTaskSummaryReducer;
@@ -91,367 +91,371 @@ const Summary = () => {
 
     return (
         <>
-        <div className="project_detail">
-               
-               
-            </div>
-        <div className="all_bg">
-            <div className="container">
-                <div className="row">
-                    <div className="col  border_clr  m-2 rounded-4 bg-white">
-                        <div className="d-flex  p-4">
-                            <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
-                                <i className="bi bi-check-lg w-size" />
+            <div className="all_bg add_height_task">
+                <div className="container">
+                    <div className="row">
+                        <div className="col  border_clr  m-2 rounded-4 bg-white">
+                            <div className="d-flex  p-4">
+                                <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
+                                    <i className="bi bi-check-lg w-size" />
+                                </div>
+                                <div className="mx-3 ">
+                                    <b>
+                                        <h5 className="mb-0 mt-1 text-secondary">
+                                            {lastWeekCount?.doneCount ? lastWeekCount?.doneCount : '0'} task done
+                                        </h5>
+                                    </b>
+                                    <b>
+                                        <p className="m-0 text-secondary">in the last 7 days</p>
+                                    </b>
+                                </div>
                             </div>
-                            <div className="mx-3 ">
-                                <b>
-                                    <h5 className="mb-0 mt-1 text-secondary">{lastWeekCount?.doneCount ? lastWeekCount?.doneCount : "0"} task done</h5>
-                                </b>
-                                <b>
-                                    <p className="m-0 text-secondary">in the last 7 days</p>
-                                </b>
+                        </div>
+                        <div className="col  border_clr  m-2 rounded-4 bg-white">
+                            <div className="d-flex  p-4">
+                                <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
+                                    <i className="bi bi-pencil-fill w-size" />
+                                </div>
+                                <div className="mx-3 ">
+                                    <b>
+                                        <h5 className="mb-0 mt-1 text-secondary">
+                                            {lastWeekCount?.updatedCount ? lastWeekCount?.updatedCount : '0'} task
+                                            updated
+                                        </h5>
+                                    </b>
+                                    <b>
+                                        <p className="m-0 text-secondary">in the last 7 days</p>
+                                    </b>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col  border_clr  m-2 rounded-4 bg-white">
+                            <div className="d-flex  p-4">
+                                <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
+                                    <i className="bi bi-plus-lg w-size " />
+                                </div>
+                                <div className="mx-3 ">
+                                    <b>
+                                        <h5 className="mb-0 mt-1 text-secondary">
+                                            {lastWeekCount?.createdCount ? lastWeekCount?.createdCount : '0'} task Add
+                                        </h5>
+                                    </b>
+                                    <b>
+                                        <p className="m-0 text-secondary">in the last 7 days</p>
+                                    </b>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col  border_clr  m-2 rounded-4 bg-white">
+                            <div className="d-flex  p-4">
+                                <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
+                                    <i className="bi bi-calendar-week w-size" />
+                                </div>
+                                <div className="mx-3 ">
+                                    <b>
+                                        <h5 className="mb-0 mt-1 text-secondary">
+                                            {lastWeekCount?.dueCount ? lastWeekCount?.dueCount : '0'} task due
+                                        </h5>
+                                    </b>
+                                    <b>
+                                        <p className="m-0 text-secondary">in the last 7 days</p>
+                                    </b>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div className="col  border_clr  m-2 rounded-4 bg-white">
-                        <div className="d-flex  p-4">
-                            <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
-                                <i className="bi bi-pencil-fill w-size" />
-                            </div>
-                            <div className="mx-3 ">
-                                <b>
-                                    <h5 className="mb-0 mt-1 text-secondary">{lastWeekCount?.updatedCount ?lastWeekCount?.updatedCount :"0"} task updated</h5>
-                                </b>
-                                <b>
-                                    <p className="m-0 text-secondary">in the last 7 days</p>
-                                </b>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col  border_clr  m-2 rounded-4 bg-white">
-                        <div className="d-flex  p-4">
-                            <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
-                                <i className="bi bi-plus-lg w-size " />
-                            </div>
-                            <div className="mx-3 ">
-                                <b>
-                                    <h5 className="mb-0 mt-1 text-secondary">{lastWeekCount?.createdCount ?lastWeekCount?.createdCount :"0"} task Add</h5>
-                                </b>
-                                <b>
-                                    <p className="m-0 text-secondary">in the last 7 days</p>
-                                </b>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col  border_clr  m-2 rounded-4 bg-white">
-                        <div className="d-flex  p-4">
-                            <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
-                                <i className="bi bi-calendar-week w-size" />
-                            </div>
-                            <div className="mx-3 ">
-                                <b>
-                                    <h5 className="mb-0 mt-1 text-secondary">{lastWeekCount?.dueCount ? lastWeekCount?.dueCount :"0"} task due</h5>
-                                </b>
-                                <b>
-                                    <p className="m-0 text-secondary">in the last 7 days</p>
-                                </b>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col border_clr  m-2 rounded-4 bg-white">
-                        <div className="p-4 ">
-                            <div className="col-10">
-                                <h5 className="mb-3">
-                                    <b>States overview</b>
-                                </h5>
-                               
-                            </div>
-                            <div className="chart_div ">
-                                <div className="donut-chart">
-                                    <Chart
-                                        options={apexDonutOpts}
-                                        series={data?.map((ele, i) => {
-                                            return ele.count;
-                                        })}
-                                        type="donut"
-                                        height={222}
-                                        className="apex-charts mb-4 mt-4"
-                                    />
+                    <div className="row">
+                        <div className="col border_clr  m-2 rounded-4 bg-white">
+                            <div className="p-4 ">
+                                <div className="col-10">
+                                    <h5 className="mb-3">
+                                        <b>States overview</b>
+                                    </h5>
+                                </div>
+                                <div className="chart_div ">
+                                    <div className="donut-chart">
+                                        <Chart
+                                            options={apexDonutOpts}
+                                            series={data?.map((ele, i) => {
+                                                return ele.count;
+                                            })}
+                                            type="donut"
+                                            height={222}
+                                            className="apex-charts mb-4 mt-4"
+                                        />
 
-                                    <ul className="legend mx-4">
-                                        <li>
-                                            <span className="color" style={{ backgroundColor: '#727cf5' }} />
-                                            To Do
-                                        </li>
-                                        <li>
-                                            <span className="color" style={{ backgroundColor: '#0acf97' }} /> In
-                                            Progress
-                                        </li>
-                                        <li>
-                                            <span className="color" style={{ backgroundColor: '#fa5c7c' }} />
-                                            Hold
-                                        </li>
-                                        <li>
-                                            <span className="color" style={{ backgroundColor: '#ffbc00' }} />
-                                            Done
-                                        </li>
-                                    </ul>
-                                    <ul>
-                                        {data?.map((ele, i) => {
-                                            return <li>{ele.count}</li>;
-                                        })}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col border_clr  m-2 rounded-4 bg-white">
-                        <div className="p-4 ">
-                            <div className="col-10">
-                                <h5 className="mb-3">
-                                    <b>Recent activity</b>
-                                </h5>
-                                <h6>Stay up to date with what"s happening across the project.</h6>
-                            </div>
-                            <div className="scrollable-content">
-                                <div className="col-10 mt-4">
-                                    <div className="sticky-top bg-white">
-                                        <p className="text-secondary day_date ">
-                                            <b> WEDNESDAY,11 OCTOBER 2023 </b>
-                                        </p>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <div className="bg-dark rounded-circle text-center ">
-                                                <h6 className="text-white mb-0 p-3">NN</h6>
-                                            </div>
-                                        </div>
-                                        <div className="col-10">
-                                            <a href className="text-decoration-none mx-1">
-                                                Nisha Negi
-                                            </a>
-                                            changed the status to Done on{' '}
-                                            <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                            <a href className="text-decoration-none">
-                                                TAS-1 - ertyuiopiuygfdghjkl;
-                                            </a>
-                                            <p className="text-secondary">8 days ago</p>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <div className="bg-dark rounded-circle text-center ">
-                                                <h6 className="text-white mb-0 p-3">NN</h6>
-                                            </div>
-                                        </div>
-                                        <div className="col-10">
-                                            <a href className="text-decoration-none mx-1">
-                                                Nisha Negi
-                                            </a>
-                                            changed the status to Done on{' '}
-                                            <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                            <a href className="text-decoration-none">
-                                                TAS-1 - ertyuiopiuygfdghjkl;
-                                            </a>
-                                            <p className="text-secondary">8 days ago</p>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <div className="bg-dark rounded-circle text-center ">
-                                                <h6 className="text-white mb-0 p-3">NN</h6>
-                                            </div>
-                                        </div>
-                                        <div className="col-10">
-                                            <a href className="text-decoration-none mx-1">
-                                                Nisha Negi
-                                            </a>
-                                            changed the status to Done on{' '}
-                                            <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                            <a href className="text-decoration-none">
-                                                TAS-1 - ertyuiopiuygfdghjkl;
-                                            </a>
-                                            <p className="text-secondary">8 days ago</p>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <div className="bg-dark rounded-circle text-center ">
-                                                <h6 className="text-white mb-0 p-3">NN</h6>
-                                            </div>
-                                        </div>
-                                        <div className="col-10">
-                                            <a href className="text-decoration-none mx-1">
-                                                Nisha Negi
-                                            </a>
-                                            changed the status to Done on{' '}
-                                            <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                            <a href className="text-decoration-none">
-                                                TAS-1 - ertyuiopiuygfdghjkl;
-                                            </a>
-                                            <p className="text-secondary">8 days ago</p>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <div className="bg-dark rounded-circle text-center ">
-                                                <h6 className="text-white mb-0 p-3">NN</h6>
-                                            </div>
-                                        </div>
-                                        <div className="col-10">
-                                            <a href className="text-decoration-none mx-1">
-                                                Nisha Negi
-                                            </a>
-                                            changed the status to Done on{' '}
-                                            <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                            <a href className="text-decoration-none">
-                                                TAS-1 - ertyuiopiuygfdghjkl;
-                                            </a>
-                                            <p className="text-secondary">8 days ago</p>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <div className="bg-dark rounded-circle text-center ">
-                                                <h6 className="text-white mb-0 p-3">NN</h6>
-                                            </div>
-                                        </div>
-                                        <div className="col-10">
-                                            <a href className="text-decoration-none mx-1">
-                                                Nisha Negi
-                                            </a>
-                                            changed the status to Done on{' '}
-                                            <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                            <a href className="text-decoration-none">
-                                                TAS-1 - ertyuiopiuygfdghjkl;
-                                            </a>
-                                            <p className="text-secondary">8 days ago</p>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <div className="bg-dark rounded-circle text-center ">
-                                                <h6 className="text-white mb-0 p-3">NN</h6>
-                                            </div>
-                                        </div>
-                                        <div className="col-10">
-                                            <a href className="text-decoration-none mx-1">
-                                                Nisha Negi
-                                            </a>
-                                            changed the status to Done on{' '}
-                                            <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                            <a href className="text-decoration-none">
-                                                TAS-1 - ertyuiopiuygfdghjkl;
-                                            </a>
-                                            <p className="text-secondary">8 days ago</p>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <div className="bg-dark rounded-circle text-center ">
-                                                <h6 className="text-white mb-0 p-3">NN</h6>
-                                            </div>
-                                        </div>
-                                        <div className="col-10">
-                                            <a href className="text-decoration-none mx-1">
-                                                Nisha Negi
-                                            </a>
-                                            changed the status to Done on{' '}
-                                            <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                            <a href className="text-decoration-none">
-                                                TAS-1 - ertyuiopiuygfdghjkl;
-                                            </a>
-                                            <p className="text-secondary">8 days ago</p>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <div className="bg-dark rounded-circle text-center ">
-                                                <h6 className="text-white mb-0 p-3">NN</h6>
-                                            </div>
-                                        </div>
-                                        <div className="col-10">
-                                            <a href className="text-decoration-none mx-1">
-                                                Nisha Negi
-                                            </a>
-                                            changed the status to Done on{' '}
-                                            <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                            <a href className="text-decoration-none">
-                                                TAS-1 - ertyuiopiuygfdghjkl;
-                                            </a>
-                                            <p className="text-secondary">8 days ago</p>
-                                        </div>
+                                        <ul className="legend mx-4">
+                                            <li>
+                                                <span className="color" style={{ backgroundColor: '#727cf5' }} />
+                                                To Do
+                                            </li>
+                                            <li>
+                                                <span className="color" style={{ backgroundColor: '#0acf97' }} /> In
+                                                Progress
+                                            </li>
+                                            <li>
+                                                <span className="color" style={{ backgroundColor: '#fa5c7c' }} />
+                                                Hold
+                                            </li>
+                                            <li>
+                                                <span className="color" style={{ backgroundColor: '#ffbc00' }} />
+                                                Done
+                                            </li>
+                                        </ul>
+                                        <ul>
+                                            {data?.map((ele, i) => {
+                                                return <li className="mb-2">{ele.count}</li>;
+                                            })}
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col border_clr  m-2 rounded-4 bg-white">
-                        <div className="p-4 ">
-                            <div className="col-12">
-                                <h5 className="mb-3">
-                                    <b>Priority breakdown</b>
-                                </h5>
-                               
-                                <Chart options={options} series={series} type="bar" height={350} />
+                        <div className="col border_clr  m-2 rounded-4 bg-white">
+                            <div className="p-4 ">
+                                <div className="col-10">
+                                    <h5 className="mb-3">
+                                        <b>Recent activity</b>
+                                    </h5>
+                                    <h6>Stay up to date with what"s happening across the project.</h6>
+                                </div>
+                                <div className="scrollable-content">
+                                    <div className="col-10 mt-4">
+                                        <div className="sticky-top bg-white">
+                                            <p className="text-secondary day_date ">
+                                                <b> WEDNESDAY,11 OCTOBER 2023 </b>
+                                            </p>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-2">
+                                                <div className="bg-dark rounded-circle text-center ">
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                </div>
+                                            </div>
+                                            <div className="col-10">
+                                                <a href className="text-decoration-none mx-1">
+                                                    Nisha Negi
+                                                </a>
+                                                changed the status to Done on{' '}
+                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
+                                                <a href className="text-decoration-none">
+                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                </a>
+                                                <p className="text-secondary">8 days ago</p>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-2">
+                                                <div className="bg-dark rounded-circle text-center ">
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                </div>
+                                            </div>
+                                            <div className="col-10">
+                                                <a href className="text-decoration-none mx-1">
+                                                    Nisha Negi
+                                                </a>
+                                                changed the status to Done on{' '}
+                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
+                                                <a href className="text-decoration-none">
+                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                </a>
+                                                <p className="text-secondary">8 days ago</p>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-2">
+                                                <div className="bg-dark rounded-circle text-center ">
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                </div>
+                                            </div>
+                                            <div className="col-10">
+                                                <a href className="text-decoration-none mx-1">
+                                                    Nisha Negi
+                                                </a>
+                                                changed the status to Done on{' '}
+                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
+                                                <a href className="text-decoration-none">
+                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                </a>
+                                                <p className="text-secondary">8 days ago</p>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-2">
+                                                <div className="bg-dark rounded-circle text-center ">
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                </div>
+                                            </div>
+                                            <div className="col-10">
+                                                <a href className="text-decoration-none mx-1">
+                                                    Nisha Negi
+                                                </a>
+                                                changed the status to Done on{' '}
+                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
+                                                <a href className="text-decoration-none">
+                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                </a>
+                                                <p className="text-secondary">8 days ago</p>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-2">
+                                                <div className="bg-dark rounded-circle text-center ">
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                </div>
+                                            </div>
+                                            <div className="col-10">
+                                                <a href className="text-decoration-none mx-1">
+                                                    Nisha Negi
+                                                </a>
+                                                changed the status to Done on{' '}
+                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
+                                                <a href className="text-decoration-none">
+                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                </a>
+                                                <p className="text-secondary">8 days ago</p>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-2">
+                                                <div className="bg-dark rounded-circle text-center ">
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                </div>
+                                            </div>
+                                            <div className="col-10">
+                                                <a href className="text-decoration-none mx-1">
+                                                    Nisha Negi
+                                                </a>
+                                                changed the status to Done on{' '}
+                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
+                                                <a href className="text-decoration-none">
+                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                </a>
+                                                <p className="text-secondary">8 days ago</p>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-2">
+                                                <div className="bg-dark rounded-circle text-center ">
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                </div>
+                                            </div>
+                                            <div className="col-10">
+                                                <a href className="text-decoration-none mx-1">
+                                                    Nisha Negi
+                                                </a>
+                                                changed the status to Done on{' '}
+                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
+                                                <a href className="text-decoration-none">
+                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                </a>
+                                                <p className="text-secondary">8 days ago</p>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-2">
+                                                <div className="bg-dark rounded-circle text-center ">
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                </div>
+                                            </div>
+                                            <div className="col-10">
+                                                <a href className="text-decoration-none mx-1">
+                                                    Nisha Negi
+                                                </a>
+                                                changed the status to Done on{' '}
+                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
+                                                <a href className="text-decoration-none">
+                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                </a>
+                                                <p className="text-secondary">8 days ago</p>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-2">
+                                                <div className="bg-dark rounded-circle text-center ">
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                </div>
+                                            </div>
+                                            <div className="col-10">
+                                                <a href className="text-decoration-none mx-1">
+                                                    Nisha Negi
+                                                </a>
+                                                changed the status to Done on{' '}
+                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
+                                                <a href className="text-decoration-none">
+                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                </a>
+                                                <p className="text-secondary">8 days ago</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div className="col border_clr  m-2 rounded-4 bg-white">
-                        <div className="p-4 ">
-                            <div className="col-12">
-                                <h5 className="mb-3">
-                                    <b>Types of work</b>
-                                </h5>
-                                
+                    <div className="row">
+                        <div className="col border_clr  m-2 rounded-4 bg-white">
+                            <div className="p-4 ">
+                                <div className="col-12">
+                                    <h5 className="mb-3">
+                                        <b>Priority breakdown</b>
+                                    </h5>
+
+                                    <Chart options={options} series={series} type="bar" height={350} />
+                                </div>
                             </div>
-                            <div className="p-4">
-                                <div className="row ">
-                                    <div className="col">
-                                        <p className="text-secondary">Type</p>
-                                        <div className="d-flex mb-4">
-                                            <i
-                                                className="bi bi-check-square-fill mx-2 icon_s"
-                                                style={{ color: '#59d3ec' }}
-                                            />
-                                            <p className="mb-0">Task</p>
-                                        </div>
-                                        <div className="d-flex mb-4">
-                                            <div
-                                                style={{ backgroundColor: '#59d3ec', color: 'aliceblue' }}
-                                                className="rounded-2 mx-2">
-                                                <i className="bi bi-subtract mx-1   " />
+                        </div>
+                        <div className="col border_clr  m-2 rounded-4 bg-white">
+                            <div className="p-4 ">
+                                <div className="col-12">
+                                    <h5 className="mb-3">
+                                        <b>Types of work</b>
+                                    </h5>
+                                </div>
+                                <div className="p-4">
+                                    <div className="row ">
+                                        <div className="col">
+                                            <p className="text-secondary">Type</p>
+                                            <div className="d-flex mb-4">
+                                                <i
+                                                    className="bi bi-check-square-fill mx-2 icon_s"
+                                                    style={{ color: '#59d3ec' }}
+                                                />
+                                                <p className="mb-0">Task</p>
                                             </div>
-                                            <p className="mb-0">Sub-task</p>
-                                        </div>
-                                        <div className="d-flex mb-4">
-                                            <div
-                                                style={{ backgroundColor: '#59d3ec', color: 'aliceblue' }}
-                                                className="rounded-2 mx-2">
-                                                <i className="bi bi-gear-wide mx-1" />
+                                            <div className="d-flex mb-4">
+                                                <div
+                                                    style={{ backgroundColor: '#59d3ec', color: 'aliceblue' }}
+                                                    className="rounded-2 mx-2">
+                                                    <i className="bi bi-subtract mx-1   " />
+                                                </div>
+                                                <p className="mb-0">Sub-task</p>
                                             </div>
-                                            <p className="mb-0">Manage types</p>
+                                            <div className="d-flex mb-4">
+                                                <div
+                                                    style={{ backgroundColor: '#59d3ec', color: 'aliceblue' }}
+                                                    className="rounded-2 mx-2">
+                                                    <i className="bi bi-gear-wide mx-1" />
+                                                </div>
+                                                <p className="mb-0">Manage types</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col">
-                                        <p className="text-secondary">Distribution</p>
-                                        <div className="progress-w-percent">
-                                            <span className="progress-value fw-bold">0%</span>
-                                            <ProgressBar now={72} className="progress-sm" />
+                                        <div className="col">
+                                            <p className="text-secondary">Distribution</p>
+                                            <div className="progress-w-percent">
+                                                <span className="progress-value fw-bold">0%</span>
+                                                <ProgressBar now={72} className="progress-sm" />
+                                            </div>
+                                            <div className="progress-w-percent">
+                                                <span className="progress-value fw-bold">0%</span>
+                                                <ProgressBar now={72} className="progress-sm" />
+                                            </div>
                                         </div>
-                                        <div className="progress-w-percent">
-                                            <span className="progress-value fw-bold">0%</span>
-                                            <ProgressBar now={72} className="progress-sm" />
+                                        <div className="col ">
+                                            <p className="text-secondary">Count</p>
+                                            <p className="text-primary  mx-4 mb-4">0</p>
+                                            <p className="text-primary mx-4 mb-4 pt-3">0</p>
                                         </div>
-                                    </div>
-                                    <div className="col ">
-                                        <p className="text-secondary">Count</p>
-                                        <p className="text-primary  mx-4 mb-4">0</p>
-                                        <p className="text-primary mx-4 mb-4 pt-3">0</p>
                                     </div>
                                 </div>
                             </div>
@@ -459,7 +463,6 @@ const Summary = () => {
                     </div>
                 </div>
             </div>
-        </div>
         </>
     );
 };

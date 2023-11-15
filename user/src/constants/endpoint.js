@@ -1,7 +1,8 @@
 // end points
 
 export const AddProject = "/project/addProject";
-export const GetAllProject = "/project/getProjects?activeStatus=";
+// export const GetAllProject = "/project/getProjects?activeStatus=";
+export const GetAllProject = "/assignUser/getUserAssignments?flag=";
 export const UpdateProjectDetails = "/project/update";
 export const DeleteProject = "/project/updateStatus";
 export const GetProjectById = "/project/getbyprojectid/";
@@ -28,7 +29,7 @@ export const SingleMilestone = "/milestone/getMilestones?"
 //==============================================================================
 
 export const SingleSprintTask = "/task/getSprintTasks?sprintId="
-export const GetAllTask = "/assignUser/getUserTasks?"
+export const GetAllTask = "/assignUser/getUserTasks?flag="
 
 export const UpdateTask = "/task/updateTask"
 export const DeleteTask = "/task/deletetask?"
@@ -60,4 +61,6 @@ export const getWeekTaskCount="/task/getTasksWeekCount";
 export const getTaskStatusCount="/task/getTasksStatusCount";
 export const getTaskCount="/task/getTasksCount";
 
+// user login time api-----------------------------
 
+export const userLoginTime="/userLogin/loginTime"

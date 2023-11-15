@@ -50,6 +50,12 @@
         icon: 'uil-users-alt',
 
     },
+    {
+        key: 'client',
+        label: 'Client',
+        url: 'dashboard/client',
+        icon: 'uil-users-alt',
+    }
    
   
 ];

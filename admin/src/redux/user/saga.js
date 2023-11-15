@@ -1,7 +1,7 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 
 import USERS_TYPES from './constant';
-import { InviteUserApi, deleteUserApi, getallRolesApi, getallUsersApi } from './api';
+import { InviteUserApi, deleteUserApi, getCsvDataApi, getallRolesApi, getallUsersApi } from './api';
 
 function* getAllUsersFunction({ payload }) {
     try {
@@ -141,6 +141,40 @@ function* getAllRolesFunction({ payload }) {
 
     }
 }
+function* getCsvFunction({ payload }) {
+    try {
+        yield put({
+            type: USERS_TYPES.GET_CSV_DATA_LOADING,
+            payload: {}
+        })
+        const response = yield call(getCsvDataApi, { payload });
+        console.log(response?.data?.loginRecords , "dddddddd")
+        if (response.data.status) {
+            yield put({
+                type: USERS_TYPES.GET_CSV_DATA_SUCCESS,
+                payload: { ...response.data },
+                
+            });
+            // yield put({
+            //     type: USERS_TYPES.GET_CSV_DATA_RESET,
+            //     payload: {},
+            // });
+        }
+        else {
+            yield put({
+                type: USERS_TYPES.GET_CSV_DATA_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: USERS_TYPES.GET_CSV_DATA_ERROR,
+            payload: { message: error?.message }
+        });
+
+    }
+}
 
 export function* getAllUsersSaga(): any {
     yield takeEvery(USERS_TYPES.GET_ALL_USERS, getAllUsersFunction);
@@ -154,13 +188,16 @@ export function* inviteuserSaga(): any {
 export function* getAllRolesSaga(): any {
     yield takeEvery(USERS_TYPES.GET_ALL_ROLES, getAllRolesFunction);
 }
-
+export function* getCsvSaga(): any {
+    yield takeEvery(USERS_TYPES.GET_CSV_DATA, getCsvFunction);
+}
 function* AllUsersSaga(): any {
     yield all([
         fork(getAllUsersSaga),
         fork(getAllRolesSaga),
     fork(deleteUserSaga),
-    fork(inviteuserSaga)
+    fork(inviteuserSaga),
+    fork(getCsvSaga),
     ])
 }
 export default AllUsersSaga;

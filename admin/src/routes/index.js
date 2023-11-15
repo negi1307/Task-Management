@@ -80,7 +80,8 @@ const CRMOrderList = React.lazy(() => import('../pages/apps/CRM/OrderList'));
 
 
 // customer
-const CustomerTable = React.lazy(() => import('../pages/Task-Manager/customer/customerTable/CustomerTable'));
+const CustomerIndex = React.lazy(() => import('../pages/Task-Manager/customer/CustomerIndex'));
+const ClientIndex = React.lazy(() => import('../pages/Task-Manager/client/ClientIndex'));
 
 
 // - ecommece pages
@@ -344,10 +345,12 @@ const AllRoutes = () => {
                         },
                         {
                             path: 'customer',
-                            element: <LoadComponent component={CustomerTable} />,
+                            element: <LoadComponent component={CustomerIndex} />,
                         },
-
-                      
+                        {
+                            path: 'client',
+                            element: <LoadComponent component={ClientIndex} />,
+                        },
                     ],
                 },
                 {

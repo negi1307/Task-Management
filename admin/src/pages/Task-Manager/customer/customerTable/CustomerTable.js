@@ -27,19 +27,7 @@ const CustomerTable = () => {
 
     return (
         <div>
-            <Card>
-                <Card.Body>
-                    <div className="d-flex justify-content-end">
-                        <Button className="web_button" onClick={() => setModalShow(true)}>
-                            Create Customer
-                        </Button>
-                    </div>
-                    <div className="row mx-auto">
-                        <div className="col-6 d-flex align-items-end justify-content-end">
-                            <h4 className="header-title heading_data"> Customer</h4>
-                        </div>
-                    </div>
-                    {getUsers?.loading ? (
+            {getUsers?.loading ? (
                         <MainLoader />
                     ) : (
                         <Table className="mb-0 add_Color_font" striped>
@@ -84,11 +72,6 @@ const CustomerTable = () => {
                             </tbody>
                         </Table>
                     )}
-                    <>
-                        <CustomerCreateFrom show={modalShow}
-                            onHide={() => setModalShow(false)} /></>
-                </Card.Body>
-            </Card>
         </div>
     )
 }

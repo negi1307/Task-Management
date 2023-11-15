@@ -14,3 +14,6 @@ export function InviteUserApi(data): any {
 export function getallRolesApi(data): any {
     return api.get(URL.GetAllRoles, data.payload)
 }
+export function getCsvDataApi(data): any {
+    return api.get(URL.GetCsvData + data.payload)
+}

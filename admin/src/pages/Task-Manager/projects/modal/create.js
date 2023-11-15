@@ -15,22 +15,22 @@ const Create = ({ modal, closeModal }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [selected, setSelected] = useState([]);
-    const [selectedenDate ,setSelectedenDate] = useState()
+    const [selectedenDate, setSelectedenDate] = useState();
     const errorhandel = store?.addProject;
     const loaderhandel = store?.addProject;
     const [addValue, setAddValue] = useState([]);
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     // disable previous date
     const today = new Date().toISOString().split('T')[0];
-      // end date
-      function findMinimumEndDate(date1, date2) {
+    // end date
+    function findMinimumEndDate(date1, date2) {
         return new Date(Math.min(new Date(date1), new Date(date2)));
     }
     const date1 = new Date();
     const date2 = selectedenDate;
     const minimumEndDate = findMinimumEndDate(date1, date2);
-    console.log(minimumEndDate,"mindate")
-    // 
+    console.log(minimumEndDate, 'mindate');
+    //
     const {
         register,
         handleSubmit,
@@ -39,7 +39,7 @@ const Create = ({ modal, closeModal }) => {
         reset,
         formState: { errors },
     } = useForm();
-    console.log(watch("startDate"),"watchhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+    console.log(watch('startDate'), 'watchhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
     console.log(addValue, 'select');
     const onSubmit = (data) => {
         let body = {
@@ -48,8 +48,8 @@ const Create = ({ modal, closeModal }) => {
             startDate: data?.startDate,
             endDate: data?.endDate,
             projectType: data?.project_type,
-            projectStatus : data?.status,
-            technology: addValue
+            projectStatus: data?.status,
+            technology: addValue,
         };
         dispatch(addProject(body));
     };
@@ -82,13 +82,14 @@ const Create = ({ modal, closeModal }) => {
     };
 
     const addhandle = (selectedList, selectItem) => {
+        console.log(selectedList, selectItem,"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn");
         const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
         });
         setAddValue([...addValue, add[0]._id]);
-        console.log(addValue, 'addvalue info');
+        // console.log(addValue, 'addvalue info');
     };
-  
+
     useEffect(() => {
         const getTechnologyname = [];
         dispatch(getAllTechnology({ status: true }));
@@ -100,7 +101,7 @@ const Create = ({ modal, closeModal }) => {
 
     return (
         <>
-            <Modal show={modal} onHide={closeModal} size="lg">
+            <Modal show={modal} className="add_round" onHide={closeModal} size="lg">
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
@@ -121,7 +122,7 @@ const Create = ({ modal, closeModal }) => {
                             <MainLoader />
                         </>
                     ) : (
-                        <Card className="p-3">
+                        <div className="p-3">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={6}>
@@ -163,7 +164,7 @@ const Create = ({ modal, closeModal }) => {
                                                 Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('project_type', { required: true })}>
-                                                <option >Choose an Project Type </option>
+                                                <option>Choose an Project Type </option>
                                                 <option value="T&M">T&M</option>
                                                 <option value="FC">FC</option>
                                                 <option value=" HR">HR</option>
@@ -173,7 +174,6 @@ const Create = ({ modal, closeModal }) => {
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>
-                                        
                                     </Col>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
@@ -210,7 +210,7 @@ const Create = ({ modal, closeModal }) => {
                                             />
                                             {errors.startDate?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
-                                            )} 
+                                            )}
                                         </Form.Group>
                                     </Col>
                                     <Col lg={6}>
@@ -220,8 +220,8 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                disabled={watch("startDate")== ""|| watch("startDate")== undefined }
-                                                min={watch("startDate")} 
+                                                disabled={watch('startDate') == '' || watch('startDate') == undefined}
+                                                min={watch('startDate')}
                                                 {...register('endDate', { required: true })}
                                                 placeholder="Please end Date"
                                             />
@@ -246,7 +246,6 @@ const Create = ({ modal, closeModal }) => {
                                                 <option value="4">Completed</option>
                                             </Form.Select>
                                         </Form.Group>
-                                        
                                     </Col>
                                 </Row>
                                 <Row>
@@ -260,7 +259,7 @@ const Create = ({ modal, closeModal }) => {
                                     </Col>
                                 </Row>
                             </Form>
-                        </Card>
+                        </div>
                     )}
                 </Modal.Body>
             </Modal>
