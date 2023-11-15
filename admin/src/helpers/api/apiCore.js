@@ -114,7 +114,6 @@ class APICore {
      * post given data to url
      */
     create = (url, data) => {        
-        console.log("dsgewhgoewhgowhgoiweohghoiweghoiew",data)
         return axios.post(url, data);
     };
 
