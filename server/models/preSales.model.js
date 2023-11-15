@@ -8,9 +8,8 @@ const preSalesModel = mongoose.model(
         description:{
             type:String,
         },
-        projectId: {
-            type: mongoose.Types.ObjectId,
-            ref:"projects"
+        projectName: {
+            type:String,
         },
         stage:{
             type:Number // 1:Hot, 2:Medium, 3:Cold

@@ -5,7 +5,7 @@ const createPreSales = async (req,res) =>{
     try {
         const result = await preSalesModel.create({
             clientName: req.body.clientName,
-            projectId: req.body.projectId,
+            projectName: req.body.projectName,
             description: req.body.description,
             stage:req.body.stage,
             type:req.body.type,
@@ -21,7 +21,7 @@ const createPreSales = async (req,res) =>{
 // get the pre Sale data which is create
 const getPreSaleData = async(req,res)=>{
     try {
-        const result = await preSalesModel.find().populate("projectId")
+        const result = await preSalesModel.find()
         return res.status(200).json({ status: "200", message: "Pre Sales fetched Successfully", response: result });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
