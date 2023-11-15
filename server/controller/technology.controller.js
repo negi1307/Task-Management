@@ -4,9 +4,7 @@ const technologyModel = require('../models/technology.model');
 // Add  a Technology category
 const addTechCategory = async (req, res) => {
     try {
-        const result = await techCategoryModel.create({
-            name: req.body.name
-        });
+        const result = await techCategoryModel.create({ name: req.body.name });
         return res.status(200).json({ status: '200', message: 'Tech Category Added Successfully', response: result })
     } catch (err) {
         return res.status(200).json({ status: '500', message: 'Something went wrong' })

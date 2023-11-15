@@ -204,7 +204,7 @@ const Summary = () => {
                                         </ul>
                                         <ul>
                                             {data?.map((ele, i) => {
-                                                return <li>{ele.count}</li>;
+                                                return <li className="mb-2">{ele.count}</li>;
                                             })}
                                         </ul>
                                     </div>
@@ -229,7 +229,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -247,7 +247,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -265,7 +265,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -283,7 +283,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -301,7 +301,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -319,7 +319,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -337,7 +337,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -355,7 +355,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -373,7 +373,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">

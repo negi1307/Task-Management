@@ -25,16 +25,16 @@ const CategoryUpdate = ({ modal, closeModal, editData }) => {
 
     useEffect(() => {
         reset({
-            Category:editData?.name,    
+            Category: editData?.name,
         });
     }, [modal]);
 
     console.log(editData, 'pppppp');
     const onSubmit = (data) => {
-        let body={
-            id:editData?._id,
-            name:data?.Category,
-        }
+        let body = {
+            id: editData?._id,
+            name: data?.Category,
+        };
         dispatch(updateTechnologyCategory(body));
     };
 
@@ -65,47 +65,50 @@ const CategoryUpdate = ({ modal, closeModal, editData }) => {
                         </Row>
                     </Col>
                 </Row>
-                {loaderhandle?.loading ? (<MainLoader />) : <Modal.Body className="py-0">
-                    <Card className="p-2">
-                        <Form onSubmit={handleSubmit(onSubmit)}>
-                            <Row>
-                                <Col lg={12}>
-                                    <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-                                        <Row>
-                                            <Col lg={4}>
-                                                <Form.Label>
-                                                    Category Name <span className="text-danger">*</span>:
-                                                </Form.Label>
-                                            </Col>
-                                            <Col lg={8}>
-                                                <Form.Control
-                                                    type="text"
-                                                    placeholder="Please Enter Category Name"
-                                                    {...register('Category', { required: true })}
-                                                />
-                                                {errors.Category?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
-                                                )}
-                                            </Col>
-                                        </Row>
-                                    </Form.Group>
-                                </Col>
-                            </Row>
+                {loaderhandle?.loading ? (
+                    <MainLoader />
+                ) : (
+                    <Modal.Body className="py-0">
+                        <div className="p-2">
+                            <Form onSubmit={handleSubmit(onSubmit)}>
+                                <Row>
+                                    <Col lg={12}>
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
+                                            <Row>
+                                                <Col lg={4}>
+                                                    <Form.Label>
+                                                        Category Name <span className="text-danger">*</span>:
+                                                    </Form.Label>
+                                                </Col>
+                                                <Col lg={8}>
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="Please Enter Category Name"
+                                                        {...register('Category', { required: true })}
+                                                    />
+                                                    {errors.Category?.type === 'required' && (
+                                                        <span className="text-danger"> This feild is required *</span>
+                                                    )}
+                                                </Col>
+                                            </Row>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
 
-                            <Row>
-                                <Col className="text-start d-flex align-items-center justify-content-center">
-                                    <Button
-                                        variant="info"
-                                        type="submit"
-                                        className="btn btn-sm  text-white pt-1 pb-1  web_button ">
-                                        Update
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </Form>
-                    </Card>
-                </Modal.Body> }
-               
+                                <Row>
+                                    <Col className="text-start d-flex align-items-center justify-content-center">
+                                        <Button
+                                            variant="info"
+                                            type="submit"
+                                            className="btn btn-sm  text-white pt-1 pb-1  web_button ">
+                                            Update
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </Form>
+                        </div>
+                    </Modal.Body>
+                )}
             </Modal>
         </>
     );

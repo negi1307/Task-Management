@@ -69,7 +69,6 @@ const Login = (): React$Element<any> => {
         dispatch(loginUser(formData['username'], formData['password']));
         const roleId = store?.Auth?.user
         localStorage.setItem("roleId",roleId);
-        console.log(roleId,"priya")
     };
 
     return (

@@ -25,7 +25,7 @@ const AllUsers = () => {
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const csvdownloaddata = store?.getCsvDataReducer;
-    console.log(csvdownloaddata, 'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
+    console.log(csvdownloaddata, csvdownloaddata?.data?.message, 'nnnnnllnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
     // const handelUpdate = (data) => {
     //     setEditData(data);
     //     setOpenEditModal(true);
@@ -48,7 +48,6 @@ const AllUsers = () => {
 
     useEffect(() => {
         dispatch(getAllUsers());
-        // dispatch(getCSVdata())
     }, [render]);
     useEffect(() => {
         if (getUsers?.data?.status == 200) {
@@ -73,32 +72,27 @@ const AllUsers = () => {
             setcsvdownload(
                 csvdownloaddata?.data?.loginRecords?.map((ele) => {
                     return {
-                        ID : ele?._id,
-                        FirstName: ele?.userId?.firstName,
-                        LastName: ele?.userId?.lastName,
-                        LoginTime: moment(ele?.loginTime).format('LLL')
+                        Name: ele?.userId?.firstName + ' ' + ele?.userId?.lastName,
+                        Time: moment(ele?.loginTime).format('LT'),
+                        Date: moment(ele?.loginTime).format('DD-MM-YYYY'),
                     };
                 })
             );
             setTimeout(() => {
-                //    document.getElementById("csvid").click()
                 csvLink.current.link.click();
             }, 1000);
         }
-       
-                
     }, [csvdownloaddata]);
-    // useEffect(() => {
-    //     if (csvdownloaddata?.data?.status == 200) {
-    //         ToastHandle('success', csvdownloaddata?.data?.message);
-    //         // closeupdatemodal('render');
-    //     } else if (csvdownloaddata?.data?.status == 404) {
-    //         ToastHandle('error', csvdownloaddata?.data?.message);
-    //     } else if (csvdownloaddata?.data?.status == 500) {
-    //         ToastHandle('error', csvdownloaddata?.data?.message);
-    //     }
-    // }, [csvdownloaddata])
-    
+    useEffect(() => {
+        if (csvdownloaddata?.data?.status == 200) {
+            ToastHandle('success', csvdownloaddata?.data?.message);
+            // closeupdatemodal('render');
+        } else if (csvdownloaddata?.data?.status == 404) {
+            ToastHandle('error', csvdownloaddata?.data?.message);
+        } else if (csvdownloaddata?.data?.status == 500) {
+            ToastHandle('error', csvdownloaddata?.data?.message);
+        }
+    }, [csvdownloaddata]);
 
     return (
         <div>

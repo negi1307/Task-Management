@@ -16,9 +16,11 @@ import { getAllMilstoneSprints } from '../../../redux/sprint/action';
 import { getAllProjects } from '../../../redux/projects/action';
 import { getHistory } from '../../../redux/addcomment/actions';
 import { getTaskStatusCount } from '../../../redux/Summary/action';
-import { addComment, getComment, updateComment, deleteComment, getCommentId } from '../../../redux/addcomment/actions';
+import { addComment, getComment, deleteComment, getCommentId } from '../../../redux/addcomment/actions';
 import Taskdetail from './taskdetail';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
+import ToastHandle from '../../../constants/toaster/toaster';
 
 const Container = styled.div`
     display: flex;
@@ -51,25 +53,34 @@ const Title = styled.span`
 `;
 
 const Boards = (props) => {
+    const { projectId, milestoneId, spriteId } = useParams();
+    console.log(spriteId, projectId, milestoneId, 'sprintttt');
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const { register, setValue } = useForm();
-
+    const taskId = store?.getTaskId?.data;
     const taskStatusCount = store?.getTaskStatusCount?.data?.response;
     // for status count on board page(get all task api)============================
     const taskStatusCountdata = store?.getAllTaskReducer?.data;
     // for status count on board page (get all task api)============================
-
+    const updateComment = store?.updateComment;
     const successHandle = store?.getAllTaskReducer;
+    console.log(successHandle, 'success');
     const statushandle = store?.updateTaskStatus;
 
-    const projectId = store?.getProjectId?.data;
-    const milstoneId = store?.getMilestoneId?.data;
-    const SprintId = store?.getSprintId?.data;
-
     useEffect(() => {
-        dispatch(getAllTask({ id: projectId, milestoneId: milstoneId, sprintId: SprintId, searchString: '' }));
-    }, [SprintId]);
+        let body = {
+            flag: 1,
+            status: true,
+            searchString: '',
+            projectId: projectId,
+            milestoneId: milestoneId,
+            sprintId: spriteId,
+            skip: 1,
+        };
+
+        dispatch(getAllTask(body));
+    }, []);
 
     useEffect(() => {
         let body = {
@@ -134,7 +145,16 @@ const Boards = (props) => {
                 dispatch(updateTaskStatus(body));
             }
             setTimeout(() => {
-                dispatch(getAllTask({ id: projectId, milestoneId: milstoneId, sprintId: SprintId, searchString: '' }));
+                let body = {
+                    flag: 1,
+                    status: true,
+                    searchString: '',
+                    projectId: projectId,
+                    milestoneId: milestoneId,
+                    sprintId: spriteId,
+                    skip: 1,
+                };
+                dispatch(getAllTask(body));
             }, 30);
         } else {
             const column = columns[source.droppableId];
@@ -160,26 +180,26 @@ const Boards = (props) => {
             setColumns({
                 [uuidv4()]: {
                     title: 'To-do',
-                    items: successHandle?.data?.todo?.tasks?.map((ele) => {
+                    items: successHandle?.data?.response?.Todo?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
                 [uuidv4()]: {
                     title: 'In Progress',
-                    items: successHandle?.data?.inProgress?.tasks?.map((ele) => {
+                    items: successHandle?.data?.response?.Inprogress?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
 
                 [uuidv4()]: {
                     title: 'Hold',
-                    items: successHandle?.data?.hold?.tasks?.map((ele) => {
+                    items: successHandle?.data?.response?.Hold?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
                 [uuidv4()]: {
                     title: 'Done',
-                    items: successHandle?.data?.done?.tasks?.map((ele) => {
+                    items: successHandle?.data?.response?.Done?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
@@ -207,11 +227,33 @@ const Boards = (props) => {
     const closeTaskDetailMOdel = () => {
         setshowTaskModel(false);
     };
-
+    useEffect(() => {
+        if (updateComment?.data?.status == 200) {
+            ToastHandle('success', updateComment?.data?.message);
+            dispatch(getComment({ taskId: commentdata?.taskInfo?._id }));
+        } else if (updateComment?.data?.status == 400) {
+            ToastHandle('error', updateComment?.data?.message);
+        } else if (updateComment?.data?.status == 500) {
+            ToastHandle('error', updateComment?.data?.message);
+        }
+    }, [updateComment]);
     const callAlltaskData = () => {
-        dispatch(getAllTask({ id: projectId, milestoneId: milstoneId, sprintId: SprintId, searchString: '' }));
+        let body = {
+            flag: 1,
+            status: true,
+            searchString: '',
+            projectId: projectId,
+            milestoneId: milestoneId,
+            sprintId: spriteId,
+            skip: 1,
+        };
+        dispatch(getAllTask(body));
     };
-
+    const closeModal = (val) => {
+        // if (val == 'render') {
+        //     setRender(!render);
+        // }
+    };
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -220,14 +262,16 @@ const Boards = (props) => {
     const selectTask = (e) => {
         if (e.target.value !== '') {
             setTimeout(() => {
-                dispatch(
-                    getAllTask({
-                        id: projectId,
-                        milestoneId: milstoneId,
-                        sprintId: SprintId,
-                        searchString: e.target.value,
-                    })
-                );
+                let body = {
+                    flag: 1,
+                    status: true,
+                    searchString: e.target.value,
+                    projectId: projectId,
+                    milestoneId: milestoneId,
+                    sprintId: spriteId,
+                    skip: 1,
+                };
+                dispatch(getAllTask(body));
             }, 500);
         }
     };
@@ -273,7 +317,7 @@ const Boards = (props) => {
             <div className="add_task">
                 <button
                     type="button"
-                    className="mybutton btn btn-info web_button"
+                    className="mybutton btn btn-info"
                     onClick={() => {
                         console.log('button click');
                         setShowModal(!showModal);
@@ -297,7 +341,7 @@ const Boards = (props) => {
                 ) : (
                     <Container>
                         <TaskColumnStyles>
-                            {Object.entries(columns).map(([columnId, column], index) => {
+                            {Object.entries(columns)?.map(([columnId, column], index) => {
                                 return (
                                     <Droppable key={columnId} droppableId={columnId}>
                                         {(provided, snapshot) => (
@@ -306,12 +350,14 @@ const Boards = (props) => {
                                                 ref={provided.innerRef}
                                                 {...provided.droppableProps}>
                                                 <Title class="">{column.title}</Title>
-                                                {column.items.map((item, index) => (
+
+                                                {column?.items?.map((item, index) => (
                                                     <TaskCard
                                                         showTaskDetailMOdel={showTaskDetailMOdel}
-                                                        key={item.id}
+                                                        key={item}
                                                         item={item}
                                                         index={index}
+                                                        closeModal={closeModal}
                                                     />
                                                 ))}
                                                 {provided.placeholder}
