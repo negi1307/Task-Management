@@ -43,7 +43,7 @@ const updatePreSalesData = async (req,res)=>{
 const deletePreSaleData = async (req,res) => {
     try {
         await preSalesModel.findByIdAndDelete({_id : req.query.preSalesId});
-        return res.status(200).json({ status: "200", message: "PreSale deleted Successfully"})
+        return res.status(200).json({ status: "200", message: "Pre Sale deleted Successfully"})
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
