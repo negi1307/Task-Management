@@ -8,6 +8,9 @@ const userLogin = mongoose.model(
         },
         loginTime:{
             type:String
+        },
+        logoutTime:{
+            type:String
         }
     },
     {
