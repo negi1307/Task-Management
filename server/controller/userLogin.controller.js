@@ -4,14 +4,10 @@ const userLoginModel = require("../models/userLogin.model");
 const userLogin = async (req, res) => {
     try {
         const userId = req.user._id;
-        if (!userId) {
-            return res.status(400).json({ status: 400, message: "User ID is missing in the token" });
-        }
         const today = new Date();
-        const existingRecord = await userLoginModel.findOne({ userId: userId, loginDate: today, logoutDate: today });
+        const existingRecord = await userLoginModel.findOne({ userId: userId, loginDate: today });
         if (existingRecord) {
             existingRecord.loginTime = new Date();
-            existingRecord.logoutTime = new Date();
             await existingRecord.save();
         } else {
             const newRecord = new userLoginModel({ userId: userId, loginDate: today, loginTime: new Date() });
@@ -24,43 +20,23 @@ const userLogin = async (req, res) => {
     }
 };
 
-// const userLogin = async (req, res) => {
-//     try {
-//         const userId = req.user._id;
-//         if (!userId) {
-//             return res.status(400).json({ status: 400, message: "User ID is missing in the token" });
-//         }
-
-//         const today = new Date();
-//         let existingRecord = await userLoginModel.findOne({ userId: userId, loginDate: today });
-
-//         if (existingRecord) {
-//             // If an existing record is found for today
-//             if (existingRecord.loginTime && !existingRecord.logoutTime) {
-//                 // If loginTime is already recorded but logoutTime is not, update logoutTime
-//                 existingRecord.logoutTime = new Date();
-//             } else {
-//                 // If both loginTime and logoutTime are already recorded, create a new record
-//                 existingRecord = new userLoginModel({ userId: userId, loginDate: today, loginTime: new Date() });
-//             }
-//         } else {
-//             // If no existing record is found for today, create a new record with loginTime
-//             existingRecord = new userLoginModel({ userId: userId, loginDate: today, loginTime: new Date() });
-//         }
-
-//         await existingRecord.save();
-//         const message = existingRecord.logoutTime ? "Logout time recorded successfully" : "Login time recorded successfully";
-
-//         return res.status(200).json({ status: 200, message: message });
-//     } catch (error) {
-//         console.error(error);
-//         return res.status(400).json({ status: 400, message: "Server error" });
-//     }
-// };
-
-
-
-
+// update the stop time
+const recordStopTime = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const mostRecentRecord = await userLoginModel.findOne({ userId: userId }, {}, { sort: { createdAt: -1 } });
+        if (mostRecentRecord) {
+            mostRecentRecord.logoutTime = new Date();
+            await mostRecentRecord.save();
+            return res.status(200).json({ status: 200, message: "Logout time updated successfully", mostRecentRecord });
+        } else {
+            return res.status(404).json({ status: 404, message: "No record found to update logout time" });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ status: 500, message: "Server error" });
+    }
+};
 
 
 
@@ -83,8 +59,4 @@ const loginTimeRecord = async (req, res) => {
 };
 
 
-
-
-
-
-module.exports = { userLogin, loginTimeRecord }
+module.exports = { userLogin, recordStopTime, loginTimeRecord }
