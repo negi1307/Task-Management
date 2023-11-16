@@ -467,11 +467,11 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     border-radius: 20px;
 }
 .css-1com30x {
-    height: 67vh !important;
+    height: 73vh !important;
     overflow-y: scroll !important;
 }
 .add_height_task {
-    height: 78vh !important;
+    height: 80vh !important;
     overflow-y: scroll !important;
 }
 .add_position {
@@ -484,6 +484,12 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     align-items: center;
     justify-content: end;
     z-index: 99999;
+}
+/* .page-title {
+    background: #37216c !important;
+} */
+.css-1xb58ew {
+    overflow: hidden !important;
 }
 .form-switch .form-check-input {
     width: 2.5em !important;
