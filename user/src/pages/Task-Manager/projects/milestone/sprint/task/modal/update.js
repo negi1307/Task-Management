@@ -105,7 +105,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                     <MainLoader />
                 ) : (
                     <Modal.Body className="py-0">
-                        <Card className="p-3">
+                        <div className="p-3">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={12}>
@@ -117,7 +117,11 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         Project<span className="text-danger">*</span>:
                                                     </Form.Label>
 
-                                                    <Form.Select {...register('projectname', { required: true ,disabled:true })}>
+                                                    <Form.Select
+                                                        {...register('projectname', {
+                                                            required: true,
+                                                            disabled: true,
+                                                        })}>
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getProject?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.projectName} </option>
@@ -135,7 +139,8 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         Milestone<span className="text-danger">*</span>:
                                                     </Form.Label>
 
-                                                    <Form.Select {...register('Milestone', { required: true ,disabled:true})}>
+                                                    <Form.Select
+                                                        {...register('Milestone', { required: true, disabled: true })}>
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getSigleMileStone?.data?.Response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.title} </option>
@@ -156,7 +161,8 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         Sprint <span className="text-danger">*</span>:
                                                     </Form.Label>
 
-                                                    <Form.Select {...register('Sprint', { required: true ,disabled:true })}>
+                                                    <Form.Select
+                                                        {...register('Sprint', { required: true, disabled: true })}>
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.sprintName} </option>
@@ -194,20 +200,20 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         Description<span className="text-danger">*</span>:
                                                     </Form.Label>
                                                     <CKEditor
-                                                config={{
-                                                    ckfinder: {
-                                                        // Upload the images to the server using the CKFinder QuickUpload command.
-                                                        uploadUrl:
-                                                            'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
-                                                    },
-                                                }}
-                                                editor={ClassicEditor}
-                                                data={description}
-                                                onChange={(event, editor) => {
-                                                    const data = editor.getData();
-                                                    setDescription(data);
-                                                }}
-                                            />
+                                                        config={{
+                                                            ckfinder: {
+                                                                // Upload the images to the server using the CKFinder QuickUpload command.
+                                                                uploadUrl:
+                                                                    'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
+                                                            },
+                                                        }}
+                                                        editor={ClassicEditor}
+                                                        data={description}
+                                                        onChange={(event, editor) => {
+                                                            const data = editor.getData();
+                                                            setDescription(data);
+                                                        }}
+                                                    />
                                                 </Form.Group>
                                             </Col>
                                             <Col lg={6}>
@@ -336,7 +342,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                     </Col>
                                 </Row>
                             </Form>
-                        </Card>
+                        </div>
                     </Modal.Body>
                 )}
             </Modal>

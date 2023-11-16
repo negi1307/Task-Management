@@ -143,7 +143,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                     <MainLoader />
                 ) : (
                     <Modal.Body className="py-0">
-                        <Card className="p-3">
+                        <div className="p-3">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={12}>
@@ -264,7 +264,10 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                     <Form.Select {...register('Assignee', { required: true })}>
                                                         <option value={''}>--Select--</option>
                                                         {store?.getAllUsers?.data?.response?.map((ele, ind) => (
-                                                            <option value={ele?._id}> {ele?.firstName} {ele?.LastName} </option>
+                                                            <option value={ele?._id}>
+                                                                {' '}
+                                                                {ele?.firstName} {ele?.LastName}{' '}
+                                                            </option>
                                                         ))}
                                                     </Form.Select>
                                                     {errors.Assignee?.type === 'required' && (
@@ -437,7 +440,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                     </Col>
                                 </Row>
                             </Form>
-                        </Card>
+                        </div>
                     </Modal.Body>
                 )}
             </Modal>
