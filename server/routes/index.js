@@ -12,6 +12,7 @@ const technologyRoute = require("./technology.route");
 const assignUserRoute = require("./assignUser.route");
 const commentsRoute = require("./comments.route");
 const historyRoute = require("./history.route");
+const preSalesRoute = require("./preSale.route");
 
 
 router.use("/users", userRoutes);
@@ -25,5 +26,6 @@ router.use("/technology", technologyRoute);
 router.use("/assignUser", assignUserRoute);
 router.use("/comments", commentsRoute);
 router.use("/history", historyRoute);
+router.use("/preSale",preSalesRoute);
 
 module.exports = router;
