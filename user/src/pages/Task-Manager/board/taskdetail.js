@@ -9,6 +9,7 @@ import { addComment, getComment, updateComment, deleteComment, getCommentId } fr
 import Attachments from './../../apps/Tasks/Details/Attachments';
 
 const Taskdetail = (props) => {
+    const { item } = props;
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [inputForUpdate, setInputForUpdate] = useState('');
@@ -22,23 +23,25 @@ const Taskdetail = (props) => {
         reset,
     } = useForm();
 
-    const [getCommentIdDta, setCommentId] = useState('');
     const onSubmitComment = (e) => {
-        if (getCommentIdDta == '') {
-            const commentData = {
-                userId: props.userId,
-                taskId: e.taskid,
-                comment: e.comment,
-            };
-            dispatch(addComment(commentData));
-            dispatch(getComment({ taskId: props.item?.taskInfo?._id }));
-        } else {
-            const body = {
-                commentId: getCommentIdDta,
-                comment: e.comment,
-            };
-            dispatch(updateComment(body));
-        }
+        console.log(e);
+        // if (getCommentIdDta == '') {
+
+        // } else {
+        //     const body = {
+        //         commentId: getCommentIdDta,
+        //         comment: e.comment,
+        //     };
+        //     dispatch(updateComment(body));
+        // }
+        const commentData = {
+            userId: props.userId,
+            taskId: item?.taskId,
+            comment: e.comment,
+        };
+        dispatch(addComment(commentData));
+        dispatch(getComment({ taskId: props.item?.taskInfo?._id }));
+        setValue('comment', '');
     };
 
     const downloadFile = (file) => {
@@ -70,12 +73,14 @@ const Taskdetail = (props) => {
     };
 
     const DeleteData = (id) => {
-        dispatch(deleteComment({ commentId: id }));
+        console.log(id);
+        dispatch(deleteComment({ commentId: id._id }));
         setTimeout(() => {
             dispatch(getComment({ taskId: props.item?.taskInfo?._id }));
         }, 500);
     };
     const submitUpdateComment = (data) => {
+        console.log(data);
         let body = {
             commentId: allCommetUpdateId,
             comment: data?.updated_comment,
@@ -223,7 +228,7 @@ const Taskdetail = (props) => {
                                                                         </p>
                                                                         <p
                                                                             className=" cp  p-0 ps-2"
-                                                                            onClick={() => handeldelete(comm)}>
+                                                                            onClick={() => DeleteData(comm)}>
                                                                             Delete
                                                                         </p>
                                                                     </div>
@@ -248,50 +253,90 @@ const Taskdetail = (props) => {
                                     <div className="edit_delte">
                                         <div className="taskcardinfo">
                                             <form onSubmit={handleSubmit(onSubmitComment)}>
-                                                <input
+                                                {/* <input
                                                     type="hidden"
                                                     value={props.item?.taskInfo?._id}
                                                     {...register('taskid')}
-                                                />
-                                                <input
-                                                    type="text"
-                                                    id="exampleForm.ControlTextarea1"
-                                                    class="form-control"
-                                                    placeholder="Add Comment"
-                                                    {...register('comment')}
-                                                />
-                                                <button type="submit" class="mybutton btn btn-info">
-                                                    Add
-                                                </button>
+                                                /> */}
+                                                <Row className="mt-2">
+                                                    <Col lg={10}>
+                                                        <Form.Group
+                                                            className="mb-1"
+                                                            controlId="exampleForm.ControlInput1">
+                                                            <Form.Control
+                                                                type="text"
+                                                                placeholder="Add comment"
+                                                                {...register('comment', { required: true })}
+                                                            />
+                                                            {/* {errors.comment?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )} */}
+                                                        </Form.Group>
+                                                    </Col>
+                                                    <Col className="m-0 p-0" lg={2}>
+                                                        <Button type="submit">Add</Button>
+                                                    </Col>
+                                                </Row>
                                             </form>
                                             <table>
-                                                {allComments
-                                                    ?.slice(0)
-                                                    .reverse()
-                                                    .map((comm, index) => (
-                                                        <>
-                                                            <tr className="task_comment_info">
-                                                                <td className="user_name">
-                                                                    <span>{comm?.userId?.firstName.charAt(0)}</span>
-                                                                    <p>{comm?.userId?.firstName}</p>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                {' '}
-                                                                <td className="user_comment">{comm?.comment}</td>
-                                                                <td>{moment(comm?.createdAt).format('hh:mm')}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <a
-                                                                        href="javascript:void(0)"
-                                                                        onClick={() => DeleteData(comm?._id)}>
-                                                                        Delete
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                        </>
-                                                    ))}
+                                                {allComments?.map((comm, ind) => (
+                                                    <>
+                                                        <Row>
+                                                            <Col lg={12} className="d-flex">
+                                                                <Col lg={2} className="pt-1">
+                                                                    <span
+                                                                        style={{
+                                                                            backgroundColor: '#605e5a',
+                                                                            borderRadius: '100%',
+                                                                            padding: '9px',
+                                                                            color: 'white',
+                                                                            fontWeight: '800',
+                                                                        }}>
+                                                                        {comm?.userId?.firstName.charAt(0)}
+                                                                        {comm?.userId?.lastName.charAt(0)}
+                                                                    </span>
+                                                                </Col>
+                                                                <Col lg={10} className="m-0 p-0">
+                                                                    <div className="d-flex">
+                                                                        <h4 className="m-0 p-0">
+                                                                            {' '}
+                                                                            {comm?.userId?.firstName}
+                                                                        </h4>
+                                                                        <h4 className="ps-1 m-0 p-0">
+                                                                            {' '}
+                                                                            {comm?.userId?.lastName}
+                                                                        </h4>
+                                                                        <p className="ps-1 m-0 p-0">
+                                                                            {moment(comm?.createdAt).format('LT')}{' '}
+                                                                            {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
+                                                                        </p>
+                                                                        {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
+                                                                    </div>
+                                                                    <div className="m-0 p-0">
+                                                                        <li
+                                                                            style={{ listStyle: 'none' }}
+                                                                            className="font-18  ">
+                                                                            {comm?.comment}
+                                                                        </li>
+                                                                    </div>
+
+                                                                    <div className="d-flex m-0 p-0">
+                                                                        <p
+                                                                            className=" p-0"
+                                                                            onClick={() => handelUpdateAll(comm, ind)}>
+                                                                            Edit
+                                                                        </p>
+                                                                        <p
+                                                                            className=" cp  p-0 ps-2"
+                                                                            onClick={() => handeldelete(comm)}>
+                                                                            Delete
+                                                                        </p>
+                                                                    </div>
+                                                                </Col>
+                                                            </Col>
+                                                        </Row>
+                                                    </>
+                                                ))}
                                             </table>
                                             <table></table>
                                         </div>
