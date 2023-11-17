@@ -1,6 +1,8 @@
 const projectModel = require("../models/project.model");
 const { ObjectId } = require('mongodb');
-
+const projectupload=require('../models/projectupload.model');
+const path = require('path');
+ 
 // Add a new Project
 const addProject = async (req, res) => {
   try {
@@ -308,5 +310,87 @@ const updateStatus = async (req, res) => {
 }
 
 
+//upload file of project
+const uploadProject_File =async(req, res)=>{
+  try {
+    let projectId=req.body.projectId;
+let attachment= `http://localhost:8000/upload/${req.file.originalname}`
 
-module.exports = { addProject, getProjects, updateProject, updateStatus };
+    if( projectId && attachment){
+    const data=  await projectupload({  projectId,
+        attachment});
+        await data.save();
+      res.status(200).json({ status: '200', message: 'Project file uploaded Successfully' })
+
+    }
+    else{
+      return res.status(200).json({ status: '500', message: 'Something went wrong' })
+
+    }
+
+    } catch (error) {
+    return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+
+  }
+}
+
+
+// only project name-------------
+const getallProject=async (req, res) => {
+  try {
+    const allProjectsName =await projectModel.find().select({projectName:1});
+    res.status(200).json({ status: '200', message: 'Project file uploaded Successfully' ,response:allProjectsName})
+  } catch (error) {
+    return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+
+  }
+}
+//download file from 
+const download=async (req, res) => {
+try {
+// var file = req.params.filename;
+
+
+// Serve files from the 'upload' folder
+
+// Route to handle file download
+ 
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, '../upload', filename);
+
+  res.download(filePath, (err) => {
+    if (err) {
+      // Handle error, such as file not found
+      console.error(err);
+      res.status(404).send('File not found');
+    }
+    else{
+      console.log(filePath,"filePath  ")
+    }
+  });
+
+// const fs = require('fs');
+//  var fileLocation = path.join("../upload",file);
+
+// const folderPath = '../upload';
+
+// fs.readdir(fileLocation, (err, files) => {
+//   if (err) {
+//     console.error(err);
+//     return files;
+//   }
+
+//   console.log("Files in the folder:", files);
+// });
+// console.log(file,"wertyuiop");
+// const folderPath = `../upload/${req.params.filename}`;
+// const absoluteFolderPath = path.resolve(folderPath);
+
+// console.log(fileLocation,"file");
+// res.download(fileLocation,file);
+} catch (error) {
+  return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+
+  }
+}
+module.exports = { addProject, getProjects, updateProject, updateStatus ,uploadProject_File,getallProject,download};
