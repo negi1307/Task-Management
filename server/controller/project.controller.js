@@ -349,7 +349,7 @@ const getallProject=async (req, res) => {
 
   }
 }
-//download file from 
+//download a attachment/file  
 const download=async (req, res) => {
 try {
 
