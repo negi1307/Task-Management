@@ -348,7 +348,8 @@ const getallProject=async (req, res) => {
     return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
 
   }
-}
+};
+
 //download a attachment/file  
 const download=async (req, res) => {
 try {
@@ -372,18 +373,20 @@ try {
   }
 }
 
-//get all uploaded project files/attachments
+// get api for particular files/attachments
 const allProjectFiles =async(req,res)=>{
   try {
     let skip=req.query.skip?parseInt(req.query.skip):1;
     let pageSize=10;
-    let totalCount=await projectupload.find().countDocuments();
-    const allProjectFiles=await projectupload.find().populate('projectId',"projectName").sort({ createdAt: -1 }).limit(pageSize).skip((skip - 1) * pageSize);
+    let totalCount=await projectupload.find({projectId:req.query.projectId}).countDocuments();
+    const allProjectFiles=await projectupload.find({projectId:req.query.projectId}).populate('projectId',"projectName").sort({ createdAt: -1 }).limit(pageSize).skip((skip - 1) * pageSize);
     const totalPages = Math.ceil(totalCount / pageSize);
     res.status(200).json({ status: '200', message: 'Project file get Successfully',response: allProjectFiles, totalCount, totalPages })
   } catch (error) {
     return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
 
   }
-}
+};
+
+ 
 module.exports = { addProject, getProjects, updateProject, updateStatus ,uploadProject_File,getallProject,download,allProjectFiles};
