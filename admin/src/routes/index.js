@@ -52,6 +52,7 @@ const Technology  = React.lazy(() => import('../pages/Task-Manager/Technology/te
 const TechnologyCategory  = React.lazy(() => import('../pages/Task-Manager/TechnologyCategory/category'));
 const AllTaskList = React.lazy(() => import('../pages/Task-Manager/TaskList/list'));
 const Summary = React.lazy(() => import('../pages/Task-Manager/Summary/summary'));
+const ClientReprojeteries = React.lazy(() => import('../pages/Task-Manager/ClientReprojeteries/clientReprojeteries'));
 // AllSprint
 // const AllSprint = React.lazy(() => import('../pages/Task-Manager/All-Sprint'));
 
@@ -350,6 +351,10 @@ const AllRoutes = () => {
                         {
                             path: 'client',
                             element: <LoadComponent component={ClientIndex} />,
+                        },
+                        {
+                            path: 'clientReprojeteries',
+                            element: <LoadComponent component={ClientReprojeteries} />,
                         },
                     ],
                 },
