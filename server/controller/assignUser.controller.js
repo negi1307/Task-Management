@@ -331,7 +331,7 @@ const getUserTasks = async (req, res) => {
       queries[9] = { $limit: pageSize };
     }
     const result = await assignUserModel.aggregate(queries);
-    const totalCount = counts[0]?.totalCount
+    const totalCount = counts[0].totalCount
     const totalPages = Math.ceil(totalCount / pageSize);
     return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result[0], totalCount, totalPages });
   } catch (error) {
