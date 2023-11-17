@@ -66,6 +66,8 @@ export const addPreSaleReducer = (state = ADD_PRE_SALE_INTIAL_STATE, action) => 
                 loading: false,
                 message: action?.payload,
             };
+            case PreSaleType.ADD_PRE_SALE_RESET:
+            return ADD_PRE_SALE_INTIAL_STATE
         default:
             return { ...state };
 
@@ -77,22 +79,22 @@ export const updatePreSaleReducer = (state = UPDATE_PRE_SALE_INTIAL_STATE, actio
     switch (action.type) {
         case PreSaleType.UPDATE_PRE_SALE_LOADING:
             return {
-                data: UPDATE_PRE_SALE_INTIAL_STATE.data,
+                updatePreSale: UPDATE_PRE_SALE_INTIAL_STATE.updatePreSale,
                 loading: true,
             };
         case PreSaleType.UPDATE_PRE_SALE_SUCCESS:
             return {
-                data: action?.payload,
+                updatePreSale: action?.payload,
                 loading: false,
             };
-
-
         case PreSaleType.UPDATE_PRE_SALE_ERROR:
             return {
                 data: [],
                 loading: false,
                 message: action?.payload,
             };
+            case PreSaleType.UPDATE_PRE_SALE_RESET:
+            return UPDATE_PRE_SALE_INTIAL_STATE
         default:
             return { ...state };
 
@@ -104,23 +106,24 @@ export const deletePreSaleReducer = (state = DELETE_PRE_SALE_INTIAL_STATE, actio
     switch (action.type) {
         case PreSaleType.DELETE_PRE_SALE_LOADING:
             return {
-                data: DELETE_PRE_SALE_INTIAL_STATE.data,
+                deletePreSale: state.deletePreSale,
                 loading: true,
             };
         case PreSaleType.DELETE_PRE_SALE_SUCCESS:
             return {
-                data: action?.payload,
+                deletePreSale: action?.payload,
                 loading: false,
             };
         case PreSaleType.DELETE_PRE_SALE_ERROR:
             return {
-                data: [],
+                deletePreSale: [],
                 loading: false,
                 message: action?.payload,
             };
+            case PreSaleType.DELETE_PRE_SALE_RESET:
+                return DELETE_PRE_SALE_INTIAL_STATE
         default:
             return { ...state };
-
     }
 };
 

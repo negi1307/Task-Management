@@ -43,6 +43,10 @@ function* addPreSale(data) {
                 type: PreSaleType.ADD_PRE_SALE_SUCCESS,
                 payload: { ...response.data },
             });
+            yield put({
+                type: PreSaleType.ADD_PRE_SALE_RESET,
+                payload: {  },
+            });
         }
         else {
             yield put({
@@ -60,46 +64,55 @@ function* addPreSale(data) {
     }
 }
 
-function* updatePreSale({ payload }) {
+function* updatePreSale( data ) {
+
     try {
         yield put({
-            type: PreSaleType.ADD_PRE_SALE_LOADING,
+            type: PreSaleType.UPDATE_PRE_SALE_LOADING,
             payload: {}
         })
-        const response = yield call(updatePreSaleApiEndPoint, { payload });
+        const response = yield call(updatePreSaleApiEndPoint, data);
         if (response.data.status) {
             yield put({
-                type: PreSaleType.ADD_PRE_SALE_SUCCESS,
+                type: PreSaleType.UPDATE_PRE_SALE_SUCCESS,
                 payload: { ...response.data },
+            });
+            yield put({
+                type: PreSaleType.UPDATE_PRE_SALE_RESET,
+                payload: {  },
             });
         }
         else {
             yield put({
-                type: PreSaleType.ADD_PRE_SALE_ERROR,
+                type: PreSaleType.UPDATE_PRE_SALE_ERROR,
                 payload: { ...response.data }
             });
         }
 
     } catch (error) {
         yield put({
-            type: PreSaleType.ADD_PRE_SALE_ERROR,
+            type: PreSaleType.UPDATE_PRE_SALE_ERROR,
             payload: { message: error?.message }
         });
 
     }
 }
 
-function* deletePreSale({ payload }) {
+function* deletePreSale(id) {
     try {
         yield put({
             type: PreSaleType.DELETE_PRE_SALE_LOADING,
             payload: {}
         })
-        const response = yield call(deletePreSaleApiEndPoint, { payload });
+        const response = yield call(deletePreSaleApiEndPoint, id);
         if (response.data.status) {
             yield put({
                 type: PreSaleType.DELETE_PRE_SALE_SUCCESS,
                 payload: { ...response.data },
+            });
+            yield put({
+                type: PreSaleType.DELETE_PRE_SALE_RESET,
+                payload: {  },
             });
         }
         else {

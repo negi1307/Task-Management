@@ -1,36 +1,28 @@
 import React, { useEffect, useState } from "react";
 import MainLoader from "../../../../constants/Loader/loader";
 import { Table, Form } from 'react-bootstrap';
-import { getPreSalesData } from "../../../../redux/customer/action";
-import { useSelector } from "react-redux";
+import { deletePreSalesData,getPreSalesData } from "../../../../redux/customer/action";
+import { useSelector ,useDispatch} from "react-redux";
+import ToastHandle from "../../../../constants/toaster/toaster";
 
-const CustomerTable = () => {
-    let getUsers = false
-    const dummyDataCustomer = [{
-        name: "testing",
-        project: 'task management',
-        description: 'testing',
-        status: true
-    },
-    {
-        name: "testing",
-        project: 'task management',
-        description: 'testing',
-        status: true
-    },
-    {
-        name: "testing",
-        project: 'task management',
-        description: 'testing',
-        status: true
-    }]
+const CustomerTable = (props) => {
+    const {checkModel}=props
     const store = useSelector((state) => state);
+    const dispatch=useDispatch()
     const preSaleData=store?.getPreSaleReducer?.data?.response
+    const preSaleLoading=store?.getPreSaleReducer?.loading
+    const preSaleDeleteStatus=store?.deletePreSaleReducer?.deletePreSale?.status;
+    const preSaleDeleteMessage=store?.deletePreSaleReducer?.deletePreSale?.message
 
-    
+    useEffect(() => {
+        if (preSaleDeleteStatus === "200") {
+            ToastHandle('success', preSaleDeleteMessage);
+            dispatch(getPreSalesData());
+        } 
+    }, [preSaleDeleteStatus])
     return (
         <div>
-            {getUsers?.loading ? (
+            {preSaleLoading ? (
                 <MainLoader />
             ) : (
                 <Table className="mb-0 add_Color_font" striped>
@@ -41,12 +33,14 @@ const CustomerTable = () => {
                             <th>Project</th>
                             <th>Description</th>
                             <th> Status</th>
+                            <th> Type</th>
+                            <th> Stage</th>
+                            <th> Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <>
                             {preSaleData?.map((ele, ind) => {
-                                console.log(ele,'*')
                                 return (
                                     <tr className="align-middle">
                                         <th scope="row">{ind + 1}</th>
@@ -57,16 +51,34 @@ const CustomerTable = () => {
                                             <span className="namelink"> {ele?.projectName} </span>
                                         </td>
                                         <td className="w-20">
-                                            <span className="namelink"> {ele?.description}</span>
+                                            <span className="namelink"> {ele?.description?.slice(0, 10)
+                                      .concat("...")}</span>
                                         </td>
                                         <td>
                                             <span className="namelink">
-                                                <Form.Check
-                                                    type="switch"
-                                                    checked={ele?.status===1?true:false}
-                                                // onChange={(e) => handleStatusChange(e, ele)}
-                                                />
-                                                {/* {moment(ele?.createdAt).format('L')} */}
+                                                {ele?.status==='1'?
+                                                <>CONVERTED</>:
+                                                ele?.status==='2'?<>NOT-CONVERTED</>:""}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className="namelink">
+                                                {ele?.stage==='1'?<>HOT</>:ele?.stage==='2'?<>COLD</>:ele?.stage==='3'?<>MEDIUM</>:<></>}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className="namelink">
+                                            {ele?.type==='1'?<>WEB</>:ele?.type==='2'?<>MOBILE</>:''}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className="namelink">
+                                                <span>
+                                                <i class="bi bi-pencil-square" onClick={()=>{checkModel(true,'edit',ele)}}></i>
+                                                </span>
+                                                <span className="ms-2">
+                                                <i class="bi bi-trash" onClick={()=>{dispatch(deletePreSalesData(ele?._id))}}></i>
+                                                </span>
                                             </span>
                                         </td>
                                     </tr>

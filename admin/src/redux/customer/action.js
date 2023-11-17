@@ -16,7 +16,7 @@ export const updatePreSalesData = (data): AuthAction => ({
     data
 })
 
-export const deletePreSalesData = (data): AuthAction => ({
+export const deletePreSalesData = (id): AuthAction => ({
     type: PreSaleType.DELETE_PRE_SALE_FIRST,
-    data
+    id
 })

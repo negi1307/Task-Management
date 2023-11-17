@@ -11,10 +11,12 @@ export function addPreSaleApiEndPoint(payload): any {
     return api.create(URL.AddPreSale,data )
 }
 
-export function updatePreSaleApiEndPoint(data): any {
-    return api.create(URL.UpdatePreSale, data.payload)
+export function updatePreSaleApiEndPoint(payload): any {
+    const {data}=payload
+
+    return api.update(URL.UpdatePreSale, data)
 }
-export function deletePreSaleApiEndPoint(data): any {
-    const {id}=data
-    return api.create(`${URL.DeletePreSale}${id}`)
+export function deletePreSaleApiEndPoint(payload): any {
+    const {id}=payload
+    return api.delete(`${URL.DeletePreSale}${id}`)
 }
