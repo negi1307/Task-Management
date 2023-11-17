@@ -1,35 +1,33 @@
-import Addcomment from "../../redux/addcomment/constants"
+import Addcomment from '../../redux/addcomment/constants';
 
-
-const ADD_ALL_COMMENT={
+const ADD_ALL_COMMENT = {
     data: [],
-    message: "",
-    loading: false
-}
-const DELETE_COMMENT={
+    message: '',
+    loading: false,
+};
+const DELETE_COMMENT = {
     data: [],
-    message: "",
-    loading: false
-}
+    message: '',
+    loading: false,
+};
 
-const UPDATE_COMMENT={
+const UPDATE_COMMENT = {
     data: [],
-    message: "",
-    loading: false
-}
+    message: '',
+    loading: false,
+};
 
-const GETHISTORY_INITAL_STATE={
+const GETHISTORY_INITAL_STATE = {
     data: [],
-    message: "",
-    loading: false
-}
+    message: '',
+    loading: false,
+};
 
-
-const GET_ALL_COMMENT_INITAL_STATE={
+const GET_ALL_COMMENT_INITAL_STATE = {
     data: [],
-    message: "",
-    loading: false
-}
+    message: '',
+    loading: false,
+};
 
 export const addComments = (state = ADD_ALL_COMMENT, action) => {
     switch (action.type) {
@@ -44,7 +42,6 @@ export const addComments = (state = ADD_ALL_COMMENT, action) => {
                 loading: false,
             };
 
-
         case Addcomment.ADD_COMMENT_ERROR:
             return {
                 data: [],
@@ -53,10 +50,8 @@ export const addComments = (state = ADD_ALL_COMMENT, action) => {
             };
         default:
             return { ...state };
-
     }
 };
-
 
 export const getAllComment = (state = GET_ALL_COMMENT_INITAL_STATE, action) => {
     switch (action.type) {
@@ -71,7 +66,6 @@ export const getAllComment = (state = GET_ALL_COMMENT_INITAL_STATE, action) => {
                 loading: false,
             };
 
-
         case Addcomment.GET_COMMENT_ERROR:
             return {
                 data: [],
@@ -80,7 +74,6 @@ export const getAllComment = (state = GET_ALL_COMMENT_INITAL_STATE, action) => {
             };
         default:
             return { ...state };
-
     }
 };
 export const deleteComment = (state = DELETE_COMMENT, action) => {
@@ -98,8 +91,8 @@ export const deleteComment = (state = DELETE_COMMENT, action) => {
         case Addcomment.DELETE_TASK_RESET:
             return {
                 data: DELETE_COMMENT.data,
-                loading: false
-            }
+                loading: false,
+            };
 
         case Addcomment.DELETE_TASK_ERROR:
             return {
@@ -110,7 +103,6 @@ export const deleteComment = (state = DELETE_COMMENT, action) => {
             };
         default:
             return { ...state };
-
     }
 };
 
@@ -129,8 +121,8 @@ export const updateComment = (state = UPDATE_COMMENT, action) => {
         case Addcomment.UPDATE_COMMENT_RESET:
             return {
                 data: UPDATE_COMMENT.data,
-                loading: false
-            }
+                loading: false,
+            };
 
         case Addcomment.UPDATE_COMMENT_ERROR:
             return {
@@ -141,12 +133,8 @@ export const updateComment = (state = UPDATE_COMMENT, action) => {
             };
         default:
             return { ...state };
-
     }
 };
-
-
-
 
 export const getHistoryData = (state = GETHISTORY_INITAL_STATE, action) => {
     switch (action.type) {
@@ -161,7 +149,6 @@ export const getHistoryData = (state = GETHISTORY_INITAL_STATE, action) => {
                 loading: false,
             };
 
-
         case Addcomment.GET_HISTORY_ERROR:
             return {
                 data: [],
@@ -170,20 +157,17 @@ export const getHistoryData = (state = GETHISTORY_INITAL_STATE, action) => {
             };
         default:
             return { ...state };
-
     }
 };
 
-export const getTaskId = (state = {data:""}, action) => {
+export const getTaskId = (state = { data: '' }, action) => {
     switch (action.type) {
-        case "getTaskId":
+        case 'getTaskId':
             return {
-                data: action.payload,                
+                data: action.payload,
             };
-      
+
         default:
             return { ...state };
-
     }
 };
-
