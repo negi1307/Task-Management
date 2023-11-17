@@ -3,6 +3,8 @@ export const AddProject = "/project/addProject";
 export const GetAllProject = "/project/getProjects?activeStatus=";
 export const UpdateProjectDetails = "/project/update";
 export const DeleteProject = "/project/updateStatus";
+export const GetProjectName ="/project/getProjectName";
+export const UploadProjectDetail = "/project/upload"
 // // 
 export const GetProjectById = "/project/getbyprojectid/";
 
