@@ -9,6 +9,9 @@ const projectuploads = mongoose.model(
         attachment: {
             type: String
         },
+        fileName:{
+            type:String
+        }
         
     },
         {
