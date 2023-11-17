@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
-import { Card, Button } from 'react-bootstrap';
-import Create from "./modal/create"
+import React, { useState, useEffect } from 'react';
+import { Card, Button, Table, Row, Col } from 'react-bootstrap';
+import Create from './modal/create';
+import { useDispatch, useSelector } from 'react-redux';
+import { getuploadProjectDetailAction } from '../../../redux/clientRepository/action';
 const Upload = () => {
-    const [openModal ,SetOpenModal]=useState(false);
-    const handleUpload =()=>{
-        SetOpenModal(true)
-    }
-    const closeModal =()=>{
-        SetOpenModal(false)
-    }
+    const dispatch = useDispatch();
+    const [openModal, SetOpenModal] = useState(false);
+    
+    const handleUpload = () => {
+        SetOpenModal(true);
+    };
+    const closeModal = () => {
+        SetOpenModal(false);
+    };
+    useEffect(() => {
+        dispatch(getuploadProjectDetailAction());
+    }, []);
+
     return (
         <>
             <Card>
@@ -21,9 +29,25 @@ const Upload = () => {
                             </span>
                         </Button>
                     </div>
+                    <Row>
+                        <Col lg={12}>
+                            <Table striped>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th> File Name</th>
+                                        <th> File</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  
+                                </tbody>
+                            </Table>
+                        </Col>
+                    </Row>
                 </Card.Body>
             </Card>
-            <Create modal={openModal} closemodal={closeModal}/>
+            <Create modal={openModal} closemodal={closeModal} />
         </>
     );
 };

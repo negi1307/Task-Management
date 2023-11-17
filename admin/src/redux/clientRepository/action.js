@@ -8,3 +8,7 @@ export const uploadProjectDetail= (data): AuthAction => ({
     type: ClientRepository.UPLOAD_PROJECT_DETAIL,
     payload: data
 })
+export const getuploadProjectDetailAction= (data): AuthAction => ({
+    type: ClientRepository.GET_UPLOAD_PROJECT_DETAIL,
+    payload: data
+})
