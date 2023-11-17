@@ -50,3 +50,9 @@ export const deleteComment ="/comments/deleteComment?commentId="
 export const updateComment ="/comments/updateComment"
 export const GetAssignUser ="/assignUser/getuserListprojectAssigned?projectId=" 
 export const GetCsvData ="/userLogin/getLoginTimeFile?userId=" 
+
+export const GetPreSale ="/preSale/getPreSalesData" 
+export const AddPreSale ="/preSale/addPreSalesData" 
+export const UpdatePreSale ="preSale/updatePreSales" 
+export const DeletePreSale ="/preSale/deletePreSales?preSalesId=" 
+
