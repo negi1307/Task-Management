@@ -14,18 +14,22 @@ const Upload = () => {
     const { projectId } = useParams();
     const dispatch = useDispatch();
     const [openModal, SetOpenModal] = useState(false);
+    const [render, setRender] = useState(false);
     const store = useSelector((state) => state);
     const [skip, setSkip] = useState(1);
     const getUploadedData = store?.getuploadProjectDetailReducer;
     const handleUpload = () => {
         SetOpenModal(true);
     };
-    const closeModal = () => {
+    const closeModal = (val) => {
+        if (val == 'render') {
+            setRender(!render);
+        }
         SetOpenModal(false);
     };
     useEffect(() => {
         dispatch(getuploadProjectDetailAction({skip : skip , projectId: projectId}));
-    }, []);
+    }, [render]);
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
         dispatch(getuploadProjectDetailAction({ skip: value , projectId: projectId}));
