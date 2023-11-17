@@ -315,11 +315,13 @@ const uploadProject_File =async(req, res)=>{
   try {
     let projectId=req.body.projectId;
     let attachment= `http://localhost:8000/upload/${req.file.originalname}`;
+    console.log(req.file.mimetype,"attachmentType",);
+    let attachmentType=req.file.mimetype;
+    let originalName=req.file.originalname;
     let fileName=req.body.fileName;
-
-    if( projectId && attachment && fileName){
+     if( projectId && attachment && fileName){
     const data=  await projectupload({  projectId,
-        attachment,fileName});
+        attachment,fileName,attachmentType,originalName});
         await data.save();
       res.status(200).json({ status: '200', message: 'Project file uploaded Successfully' })
 
@@ -339,7 +341,8 @@ const uploadProject_File =async(req, res)=>{
 // only project name-------------
 const getallProject=async (req, res) => {
   try {
-    const allProjectsName =await projectModel.find().select({projectName:1});
+    const allProjectsName =await projectModel.find().select({projectName:1}).sort({ createdAt: -1 })
+    ;
     res.status(200).json({ status: '200', message: 'Project file uploaded Successfully' ,response:allProjectsName})
   } catch (error) {
     return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
@@ -355,7 +358,6 @@ try {
 
   res.download(filePath, (err) => {
     if (err) {
-      // Handle error, such as file not found
       console.error(err);
       res.status(404).send('File not found');
     }
@@ -369,4 +371,19 @@ try {
 
   }
 }
-module.exports = { addProject, getProjects, updateProject, updateStatus ,uploadProject_File,getallProject,download};
+
+//get all uploaded project files/attachments
+const allProjectFiles =async(req,res)=>{
+  try {
+    let skip=req.query.skip?parseInt(req.query.skip):1;
+    let pageSize=10;
+    let totalCount=await projectupload.find().countDocuments();
+    const allProjectFiles=await projectupload.find().populate('projectId',"projectName").sort({ createdAt: -1 }).limit(pageSize).skip((skip - 1) * pageSize);
+    const totalPages = Math.ceil(totalCount / pageSize);
+    res.status(200).json({ status: '200', message: 'Project file get Successfully',response: allProjectFiles, totalCount, totalPages })
+  } catch (error) {
+    return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+
+  }
+}
+module.exports = { addProject, getProjects, updateProject, updateStatus ,uploadProject_File,getallProject,download,allProjectFiles};

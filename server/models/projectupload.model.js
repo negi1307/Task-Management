@@ -11,6 +11,12 @@ const projectuploads = mongoose.model(
         },
         fileName:{
             type:String
+        },
+        attachmentType: {
+            type: String
+        },
+        originalName:{
+            type: String
         }
         
     },
