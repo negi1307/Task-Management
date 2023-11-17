@@ -501,3 +501,13 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     width: 2.5em !important;
     margin-left: -2.5em !important;
 }
+.side-nav-item {
+    color: white !important;
+}
+.side-nav-link {
+    color: white !important;
+}
+.bg_clr {
+    height: 75px;
+    width: 75px;
+}
