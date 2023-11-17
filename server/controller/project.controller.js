@@ -1,6 +1,8 @@
 const projectModel = require("../models/project.model");
 const { ObjectId } = require('mongodb');
-
+const projectupload=require('../models/projectupload.model');
+const path = require('path');
+ 
 // Add a new Project
 const addProject = async (req, res) => {
   try {
@@ -308,5 +310,63 @@ const updateStatus = async (req, res) => {
 }
 
 
+//upload file of project
+const uploadProject_File =async(req, res)=>{
+  try {
+    let projectId=req.body.projectId;
+    let attachment= `http://localhost:8000/upload/${req.file.originalname}`;
+    let fileName=req.body.fileName;
 
-module.exports = { addProject, getProjects, updateProject, updateStatus };
+    if( projectId && attachment && fileName){
+    const data=  await projectupload({  projectId,
+        attachment,fileName});
+        await data.save();
+      res.status(200).json({ status: '200', message: 'Project file uploaded Successfully' })
+
+    }
+    else{
+      return res.status(200).json({ status: '500', message: 'Something went wrong' })
+
+    }
+
+    } catch (error) {
+    return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+
+  }
+}
+
+
+// only project name-------------
+const getallProject=async (req, res) => {
+  try {
+    const allProjectsName =await projectModel.find().select({projectName:1});
+    res.status(200).json({ status: '200', message: 'Project file uploaded Successfully' ,response:allProjectsName})
+  } catch (error) {
+    return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+
+  }
+}
+//download file from 
+const download=async (req, res) => {
+try {
+
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, '../upload', filename);
+
+  res.download(filePath, (err) => {
+    if (err) {
+      // Handle error, such as file not found
+      console.error(err);
+      res.status(404).send('File not found');
+    }
+    else{
+      console.log(filePath,"filePath  ")
+    }
+  });
+
+} catch (error) {
+  return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+
+  }
+}
+module.exports = { addProject, getProjects, updateProject, updateStatus ,uploadProject_File,getallProject,download};
