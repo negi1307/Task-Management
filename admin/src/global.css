@@ -489,8 +489,14 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     background: #37216c !important;
 } */
 .css-1xb58ew {
-    overflow: hidden !important;
+    margin: 0px !important;
 }
+.css-1com30x {
+    min-width: 347px !important;
+}
+/* .css-1xb58ew {
+    overflow: hidden !important;
+} */
 .form-switch .form-check-input {
     width: 2.5em !important;
     margin-left: -2.5em !important;

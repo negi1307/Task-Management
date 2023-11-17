@@ -308,7 +308,7 @@ const Boards = () => {
                        
                     </ul>
                 </div> */}
-            <div className="add_task row mx-auto d-flex pb-2 pt-1">
+            <div className="add_task row d-flex pb-2 pt-1">
                 <div className="col-lg-8 d-flex  align -items-center">
                     <div>
                         {' '}
