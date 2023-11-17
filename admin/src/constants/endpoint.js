@@ -4,7 +4,8 @@ export const GetAllProject = "/project/getProjects?activeStatus=";
 export const UpdateProjectDetails = "/project/update";
 export const DeleteProject = "/project/updateStatus";
 export const GetProjectName ="/project/getProjectName";
-export const UploadProjectDetail = "/project/upload"
+export const UploadProjectDetail = "/project/upload";
+export const getUploadProjectDetail ="/project/files?skip="
 // // 
 export const GetProjectById = "/project/getbyprojectid/";
 
