@@ -314,11 +314,12 @@ const updateStatus = async (req, res) => {
 const uploadProject_File =async(req, res)=>{
   try {
     let projectId=req.body.projectId;
-let attachment= `http://localhost:8000/upload/${req.file.originalname}`
+    let attachment= `http://localhost:8000/upload/${req.file.originalname}`;
+    let fileName=req.body.fileName;
 
-    if( projectId && attachment){
+    if( projectId && attachment && fileName){
     const data=  await projectupload({  projectId,
-        attachment});
+        attachment,fileName});
         await data.save();
       res.status(200).json({ status: '200', message: 'Project file uploaded Successfully' })
 
@@ -348,13 +349,7 @@ const getallProject=async (req, res) => {
 //download file from 
 const download=async (req, res) => {
 try {
-// var file = req.params.filename;
 
-
-// Serve files from the 'upload' folder
-
-// Route to handle file download
- 
   const filename = req.params.filename;
   const filePath = path.join(__dirname, '../upload', filename);
 
@@ -369,25 +364,6 @@ try {
     }
   });
 
-// const fs = require('fs');
-//  var fileLocation = path.join("../upload",file);
-
-// const folderPath = '../upload';
-
-// fs.readdir(fileLocation, (err, files) => {
-//   if (err) {
-//     console.error(err);
-//     return files;
-//   }
-
-//   console.log("Files in the folder:", files);
-// });
-// console.log(file,"wertyuiop");
-// const folderPath = `../upload/${req.params.filename}`;
-// const absoluteFolderPath = path.resolve(folderPath);
-
-// console.log(fileLocation,"file");
-// res.download(fileLocation,file);
 } catch (error) {
   return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
 
