@@ -6,13 +6,16 @@ const userLogin = mongoose.model(
             type: mongoose.Types.ObjectId,
             ref: 'User'
         },
-        loginTime:{
-            type:String
+        loginTime: {
+            type: Date
+        },
+        logoutTime: {
+            type: Date,
         }
     },
-    {
-        timestamps: true
-    }
+        {
+            timestamps: true
+        }
     )
 )
-module.exports= userLogin;
+module.exports = userLogin;
