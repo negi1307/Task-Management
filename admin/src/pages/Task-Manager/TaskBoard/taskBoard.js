@@ -17,7 +17,50 @@ const TaskBoard = () => {
             <div>
                 <div className="card">
                     <div className="card-body">
-                        <div className="taskinfo">
+                        <div className="row mx-auto border-bottom mb-2">
+                            <div className="row d-flex align-items-center pb-2">
+                                <div
+                                    className={`col-auto  cp ${
+                                        connectComponent == 'Summary' ? 'Active_data' : 'InActive_data'
+                                    }`}>
+                                    <p
+                                        className="p-0 m-0 p-1 cp"
+                                        onClick={() => {
+                                            connectComponentCheck('Summary');
+                                        }}>
+                                        {' '}
+                                        Summary
+                                    </p>
+                                </div>
+
+                                <div
+                                    className={`col-auto  cp ${
+                                        connectComponent == 'List' ? 'Active_data' : 'InActive_data'
+                                    }`}>
+                                    <p
+                                        className="p-0 m-0 p-1 cp"
+                                        onClick={() => {
+                                            connectComponentCheck('List');
+                                        }}>
+                                        List
+                                    </p>
+                                </div>
+                                <div
+                                    className={`col-auto  cp ${
+                                        connectComponent == 'Board' ? 'Active_data' : 'InActive_data'
+                                    }`}>
+                                    <p
+                                        className=" p-0 m-0 p-1 cp"
+                                        onClick={() => {
+                                            connectComponentCheck('Board');
+                                        }}>
+                                        Board
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* <div className="taskinfo border-bottom">
                             <ul>
                                 <li>
                                     {' '}
@@ -50,7 +93,7 @@ const TaskBoard = () => {
                                     </h4>{' '}
                                 </li>
                             </ul>
-                        </div>
+                        </div> */}
 
                         <div>
                             {connectComponent === 'Board' ? (

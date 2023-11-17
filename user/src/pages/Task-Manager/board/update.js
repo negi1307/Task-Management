@@ -14,7 +14,6 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const UpdateTask = ({ modal, closeModal, editData }) => {
-    
     const [description, setDescription] = useState('');
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -40,7 +39,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const CloseModaal = () => {
         closeModal();
     };
-  
+
     const onSubmit = (data) => {
         let body = {
             taskId: editData?._id,
@@ -72,7 +71,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
         });
         setDescription(editData?.description);
     }, [modal]);
-    
+
     const handleDate = (data) => {
         let date = new Date(data);
         let year = date.toLocaleString('default', { year: 'numeric' });
@@ -81,7 +80,6 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
         let formattedDate = year + '-' + month + '-' + day;
         return formattedDate;
     };
-
 
     return (
         <>
@@ -104,7 +102,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                     <MainLoader />
                 ) : (
                     <Modal.Body className="py-0">
-                        <Card className="p-3">
+                        <div className="p-3">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={12}>
@@ -118,14 +116,12 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
 
                                                     <Form.Select
                                                         {...register('projectname', {
-                                                            required: true, disabled:true
-                                                           
-                                                        })}
-                                                        
-                                                       >
+                                                            required: true,
+                                                            disabled: true,
+                                                        })}>
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getProject?.data?.response?.map((ele, ind) => (
-                                                            <option value={ele?._id} > {ele?.projectName} </option>
+                                                            <option value={ele?._id}> {ele?.projectName} </option>
                                                         ))}
                                                     </Form.Select>
                                                     {errors.projectname?.type === 'required' && (
@@ -141,8 +137,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
 
                                                     <Form.Select
-                                                        {...register('Milestone', { required: true,disabled:true  })}
-                                                        >
+                                                        {...register('Milestone', { required: true, disabled: true })}>
                                                         <option value={''}>--Select--</option>
                                                         {store?.getSigleMileStone?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.title} </option>
@@ -164,7 +159,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
 
                                                     <Form.Select
-                                                        {...register('Sprint', { required: true,  disabled:true })}>
+                                                        {...register('Sprint', { required: true, disabled: true })}>
                                                         <option value={''}>--Select--</option>
                                                         {store?.getAllSingleSprints?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.sprintName} </option>
@@ -346,7 +341,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                     </Col>
                                 </Row>
                             </Form>
-                        </Card>
+                        </div>
                     </Modal.Body>
                 )}
             </Modal>
@@ -354,5 +349,4 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     );
 };
 
-
-export default UpdateTask
+export default UpdateTask;

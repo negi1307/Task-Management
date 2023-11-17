@@ -78,6 +78,12 @@ const CRMManagement = React.lazy(() => import('../pages/apps/CRM/Management'));
 const CRMClients = React.lazy(() => import('../pages/apps/CRM/Clients'));
 const CRMOrderList = React.lazy(() => import('../pages/apps/CRM/OrderList'));
 
+
+// customer
+const CustomerIndex = React.lazy(() => import('../pages/Task-Manager/customer/CustomerIndex'));
+const ClientIndex = React.lazy(() => import('../pages/Task-Manager/client/ClientIndex'));
+
+
 // - ecommece pages
 const EcommerceProducts = React.lazy(() => import('../pages/apps/Ecommerce/Products'));
 const ProductDetails = React.lazy(() => import('../pages/apps/Ecommerce/ProductDetails'));
@@ -337,7 +343,14 @@ const AllRoutes = () => {
                             path: 'technologyCategory',
                             element: <LoadComponent component={TechnologyCategory} />,
                         },
-                      
+                        {
+                            path: 'customer',
+                            element: <LoadComponent component={CustomerIndex} />,
+                        },
+                        {
+                            path: 'client',
+                            element: <LoadComponent component={ClientIndex} />,
+                        },
                     ],
                 },
                 {
