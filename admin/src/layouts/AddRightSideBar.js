@@ -166,7 +166,7 @@ export default function RightBar(props) {
                                         type="text"
                                         id="exampleForm.ControlTextarea1"
                                         class="form-control"
-                                        {...register('Summary')}
+                                        {...register('Summary', { required: true })}
                                     />
                                     {errors.Summary?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
@@ -205,7 +205,7 @@ export default function RightBar(props) {
                                             name="Assignee"
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
-                                            {...register('Assignee')}>
+                                            {...register('Assignee' , { required: true })}>
                                             <option value={''}>--Select--</option>
                                             {store?.getAllUsers?.data?.response?.map((ele, ind) => (
                                                 <option value={ele?._id}>
@@ -231,7 +231,7 @@ export default function RightBar(props) {
                                             defaultValue="Admin"
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
-                                            {...register('Report')}>
+                                            {...register('Report' , { required: true })}>
                                             <option value={''}>--Select--</option>
                                             {store?.getAllRoles?.data?.response?.map((ele, ind) => (
                                                 <option value={ele?._id}> {ele?.role} </option>
@@ -253,7 +253,7 @@ export default function RightBar(props) {
                                             min={today}
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
-                                            {...register('start_date')}
+                                            {...register('start_date' , { required: true })}
                                         />
                                         {errors.start_date?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
@@ -274,7 +274,7 @@ export default function RightBar(props) {
                                             min={watch('start_date')}
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
-                                            {...register('last_date')}
+                                            {...register('last_date' , { required: true })}
                                         />
                                         {errors.last_date?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
@@ -291,13 +291,14 @@ export default function RightBar(props) {
                                             name="Priority"
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
-                                            {...register('priority')}>
+                                            {...register('priority' , { required: true })}>
                                             <option>-----select----</option>
                                             <option value="1">High</option>
                                             <option value="2">Medium</option>
                                             <option value="3">Low</option>
                                         </select>
-                                        {errors.priority?.type === 'required' && (
+                                        
+                                         {errors?.priority?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
                                         )}
                                     </div>
@@ -326,10 +327,14 @@ export default function RightBar(props) {
                                         </label>
                                         <input
                                             type="file"
+                                            accept="application/pdf,image/png,image/jpeg,image/jpg"
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
-                                            {...register('Attachment')}
+                                            {...register('Attachment' , { required: true })}
                                         />
+                                          {errors?.Attachment?.type === 'required' && (
+                                            <span className="text-danger"> This feild is required *</span>
+                                        )}
                                     </div>
                                 </div>
                             </div>
