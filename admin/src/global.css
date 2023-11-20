@@ -495,3 +495,12 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     width: 2.5em !important;
     margin-left: -2.5em !important;
 }
+.projects_info {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.projects_info p {
+    text-align: center;
+    flex: 0 0 14%;
+}
