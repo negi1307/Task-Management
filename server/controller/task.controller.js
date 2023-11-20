@@ -8,36 +8,44 @@ const { ObjectId } = require("mongodb");
 // Create or add tasks
 const createtask = async (req, res) => {
   try {
-    const { projectId, milestoneId, sprintId, summary, description, priority, assigneeId, reporterId, startDate, dueDate, parentId } = req.body;
-    const existingTask = await taskModel.findOne({ summary: new RegExp(`^${summary}$`, "i"), printId: sprintId });
-    if (existingTask) {
-      return res.status(400).json({ status: "400", message: "Task already exists" });
-    } else {
-      const lastTask = await taskModel.countDocuments();
-      const task = await taskModel.create({
-        taskMannualId: lastTask + 1,
-        projectId,
-        milestoneId,
-        sprintId,
-        summary,
-        description,
-        priority,
-        startDate,
-        dueDate,
-        attachment: `http://localhost:8000/upload/${req.file.originalname}`,
-        attachmentType: req.file.mimetype,
-        parentId
-      });
-      if (task) {
-        const admin = await userModel.findOne({ role: 1 }).select("_id roleId");
-        const assignedUser = await assignUserModel.create({
-          assigneeId: req.user.role === 1 ? assigneeId : req.user._id, // One who is doing work
-          reporterId: req.user.role === 1 ? reporterId : admin.roleId, // one who will assignee report after work done
-          taskId: task._id,
+    if (req.body.summary === "" || req.body.description == "" || req.body.priority == "" || req.body.startDate == "" || req.body.startDate == "" || req.file == undefined) {
+      return res.status(200).json({ status: "400", message: "Please fill all required fields" });
+
+    }
+    else {
+      const { projectId, milestoneId, sprintId, summary, description, priority, assigneeId, reporterId, startDate, dueDate, parentId } = req.body;
+
+      const existingTask = await taskModel.findOne({ summary: new RegExp(`^${summary}$`, "i"), sprintId: sprintId });
+      if (existingTask) {
+        return res.status(400).json({ status: "400", message: "Task already exists" });
+      } else {
+        const lastTask = await taskModel.countDocuments();
+        const task = await taskModel.create({
+          taskMannualId: lastTask + 1,
+          projectId,
+          milestoneId,
+          sprintId,
+          summary,
+          description,
+          priority,
+          startDate,
+          dueDate,
+          attachment: `http://localhost:8000/upload/${req.file.originalname}`,
+          attachmentType: req.file.mimetype,
+          parentId
         });
-        return res.status(200).json({ status: "200", message: "Task created successfully", response: task, assignedUser });
+        if (task) {
+          const admin = await userModel.findOne({ role: 1 }).select("_id roleId");
+          const assignedUser = await assignUserModel.create({
+            assigneeId: req.user.role === 1 ? assigneeId : req.user._id, // One who is doing work
+            reporterId: req.user.role === 1 ? reporterId : admin.roleId, // one who will assignee report after work done
+            taskId: task._id,
+          });
+          return res.status(200).json({ status: "200", message: "Task created successfully", response: task, assignedUser });
+        }
       }
     }
+
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
