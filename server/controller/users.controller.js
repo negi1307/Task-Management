@@ -6,7 +6,7 @@ const { accessToken } = require("../middleware/jwt.auth");
 // Register a user or invite a user 
 const registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, roleId } = req.body;
+    const { firstName, lastName, email, password, role } = req.body;
 
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
@@ -20,8 +20,7 @@ const registerUser = async (req, res) => {
         email,
         password: hashedPassword,
         plainPassword: password,
-        roleId,
-        role: 2
+        role
       });
       if (result) {
         await nodemailer.emailSender(result);
@@ -35,16 +34,10 @@ const registerUser = async (req, res) => {
   }
 }
 
-// LognIn of A User
+// Log In of A User
 const logInUser = async (req, res) => {
   try {
-    let existingUser;
-    if (req.body.email) {
-      existingUser = await userModel.findOne({ email: req.body.email, role: 1 }).populate('roleId')
-    }
-    if (!existingUser && req.body.email) {
-      existingUser = await userModel.findOne({ email: req.body.email, role: 2 }).populate('roleId')
-    }
+    const existingUser = await userModel.findOne({ email: req.body.email });
     if (existingUser) {
       const isPasswordValid = await bcrypt.compare(req.body.password, existingUser.password);
       if (isPasswordValid) {
@@ -65,7 +58,7 @@ const logInUser = async (req, res) => {
 // Get All Users
 const getUsers = async (req, res) => {
   try {
-    const result = await userModel.find({ role: 2 }).sort({ createdAt: -1 });
+    const result = await userModel.find({ role: { $ne: 'Admin' } }).sort({ createdAt: -1 });
     return res.status(200).json({ status: "200", message: 'User data fetched successfully', response: result });
   } catch (error) {
     return res.status(200).json({ status: "500", message: 'Something went wrong' });
@@ -82,8 +75,23 @@ const deleteUser = async (req, res) => {
   }
 }
 
+// Time tracking of users spend time
+const trackTime = async (req, res) => {
+  try {
+    const userIds = await userModel.distinct('_id');
+    console.log(userIds);
+  } catch (error) {
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+  }
+}
+
+
 
 
 module.exports = {
-  getUsers, registerUser, logInUser, deleteUser
+  registerUser,
+  logInUser,
+  getUsers,
+  deleteUser,
+  trackTime
 };

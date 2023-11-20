@@ -28,7 +28,7 @@ const getRoles = async (req, res) => {
     }
 }
 
-// Get roles 
+// Get All available roles 
 const getAllRoles = async (req, res) => {
     try {
         const result = await rolesModel.find();
@@ -37,6 +37,7 @@ const getAllRoles = async (req, res) => {
         return res.status(500).json({ status: "500", message: "something went wrong", error: error.message })
     }
 }
+
 // Delete a Role
 const deleteRole = async (req, res) => {
     try {

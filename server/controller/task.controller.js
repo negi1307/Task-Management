@@ -2,39 +2,38 @@ const mongoose = require("mongoose");
 const taskModel = require("../models/task.model");
 const assignUserModel = require("../models/assignUser.model");
 const historyModel = require("../models/history.model");
-const userModel = require("../models/users.model");
-const { ObjectId } = require("mongodb");
+const rolesModel = require('../models/role.model');
 
 // Create or add tasks
 const createtask = async (req, res) => {
   try {
-    const {summary,description,priority,startDate} = req.body;
-    if (!summary || !description || !priority || !startDate || !startDate || !req.file) {
-      // if (req.body.summary  || req.body.description  || req.body.priority  || req.body.startDate  || req.body.startDate  || req.file == undefined) {
-      return res.status(200).json({ status: "400", message: "Please fill all required fields" });
-
-    }
-    else {
-      const { projectId, milestoneId, sprintId, summary, description, priority, assigneeId, reporterId, startDate, dueDate, parentId } = req.body;
-
-      const existingTask = await taskModel.findOne({ summary: new RegExp(`^${summary}$`, "i"), sprintId: sprintId });
-      if (existingTask) {
-        return res.status(400).json({ status: "400", message: "Task already exists" });
-      } else {
-        const lastTask = await taskModel.countDocuments();
-        const task = await taskModel.create({
-          taskMannualId: lastTask + 1,
-          projectId,
-          milestoneId,
-          sprintId,
-          summary,
-          description,
-          priority,
-          startDate,
-          dueDate,
-          attachment: `http://localhost:8000/upload/${req.file.originalname}`,
-          attachmentType: req.file.mimetype,
-          parentId
+    const { projectId, milestoneId, sprintId, summary, description, priority, assigneeId,/* reporterId,*/ startDate, dueDate, parentId } = req.body;
+    const existingTask = await taskModel.findOne({ summary: new RegExp(`^${summary}$`, "i"), sprintId: sprintId });
+    if (existingTask) {
+      return res.status(400).json({ status: "400", message: "Task already exists" });
+    } else {
+      const lastTask = await taskModel.countDocuments();
+      const task = await taskModel.create({
+        taskMannualId: lastTask + 1,
+        projectId,
+        milestoneId,
+        sprintId,
+        summary,
+        description,
+        priority,
+        startDate,
+        dueDate,
+        attachment: `http://localhost:8000/upload/${req.file.originalname}`,
+        attachmentType: req.file.mimetype,
+        parentId
+      });
+      if (task) {
+        const roles = ['CTO', 'PM', 'Admin'];
+        const role = await rolesModel.findOne({ role: roles.includes(req.user.role)? req.user.role : "PM"  }).select("_id role");
+        const assignedUser = await assignUserModel.create({
+          assigneeId: roles.includes(req.user.role) ? assigneeId : req.user._id,
+          reporterId: role._id,
+          taskId: task._id,
         });
         if (task) {
           const admin = await userModel.findOne({ role: 1 }).select("_id roleId");
