@@ -48,7 +48,7 @@ const ListTask=()=>{
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            {/* {
+                                            {
                                                 
                                                 listTaskData?.taskInfo?.map((item,index)=>
                                                     <tr>
@@ -70,7 +70,7 @@ const ListTask=()=>{
                                                 <td>{moment(item?.dueDate).format('L')}</td>
                                                 </tr>
                                                 
-                                            )} */}
+                                            )}
                                             </tbody>
                                             
                                         </Table>
