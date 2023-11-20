@@ -13,7 +13,7 @@ import moment from 'moment';
 const Projects = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    const projectDataInfo=store?.getProject?.data?.response
+    const projectDataInfo = store?.getProject?.data?.response;
     const [openModal, setOpenModal] = useState(false);
     const [render, setRender] = useState(false);
     const [deleteId, setdeleteId] = useState();
@@ -79,28 +79,25 @@ const Projects = () => {
         if (val) {
             setStatus(1);
             let data = {
-            status: 1,     
-            projectstatus:1
+                status: 1,
+                projectstatus: 1,
             };
             dispatch(getAllProjects(data));
         } else {
             setStatus(0);
             let data = {
-        
-            status: 1,
-            projectstatus:1
-
+                status: 1,
+                projectstatus: 1,
             };
             dispatch(getAllProjects(data));
         }
     };
     useEffect(() => {
         let body = {
-            flag:1,
-            projectId:'',
-            milestoneId:'',
-            skip:1
-
+            flag: 1,
+            projectId: '',
+            milestoneId: '',
+            skip: 1,
         };
         dispatch(getAllProjects(body));
     }, [render]);
@@ -200,8 +197,7 @@ const Projects = () => {
                                                 {/* <td>
                                                     <Form.Check
                                                         type="switch"
-                                                        checked={ele?.activeStatus
-                                                        }
+                                                        checked={ele?.activeStatus}
                                                         onChange={(e) => handleStatusChange(e, ele)}
                                                     />
                                                 </td> */}
@@ -234,7 +230,7 @@ const Projects = () => {
 
                 <Create modal={openModal} closeModal={closeModal} />
                 <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
-                
+
                 <Modal show={statusModal} onHide={() => setStatusModal(false)}>
                     <Modal.Body>
                         Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this Project ?
@@ -253,7 +249,6 @@ const Projects = () => {
                     </Modal.Footer>
                 </Modal>
             </div>
-            
         </>
     );
 };

@@ -173,9 +173,8 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                             {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
                                                         </div>
                                                         {inputForUpdate === ind ? (
-                                                           
-                                                                <form onSubmit={handleSubmit(submitUpdateComment)}>
-                                                                     <Row className="mt-2 d-flex" >
+                                                            <form onSubmit={handleSubmit(submitUpdateComment)}>
+                                                                <Row className="mt-2 d-flex">
                                                                     <Col lg={9}>
                                                                         <Form.Group
                                                                             className="mb-1"
@@ -190,9 +189,8 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                                     <Col className="m-0 p-0" lg={1}>
                                                                         <Button type="submit">Update</Button>
                                                                     </Col>
-                                                                    </Row>
-                                                                </form>
-                                                            
+                                                                </Row>
+                                                            </form>
                                                         ) : (
                                                             <>
                                                                 <div className="m-0 p-0">
