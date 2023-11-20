@@ -20,23 +20,23 @@ const userLogin = async (req, res) => {
     }
 };
 
-// update the stop time
-const recordStopTime = async (req, res) => {
-    try {
-        const userId = req.user._id;
-        const mostRecentRecord = await userLoginModel.findOne({ userId: userId }, {}, { sort: { createdAt: -1 } });
-        if (mostRecentRecord) {
-            mostRecentRecord.logoutTime = new Date();
-            await mostRecentRecord.save();
-            return res.status(200).json({ status: 200, message: "Logout time updated successfully", mostRecentRecord });
-        } else {
-            return res.status(404).json({ status: 404, message: "No record found to update logout time" });
-        }
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ status: 500, message: "Server error" });
-    }
-};
+// // update the stop time
+// const recordStopTime = async (req, res) => {
+//     try {
+//         const userId = req.user._id;
+//         const mostRecentRecord = await userLoginModel.findOne({ userId: userId }, {}, { sort: { createdAt: -1 } });
+//         if (mostRecentRecord) {
+//             mostRecentRecord.logoutTime = new Date();
+//             await mostRecentRecord.save();
+//             return res.status(200).json({ status: 200, message: "Logout time updated successfully", mostRecentRecord });
+//         } else {
+//             return res.status(404).json({ status: 404, message: "No record found to update logout time" });
+//         }
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({ status: 500, message: "Server error" });
+//     }
+// };
 
 
 
@@ -59,4 +59,8 @@ const loginTimeRecord = async (req, res) => {
 };
 
 
-module.exports = { userLogin, recordStopTime, loginTimeRecord }
+module.exports = {
+    userLogin,
+    // recordStopTime,
+    loginTimeRecord
+}
