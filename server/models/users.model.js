@@ -22,12 +22,9 @@ const users = mongoose.model(
     plainPassword: {
       type: String,
     },
-    roleId: {
-      type: mongoose.Types.ObjectId,
-      ref: 'roles'
-    },
-    role :{
-      type : Number
+    role: {
+      type: String,
+      enum: ['Admin', 'Employee', 'Sales', 'PM', 'CTO']
     }
   },
     {
