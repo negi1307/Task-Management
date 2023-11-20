@@ -166,7 +166,7 @@ const Sprint = () => {
                                             <th>Sprint Description</th>
                                             <th>Sprint Start Date</th>
                                             <th>Sprint End Date</th>
-                                            <th>Status</th>
+                                            {/* <th>Status</th> */}
                                             <th>Action</th>
                                         </tr>
 
@@ -185,26 +185,25 @@ const Sprint = () => {
 
                                                 <td>  {moment(item?.sprintId?.startDate).format('L')}</td>
                                                 <td>{moment(item?.sprintId?.endDate).format('L')}</td>
-                                                <td> <Form.Check
+                                                {/* <td> <Form.Check
                                                                 type="switch"
                                                                 checked={item?.status}
                                                                 onChange={(e) => handleStatusChange(e, item)}
-                                                            /></td>
+                                                            /></td> */}
                                                             <td> <Row>
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0 ">
-                                                                        <Link to={`/dashboard/boards/projectId=/${item?.projectId}&milestoneId=/${item?.milestoneId}&spriteId=/${item?.sprintId?._id}`}>
+                                                                        <Link to={`/dashboard/taskboard/projectId=/${item?.projectId}&milestoneId=/${item?.milestoneId}&spriteId=/${item?.sprintId?._id}`}>
                                                                             <i className="mdi mdi-eye m-0 p-0"></i>
                                                                         </Link>
                                                                     </p>
-                                                                    <p className="action-icon m-0 p-0  ">
+                                                                    {/* <p className="action-icon m-0 p-0  ">
                                                                         <i
                                                                             onClick={() => {
                                                                                 handelUpdate(item);
                                                                             }}
-                                                                            className="uil-edit-alt m-0 p-0"
-                                                                        ></i>
-                                                                    </p>
+                                                                            className="uil-edit-alt m-0 p-0"></i>
+                                                                    </p> */}
 
                                                                 </Col>
                                                             </Row></td>

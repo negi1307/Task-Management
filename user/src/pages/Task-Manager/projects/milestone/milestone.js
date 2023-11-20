@@ -205,7 +205,7 @@ dispatch(getAllProjects(body))
                                                         <th> Description</th>
                                                         <th> Start Date</th>
                                                         <th> End Date</th>
-                                                        <th>Status</th>
+                                                        {/* <th>Status</th> */}
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -222,11 +222,11 @@ dispatch(getAllProjects(body))
 
                                                             <td> {moment(item?.milestoneId?.start_date).format('L')}</td>
                                                             <td>{moment(item?.milestoneId?.completion_date).format('L')}</td>
-                                                            <td> <Form.Check
+                                                            {/* <td> <Form.Check
                                                                 type="switch"
                                                                 checked={item?.status}
                                                                 onChange={(e) => handleStatusChange(e, item)}
-                                                            /></td>
+                                                            /></td> */}
                                                             <td> <Row>
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0 ">
@@ -234,14 +234,14 @@ dispatch(getAllProjects(body))
                                                                             <i className="mdi mdi-eye m-0 p-0"></i>
                                                                         </Link>
                                                                     </p>
-                                                                    <p className="action-icon m-0 p-0  ">
+                                                                    {/* <p className="action-icon m-0 p-0  ">
                                                                         <i
                                                                             onClick={() => {
                                                                                 handelUpdate(item);
                                                                             }}
                                                                             className="uil-edit-alt m-0 p-0"
                                                                         ></i>
-                                                                    </p>
+                                                                    </p> */}
 
                                                                 </Col>
                                                             </Row></td>

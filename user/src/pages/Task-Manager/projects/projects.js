@@ -168,7 +168,7 @@ const Projects = () => {
                                         <th>Project Type</th>
                                         <th>Project Start Date</th>
                                         <th>Project End Date</th>
-                                        <th>Status</th>
+                                        {/* <th>Status</th> */}
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -197,14 +197,14 @@ const Projects = () => {
                                                         {moment(ele?.projectId?.endDate).format('L')}
                                                     </span>
                                                 </td>
-                                                <td>
+                                                {/* <td>
                                                     <Form.Check
                                                         type="switch"
                                                         checked={ele?.activeStatus
                                                         }
                                                         onChange={(e) => handleStatusChange(e, ele)}
                                                     />
-                                                </td>
+                                                </td> */}
                                                 <td>
                                                     <Row>
                                                         <Col>
@@ -213,13 +213,13 @@ const Projects = () => {
                                                                     <i className="mdi mdi-eye m-0 p-0"></i>
                                                                 </Link>
                                                             </p>
-                                                            <p className="action-icon m-0 p-0  ">
+                                                            {/* <p className="action-icon m-0 p-0  ">
                                                                 <i
                                                                     className="uil-edit-alt m-0 p-0"
                                                                     onClick={() => {
                                                                         handelUpdate(ele);
                                                                     }}></i>
-                                                            </p>
+                                                            </p> */}
                                                         </Col>
                                                     </Row>
                                                 </td>
