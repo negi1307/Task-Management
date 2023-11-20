@@ -95,12 +95,12 @@ const Taskdetail = (props) => {
                 };
                 dispatch(updateComment(body));
                 setInputForUpdate(false);
-                // dispatch(getComment());
             } else {
                 setInputForUpdate(false);
             }
         } else {
             setError('This field is required');
+            setInputForUpdate(false);
         }
     };
     const handelUpdateAll = (data, indx) => {
