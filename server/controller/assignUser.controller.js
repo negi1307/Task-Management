@@ -425,7 +425,6 @@ const getUserTasks = async (req, res) => {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 }
-
 // All assignees of A project
 const projectUserList = async (req, res) => {
   try {

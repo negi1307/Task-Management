@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal';
 import { useForm } from 'react-hook-form';
-
+import { Col, Row, Form, Button } from 'react-bootstrap';
 import moment from 'moment';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,34 +9,44 @@ import { addComment, getComment, updateComment, deleteComment, getCommentId } fr
 import Attachments from './../../apps/Tasks/Details/Attachments';
 
 const Taskdetail = (props) => {
+    const { item } = props;
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-
+    const [inputForUpdate, setInputForUpdate] = useState('');
+    const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
+    const [updatedCommentValue, setUpdatedCommentValue] = useState('');
+    const [updatedCommentInitialValue, setUpdatedCommentInitialValue] = useState('');
+    const [unchangeComment, setUnchangeComment] = useState('');
+    const [error, setError] = useState('');
     const allComments = store?.getAllComment?.data?.response;
+
     const {
         register,
         handleSubmit,
         setValue,
         formState: { errors },
+        reset,
     } = useForm();
 
-    const [getCommentIdDta, setCommentId] = useState('');
     const onSubmitComment = (e) => {
-        if (getCommentIdDta == '') {
-            const commentData = {
-                userId: props.userId,
-                taskId: e.taskid,
-                comment: e.comment,
-            };
-            dispatch(addComment(commentData));
-            dispatch(getComment({ taskId: props.item?.taskInfo?._id }));
-        } else {
-            const body = {
-                commentId: getCommentIdDta,
-                comment: e.comment,
-            };
-            dispatch(updateComment(body));
-        }
+        console.log(e);
+        // if (getCommentIdDta == '') {
+
+        // } else {
+        //     const body = {
+        //         commentId: getCommentIdDta,
+        //         comment: e.comment,
+        //     };
+        //     dispatch(updateComment(body));
+        // }
+        const commentData = {
+            userId: props.userId,
+            taskId: item?.taskId,
+            comment: e.comment,
+        };
+        dispatch(addComment(commentData));
+        dispatch(getComment({ taskId: props.item?.taskInfo?._id }));
+        setValue('comment', '');
     };
 
     const downloadFile = (file) => {
@@ -68,12 +78,40 @@ const Taskdetail = (props) => {
     };
 
     const DeleteData = (id) => {
-        dispatch(deleteComment({ commentId: id }));
+        console.log(id);
+        dispatch(deleteComment({ commentId: id._id }));
         setTimeout(() => {
             dispatch(getComment({ taskId: props.item?.taskInfo?._id }));
         }, 500);
     };
-
+    console.log(updatedCommentValue, 'data===');
+    const updateHandle = (condition) => {
+        console.log(updatedCommentInitialValue);
+        if (updatedCommentInitialValue !== '') {
+            if (condition === 'updateComment') {
+                let body = {
+                    commentId: allCommetUpdateId,
+                    comment: updatedCommentInitialValue,
+                };
+                dispatch(updateComment(body));
+                setInputForUpdate(false);
+            } else {
+                setInputForUpdate(false);
+            }
+        } else {
+            setError('This field is required');
+            setInputForUpdate(false);
+        }
+    };
+    const handelUpdateAll = (data, indx) => {
+        console.log('i am working here handelUpdateAll');
+        setError('');
+        setUnchangeComment(data?.comment);
+        setAllCommetUpdateId(data?._id);
+        setInputForUpdate(indx);
+        setUpdatedCommentInitialValue(data?.comment);
+    };
+    const handeldelete = () => {};
     return (
         <>
             <Modal
@@ -82,13 +120,12 @@ const Taskdetail = (props) => {
                 onHide={props.closeTaskDetailMOdel}
                 backdrop="static"
                 className="modal_details">
-                <Modal.Header closeButton>
+                <Modal.Header onClick={() => updateHandle('closeModal')} closeButton>
                     <Modal.Title>Task Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="cardinfo">
                     <div className="comments">
                         <h4>Activity</h4>
-
                         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button
@@ -138,29 +175,102 @@ const Taskdetail = (props) => {
                                 aria-labelledby="pills-home-tab"
                                 tabindex="0">
                                 <div className="taskcardinfo">
-                                    <table>
-                                        {allComments
-                                            ?.slice(0)
-                                            .reverse()
-                                            .map((comm, index) => (
-                                                <>
-                                                    <tr className="task_comment_info">
-                                                        <td className="user_name">
-                                                            <span>{comm?.userId?.firstName.charAt(0)}</span>
-                                                            <p>{comm?.userId?.firstName} </p> Added a Comment{' '}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        {' '}
-                                                        <td className="user_comment">{comm?.comment}</td>
-                                                        <td>
-                                                            {/* {moment(comm?.createdAt).add(24, 'hours').format("LT")} */}
-                                                            {moment(comm?.createdAt).format('HH:mm')}
-                                                        </td>
-                                                    </tr>
-                                                </>
-                                            ))}
-                                    </table>
+                                    <Row className="mt-3">
+                                        {allComments?.map((comm, ind) => (
+                                            <ul style={{ listStyle: 'none' }}>
+                                                <Row>
+                                                    <Col lg={12} className="d-flex">
+                                                        <Col lg={2} className="pt-1">
+                                                            <span
+                                                                style={{
+                                                                    backgroundColor: '#605e5a',
+                                                                    borderRadius: '100%',
+                                                                    padding: '9px',
+                                                                    color: 'white',
+                                                                    fontWeight: '800',
+                                                                }}>
+                                                                {comm?.userId?.firstName.charAt(0)}
+                                                                {comm?.userId?.lastName.charAt(0)}
+                                                            </span>
+                                                        </Col>
+                                                        <Col lg={10} className="m-0 p-0">
+                                                            <div className="d-flex">
+                                                                <h4 className="m-0 p-0"> {comm?.userId?.firstName}</h4>
+                                                                <h4 className="ps-1 m-0 p-0">
+                                                                    {' '}
+                                                                    {comm?.userId?.lastName}
+                                                                </h4>
+                                                                <p className="ps-1 m-0 p-0">
+                                                                    {moment(comm?.createdAt).format('LT')}{' '}
+                                                                    {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
+                                                                </p>
+                                                                {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
+                                                            </div>
+                                                            {inputForUpdate === ind ? (
+                                                                <form>
+                                                                    <Row className="mt-2">
+                                                                        <Col lg={10}>
+                                                                            <Form.Group
+                                                                                className="mb-1"
+                                                                                controlId="exampleForm.ControlInput1">
+                                                                                <Form.Control
+                                                                                    type="text"
+                                                                                    placeholder="Update Comment"
+                                                                                    defaultValue={
+                                                                                        updatedCommentInitialValue
+                                                                                    }
+                                                                                    onChange={(e) =>
+                                                                                        setUpdatedCommentInitialValue(
+                                                                                            e.target.value
+                                                                                        )
+                                                                                    }
+                                                                                />
+                                                                                {error ? (
+                                                                                    <div>
+                                                                                        {error}
+                                                                                        <label className="text-danger">
+                                                                                            {' '}
+                                                                                            *
+                                                                                        </label>
+                                                                                    </div>
+                                                                                ) : null}
+                                                                            </Form.Group>
+                                                                        </Col>
+                                                                        <Col className="m-0 p-0" lg={2}>
+                                                                            <Button
+                                                                                onClick={() =>
+                                                                                    updateHandle('updateComment')
+                                                                                }>
+                                                                                Update
+                                                                            </Button>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </form>
+                                                            ) : (
+                                                                <>
+                                                                    <div className="m-0 p-0">
+                                                                        <li className="font-18  ">{comm?.comment}</li>
+                                                                    </div>
+                                                                    <div className="d-flex m-0 p-0">
+                                                                        <p
+                                                                            className=" p-0"
+                                                                            onClick={() => handelUpdateAll(comm, ind)}>
+                                                                            Edit
+                                                                        </p>
+                                                                        <p
+                                                                            className=" cp  p-0 ps-2"
+                                                                            onClick={() => DeleteData(comm)}>
+                                                                            Delete
+                                                                        </p>
+                                                                    </div>
+                                                                </>
+                                                            )}
+                                                        </Col>
+                                                    </Col>
+                                                </Row>
+                                            </ul>
+                                        ))}
+                                    </Row>
                                     <table></table>
                                 </div>
                             </div>
@@ -174,50 +284,82 @@ const Taskdetail = (props) => {
                                     <div className="edit_delte">
                                         <div className="taskcardinfo">
                                             <form onSubmit={handleSubmit(onSubmitComment)}>
-                                                <input
+                                                {/* <input
                                                     type="hidden"
                                                     value={props.item?.taskInfo?._id}
                                                     {...register('taskid')}
-                                                />
-                                                <input
-                                                    type="text"
-                                                    id="exampleForm.ControlTextarea1"
-                                                    class="form-control"
-                                                    placeholder="Add Comment"
-                                                    {...register('comment')}
-                                                />
-                                                <button type="submit" class="mybutton btn btn-info">
-                                                    Add
-                                                </button>
+                                                /> */}
+                                                <Row className="mt-2">
+                                                    <Col lg={10}>
+                                                        <Form.Group
+                                                            className="mb-1"
+                                                            controlId="exampleForm.ControlInput1">
+                                                            <Form.Control
+                                                                type="text"
+                                                                placeholder="Add comment"
+                                                                {...register('comment', { required: true })}
+                                                            />
+                                                            {/* {errors.comment?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )} */}
+                                                        </Form.Group>
+                                                    </Col>
+                                                    <Col className="m-0 p-0" lg={2}>
+                                                        <Button type="submit">Add</Button>
+                                                    </Col>
+                                                </Row>
                                             </form>
                                             <table>
-                                                {allComments
-                                                    ?.slice(0)
-                                                    .reverse()
-                                                    .map((comm, index) => (
-                                                        <>
-                                                            <tr className="task_comment_info">
-                                                                <td className="user_name">
-                                                                    <span>{comm?.userId?.firstName.charAt(0)}</span>
-                                                                    <p>{comm?.userId?.firstName}</p>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                {' '}
-                                                                <td className="user_comment">{comm?.comment}</td>
-                                                                <td>{moment(comm?.createdAt).format('hh:mm')}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <a
-                                                                        href="javascript:void(0)"
-                                                                        onClick={() => DeleteData(comm?._id)}>
-                                                                        Delete
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                        </>
-                                                    ))}
+                                                {allComments?.map((comm, ind) => (
+                                                    <>
+                                                        <Row>
+                                                            <Col lg={12} className="d-flex">
+                                                                <Col lg={2} className="pt-1">
+                                                                    <span
+                                                                        style={{
+                                                                            backgroundColor: '#605e5a',
+                                                                            borderRadius: '100%',
+                                                                            padding: '9px',
+                                                                            color: 'white',
+                                                                            fontWeight: '800',
+                                                                        }}>
+                                                                        {comm?.userId?.firstName.charAt(0)}
+                                                                        {comm?.userId?.lastName.charAt(0)}
+                                                                    </span>
+                                                                </Col>
+                                                                <Col lg={10} className="m-0 p-0">
+                                                                    <div className="d-flex">
+                                                                        <h4 className="m-0 p-0">
+                                                                            {' '}
+                                                                            {comm?.userId?.firstName}
+                                                                        </h4>
+                                                                        <h4 className="ps-1 m-0 p-0">
+                                                                            {' '}
+                                                                            {comm?.userId?.lastName}
+                                                                        </h4>
+                                                                        <p className="ps-1 m-0 p-0">
+                                                                            {moment(comm?.createdAt).format('LT')}{' '}
+                                                                            {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
+                                                                        </p>
+                                                                        {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
+                                                                    </div>
+                                                                    <div className="m-0 p-0">
+                                                                        <li
+                                                                            style={{ listStyle: 'none' }}
+                                                                            className="font-18  ">
+                                                                            {comm?.comment}
+                                                                        </li>
+                                                                    </div>
+
+                                                                    <div className="d-flex m-0 p-0">
+                                                                        <p className=" p-0">Edit</p>
+                                                                        <p className=" cp  p-0 ps-2">Delete</p>
+                                                                    </div>
+                                                                </Col>
+                                                            </Col>
+                                                        </Row>
+                                                    </>
+                                                ))}
                                             </table>
                                             <table></table>
                                         </div>
@@ -308,7 +450,7 @@ const Taskdetail = (props) => {
 
                                 {props.item.projectInfo?.projectName}
                             </li>
-                            <li>
+                            <li class="card_img">
                                 <label>Attachment:</label>
 
                                 {(() => {
@@ -325,7 +467,7 @@ const Taskdetail = (props) => {
                                                         : ''
                                                 }
                                                 width={150}
-                                                height={100}
+                                                height={150}
                                             />
                                         );
                                     } else if (ext == 'pdf') {
@@ -351,12 +493,15 @@ const Taskdetail = (props) => {
                                         );
                                     }
                                 })()}
-                            </li>
-                            <li>
                                 <button type="button" onClick={() => downloadFile(props.item.taskInfo?.attachment)}>
-                                    Download
+                                    <i class="dripicons-download download_color"></i>
                                 </button>
                             </li>
+                            {/* <li>
+                                <button type="button" onClick={() => downloadFile(props.item.taskInfo?.attachment)}>
+                                <i class="dripicons-download download_color"></i>
+                                </button>
+                            </li> */}
                         </ul>
                     </div>
                 </Modal.Body>

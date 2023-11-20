@@ -1,34 +1,32 @@
-import USERS_TYPES from "./constant";
-
-
+import USERS_TYPES from './constant';
 
 const GET_ALL_USER_INITIAL_STATE = {
     data: [],
-    message: "",
-    loading: false
-}
+    message: '',
+    loading: false,
+};
 const DELETE_USER_INITIAL_STATE = {
     data: [],
-    message: "",
-    loading: false
-}
+    message: '',
+    loading: false,
+};
 const CREATE_USER_INITIAL_STATE = {
     data: [],
-    message: "",
-    loading: false
-}
+    message: '',
+    loading: false,
+};
 
 const GET_ALL_ROLES_INITIAL_STATE = {
     data: [],
-    message: "",
-    loading: false
-}
+    message: '',
+    loading: false,
+};
 
 const GET_CSV_FILE_INITIAL_STATE = {
     data: [],
-    message: "",
-    loading: false
-}
+    message: '',
+    loading: false,
+};
 export const getAllUsers = (state = GET_ALL_USER_INITIAL_STATE, action) => {
     switch (action.type) {
         case USERS_TYPES.GET_ALL_USERS_LOADING:
@@ -42,7 +40,6 @@ export const getAllUsers = (state = GET_ALL_USER_INITIAL_STATE, action) => {
                 loading: false,
             };
 
-
         case USERS_TYPES.GET_ALL_USERS_ERROR:
             return {
                 data: [],
@@ -51,7 +48,6 @@ export const getAllUsers = (state = GET_ALL_USER_INITIAL_STATE, action) => {
             };
         default:
             return { ...state };
-
     }
 };
 export const deleteUser = (state = DELETE_USER_INITIAL_STATE, action) => {
@@ -69,8 +65,8 @@ export const deleteUser = (state = DELETE_USER_INITIAL_STATE, action) => {
         case USERS_TYPES.GET_DELETE_USER_RESET:
             return {
                 data: DELETE_USER_INITIAL_STATE.data,
-                loading: false
-            }
+                loading: false,
+            };
 
         case USERS_TYPES.GET_DELETE_USER_ERROR:
             return {
@@ -81,7 +77,6 @@ export const deleteUser = (state = DELETE_USER_INITIAL_STATE, action) => {
             };
         default:
             return { ...state };
-
     }
 };
 export const createUser = (state = CREATE_USER_INITIAL_STATE, action) => {
@@ -99,8 +94,8 @@ export const createUser = (state = CREATE_USER_INITIAL_STATE, action) => {
         case USERS_TYPES.CREATE_USER_RESET:
             return {
                 data: CREATE_USER_INITIAL_STATE.data,
-                loading: false
-            }
+                loading: false,
+            };
 
         case USERS_TYPES.CREATE_USER_ERROR:
             return {
@@ -111,7 +106,6 @@ export const createUser = (state = CREATE_USER_INITIAL_STATE, action) => {
             };
         default:
             return { ...state };
-
     }
 };
 export const getAllRoles = (state = GET_ALL_ROLES_INITIAL_STATE, action) => {
@@ -127,7 +121,6 @@ export const getAllRoles = (state = GET_ALL_ROLES_INITIAL_STATE, action) => {
                 loading: false,
             };
 
-
         case USERS_TYPES.GET_ALL_ROLES_ERROR:
             return {
                 data: [],
@@ -136,7 +129,6 @@ export const getAllRoles = (state = GET_ALL_ROLES_INITIAL_STATE, action) => {
             };
         default:
             return { ...state };
-
     }
 };
 export const getCsvDataReducer = (state = GET_CSV_FILE_INITIAL_STATE, action) => {
@@ -151,7 +143,11 @@ export const getCsvDataReducer = (state = GET_CSV_FILE_INITIAL_STATE, action) =>
                 data: action?.payload,
                 loading: false,
             };
-
+        case USERS_TYPES.GET_CSV_DATA_RESET:
+            return {
+                data: GET_CSV_FILE_INITIAL_STATE.data,
+                loading: false,
+            };
 
         case USERS_TYPES.GET_CSV_DATA_ERROR:
             return {
@@ -161,6 +157,5 @@ export const getCsvDataReducer = (state = GET_CSV_FILE_INITIAL_STATE, action) =>
             };
         default:
             return { ...state };
-
     }
 };
