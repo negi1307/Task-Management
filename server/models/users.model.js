@@ -26,8 +26,8 @@ const users = mongoose.model(
       type: mongoose.Types.ObjectId,
       ref: 'roles'
     },
-    role :{
-      type : Number
+    role: {
+      type: Number // 1-Admin, 2-Employee, 3-CTO, 4-PM, 5-Sales
     }
   },
     {

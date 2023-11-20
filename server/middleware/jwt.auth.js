@@ -82,7 +82,7 @@ const verifyUser = async (req, res, next) => {
                 return res.status(401).json({ message: 'jwt token is expired' })
             }
             req.user = user.aud;
-            if (req.user.roleId.role === 'Employee' || req.user.roleId.role === 'Admin') {
+            if (req.user.roleId.role === 'Employee' || req.user.roleId.role === 'Admin' || req.user.roleId.role === 'P.M' || req.user.roleId.role === 'CTO') {
                 next();
             } else {
                 return res.status(403).json({ message: 'Access denied. Only the authenciated users are allowed.' });

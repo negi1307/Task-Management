@@ -352,7 +352,6 @@ const getUserTasks = async (req, res) => {
           },
       },
     ]
-    // console.log(queries);
     let counts = [{ totalCount: 0 }]
     if (flag != "1") {
       counts = await assignUserModel.aggregate(queries);
@@ -360,7 +359,6 @@ const getUserTasks = async (req, res) => {
       queries[14] = { $skip: (parseInt(skip) - 1) * pageSize }
       queries[15] = { $limit: pageSize };
     }
-    console.log(queries);
     const result = await assignUserModel.aggregate(queries);
     const totalCount = counts[0]?.totalCount
     const totalPages = Math.ceil(totalCount / pageSize);
