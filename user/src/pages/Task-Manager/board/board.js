@@ -290,17 +290,21 @@ const closeTaskDetailMOdel = () => {
     <h4>Task Status Count</h4>
     <ul>
       <li>TO-DO:
-        {taskStatusCountdata?.todo?.taskCount}
+        {taskStatusCountdata?.response?.TodoCount}
       </li>
       <li>In-Progress:
-        {taskStatusCountdata?.inProgress?.taskCount}
+        {taskStatusCountdata?.response?.InprogressCount}
       </li>
       <li>Hold:
-        {taskStatusCountdata?.hold?.taskCount}
+        {taskStatusCountdata?.response?.HoldCount}
       </li>
       <li>Done:
-        {taskStatusCountdata?.done?.taskCount}
+        {taskStatusCountdata?.response?.DoneCount}
       </li>
+      <li>Due Task:
+        {taskStatusCountdata?.response?.DueTasksCount}
+      </li>
+      
       <li>
         <input type="search"
          placeholder='Search here...'

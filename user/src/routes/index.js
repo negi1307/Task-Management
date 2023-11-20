@@ -39,6 +39,8 @@ const EWalletDashboard = React.lazy(() => import('../pages/dashboard/E-Wallet'))
 
 // Boards
 const Boards = React.lazy(() => import('../pages/Task-Manager/board/board'));
+//taskBoard
+const TaskBoard = React.lazy(() => import('../pages/Task-Manager/TaskBoard/TaskBoard'));
 
 // AllMillStone
 const AllMillStone = React.lazy(() => import('../pages/Task-Manager/AllMillstones'));
@@ -329,14 +331,18 @@ const AllRoutes = () => {
                         {
                             path: 'technology',
                             element: <LoadComponent component={Technology} />,
-                        },
+                        },     
                         {
                             path: 'boards',
                             element: <LoadComponent component={Boards} />,
-                        },
+                        },                 
+                        // {
+                        //     path: 'boards/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId',
+                        //     element: <LoadComponent component={Boards} />,
+                        // },                       
                         {
-                            path: 'boards/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId',
-                            element: <LoadComponent component={Boards} />,
+                            path: 'taskboard/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId',
+                            element: <LoadComponent component={TaskBoard} />,
                         },
                         {
                             path: 'technologyCategory',

@@ -284,7 +284,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                             Teams
                                         </Link>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <div class="project_names">
                                             <select
                                                 name="ddlProject"
@@ -315,8 +315,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                                 ))}
                                             </select>
                                         </div>
-                                    </li>
-
+                                    </li> */}
+{/* 
                                     <li>
                                         <div class="project_names">
                                             <select
@@ -332,31 +332,10 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                                 ))}
                                             </select>
                                         </div>
-                                    </li>
-                                    {/* <li>
-                            <div class="project_names">
-                                                        <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeProject}>
-                                <option>--Select Project--</option>
-                                {allProjects?.map((item,index)=>
-                                    <option key={index} value={item._id}>{item.projectName}</option>
-                                )}
-                            </select>
-                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeMilestone}>
-                                <option>--Select MileStone--</option>
-                                {getAllMilestoneData?.map((item,index)=>
-                                    <option key={index} value={item._id}>{item.title}</option>
-                                )}
-                            </select>
-                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeSprint}>
-                                <option>--Select Sprint--</option>
-                                {getAllSingleSprints?.map((item,index)=>
-                                    <option key={index} value={item._id}>{item.sprintName}</option>
-                                )}
-                            </select>
-                            </div>
-                            </li> */}
+                                    </li> */}
+                                    
                                     <li>
-                                        <button type="submit" onClick={loginTime}>
+                                        <button type="submit" class="mybutton btn btn-info" onClick={loginTime}>
                                             Start
                                         </button>
                                     </li>
@@ -365,20 +344,6 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                         </div>
 
                         <ul className="list-unstyled topbar-menu float-end mb-0 topbarr">
-                            {/*                    
-                        <li className="notification-list topbar-dropdown d-xl-none">
-                            <SearchDropdown />
-                        </li>
-                        
-                        <li className="dropdown notification-list topbar-dropdown d-none d-lg-block">
-                            <LanguageDropdown />
-                        </li> 
-                         <li className="dropdown notification-list">
-                            <NotificationDropdown notifications={Notifications} />
-                        </li> 
-                        <li className="dropdown notification-list d-none d-sm-inline-block">
-                            <AppsDropdown />
-                        </li>  */}
 
                             <li className="notification-list">
                                 <button
@@ -427,7 +392,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                     </div>
                 </div>
             </div>
-            <div className="project_detail">
+            {/* <div className="project_detail">
                 <div className="project_name">
                     <h3>{projectNameHeading}</h3>
                 </div>
@@ -444,7 +409,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div> */}
             <Filter modal={modal} closeModal={closemodal} />
         </>
     );
