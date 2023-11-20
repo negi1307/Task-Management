@@ -8,7 +8,9 @@ const { ObjectId } = require("mongodb");
 // Create or add tasks
 const createtask = async (req, res) => {
   try {
-    if (req.body.summary === "" || req.body.description == "" || req.body.priority == "" || req.body.startDate == "" || req.body.startDate == "" || req.file == undefined) {
+    const {summary,description,priority,startDate} = req.body;
+    if (!summary || !description || !priority || !startDate || !startDate || !req.file) {
+      // if (req.body.summary  || req.body.description  || req.body.priority  || req.body.startDate  || req.body.startDate  || req.file == undefined) {
       return res.status(200).json({ status: "400", message: "Please fill all required fields" });
 
     }
@@ -172,7 +174,7 @@ const getTasks = async (req, res) => {
     var totalPages = 0;
     var totalCount = 0;
     const query = {};
-    if (!req.query.sprintId && !req.query.taskStatus == "" && parseInt(req.query.skip) === 1) {
+    if (!req.query.sprintId && !req.query.taskStatus && parseInt(req.query.skip) === 1) {
       let query = {};
       const taskStatus = JSON.parse(req.query.taskStatus);
       query.activeStatus = JSON.parse(req.query.activeStatus)
