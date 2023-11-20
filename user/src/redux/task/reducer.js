@@ -15,6 +15,11 @@ const GET_All_TASK_INITIAL_STATE = {
     loading:false,
     message:""
 }
+const GET_All_ASSIGNEE_INITIAL_STATE = {
+    data:[],
+    loading:false,
+    message:""
+}
 const UPDATE_STATUS_TASK_INITIAL_STATE = {
     data:[],
     loading:false,
@@ -91,6 +96,32 @@ export const getAllTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) =>
 
 
         case TASK_TYPES.GET_ALL_TASK_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+
+export const getAllAssigneeName = (state = GET_All_ASSIGNEE_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case TASK_TYPES.GET_ALL_ASSIGNEE_NAME_LOADING:
+            return {
+                data: GET_All_ASSIGNEE_INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.GET_ALL_ASSIGNEE_NAME_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case TASK_TYPES.GET_ALL_ASSIGNEE_NAME_ERROR:
             return {
                 data: [],
                 loading: false,
