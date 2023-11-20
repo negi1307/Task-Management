@@ -483,15 +483,40 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     display: flex;
     align-items: center;
     justify-content: end;
-    z-index: 99999;
+    /* z-index: 99999; */
 }
 /* .page-title {
     background: #37216c !important;
 } */
 .css-1xb58ew {
-    overflow: hidden !important;
+    margin: 0px !important;
 }
+.css-1com30x {
+    min-width: 347px !important;
+}
+/* .css-1xb58ew {
+    overflow: hidden !important;
+} */
 .form-switch .form-check-input {
     width: 2.5em !important;
     margin-left: -2.5em !important;
+}
+.side-nav-item {
+    color: white !important;
+}
+.side-nav-link {
+    color: white !important;
+}
+.bg_clr {
+    height: 75px;
+    width: 75px;
+}
+.projects_info {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.projects_info p {
+    text-align: center;
+    flex: 0 0 14%;
 }

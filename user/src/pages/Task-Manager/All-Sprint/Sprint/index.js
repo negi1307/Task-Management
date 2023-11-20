@@ -16,18 +16,17 @@ const Sprint = () => {
     const [openModal, SetOpenModal] = useState(false);
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
-    const getSingleSprintList = store?.getSingleSprint?.data?.data
-    const getSingleSprintTask = store?.getSigleSprintTask?.data?.Response
-    const loaderhandel = store?.getSigleSprintTask
+    const getSingleSprintList = store?.getSingleSprint?.data?.data;
+    const getSingleSprintTask = store?.getSigleSprintTask?.data?.Response;
+    const loaderhandel = store?.getSigleSprintTask;
     const handleCreate = () => {
-        SetOpenModal(true)
-    }
+        SetOpenModal(true);
+    };
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
         dispatch(getsingleSprintTask({ id: id, skip: value }));
     };
     const CloseModal = (val) => {
-
         if (val == 'render') {
             setRender(!render);
         }
@@ -35,7 +34,7 @@ const Sprint = () => {
     };
     useEffect(() => {
         dispatch(getSprintById(id));
-        dispatch(getsingleSprintTask({ id: id, skip: 1 }))
+        dispatch(getsingleSprintTask({ id: id, skip: 1 }));
     }, [render]);
 
     return (
@@ -51,7 +50,9 @@ const Sprint = () => {
                     </Button>
                 </Col>
             </Row>
-            {loaderhandel.loading ? (<MainLoader />) :
+            {loaderhandel.loading ? (
+                <MainLoader />
+            ) : (
                 <Row>
                     <Col lg={4}>
                         <Row>
@@ -92,10 +93,8 @@ const Sprint = () => {
                                         </div>
                                     </div>
                                 </ListGroup.Item>
-
                             </ListGroup>
                         </Row>
-
                     </Col>
                     <Col className="mx-auto" lg={7}>
                         <Row>
@@ -104,8 +103,6 @@ const Sprint = () => {
                                 <h4>Tasks</h4>
                             </Col>
                             <Col className="" lg={12}>
-
-
                                 <Table>
                                     <thead className=" btom_Line_hide">
                                         <tr>
@@ -129,12 +126,10 @@ const Sprint = () => {
                                         ))}
                                     </tbody>
                                 </Table>
-
-
                             </Col>
                         </Row>
                         <Row>
-                            <Col lg={12} className="d-flex justify-content-end mt-3">
+                            <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
                                 {store?.getSigleSprintTask?.data?.totalPages > 0 && (
                                     <Stack spacing={2}>
                                         <Pagination
@@ -149,8 +144,8 @@ const Sprint = () => {
                             </Col>
                         </Row>
                     </Col>
-
-                </Row>}
+                </Row>
+            )}
 
             <Create modal={openModal} CloseModal={CloseModal} data={getSingleSprintList} />
         </>

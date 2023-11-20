@@ -26,7 +26,7 @@ const ClientRepository = () => {
                     ) : (
                         <Row>
                             <Col lg={12}>
-                                <div className="d-flex">
+                                <div className="projects_info">
                                     {data?.data?.response?.map((ele, ind) => (
                                         <p
                                             style={{

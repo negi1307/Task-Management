@@ -431,11 +431,11 @@ ul.side-nav i {
 .comments ul li button {
     font-weight: 600;
 }
-.addcommentname button {
+/* .addcommentname button {
     margin-top: 15px;
     text-align: right;
-    float: right;
-}
+    float: right; */
+/* } */
 .card_detail h4 {
     color: #000;
 }
@@ -557,10 +557,11 @@ h5.count {
     color: red !important;
     font-size: 22px;
 }
-
-.card_detail i {
-    font-size: 55px;
-    color: red;
+li.card_img button {
+    background: transparent;
+    border: 0px;
+    font-size: 20px;
+    color: #1313ee;
 }
 .taskcardinfo span {
     height: 30px;
