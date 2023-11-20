@@ -35,7 +35,7 @@ const Create = ({ modal, closemodal }) => {
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
             ToastHandle('success', successHandle?.data?.message);
-            closemodal()
+            closemodal("render")
         } else if (successHandle?.data?.status == 400) {
             ToastHandle('error', successHandle?.data?.message);
         } else if (successHandle?.data?.status == 500) {
