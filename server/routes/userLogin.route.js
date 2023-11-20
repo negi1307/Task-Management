@@ -5,7 +5,7 @@ const userLoginRoute = express.Router();
 
 
 userLoginRoute.post("/loginTime", verifyUser, userLogin.userLogin);
-// userLoginRoute.put("/updateLogoutTime", verifyUser, userLogin.recordStopTime);
+userLoginRoute.put("/updateLogoutTime", verifyUser, userLogin.recordStopTime);
 userLoginRoute.get("/getLoginTimeFile", userLogin.loginTimeRecord);
 
 
