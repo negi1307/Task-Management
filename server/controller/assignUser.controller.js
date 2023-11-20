@@ -165,9 +165,36 @@ const getUserTasks = async (req, res) => {
           as: "taskInfo",
         },
       },
+      {
+        $lookup: {
+          from: "projects",
+          localField: "taskInfo.projectId",
+          foreignField: "_id",
+          as: "projectInfo"
+        }
+      },
+      {
+        $lookup: {
+          from: "milestones",
+          localField: "taskInfo.milestoneId",
+          foreignField: "_id",
+          as: "milestoneInfo"
+        }
+      },
+      {
+        $lookup: {
+          from: "sprints",
+          localField: "taskInfo.sprintId",
+          foreignField: "_id",
+          as: "sprintInfo"
+        }
+      },
       { $unwind: "$taskInfo" },
       { $unwind: "$assigneeInfo" },
       { $unwind: "$reporterInfo" },
+      { $unwind: "$projectInfo" },
+      { $unwind: "$milestoneInfo" },
+      { $unwind: "$sprintInfo" },
       { $sort: { createdAt: -1 } },
       { $sort: { createdAt: -1 } },
       { $sort: { createdAt: -1 } },
@@ -187,8 +214,8 @@ const getUserTasks = async (req, res) => {
             $push: {
               $cond: {
                 if: { $eq: ['$taskInfo.status', 2] },
-                then: '$$ROOT', 
-                else: null 
+                then: '$$ROOT',
+                else: null
               }
             }
           },
@@ -197,7 +224,7 @@ const getUserTasks = async (req, res) => {
               $cond: {
                 if: { $eq: ['$taskInfo.status', 3] },
                 then: '$$ROOT',
-                else: null 
+                else: null
               }
             }
           },
@@ -205,8 +232,8 @@ const getUserTasks = async (req, res) => {
             $push: {
               $cond: {
                 if: { $eq: ['$taskInfo.status', 4] },
-                then: '$$ROOT', 
-                else: null 
+                then: '$$ROOT',
+                else: null
               }
             }
           },
@@ -247,6 +274,10 @@ const getUserTasks = async (req, res) => {
                 createdAt: '$taskInfo.createdAt',
                 updatedAt: '$taskInfo.updatedAt',
                 __v: '$taskInfo.__v',
+                projectInfo: '$projectInfo',
+                // projectInfo: { $arrayElemAt: ['$projectInfo', 0] },
+                milestoneInfo: '$milestoneInfo',
+                sprintInfo: '$sprintInfo',
                 assigneeInfo: '$assigneeInfo',
                 reporterInfo: '$reporterInfo'
               }
@@ -311,19 +342,25 @@ const getUserTasks = async (req, res) => {
           }
           : {
             _id: 0,
-            assigneeInfo: 1,
-            reporterInfo: 1,
+            // projectInfo:1,
+            // milestoneInfo : 1,
+            // sprintInfo : 1,
+            // assigneeInfo: 1,
+            // reporterInfo: 1,
             taskInfo: 1,
             totalCount: 1
           },
       },
     ]
+    // console.log(queries);
     let counts = [{ totalCount: 0 }]
     if (flag != "1") {
       counts = await assignUserModel.aggregate(queries);
-      queries[8] = { $skip: (parseInt(skip) - 1) * pageSize }
-      queries[9] = { $limit: pageSize };
+      
+      queries[14] = { $skip: (parseInt(skip) - 1) * pageSize }
+      queries[15] = { $limit: pageSize };
     }
+    console.log(queries);
     const result = await assignUserModel.aggregate(queries);
     const totalCount = counts[0]?.totalCount
     const totalPages = Math.ceil(totalCount / pageSize);
