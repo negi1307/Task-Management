@@ -12,7 +12,6 @@ import moment from 'moment';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import HeaderMain from '../header/HeaderMain';
-const loading = () => <div className=""></div>;
 
 const Projects = () => {
     const dispatch = useDispatch();

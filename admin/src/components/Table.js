@@ -76,6 +76,8 @@ type TableProps = {
     }[],
 };
 
+
+
 const Table = (props: TableProps): React$Element<React$FragmentType> => {
     const isSearchable = props['isSearchable'] || false;
     const isSortable = props['isSortable'] || false;

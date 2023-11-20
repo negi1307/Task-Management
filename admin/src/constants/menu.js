@@ -43,13 +43,25 @@
             },
         ]
     },
-    // {
-    //     key: 'technology',
-    //     label: 'Technology',
-    //     url: 'dashboard/technology',
-    //     icon: 'uil-technology',
+    {
+        key: 'customer',
+        label: 'Customer',
+        url: 'dashboard/customer',
+        icon: 'uil-users-alt',
 
-    // },
+    },
+    {
+        key: 'client',
+        label: 'Client',
+        url: 'dashboard/client',
+        icon: 'uil-users-alt',
+    },
+    {
+        key: 'clientRepository',
+        label: 'clientRepository',
+        url: 'dashboard/clientRepository',
+        icon: 'uil-users-alt',
+    }
    
   
 ];
