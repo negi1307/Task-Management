@@ -55,6 +55,12 @@
         label: 'Client',
         url: 'dashboard/client',
         icon: 'uil-users-alt',
+    },
+    {
+        key: 'clientRepository',
+        label: 'Client Repository',
+        url: 'dashboard/clientRepository',
+        icon: 'uil-users-alt',
     }
    
   

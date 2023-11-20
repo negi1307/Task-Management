@@ -450,7 +450,7 @@ const Taskdetail = (props) => {
 
                                 {props.item.projectInfo?.projectName}
                             </li>
-                            <li>
+                            <li class="card_img">
                                 <label>Attachment:</label>
 
                                 {(() => {
@@ -467,7 +467,7 @@ const Taskdetail = (props) => {
                                                         : ''
                                                 }
                                                 width={150}
-                                                height={100}
+                                                height={150}
                                             />
                                         );
                                     } else if (ext == 'pdf') {
@@ -493,12 +493,15 @@ const Taskdetail = (props) => {
                                         );
                                     }
                                 })()}
-                            </li>
-                            <li>
                                 <button type="button" onClick={() => downloadFile(props.item.taskInfo?.attachment)}>
-                                    Download
+                                    <i class="dripicons-download download_color"></i>
                                 </button>
                             </li>
+                            {/* <li>
+                                <button type="button" onClick={() => downloadFile(props.item.taskInfo?.attachment)}>
+                                <i class="dripicons-download download_color"></i>
+                                </button>
+                            </li> */}
                         </ul>
                     </div>
                 </Modal.Body>

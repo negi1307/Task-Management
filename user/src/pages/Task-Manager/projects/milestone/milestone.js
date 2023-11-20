@@ -225,14 +225,11 @@ const Milestone = () => {
                                                         <td>
                                                             {moment(item?.milestoneId?.completion_date).format('L')}
                                                         </td>
-                                                        {/* <td>
-                                                            {' '}
-                                                            <Form.Check
+                                                        {/* <td> <Form.Check
                                                                 type="switch"
                                                                 checked={item?.status}
                                                                 onChange={(e) => handleStatusChange(e, item)}
-                                                            />
-                                                        </td> */}
+                                                            /></td> */}
                                                         <td>
                                                             {' '}
                                                             <Row>
@@ -248,7 +245,8 @@ const Milestone = () => {
                                                                             onClick={() => {
                                                                                 handelUpdate(item);
                                                                             }}
-                                                                            className="uil-edit-alt m-0 p-0"></i>
+                                                                            className="uil-edit-alt m-0 p-0"
+                                                                        ></i>
                                                                     </p> */}
                                                                 </Col>
                                                             </Row>

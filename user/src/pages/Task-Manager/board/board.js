@@ -283,20 +283,25 @@ const Boards = (props) => {
                 <ul>
                     <li>
                         TO-DO:
-                        {taskStatusCountdata?.todo?.taskCount}
+                        {taskStatusCountdata?.response?.TodoCount}
                     </li>
                     <li>
                         In-Progress:
-                        {taskStatusCountdata?.inProgress?.taskCount}
+                        {taskStatusCountdata?.response?.InprogressCount}
                     </li>
                     <li>
                         Hold:
-                        {taskStatusCountdata?.hold?.taskCount}
+                        {taskStatusCountdata?.response?.HoldCount}
                     </li>
                     <li>
                         Done:
-                        {taskStatusCountdata?.done?.taskCount}
+                        {taskStatusCountdata?.response?.DoneCount}
                     </li>
+                    <li>
+                        Due Task:
+                        {taskStatusCountdata?.response?.DueTasksCount}
+                    </li>
+
                     <li>
                         <input
                             type="search"
