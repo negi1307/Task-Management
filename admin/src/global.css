@@ -511,3 +511,12 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     height: 75px;
     width: 75px;
 }
+.projects_info {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.projects_info p {
+    text-align: center;
+    flex: 0 0 14%;
+}
