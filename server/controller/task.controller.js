@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 const taskModel = require("../models/task.model");
 const assignUserModel = require("../models/assignUser.model");
 const historyModel = require("../models/history.model");
-const userModel = require("../models/users.model");
-const { ObjectId } = require("mongodb");
+const rolesModel = require('../models/role.model');
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -29,11 +28,11 @@ const createtask = async (req, res) => {
         parentId
       });
       if (task) {
-        const admin = await userModel.findOne({ role: 1 }).select("_id roleId");
-        const roles = [1, 3, 4]
+        const roles = ['CTO', 'PM', 'Admin'];
+        const role = await rolesModel.findOne({ role: roles.includes(req.user.role)? req.user.role : "PM"  }).select("_id role");
         const assignedUser = await assignUserModel.create({
-          assigneeId: roles.includes(req.user.role) ? assigneeId : req.user._id, // One who is doing work
-          reporterId: roles.includes(req.user.role) ? req.user.roleId : admin.roleId, // one who will assignee report after work done
+          assigneeId: roles.includes(req.user.role) ? assigneeId : req.user._id,
+          reporterId: role._id,
           taskId: task._id,
         });
         return res.status(200).json({ status: "200", message: "Task created successfully", response: task, assignedUser });
