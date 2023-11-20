@@ -10,6 +10,7 @@ import MainLoader from '../../../../constants/Loader/loader';
 import Multiselect from 'multiselect-react-dropdown';
 import { getAllTechnology } from '../../../../redux/technology/action';
 const Update = ({ modal, closeModal, editData }) => {
+    console.log(editData);
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const sucesshandel = store?.updateProject;
@@ -41,18 +42,19 @@ const Update = ({ modal, closeModal, editData }) => {
         let formattedDate = year + '-' + month + '-' + day;
         return formattedDate;
     };
+    console.log(editData?.projectId?.projectType);
     useEffect(() => {
         reset({
-            projectName: editData?.projectName,
-            clientName: editData?.clientName,
+            projectName: editData?.projectId?.projectName,
+            clientName: editData?.projectId?.clientName,
             access: editData?.projectAccess,
             key: editData?.key,
-            startDate: handleDate(editData?.startDate),
-            endDate: handleDate(editData?.endDate),
+            startDate: handleDate(editData?.projectId?.startDate),
+            endDate: handleDate(editData?.projectId?.endDate),
             expectedEndDate: handleDate(editData?.CompilationDate),
-            project_type: editData?.project_type,
-            technology: editData?.technology,
-            projectstatus: editData?.projectStatus,
+            project_type: editData?.projectId?.projectType,
+            technology: editData?.projectId?.technology,
+            projectstatus: editData?.status,
             expectedEndDate: handleDate(editData?.expectedDate),
             // status :editData?.projectStatus
         });

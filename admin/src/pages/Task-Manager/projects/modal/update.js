@@ -10,6 +10,7 @@ import MainLoader from '../../../../constants/Loader/loader';
 import Multiselect from 'multiselect-react-dropdown';
 import { getAllTechnology } from '../../../../redux/technology/action';
 const Update = ({ modal, closeModal, editData }) => {
+    console.log(editData);
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const sucesshandel = store?.updateProject;
@@ -55,6 +56,7 @@ const Update = ({ modal, closeModal, editData }) => {
         return formattedDate;
     };
     useEffect(() => {
+        console.log(editData, 'dattatatatatatat');
         setFinalTechnology(editData?.technology);
         setAddValue(editData?.technology);
         reset({
@@ -112,7 +114,9 @@ const Update = ({ modal, closeModal, editData }) => {
     const selectedValues = editData?.technology?.map((item) => {
         return item.techName;
     });
+    console.log(selected, 'aadadasa');
     useEffect(() => {
+        console.log('llllllllll');
         if (sucesshandel?.data?.status == 200) {
             ToastHandle('success', 'Updated Successfully');
             closeModal('render');

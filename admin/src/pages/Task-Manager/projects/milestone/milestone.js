@@ -241,7 +241,9 @@ const Milestone = () => {
                                     </Row>
                                 </Col>
                                 <Row>
-                                    <Col lg={12} className="d-flex justify-content-end mt-3">
+                                    <Col
+                                        lg={12}
+                                        className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
                                         {store?.getSigleMileStone?.data?.totalPages > 0 && (
                                             <Stack spacing={2}>
                                                 <Pagination

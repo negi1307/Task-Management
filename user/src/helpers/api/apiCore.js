@@ -8,7 +8,8 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.baseURL = config.API_URL;
 
 // intercepting to capture errors
-axios.interceptors.response.use((response) => {
+axios.interceptors.response.use(
+    (response) => {
         return response;
     },
     (error) => {
@@ -20,8 +21,7 @@ axios.interceptors.response.use((response) => {
         } else if (error && error.response && error.response.status === 403) {
             // alert(error)
             window.location.href = '/access-denied';
-        } 
-        else {
+        } else {
             switch (error.response.status) {
                 case 401:
                     message = 'Invalid credentials';
@@ -49,7 +49,6 @@ const AUTH_SESSION_KEY = 'hyper_user';
  * @param {*} token
  */
 const setAuthorization = (token) => {
-    
     if (token) axios.defaults.headers.common['Authorization'] = 'JWT ' + token;
     else delete axios.defaults.headers.common['Authorization'];
 };
@@ -67,8 +66,8 @@ class APICore {
         if (params) {
             var queryString = params
                 ? Object.keys(params)
-                    .map((key) => key + '=' + params[key])
-                    .join('&')
+                      .map((key) => key + '=' + params[key])
+                      .join('&')
                 : '';
             response = axios.get(`${url}?${queryString}`, params);
         } else {
@@ -82,8 +81,8 @@ class APICore {
         if (params) {
             var queryString = params
                 ? Object.keys(params)
-                    .map((key) => key + '=' + params[key])
-                    .join('&')
+                      .map((key) => key + '=' + params[key])
+                      .join('&')
                 : '';
             response = axios.get(`${url}?${queryString}`, { responseType: 'blob' });
         } else {
@@ -98,8 +97,8 @@ class APICore {
         if (params) {
             queryString = params
                 ? Object.keys(params)
-                    .map((key) => key + '=' + params[key])
-                    .join('&')
+                      .map((key) => key + '=' + params[key])
+                      .join('&')
                 : '';
         }
 
@@ -112,7 +111,7 @@ class APICore {
     /**
      * post given data to url
      */
-    create = (url, data) => {        
+    create = (url, data) => {
         return axios.post(url, data);
     };
 
@@ -179,9 +178,9 @@ class APICore {
             return false;
         }
         if (!user.token) {
-            return false
+            return false;
         }
-        return true
+        return true;
         // const user = this.getLoggedInUser();
         // if (!user || (user && !user.token)) {
         //     return false;

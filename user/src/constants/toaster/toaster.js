@@ -15,15 +15,15 @@ const Toaster = () => {
 const ErrorToaster = () => {
     return {
         position: 'top-center',
-                autoClose: 2000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light'
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
     };
-}
+};
 const ToastHandle = (type, message) => {
     if (type === 'success') {
         toast.success(message, Toaster());

@@ -49,11 +49,11 @@ const Update = ({ modal, closeModal, editData }) => {
     };
     useEffect(() => {
         reset({
-            title: editData?.sprintName,
-            startDate: handleDate(editData?.startDate),
-            endDate: handleDate(editData?.endDate),
+            title: editData?.sprintId?.sprintName,
+            startDate: handleDate(editData?.sprintId?.startDate),
+            endDate: handleDate(editData?.sprintId?.endDate),
         });
-        setDescription(editData?.sprintDesc);
+        setDescription(editData?.sprintId?.sprintDesc);
     }, [modal]);
     console.log(editData, 'pppppp');
     const handleDate = (data) => {
@@ -82,7 +82,7 @@ const Update = ({ modal, closeModal, editData }) => {
                         <Row>
                             <Col lg={8} className="text-end">
                                 <Modal.Title id="" className="mx-auto">
-                                    Update Sprint Detail
+                                    Update Sprint Details
                                 </Modal.Title>
                             </Col>
                             <Col lg={4} className="text-end pt-2">

@@ -95,8 +95,8 @@ const Summary = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col  border_clr  m-2 rounded-4 bg-white">
-                            <div className="d-flex  p-4">
-                                <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
+                            <div className="d-flex  p-4  px-4 align-items-center jusstify-content-center">
+                                <div className="bg_clr  p-3 rounded-circle text-center ">
                                     <i className="bi bi-check-lg w-size" />
                                 </div>
                                 <div className="mx-3 ">
@@ -112,8 +112,8 @@ const Summary = () => {
                             </div>
                         </div>
                         <div className="col  border_clr  m-2 rounded-4 bg-white">
-                            <div className="d-flex  p-4">
-                                <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
+                            <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
+                                <div className="bg_clr  p-3 rounded-circle text-center ">
                                     <i className="bi bi-pencil-fill w-size" />
                                 </div>
                                 <div className="mx-3 ">
@@ -130,8 +130,8 @@ const Summary = () => {
                             </div>
                         </div>
                         <div className="col  border_clr  m-2 rounded-4 bg-white">
-                            <div className="d-flex  p-4">
-                                <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
+                            <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
+                                <div className="bg_clr  p-3 rounded-circle text-center ">
                                     <i className="bi bi-plus-lg w-size " />
                                 </div>
                                 <div className="mx-3 ">
@@ -147,8 +147,8 @@ const Summary = () => {
                             </div>
                         </div>
                         <div className="col  border_clr  m-2 rounded-4 bg-white">
-                            <div className="d-flex  p-4">
-                                <div className="bg_clr  py-3 px-4 rounded-circle text-center ">
+                            <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
+                                <div className="bg_clr  p-3 rounded-circle text-center ">
                                     <i className="bi bi-calendar-week w-size" />
                                 </div>
                                 <div className="mx-3 ">

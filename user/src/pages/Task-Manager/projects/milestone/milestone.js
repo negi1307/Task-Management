@@ -17,7 +17,7 @@ import { getAllProjects } from '../../../../redux/projects/action';
 // import ToastHandle from '../../../constants/toaster/toaster';
 const Milestone = () => {
     const { id } = useParams();
-    console.log(id,"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
+    console.log(id, 'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
     const store = useSelector((state) => state);
 
     const dispatch = useDispatch();
@@ -25,17 +25,17 @@ const Milestone = () => {
     const [render, setRender] = useState(false);
     const [status, setStatus] = useState(1);
     const GetDataById = store?.getProjectById?.data?.project;
-    
+
     // const GetSinglemilstonesData = store?.getSigleMileStone?.data?.Response;
-    const getMileStoneData=store?.getProject?.data?.response
-    console.log("getMileStoneData",getMileStoneData)
+    const getMileStoneData = store?.getProject?.data?.response;
+    console.log('getMileStoneData', getMileStoneData);
     const loaderhandel = store?.getSigleMileStone;
     const [checkedStatus, setCheckedStatus] = useState();
     const [statusModal, setStatusModal] = useState(false);
     const [checkedData, setCheckedData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const [editData, setEditData] = useState();
-    const deletehandle = store?.deleteMileStone?.data
+    const deletehandle = store?.deleteMileStone?.data;
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -72,14 +72,14 @@ const Milestone = () => {
         if (checkedStatus) {
             let body = {
                 id: checkedData._id,
-                status: true
-            }
+                status: true,
+            };
             dispatch(deleteMileStone(body));
         } else {
             let body = {
                 id: checkedData._id,
-                status: false
-            }
+                status: false,
+            };
             dispatch(deleteMileStone(body));
         }
         setStatusModal(false);
@@ -103,27 +103,26 @@ const Milestone = () => {
         } else if (deletehandle?.status == 500) {
             ToastHandle('error', deletehandle?.message);
         }
-    }, [deletehandle])
+    }, [deletehandle]);
     useEffect(() => {
         dispatch(getProjectsById(id));
-        dispatch(getsingleMileStone({id:id ,status:status}));
+        dispatch(getsingleMileStone({ id: id, status: status }));
     }, [render]);
-useEffect(()=>{
-    let body = {
-        flag:2,
-        projectId:id,
-        milestoneId:'',
-        skip:1
-
-    };
-dispatch(getAllProjects(body))
-},[])
+    useEffect(() => {
+        let body = {
+            flag: 2,
+            projectId: id,
+            milestoneId: '',
+            skip: 1,
+        };
+        dispatch(getAllProjects(body));
+    }, []);
 
     return (
         <>
             {/* {/ <h1>{id}</h1> /} */}
-       
-                {/* <Row>
+
+            {/* <Row>
                     <Col className="text-end" lg={12}>
                         <Button
                             onClick={() => {
@@ -137,11 +136,11 @@ dispatch(getAllProjects(body))
                         </Button>
                     </Col>
                 </Row> */}
-                {loaderhandel.loading ? (
-                    <MainLoader />
-                ) : (
-                    <>
-                        {/* <Row>
+            {loaderhandel.loading ? (
+                <MainLoader />
+            ) : (
+                <>
+                    {/* <Row>
                             <Col lg={12}>
                                 <Row>
                                     <Col className="text-center" lg={12}>
@@ -170,11 +169,11 @@ dispatch(getAllProjects(body))
 
 
                         </Row> */}
-                        <Card className='mt-3'>
-                            <Card.Body>
-                                <Col className="mx-auto" lg={12}>
-                                    <Row>
-                                        {/* <div className="row mx-auto mt-2">
+                    <Card className="mt-3">
+                        <Card.Body>
+                            <Col className="mx-auto" lg={12}>
+                                <Row>
+                                    {/* <div className="row mx-auto mt-2">
                                             <div className="d-flex col-4">
                                                 <div className="row d-flex align-items-center">
                                                     <div
@@ -195,42 +194,49 @@ dispatch(getAllProjects(body))
                                                 <h4 className="header-title heading_data"> Milestones</h4>
                                             </div>
                                         </div> */}
-                                        <Col className="" lg={12}>
-
-                                            <Table striped>
-                                                <thead >
+                                    <Col className="" lg={12}>
+                                        <Table striped>
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th> MileStone Name</th>
+                                                    <th> Description</th>
+                                                    <th> Start Date</th>
+                                                    <th> End Date</th>
+                                                    {/* <th>Status</th> */}
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {getMileStoneData?.map((item, index) => (
                                                     <tr>
-                                                        <th>#</th>
-                                                        <th> MileStone Name</th>
-                                                        <th> Description</th>
-                                                        <th> Start Date</th>
-                                                        <th> End Date</th>
-                                                        {/* <th>Status</th> */}
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {getMileStoneData?.map((item, index) => (
-                                                        <tr>
-                                                            <td>{index + 1}</td>
-                                                            <td>{item?.milestoneId?.title}</td>
-                                                            <td>  <div
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: item?.milestoneId?.description,
-                                                    }}
-                                                /></td>
+                                                        <td>{index + 1}</td>
+                                                        <td>{item?.milestoneId?.title}</td>
+                                                        <td>
+                                                            {' '}
+                                                            <div
+                                                                dangerouslySetInnerHTML={{
+                                                                    __html: item?.milestoneId?.description,
+                                                                }}
+                                                            />
+                                                        </td>
 
-                                                            <td> {moment(item?.milestoneId?.start_date).format('L')}</td>
-                                                            <td>{moment(item?.milestoneId?.completion_date).format('L')}</td>
-                                                            {/* <td> <Form.Check
+                                                        <td> {moment(item?.milestoneId?.start_date).format('L')}</td>
+                                                        <td>
+                                                            {moment(item?.milestoneId?.completion_date).format('L')}
+                                                        </td>
+                                                        {/* <td> <Form.Check
                                                                 type="switch"
                                                                 checked={item?.status}
                                                                 onChange={(e) => handleStatusChange(e, item)}
                                                             /></td> */}
-                                                            <td> <Row>
+                                                        <td>
+                                                            {' '}
+                                                            <Row>
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0 ">
-                                                                        <Link to={`/dashboard/singleMilestonesprint/projectId=/${item?.projectId}&milestoneId=/${item?.milestoneId?._id}`}>
+                                                                        <Link
+                                                                            to={`/dashboard/singleMilestonesprint/projectId=/${item?.projectId}&milestoneId=/${item?.milestoneId?._id}`}>
                                                                             <i className="mdi mdi-eye m-0 p-0"></i>
                                                                         </Link>
                                                                     </p>
@@ -242,44 +248,41 @@ dispatch(getAllProjects(body))
                                                                             className="uil-edit-alt m-0 p-0"
                                                                         ></i>
                                                                     </p> */}
-
                                                                 </Col>
-                                                            </Row></td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </Table>
+                                                            </Row>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </Table>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </Card.Body>
+                    </Card>
+                </>
+            )}
 
-                                        </Col>
-                                    </Row>
-                                </Col>
-                            </Card.Body>
-                        </Card>
-                    </>
-
-                )}
-
-                <Create modal={openModel} closeModal={closeModal} />
-                <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
-                {/* delete modal */}
-                <Modal show={statusModal} onHide={() => setStatusModal(false)}>
-                    <Modal.Body>
-                        Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this MileStone?
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button
-                            variant="secondary"
-                            onClick={() => {
-                                setStatusModal(false);
-                            }}>
-                            No
-                        </Button>
-                        <Button className=" web_button " variant="primary" onClick={() => handleYes()}>
-                            Yes
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            
+            <Create modal={openModel} closeModal={closeModal} />
+            <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
+            {/* delete modal */}
+            <Modal show={statusModal} onHide={() => setStatusModal(false)}>
+                <Modal.Body>
+                    Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this MileStone?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            setStatusModal(false);
+                        }}>
+                        No
+                    </Button>
+                    <Button className=" web_button " variant="primary" onClick={() => handleYes()}>
+                        Yes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 };
