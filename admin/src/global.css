@@ -483,7 +483,7 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     display: flex;
     align-items: center;
     justify-content: end;
-    z-index: 99999;
+    /* z-index: 99999; */
 }
 /* .page-title {
     background: #37216c !important;
