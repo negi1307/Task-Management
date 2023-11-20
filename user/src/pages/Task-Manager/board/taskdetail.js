@@ -14,7 +14,12 @@ const Taskdetail = (props) => {
     const store = useSelector((state) => state);
     const [inputForUpdate, setInputForUpdate] = useState('');
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
+    const [updatedCommentValue, setUpdatedCommentValue] = useState('');
+    const [updatedCommentInitialValue, setUpdatedCommentInitialValue] = useState('');
+    const [unchangeComment, setUnchangeComment] = useState('');
+    const [error, setError] = useState('');
     const allComments = store?.getAllComment?.data?.response;
+
     const {
         register,
         handleSubmit,
@@ -79,26 +84,32 @@ const Taskdetail = (props) => {
             dispatch(getComment({ taskId: props.item?.taskInfo?._id }));
         }, 500);
     };
-    const submitUpdateComment = (data) => {
-        console.log(data);
-        let body = {
-            commentId: allCommetUpdateId,
-            comment: data?.updated_comment,
-        };
-        dispatch(updateComment(body));
-        setInputForUpdate(false);
-        // console.log(data, allCommetUpdateId);
+    console.log(updatedCommentValue, 'data===');
+    const updateHandle = (condition) => {
+        console.log(updatedCommentInitialValue);
+        if (updatedCommentInitialValue !== '') {
+            if (condition === 'updateComment') {
+                let body = {
+                    commentId: allCommetUpdateId,
+                    comment: updatedCommentInitialValue,
+                };
+                dispatch(updateComment(body));
+                setInputForUpdate(false);
+                // dispatch(getComment());
+            } else {
+                setInputForUpdate(false);
+            }
+        } else {
+            setError('This field is required');
+        }
     };
     const handelUpdateAll = (data, indx) => {
-        console.log(indx);
+        console.log('i am working here handelUpdateAll');
+        setError('');
+        setUnchangeComment(data?.comment);
         setAllCommetUpdateId(data?._id);
-        console.log(data?._id, 'in my id');
-        reset({
-            updated_comment: data?.comment,
-        });
         setInputForUpdate(indx);
-        // console.log(data, allCommetUpdateId);
-        // console.log(body);
+        setUpdatedCommentInitialValue(data?.comment);
     };
     const handeldelete = () => {};
     return (
@@ -109,13 +120,12 @@ const Taskdetail = (props) => {
                 onHide={props.closeTaskDetailMOdel}
                 backdrop="static"
                 className="modal_details">
-                <Modal.Header closeButton>
+                <Modal.Header onClick={() => updateHandle('closeModal')} closeButton>
                     <Modal.Title>Task Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="cardinfo">
                     <div className="comments">
                         <h4>Activity</h4>
-
                         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button
@@ -197,21 +207,42 @@ const Taskdetail = (props) => {
                                                                 {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
                                                             </div>
                                                             {inputForUpdate === ind ? (
-                                                                <form onSubmit={handleSubmit(submitUpdateComment)}>
-                                                                    <Row className="mt-2 d-flex">
-                                                                        <Col lg={9}>
+                                                                <form>
+                                                                    <Row className="mt-2">
+                                                                        <Col lg={10}>
                                                                             <Form.Group
                                                                                 className="mb-1"
                                                                                 controlId="exampleForm.ControlInput1">
                                                                                 <Form.Control
                                                                                     type="text"
-                                                                                    placeholder="Update comment"
-                                                                                    {...register(`updated_comment`)}
+                                                                                    placeholder="Update Comment"
+                                                                                    defaultValue={
+                                                                                        updatedCommentInitialValue
+                                                                                    }
+                                                                                    onChange={(e) =>
+                                                                                        setUpdatedCommentInitialValue(
+                                                                                            e.target.value
+                                                                                        )
+                                                                                    }
                                                                                 />
+                                                                                {error ? (
+                                                                                    <div>
+                                                                                        {error}
+                                                                                        <label className="text-danger">
+                                                                                            {' '}
+                                                                                            *
+                                                                                        </label>
+                                                                                    </div>
+                                                                                ) : null}
                                                                             </Form.Group>
                                                                         </Col>
-                                                                        <Col className="m-0 p-0" lg={1}>
-                                                                            <Button type="submit">Update</Button>
+                                                                        <Col className="m-0 p-0" lg={2}>
+                                                                            <Button
+                                                                                onClick={() =>
+                                                                                    updateHandle('updateComment')
+                                                                                }>
+                                                                                Update
+                                                                            </Button>
                                                                         </Col>
                                                                     </Row>
                                                                 </form>
@@ -321,16 +352,8 @@ const Taskdetail = (props) => {
                                                                     </div>
 
                                                                     <div className="d-flex m-0 p-0">
-                                                                        <p
-                                                                            className=" p-0"
-                                                                            onClick={() => handelUpdateAll(comm, ind)}>
-                                                                            Edit
-                                                                        </p>
-                                                                        <p
-                                                                            className=" cp  p-0 ps-2"
-                                                                            onClick={() => handeldelete(comm)}>
-                                                                            Delete
-                                                                        </p>
+                                                                        <p className=" p-0">Edit</p>
+                                                                        <p className=" cp  p-0 ps-2">Delete</p>
                                                                     </div>
                                                                 </Col>
                                                             </Col>

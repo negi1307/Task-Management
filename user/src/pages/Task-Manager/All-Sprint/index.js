@@ -13,10 +13,10 @@ const AllSprint = () => {
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
-    const [deleteId, setdeleteId] = useState()
+    const [deleteId, setdeleteId] = useState();
     const [render, setRender] = useState(false);
     const getSprintsDetail = store?.getAllSprints;
-    const deletehandle = store?.deleteSprint
+    const deletehandle = store?.deleteSprint;
     const [deletemodal, setDeleteModal] = useState(false);
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
@@ -31,14 +31,14 @@ const AllSprint = () => {
         setOpenEditModal(false);
     };
     const handeldelete = (ele) => {
-        setdeleteId(ele?._id)
+        setdeleteId(ele?._id);
         setDeleteModal(true);
     };
 
     const handeldYes = () => {
         dispatch(deleteSprint(deleteId));
         setDeleteModal(false);
-    }
+    };
 
     useEffect(() => {
         dispatch(getAllSprint());
@@ -57,7 +57,7 @@ const AllSprint = () => {
         } else if (deletehandle?.status == 500) {
             ToastHandle('error', deletehandle?.data?.message);
         }
-    }, [deletehandle])
+    }, [deletehandle]);
 
     return (
         <>
@@ -69,7 +69,7 @@ const AllSprint = () => {
                     <Card.Body>
                         <div className="row mx-auto">
                             <div className="col-6 d-flex align-items-end justify-content-end">
-                                <h4 className="header-title heading_data">  All Sprints</h4>
+                                <h4 className="header-title heading_data"> All Sprints</h4>
                             </div>
                         </div>
                         {getSprintsDetail?.loading ? (
@@ -83,7 +83,7 @@ const AllSprint = () => {
                                         <th> Sprint Name</th>
                                         <th>Description</th>
                                         <th> Start Date</th>
-                                        <th>  End Date</th>
+                                        <th> End Date</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -94,9 +94,10 @@ const AllSprint = () => {
                                         {data?.map((ele, ind) => {
                                             return (
                                                 <tr className="align-middle">
-
                                                     <th scope="row">{ind + 1}</th>
-                                                    <td><span className='namelink'>{ele?.milestone_id?.title}</span></td>
+                                                    <td>
+                                                        <span className="namelink">{ele?.milestone_id?.title}</span>
+                                                    </td>
                                                     <td className="cp">
                                                         <span className="namelink"> {ele?.sprintName} </span>
                                                     </td>
@@ -122,9 +123,7 @@ const AllSprint = () => {
                                                         <Row>
                                                             <Col>
                                                                 <p className="action-icon m-0 p-0 ">
-                                                                    <Link
-                                                                        to={`/sprint/${ele._id}`}
-                                                                    >
+                                                                    <Link to={`/sprint/${ele._id}`}>
                                                                         <i className="mdi mdi-eye m-0 p-0"></i>
                                                                     </Link>
                                                                 </p>
@@ -133,16 +132,14 @@ const AllSprint = () => {
                                                                         className="uil-edit-alt m-0 p-0"
                                                                         onClick={() => {
                                                                             handelUpdate(ele);
-                                                                        }}
-                                                                    ></i>
+                                                                        }}></i>
                                                                 </p>
                                                                 <p className="action-icon m-0 p-0  ">
                                                                     <i
                                                                         className="mdi mdi-delete m-0 p-0"
                                                                         onClick={() => {
                                                                             handeldelete(ele);
-                                                                        }}
-                                                                    ></i>
+                                                                        }}></i>
                                                                 </p>
                                                             </Col>
                                                         </Row>
@@ -158,7 +155,9 @@ const AllSprint = () => {
                 </Card>
                 {/* delete modal */}
                 <Modal show={deletemodal} onHide={() => setDeleteModal(false)}>
-                    {deletehandle?.loading ? (<MainLoader />) : (
+                    {deletehandle?.loading ? (
+                        <MainLoader />
+                    ) : (
                         <>
                             <Row>
                                 <Col lg={12} className="text-end mt-1 ">
@@ -186,7 +185,6 @@ const AllSprint = () => {
                             </Modal.Footer>
                         </>
                     )}
-
                 </Modal>
                 <Update modal={openEditModal} CloseModal={closeupdatemodal} editData={editData} />
             </div>

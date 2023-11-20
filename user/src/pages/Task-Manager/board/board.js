@@ -56,6 +56,7 @@ const Boards = (props) => {
     const { projectId, milestoneId, spriteId } = useParams();
     console.log(spriteId, projectId, milestoneId, 'sprintttt');
     const dispatch = useDispatch();
+    const [render, setRender] = useState(false);
     const store = useSelector((state) => state);
     const { register, setValue } = useForm();
     const taskId = store?.getTaskId?.data;
@@ -250,9 +251,9 @@ const Boards = (props) => {
         dispatch(getAllTask(body));
     };
     const closeModal = (val) => {
-        // if (val == 'render') {
-        //     setRender(!render);
-        // }
+        if (val == 'render') {
+            setRender(!render);
+        }
     };
     const [show, setShow] = useState(false);
 
