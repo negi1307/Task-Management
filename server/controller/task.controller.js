@@ -336,7 +336,6 @@ const getTasks = async (req, res) => {
 const updateTask = async (req, res) => {
   try {
     const taskId = req.body.taskId;
-    console.log(req.file);
     const attachmentPath = req.file
       ? `http://localhost:8000/upload/${req.file.originalname}`
       : req.body.attachment;
@@ -563,7 +562,7 @@ const getTasksAccToStatus = async (req, res) => {
 // Priority breakdown of Tasks for a User as well as For admin
 const getPriorityTasks = async (req, res) => {
   try {
-    if (req.user.role === 1) {
+    if (req.user.role === 'Admin') {
       const firstPriority = await taskModel.countDocuments({ priority: 1 });
       const secondPriority = await taskModel.countDocuments({ priority: 2 });
       const thirdPriority = await taskModel.countDocuments({ priority: 3 });
@@ -596,7 +595,7 @@ const getTasksStatusCount = async (req, res) => {
   try {
     const now = new Date();
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // Calculate the date 7 days ago
-    if (req.user.role === 1) {
+    if (req.user.role === 'Admin') {
       const todoCount = await taskModel.countDocuments({ status: 1, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
       const inProgressCount = await taskModel.countDocuments({ status: 2, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
       const holdCount = await taskModel.countDocuments({ status: 3, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
@@ -631,7 +630,7 @@ const getTasksStatusCount = async (req, res) => {
 // Get count of all tasks
 const getTasksCount = async (req, res) => {
   try {
-    if (req.user.role === 1) {
+    if (req.user.role === 'Admin') {
       const tasksCount = await taskModel.countDocuments();
       return res.status(200).json({ status: "200", message: "Tasks count for admin fetched successfully", response: { tasksCount } });
     } else {
@@ -650,7 +649,7 @@ const getTasksWeekCount = async (req, res) => {
   try {
     const now = new Date();
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // Calculate the date 7 days ago
-    if (req.user.role === 1) {
+    if (req.user.role === 'Admin') {
       const doneCount = await taskModel.countDocuments({ status: 4, createdAt: { $gte: sevenDaysAgo } });
       const updatedCount = await taskModel.aggregate([
         {
