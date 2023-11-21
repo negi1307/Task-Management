@@ -418,7 +418,7 @@ const getUserTasks = async (req, res) => {
       queries[15] = { $limit: pageSize };
     }
     const result = await assignUserModel.aggregate(queries);
-    const totalCount = counts[0]?.totalCount
+    const totalCount = counts[0].totalCount
     const totalPages = Math.ceil(totalCount / pageSize);
     return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result[0], totalCount, totalPages });
   } catch (error) {
@@ -429,25 +429,28 @@ const getUserTasks = async (req, res) => {
 const projectUserList = async (req, res) => {
   try {
     const { projectId, milestoneId, sprintId } = req.query;
-    const taskfind = await taskModel.find({ projectId, milestoneId, sprintId });
-    const taskIds = taskfind.map((task) => task._id);
+    const tasks = await taskModel.find({ projectId, milestoneId, sprintId });
+    const taskIds = tasks.map((task) => task._id);
     const assignees = await assignUserModel.find({ taskId: { $in: taskIds } }).populate([
-      { path: "assigneeId", select: "firstName lastName" },
-      { path: "reporterId", select: "role" },
-      { path: "taskId" },
-    ]);
+        { path: "assigneeId", select: "firstName lastName" },
+        { path: "reporterId", select: "role" },
+        { path: "taskId" },
+      ]);
     // Create a map to store unique assigneeIds
     const uniqueAssigneesMap = new Map();
     // Filter out duplicate assigneeIds
     const uniqueAssignees = [];
     assignees.forEach((assignee) => {
-      const assigneeId = assignee.assigneeId._id.toString();
-      if (!uniqueAssigneesMap.has(assigneeId)) { uniqueAssigneesMap.set(assigneeId, true); uniqueAssignees.push(assignee) }
+      if (assignee.assigneeId && assignee.assigneeId._id) {
+        const assigneeId = assignee.assigneeId._id.toString();
+        if (!uniqueAssigneesMap.has(assigneeId)) {uniqueAssigneesMap.set(assigneeId, true);uniqueAssignees.push(assignee)}
+      }
     });
-    return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: uniqueAssignees });
+    return res.status(200).json({status: "200", message: "Data Fetched Successfully",response: uniqueAssignees});
   } catch (error) {
-    return res.status(400).json({ status: "400", message: "Fill all the required fields", error: error.message });
+    return res.status(400).json({status: "400",message: "Fill all the required fields", error: error.message});
   }
 };
+
 
 module.exports = { addUserAssignments, getUserAssignments, getUserTasks, projectUserList };

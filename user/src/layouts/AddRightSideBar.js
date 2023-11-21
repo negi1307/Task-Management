@@ -219,7 +219,7 @@ export default function RightBar(props) {
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-6">
+                                {/* <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Assignee
@@ -233,14 +233,11 @@ export default function RightBar(props) {
                                             {...register('Assignee')}>
                                             <option value="">--Select--</option>
                                             {getAllUserData?.map((items, index) => <option key={index} value={items._id}>{items.firstName}</option>)}
-                                            {/* {store?.getAllAssignee?.data?.response?.map((item,index)=> <option value={item?.assigneeId?._id}>{item?.assigneeId?.userName} </option>)} */}
-
-
+                                           
                                         </select>
 
-                                        {/* <input placeholder="Please Enter Assignee" type="text" id="exampleForm.ControlTextarea1" class="form-control" {...register("Assignee")} /> */}
-                                    </div>
-                                </div>
+                                          </div>
+                                </div> */}
                                 <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlInput1">
@@ -318,9 +315,9 @@ export default function RightBar(props) {
                                             Status<span class="text-danger">*</span>:
                                         </label>
                                         <input
-                                            disabled="Live"
+                                            disabled="Todo"
                                             name="status"
-                                            placeholder="Live"
+                                            placeholder="Todo"
                                             type="text"
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"

@@ -21,6 +21,7 @@ import Taskdetail from './taskdetail';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import ToastHandle from '../../../constants/toaster/toaster';
+import {listProjectAssignee} from '../../../redux/task/action'
 
 const Container = styled.div`
     display: flex;
@@ -92,6 +93,7 @@ const Boards = (props) => {
     }, []);
 
     useEffect(() => {
+      dispatch(listProjectAssignee())
         dispatch(getTaskStatusCount());
     }, []);
 

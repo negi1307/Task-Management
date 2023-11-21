@@ -6,21 +6,9 @@ const path = require('path');
 // Add a new Project
 const addProject = async (req, res) => {
   try {
-    const {
-      projectName,
-      clientName,
-      technology,
-      startDate,
-      endDate,
-      projectDesc,
-      projectType,
-      projectStatus,
-    } = req.body;
+    const { projectName, clientName, technology, startDate, endDate, projectDesc, projectType, projectStatus } = req.body;
 
-    const projectNameRegex = new RegExp(`^${projectName}$`, "i");
-    const existingProjectName = await projectModel.findOne({
-      projectName: projectNameRegex,
-    });
+    const existingProjectName = await projectModel.findOne({ projectName: new RegExp(`^${projectName.replace(/[\s]+/g, '\\s*')}\\s*$`, 'i') });
     if (existingProjectName) {
       return res.status(200).json({ status: "400", message: "Project Name Already exist" });
     } else {
