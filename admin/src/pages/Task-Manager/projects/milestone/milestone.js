@@ -116,7 +116,7 @@ const Milestone = () => {
     return (
         <>
             {/* {/ <h1>{id}</h1> /} */}
-            <div className="my-3">
+            <div className="">
                 <Row>
                     {/* <Col className="text-end" lg={12}>
                         <Button
