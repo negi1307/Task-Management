@@ -115,7 +115,7 @@ const getProjects = async (req, res) => {
           },
         },
       }, {
-        $sort: { startDate: 1 }
+        $sort: { daysLeft: 1 }
       }
       ]);
 
@@ -152,7 +152,7 @@ const getProjects = async (req, res) => {
           },
         },
         {
-          $sort: { startDate: 1 }
+          $sort: { daysLeft: 1 }
         }
       ]);
       return res.status(200).json({ status: "200", message: "Projects fetched successfully 1", response: projects });
@@ -191,7 +191,7 @@ const getProjects = async (req, res) => {
               },
             },
           }, {
-            $sort: { startDate: 1 }
+            $sort: { daysLeft: 1 }
           }
           ]);
           return res.status(200).json({ status: "200", message: "Project Details fetched successfully", response: project });
@@ -227,7 +227,7 @@ const getProjects = async (req, res) => {
                 },
               },
             }, {
-              $sort: { startDate: 1 }
+              $sort: { daysLeft: 1 }
             }
           ])
           // const projects = await projectModel.find({ activeStatus: req.query.activeStatus, projectStatus }).populate('technology', 'techName')
@@ -267,11 +267,10 @@ const getProjects = async (req, res) => {
               },
             },
           }, {
-            $sort: { startDate: 1 }
+            $sort: { daysLeft: 1 }
           }
         ])
-          .sort({ createdAt: -1 })
-          .limit(pageSize)
+           .limit(pageSize)
           .skip((skip - 1) * pageSize);
         const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus, projectStatus });
         // const projects = await projectModel
