@@ -29,7 +29,7 @@ const createtask = async (req, res) => {
       });
       if (task) {
         const roles = ['CTO', 'PM', 'Admin'];
-        const role = await rolesModel.findOne({ role: roles.includes(req.user.role)? req.user.role : "PM"  }).select("_id role");
+        const role = await rolesModel.findOne({ role: roles.includes(req.user.role) ? req.user.role : "PM" }).select("_id role");
         const assignedUser = await assignUserModel.create({
           assigneeId: roles.includes(req.user.role) ? assigneeId : req.user._id,
           reporterId: role._id,
