@@ -193,6 +193,7 @@ const getMilestones = async (req, res) => {
         //   .sort({ createdAt: -1 });
       }
     } else {
+      let skip=parseInt(req.query.skip);
       const totalCount = await milestoneModel.countDocuments({ projectId: req.query.projectId, activeStatus: JSON.parse(status) });
       milestones = await milestoneModel
         .aggregate([
@@ -232,11 +233,13 @@ const getMilestones = async (req, res) => {
           },
           {
             $sort: { daysLeft: 1 }
-          }
+          },
+          { $skip: (skip - 1) *  pageSize}, { $limit: pageSize }
+
         ])
         // .sort({ createdAt: -1 })
-        .limit(pageSize)
-        .skip((parseInt(req.query.skip) - 1) * pageSize);
+        // .limit(pageSize)
+        // .skip((parseInt(req.query.skip) - 1) * pageSize);
       //   milestones = await milestoneModel
       //     .find({
       //       projectId: req.query.projectId,

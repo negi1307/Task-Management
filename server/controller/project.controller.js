@@ -262,16 +262,18 @@ const getProjects = async (req, res) => {
               daysLeft: {
                 $divide: [
                   { $subtract: ["$endDate", "$startDate"] },
-                  1000 * 60 * 60 * 24, // Convert milliseconds to days
+                  1000 * 60 * 60 * 24,  
                 ],
               },
             },
-          }, {
+          }, 
+          {
             $sort: { daysLeft: 1 }
-          }
-        ])
-           .limit(pageSize)
-          .skip((skip - 1) * pageSize);
+          },
+          { $skip: (skip - 1) *  pageSize}, { $limit: pageSize }
+        ]);
+           
+
         const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus, projectStatus });
         // const projects = await projectModel
         //   .find({ activeStatus: req.query.activeStatus, projectStatus })

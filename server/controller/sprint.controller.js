@@ -148,7 +148,7 @@ const getAMilestoneAllSprints = async (req, res) => {
             }
         }
         else {
-
+            let skip=parseInt(req.query.skip);
             const totalCount = await sprintModel.countDocuments({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: JSON.parse(status) }] })
             const result = await sprintModel.aggregate([{ $match: { activeStatus: JSON.parse(status), milestoneId: ObjectId(req.query.milestoneId) } }, {
                 $lookup:
@@ -190,7 +190,9 @@ const getAMilestoneAllSprints = async (req, res) => {
             },
             {
                 $sort: { daysLeft: 1 }
-            }
+            },
+            { $skip: (skip - 1) *  pageSize}, { $limit: pageSize }
+
         ])
             // .sort({ createdAt: -1 })
                 // const result = await sprintModel.find({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: req.query.activeStatus }] }).populate([
@@ -198,8 +200,8 @@ const getAMilestoneAllSprints = async (req, res) => {
                 //     { path: 'milestoneId', select: 'title' },
                 // ])
                 // .sort({ createdAt: -1 })
-                .limit(pageSize)
-                .skip((parseInt(req.query.skip) - 1) * pageSize);
+                // .limit(pageSize)
+                // .skip((parseInt(req.query.skip) - 1) * pageSize);
             const totalPages = Math.ceil(totalCount / pageSize);
 
             return res.status(200).json({ status: '200', message: "ALL sprints fecteched successfully", Response: result, totalCount, totalPages })
