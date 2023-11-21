@@ -313,6 +313,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                         </Link>
                                     </li>
                                     {/* <li>
+                                    {/* <li>
                                         <div class="project_names">
                                             <select
                                                 name="ddlProject"
@@ -343,8 +344,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                                 ))}
                                             </select>
                                         </div>
-                                    </li>
-
+                                    </li> */}
+                                    {/* 
                                     <li>
                                         <div class="project_names">
                                             <select
@@ -401,21 +402,6 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                         </div>
 
                         <ul className="list-unstyled topbar-menu float-end mb-0 topbarr">
-                            {/*                    
-                        <li className="notification-list topbar-dropdown d-xl-none">
-                            <SearchDropdown />
-                        </li>
-                        
-                        <li className="dropdown notification-list topbar-dropdown d-none d-lg-block">
-                            <LanguageDropdown />
-                        </li> 
-                         <li className="dropdown notification-list">
-                            <NotificationDropdown notifications={Notifications} />
-                        </li> 
-                        <li className="dropdown notification-list d-none d-sm-inline-block">
-                            <AppsDropdown />
-                        </li>  */}
-
                             <li className="notification-list">
                                 <button
                                     className="nav-link dropdown-toggle end-bar-toggle arrow-none btn btn-link shadow-none"
@@ -463,7 +449,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                     </div>
                 </div>
             </div>
-            <div className="project_detail">
+            {/* <div className="project_detail">
                 <div className="project_name">
                     <h3>{projectNameHeading}</h3>
                 </div>
@@ -483,7 +469,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div> */}
             <Filter modal={modal} closeModal={closemodal} />
         </>
     );

@@ -25,6 +25,7 @@ const AllUsers = () => {
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const csvdownloaddata = store?.getCsvDataReducer;
+    console.log(csvdownloaddata, csvdownloaddata?.data?.message, 'nnnnnllnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
     // const handelUpdate = (data) => {
     //     setEditData(data);
     //     setOpenEditModal(true);

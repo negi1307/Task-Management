@@ -3,6 +3,7 @@ import {getAllTask} from '../../../redux/task/action'
 import { useSelector,useDispatch } from 'react-redux'
 import { ListGroup, Container, Row, Col, Table, Button, Form, Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import moment from 'moment';
 
 
 const ListTask=()=>{
@@ -43,25 +44,35 @@ const ListTask=()=>{
                                                     <th>Priority</th>
                                                     <th> Start Date</th>
                                                     <th> End Date</th>
-                                                    <th>Status</th>
+                                                  
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            {/* {listTaskData?.map((item,index)=>
+                                            {
+                                                
+                                                listTaskData?.taskInfo?.map((item,index)=>
                                                     <tr>
-                                                    <td>{item?.taskInfo.summary}</td>
+                                                    <td>{index=index+1}</td>
+                                                    <td>{item?.description}</td>
+                                                    <td>{item?.summary}</td>
+                                                    <td>{item?.assigneeInfo?.firstName} {item?.assigneeInfo?.lastName}</td>
+                                                    <td>{item?.reporterInfo?.role}</td>
+                                                    <td>
+                                                    {item?.priority == 1
+                                                        ? 'High'
+                                                        : '' || item?.priority == 2
+                                                        ? 'Medium'
+                                                        : '' || item?.priority == 3
+                                                        ? 'Low'
+                                                        : ''}
+                                                    </td>
+                                                    <td> {moment(item?.startDate).format('L')}</td>
+                                                <td>{moment(item?.dueDate).format('L')}</td>
                                                 </tr>
                                                 
-                                            )} */}
+                                            )}
                                             </tbody>
                                             
-                                            {/* <tbody>
-                                                {listTaskData?.map((item,index)=>
-                                                <tr>
-                                                    <td>{item?.taskInfo.summary}</td>
-                                                </tr>
-                                                )}
-                                            </tbody> */}
                                         </Table>
                                     </Col>
                                 </Row>

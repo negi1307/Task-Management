@@ -9,6 +9,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useState } from 'react';
 
+
 export default function RightBar(props) {
     
     const { showModal, setShowModal, content,callAlltaskData } = props;
@@ -22,10 +23,11 @@ export default function RightBar(props) {
 
 
     const id = store?.Auth?.user?.userId
-    
-const projectId=store?.getProjectId?.data
-const milstoneId=store?.getMilestoneId?.data
-const SprintId=store?.getSprintId?.data
+//     const projectId=store?.getProjectId?.data
+// const milstoneId=store?.getMilestoneId?.data
+// const SprintId=store?.getSprintId?.data
+    const {projectId,milestoneId,spriteId}=useParams()
+
 
     const[fileData,setFile]=useState(null)
    
@@ -46,8 +48,8 @@ const SprintId=store?.getSprintId?.data
     const onSubmit = (e) => {
         const formData=new FormData()
         formData.append('projectId',projectId)
-        formData.append('milestoneId',milstoneId)
-        formData.append('sprintId',SprintId)
+        formData.append('milestoneId',milestoneId)
+        formData.append('sprintId',spriteId)
         formData.append('summary',e.Summary)
         formData.append('description',description)
         formData.append('assigneeId',e.Assignee)
@@ -57,7 +59,7 @@ const SprintId=store?.getSprintId?.data
         formData.append('dueDate',e.last_date)
         formData.append('attachment',e.attachment[0]);
         
-        if ( projectId !== '' &&  milstoneId !== '' && SprintId !== '') {
+        if ( projectId !== '' &&  milestoneId !== '' && spriteId !== '') {
             
             dispatch(createTask(formData));
             setTimeout(() => {

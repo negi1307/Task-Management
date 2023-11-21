@@ -14,5 +14,6 @@ projectRoute.put('/updateStatus', verifyAdmin, projectPath.updateStatus);
 projectRoute.post("/upload",verifyAdmin,taskAttachmentUpload.single('project'),projectPath.uploadProject_File)
 projectRoute.get("/getProjectName",verifyAdmin,projectPath.getallProject);
 projectRoute.get("/download/:filename",projectPath.download);
+projectRoute.get("/files",verifyAdmin,projectPath.allProjectFiles);
 
 module.exports = projectRoute;

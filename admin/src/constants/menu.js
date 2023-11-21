@@ -50,10 +50,16 @@
         icon: 'uil-users-alt',
 
     },
+    // {
+    //     key: 'client',
+    //     label: 'Client',
+    //     url: 'dashboard/client',
+    //     icon: 'uil-users-alt',
+    // },
     {
-        key: 'client',
-        label: 'Client',
-        url: 'dashboard/client',
+        key: 'clientRepository',
+        label: 'Client Repository',
+        url: 'dashboard/clientRepository',
         icon: 'uil-users-alt',
     }
    
