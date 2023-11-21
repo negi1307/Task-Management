@@ -90,8 +90,11 @@ const getMilestones = async (req, res) => {
               },
             }
           },
-
-        ]).sort({ createdAt: -1 });
+          {
+            $sort: { daysLeft: 1 }
+        }
+        ])
+        // .sort({ createdAt: -1 });
       //   milestones = await milestoneModel
       //     .findById(req.query.milestoneId)
       //     .populate("projectId", "projectName");
@@ -137,8 +140,11 @@ const getMilestones = async (req, res) => {
               },
             }
           },
-
-        ]).sort({ createdAt: -1 });
+          {
+            $sort: { daysLeft: 1 }
+        }
+        ])
+        // .sort({ createdAt: -1 });
         // milestones = await milestoneModel.find({ activeStatus: req.query.activeStatus, projectId: req.query.projectId })
         //     .populate('projectId', 'projectName')
         //     .sort({ createdAt: -1 });
@@ -181,8 +187,11 @@ const getMilestones = async (req, res) => {
               },
             }
           },
-
-        ]).sort({ createdAt: -1 });
+          {
+            $sort: { daysLeft: 1 }
+        }
+        ])
+        // .sort({ createdAt: -1 });
 
         // milestones = await milestoneModel
         //   .find({ activeStatus: req.query.activeStatus })
@@ -190,6 +199,7 @@ const getMilestones = async (req, res) => {
         //   .sort({ createdAt: -1 });
       }
     } else {
+      let skip=parseInt(req.query.skip);
       const totalCount = await milestoneModel.countDocuments({ projectId: req.query.projectId, activeStatus: JSON.parse(status) });
       milestones = await milestoneModel
         .aggregate([
@@ -227,11 +237,15 @@ const getMilestones = async (req, res) => {
               },
             }
           },
+          {
+            $sort: { daysLeft: 1 }
+          },
+          { $skip: (skip - 1) *  pageSize}, { $limit: pageSize }
 
         ])
-        .sort({ createdAt: -1 })
-        .limit(pageSize)
-        .skip((parseInt(req.query.skip) - 1) * pageSize);
+        // .sort({ createdAt: -1 })
+        // .limit(pageSize)
+        // .skip((parseInt(req.query.skip) - 1) * pageSize);
       //   milestones = await milestoneModel
       //     .find({
       //       projectId: req.query.projectId,
@@ -252,7 +266,6 @@ const getMilestones = async (req, res) => {
     //  const completionDate = milestones.completionDate;
     //  const timeDifference = completionDate - currentDate;
     //  const leftDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-
     //  milestones = { ...milestones.toObject(), leftDays };
     return res.status(200).json({ status: "200", message: "Milestones fetched successfully", response: milestones });
   } catch (error) {
