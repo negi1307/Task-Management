@@ -7,12 +7,15 @@ const { accessToken } = require("../middleware/jwt.auth");
 const registerUser = async (req, res) => {
   try {
     const { firstName, lastName, email, password, role } = req.body;
-
-    const existingUser = await userModel.findOne({ email });
-    if (existingUser) {
-      return res.status(200).json({ status: "400", message: "Email already exists" });
+    if ((role === 'CTO' || role === 'PM') && (await userModel.findOne({ role }))) {
+      return res.status(200).json({ status: "400", message: `${role} already exists` });
     }
     else {
+      const existingUser = await userModel.findOne({ email });
+      if (existingUser) { 
+        return res.status(200).json({ status: "400", message: "Email already exists" });
+      }
+      else{
       const hashedPassword = await bcrypt.hash(password, 9);
       const result = await userModel.create({
         firstName,
@@ -25,10 +28,12 @@ const registerUser = async (req, res) => {
       if (result) {
         await nodemailer.emailSender(result);
         return res.status(200).json({ status: "200", message: "User created Successfully", response: result });
-      } else {
-        return res.status(400).json({ status: "400", message: 'User not created' });
+      }
+       else {
+        return res.status(200).json({ status: "400", message: 'User not created' });
       }
     }
+  }
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
