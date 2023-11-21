@@ -308,7 +308,7 @@ const Boards = () => {
                        
                     </ul>
                 </div> */}
-            <div className="add_task row mx-auto d-flex pb-2 pt-1">
+            <div className="add_task row d-flex pb-2 pt-1">
                 <div className="col-lg-8 d-flex  align -items-center">
                     <div>
                         {' '}
@@ -367,6 +367,7 @@ const Boards = () => {
                                 <div className="d-flex align-items-center cp">
                                     <span
                                         style={{
+                                            zIndex: '0000000',
                                             backgroundColor: '#605e5a',
                                             borderRadius: '100%',
                                             // padding: '8px',
@@ -380,7 +381,7 @@ const Boards = () => {
                                             color: 'white',
                                             fontWeight: '800',
                                             marginRight: '-8px',
-                                            zIndex: '999999',
+                                            // zIndex: '999999',
                                         }}>
                                         {ele?.assigneeId?.firstName.charAt(0)}
                                         {ele?.assigneeId?.lastName.charAt(0)}

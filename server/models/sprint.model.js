@@ -31,6 +31,9 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             type: Boolean,
             default: true
         },
+        daysLeft : {
+            type : Number
+        }
     },
         {
             timestamps: true,

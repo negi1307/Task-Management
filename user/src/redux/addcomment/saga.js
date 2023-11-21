@@ -1,14 +1,13 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import Addcomment from '../addcomment/constants';
-import { addTaskCommentApi,deleteTask,updateTask,getHistoryApi,getTaskCommentApi } from '../addcomment/api';
-
+import { addTaskCommentApi, deleteTask, updateTask, getHistoryApi, getTaskCommentApi } from '../addcomment/api';
 
 function* addTaskCommentFunction({ payload }) {
     try {
         yield put({
             type: Addcomment.ADD_COMMENT_LOADING,
-            payload: {}
-        })
+            payload: {},
+        });
         const response = yield call(addTaskCommentApi, { payload });
         if (response.data.status) {
             yield put({
@@ -19,28 +18,25 @@ function* addTaskCommentFunction({ payload }) {
             //     type: Addcomment.GET_ALL_MILESTONES_RESET,
             //     payload: {},
             // });
-        }
-        else {
+        } else {
             yield put({
                 type: Addcomment.ADD_COMMENT_ERROR,
-                payload: { ...response.data }
+                payload: { ...response.data },
             });
         }
-
     } catch (error) {
         yield put({
             type: Addcomment.ADD_COMMENT_ERROR,
-            payload: { message: error?.message }
+            payload: { message: error?.message },
         });
-
     }
 }
 function* getCommentsFunction({ payload }) {
     try {
         yield put({
             type: Addcomment.GET_COMMENT_LOADING,
-            payload: {}
-        })
+            payload: {},
+        });
         const response = yield call(getTaskCommentApi, { payload });
         if (response.data.status) {
             yield put({
@@ -51,28 +47,25 @@ function* getCommentsFunction({ payload }) {
             //     type: Addcomment.GET_ALL_MILESTONES_RESET,
             //     payload: {},
             // });
-        }
-        else {
+        } else {
             yield put({
                 type: Addcomment.GET_COMMENT_ERROR,
-                payload: { ...response.data }
+                payload: { ...response.data },
             });
         }
-
     } catch (error) {
         yield put({
             type: Addcomment.GET_COMMENT_ERROR,
-            payload: { message: error?.message }
+            payload: { message: error?.message },
         });
-
     }
 }
 function* deleteTaskCommentFunction({ payload }) {
     try {
         yield put({
             type: Addcomment.DELETE_COMMENT_LOADING,
-            payload: {}
-        })
+            payload: {},
+        });
         const response = yield call(deleteTask, { payload });
         if (response.data.status) {
             yield put({
@@ -83,20 +76,17 @@ function* deleteTaskCommentFunction({ payload }) {
             //     type: Addcomment.GET_ALL_MILESTONES_RESET,
             //     payload: {},
             // });
-        }
-        else {
+        } else {
             yield put({
                 type: Addcomment.DELETE_COMMENT_ERROR,
-                payload: { ...response.data }
+                payload: { ...response.data },
             });
         }
-
     } catch (error) {
         yield put({
             type: Addcomment.DELETE_COMMENT_ERROR,
-            payload: { message: error?.message }
+            payload: { message: error?.message },
         });
-
     }
 }
 
@@ -104,8 +94,8 @@ function* updateTaskFunction({ payload }) {
     try {
         yield put({
             type: Addcomment.UPDATE_COMMENT_LOADING,
-            payload: {}
-        })
+            payload: {},
+        });
         const response = yield call(updateTask, { payload });
         if (response.data.status) {
             yield put({
@@ -116,22 +106,20 @@ function* updateTaskFunction({ payload }) {
                 type: Addcomment.UPDATE_COMMENT_RESET,
                 payload: {},
             });
-        }
-        else {
+        } else {
             yield put({
                 type: Addcomment.UPDATE_COMMENT_ERROR,
-                payload: { ...response.data }
+                payload: { ...response.data },
             });
             yield put({
                 type: Addcomment.UPDATE_COMMENT_RESET,
                 payload: {},
             });
         }
-
     } catch (error) {
         yield put({
             type: Addcomment.UPDATE_COMMENT_ERROR,
-            payload: { message: error }
+            payload: { message: error },
         });
         yield put({
             type: Addcomment.UPDATE_COMMENT_RESET,
@@ -144,8 +132,8 @@ function* getHistroryFunction({ payload }) {
     try {
         yield put({
             type: Addcomment.GET_HISTORY_LOADING,
-            payload: {}
-        })
+            payload: {},
+        });
         const response = yield call(getHistoryApi, { payload });
         if (response.data.status) {
             yield put({
@@ -156,20 +144,17 @@ function* getHistroryFunction({ payload }) {
             //     type: Addcomment.GET_ALL_MILESTONES_RESET,
             //     payload: {},
             // });
-        }
-        else {
+        } else {
             yield put({
                 type: Addcomment.GET_HISTORY_ERROR,
-                payload: { ...response.data }
+                payload: { ...response.data },
             });
         }
-
     } catch (error) {
         yield put({
             type: Addcomment.GET_HISTORY_ERROR,
-            payload: { message: error?.message }
+            payload: { message: error?.message },
         });
-
     }
 }
 
@@ -193,19 +178,14 @@ export function* getCommetSaga(): any {
     yield takeEvery(Addcomment.GET_COMMENT, getCommentsFunction);
 }
 
-
 function* Addcommentsaga(): any {
     yield all([
-
         fork(addAllTaskCommentsSaga),
         fork(deleteTaskCommentsSaga),
         fork(updateTaskCommentsSaga),
         fork(getHistrorySaga),
-        fork(getCommetSaga)
-     
-
-
-    ])
+        fork(getCommetSaga),
+    ]);
 }
 
 export default Addcommentsaga;

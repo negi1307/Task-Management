@@ -33,7 +33,7 @@ const verifyAdmin = async (req, res, next) => {
                 return res.status(401).json({ message: 'jwt token is expired' })
             }
             req.user = user.aud;
-            if (req.user.roleId.role === 'Admin') {
+            if (req.user.role === 'Admin') {
                 next();
             } else {
                 return res.status(403).json({ message: 'Access denied. Only Admin is allowed.' });
@@ -58,7 +58,7 @@ const verifyEmployee = async (req, res, next) => {
                 return res.status(401).json({ message: 'jwt token is expired' })
             }
             req.user = user.aud;
-            if (req.user.roleId.role === 'Employee') {
+            if (req.user.role === 'Employee') {
                 next();
             } else {
                 return res.status(403).json({ message: 'Access denied. Only the authenciated users are allowed.' });
@@ -82,7 +82,7 @@ const verifyUser = async (req, res, next) => {
                 return res.status(401).json({ message: 'jwt token is expired' })
             }
             req.user = user.aud;
-            if (req.user.roleId.role === 'Employee' || req.user.roleId.role === 'Admin') {
+            if (req.user.role === 'Employee' || req.user.role === 'Admin' || req.user.role === 'PM' || req.user.role === 'CTO') {
                 next();
             } else {
                 return res.status(403).json({ message: 'Access denied. Only the authenciated users are allowed.' });

@@ -167,15 +167,14 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                             <h4 className="m-0 p-0"> {ele?.userId?.firstName}</h4>
                                                             <h4 className="ps-1 m-0 p-0"> {ele?.userId?.lastName}</h4>
                                                             <p className="ps-1 m-0 p-0">
-                                                                {moment(ele?.createdAt).format('LT')}{' '}
+                                                                {moment(ele?.createdAt).fromNow()}
                                                                 {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
                                                             </p>
                                                             {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
                                                         </div>
                                                         {inputForUpdate === ind ? (
-                                                           
-                                                                <form onSubmit={handleSubmit(submitUpdateComment)}>
-                                                                     <Row className="mt-2 d-flex" >
+                                                            <form onSubmit={handleSubmit(submitUpdateComment)}>
+                                                                <Row className="mt-2 d-flex">
                                                                     <Col lg={9}>
                                                                         <Form.Group
                                                                             className="mb-1"
@@ -190,9 +189,8 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                                     <Col className="m-0 p-0" lg={1}>
                                                                         <Button type="submit">Update</Button>
                                                                     </Col>
-                                                                    </Row>
-                                                                </form>
-                                                            
+                                                                </Row>
+                                                            </form>
                                                         ) : (
                                                             <>
                                                                 <div className="m-0 p-0">
@@ -264,6 +262,10 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                                     {' '}
                                                                     {ele?.userId?.lastName}
                                                                 </h4>
+                                                                <p className="ps-1 m-0 p-0">
+                                                                {moment(ele?.createdAt).fromNow()}{' '}
+                                                                {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
+                                                            </p>
                                                                 {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
                                                             </div>
                                                             <div className="m-0 p-0">
