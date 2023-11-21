@@ -7,10 +7,10 @@ function* getAllUsersFunction({ payload }) {
     try {
         yield put({
             type: USERS_TYPES.GET_ALL_USERS_LOADING,
-            payload: {}
-        })
+            payload: {},
+        });
         const response = yield call(getallUsersApi, { payload });
-        
+
         if (response.data.status) {
             yield put({
                 type: USERS_TYPES.GET_ALL_USERS_SUCCESS,
@@ -20,28 +20,25 @@ function* getAllUsersFunction({ payload }) {
             //     type: USERS_TYPES.GET_ALL_USERS_RESET,
             //     payload: {},
             // });
-        }
-        else {
+        } else {
             yield put({
                 type: USERS_TYPES.GET_ALL_USERS_ERROR,
-                payload: { ...response.data }
+                payload: { ...response.data },
             });
         }
-
     } catch (error) {
         yield put({
             type: USERS_TYPES.GET_ALL_USERS_ERROR,
-            payload: { message: error?.message }
+            payload: { message: error?.message },
         });
-
     }
 }
 function* deleteUserFunction({ payload }) {
     try {
         yield put({
             type: USERS_TYPES.GET_DELETE_USER_LOADING,
-            payload: {}
-        })
+            payload: {},
+        });
         const response = yield call(deleteUserApi, { payload });
         if (response.data.status) {
             yield put({
@@ -52,32 +49,29 @@ function* deleteUserFunction({ payload }) {
                 type: USERS_TYPES.GET_DELETE_USER_RESET,
                 payload: {},
             });
-        }
-        else {
+        } else {
             yield put({
                 type: USERS_TYPES.GET_DELETE_USER_ERROR,
-                payload: { ...response.data }
+                payload: { ...response.data },
             });
         }
-
     } catch (error) {
         yield put({
             type: USERS_TYPES.GET_DELETE_USER_ERROR,
-            payload: { message: error?.message }
+            payload: { message: error?.message },
         });
         yield put({
             type: USERS_TYPES.GET_DELETE_USER_RESET,
             payload: {},
         });
-
     }
 }
 function* inviteUserFunction({ payload }) {
     try {
         yield put({
             type: USERS_TYPES.CREATE_USER_LOADING,
-            payload: {}
-        })
+            payload: {},
+        });
         const response = yield call(InviteUserApi, { payload });
         if (response.data.status) {
             yield put({
@@ -88,34 +82,31 @@ function* inviteUserFunction({ payload }) {
                 type: USERS_TYPES.CREATE_USER_RESET,
                 payload: {},
             });
-        }
-        else {
+        } else {
             yield put({
                 type: USERS_TYPES.CREATE_USER_ERROR,
-                payload: { ...response.data }
+                payload: { ...response.data },
             });
         }
-
     } catch (error) {
         yield put({
             type: USERS_TYPES.CREATE_USER_ERROR,
-            payload: { message: error?.message }
+            payload: { message: error?.message },
         });
         yield put({
             type: USERS_TYPES.CREATE_USER_RESET,
             payload: {},
         });
-
     }
 }
 function* getAllRolesFunction({ payload }) {
     try {
         yield put({
             type: USERS_TYPES.GET_ALL_ROLES_LOADING,
-            payload: {}
-        })
+            payload: {},
+        });
         const response = yield call(getallRolesApi, { payload });
-        
+
         if (response.data.status) {
             yield put({
                 type: USERS_TYPES.GET_ALL_ROLES_SUCCESS,
@@ -125,54 +116,47 @@ function* getAllRolesFunction({ payload }) {
             //     type: USERS_TYPES.GET_ALL_ROLES_RESET,
             //     payload: {},
             // });
-        }
-        else {
+        } else {
             yield put({
                 type: USERS_TYPES.GET_ALL_ROLES_ERROR,
-                payload: { ...response.data }
+                payload: { ...response.data },
             });
         }
-
     } catch (error) {
         yield put({
             type: USERS_TYPES.GET_ALL_ROLES_ERROR,
-            payload: { message: error?.message }
+            payload: { message: error?.message },
         });
-
     }
 }
 function* getCsvFunction({ payload }) {
     try {
         yield put({
             type: USERS_TYPES.GET_CSV_DATA_LOADING,
-            payload: {}
-        })
+            payload: {},
+        });
         const response = yield call(getCsvDataApi, { payload });
-        console.log(response?.data?.loginRecords , "dddddddd")
+        console.log(response?.data?.loginRecords, 'dddddddd');
         if (response.data.status) {
             yield put({
                 type: USERS_TYPES.GET_CSV_DATA_SUCCESS,
                 payload: { ...response.data },
-                
             });
-            // yield put({
-            //     type: USERS_TYPES.GET_CSV_DATA_RESET,
-            //     payload: {},
-            // });
-        }
-        else {
+            yield put({
+                type: USERS_TYPES.GET_CSV_DATA_RESET,
+                payload: {},
+            });
+        } else {
             yield put({
                 type: USERS_TYPES.GET_CSV_DATA_ERROR,
-                payload: { ...response.data }
+                payload: { ...response.data },
             });
         }
-
     } catch (error) {
         yield put({
             type: USERS_TYPES.GET_CSV_DATA_ERROR,
-            payload: { message: error?.message }
+            payload: { message: error?.message },
         });
-
     }
 }
 
@@ -195,9 +179,9 @@ function* AllUsersSaga(): any {
     yield all([
         fork(getAllUsersSaga),
         fork(getAllRolesSaga),
-    fork(deleteUserSaga),
-    fork(inviteuserSaga),
-    fork(getCsvSaga),
-    ])
+        fork(deleteUserSaga),
+        fork(inviteuserSaga),
+        fork(getCsvSaga),
+    ]);
 }
 export default AllUsersSaga;

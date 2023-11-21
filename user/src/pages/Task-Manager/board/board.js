@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { React, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
 import { columnsFromBackend } from './data';
@@ -16,10 +16,12 @@ import { getAllMilstoneSprints } from '../../../redux/sprint/action';
 import { getAllProjects } from '../../../redux/projects/action';
 import { getHistory } from '../../../redux/addcomment/actions';
 import { getTaskStatusCount } from '../../../redux/Summary/action';
-import { addComment, getComment, updateComment, deleteComment, getCommentId } from '../../../redux/addcomment/actions';
+import { addComment, getComment, deleteComment, getCommentId } from '../../../redux/addcomment/actions';
 import Taskdetail from './taskdetail';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
+import ToastHandle from '../../../constants/toaster/toaster';
+import { listProjectAssignee } from '../../../redux/task/action';
 
 const Container = styled.div`
     display: flex;
@@ -55,15 +57,15 @@ const Boards = (props) => {
     const { projectId, milestoneId, spriteId } = useParams();
     console.log(spriteId, projectId, milestoneId, 'sprintttt');
     const dispatch = useDispatch();
-    const store = useSelector((state) => state);
     const [render, setRender] = useState(false);
+    const store = useSelector((state) => state);
     const { register, setValue } = useForm();
-
+    const taskId = store?.getTaskId?.data;
     const taskStatusCount = store?.getTaskStatusCount?.data?.response;
     // for status count on board page(get all task api)============================
     const taskStatusCountdata = store?.getAllTaskReducer?.data;
     // for status count on board page (get all task api)============================
-
+    const updateComment = store?.updateComment;
     const successHandle = store?.getAllTaskReducer;
     console.log(successHandle, 'success');
     const statushandle = store?.updateTaskStatus;
@@ -91,6 +93,7 @@ const Boards = (props) => {
     }, []);
 
     useEffect(() => {
+        dispatch(listProjectAssignee());
         dispatch(getTaskStatusCount());
     }, []);
 
@@ -227,7 +230,16 @@ const Boards = (props) => {
     const closeTaskDetailMOdel = () => {
         setshowTaskModel(false);
     };
-
+    useEffect(() => {
+        if (updateComment?.data?.status == 200) {
+            ToastHandle('success', updateComment?.data?.message);
+            dispatch(getComment({ taskId: commentdata?.taskInfo?._id }));
+        } else if (updateComment?.data?.status == 400) {
+            ToastHandle('error', updateComment?.data?.message);
+        } else if (updateComment?.data?.status == 500) {
+            ToastHandle('error', updateComment?.data?.message);
+        }
+    }, [updateComment]);
     const callAlltaskData = () => {
         let body = {
             flag: 1,

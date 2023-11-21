@@ -51,57 +51,105 @@ const Upload = () => {
                             </span>
                         </Button>
                     </div>
-                    <Row>
-                        <Col lg={12}> {getUploadedData?.loading ? (<MainLoader/>) :
-                            <Table striped>
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th> File Name</th>
-                                        <th> File</th>
-                                        <th>Download</th>
-                                    </tr>
-                                </thead>
-                             <tbody>
-                                    {getUploadedData?.data?.response?.map((ele, ind) => (
-                                        <tr>
-                                            <td>{(skip - 1) * 10 + ind + 1}</td>
-                                            <td>{ele?.fileName}</td>
-                                            <td>
-                                                <div style={{ width: '3rem' }}>
-                                                    {ele?.attachmentType == 'application/x-zip-compressed' ? (
-                                                        <img style={{ width: '100%' }} src={zip} />
-                                                    ) : '' ||
-                                                      ele?.attachmentType == 'image/png' ||
-                                                      ele?.attachmentType == 'image/jpeg' ||
-                                                      ele?.attachmentType == 'image/webp' ? (
-                                                        <img style={{ width: '100%' }} src={image} />
-                                                    ) : '' || ele?.attachmentType == 'text/csv' ? (
-                                                        <img style={{ width: '100%' }} src={csv} />
-                                                    ) : '' || ele?.attachmentType == 'application/pdf' ? (
-                                                        <img style={{ width: '100%' }} src={pdf} />
-                                                    ) : '' ||
-                                                      ele?.attachmentType ==
-                                                          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ? (
-                                                        <img style={{ width: '100%' }} src={excel} />
-                                                    ) : '' || ele?.attachmentType == 'application/vnd.ms-powerpoint' ? (
-                                                        <img style={{ width: '100%' }} src={powerPoint} />
-                                                    ) : '' || ele?.attachmentType == 'application/msword' ? (
-                                                        <img style={{ width: '100%' }} src={Word} />
-                                                    ) : (
-                                                        ''
-                                                    )}
-                                                </div>
-                                            </td>
-                                            <td>
+                    {/* <Row>
+                        <div className="projects_info">
+                            {getUploadedData?.data?.response?.map((ele, ind) => (
+                                <>
+                                    <div className=" col-2">
+                                        <div className="row">
+                                            <div className="col-12 d-flex">
+                                                <h4>{ele?.fileName}</h4>
                                                 <a href={ele?.attachment} download target="_blank">
                                                     <i className="mdi mdi-download m-0 p-0 cp font-20"></i>
                                                 </a>
-                                            </td>
+                                            </div>
+                                            <div style={{ width: '3rem' }} className="col-12">
+                                                {ele?.attachmentType == 'application/x-zip-compressed' ? (
+                                                    <img style={{ width: '100%' }} src={zip} />
+                                                ) : '' ||
+                                                  ele?.attachmentType == 'image/png' ||
+                                                  ele?.attachmentType == 'image/jpeg' ||
+                                                  ele?.attachmentType == 'image/webp' ? (
+                                                    <img style={{ width: '100%' }} src={image} />
+                                                ) : '' || ele?.attachmentType == 'text/csv' ? (
+                                                    <img style={{ width: '100%' }} src={csv} />
+                                                ) : '' || ele?.attachmentType == 'application/pdf' ? (
+                                                    <img style={{ width: '100%' }} src={pdf} />
+                                                ) : '' ||
+                                                  ele?.attachmentType ==
+                                                      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ? (
+                                                    <img style={{ width: '100%' }} src={excel} />
+                                                ) : '' || ele?.attachmentType == 'application/vnd.ms-powerpoint' ? (
+                                                    <img style={{ width: '100%' }} src={powerPoint} />
+                                                ) : '' || ele?.attachmentType == 'application/msword' ? (
+                                                    <img style={{ width: '100%' }} src={Word} />
+                                                ) : (
+                                                    ''
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            ))}
+                        </div>
+                    </Row> */}
+                    <Row>
+                        <Col lg={12}>
+                        
+                            {getUploadedData?.loading ? (
+                                <MainLoader />
+                            ) : (
+                                <Table striped>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th> File Name</th>
+                                            <th> File</th>
+                                            <th>Download</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </Table>}
+                                    </thead>
+                                    <tbody>
+                                        {getUploadedData?.data?.response?.map((ele, ind) => (
+                                            <tr>
+                                                <td>{(skip - 1) * 10 + ind + 1}</td>
+                                                <td>{ele?.fileName}</td>
+                                                <td>
+                                                    <div style={{ width: '3rem' }}>
+                                                        {ele?.attachmentType == 'application/x-zip-compressed' ? (
+                                                            <img style={{ width: '100%' }} src={zip} />
+                                                        ) : '' ||
+                                                          ele?.attachmentType == 'image/png' ||
+                                                          ele?.attachmentType == 'image/jpeg' ||
+                                                          ele?.attachmentType == 'image/webp' ? (
+                                                            <img style={{ width: '100%' }} src={image} />
+                                                        ) : '' || ele?.attachmentType == 'text/csv' ? (
+                                                            <img style={{ width: '100%' }} src={csv} />
+                                                        ) : '' || ele?.attachmentType == 'application/pdf' ? (
+                                                            <img style={{ width: '100%' }} src={pdf} />
+                                                        ) : '' ||
+                                                          ele?.attachmentType ==
+                                                              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ? (
+                                                            <img style={{ width: '100%' }} src={excel} />
+                                                        ) : '' ||
+                                                          ele?.attachmentType == 'application/vnd.ms-powerpoint' ? (
+                                                            <img style={{ width: '100%' }} src={powerPoint} />
+                                                        ) : '' || ele?.attachmentType == 'application/msword' ? (
+                                                            <img style={{ width: '100%' }} src={Word} />
+                                                        ) : (
+                                                            ''
+                                                        )}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <a href={ele?.attachment} download target="_blank">
+                                                        <i className="mdi mdi-download m-0 p-0 cp font-20"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </Table>
+                            )}
                         </Col>
                     </Row>
                     <Row>

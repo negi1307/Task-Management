@@ -43,6 +43,9 @@ import { getTaskStatusCount } from '../../src/redux/Summary/action';
 import { addLoginTime } from '../../src/redux/user/action';
 import Filter from '../pages/Task-Manager/board/Modal/Filter';
 import { useParams } from 'react-router-dom';
+import Buttons from '../pages/uikit/Buttons';
+import ToastHandle from '../constants/toaster/toaster';
+import { Button } from 'react-bootstrap';
 
 // get the notifications
 const Notifications = [
@@ -145,18 +148,18 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const store = useSelector((state) => state);
     console.log('storeeeeeee', store);
     const [isopen, setIsopen] = useState(false);
-    const [startLoginTime,setLoginTime]=useState(false)
+    const [startLoginTime, setLoginTime] = useState(false);
     const allProjects = store?.getProject?.data?.response;
-    const loginTimeMessage = store?.createUserTime?.message;
+    const loginTimeMessage = store?.createUserTime;
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
     const getAllSingleSprints = store?.getAllSingleSprints?.data?.Response;
-    const{projectId,milestoneId,spriteId}=useParams();
+    const { projectId, milestoneId, spriteId } = useParams();
     //=====================================user login time=========================================================
-        useEffect(()=>{
-            
-                dispatch(addLoginTime())
+    // useEffect(()=>{
 
-        },[])
+    //         dispatch(addLoginTime())
+
+    // },[])
     //=======================================user login time=================================================================
 
     const [projectNameHeading, setProjectName] = useState('Select Project Name');
@@ -237,8 +240,33 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const handleRightSideBar = () => {
         dispatch(showRightSidebar());
     };
+    const [showButton, setShowButton] = useState();
+    useEffect(() => {
+        if (sessionStorage?.getItem('startButton')) {
+            setShowButton(false);
+        } else {
+            setShowButton(true);
+        }
+    }, []);
+    const token = sessionStorage.getItem('hyper_user');
     const loginTime = () => {
-        alert(loginTimeMessage.message);
+        dispatch(addLoginTime());
+        sessionStorage.setItem('startButton', true);
+        console.log(sessionStorage?.getItem('startButton'), 'llakakokokjkkkas');
+        if (sessionStorage?.getItem('startButton')) {
+            setShowButton(false);
+        }
+        console.log(token?.token, 'tokennnnnnn');
+        console.log(token, 'tokennnnnnn');
+    };
+    useEffect(() => {
+        if (loginTimeMessage?.data?.status == 200) {
+            ToastHandle('success', loginTimeMessage?.data?.message);
+        }
+    }, [loginTimeMessage]);
+    const logoutTime = () => {
+        sessionStorage.removeItem('startButton');
+        setShowButton(true);
     };
     return (
         <>
@@ -285,6 +313,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                         </Link>
                                     </li>
                                     {/* <li>
+                                    {/* <li>
                                         <div class="project_names">
                                             <select
                                                 name="ddlProject"
@@ -316,7 +345,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                             </select>
                                         </div>
                                     </li> */}
-{/* 
+                                    {/* 
                                     <li>
                                         <div class="project_names">
                                             <select
@@ -333,18 +362,46 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                             </select>
                                         </div>
                                     </li> */}
-                                    
-                                    <li>
-                                        <button type="submit" class="mybutton btn btn-info" onClick={loginTime}>
-                                            Start
-                                        </button>
-                                    </li>
+                                    {/* <li>
+                            <div class="project_names">
+                                                        <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeProject}>
+                                <option>--Select Project--</option>
+                                {allProjects?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.projectName}</option>
+                                )}
+                            </select>
+                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeMilestone}>
+                                <option>--Select MileStone--</option>
+                                {getAllMilestoneData?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.title}</option>
+                                )}
+                            </select>
+                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeSprint}>
+                                <option>--Select Sprint--</option>
+                                {getAllSingleSprints?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.sprintName}</option>
+                                )}
+                            </select>
+                            </div>
+                            </li> */}
+                                    {showButton ? (
+                                        <li>
+                                            <Button type="submit" onClick={loginTime}>
+                                                Start
+                                            </Button>
+                                        </li>
+                                    ) : (
+                                        <li>
+                                            <Button type="submit" onClick={logoutTime}>
+                                                Stop
+                                            </Button>
+                                        </li>
+                                    )}
                                 </ul>
                             </div>
                         </div>
 
                         <ul className="list-unstyled topbar-menu float-end mb-0 topbarr">
-
                             <li className="notification-list">
                                 <button
                                     className="nav-link dropdown-toggle end-bar-toggle arrow-none btn btn-link shadow-none"
@@ -402,7 +459,10 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             {' '}
                             <Link to="summary">Summary</Link>{' '}
                         </li>
-                        <li> <Link to="/tasklist">List</Link> </li>
+                        <li>
+                            {' '}
+                            <Link to="/tasklist">List</Link>{' '}
+                        </li>
                         <li>
                             {' '}
                             <Link to="/boards">Board</Link>{' '}

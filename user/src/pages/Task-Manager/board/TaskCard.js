@@ -128,6 +128,7 @@ const TaskCard = ({ item, index, closeModal,showTaskDetailMOdel }) => {
                                 </div>
                             </div>
                             <p> {item?.reporterInfo?.role}</p>
+                            <p>{item?.assigneeInfo?.firstName}</p>
 
                         </TaskInformation>
                     </div>
