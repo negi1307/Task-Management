@@ -65,3 +65,6 @@ export const getTaskCount = '/task/getTasksCount';
 
 export const userLoginTime = '/userLogin/loginTime';
 export const userLoginTimeStop = '/userLogin/updateLogoutTime';
+// get all assigne name on borad page========================
+export const getAllAssigneeName='/assignUser/getuserListprojectAssigned?projectId='
+// get all assigne name on borad page========================

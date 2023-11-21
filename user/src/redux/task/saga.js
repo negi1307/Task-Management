@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import TASK_TYPES from './constant';
-import { UpdateTaskApi, createTaskApi, deleteTaskApi, getAllTaskApi, getSingleSprintTaskApi,updateTaskStatusApi } from './api';
+import { UpdateTaskApi, createTaskApi, deleteTaskApi, getAllTaskApi, getSingleSprintTaskApi,updateTaskStatusApi,getAllAssigneeNamesApi } from './api';
 
 function* createTaskFunction({ payload }) {
     try {
@@ -97,6 +97,40 @@ function* getAllTaskFunction({ payload }) {
     } catch (error) {
         yield put({
             type: TASK_TYPES.GET_ALL_TASK_ERROR,
+            payload: { message: error?.message }
+        });
+
+    }
+}
+
+function* getAllAssigneeName({ payload }) {
+    try {
+        yield put({
+            type: TASK_TYPES.GET_ALL_ASSIGNEE_NAME_LOADING,
+            payload: {}
+        })
+        const response = yield call(getAllAssigneeNamesApi, { payload });
+        console.log("get All TAsk Data",response)
+        if (response.data.status) {
+            yield put({
+                type: TASK_TYPES.GET_ALL_ASSIGNEE_NAME_SUCCESS,
+                payload: { ...response.data },
+            });
+            // yield put({
+            //     type: TASK_TYPES.GET_ALL_TASK_RESET,
+            //     payload: {},
+            // });
+        }
+        else {
+            yield put({
+                type: TASK_TYPES.GET_ALL_ASSIGNEE_NAME_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: TASK_TYPES.GET_ALL_ASSIGNEE_NAME_ERROR,
             payload: { message: error?.message }
         });
 
@@ -216,6 +250,9 @@ export function* getSingleSprintTaskSaga(): any {
 export function* getAllTask(): any {
     yield takeEvery(TASK_TYPES.GET_ALL_TASK, getAllTaskFunction);
 }
+export function* getAllAssigneeNameSaga(): any {
+    yield takeEvery(TASK_TYPES.GET_ALL_ASSIGNEE_NAME, getAllAssigneeName);
+}
 export function* updateTask(): any {
     yield takeEvery(TASK_TYPES.UPDATE_TASK, updateTaskFunction);
 }
@@ -232,7 +269,9 @@ function* AllTaskSaga(): any {
         fork(getAllTask),
         fork(updateTask),
         fork(deleteTask),
-        fork(updateTaskStatus)
+        fork(updateTaskStatus),
+        fork(getAllAssigneeNameSaga)
+
     ])
 }
 export default AllTaskSaga;

@@ -35,18 +35,9 @@ const createtask = async (req, res) => {
           reporterId: role._id,
           taskId: task._id,
         });
-        if (task) {
-          const admin = await userModel.findOne({ role: 1 }).select("_id roleId");
-          const assignedUser = await assignUserModel.create({
-            assigneeId: req.user.role === 1 ? assigneeId : req.user._id, // One who is doing work
-            reporterId: req.user.role === 1 ? reporterId : admin.roleId, // one who will assignee report after work done
-            taskId: task._id,
-          });
-          return res.status(200).json({ status: "200", message: "Task created successfully", response: task, assignedUser });
-        }
+        return res.status(200).json({ status: "200", message: "Task created successfully", response: task, assignedUser });
       }
     }
-
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }

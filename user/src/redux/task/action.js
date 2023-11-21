@@ -27,3 +27,8 @@ export const updateTaskStatus = (data): AuthAction => ({
     type: TASK_TYPES.UPDATE_TASK_STATUS,
     payload: data
 })
+
+export const listProjectAssignee = (data): AuthAction => ({
+    type: TASK_TYPES.GET_ALL_ASSIGNEE_NAME,
+    payload: data
+})
