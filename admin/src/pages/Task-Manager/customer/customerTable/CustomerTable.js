@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
 import MainLoader from "../../../../constants/Loader/loader";
 import { Table, Form } from 'react-bootstrap';
-import { deletePreSalesData,getPreSalesData } from "../../../../redux/customer/action";
-import { useSelector ,useDispatch} from "react-redux";
+import { deletePreSalesData, getPreSalesData } from "../../../../redux/customer/action";
+import { useSelector, useDispatch } from "react-redux";
 import ToastHandle from "../../../../constants/toaster/toaster";
 
 const CustomerTable = (props) => {
-    const {checkModel}=props
+    const { checkModel } = props
     const store = useSelector((state) => state);
-    const dispatch=useDispatch()
-    const preSaleData=store?.getPreSaleReducer?.data?.response
-    const preSaleLoading=store?.getPreSaleReducer?.loading
-    const preSaleDeleteStatus=store?.deletePreSaleReducer?.deletePreSale?.status;
-    const preSaleDeleteMessage=store?.deletePreSaleReducer?.deletePreSale?.message
+    const dispatch = useDispatch()
+    const preSaleData = store?.getPreSaleReducer?.data?.response
+    const preSaleLoading = store?.getPreSaleReducer?.loading
+    const preSaleDeleteStatus = store?.deletePreSaleReducer?.deletePreSale?.status;
+    const preSaleDeleteMessage = store?.deletePreSaleReducer?.deletePreSale?.message
 
     useEffect(() => {
         if (preSaleDeleteStatus === "200") {
             ToastHandle('success', preSaleDeleteMessage);
             dispatch(getPreSalesData());
-        } 
+        }
     }, [preSaleDeleteStatus])
     return (
         <div>
@@ -41,6 +41,7 @@ const CustomerTable = (props) => {
                     <tbody>
                         <>
                             {preSaleData?.map((ele, ind) => {
+                                console.log(ele?.stage, '=-')
                                 return (
                                     <tr className="align-middle">
                                         <th scope="row">{ind + 1}</th>
@@ -52,32 +53,32 @@ const CustomerTable = (props) => {
                                         </td>
                                         <td className="w-20">
                                             <span className="namelink"> {ele?.description?.slice(0, 10)
-                                      .concat("...")}</span>
+                                                .concat("...")}</span>
                                         </td>
                                         <td>
                                             <span className="namelink">
-                                                {ele?.status==='1'?
-                                                <>CONVERTED</>:
-                                                ele?.status==='2'?<>NOT-CONVERTED</>:""}
+                                                {ele?.status === 1 ?
+                                                    <>CONVERTED</> :
+                                                    ele?.status === 2 ? <>NOT-CONVERTED</> : ""}
                                             </span>
                                         </td>
                                         <td>
                                             <span className="namelink">
-                                                {ele?.stage==='1'?<>HOT</>:ele?.stage==='2'?<>COLD</>:ele?.stage==='3'?<>MEDIUM</>:<></>}
+                                                {ele?.stage === 1 ? <>HOT</> : ele?.stage === 2 ? <>COLD</> : ele?.stage === 3 ? <>MEDIUM</> : <></>}
                                             </span>
                                         </td>
                                         <td>
                                             <span className="namelink">
-                                            {ele?.type==='1'?<>WEB</>:ele?.type==='2'?<>MOBILE</>:''}
+                                                {ele?.type[0] === 1 ? <>WEB</> : ele?.type[0] === 2 ? <>MOBILE</> : ''}
                                             </span>
                                         </td>
                                         <td>
                                             <span className="namelink">
                                                 <span>
-                                                <i class="bi bi-pencil-square" onClick={()=>{checkModel(true,'edit',ele)}}></i>
+                                                    <i class="bi bi-pencil-square" onClick={() => { checkModel(true, 'edit', ele) }}></i>
                                                 </span>
                                                 <span className="ms-2">
-                                                <i class="bi bi-trash" onClick={()=>{dispatch(deletePreSalesData(ele?._id))}}></i>
+                                                    <i class="bi bi-trash" onClick={() => { dispatch(deletePreSalesData(ele?._id)) }}></i>
                                                 </span>
                                             </span>
                                         </td>

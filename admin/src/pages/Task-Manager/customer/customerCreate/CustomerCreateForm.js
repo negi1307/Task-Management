@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Modal, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { addPreSalesData, getPreSalesData,updatePreSalesData } from "../../../../redux/customer/action";
+import { addPreSalesData, getPreSalesData, updatePreSalesData } from "../../../../redux/customer/action";
 import { useSelector, useDispatch } from "react-redux";
 import ToastHandle from '../../../../constants/toaster/toaster';
 // import {ButtonLoading} from '../../../../constants/Loader/loader';
@@ -13,11 +13,11 @@ const CustomerCreateFrom = (props) => {
     const customerCreateStatus = store?.addPreSaleReducer?.data?.status;
     const customerCreateMessage = store?.addPreSaleReducer?.data?.message
     const customerCreateLoading = store?.addPreSaleReducer?.loading
-        // create 
+    // create 
     // update 
-    const updatePreSaleStatus=store?.updatePreSaleReducer?.updatePreSale?.status
-    const updatePreSaleMessage=store?.updatePreSaleReducer?.updatePreSale?.message
-
+    const updatePreSaleStatus = store?.updatePreSaleReducer?.updatePreSale?.status
+    const updatePreSaleMessage = store?.updatePreSaleReducer?.updatePreSale?.message
+console.log(customerCreateStatus,customerCreateMessage,'*/')
     // update 
 
     const [showModel, setShowModel] = useState({
@@ -32,26 +32,26 @@ const CustomerCreateFrom = (props) => {
         formState: { errors },
     } = useForm();
     const onSubmit = (data) => {
-        if(showModel.modelType==='add'){
-        dispatch(addPreSalesData({
-            clientName: data?.name,
-            projectName: data?.project,
-            description: data?.description,
-            stage: data?.stage,
-            type: data?.type,
-            status: data?.status
-        }))
-    }else if(showModel.modelType==='edit'){
-        dispatch(updatePreSalesData({
-            preSalesId:showModel?.editData?._id,
-            clientName: data?.name,
-            projectName: data?.project,
-            description: data?.description,
-            stage: data?.stage,
-            type: data?.type,
-            status: data?.status
-        }))
-    }
+        if (showModel.modelType === 'add') {
+            dispatch(addPreSalesData({
+                clientName: data?.name,
+                projectName: data?.project,
+                description: data?.description,
+                stage: data?.stage,
+                type: data?.type,
+                status: data?.status
+            }))
+        } else if (showModel.modelType === 'edit') {
+            dispatch(updatePreSalesData({
+                preSalesId: showModel?.editData?._id,
+                clientName: data?.name,
+                projectName: data?.project,
+                description: data?.description,
+                stage: data?.stage,
+                type: data?.type,
+                status: data?.status
+            }))
+        }
     };
 
     useEffect(() => {
@@ -59,15 +59,17 @@ const CustomerCreateFrom = (props) => {
             ToastHandle('success', customerCreateMessage);
             checkModel(false, '')
             dispatch(getPreSalesData());
-        } 
+        }
         else if (updatePreSaleStatus === "200") {
             ToastHandle('success', updatePreSaleMessage);
             checkModel(false, '')
             dispatch(getPreSalesData());
+        }else if(customerCreateStatus==="400"){
+            ToastHandle('error', customerCreateMessage);
         }
-    }, [customerCreateStatus,updatePreSaleStatus])
+    }, [customerCreateStatus, updatePreSaleStatus])
     // model check two type add and edite;
-    
+
 
     useEffect(() => {
         if (show?.type !== "") {
@@ -81,7 +83,7 @@ const CustomerCreateFrom = (props) => {
                     name: "",
                     project: "",
                     description: "",
-                    status:"",
+                    status: "",
                     STAGE: "",
                     TYPE: ""
                 })
@@ -96,7 +98,7 @@ const CustomerCreateFrom = (props) => {
                     name: show?.dataEdit?.clientName,
                     project: show?.dataEdit?.projectName,
                     description: show?.dataEdit?.description,
-                    status:show?.dataEdit?.description?.status,
+                    status: show?.dataEdit?.description?.status,
                     STAGE: show?.dataEdit?.description?.stage,
                     TYPE: show?.dataEdit?.description?.type
                 })
@@ -180,8 +182,8 @@ const CustomerCreateFrom = (props) => {
                                 </Form.Label>
                                 <Form.Select {...register('status', { required: true })}>
                                     <option value='' hidden selected> --select--</option>
-                                    <option value="1" selected={showModel?.editData?.status==="1"&& true}>CONVERTED</option>
-                                    <option value="2" selected={showModel?.editData?.status==="2"&& true}>NOT-CONVERTED</option>
+                                    <option value="1" selected={showModel?.editData?.status === 1 && true}>CONVERTED</option>
+                                    <option value="2" selected={showModel?.editData?.status === 2 && true}>NOT-CONVERTED</option>
                                 </Form.Select>
                                 {errors?.status?.type === 'required' && (
                                     <span className="text-danger"> This feild is required *</span>
@@ -198,9 +200,9 @@ const CustomerCreateFrom = (props) => {
                                 </Form.Label>
                                 <Form.Select {...register('stage', { required: true })}>
                                     <option value='' hidden selected> --select--</option>
-                                    <option value="1" selected={showModel?.editData?.stage==="1"&& true}>HOT</option>
-                                    <option value="2" selected={showModel?.editData?.stage==="2"&& true}>COLD</option>
-                                    <option value="3" selected={showModel?.editData?.stage==="3"&& true}>MEDIUM</option>
+                                    <option value="1" selected={showModel?.editData?.stage === 1 && true}>HOT</option>
+                                    <option value="2" selected={showModel?.editData?.stage === 2 && true}>COLD</option>
+                                    <option value="3" selected={showModel?.editData?.stage === 3 && true}>MEDIUM</option>
                                 </Form.Select>
                                 {errors?.stage?.type === 'required' && (
                                     <span className="text-danger"> This feild is required *</span>
@@ -214,8 +216,8 @@ const CustomerCreateFrom = (props) => {
                                 </Form.Label>
                                 <Form.Select {...register('type', { required: true })}>
                                     <option value='' hidden selected> --select--</option>
-                                    <option value="1" selected={showModel?.editData?.type==="1"&& true}>WEB</option>
-                                    <option value="2" selected={showModel?.editData?.type==="2"&& true}>MOBILE</option>
+                                    <option value="1" selected={showModel?.editData?.type?.[0] === 1 && true}>WEB</option>
+                                    <option value="2" selected={showModel?.editData?.type?.[0] === 2 && true}>MOBILE</option>
                                 </Form.Select>
                                 {errors?.type?.type === 'required' && (
                                     <span className="text-danger"> This feild is required *</span>
