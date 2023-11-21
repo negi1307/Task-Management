@@ -10,7 +10,7 @@ const createtask = async (req, res) => {
     const { projectId, milestoneId, sprintId, summary, description, priority, assigneeId,/* reporterId,*/ startDate, dueDate, parentId } = req.body;
     const existingTask = await taskModel.findOne({ summary: new RegExp(`^${summary}$`, "i"), sprintId: sprintId });
     if (existingTask) {
-      return res.status(400).json({ status: "400", message: "Task already exists" });
+      return res.status(200).json({ status: "400", message: "Task already exists" });
     } else {
       const lastTask = await taskModel.countDocuments();
       const task = await taskModel.create({
