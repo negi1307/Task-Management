@@ -42,7 +42,7 @@ const registerUser = async (req, res) => {
 // Log In of A User
 const logInUser = async (req, res) => {
   try {
-    const existingUser = await userModel.findOne({ email: req.body.email });
+    const existingUser = await userModel.findOne({ email: { $regex: new RegExp('^' + req.body.email + '$') } });
     if (existingUser) {
       const isPasswordValid = await bcrypt.compare(req.body.password, existingUser.password);
       if (isPasswordValid) {
