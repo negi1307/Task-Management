@@ -59,7 +59,7 @@ function* login({ payload: { username, password } }) {
             setAuthorization(user['token']);
             yield put(authApiResponseSuccess(AuthActionTypes.LOGIN_USER, userData));
         }
-        else if (response?.data?.response?.role === 2) {
+        else if (response?.data?.response?.role === "Employee" || "Sales" || "PM" || "CTO") {
             yield put(authApiResponseError(AuthActionTypes.LOGIN_USER, "User Not Found"));
             api.setLoggedInUser(null);
             setAuthorization(null);
