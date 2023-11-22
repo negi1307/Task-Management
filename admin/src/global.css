@@ -6,13 +6,13 @@ body[data-leftbar-theme='dark'] .side-nav .menuitem-active > a {
 }
 
 .Active_data {
-    background: #37216c;
+    background: black;
     color: #ecac37e3 !important;
     font-weight: 700;
 }
 
 .InActive_data {
-    background: #e2dadb;
+    background: #c9c8c8;
     color: white;
 }
 
@@ -425,7 +425,7 @@ option {
     cursor: pointer;
 }
 .web_button {
-    background-color: #37216c !important;
+    background-color: black !important;
     color: white !important;
     box-shadow: none !important;
     border: none !important;
@@ -439,24 +439,24 @@ option {
     color: white;
 }
 .leftside-menu {
-    background-color: #37216c !important;
+    background-color: black !important;
 }
 span.logo-lg {
-    background: #37216c !important;
+    background: black !important;
     /* border-bottom: 1px solid #b5852d !important; */
 }
 .mdi.mdi-eye {
-    color: #37216c;
+    color: black;
 }
 .form-switch .form-check-input:checked[type='checkbox']:after {
-    background-color: #37216c !important;
+    background-color: black !important;
 }
 .form-check-input[type='checkbox']:checked {
     /* background-image: none; */
-    background-color: #37216c !important;
+    background-color: black !important;
 }
 table.table-striped tbody tr:nth-of-type(odd) > * {
-    --ct-table-accent-bg: #e2dadb !important;
+    --ct-table-accent-bg: #c9c8c8 !important;
 }
 .name_div {
     background: #e2dadb !important;
