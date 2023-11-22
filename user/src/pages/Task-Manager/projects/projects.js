@@ -115,6 +115,7 @@ const Projects = () => {
     return (
         <>
             <div>
+            <div className='title'><h3>PROJECTS</h3></div>
                 <Card>
                     <Card.Body>
                         <div className="row mx-auto mt-2">
@@ -132,9 +133,7 @@ const Projects = () => {
                                     </div>
                                 </div>
                             </div> */}
-                            <div className="col-4 d-flex align-items-center justify-content-center">
-                                <h4 className="header-title heading_data"> Projects</h4>
-                            </div>
+                          
                             {status == 1 ? (
                                 <div className="col-4 d-flex align-items-center justify-content-end pe-0">
                                     {/* <Button
@@ -165,7 +164,6 @@ const Projects = () => {
                                         <th>Project Type</th>
                                         <th>Project Start Date</th>
                                         <th>Due Days</th>
-                                        {/* <th>Status</th> */}
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -191,17 +189,9 @@ const Projects = () => {
                                                 <td>
                                                     <span className="namelink">
                                                     {ele?.projectId?.daysLeft}
-                                              
-                                                        {/* {moment(ele?.projectId?.endDate).format('L')} */}
                                                     </span>
                                                 </td>
-                                                {/* <td>
-                                                    <Form.Check
-                                                        type="switch"
-                                                        checked={ele?.activeStatus}
-                                                        onChange={(e) => handleStatusChange(e, ele)}
-                                                    />
-                                                </td> */}
+                                                
                                                 <td>
                                                     <Row>
                                                         <Col>
@@ -210,13 +200,7 @@ const Projects = () => {
                                                                     <i className="mdi mdi-eye m-0 p-0"></i>
                                                                 </Link>
                                                             </p>
-                                                            {/* <p className="action-icon m-0 p-0  ">
-                                                                <i
-                                                                    className="uil-edit-alt m-0 p-0"
-                                                                    onClick={() => {
-                                                                        handelUpdate(ele);
-                                                                    }}></i>
-                                                            </p> */}
+                                                        
                                                         </Col>
                                                     </Row>
                                                 </td>
@@ -227,6 +211,7 @@ const Projects = () => {
                             </Table>
                         )}
                     </Card.Body>
+                    
                 </Card>
 
                 <Create modal={openModal} closeModal={closeModal} />

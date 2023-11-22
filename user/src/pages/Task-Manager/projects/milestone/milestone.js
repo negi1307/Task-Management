@@ -136,6 +136,7 @@ const Milestone = () => {
                         </Button>
                     </Col>
                 </Row> */}
+                <div className='title'><h3>MILESTONES</h3></div>
             {loaderhandel.loading ? (
                 <MainLoader />
             ) : (

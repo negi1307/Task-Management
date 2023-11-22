@@ -305,7 +305,7 @@ const Boards = (props) => {
                         Due Task:
                         {taskStatusCountdata?.response?.DueTasksCount}
                     </li>
-                    <li>
+                    <li className='info_cls'>
                         {assigneeName?.map((item,index)=>
                         <div className='assignee_name'>
                             <ul>

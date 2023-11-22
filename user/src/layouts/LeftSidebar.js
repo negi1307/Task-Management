@@ -101,7 +101,7 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                                 <img src={isLight ? logoDark : logoImg} alt="logo" height="25" />
                             </span>
                             <span className="logo-sm">
-                                {/* <img src={isLight ? rtlogo : rtlogo} alt="logo" height="20" /> */}
+                               
                             </span>
                         </Link>
 
@@ -110,7 +110,7 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                                 <img src={isLight ? logoDark : logoImg} alt="logo" height="16" />
                             </span>
                             <span className="logo-sm">
-                                {/* <img src={isLight ? rtlogo : rtlogo} alt="logo" height="20" /> */}
+                               
                             </span>
                         </Link>
                     </>
