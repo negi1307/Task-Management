@@ -238,7 +238,7 @@ export default function RightBar(props) {
 
                                           </div>
                                 </div> */}
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             Report <span class="text-danger">*</span>:

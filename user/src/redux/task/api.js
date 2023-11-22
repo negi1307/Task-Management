@@ -13,7 +13,7 @@ export function getAllTaskApi(data): any {
 }
 
 export function getAllAssigneeNamesApi(data): any {
-    return api.get(URL.getAllAssigneeName+"&projectId="+data.payload.projectId+"&milestoneId="+data.payload.milestoneId+"&sprintId="+data.payload.sprintId);
+    return api.get(URL.getAllAssigneeName+data.payload.projectId+"&milestoneId="+data.payload.milestoneId+"&sprintId="+data.payload.sprintId);
 }
 
 // export function getAllTaskApi(data): any {

@@ -202,9 +202,9 @@ const Taskdetail = (props) => {
                                                                 </h4>
                                                                 <p className="ps-1 m-0 p-0">
                                                                     {moment(comm?.createdAt).format('LT')}{' '}
-                                                                    {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
+                                                                    
                                                                 </p>
-                                                                {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
+                                                                
                                                             </div>
                                                             {inputForUpdate === ind ? (
                                                                 <form>
@@ -257,11 +257,11 @@ const Taskdetail = (props) => {
                                                                             onClick={() => handelUpdateAll(comm, ind)}>
                                                                             Edit
                                                                         </p>
-                                                                        <p
+                                                                        {/* <p
                                                                             className=" cp  p-0 ps-2"
                                                                             onClick={() => DeleteData(comm)}>
                                                                             Delete
-                                                                        </p>
+                                                                        </p> */}
                                                                     </div>
                                                                 </>
                                                             )}
@@ -271,7 +271,7 @@ const Taskdetail = (props) => {
                                             </ul>
                                         ))}
                                     </Row>
-                                    <table></table>
+                                 
                                 </div>
                             </div>
                             <div
@@ -352,8 +352,8 @@ const Taskdetail = (props) => {
                                                                     </div>
 
                                                                     <div className="d-flex m-0 p-0">
-                                                                        <p className=" p-0">Edit</p>
-                                                                        <p className=" cp  p-0 ps-2">Delete</p>
+                                                                        <p className=" p-0"  onClick={() => handelUpdateAll(comm, ind)}>Edit</p>
+                                                                        {/* <p className=" cp  p-0 ps-2">Delete</p> */}
                                                                     </div>
                                                                 </Col>
                                                             </Col>
@@ -399,6 +399,19 @@ const Taskdetail = (props) => {
                     <div class="card_detail">
                         <h4>Details</h4>
                         <ul style={{ listStyle: 'none' }}>
+                        <li>
+                                <label>Project Name:</label>
+
+                                {props.item.projectInfo?.projectName}
+                            </li>
+                            <li>
+                                <label>Milestone Name:</label>
+                                {props.item.milestoneInfo?.title}
+                            </li>
+                            <li>
+                                <label>Sprint Name:</label>
+                                {props.item.sprintInfo?.sprintName}
+                            </li>
                             <li>
                                 <label>Summary:</label>
                                 {props.item?.taskInfo?.summary}
@@ -445,11 +458,7 @@ const Taskdetail = (props) => {
                                 {props.item.reporterInfo?.role}
                             </li>
 
-                            <li>
-                                <label>Project Name:</label>
-
-                                {props.item.projectInfo?.projectName}
-                            </li>
+                            
                             <li class="card_img">
                                 <label>Attachment:</label>
 
