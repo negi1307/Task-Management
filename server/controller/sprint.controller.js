@@ -6,9 +6,12 @@ const addSprint = async (req, res) => {
     try {
         const { projectId, milestoneId, sprintName, sprintDesc, startDate, endDate } = req.body;
 
-        const existingSprintName = await sprintModel.findOne({ sprintName: new RegExp(`^${sprintName}$`, 'i'), milestoneId: milestoneId });
+        const existingSprintName = await sprintModel.findOne({
+            sprintName: new RegExp(`^${sprintName.replace(/[\s]+/g, '\\s*')}\\s*$`, 'i'),
+            milestoneId: milestoneId
+          });
         if (existingSprintName) {
-            return res.status(400).json({ status: '400', message: 'Sprint Name Already Exists' });
+            return res.status(200).json({ status: '400', message: 'Sprint Name Already Exists' });
         } else {
             const result = await sprintModel.create({
                 projectId,
@@ -65,7 +68,8 @@ const getAMilestoneAllSprints = async (req, res) => {
                         foreignField: "_id",
                         as: "projectId"
                     }
-                }, { $unwind: "$projectId" }, {
+                }, { $unwind: "$projectId" },
+                 {
                     $project: {
                         "projectId._id": 1,
                         "projectId.projectName": 1,
@@ -82,8 +86,12 @@ const getAMilestoneAllSprints = async (req, res) => {
                                 1000 * 60 * 60 * 24,
                             ],
                         },
-                    }
-                }]).sort({ createdAt: -1 })
+                    },
+                },{
+                    $sort: { daysLeft: 1 }
+                  }
+            ])
+            // .sort({ createdAt: -1 });
                 // const milestones = await sprintModel.find({ activeStatus: req.query.activeStatus, milestoneId: req.query.milestoneId }).populate('projectId', 'projectName')
                 //     .sort({ createdAt: -1 })
                 return res.status(200).json({ status: '200', message: 'Milestones Data fetched successfully', response: milestones })
@@ -128,7 +136,12 @@ const getAMilestoneAllSprints = async (req, res) => {
                             ],
                         },
                     }
-                }]).sort({ createdAt: -1 })
+                },
+                {
+                    $sort: { daysLeft: 1 }
+                }
+            ])
+                // .sort({ createdAt: -1 })
                 // const sprints = await sprintModel.find({ activeStatus: req.query.activeStatus }).populate([
                 //     { path: 'projectId', select: 'projectName' },
                 //     { path: 'milestoneId', select: 'title' },
@@ -138,7 +151,7 @@ const getAMilestoneAllSprints = async (req, res) => {
             }
         }
         else {
-
+            let skip=parseInt(req.query.skip);
             const totalCount = await sprintModel.countDocuments({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: JSON.parse(status) }] })
             const result = await sprintModel.aggregate([{ $match: { activeStatus: JSON.parse(status), milestoneId: ObjectId(req.query.milestoneId) } }, {
                 $lookup:
@@ -177,14 +190,21 @@ const getAMilestoneAllSprints = async (req, res) => {
                         ],
                     },
                 }
-            }]).sort({ createdAt: -1 })
+            },
+            {
+                $sort: { daysLeft: 1 }
+            },
+            { $skip: (skip - 1) *  pageSize}, { $limit: pageSize }
+
+        ])
+            // .sort({ createdAt: -1 })
                 // const result = await sprintModel.find({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: req.query.activeStatus }] }).populate([
                 //     { path: 'projectId', select: 'projectName' },
                 //     { path: 'milestoneId', select: 'title' },
                 // ])
-                .sort({ createdAt: -1 })
-                .limit(pageSize)
-                .skip((parseInt(req.query.skip) - 1) * pageSize);
+                // .sort({ createdAt: -1 })
+                // .limit(pageSize)
+                // .skip((parseInt(req.query.skip) - 1) * pageSize);
             const totalPages = Math.ceil(totalCount / pageSize);
 
             return res.status(200).json({ status: '200', message: "ALL sprints fecteched successfully", Response: result, totalCount, totalPages })

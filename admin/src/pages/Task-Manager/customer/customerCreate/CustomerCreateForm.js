@@ -17,7 +17,6 @@ const CustomerCreateFrom = (props) => {
     // update 
     const updatePreSaleStatus = store?.updatePreSaleReducer?.updatePreSale?.status
     const updatePreSaleMessage = store?.updatePreSaleReducer?.updatePreSale?.message
-console.log(customerCreateStatus,customerCreateMessage,'*/')
     // update 
 
     const [showModel, setShowModel] = useState({
