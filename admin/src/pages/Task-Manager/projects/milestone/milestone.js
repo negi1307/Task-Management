@@ -42,19 +42,21 @@ const Milestone = () => {
     const handleActive = (val) => {
         if (val) {
             setStatus(1);
+            setSkip(1)
             let data = {
                 id: id,
                 activeStatus: 1,
-                skip,
+                skip:1,
                 mileStoneId: '',
             };
             dispatch(getsingleMileStone(data));
         } else {
             setStatus(0);
+            setSkip(1)
             let data = {
                 id: id,
                 activeStatus: 0,
-                skip,
+                skip:1 ,
                 mileStoneId: '',
             };
             dispatch(getsingleMileStone(data));
@@ -72,6 +74,7 @@ const Milestone = () => {
         }
         setCheckedData(data);
         setStatusModal(true);
+       
     };
     const handleYes = () => {
         if (checkedStatus) {
