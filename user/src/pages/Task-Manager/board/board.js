@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { React, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
 import { columnsFromBackend } from './data';
@@ -21,6 +21,7 @@ import Taskdetail from './taskdetail';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import ToastHandle from '../../../constants/toaster/toaster';
+import { listProjectAssignee } from '../../../redux/task/action';
 
 const Container = styled.div`
     display: flex;
@@ -56,6 +57,7 @@ const Boards = (props) => {
     const { projectId, milestoneId, spriteId } = useParams();
     console.log(spriteId, projectId, milestoneId, 'sprintttt');
     const dispatch = useDispatch();
+    const [render, setRender] = useState(false);
     const store = useSelector((state) => state);
     const { register, setValue } = useForm();
     const taskId = store?.getTaskId?.data;
@@ -91,6 +93,7 @@ const Boards = (props) => {
     }, []);
 
     useEffect(() => {
+        dispatch(listProjectAssignee());
         dispatch(getTaskStatusCount());
     }, []);
 
@@ -250,9 +253,9 @@ const Boards = (props) => {
         dispatch(getAllTask(body));
     };
     const closeModal = (val) => {
-        // if (val == 'render') {
-        //     setRender(!render);
-        // }
+        if (val == 'render') {
+            setRender(!render);
+        }
     };
     const [show, setShow] = useState(false);
 
@@ -282,20 +285,25 @@ const Boards = (props) => {
                 <ul>
                     <li>
                         TO-DO:
-                        {taskStatusCountdata?.todo?.taskCount}
+                        {taskStatusCountdata?.response?.TodoCount}
                     </li>
                     <li>
                         In-Progress:
-                        {taskStatusCountdata?.inProgress?.taskCount}
+                        {taskStatusCountdata?.response?.InprogressCount}
                     </li>
                     <li>
                         Hold:
-                        {taskStatusCountdata?.hold?.taskCount}
+                        {taskStatusCountdata?.response?.HoldCount}
                     </li>
                     <li>
                         Done:
-                        {taskStatusCountdata?.done?.taskCount}
+                        {taskStatusCountdata?.response?.DoneCount}
                     </li>
+                    <li>
+                        Due Task:
+                        {taskStatusCountdata?.response?.DueTasksCount}
+                    </li>
+
                     <li>
                         <input
                             type="search"

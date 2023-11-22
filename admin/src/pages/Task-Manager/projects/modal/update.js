@@ -10,7 +10,7 @@ import MainLoader from '../../../../constants/Loader/loader';
 import Multiselect from 'multiselect-react-dropdown';
 import { getAllTechnology } from '../../../../redux/technology/action';
 const Update = ({ modal, closeModal, editData }) => {
-    console.log(closeModal);
+    console.log(editData);
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const sucesshandel = store?.updateProject;

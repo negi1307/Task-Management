@@ -287,9 +287,11 @@ const Boards = () => {
     // }
     return (
         <>
-            <div className="project_detail">
-                <div className="project_name">{/* <h3>{projectNameHeading}</h3> */}</div>
-                {/* <div className="taskinfo">
+            {/* <div className="project_detail"> */}
+            {/* <div className="project_name"> */}
+            {/* <h3>{projectNameHeading}</h3> */}
+            {/* </div> */}
+            {/* <div className="taskinfo">
                     <ul>
                     <li>
                             {' '}
@@ -306,51 +308,50 @@ const Boards = () => {
                        
                     </ul>
                 </div> */}
-            </div>
-            <div className="add_task row d-flex">
-                <div className="col-lg-8 d-flex ">
+            <div className="add_task row d-flex pb-2 pt-1">
+                <div className="col-lg-8 d-flex  align -items-center">
                     <div>
                         {' '}
-                        <h4 className="page-title">
+                        <h4 className="page-title bg-secondary  text-white rounded-2 p-2 py-1">
                             {' '}
                             To-Do :
-                            <Badge className="badge-success-lighten ms-1">
+                            <Badge className="bg-white text-dark ms-1">
                                 {successHandle?.data?.Response?.taskCount}
                             </Badge>
                         </h4>{' '}
                     </div>
                     <div className="ms-3">
                         {' '}
-                        <h4 className="page-title">
+                        <h4 className="page-title bg-primary text-white rounded-2 p-2 py-1">
                             {' '}
                             In-Progress :
-                            <Badge className="badge-success-lighten ms-1">
+                            <Badge className="bg-white text-dark ms-1">
                                 {successHandle?.data?.inProgress?.taskCount}
                             </Badge>
                         </h4>{' '}
                     </div>
                     <div className="ms-3">
                         {' '}
-                        <h4 className="page-title">
+                        <h4 className="page-title bg-dark text-white rounded-2 p-2 py-1">
                             {' '}
                             Hold :
-                            <Badge className="badge-success-lighten ms-1">{successHandle?.data?.hold?.taskCount}</Badge>
+                            <Badge className="bg-white text-dark ms-1">{successHandle?.data?.hold?.taskCount}</Badge>
                         </h4>{' '}
                     </div>
                     <div className="ms-3">
                         {' '}
-                        <h4 className="page-title">
+                        <h4 className="page-title  bg-success text-white rounded-2 p-2 py-1">
                             {' '}
                             Done :
-                            <Badge className="badge-success-lighten ms-1">{successHandle?.data?.done?.taskCount}</Badge>
+                            <Badge className="bg-white text-dark ms-1">{successHandle?.data?.done?.taskCount}</Badge>
                         </h4>{' '}
                     </div>
                     <div className="ms-3 me-2">
                         {' '}
-                        <h4 className="page-title">
+                        <h4 className="page-title bg-warning text-white rounded-2 p-2 py-1">
                             {' '}
                             Due Task:
-                            <Badge className="badge-success-lighten ms-1">{successHandle?.data?.dueTasksCount}</Badge>
+                            <Badge className="bg-white text-dark ms-1">{successHandle?.data?.dueTasksCount}</Badge>
                         </h4>{' '}
                     </div>
                     {AssignUserName?.map((ele, ind) => (
@@ -363,14 +364,24 @@ const Boards = () => {
                                         {ele?.assigneeId?.lastName}
                                     </Tooltip>
                                 }>
-                                <div className="mt-1 cp">
+                                <div className="d-flex align-items-center cp">
                                     <span
                                         style={{
+                                            zIndex: '0000000',
                                             backgroundColor: '#605e5a',
                                             borderRadius: '100%',
-                                            padding: '9px',
+                                            // padding: '8px',
+                                            height: '35px',
+                                            width: '35px',
+                                            display: 'flex',
+                                            // alignitems: 'center',
+                                            alignItems: 'center',
+                                            // justifycontent: 'center',
+                                            justifyContent: 'center',
                                             color: 'white',
                                             fontWeight: '800',
+                                            marginRight: '-8px',
+                                            // zIndex: '999999',
                                         }}>
                                         {ele?.assigneeId?.firstName.charAt(0)}
                                         {ele?.assigneeId?.lastName.charAt(0)}
@@ -381,10 +392,10 @@ const Boards = () => {
                     ))}
                 </div>
 
-                <div className="col-lg-4 d-flex justify-content-end">
+                <div className="col-lg-4 d-flex justify-content-end align-items-center">
                     <div className="page-title-box">
                         <div className="">
-                            <form className="d-flex text  align-items-center mb-2 pb-1 ">
+                            <form className="d-flex text  align-items-center ">
                                 <div className="app-search px-0">
                                     <div className=" position-relative ">
                                         <input

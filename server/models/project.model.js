@@ -32,7 +32,7 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             projectType : {
                 type : String
             },
-            days:{
+            daysLeft:{
                 type: Number
             }
         },

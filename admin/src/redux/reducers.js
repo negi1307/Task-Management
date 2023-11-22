@@ -55,6 +55,8 @@ import {
     UpdateTechnologyCategoryReducer,
     deleteTechnologyCategory,
 } from './technology/reducer';
+import { getPreSaleReducer,addPreSaleReducer,updatePreSaleReducer,deletePreSaleReducer } from './customer/reducer';
+import {getProjectNameReducer ,uploadProjectDetail ,getuploadProjectDetailReducer} from "./clientRepository/reducers"
 export default (combineReducers({
     Auth,
     Layout,
@@ -104,5 +106,11 @@ export default (combineReducers({
     deleteCommentReducer,
     getTaskId,
     updateCommentReducer,
-    getAssignUserReducer,getCsvDataReducer
+    getAssignUserReducer,
+    getCsvDataReducer,
+    getPreSaleReducer,
+    addPreSaleReducer,
+    updatePreSaleReducer,
+    deletePreSaleReducer,
+    getProjectNameReducer,uploadProjectDetail,getuploadProjectDetailReducer
 }): any);

@@ -23,9 +23,9 @@ const Update = ({ modal, closeModal, editData }) => {
     console.log(editorState, 'stttttt');
     useEffect(() => {
         reset({
-            title: editData?.title,
-            startDate: handleDate(editData?.start_date),
-            endDate: handleDate(editData?.completion_date),
+            title: editData?.milestoneId?.title,
+            startDate: handleDate(editData?.milestoneId?.startDate),
+            endDate: handleDate(editData?.milestoneId?.completionDate),
         });
         setDescription(editData?.description);
     }, [modal]);

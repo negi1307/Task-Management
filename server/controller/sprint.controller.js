@@ -6,9 +6,12 @@ const addSprint = async (req, res) => {
     try {
         const { projectId, milestoneId, sprintName, sprintDesc, startDate, endDate } = req.body;
 
-        const existingSprintName = await sprintModel.findOne({ sprintName: new RegExp(`^${sprintName}$`, 'i'), milestoneId : milestoneId });
+        const existingSprintName = await sprintModel.findOne({
+            sprintName: new RegExp(`^${sprintName.replace(/[\s]+/g, '\\s*')}\\s*$`, 'i'),
+            milestoneId: milestoneId
+          });
         if (existingSprintName) {
-            return res.status(400).json({ status: '400', message: 'Sprint Name Already Exists' });
+            return res.status(200).json({ status: '400', message: 'Sprint Name Already Exists' });
         } else {
             const result = await sprintModel.create({
                 projectId,
@@ -48,86 +51,97 @@ const updateStatus = async (req, res) => {
 // To get all sprints of a milestone
 const getAMilestoneAllSprints = async (req, res) => {
     try {
-         const pageSize = 10;
+        const pageSize = 10;
         let status;
         if (req.query.activeStatus == 1) {
-          status = true;
+            status = true;
         } else {
-          status = false;
+            status = false;
         }
         if (parseInt(req.query.skip) === 0) {
             if (req.query.milestoneId) {
-                  const milestones=await sprintModel.aggregate([{$match:{activeStatus: JSON.parse(status), milestoneId: ObjectId(req.query.milestoneId)}},{
+                const milestones = await sprintModel.aggregate([{ $match: { activeStatus: JSON.parse(status), milestoneId: ObjectId(req.query.milestoneId) } }, {
                     $lookup:
                     {
-                      from: "projects",
-                      localField:"projectId",
-                      foreignField: "_id",
-                      as: "projectId"
+                        from: "projects",
+                        localField: "projectId",
+                        foreignField: "_id",
+                        as: "projectId"
                     }
-                },{$unwind:"$projectId"},{
-                    $project:{
-                         "projectId._id":1,
-                            "projectId.projectName":1,
-                        sprintName:1,
-                        sprintDesc:1,
-                        startDate:1,
-                        endDate:1,
-                        activeStatus:1,
-                        createdAt:1,
-                        updatedAt:1,
+                }, { $unwind: "$projectId" },
+                 {
+                    $project: {
+                        "projectId._id": 1,
+                        "projectId.projectName": 1,
+                        sprintName: 1,
+                        sprintDesc: 1,
+                        startDate: 1,
+                        endDate: 1,
+                        activeStatus: 1,
+                        createdAt: 1,
+                        updatedAt: 1,
                         daysLeft: {
                             $divide: [
-                              { $subtract: ["$endDate", "$startDate"] },
-                              1000 * 60 * 60 * 24, 
+                                { $subtract: ["$endDate", "$startDate"] },
+                                1000 * 60 * 60 * 24,
                             ],
-                          },
-                    }
-                }]) .sort({ createdAt: -1 })
+                        },
+                    },
+                },{
+                    $sort: { daysLeft: 1 }
+                  }
+            ])
+            // .sort({ createdAt: -1 });
                 // const milestones = await sprintModel.find({ activeStatus: req.query.activeStatus, milestoneId: req.query.milestoneId }).populate('projectId', 'projectName')
                 //     .sort({ createdAt: -1 })
                 return res.status(200).json({ status: '200', message: 'Milestones Data fetched successfully', response: milestones })
             }
             else {
- 
-                const sprints=await sprintModel.aggregate([{$match:{activeStatus: JSON.parse(status)}},{
+
+                const sprints = await sprintModel.aggregate([{ $match: { activeStatus: JSON.parse(status) } }, {
                     $lookup:
                     {
-                      from: "projects",
-                      localField:"projectId",
-                      foreignField: "_id",
-                      as: "projectId"
+                        from: "projects",
+                        localField: "projectId",
+                        foreignField: "_id",
+                        as: "projectId"
                     }
-                },{$unwind:"$projectId"},{ $lookup:
+                }, { $unwind: "$projectId" }, {
+                    $lookup:
                     {
-                      from: "milestones",
-                      localField:"milestoneId",
-                      foreignField: "_id",
-                      as: "milestoneId"
+                        from: "milestones",
+                        localField: "milestoneId",
+                        foreignField: "_id",
+                        as: "milestoneId"
                     }
                 },
-                {$unwind:"$milestoneId"},{
-                    $project:{
-                         "projectId._id":1,
-                        "projectId.projectName":1,
-                        "milestoneId._is":1,
-                        "milestoneId.title":1,
-                        "milestoneId._id":1,
-                        sprintName:1,
-                        sprintDesc:1,
-                        startDate:1,
-                        endDate:1,
-                        activeStatus:1,
-                        createdAt:1,
-                        updatedAt:1,
+                { $unwind: "$milestoneId" }, {
+                    $project: {
+                        "projectId._id": 1,
+                        "projectId.projectName": 1,
+                        "milestoneId._is": 1,
+                        "milestoneId.title": 1,
+                        "milestoneId._id": 1,
+                        sprintName: 1,
+                        sprintDesc: 1,
+                        startDate: 1,
+                        endDate: 1,
+                        activeStatus: 1,
+                        createdAt: 1,
+                        updatedAt: 1,
                         daysLeft: {
                             $divide: [
-                              { $subtract: ["$endDate", "$startDate"] },
-                              1000 * 60 * 60 * 24, 
+                                { $subtract: ["$endDate", "$startDate"] },
+                                1000 * 60 * 60 * 24,
                             ],
-                          },
+                        },
                     }
-                }]) .sort({ createdAt: -1 })
+                },
+                {
+                    $sort: { daysLeft: 1 }
+                }
+            ])
+                // .sort({ createdAt: -1 })
                 // const sprints = await sprintModel.find({ activeStatus: req.query.activeStatus }).populate([
                 //     { path: 'projectId', select: 'projectName' },
                 //     { path: 'milestoneId', select: 'title' },
@@ -137,51 +151,60 @@ const getAMilestoneAllSprints = async (req, res) => {
             }
         }
         else {
- 
+            let skip=parseInt(req.query.skip);
             const totalCount = await sprintModel.countDocuments({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: JSON.parse(status) }] })
-            const result=await sprintModel.aggregate([{$match:{activeStatus: JSON.parse(status), milestoneId:ObjectId(req.query.milestoneId)} },{
+            const result = await sprintModel.aggregate([{ $match: { activeStatus: JSON.parse(status), milestoneId: ObjectId(req.query.milestoneId) } }, {
                 $lookup:
                 {
-                  from: "projects",
-                  localField:"projectId",
-                  foreignField: "_id",
-                  as: "projectId"
+                    from: "projects",
+                    localField: "projectId",
+                    foreignField: "_id",
+                    as: "projectId"
                 }
-            },{$unwind:"$projectId"},{ $lookup:
+            }, { $unwind: "$projectId" }, {
+                $lookup:
                 {
-                  from: "milestones",
-                  localField:"milestoneId",
-                  foreignField: "_id",
-                  as: "milestoneId"
-                }},{$unwind:"$milestoneId"},{
-                $project:{
-                     "projectId._id":1,
-                    "projectId.projectName":1,
-                    "milestoneId._is":1,
-                    "milestoneId.title":1,
-                    "milestoneId._id":1,
-                    sprintName:1,
-                    sprintDesc:1,
-                    startDate:1,
-                    endDate:1,
-                    activeStatus:1,
-                    createdAt:1,
-                    updatedAt:1,
+                    from: "milestones",
+                    localField: "milestoneId",
+                    foreignField: "_id",
+                    as: "milestoneId"
+                }
+            }, { $unwind: "$milestoneId" }, {
+                $project: {
+                    "projectId._id": 1,
+                    "projectId.projectName": 1,
+                    "milestoneId._is": 1,
+                    "milestoneId.title": 1,
+                    "milestoneId._id": 1,
+                    sprintName: 1,
+                    sprintDesc: 1,
+                    startDate: 1,
+                    endDate: 1,
+                    activeStatus: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
                     daysLeft: {
                         $divide: [
-                          { $subtract: ["$endDate", "$startDate"] },
-                          1000 * 60 * 60 * 24, 
+                            { $subtract: ["$endDate", "$startDate"] },
+                            1000 * 60 * 60 * 24,
                         ],
-                      },
+                    },
                 }
-            }]) .sort({ createdAt: -1 })
-            // const result = await sprintModel.find({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: req.query.activeStatus }] }).populate([
-            //     { path: 'projectId', select: 'projectName' },
-            //     { path: 'milestoneId', select: 'title' },
-            // ])
-                .sort({ createdAt: -1 })
-                .limit(pageSize)
-                .skip((parseInt(req.query.skip) - 1) * pageSize);
+            },
+            {
+                $sort: { daysLeft: 1 }
+            },
+            { $skip: (skip - 1) *  pageSize}, { $limit: pageSize }
+
+        ])
+            // .sort({ createdAt: -1 })
+                // const result = await sprintModel.find({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: req.query.activeStatus }] }).populate([
+                //     { path: 'projectId', select: 'projectName' },
+                //     { path: 'milestoneId', select: 'title' },
+                // ])
+                // .sort({ createdAt: -1 })
+                // .limit(pageSize)
+                // .skip((parseInt(req.query.skip) - 1) * pageSize);
             const totalPages = Math.ceil(totalCount / pageSize);
 
             return res.status(200).json({ status: '200', message: "ALL sprints fecteched successfully", Response: result, totalCount, totalPages })

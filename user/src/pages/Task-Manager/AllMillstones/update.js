@@ -20,7 +20,7 @@ const Update = ({ modal, closeModal, editData }) => {
     console.log(editorState, 'stttttt');
     useEffect(() => {
         reset({
-            title: editData?.title,
+            title: editData?.milestoneId?.title,
             Description: editData?.description,
             startDate: handleDate(editData?.start_date),
             endDate: handleDate(editData?.completion_date),

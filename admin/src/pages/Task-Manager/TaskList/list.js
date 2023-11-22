@@ -36,7 +36,7 @@ const TaskList = () => {
     };
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getsingleSprintTask({ id: '', skip: value, activeStatus: activeStatus ,taskStatus:taskStatus}));
+        dispatch(getsingleSprintTask({ id: '', skip: value, activeStatus: activeStatus, taskStatus: taskStatus }));
     };
     const CloseModal = (val) => {
         if (val == 'render') {
@@ -48,27 +48,25 @@ const TaskList = () => {
         if (val) {
             setStatus(1);
             setSkip(1);
-            
+
             let data = {
                 id: '',
                 activeStatus: true,
                 skip: 1,
-                taskStatus:taskStatus
+                taskStatus: taskStatus,
             };
             dispatch(getsingleSprintTask(data));
-           
         } else {
             setStatus(0);
             setSkip(1);
-       
+
             let data = {
                 id: '',
                 activeStatus: false,
                 skip: 1,
-                taskStatus:taskStatus
+                taskStatus: taskStatus,
             };
             dispatch(getsingleSprintTask(data));
-                 
         }
     };
     const handleStatusChange = (e, data) => {
@@ -87,20 +85,18 @@ const TaskList = () => {
                 activeStatus: true,
             };
             dispatch(TaskStatusAction(body));
-           
         } else {
             let body = {
                 taskId: checkedData._id,
                 activeStatus: false,
             };
             dispatch(TaskStatusAction(body));
-            
         }
         setStatusModal(false);
         setStatus(1);
     };
     useEffect(() => {
-        dispatch(getsingleSprintTask({ id: '', taskStatus:taskStatus, activeStatus: true, skip: skip }));
+        dispatch(getsingleSprintTask({ id: '', taskStatus: taskStatus, activeStatus: true, skip: skip }));
     }, [render]);
     useEffect(() => {
         dispatch(getAllRoles());
@@ -119,29 +115,28 @@ const TaskList = () => {
     useEffect(() => {
         let body = {
             status: 1,
-            skip:"",
-            projectStatus:""
+            skip: '',
+            projectStatus: '',
         };
         dispatch(getAllProjects(body));
-      
     }, [render]);
     const handleTaskStatus = (val) => {
         if (val == '1') {
             settaskStatus(1);
             setSkip(1);
-            dispatch(getsingleSprintTask({ id: '' ,activeStatus: true, skip: 1, taskStatus: 1 }));
+            dispatch(getsingleSprintTask({ id: '', activeStatus: true, skip: 1, taskStatus: 1 }));
         } else if (val == '2') {
             settaskStatus(2);
             setSkip(1);
-            dispatch(getsingleSprintTask({ id: '' ,activeStatus: true, skip: 1, taskStatus: 2 }));
+            dispatch(getsingleSprintTask({ id: '', activeStatus: true, skip: 1, taskStatus: 2 }));
         } else if (val == '3') {
             setSkip(1);
             settaskStatus(3);
-            dispatch(getsingleSprintTask({ id: '' ,activeStatus: true, skip: 1, taskStatus: 3 }));
+            dispatch(getsingleSprintTask({ id: '', activeStatus: true, skip: 1, taskStatus: 3 }));
         } else {
             setSkip(1);
             settaskStatus(4);
-            dispatch(getsingleSprintTask({ id: '' ,activeStatus: true, skip: 1, taskStatus: 4 }));
+            dispatch(getsingleSprintTask({ id: '', activeStatus: true, skip: 1, taskStatus: 4 }));
         }
     };
     return (
@@ -156,7 +151,7 @@ const TaskList = () => {
                     <div className={`col-auto  cp ${taskStatus == 2 ? 'Active_data' : 'InActive_data'}`}>
                         <p className="p-0 m-0 p-1 cp" onClick={() => handleTaskStatus('2')}>
                             In Progress
-                        </p> 
+                        </p>
                     </div>
 
                     <div className={`col-auto  cp ${taskStatus == 3 ? 'Active_data' : 'InActive_data'}`}>
@@ -187,7 +182,7 @@ const TaskList = () => {
                 <div className="col-4 d-flex align-items-center justify-content-center">
                     <h4 className="header-title heading_data"> Tasks</h4>
                 </div>
-                {status == 1 && taskStatus==1 ? (
+                {status == 1 && taskStatus == 1 ? (
                     <div className="col-4 d-flex align-items-center justify-content-end pe-0">
                         <Button className="web_button" variant="info" onClick={handleCreate}>
                             Create Task
@@ -277,7 +272,7 @@ const TaskList = () => {
                             </Col>
                         </Row>
                         <Row>
-                            <Col lg={12} className="d-flex justify-content-end mt-3">
+                            <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
                                 {store?.getSigleSprintTask?.data?.totalPages > 0 && (
                                     <Stack spacing={2}>
                                         <Pagination

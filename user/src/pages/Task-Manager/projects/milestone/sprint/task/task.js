@@ -10,7 +10,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Update from './modal/update';
 import { getAllProjects } from '../../../../../../redux/projects/action';
-import {  getsingleMileStone } from '../../../../../../redux/milestone/action';
+import { getsingleMileStone } from '../../../../../../redux/milestone/action';
 import { getSingleSprint, getSprintById } from '../../../../../../redux/sprint/action';
 import { getAllRoles, getAllUsers } from '../../../../../../redux/actions';
 import { Modal } from 'react-bootstrap';
@@ -28,7 +28,7 @@ const Task = () => {
     const [editData, setEditData] = useState();
     const [render, setRender] = useState(false);
     const [statusModal, setStatusModal] = useState(false);
-    const [activeStatus,setActiveStatus] = useState(true);
+    const [activeStatus, setActiveStatus] = useState(true);
 
     const getSingleSprintTask = store?.getSigleSprintTask?.data?.response;
     const deletehandle = store?.deleteTask?.data;
@@ -38,7 +38,7 @@ const Task = () => {
     };
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getsingleSprintTask({ id: spriteId, skip: value ,activeStatus:activeStatus }));
+        dispatch(getsingleSprintTask({ id: spriteId, skip: value, activeStatus: activeStatus }));
     };
     const CloseModal = (val) => {
         if (val == 'render') {
@@ -49,22 +49,20 @@ const Task = () => {
     const handleActive = (val) => {
         if (val) {
             setStatus(1);
-            setActiveStatus(true)
+            setActiveStatus(true);
             let data = {
                 id: spriteId,
-                activeStatus:true,
+                activeStatus: true,
                 skip: skip,
-                
             };
             dispatch(getsingleSprintTask(data));
         } else {
-         setStatus(0);
-         setActiveStatus(false)
+            setStatus(0);
+            setActiveStatus(false);
             let data = {
                 id: spriteId,
-                activeStatus:false,
+                activeStatus: false,
                 skip: skip,
-                
             };
             dispatch(getsingleSprintTask(data));
         }
@@ -93,14 +91,13 @@ const Task = () => {
             dispatch(deleteTask(body));
         }
         setStatusModal(false);
-        setStatus(1)
-
+        setStatus(1);
     };
     const handelUpdate = (data) => {
         setEditData(data);
         SetEditOpenModal(true);
     };
- 
+
     const CloseUpdateModal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -108,7 +105,7 @@ const Task = () => {
         SetEditOpenModal(false);
     };
     useEffect(() => {
-        dispatch(getsingleSprintTask({ id: spriteId ,activeStatus:true , skip: 1 }));
+        dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1 }));
     }, [render]);
     useEffect(() => {
         let body = {
@@ -188,11 +185,14 @@ const Task = () => {
                                                     <tr>
                                                         <td>{(skip - 1) * 5 + index + 1}</td>
                                                         <td>{item?.summary}</td>
-                                                        <td>  <div
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: item?.description,
-                                                    }}
-                                                /></td>
+                                                        <td>
+                                                            {' '}
+                                                            <div
+                                                                dangerouslySetInnerHTML={{
+                                                                    __html: item?.description,
+                                                                }}
+                                                            />
+                                                        </td>
 
                                                         <td> {moment(item?.startDate).format('L')}</td>
                                                         <td>{moment(item?.dueDate).format('L')}</td>
@@ -200,7 +200,6 @@ const Task = () => {
                                                             <Form.Check
                                                                 type="switch"
                                                                 checked={item?.activeStatus}
-                                                            
                                                                 onChange={(e) => handleStatusChange(e, item)}
                                                             />
                                                         </td>
@@ -224,7 +223,9 @@ const Task = () => {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col lg={12} className="d-flex justify-content-end mt-3">
+                                    <Col
+                                        lg={12}
+                                        className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
                                         {store?.getSigleSprintTask?.data?.totalPages > 0 && (
                                             <Stack spacing={2}>
                                                 <Pagination

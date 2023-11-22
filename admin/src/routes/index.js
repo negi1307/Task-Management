@@ -52,6 +52,8 @@ const Technology  = React.lazy(() => import('../pages/Task-Manager/Technology/te
 const TechnologyCategory  = React.lazy(() => import('../pages/Task-Manager/TechnologyCategory/category'));
 const AllTaskList = React.lazy(() => import('../pages/Task-Manager/TaskList/list'));
 const Summary = React.lazy(() => import('../pages/Task-Manager/Summary/summary'));
+const clientRepository = React.lazy(() => import('../pages/Task-Manager/ClientReprojeteries/clientRepository'));
+const GetUploadData = React.lazy(() => import('../pages/Task-Manager/ClientReprojeteries/upload'));
 // AllSprint
 // const AllSprint = React.lazy(() => import('../pages/Task-Manager/All-Sprint'));
 
@@ -77,6 +79,12 @@ const CRMProjects = React.lazy(() => import('../pages/apps/CRM/Projects'));
 const CRMManagement = React.lazy(() => import('../pages/apps/CRM/Management'));
 const CRMClients = React.lazy(() => import('../pages/apps/CRM/Clients'));
 const CRMOrderList = React.lazy(() => import('../pages/apps/CRM/OrderList'));
+
+
+// customer
+const CustomerIndex = React.lazy(() => import('../pages/Task-Manager/customer/CustomerIndex'));
+const ClientIndex = React.lazy(() => import('../pages/Task-Manager/client/ClientIndex'));
+
 
 // - ecommece pages
 const EcommerceProducts = React.lazy(() => import('../pages/apps/Ecommerce/Products'));
@@ -337,7 +345,22 @@ const AllRoutes = () => {
                             path: 'technologyCategory',
                             element: <LoadComponent component={TechnologyCategory} />,
                         },
-                      
+                        {
+                            path: 'customer',
+                            element: <LoadComponent component={CustomerIndex} />,
+                        },
+                        {
+                            path: 'client',
+                            element: <LoadComponent component={ClientIndex} />,
+                        },
+                        {
+                            path: 'clientRepository',
+                            element: <LoadComponent component={clientRepository} />,
+                        },
+                        {
+                            path: "clientRepository/uploadData/projectId=/:projectId" ,
+                            element: <LoadComponent component={GetUploadData} />
+                        },
                     ],
                 },
                 {

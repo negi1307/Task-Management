@@ -25,20 +25,20 @@ const getTaskComment = async (req, res) => {
 }
 
 // Update the Comment 
-const updateComment = async (req,res)=>{
+const updateComment = async (req, res) => {
     try {
-        await commentsModel.findByIdAndUpdate({_id : req.body.commentId}, req.body, {new : true});
-        return res.status(200).json({ status: "200", message: "Comment updated Successfully"})
+        await commentsModel.findByIdAndUpdate({ _id: req.body.commentId }, req.body, { new: true });
+        return res.status(200).json({ status: "200", message: "Comment updated Successfully" })
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
 }
 
 // delete a Comment
-const deleteComment = async (req,res) => {
+const deleteComment = async (req, res) => {
     try {
-        await commentsModel.findByIdAndDelete({_id : req.query.commentId});
-        return res.status(200).json({ status: "200", message: "Comment deleted Successfully"})
+        await commentsModel.findByIdAndDelete({ _id: req.query.commentId });
+        return res.status(200).json({ status: "200", message: "Comment deleted Successfully" })
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }

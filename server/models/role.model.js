@@ -3,12 +3,7 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
         {
             role: {
                 type: String
-            },
-            // permission: [
-            //     {
-            //         type: String
-            //     }
-            // ]
+            }
         }
     )
 

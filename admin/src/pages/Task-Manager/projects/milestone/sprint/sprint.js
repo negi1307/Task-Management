@@ -51,18 +51,20 @@ const Sprint = () => {
     const handleActive = (val) => {
         if (val) {
             setStatus(1);
+            setSkip(1);
             let data = {
                 id: milestoneId,
                 activeStatus: 1,
-                skip,
+                skip:1
             };
             dispatch(getSingleSprint(data));
         } else {
             setStatus(0);
+            setSkip(1);
             let data = {
                 id: milestoneId,
                 activeStatus: 0,
-                skip,
+                skip:1
             };
             dispatch(getSingleSprint(data));
         }
@@ -218,7 +220,7 @@ const Sprint = () => {
                         </Row>
                     </Col>
                     <Row>
-                        <Col lg={12} className="d-flex justify-content-end mt-3">
+                        <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
                             {store?.getAllSingleSprints?.data?.totalPages > 0 && (
                                 <Stack spacing={2}>
                                     <Pagination
