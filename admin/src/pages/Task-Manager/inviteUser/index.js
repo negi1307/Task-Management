@@ -25,7 +25,7 @@ const InviteUser = () => {
             password: data?.password,
             email: data?.email,
             lastName: data?.lastName,
-            roleId: data?.role,
+            role: data?.role,
         };
         dispatch(inviteUser(body));
     };
@@ -124,7 +124,7 @@ const InviteUser = () => {
                                     {...register('role')}>
                                     <option value={''}>--Select--</option>
                                     {store?.getAllRoles?.data?.response?.map((ele, ind) => (
-                                        <option value={ele?._id}> {ele?.role} </option>
+                                        <option value={ele?.role}> {ele?.role} </option>
                                     ))}
                                 </select>
                             </Form.Group>

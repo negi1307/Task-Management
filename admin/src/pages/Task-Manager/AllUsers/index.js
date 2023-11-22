@@ -70,7 +70,7 @@ const AllUsers = () => {
     useEffect(() => {
         if (csvdownloaddata?.data?.status == 200 && csvdownloaddata?.data?.length !== 0) {
             setcsvdownload(
-                csvdownloaddata?.data?.loginRecords?.map((ele) => {
+                csvdownloaddata?.data?.data?.map((ele) => {
                     return {
                         Name: ele?.userId?.firstName + ' ' + ele?.userId?.lastName,
                         Time: moment(ele?.loginTime).format('LT'),
