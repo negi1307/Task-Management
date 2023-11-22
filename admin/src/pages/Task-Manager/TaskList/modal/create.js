@@ -11,6 +11,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { getSingleSprint, getsingleMileStone } from '../../../../redux/actions';
 import moment from 'moment';
+import pdfImage from '../../../../../src/assets/images/pdf.png';
 const Create = ({ modal, CloseModal }) => {
     const {
         register,
@@ -19,6 +20,7 @@ const Create = ({ modal, CloseModal }) => {
         formState: { errors },
     } = useForm();
     const store = useSelector((state) => state);
+
     const [description, setDescription] = useState('');
     const [milestoneDisable,setMilestoneDisable]=useState(true)
     const [sprintDisable,setsprintDisable]=useState(true)
@@ -26,6 +28,23 @@ const Create = ({ modal, CloseModal }) => {
     const milestoneId = store?.getMilestoneId?.data;
     const sprintid = store?.getSprintId?.data;
     const Createhandel = store?.createTaskReducer;
+    const [selectedFile, setSelectedFile] = useState('');
+    const handleFileSelect = (event) => {
+        const file = event.target.files[0];
+        if(file){
+            setSelectedFile(file);
+            alert('File selected');
+        }
+     else {
+        alert('File Not selected');
+        setSelectedFile("");
+     }   
+       
+    };
+
+    const openFileInput = () => {
+        document.getElementById('fileInput').click();
+    };
     // const sucesshandel =store?.createTaskReducer?.data
     const today = new Date().toISOString().split('T')[0];
     const dispatch = useDispatch();
@@ -43,7 +62,7 @@ const Create = ({ modal, CloseModal }) => {
         body.append('startDate', e.startdate);
         body.append('dueDate', e.dueDate);
         body.append('status', 1);
-        body.append('attachment', e.Attachment[0]);
+        body.append('attachment', selectedFile);
         
             dispatch(createTask(body));
             setValue('projectname', '');
@@ -58,10 +77,24 @@ const Create = ({ modal, CloseModal }) => {
             setValue('Priority', '');
             setValue('startdate', '');
             setValue('dueDate', '');
+            setSelectedFile("")
         // setShowModal(false);
     };
 
     const handleClose = () => {
+        setValue('projectname', '');
+        setValue('Milestone', '');
+        setsprintDisable(true)
+        setMilestoneDisable(true)
+        setValue('description', '');
+        setValue('Sprint', '');
+        setValue('summary', '');
+        setValue('Assignee', '');
+        setValue('Reporter', '');
+        setValue('Priority', '');
+        setValue('startdate', '');
+        setValue('dueDate', '');
+        setSelectedFile("")
         CloseModal();
     };
     useEffect(() => {
@@ -321,20 +354,41 @@ const Create = ({ modal, CloseModal }) => {
                                         </Form.Group>
                                     </Col>
                                     <Col lg={6}>
-                                        <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                {' '}
-                                                Attachment <span className="text-danger">*</span>:
-                                            </Form.Label>
-                                            <Form.Control
-                                                type="file"
-                                                placeholder="To-Do"
-                                                {...register('Attachment', { required: true })}
+                                   
+                                    <div class="mb-2">
+                                        <label class="form-label" for="exampleForm.ControlTextarea1">
+                                            Attachment :
+                                        </label>
+                                        <div onClick={openFileInput}>
+                                            <i className="mdi mdi-attachment m-0 p-0 font-20 cp"></i>
+                                        </div>
+                                        <input
+                                            type="file"
+                                            accept="application/pdf,image/png,image/jpeg,image/jpg"
+                                            id="fileInput"
+                                            className="file-input"
+                                            onChange={handleFileSelect}
+                                            style={{ display: 'none' }}
+                                            // {...register('Attachment', { required: true })}
+                                        />{' '}
+                                        {selectedFile ? (
+                                            <img
+                                                src={
+                                                    selectedFile?.type == 'image/png' ||
+                                                    selectedFile?.type == 'image/jpg' ||
+                                                    selectedFile?.type === 'image/jpeg'
+                                                        ?  URL.createObjectURL( selectedFile)
+                                                        : pdfImage
+                                                }
+                                                className="add_upload_icon_load me-2 h-auto w-25 cp"
+                                                alt=""
                                             />
-                                            {errors.Attachment?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
+                                        ) : (
+                                            ''
+                                        )}
+                                       
+                                    </div>
+                                
                                     </Col>
                                 </Row>
                             </Col>
