@@ -179,7 +179,7 @@ const Sprint = () => {
                                                     </td>
 
                                                     <td> {moment(item?.sprintId?.startDate).format('L')}</td>
-                                                    <td>{moment(item?.sprintId?.endDate).format('L')}</td>
+                                                    <td> {item?.sprintId?.daysLeft}</td>
                                                     {/* <td> <Form.Check
                                                                 type="switch"
                                                                 checked={item?.status}

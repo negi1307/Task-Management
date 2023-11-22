@@ -164,7 +164,7 @@ const Projects = () => {
                                         <th>Client Name</th>
                                         <th>Project Type</th>
                                         <th>Project Start Date</th>
-                                        <th>Project End Date</th>
+                                        <th>Due Days</th>
                                         {/* <th>Status</th> */}
                                         <th>Action</th>
                                     </tr>
@@ -190,8 +190,9 @@ const Projects = () => {
                                                 </td>
                                                 <td>
                                                     <span className="namelink">
-                                                        {' '}
-                                                        {moment(ele?.projectId?.endDate).format('L')}
+                                                    {ele?.projectId?.daysLeft}
+                                              
+                                                        {/* {moment(ele?.projectId?.endDate).format('L')} */}
                                                     </span>
                                                 </td>
                                                 {/* <td>

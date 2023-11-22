@@ -534,11 +534,12 @@ h5.count {
     list-style: none;
     display: flex;
     justify-content: space-between;
+    padding-left: 0px;
 }
 
 .status ul li {
-    margin-right: 58px;
-    font-size: 20px;
+    margin-right: 29px;
+    font-size: 17px;
     color: #39afd1;
     font-weight: 600;
 }
