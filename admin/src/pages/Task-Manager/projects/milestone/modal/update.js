@@ -82,7 +82,7 @@ const Update = ({ modal, closeModal, editData }) => {
                         <Row>
                             <Col lg={9} className="text-end">
                                 <Modal.Title id="" className="mx-auto">
-                                    Update MileStone Details
+                                    Update Milestone Details
                                 </Modal.Title>
                             </Col>
                             <Col lg={3} className="text-end pt-2">
