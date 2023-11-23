@@ -34,7 +34,7 @@ const updateSprint = async (req, res) => {
         await sprintModel.findByIdAndUpdate({ _id: req.body.sprintId }, req.body, { new: true });
         return res.status(200).json({ status: '200', message: 'Sprint updated Successfully' });
     } catch (error) {
-        return res.status(200).json({ status: '404', message: 'Something went wrong' });
+        return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });
     }
 }
 
