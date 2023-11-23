@@ -10,7 +10,7 @@ function* createTaskFunction({ payload }) {
         })
         
         const response = yield call(createTaskApi, { payload });
-    //   alert(response)
+       console.log(response ,"hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii") ;
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.CREATE_TASK_SUCCESS,
@@ -29,6 +29,7 @@ function* createTaskFunction({ payload }) {
         }
 
     } catch (error) {
+       
         yield put({
             type: TASK_TYPES.CREATE_TASK_ERROR,
             payload: { message: error?.message }
