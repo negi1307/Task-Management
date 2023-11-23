@@ -3,6 +3,7 @@ const taskModel = require("../models/task.model");
 const assignUserModel = require("../models/assignUser.model");
 const historyModel = require("../models/history.model");
 const rolesModel = require('../models/role.model');
+const milestoneModel = require("../models/milestone.model");
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -206,9 +207,14 @@ const getTasks = async (req, res) => {
       var pageSize = 10;
       var skip = parseInt(req.query.skip);
     }
-    query.status = parseInt(req.query.status) ? parseInt(req.query.status) : delete query.status;
-    totalCount = await taskModel.countDocuments(query);
-    console.log(query, "totalCount")
+    query.status = parseInt(req.query.status)
+    console.log(query)
+    // totalCount = await taskModel.countDocuments(query, projectId, milestoneId, sprintId);
+    totalCount = await taskModel.countDocuments({
+      activeStatus: JSON.parse(req.query.activeStatus),
+      status: parseInt(req.query.status), projectId: req.query.projectId,
+      milestoneId: req.query.milestoneId, sprintId: req.query.sprintId
+    })
 
     var tasks = await taskModel.aggregate([
       {
