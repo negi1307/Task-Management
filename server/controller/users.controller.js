@@ -1,4 +1,5 @@
 const userModel = require("../models/users.model");
+const assignUserModel = require("../models/assignUser.model");
 const nodemailer = require("../middleware/nodemailer");
 const bcrypt = require("bcrypt");
 const { accessToken } = require("../middleware/jwt.auth");
@@ -55,7 +56,6 @@ const logInUser = async (req, res) => {
       return res.status(200).json({ status: "400", message: "User not found" });
     }
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 };
@@ -66,7 +66,7 @@ const getUsers = async (req, res) => {
     const result = await userModel.find({ role: { $ne: 'Admin' } }).sort({ createdAt: -1 });
     return res.status(200).json({ status: "200", message: 'User data fetched successfully', response: result });
   } catch (error) {
-    return res.status(200).json({ status: "500", message: 'Something went wrong' });
+    return res.status(500).json({ status: "500", message: 'Something went wrong' });
   }
 }
 
@@ -76,15 +76,18 @@ const deleteUser = async (req, res) => {
     await userModel.findByIdAndDelete({ _id: req.query.userId });
     return res.status(200).json({ status: "200", message: 'User deleted successfully' });
   } catch (error) {
-    return res.status(200).json({ status: '500', message: 'Something went wrong' })
+    return res.status(500).json({ status: '500', message: 'Something went wrong' })
   }
 }
 
 // Time tracking of users spend time
 const trackTime = async (req, res) => {
   try {
-    const userIds = await userModel.distinct('_id');
+    const userIds = await userModel.distinct('_id', { role : {$in : ['Employee', 'Sales']}});
     console.log(userIds);
+    const assignedTasksIds = await assignUserModel.distinct('taskId', { assigneeId: { $in: userIds } });
+    console.log(assignedTasksIds);
+    return res.send('okk')
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }

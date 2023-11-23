@@ -16,6 +16,8 @@ const createtask = async (req, res) => {
       return res.status(200).json({ status: "400", message: "Task already exists" });
     } else {
       const lastTask = await taskModel.countDocuments();
+      const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : req.body.attachment;
+      const fileExtension = req.file ? req.file.mimetype : undefined;
       const task = await taskModel.create({
         taskMannualId: lastTask + 1,
         projectId,
@@ -26,8 +28,8 @@ const createtask = async (req, res) => {
         priority,
         startDate,
         dueDate,
-        attachment: `http://localhost:8000/upload/${req.file.originalname}`,
-        attachmentType: req.file.mimetype,
+        attachment: attachmentPath,
+        attachmentType: fileExtension,
         parentId
       });
       if (task) {
@@ -167,7 +169,7 @@ const getTasks = async (req, res) => {
     var totalPages = 0;
     var totalCount = 0;
     const query = {};
-    if (!req.query.sprintId && !req.query.taskStatus && parseInt(req.query.skip) === 1) {
+    if (!req.query.projectId && !req.query.milestoneId && !req.query.sprintId && !req.query.taskStatus && parseInt(req.query.skip) === 1) {
       let query = {};
       const taskStatus = JSON.parse(req.query.taskStatus);
       query.activeStatus = JSON.parse(req.query.activeStatus)
@@ -216,6 +218,16 @@ const getTasks = async (req, res) => {
     }
     totalCount = await taskModel.countDocuments(query);
     var tasks = await taskModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { projectId: req.query.projectId ? new mongoose.Types.ObjectId(req.query.projectId) : { $exists: true } },
+            { milestoneId: req.query.milestoneId ? new mongoose.Types.ObjectId(req.query.milestoneId) : { $exists: true } },
+            { sprintId: req.query.sprintId ? new mongoose.Types.ObjectId(req.query.sprintId) : { $exists: true } },
+            { activeStatus: JSON.parse(req.query.activeStatus) }
+          ],
+        },
+      },
       {
         $match: query,
       },
@@ -336,9 +348,7 @@ const getTasks = async (req, res) => {
 const updateTask = async (req, res) => {
   try {
     const taskId = req.body.taskId;
-    const attachmentPath = req.file
-      ? `http://localhost:8000/upload/${req.file.originalname}`
-      : req.body.attachment;
+    const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : req.body.attachment;
     const fileExtension = req.file ? req.file.mimetype : undefined;
     const obj = {
       summary: req.body.summary,
@@ -350,7 +360,10 @@ const updateTask = async (req, res) => {
       attachment: attachmentPath,
       attachmentType: fileExtension,
     };
-    const secObj = { assigneeId: req.body.assigneeId, reporterId: req.body.reporterId };
+    const secObj = {
+      assigneeId: req.body.assigneeId,
+      reporterId: req.body.reporterId
+    };
     await taskModel.findByIdAndUpdate(taskId, obj, { new: true });
     await assignUserModel.findOneAndUpdate({ taskId }, secObj, { new: true });
     return res.status(200).json({ status: "200", message: "Task updated successfully" });
@@ -366,18 +379,33 @@ const deleteTask = async (req, res) => {
     await assignUserModel.deleteMany({ taskId: req.query.taskId });
     return res.status(200).json({ status: "200", message: "Task Deleted successfully" });
   } catch (err) {
-    return res.status(200).json({ status: "500", message: "Something went wrong", error: err.message });
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: err.message });
   }
 };
 
 // update Status of a task
 const updateTaskStatus = async (req, res) => {
   try {
-    let existingTask = await taskModel.findById({ _id: req.body.taskId });
-    await taskModel.findByIdAndUpdate({ _id: req.body.taskId }, { status: req.body.status }, { new: true });
-    const HistoryTypeEnum = { CREATED: "created", UPDATED: "updated", DELETED: "deleted" };
-    await historyModel.create({ type: HistoryTypeEnum.UPDATED, taskId: req.body.taskId, previousStatus: existingTask.status, currentStatus: req.body.status });
-    return res.status(200).json({ status: "200", message: "Task Status updated successfully" });
+    const { taskId, status } = req.body;
+    let query = { status };
+    if (status === 2) {
+      query.inProgressDate = new Date();
+    }
+    if (status === 4) {
+      query.doneDate = new Date();
+
+      const task = await taskModel.findById(taskId);
+      if (task && task.inProgressDate) {
+        const timeDifferenceInHours = (query.doneDate.getTime() - task.inProgressDate.getTime()) / (1000 * 60 * 60);
+        if (task.timeTracker) {
+          query.timeTracker = task.timeTracker + timeDifferenceInHours;
+        } else {
+          query.timeTracker = timeDifferenceInHours;
+        }
+      }
+    }
+    const result = await taskModel.findByIdAndUpdate({ _id: taskId }, query, { new: true });
+    return res.status(200).json({ status: "200", message: "Task Status updated successfully", data: result });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }

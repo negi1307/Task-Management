@@ -23,7 +23,7 @@ const addMilestone = async (req, res) => {
       return res.status(200).json({ status: "200", message: "Milestone added Successfully", response: result });
     }
   } catch (error) {
-    return res.status(200).json({ status: "500", message: "Something went wrong", error: error.message });
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 };
 
@@ -33,7 +33,7 @@ const updateMilestone = async (req, res) => {
     await milestoneModel.findByIdAndUpdate({ _id: req.body.milestoneId }, req.body, { new: true });
     return res.status(200).json({ status: "200", message: "Milestone updated Successfully" });
   } catch (error) {
-    return res.status(200).json({ status: "500", message: "Something went wrong", error: error.message });
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 };
 
@@ -43,7 +43,7 @@ const updateStatus = async (req, res) => {
     await milestoneModel.findByIdAndUpdate({ _id: req.body.milestoneId }, { activeStatus: req.body.activeStatus });
     return res.status(200).json({ status: "200", message: "Milestone status updated Successfully" });
   } catch (error) {
-    return res.status(200).json({ status: "500", message: "Something went wrong", error: error.message });
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 };
 
