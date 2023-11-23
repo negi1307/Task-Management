@@ -450,6 +450,11 @@ span.logo-lg {
 }
 .form-switch .form-check-input:checked[type='checkbox']:after {
     background-color: black !important;
+    width: 1rem !important;
+    height: 1rem !important;
+    /* background-color: #3b71ca; */
+    margin-top: -1px !important;
+    margin-left: 0.8rem !important;
 }
 .form-check-input[type='checkbox']:checked {
     /* background-image: none; */
@@ -498,8 +503,13 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     overflow: hidden !important;
 } */
 .form-switch .form-check-input {
-    width: 2.5em !important;
+    width: 2em !important;
     margin-left: -2.5em !important;
+}
+.form-switch .form-check-input:after {
+    width: 1rem !important;
+    height: 1rem !important;
+    margin-top: -1px !important;
 }
 .side-nav-item {
     color: white !important;
@@ -510,6 +520,10 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
 .bg_clr {
     height: 75px;
     width: 75px;
+}
+.header-title.heading_data {
+    font-size: 20px !important;
+    font-weight: 700 !important;
 }
 .projects_info {
     display: flex;
