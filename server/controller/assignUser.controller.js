@@ -31,143 +31,199 @@ const addUserAssignments = async (req, res) => {
 
 // Get Project , milestones, and sprints of users
 const getUserAssignments = async (req, res) => {
-    try {
-      let pageSize = 10;
-      const { flag, skip } = req.query;
-      const taskIds = await assignUserModel.distinct("taskId", { assigneeId: req.user._id });
-      if (flag == 1) {
-        const projectDetails = await taskModel.find({ _id: taskIds, projectId: { $exists: true } })
-          .populate("projectId")
-          .sort({ createdAt: -1 })
-          .limit(pageSize)
-          .skip((parseInt(skip) - 1) * pageSize);
-        const uniqueProjectDetails = projectDetails.reduce((acc, project) => {
-          const existingProject = acc.find((item) => item.projectId && item.projectId.equals(project.projectId._id));
-          if (!existingProject) {
-            const endDate = project.projectId.endDate;
-            const daysLeft = calculateDaysLeft(endDate);
-            project.projectId.daysLeft = daysLeft;
-            acc.push(project)
-          }
-          return acc;
-        }, []);
-        const totalCount = uniqueProjectDetails.length;
-        const totalPages = Math.ceil(totalCount / pageSize);
-        return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: uniqueProjectDetails, totalCount, totalPages });
-      }
-      if (flag == 2) {
-        const milestoneDetails = await taskModel.find({ _id: taskIds, projectId: req.query.projectId, milestoneId: { $exists: true } })
-          .populate("milestoneId")
-          .sort({ createdAt: -1 })
-          .limit(pageSize)
-          .skip((parseInt(skip) - 1) * pageSize);
-        const uniqueMilestoneDetails = milestoneDetails.reduce((acc, milestone) => {
-          const existingMilestone = acc.find((item) => item.milestoneId && item.milestoneId.equals(milestone.milestoneId._id));
-          if (!existingMilestone) {
-            const endDate = milestone.milestoneId.completionDate;
-            const daysLeft = calculateDaysLeft(endDate);
-            milestone.milestoneId.daysLeft = daysLeft;
-            acc.push(milestone)
-          }
-          return acc;
-        },
-          []);
-        const totalCount = uniqueMilestoneDetails.length;
-        const totalPages = Math.ceil(totalCount / pageSize);
-        return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: uniqueMilestoneDetails, totalCount, totalPages });
-      }
-      if (flag == 3) {
-        const sprintDetails = await taskModel.find({ _id: taskIds, milestoneId: req.query.milestoneId, sprintId: { $exists: true } })
-          .populate("sprintId")
-          .sort({ createdAt: -1 })
-          .limit(pageSize)
-          .skip((parseInt(skip) - 1) * pageSize);
-        const uniqueSprintDetails = sprintDetails.reduce((acc, sprint) => {
-          const existingSprint = acc.find((item) => item.sprintId && item.sprintId.equals(sprint.sprintId._id));
-          if (!existingSprint) {
-            const endDate = sprint.sprintId.endDate;
-            const daysLeft = calculateDaysLeft(endDate);
-            sprint.sprintId.daysLeft = daysLeft;
-            acc.push(sprint)
-          }
-          return acc;
-        }, []);
-        const totalCount = uniqueSprintDetails.length;
-        const totalPages = Math.ceil(totalCount / pageSize);
-        return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: uniqueSprintDetails, totalCount, totalPages });
-      }
-    } catch (error) {
-      return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
-    }
-  };
-//   try {
-//     let pageSize = 10;
-//     const { flag, skip } = req.query;
-//     const taskIds = await assignUserModel.distinct("taskId", { assigneeId: req.user._id });
-  
-//     let details, idField, endDateField;
-  
-//     switch (flag) {
-//       case "1":
-//         idField = "projectId";
-//         endDateField = "endDate";
-//         details = await taskModel.find({ _id: taskIds, projectId: { $exists: true } })
-//           .populate("projectId")
-//           .sort({ createdAt: -1 })
-//           .skip((parseInt(skip) - 1) * pageSize)
-//           .limit(pageSize);
-//         break;
-  
-//       case "2":
-//         idField = "milestoneId";
-//         endDateField = "completionDate";
-//         details = await taskModel.find({ _id: taskIds, projectId: req.query.projectId, milestoneId: { $exists: true } })
-//           .populate("milestoneId")
-//           .sort({ createdAt: -1 })
-//           .skip((parseInt(skip) - 1) * pageSize)
-//           .limit(pageSize);
-//         break;
-  
-//       case "3":
-//         idField = "sprintId";
-//         endDateField = "endDate";
-//         details = await taskModel.find({ _id: taskIds, milestoneId: req.query.milestoneId, sprintId: { $exists: true } })
-//           .populate("sprintId")
-//           .sort({ createdAt: -1 })
-//           .skip((parseInt(skip) - 1) * pageSize)
-//           .limit(pageSize);
-//         break;
-  
-//       default:
-//         return res.status(400).json({ status: "400", message: "Invalid flag value" });
-//     }
-  
-//     const uniqueDetails = [];
+  try {
+    let pageSize = 10;
+    let todayDate = new Date()
+    let { flag, skip, projectId, milestoneId } = req.query;
+    let taskIds = await assignUserModel.distinct("taskId", { assigneeId: req.user._id });
 
-//     details.forEach(item => {
-//       const existingItem = uniqueDetails.find(detail => detail[idField]._id.toString() === item[idField]._id.toString());
-//       if (!existingItem) {
-//         const endDate = item[idField][endDateField];
-//         const daysLeft = calculateDaysLeft(endDate);
-//         item[idField].daysLeft = daysLeft;
-//         uniqueDetails.push(item);
-//       }
-//     });
-  
-//     const totalCount = uniqueDetails.length;
-//     const totalPages = Math.ceil(totalCount / pageSize);
-  
-//     return res.status(200).json({
-//       status: "200",
-//       message: "Data Fetched Successfully",
-//       response: uniqueDetails,
-//       totalCount,
-//       totalPages
-//     });
-//   } catch (error) {
-//     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
-//   }
-// };
+    if (flag == 1) {
+      let queries = [
+        {
+          $match: { _id: { $in: taskIds }, projectId: { $exists: true } }
+        },
+        {
+          $lookup: {
+            from: 'projects',
+            localField: 'projectId',
+            foreignField: '_id',
+            as: 'ProjectInfo'
+          }
+        },
+        {
+          $unwind: '$ProjectInfo'
+        },
+        {
+          $addFields: {
+            'ProjectInfo.daysLeft': {
+              $max: [
+                0,
+                {
+                  $round: [
+                    {
+                      $divide: [
+                        { $subtract: ['$ProjectInfo.endDate', todayDate] },
+                        1000 * 60 * 60 * 24,
+                      ]
+                    },
+                    0
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          $group: {
+            _id: '$projectId',
+            projectId: { $first: '$ProjectInfo' },
+          }
+        },
+        {
+          $sort: { 'ProjectInfo.daysLeft': 1 }
+        },
+        {
+          $sort: { 'ProjectInfo.daysLeft': 1 }
+        },
+        {
+          $sort: { 'ProjectInfo.daysLeft': 1 }
+        }
+      ];
+
+      const count = await taskModel.aggregate(queries);
+      const totalCount = count.length
+      queries[6] = { $skip: (parseInt(skip) - 1) * pageSize }
+      queries[7] = { $limit: pageSize };
+      const projectDetails = await taskModel.aggregate(queries);
+      const totalPages = Math.ceil(totalCount / pageSize);
+      return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: projectDetails, totalCount, totalPages });
+    }
+    if (flag == 2) {
+      let queries = [
+        {
+          $match: { _id: { $in: taskIds }, projectId: mongoose.Types.ObjectId(projectId), milestoneId: { $exists: true } }
+        },
+        {
+          $lookup: {
+            from: 'milestones',
+            localField: 'milestoneId',
+            foreignField: '_id',
+            as: 'MilestoneInfo'
+          }
+        },
+        {
+          $unwind: '$MilestoneInfo'
+        },
+        {
+          $addFields: {
+            'MilestoneInfo.daysLeft': {
+              $max: [
+                0,
+                {
+                  $round: [
+                    {
+                      $divide: [
+                        { $subtract: ['$MilestoneInfo.completionDate', todayDate] },
+                        1000 * 60 * 60 * 24,
+                      ]
+                    },
+                    0
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          $group: {
+            _id: '$milestoneId',
+            milestoneId: { $first: '$MilestoneInfo' },
+          }
+        },
+        {
+          $sort: { 'MilestoneInfo.daysLeft': 1 }
+        },
+        {
+          $sort: { 'MilestoneInfo.daysLeft': 1 }
+        },
+        {
+          $sort: { 'MilestoneInfo.daysLeft': 1 }
+        }
+      ];
+
+      const count = await taskModel.aggregate(queries);
+      const totalCount = count.length;
+      queries[6] = { $skip: (parseInt(skip) - 1) * pageSize }
+      queries[7] = { $limit: pageSize };
+      const milestoneDetails = await taskModel.aggregate(queries);
+      const totalPages = Math.ceil(totalCount / pageSize);
+      return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: milestoneDetails, totalCount, totalPages });
+    }
+    if (flag == 3) {
+      let queries = [
+        {
+          $match: { _id: { $in: taskIds }, milestoneId: mongoose.Types.ObjectId(milestoneId), sprintId: { $exists: true } }
+        },
+        {
+          $lookup: {
+            from: 'sprints',
+            localField: 'sprintId',
+            foreignField: '_id',
+            as: 'SprintInfo'
+          }
+        },
+        {
+          $unwind: '$SprintInfo'
+        },
+        {
+          $addFields: {
+            'SprintInfo.daysLeft': {
+              $max: [
+                0,
+                {
+                  $round: [
+                    {
+                      $divide: [
+                        { $subtract: ['$SprintInfo.endDate', todayDate] },
+                        1000 * 60 * 60 * 24,
+                      ]
+                    },
+                    0
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          $group: {
+            _id: '$sprintId',
+            sprintId: { $first: '$SprintInfo' },
+          }
+        },
+        {
+          $sort: { 'SprintInfo.daysLeft': 1 }
+        },
+        {
+          $sort: { 'SprintInfo.daysLeft': 1 }
+        },
+        {
+          $sort: { 'SprintInfo.daysLeft': 1 }
+        }
+      ];
+
+      const count = await taskModel.aggregate(queries);
+      const totalCount = count.length;
+      queries[6] = { $skip: (parseInt(skip) - 1) * pageSize }
+      queries[7] = { $limit: pageSize };
+      const sprintDetails = await taskModel.aggregate(queries);
+      const totalPages = Math.ceil(totalCount / pageSize);
+      return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: sprintDetails, totalCount, totalPages });
+    }
+  } catch (error) {
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+  }
+};
 
 // Get A Users All tasks Acc to status & Search tasks & List of tasks
 const getUserTasks = async (req, res) => {
@@ -182,7 +238,9 @@ const getUserTasks = async (req, res) => {
     };
     const taskIds = await taskModel.distinct('_id', query);
     // Flag = 1 :- Tasks acc to Status, Flag = 2 :- List of tasks
-    if (flag == 1) { activeStatus = true }
+    if (flag == 1) {
+      activeStatus = true
+    }
 
     let queries = [
       {
@@ -425,6 +483,7 @@ const getUserTasks = async (req, res) => {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 }
+
 // All assignees of A project
 const projectUserList = async (req, res) => {
   try {
@@ -432,10 +491,10 @@ const projectUserList = async (req, res) => {
     const tasks = await taskModel.find({ projectId, milestoneId, sprintId });
     const taskIds = tasks.map((task) => task._id);
     const assignees = await assignUserModel.find({ taskId: { $in: taskIds } }).populate([
-        { path: "assigneeId", select: "firstName lastName" },
-        { path: "reporterId", select: "role" },
-        { path: "taskId" },
-      ]);
+      { path: "assigneeId", select: "firstName lastName" },
+      { path: "reporterId", select: "role" },
+      { path: "taskId" },
+    ]);
     // Create a map to store unique assigneeIds
     const uniqueAssigneesMap = new Map();
     // Filter out duplicate assigneeIds
@@ -443,12 +502,12 @@ const projectUserList = async (req, res) => {
     assignees.forEach((assignee) => {
       if (assignee.assigneeId && assignee.assigneeId._id) {
         const assigneeId = assignee.assigneeId._id.toString();
-        if (!uniqueAssigneesMap.has(assigneeId)) {uniqueAssigneesMap.set(assigneeId, true);uniqueAssignees.push(assignee)}
+        if (!uniqueAssigneesMap.has(assigneeId)) { uniqueAssigneesMap.set(assigneeId, true); uniqueAssignees.push(assignee) }
       }
     });
-    return res.status(200).json({status: "200", message: "Data Fetched Successfully",response: uniqueAssignees});
+    return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: uniqueAssignees });
   } catch (error) {
-    return res.status(400).json({status: "400",message: "Fill all the required fields", error: error.message});
+    return res.status(400).json({ status: "400", message: "Fill all the required fields", error: error.message });
   }
 };
 
