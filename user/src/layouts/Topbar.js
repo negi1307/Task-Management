@@ -168,6 +168,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         layoutType: state.Layout.layoutType,
         leftSideBarType: state.Layout.leftSideBarType,
     }));
+   
     const {
         totalSeconds,
         seconds,
@@ -178,7 +179,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         start,
         pause,
         reset,
-      } = useStopwatch({ autoStart: false });
+      } = useStopwatch({ autoStart: false});
 
     // useEffect(() => {
     //     let data = {
@@ -262,12 +263,11 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         sessionStorage.setItem('startButton', true);
         console.log(sessionStorage?.getItem('startButton'), 'llakakokokjkkkas');
         if (sessionStorage?.getItem('startButton')) {
+            
             start();
             setShowButton(false);
         }
         
-        console.log(token?.token, 'tokennnnnnn');
-        console.log(token, 'tokennnnnnn');
     };
     useEffect(() => {
         if (loginTimeMessage?.data?.status == 200) {
@@ -277,9 +277,16 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         }
     }, [loginTimeMessage]);
     const logoutTime = () => {
-        sessionStorage.removeItem('startButton');
-        pause();
-        setShowButton(true);       
+        
+        if(hours >= 9){            
+           sessionStorage.removeItem('startButton');
+            pause();
+            setShowButton(true); 
+
+        }
+        else{
+            ToastHandle('warning', "Your time is not done please wait for 9 hour");
+        }
     };
     
     return (

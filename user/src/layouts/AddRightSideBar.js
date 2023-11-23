@@ -330,10 +330,12 @@ export default function RightBar(props) {
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                            Attachment<span class="text-danger">*</span>:
                                         </label>
+                                        <button type='button' onClick={()=>document.getElementById('file').click()}>Attachment</button>
                                         <input
+                                        hidden="hidden"
                                             placeholder="Please start Date "
                                             type="file"
-                                            id="exampleForm.ControlTextarea1"
+                                            id="file"
                                             class="form-control"
                                             {...register('attachment')}
                                         />
