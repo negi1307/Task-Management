@@ -7,7 +7,7 @@ const rolesModel = require('../models/role.model');
 // Create or add tasks
 const createtask = async (req, res) => {
   try {
-    const { projectId, milestoneId, sprintId, summary, description, priority, assigneeId, startDate, dueDate, parentId } = req.body;
+    const { projectId, milestoneId, sprintId, summary, description, priority, expectedHours, startDate, dueDate, assigneeId, parentId } = req.body;
     const existingTask = await taskModel.findOne({
       summary: new RegExp(`^${summary.replace(/[\s]+/g, '\\s*')}\\s*$`, 'i'),
       sprintId: sprintId
@@ -26,6 +26,7 @@ const createtask = async (req, res) => {
         summary,
         description,
         priority,
+        expectedHours,
         startDate,
         dueDate,
         attachment: attachmentPath,
