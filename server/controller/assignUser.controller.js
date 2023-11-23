@@ -42,6 +42,14 @@ const getUserAssignments = async (req, res) => {
         {
           $match: { _id: { $in: taskIds }, projectId: { $exists: true } }
         },
+        // {
+        //   $lookup : {
+        //     from : 'projects',
+        //     localField : 'projectId',
+        //     foreignField : '_id',
+        //     as : 'ProjectInfo'
+        //   }
+        // },
         {
           $lookup: {
             from: 'projects',
