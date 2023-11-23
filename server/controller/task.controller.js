@@ -164,6 +164,7 @@ const task_list = async (query, totalCount, pageSize, skip, arr) => {
   arr.push(tasks)
   return arr;
 }
+
 // Get All tasks And Sprint id,s all tasks
 const getTasks = async (req, res) => {
   try {
@@ -184,18 +185,7 @@ const getTasks = async (req, res) => {
 
       const reponseCheck = await task_list(query, totalCount, pageSize, skip, arr);
       const [tasks] = reponseCheck;
-      return reponseCheck ? res
-        .status(200)
-        .json({
-          status: "200",
-          message: "All Tasks fetched successfully",
-          response: tasks,
-          totalCount,
-          totalPages,
-        }) : null
-      //  }
-
-
+      return reponseCheck ? res.status(200).json({ status: "200", message: "All Tasks fetched successfully", response: tasks, totalCount, totalPages }) : null
     }
 
     if (parseInt(req.query.skip) === 0) {
@@ -217,7 +207,10 @@ const getTasks = async (req, res) => {
       var pageSize = 10;
       var skip = parseInt(req.query.skip);
     }
+    query.status = parseInt(req.query.status) ? parseInt(req.query.status) : delete query.status;
     totalCount = await taskModel.countDocuments(query);
+    console.log(query, "totalCount")
+
     var tasks = await taskModel.aggregate([
       {
         $match: {
@@ -225,7 +218,7 @@ const getTasks = async (req, res) => {
             { projectId: req.query.projectId ? new mongoose.Types.ObjectId(req.query.projectId) : { $exists: true } },
             { milestoneId: req.query.milestoneId ? new mongoose.Types.ObjectId(req.query.milestoneId) : { $exists: true } },
             { sprintId: req.query.sprintId ? new mongoose.Types.ObjectId(req.query.sprintId) : { $exists: true } },
-            { activeStatus: JSON.parse(req.query.activeStatus) }
+            { activeStatus: JSON.parse(req.query.activeStatus) },
           ],
         },
       },
@@ -333,7 +326,7 @@ const getTasks = async (req, res) => {
           assignees: { $first: { $arrayElemAt: [["$assignees"], 0] } },
         },
       },
-      { $skip: (parseInt(skip) - 1) * pageSize }, // Skip the specified number of documents
+      { $skip: (parseInt(skip) - 1) * pageSize },
       { $limit: pageSize },
       { $sort: { createdAt: -1 } },
     ]);
