@@ -729,3 +729,12 @@ tr.align-middle i {
     color: #424040;
     margin: 20px 0px;
 }
+button.attachment {
+    background: transparent;
+    border: 0px;
+    transform: rotate(130deg);
+}
+
+button.attachment i {
+    font-size: 30px !important;
+}

@@ -361,7 +361,7 @@ const Taskdetail = (props) => {
                                                     </>
                                                 ))}
                                             </table>
-                                            <table></table>
+                                           
                                         </div>
                                     </div>
                                 </div>
