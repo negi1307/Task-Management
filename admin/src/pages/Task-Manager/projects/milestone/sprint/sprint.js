@@ -51,18 +51,20 @@ const Sprint = () => {
     const handleActive = (val) => {
         if (val) {
             setStatus(1);
+            setSkip(1);
             let data = {
                 id: milestoneId,
                 activeStatus: 1,
-                skip,
+                skip:1
             };
             dispatch(getSingleSprint(data));
         } else {
             setStatus(0);
+            setSkip(1);
             let data = {
                 id: milestoneId,
                 activeStatus: 0,
-                skip,
+                skip:1
             };
             dispatch(getSingleSprint(data));
         }

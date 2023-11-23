@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { React, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
 import { columnsFromBackend } from './data';
@@ -21,7 +21,7 @@ import Taskdetail from './taskdetail';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import ToastHandle from '../../../constants/toaster/toaster';
-import {listProjectAssignee} from '../../../redux/task/action'
+import { listProjectAssignee } from '../../../redux/task/action';
 
 const Container = styled.div`
     display: flex;
@@ -55,7 +55,7 @@ const Title = styled.span`
 
 const Boards = (props) => {
     const { projectId, milestoneId, spriteId } = useParams();
-    console.log(spriteId, projectId, milestoneId, 'sprintttt');
+    console.log(projectId, 'sprintttt');
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
     const store = useSelector((state) => state);
@@ -69,6 +69,8 @@ const Boards = (props) => {
     const successHandle = store?.getAllTaskReducer;
     console.log(successHandle, 'success');
     const statushandle = store?.updateTaskStatus;
+    const assigneeName = store?.getAllAssigneeName?.data?.response
+    console.log("assigneeName",assigneeName)
 
     useEffect(() => {
         let body = {
@@ -93,9 +95,9 @@ const Boards = (props) => {
     }, []);
 
     useEffect(() => {
-      dispatch(listProjectAssignee())
+      dispatch(listProjectAssignee({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }))
         dispatch(getTaskStatusCount());
-    }, []);
+    },[]);
 
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
@@ -303,7 +305,16 @@ const Boards = (props) => {
                         Due Task:
                         {taskStatusCountdata?.response?.DueTasksCount}
                     </li>
-
+                    <li className='info_cls'>
+                        {assigneeName?.map((item,index)=>
+                        <div className='assignee_name'>
+                            <ul>
+                                <li>{item?.assigneeId?.firstName.charAt(0)}{item?.assigneeId?.lastName.charAt(0)}</li>
+                            </ul>
+                        </div>
+                        )}
+                    </li>
+        
                     <li>
                         <input
                             type="search"

@@ -68,7 +68,7 @@ const getProjects = async (req, res) => {
           },
         },
       }, {
-        $sort: { startDate: 1 }
+        $sort: { daysLeft: 1 }
       }
       ]);
 
@@ -105,7 +105,7 @@ const getProjects = async (req, res) => {
           },
         },
         {
-          $sort: { startDate: 1 }
+          $sort: { daysLeft: 1 }
         }
       ]);
       return res.status(200).json({ status: "200", message: "Projects fetched successfully 1", response: projects });
@@ -144,7 +144,7 @@ const getProjects = async (req, res) => {
               },
             },
           }, {
-            $sort: { startDate: 1 }
+            $sort: { daysLeft: 1 }
           }
           ]);
           return res.status(200).json({ status: "200", message: "Project Details fetched successfully", response: project });
@@ -180,7 +180,7 @@ const getProjects = async (req, res) => {
                 },
               },
             }, {
-              $sort: { startDate: 1 }
+              $sort: { daysLeft: 1 }
             }
           ])
           // const projects = await projectModel.find({ activeStatus: req.query.activeStatus, projectStatus }).populate('technology', 'techName')
@@ -215,17 +215,18 @@ const getProjects = async (req, res) => {
               daysLeft: {
                 $divide: [
                   { $subtract: ["$endDate", "$startDate"] },
-                  1000 * 60 * 60 * 24, // Convert milliseconds to days
+                  1000 * 60 * 60 * 24,  
                 ],
               },
             },
-          }, {
-            $sort: { startDate: 1 }
-          }
-        ])
-          .sort({ createdAt: -1 })
-          .limit(pageSize)
-          .skip((skip - 1) * pageSize);
+          }, 
+          {
+            $sort: { daysLeft: 1 }
+          },
+          { $skip: (skip - 1) *  pageSize}, { $limit: pageSize }
+        ]);
+           
+
         const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus, projectStatus });
         // const projects = await projectModel
         //   .find({ activeStatus: req.query.activeStatus, projectStatus })
@@ -260,7 +261,7 @@ const updateStatus = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message })
   }
-}
+};
 
 
 //upload file of project

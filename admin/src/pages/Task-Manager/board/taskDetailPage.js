@@ -202,11 +202,11 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                                         onClick={() => handelUpdateAll(ele, ind)}>
                                                                         Edit
                                                                     </p>
-                                                                    <p
+                                                                    {/* <p
                                                                         className=" cp  p-0 ps-2"
                                                                         onClick={() => handeldelete(ele)}>
                                                                         Delete
-                                                                    </p>
+                                                                    </p> */}
                                                                 </div>
                                                             </>
                                                         )}
@@ -275,11 +275,11 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                                 <p className=" p-0" onClick={() => handelUpdate(ele)}>
                                                                     Edit
                                                                 </p>
-                                                                <p
+                                                                {/* <p
                                                                     className=" cp  p-0 ps-2"
                                                                     onClick={() => handeldelete(ele)}>
                                                                     Delete
-                                                                </p>
+                                                                </p> */}
                                                             </div>
                                                         </Col>
                                                     </Col>

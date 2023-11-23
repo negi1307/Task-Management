@@ -57,10 +57,15 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openDetailPage, setOpenDetailPage] = useState(false);
     const [detailData, setDetailData] = useState();
+    const [openModal ,setOpenModal] =useState(false)
     const [isOpen, setIsOpen] = useState(false);
     const store = useSelector((state) => state);
 
     const dispatch = useDispatch();
+  
+    const closeOpenModal=()=>{
+        setOpenModal(false)
+    }
     const deleteData = (id) => {
         setDeleteId(id);
         setDeleteModal(true);
@@ -87,7 +92,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
         setOpenDetailPage(false);
     };
     function toggle() {
-        setIsOpen((isOpen) => !isOpen);
+        setOpenModal(true)
     }
     return (
         <>
@@ -115,7 +120,8 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                                         class="fa fa-ellipsis-h cp bg-light p-2 rounded-3"
                                                         aria-hidden="true"></i>
                                                 </div>
-                                                {isOpen && (
+                                                <Modal show={openModal} onHide={closeOpenModal} >
+                                                    <Modal.Body>
                                                     <div className="row position-absolute add_position ">
                                                         <div className="col-12 border p-2 bg-white">
                                                             <div className="row">
@@ -144,7 +150,38 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                )}
+                                                    </Modal.Body>
+                                                   </Modal>
+                                                {/* {isOpen && (
+                                                    <div className="row position-absolute add_position ">
+                                                        <div className="col-12 border p-2 bg-white">
+                                                            <div className="row">
+                                                                <div className="col-12 pb-2 d-flex align-items-center justify-content-start">
+                                                                    <h4 className="m-0 p-0">Action</h4>
+                                                                </div>
+                                                                <div className="col-12 pb-2 d-flex align-items-center justify-content-start">
+                                                                    <button type="button " className="m-0 p-0">
+                                                                        <i
+                                                                            class="uil-edit-alt m-0 p-0 me-2"
+                                                                            onClick={() => {
+                                                                                handelUpdate(item);
+                                                                            }}></i>
+                                                                        Edit
+                                                                    </button>
+                                                                </div>
+                                                                <div className="col-12 d-flex align-items-center justify-content-start">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="m-0 p-0"
+                                                                        onClick={() => deleteData(item?.id)}>
+                                                                        <i class="mdi mdi-delete m-0 p-0 me-2"></i>
+                                                                        Delete
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )} */}
                                             </div>
                                         </div>
                                     </div>

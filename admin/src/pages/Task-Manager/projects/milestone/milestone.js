@@ -42,19 +42,21 @@ const Milestone = () => {
     const handleActive = (val) => {
         if (val) {
             setStatus(1);
+            setSkip(1)
             let data = {
                 id: id,
                 activeStatus: 1,
-                skip,
+                skip:1,
                 mileStoneId: '',
             };
             dispatch(getsingleMileStone(data));
         } else {
             setStatus(0);
+            setSkip(1)
             let data = {
                 id: id,
                 activeStatus: 0,
-                skip,
+                skip:1 ,
                 mileStoneId: '',
             };
             dispatch(getsingleMileStone(data));
@@ -72,6 +74,7 @@ const Milestone = () => {
         }
         setCheckedData(data);
         setStatusModal(true);
+       
     };
     const handleYes = () => {
         if (checkedStatus) {
@@ -116,7 +119,7 @@ const Milestone = () => {
     return (
         <>
             {/* {/ <h1>{id}</h1> /} */}
-            <div className="my-3">
+            <div className="">
                 <Row>
                     {/* <Col className="text-end" lg={12}>
                         <Button
@@ -185,7 +188,7 @@ const Milestone = () => {
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th> MileStone Name</th>
+                                                        <th> Milestone Name</th>
                                                         <th> Description</th>
                                                         <th> Start Date</th>
                                                         <th>Days Left</th>

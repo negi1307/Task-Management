@@ -115,6 +115,7 @@ const Sprint = () => {
     }, []);
     return (
         <>
+        <div className='title'><h3>SPRINTS</h3></div>
             <Card>
                 <Card.Body>
                     <Col className="mx-auto" lg={12}>
@@ -149,6 +150,7 @@ const Sprint = () => {
                             </Button>
                             </div> : ""}
                         </div> */}
+                        
                             {loaderhandel.loading ? (
                                 <MainLoader />
                             ) : (
@@ -160,7 +162,7 @@ const Sprint = () => {
                                                 <th>SprintName</th>
                                                 <th>Sprint Description</th>
                                                 <th>Sprint Start Date</th>
-                                                <th>Sprint End Date</th>
+                                                <th>Due Days</th>
                                                 {/* <th>Status</th> */}
                                                 <th>Action</th>
                                             </tr>
@@ -179,7 +181,7 @@ const Sprint = () => {
                                                     </td>
 
                                                     <td> {moment(item?.sprintId?.startDate).format('L')}</td>
-                                                    <td>{moment(item?.sprintId?.endDate).format('L')}</td>
+                                                    <td> {item?.sprintId?.daysLeft}</td>
                                                     {/* <td> <Form.Check
                                                                 type="switch"
                                                                 checked={item?.status}

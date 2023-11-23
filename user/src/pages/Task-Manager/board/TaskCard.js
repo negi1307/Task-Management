@@ -114,6 +114,7 @@ const TaskCard = ({ item, index, closeModal,showTaskDetailMOdel }) => {
                                 </button>
                             </div> */}
                             <div >
+                   
                                 <p>{item?.taskInfo?.summary}</p>
                                 
                                 <div
@@ -127,8 +128,22 @@ const TaskCard = ({ item, index, closeModal,showTaskDetailMOdel }) => {
                                     </p>
                                 </div>
                             </div>
-                            <p> {item?.reporterInfo?.role}</p>
-                            <p>{item?.assigneeInfo?.firstName}</p>
+                            <div className='username_info'>
+                            <ul>
+                                <li>
+                                {item?.reporterInfo?.role.charAt(0)}
+                                </li>
+                                <li>
+                                {item?.assigneeInfo?.firstName.charAt(0)}{item?.assigneeInfo?.lastName.charAt(0)}
+                                </li>
+                            </ul>
+                            
+                            </div>
+                          
+                            
+                          
+                          
+
 
                         </TaskInformation>
                     </div>
