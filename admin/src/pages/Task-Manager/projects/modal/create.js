@@ -191,6 +191,7 @@ const Create = ({ modal, closeModal }) => {
                                                 isObject={false}
                                                 options={selected}
                                                 showCheckbox
+                                                placeholder='Select Technology'
                                             />
                                         </Form.Group>
                                     </Col>
@@ -239,7 +240,7 @@ const Create = ({ modal, closeModal }) => {
                                                 Status<span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('status', { required: true })}>
-                                                <option>--select--</option>
+                                                <option>Select Status</option>
                                                 <option value="1">To-Do</option>
                                                 <option value="2">Live</option>
                                                 <option value="3">Hold</option>

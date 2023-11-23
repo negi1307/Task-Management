@@ -7,6 +7,7 @@ import ToastHandle from '../../../../constants/toaster/toaster';
 // import {ButtonLoading} from '../../../../constants/Loader/loader';
 const CustomerCreateFrom = (props) => {
     const { checkModel, show } = props
+    console.log(checkModel ,"nnnnnnnnnnnnnnnnnnnnnnnnnnn")
     const store = useSelector((state) => state);
     const dispatch = useDispatch()
     // create 
