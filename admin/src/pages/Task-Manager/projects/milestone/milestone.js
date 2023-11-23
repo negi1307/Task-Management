@@ -188,7 +188,7 @@ const Milestone = () => {
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th> MileStone Name</th>
+                                                        <th> Milestone Name</th>
                                                         <th> Description</th>
                                                         <th> Start Date</th>
                                                         <th>Days Left</th>
