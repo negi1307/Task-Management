@@ -360,7 +360,7 @@ export default function RightBar(props) {
                                                         ?  URL.createObjectURL( selectedFile)
                                                         : pdfImage
                                                 }
-                                                className="add_upload_icon_load me-2 h-auto w-25 cp"
+                                                className="add_upload_icon_load me-2 h-auto w-75 cp"
                                                 alt=""
                                             />
                                         ) : (
