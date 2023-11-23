@@ -22,8 +22,7 @@ const userLogin = async (req, res) => {
         };
         return res.status(200).json(response);
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({ status: 400, message: "Server error" });
+        return res.status(500).json({ status: 500, message: "Server error" });
     }
 };
 
