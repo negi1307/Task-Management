@@ -219,7 +219,7 @@ export default function RightBar(props) {
                                             name="Assignee"
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
-                                            {...register('Assignee', )}>
+                                            {...register('Assignee', { required: true })}>
                                             <option value={''} hidden selected>--Select--</option>
                                             {store?.getAllUsers?.data?.response?.map((ele, ind) => (
                                                 <option value={ele?._id}>
