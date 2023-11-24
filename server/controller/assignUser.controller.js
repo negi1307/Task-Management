@@ -1,7 +1,6 @@
 const { mongoose } = require("mongoose");
 const assignUserModel = require("../models/assignUser.model");
 const taskModel = require("../models/task.model");
-const { calculateDaysLeft } = require("../middleware/customFunctions");
 
 // Assign the user
 const addUserAssignments = async (req, res) => {
@@ -34,7 +33,7 @@ const getUserAssignments = async (req, res) => {
   try {
     let pageSize = 10;
     let todayDate = new Date()
-    let { flag, skip, projectId, milestoneId, projectStatus } = req.query;
+    let { flag, skip, projectId, milestoneId } = req.query;
     let taskIds = await assignUserModel.distinct("taskId", { assigneeId: req.user._id });
 
     if (flag == 1) {
@@ -42,34 +41,34 @@ const getUserAssignments = async (req, res) => {
         {
           $match: { _id: { $in: taskIds }, projectId: { $exists: true } }
         },
-        // {
-        //   $lookup : {
-        //     from : 'projects',
-        //     localField : 'projectId',
-        //     foreignField : '_id',
-        //     as : 'ProjectInfo'
-        //   }
-        // },
         {
-          $lookup: {
-            from: 'projects',
-            let: { projectId: '$projectId' },
-            pipeline: [
-              {
-                $match: {
-                  $expr: {
-                    $and: [
-                      { $eq: ['$_id', '$$projectId'] }, 
-                      { $eq: ['$projectStatus', parseInt(projectStatus)] },
-                      { $eq: ['$activeStatus', true] }, 
-                    ]
-                  }
-                }
-              }
-            ],
-            as: 'ProjectInfo'
+          $lookup : {
+            from : 'projects',
+            localField : 'projectId',
+            foreignField : '_id',
+            as : 'ProjectInfo'
           }
         },
+        // {
+        //   $lookup: {
+        //     from: 'projects',
+        //     let: { projectId: '$projectId' },
+        //     pipeline: [
+        //       {
+        //         $match: {
+        //           $expr: {
+        //             $and: [
+        //               { $eq: ['$_id', '$$projectId'] },
+        //               { $eq: ['$projectStatus', parseInt(projectStatus)] },
+        //               { $eq: ['$activeStatus', true] },
+        //             ]
+        //           }
+        //         }
+        //       }
+        //     ],
+        //     as: 'ProjectInfo'
+        //   }
+        // },
         {
           $unwind: '$ProjectInfo'
         },
@@ -250,7 +249,7 @@ const getUserTasks = async (req, res) => {
   try {
     var pageSize = 10;
     let now = new Date();
-    let { flag, activeStatus, searchString, projectId, milestoneId, sprintId, skip } = req.query;
+    let { flag, activeStatus, searchString, projectId, milestoneId, sprintId, skip, status } = req.query;
     const query = {
       projectId: new mongoose.Types.ObjectId(projectId),
       milestoneId: new mongoose.Types.ObjectId(milestoneId),
@@ -282,17 +281,58 @@ const getUserTasks = async (req, res) => {
           as: "reporterInfo",
         },
       },
+      // {
+      //   $lookup: {
+      //     from: "tasks",
+      //     let: { taskId: "$taskId" },
+      //     pipeline: [
+      //       {
+      //         $match: {
+      //           $expr: {
+      //             $and: [
+      //               { $eq: ["$_id", "$$taskId"] },
+      //               // flag != 1 ?
+      //               // { $eq: ['$status', parseInt(status)] } 
+      //               // :
+      //               { $eq: ["$activeStatus", JSON.parse(activeStatus)] },
+      //             ],
+      //           },
+      //         },
+      //       },
+      //       {
+      //         $match: { summary: { $regex: `.*${searchString.replace(/\s+/g, "\\s+")}.*`, $options: "i" } },
+      //       },
+      //     ],
+      //     as: "taskInfo",
+      //   },
+      // },
       {
         $lookup: {
           from: "tasks",
-          let: { taskId: "$taskId" },
+          let: { taskId: "$taskId", flag: parseInt(flag), status: parseInt(status), activeStatus: JSON.parse(activeStatus) },
           pipeline: [
             {
               $match: {
                 $expr: {
                   $and: [
                     { $eq: ["$_id", "$$taskId"] },
-                    { $eq: ["$activeStatus", JSON.parse(activeStatus)] },
+                    {
+                      $or: [
+                        {
+                          $and: [
+                            { $eq: ["$$flag", 1] },
+                            { $eq: ["$activeStatus", "$$activeStatus"] },
+                          ],
+                        },
+                        {
+                          $and: [
+                            { $ne: ["$$flag", 1] },
+                            { $eq: ["$status", "$$status"] },
+                            { $eq: ["$activeStatus", "$$activeStatus"] },
+                          ],
+                        },
+                      ],
+                    },
                   ],
                 },
               },
@@ -495,10 +535,11 @@ const getUserTasks = async (req, res) => {
       queries[14] = { $skip: (parseInt(skip) - 1) * pageSize }
       queries[15] = { $limit: pageSize };
     }
-    const result = await assignUserModel.aggregate(queries);
-    const totalCount = counts[0].totalCount
+    const resultGet = await assignUserModel.aggregate(queries);
+    const result = resultGet.length!=0?resultGet[0] :resultGet
+    const totalCount = counts.length != 0 ? counts[0].totalCount : 0
     const totalPages = Math.ceil(totalCount / pageSize);
-    return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result[0], totalCount, totalPages });
+    return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result, totalCount, totalPages });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
