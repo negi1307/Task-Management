@@ -224,7 +224,7 @@ const TaskList = () => {
                                         {getSingleSprintTask?.map((item, index) => (
                                             <tr>
                                                 <td>{(skip - 1) * 10 + index + 1}</td>
-                                                <td>{item?.summary}</td>
+                                                <td >{item?.summary}</td>
                                                 <td>
                                                     {' '}
                                                     <div

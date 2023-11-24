@@ -437,7 +437,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                     profilePic={profilePic}
                                     menuItems={ProfileMenus}
                                     username={store?.Auth?.user?.username}
-                                    userTitle={store?.Auth?.user?.firstName}
+                                    firstName={store?.Auth?.user?.firstName}
+                                    lastName={store?.Auth?.user?.lastName}
                                 />
                             </li>
                         </ul>
