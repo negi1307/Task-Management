@@ -33,7 +33,7 @@ const getUserAssignments = async (req, res) => {
   try {
     let pageSize = 10;
     let todayDate = new Date()
-    let { flag, skip, projectId, milestoneId, projectStatus } = req.query;
+    let { flag, skip, projectId, milestoneId } = req.query;
     let taskIds = await assignUserModel.distinct("taskId", { assigneeId: req.user._id });
 
     if (flag == 1) {
@@ -41,34 +41,34 @@ const getUserAssignments = async (req, res) => {
         {
           $match: { _id: { $in: taskIds }, projectId: { $exists: true } }
         },
-        // {
-        //   $lookup : {
-        //     from : 'projects',
-        //     localField : 'projectId',
-        //     foreignField : '_id',
-        //     as : 'ProjectInfo'
-        //   }
-        // },
         {
-          $lookup: {
-            from: 'projects',
-            let: { projectId: '$projectId' },
-            pipeline: [
-              {
-                $match: {
-                  $expr: {
-                    $and: [
-                      { $eq: ['$_id', '$$projectId'] },
-                      { $eq: ['$projectStatus', parseInt(projectStatus)] },
-                      { $eq: ['$activeStatus', true] },
-                    ]
-                  }
-                }
-              }
-            ],
-            as: 'ProjectInfo'
+          $lookup : {
+            from : 'projects',
+            localField : 'projectId',
+            foreignField : '_id',
+            as : 'ProjectInfo'
           }
         },
+        // {
+        //   $lookup: {
+        //     from: 'projects',
+        //     let: { projectId: '$projectId' },
+        //     pipeline: [
+        //       {
+        //         $match: {
+        //           $expr: {
+        //             $and: [
+        //               { $eq: ['$_id', '$$projectId'] },
+        //               { $eq: ['$projectStatus', parseInt(projectStatus)] },
+        //               { $eq: ['$activeStatus', true] },
+        //             ]
+        //           }
+        //         }
+        //       }
+        //     ],
+        //     as: 'ProjectInfo'
+        //   }
+        // },
         {
           $unwind: '$ProjectInfo'
         },
