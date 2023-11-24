@@ -25,44 +25,9 @@ const addProject = async (req, res) => {
       return res.status(200).json({ status: "200", message: "Project created successfully", response: result });
     }
   } catch (error) {
-    return res.status(200).json({ status: "500", message: "Something went wrong", error: error.message });
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 };
-
-// Get all Projects WRT status
-// const getProjects = async (req, res) => {
-//     try {
-//         const pageSize = 10;
-//         // const projectStatus = parseInt(req.query.projectStatus);
-//         // if (projectStatus) {
-//             if (parseInt(req.query.skip) === 0) {
-//                 if (req.query.projectId) {
-//                     const project = await projectModel.findById({ _id: req.query.projectId });
-//                     return res.status(200).json({ status: '200', message: 'Project Details fetched successfully', response: project })
-//                 } else {
-//                     const projectStatus = parseInt(req.query.projectStatus);
-//                     const projects = await projectModel.find({ activeStatus: req.query.activeStatus ,projectStatus}).populate('technology', 'techName')
-//                         .sort({ createdAt: -1 })
-//                     return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects })
-//                 }
-//             } else {
-//                 const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus,projectStatus});
-//                 const projects = await projectModel.find({ activeStatus: req.query.activeStatus,projectStatus}).populate('technology', 'techName')
-//                     .sort({ createdAt: -1 })
-//                     .limit(pageSize)
-//                     .skip((parseInt(req.query.skip) - 1) * pageSize);
-//                 const totalPages = Math.ceil(totalCount / pageSize);
-
-//                 return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects, totalCount, totalPages })
-//             }
-//         // }
-//         // else{
-//         //     res.status(200).json({status:201,message:"Invalid or missing projectStatus. It should be 1, 2,3 or 4"})
-//         // }
-//     } catch (error) {
-//         return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message });
-//     }
-// }
 
 
 const getProjects = async (req, res) => {
@@ -284,7 +249,7 @@ const updateProject = async (req, res) => {
     await projectModel.findByIdAndUpdate({ _id: req.body.projectId }, req.body, { new: true });
     return res.status(200).json({ status: "200", message: "Project updated successfully" });
   } catch (error) {
-    return res.status(200).json({ status: "500", message: "Something went wrong", error: error.message });
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 };
 
@@ -294,7 +259,7 @@ const updateStatus = async (req, res) => {
     await projectModel.findByIdAndUpdate({ _id: req.body.projectId }, { activeStatus: req.body.activeStatus });
     return res.status(200).json({ status: '200', message: 'Project status updated Successfully' });
   } catch (error) {
-    return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+    return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message })
   }
 };
 
@@ -321,7 +286,7 @@ const uploadProject_File =async(req, res)=>{
     }
 
     } catch (error) {
-    return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+    return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message })
 
   }
 }
@@ -334,7 +299,7 @@ const getallProject=async (req, res) => {
     ;
     res.status(200).json({ status: '200', message: 'Project file uploaded Successfully' ,response:allProjectsName})
   } catch (error) {
-    return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+    return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message })
 
   }
 };
@@ -357,7 +322,7 @@ try {
   });
 
 } catch (error) {
-  return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+  return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message })
 
   }
 }
@@ -372,7 +337,7 @@ const allProjectFiles =async(req,res)=>{
     const totalPages = Math.ceil(totalCount / pageSize);
     res.status(200).json({ status: '200', message: 'Project file get Successfully',response: allProjectFiles, totalCount, totalPages })
   } catch (error) {
-    return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+    return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message })
 
   }
 };

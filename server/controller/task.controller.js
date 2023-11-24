@@ -3,11 +3,12 @@ const taskModel = require("../models/task.model");
 const assignUserModel = require("../models/assignUser.model");
 const historyModel = require("../models/history.model");
 const rolesModel = require('../models/role.model');
+const milestoneModel = require("../models/milestone.model");
 
 // Create or add tasks
 const createtask = async (req, res) => {
   try {
-    const { projectId, milestoneId, sprintId, summary, description, priority, assigneeId, startDate, dueDate, parentId } = req.body;
+    const { projectId, milestoneId, sprintId, summary, description, priority, expectedHours, startDate, dueDate, assigneeId, parentId } = req.body;
     const existingTask = await taskModel.findOne({
       summary: new RegExp(`^${summary.replace(/[\s]+/g, '\\s*')}\\s*$`, 'i'),
       sprintId: sprintId
@@ -16,6 +17,8 @@ const createtask = async (req, res) => {
       return res.status(200).json({ status: "400", message: "Task already exists" });
     } else {
       const lastTask = await taskModel.countDocuments();
+      const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : req.body.attachment;
+      const fileExtension = req.file ? req.file.mimetype : undefined;
       const task = await taskModel.create({
         taskMannualId: lastTask + 1,
         projectId,
@@ -24,10 +27,11 @@ const createtask = async (req, res) => {
         summary,
         description,
         priority,
+        expectedHours,
         startDate,
         dueDate,
-        attachment: `http://localhost:8000/upload/${req.file.originalname}`,
-        attachmentType: req.file.mimetype,
+        attachment: attachmentPath,
+        attachmentType: fileExtension,
         parentId
       });
       if (task) {
@@ -161,13 +165,14 @@ const task_list = async (query, totalCount, pageSize, skip, arr) => {
   arr.push(tasks)
   return arr;
 }
+
 // Get All tasks And Sprint id,s all tasks
 const getTasks = async (req, res) => {
   try {
     var totalPages = 0;
     var totalCount = 0;
     const query = {};
-    if (!req.query.sprintId && !req.query.taskStatus && parseInt(req.query.skip) === 1) {
+    if (!req.query.projectId && !req.query.milestoneId && !req.query.sprintId && !req.query.taskStatus && parseInt(req.query.skip) === 1) {
       let query = {};
       const taskStatus = JSON.parse(req.query.taskStatus);
       query.activeStatus = JSON.parse(req.query.activeStatus)
@@ -181,18 +186,7 @@ const getTasks = async (req, res) => {
 
       const reponseCheck = await task_list(query, totalCount, pageSize, skip, arr);
       const [tasks] = reponseCheck;
-      return reponseCheck ? res
-        .status(200)
-        .json({
-          status: "200",
-          message: "All Tasks fetched successfully",
-          response: tasks,
-          totalCount,
-          totalPages,
-        }) : null
-      //  }
-
-
+      return reponseCheck ? res.status(200).json({ status: "200", message: "All Tasks fetched successfully", response: tasks, totalCount, totalPages }) : null
     }
 
     if (parseInt(req.query.skip) === 0) {
@@ -214,8 +208,26 @@ const getTasks = async (req, res) => {
       var pageSize = 10;
       var skip = parseInt(req.query.skip);
     }
-    totalCount = await taskModel.countDocuments(query);
+    query.status = parseInt(req.query.status)
+    console.log(query)
+    // totalCount = await taskModel.countDocuments(query, projectId, milestoneId, sprintId);
+    totalCount = await taskModel.countDocuments({
+      activeStatus: JSON.parse(req.query.activeStatus),
+      status: parseInt(req.query.status), projectId: req.query.projectId,
+      milestoneId: req.query.milestoneId, sprintId: req.query.sprintId
+    })
+
     var tasks = await taskModel.aggregate([
+      {
+        $match: {
+          $and: [
+            { projectId: req.query.projectId ? new mongoose.Types.ObjectId(req.query.projectId) : { $exists: true } },
+            { milestoneId: req.query.milestoneId ? new mongoose.Types.ObjectId(req.query.milestoneId) : { $exists: true } },
+            { sprintId: req.query.sprintId ? new mongoose.Types.ObjectId(req.query.sprintId) : { $exists: true } },
+            { activeStatus: JSON.parse(req.query.activeStatus) },
+          ],
+        },
+      },
       {
         $match: query,
       },
@@ -320,7 +332,7 @@ const getTasks = async (req, res) => {
           assignees: { $first: { $arrayElemAt: [["$assignees"], 0] } },
         },
       },
-      { $skip: (parseInt(skip) - 1) * pageSize }, // Skip the specified number of documents
+      { $skip: (parseInt(skip) - 1) * pageSize },
       { $limit: pageSize },
       { $sort: { createdAt: -1 } },
     ]);
@@ -336,9 +348,7 @@ const getTasks = async (req, res) => {
 const updateTask = async (req, res) => {
   try {
     const taskId = req.body.taskId;
-    const attachmentPath = req.file
-      ? `http://localhost:8000/upload/${req.file.originalname}`
-      : req.body.attachment;
+    const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : req.body.attachment;
     const fileExtension = req.file ? req.file.mimetype : undefined;
     const obj = {
       summary: req.body.summary,
@@ -350,7 +360,10 @@ const updateTask = async (req, res) => {
       attachment: attachmentPath,
       attachmentType: fileExtension,
     };
-    const secObj = { assigneeId: req.body.assigneeId, reporterId: req.body.reporterId };
+    const secObj = {
+      assigneeId: req.body.assigneeId,
+      reporterId: req.body.reporterId
+    };
     await taskModel.findByIdAndUpdate(taskId, obj, { new: true });
     await assignUserModel.findOneAndUpdate({ taskId }, secObj, { new: true });
     return res.status(200).json({ status: "200", message: "Task updated successfully" });
@@ -366,18 +379,33 @@ const deleteTask = async (req, res) => {
     await assignUserModel.deleteMany({ taskId: req.query.taskId });
     return res.status(200).json({ status: "200", message: "Task Deleted successfully" });
   } catch (err) {
-    return res.status(200).json({ status: "500", message: "Something went wrong", error: err.message });
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: err.message });
   }
 };
 
 // update Status of a task
 const updateTaskStatus = async (req, res) => {
   try {
-    let existingTask = await taskModel.findById({ _id: req.body.taskId });
-    await taskModel.findByIdAndUpdate({ _id: req.body.taskId }, { status: req.body.status }, { new: true });
-    const HistoryTypeEnum = { CREATED: "created", UPDATED: "updated", DELETED: "deleted" };
-    await historyModel.create({ type: HistoryTypeEnum.UPDATED, taskId: req.body.taskId, previousStatus: existingTask.status, currentStatus: req.body.status });
-    return res.status(200).json({ status: "200", message: "Task Status updated successfully" });
+    const { taskId, status } = req.body;
+    let query = { status };
+    if (status === 2) {
+      query.inProgressDate = new Date();
+    }
+    if (status === 4) {
+      query.doneDate = new Date();
+
+      const task = await taskModel.findById(taskId);
+      if (task && task.inProgressDate) {
+        const timeDifferenceInHours = (query.doneDate.getTime() - task.inProgressDate.getTime()) / (1000 * 60 * 60);
+        if (task.timeTracker) {
+          query.timeTracker = task.timeTracker + timeDifferenceInHours;
+        } else {
+          query.timeTracker = timeDifferenceInHours;
+        }
+      }
+    }
+    const result = await taskModel.findByIdAndUpdate({ _id: taskId }, query, { new: true });
+    return res.status(200).json({ status: "200", message: "Task Status updated successfully", data: result });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }

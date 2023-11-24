@@ -262,6 +262,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 isObject={false}
                                                 options={selected}
                                                 selectedValues={selectedValues}
+                                                placeholder='Select Technology'
                                             />
                                             {errors.technology?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>

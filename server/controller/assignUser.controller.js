@@ -34,7 +34,7 @@ const getUserAssignments = async (req, res) => {
   try {
     let pageSize = 10;
     let todayDate = new Date()
-    let { flag, skip, projectId, milestoneId } = req.query;
+    let { flag, skip, projectId, milestoneId, projectStatus } = req.query;
     let taskIds = await assignUserModel.distinct("taskId", { assigneeId: req.user._id });
 
     if (flag == 1) {
@@ -42,11 +42,31 @@ const getUserAssignments = async (req, res) => {
         {
           $match: { _id: { $in: taskIds }, projectId: { $exists: true } }
         },
+        // {
+        //   $lookup : {
+        //     from : 'projects',
+        //     localField : 'projectId',
+        //     foreignField : '_id',
+        //     as : 'ProjectInfo'
+        //   }
+        // },
         {
           $lookup: {
             from: 'projects',
-            localField: 'projectId',
-            foreignField: '_id',
+            let: { projectId: '$projectId' },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ['$_id', '$$projectId'] }, 
+                      { $eq: ['$projectStatus', parseInt(projectStatus)] },
+                      { $eq: ['$activeStatus', true] }, 
+                    ]
+                  }
+                }
+              }
+            ],
             as: 'ProjectInfo'
           }
         },
@@ -507,7 +527,7 @@ const projectUserList = async (req, res) => {
     });
     return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: uniqueAssignees });
   } catch (error) {
-    return res.status(400).json({ status: "400", message: "Fill all the required fields", error: error.message });
+    return res.status(500).json({ status: "400", message: "Fill all the required fields", error: error.message });
   }
 };
 
