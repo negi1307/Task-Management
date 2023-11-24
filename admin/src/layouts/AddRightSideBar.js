@@ -219,8 +219,8 @@ export default function RightBar(props) {
                                             name="Assignee"
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
-                                            {...register('Assignee', { required: true })}>
-                                            <option value={''}>--Select--</option>
+                                            {...register('Assignee', )}>
+                                            <option value={''} hidden selected>--Select--</option>
                                             {store?.getAllUsers?.data?.response?.map((ele, ind) => (
                                                 <option value={ele?._id}>
                                                     {' '}
@@ -246,7 +246,7 @@ export default function RightBar(props) {
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('Report', { required: true })}>
-                                            <option value={''}>--Select--</option>
+                                            <option value={''} hidden selected>--Select--</option>
                                             {store?.getAllRoles?.data?.response?.map((ele, ind) => (
                                                 <option value={ele?._id}> {ele?.role} </option>
                                             ))}
@@ -306,7 +306,7 @@ export default function RightBar(props) {
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('priority', { required: true })}>
-                                            <option>-----select----</option>
+                                            <option hidden selected>-----select----</option>
                                             <option value="1">High</option>
                                             <option value="2">Medium</option>
                                             <option value="3">Low</option>

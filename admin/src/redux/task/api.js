@@ -6,7 +6,7 @@ export function createTaskApi(data): any {
     return api.create(URL.CREATE_TASK, data.payload);
 }
 export function getSingleSprintTaskApi(data): any {
-    return api.get(`${URL.SingleSprintTask}${data.payload.id}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}&taskStatus=${data.payload.taskStatus}&milestoneId=${data.payload.milestoneId}&projectId=${data.payload.projectId}`);
+    return api.get(`${URL.SingleSprintTask}${data.payload.id}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}&status=${data.payload.taskStatus}&milestoneId=${data.payload.milestoneId}&projectId=${data.payload.projectId}`);
 }
 export function getAllTaskApi(data): any {
     return api.get(`${URL.GetAllTask}${data.payload.projectId}&milestoneId=${data.payload.milestoneId}&sprintId=${data.payload.sprintId}&searchString=${data.payload.searchString}`);
