@@ -312,20 +312,20 @@ const Boards = () => {
                 <div className="col-lg-8 d-flex  align -items-center">
                     <div>
                         {' '}
-                        <h4 className="page-title bg-secondary  text-white rounded-2 p-2 py-1">
+                        <h4 className="page-title bg-dark  text-white rounded-2 p-2 py-1">
                             {' '}
                             To-Do :
-                            <Badge className="bg-white text-dark ms-1">
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
                                 {successHandle?.data?.Response?.taskCount}
                             </Badge>
                         </h4>{' '}
                     </div>
                     <div className="ms-3">
                         {' '}
-                        <h4 className="page-title bg-primary text-white rounded-2 p-2 py-1">
+                        <h4 className="page-title bg-dark text-white rounded-2 p-2 py-1">
                             {' '}
                             In-Progress :
-                            <Badge className="bg-white text-dark ms-1">
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
                                 {successHandle?.data?.inProgress?.taskCount}
                             </Badge>
                         </h4>{' '}
@@ -335,23 +335,29 @@ const Boards = () => {
                         <h4 className="page-title bg-dark text-white rounded-2 p-2 py-1">
                             {' '}
                             Hold :
-                            <Badge className="bg-white text-dark ms-1">{successHandle?.data?.hold?.taskCount}</Badge>
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
+                                {successHandle?.data?.hold?.taskCount}
+                            </Badge>
                         </h4>{' '}
                     </div>
                     <div className="ms-3">
                         {' '}
-                        <h4 className="page-title  bg-success text-white rounded-2 p-2 py-1">
+                        <h4 className="page-title  bg-dark text-white rounded-2 p-2 py-1">
                             {' '}
                             Done :
-                            <Badge className="bg-white text-dark ms-1">{successHandle?.data?.done?.taskCount}</Badge>
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
+                                {successHandle?.data?.done?.taskCount}
+                            </Badge>
                         </h4>{' '}
                     </div>
                     <div className="ms-3 me-2">
                         {' '}
-                        <h4 className="page-title bg-warning text-white rounded-2 p-2 py-1">
+                        <h4 className="page-title bg-dark text-white rounded-2 p-2 py-1">
                             {' '}
                             Due Task:
-                            <Badge className="bg-white text-dark ms-1">{successHandle?.data?.dueTasksCount}</Badge>
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
+                                {successHandle?.data?.dueTasksCount}
+                            </Badge>
                         </h4>{' '}
                     </div>
                     {AssignUserName?.map((ele, ind) => (
