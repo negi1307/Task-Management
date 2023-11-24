@@ -76,6 +76,7 @@ const Boards = () => {
     const deleteCommenthandel = store?.deleteCommentReducer;
     const [loader, setloader] = useState(false);
     const [search, setSearch] = useState('');
+    console.log(Createhandel,"nnnnnnnnnnnnnnnnnnnnnnnnnnn")
     // const projectId = store?.getProjectId?.data;
     // const milestoneId = store?.getMilestoneId?.data;
     const {
@@ -225,9 +226,10 @@ const Boards = () => {
             ToastHandle('success', Createhandel?.data?.message);
         } else if (Createhandel?.data?.status == 400) {
             ToastHandle('error', Createhandel?.data?.message);
-        } else if (Createhandel?.data?.status == 500) {
-            ToastHandle('error', Createhandel?.data?.message);
+        } else if (Createhandel?.status !== 200) {
+            ToastHandle('error', Createhandel?.message?.error);
         }
+      
     }, [Createhandel]);
     useEffect(() => {
         if (CreateCommenthandel?.data?.status == 200) {

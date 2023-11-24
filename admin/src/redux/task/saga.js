@@ -29,10 +29,10 @@ function* createTaskFunction({ payload }) {
         }
 
     } catch (error) {
-       
+       console.log(error,"mmmmmmmmmmmmmmmmmmmmmm")
         yield put({
             type: TASK_TYPES.CREATE_TASK_ERROR,
-            payload: { message: error?.message }
+            payload: { error }
         });
 
     }

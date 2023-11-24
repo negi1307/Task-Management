@@ -69,6 +69,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
     const deleteData = (id) => {
         setDeleteId(id);
         setDeleteModal(true);
+        setOpenModal(false)
     };
     const handleYes = () => {
         dispatch(deleteTask({ taskId: deleteId }));
@@ -77,6 +78,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
+        setOpenModal(false)
     };
     const closeupdatemodal = (val) => {
         closeModal('render');
