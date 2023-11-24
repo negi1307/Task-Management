@@ -11,30 +11,34 @@ const ListTask=()=>{
     const store=useSelector(state=>state)
     const dispatch=useDispatch()
     const listTaskData=store?.getAllTaskReducer?.data?.response
+    console.log("listTaskDatalistTaskData",listTaskData)
     const { projectId, milestoneId ,spriteId } = useParams()
     console.log("projectId",projectId)
-  useEffect(() => {
-    let body={
-        flag:2,
-        status:true,
-        searchString:"",
-        projectId:projectId,
-        milestoneId:milestoneId,
-        sprintId:spriteId,
-        skip:1
-      }
-      dispatch(getAllTask(body))   
-  }, [])
+//   useEffect(() => {
+//     let body={
+//         flag:2,
+//         status:true,
+//         searchString:"",
+//         projectId:projectId,
+//         milestoneId:milestoneId,
+//         sprintId:spriteId,
+//         skip:1
+//       }
+//       dispatch(getAllTask(body))   
+//   }, [])
 
   const statusInfo =(status)=>{
     let body = {
-        flag: 1,
+        flag: 2,
         projectId: projectId,
         milestoneId:milestoneId,
-        projectStatus:status,
+        sprintId:spriteId,
+        status:status,
+        activeStatus:true,
+        searchString:'',
         skip: 1,
     };
-    dispatch(getAllProjects(body));
+    dispatch(getAllTask(body));
 
 }
     return(
@@ -46,8 +50,8 @@ const ListTask=()=>{
                     <div class="col-auto  cp InActive_data">
                     <p class="p-0 m-0 p-1 cp" onClick={()=>statusInfo(1)}> Todo</p></div>
                     <div class="col-auto  cp InActive_data"><p onClick={()=>statusInfo(2)} class="p-0 m-0 p-1 cp">Live</p></div>
-                    <div class="col-auto  cp Active_data"><p onClick={()=>statusInfo(3)} class=" p-0 m-0 p-1 cp">Hold</p></div>
-                    <div class="col-auto  cp Active_data"><p onClick={()=>statusInfo(4)} class=" p-0 m-0 p-1 cp">Completed</p></div>
+                    <div class="col-auto  cp InActive_data"><p onClick={()=>statusInfo(3)} class=" p-0 m-0 p-1 cp">Hold</p></div>
+                    <div class="col-auto  cp InActive_data"><p onClick={()=>statusInfo(4)} class=" p-0 m-0 p-1 cp">Completed</p></div>
                     </div>
                     </div>
                             <Col className="mx-auto" lg={12}>
