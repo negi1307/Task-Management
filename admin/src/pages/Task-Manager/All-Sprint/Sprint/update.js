@@ -36,16 +36,14 @@ const Update = ({ modal, CloseModal, editData }) => {
             startDate: data?.startDate,
             endDate: data?.endDate,
         };
-        console.log("editsprit", body)
+        console.log('editsprit', body);
         dispatch(updateSprint(body));
     };
     //editor state
-    const [editorState, setEditorState] = useState(
-        () => EditorState.createEmpty(),
-    );
+    const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
     const textEditorOnchange = (e) => {
-        console.log(e, 'edi')
-    }
+        console.log(e, 'edi');
+    };
     useEffect(() => {
         reset({
             title: editData?.sprintName,
@@ -94,11 +92,10 @@ const Update = ({ modal, CloseModal, editData }) => {
                     <MainLoader />
                 ) : (
                     <Modal.Body className="py-0">
-                        <Card className="p-3">
+                        <div className="p-3">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={12}>
-
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
                                                 Sprint Name<span className="text-danger">*</span>:
@@ -118,14 +115,14 @@ const Update = ({ modal, CloseModal, editData }) => {
                                             <Form.Label>
                                                 Description <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <dvi className=""
-                                            >
+                                            <dvi className="">
                                                 <Editor
                                                     // {...register('Description', { required: true })}
                                                     editorState={editorState}
                                                     onEditorStateChange={setEditorState}
-                                                    onChange={(e) => { textEditorOnchange(e) }}
-
+                                                    onChange={(e) => {
+                                                        textEditorOnchange(e);
+                                                    }}
                                                 />
                                             </dvi>
                                             {/* <Form.Control
@@ -181,7 +178,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                     </Col>
                                 </Row>
                             </Form>
-                        </Card>
+                        </div>
                     </Modal.Body>
                 )}
             </Modal>

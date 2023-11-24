@@ -93,7 +93,7 @@ const Update = ({ modal, closeModal, editData }) => {
                     <div className="p-3">
                         <Form onSubmit={handleSubmit(onSubmit)}>
                             <Row>
-                                <Col lg={12}>
+                                <div lg={12}>
                                     <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                         <Form.Label>
                                             Title<span className="text-danger">*</span>:
@@ -107,7 +107,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             <span className="text-danger"> This feild is required *</span>
                                         )}
                                     </Form.Group>
-                                </Col>
+                                </div>
                                 <Col lg={12}>
                                     <Form.Group
                                         className="mb-2 border d-flex align-content-center flex-column"
