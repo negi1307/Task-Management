@@ -33,7 +33,7 @@ const getUserAssignments = async (req, res) => {
   try {
     let pageSize = 10;
     let todayDate = new Date()
-    let { flag, skip, projectId, milestoneId, projectStatus } = req.query;
+    let { flag, skip, projectId, milestoneId } = req.query;
     let taskIds = await assignUserModel.distinct("taskId", { assigneeId: req.user._id });
 
     if (flag == 1) {
