@@ -69,7 +69,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
     const deleteData = (id) => {
         setDeleteId(id);
         setDeleteModal(true);
-        setOpenModal(false)
+        setOpenModal(false);
     };
     const handleYes = () => {
         dispatch(deleteTask({ taskId: deleteId }));
@@ -78,7 +78,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
-        setOpenModal(false)
+        setOpenModal(false);
     };
     const closeupdatemodal = (val) => {
         closeModal('render');
@@ -122,7 +122,10 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                                         class="fa fa-ellipsis-h cp bg-light p-2 rounded-3"
                                                         aria-hidden="true"></i>
                                                 </div>
-                                                <Modal show={openModal} onHide={closeOpenModal}>
+                                                <Modal
+                                                    show={openModal}
+                                                    onHide={closeOpenModal}
+                                                    className="bg_trans_modal">
                                                     <Modal.Body className="p-0">
                                                         <div className="row position-absolute add_position ">
                                                             <div className="col-4 border p-2 bg-white add_position_modal_edit">

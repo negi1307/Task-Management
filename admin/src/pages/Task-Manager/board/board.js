@@ -314,7 +314,7 @@ const Boards = () => {
                 <div className="col-lg-8 d-flex  align -items-center">
                     <div>
                         {' '}
-                        <h4 className="page-title bg-dark  text-white rounded-2 p-2 py-1">
+                        <h4 className="page-title bg-black  text-white rounded-2 p-2 py-1">
                             {' '}
                             To-Do :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
@@ -324,7 +324,7 @@ const Boards = () => {
                     </div>
                     <div className="ms-3">
                         {' '}
-                        <h4 className="page-title bg-dark text-white rounded-2 p-2 py-1">
+                        <h4 className="page-title bg-black text-white rounded-2 p-2 py-1">
                             {' '}
                             In-Progress :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
@@ -334,7 +334,7 @@ const Boards = () => {
                     </div>
                     <div className="ms-3">
                         {' '}
-                        <h4 className="page-title bg-dark text-white rounded-2 p-2 py-1">
+                        <h4 className="page-title bg-black text-white rounded-2 p-2 py-1">
                             {' '}
                             Hold :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
@@ -344,7 +344,7 @@ const Boards = () => {
                     </div>
                     <div className="ms-3">
                         {' '}
-                        <h4 className="page-title  bg-dark text-white rounded-2 p-2 py-1">
+                        <h4 className="page-title  bg-black text-white rounded-2 p-2 py-1">
                             {' '}
                             Done :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
@@ -354,7 +354,7 @@ const Boards = () => {
                     </div>
                     <div className="ms-3 me-2">
                         {' '}
-                        <h4 className="page-title bg-dark text-white rounded-2 p-2 py-1">
+                        <h4 className="page-title bg-black text-white rounded-2 p-2 py-1">
                             {' '}
                             Due Task:
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
