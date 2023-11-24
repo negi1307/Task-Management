@@ -540,3 +540,14 @@ tr {
     text-align: center;
     flex: 0 0 14%;
 }
+.react-datepicker-wrapper {
+    /* border: 1px solid gray; */
+    width: 100%;
+}
+input.add_width_input {
+    border: 1px solid #d8cccc;
+    width: 100%;
+    padding: 6px;
+    border-radius: 4px;
+
+}

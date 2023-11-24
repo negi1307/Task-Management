@@ -215,7 +215,7 @@ const Create = ({ modal, closeModal }) => {
                                 <Row>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label>
+                                            <Form.Label className='w-100'>
                                                 Start Date<span className="text-danger">*</span>:
                                             </Form.Label>
                                             {/* <Form.Control
@@ -234,12 +234,13 @@ const Create = ({ modal, closeModal }) => {
                                                 onChange={(date)=>handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
                                                 minDate={today}
+                                                className='add_width_input'
                                             />
                                         </Form.Group>
                                     </Col>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label>
+                                            <Form.Label className='w-100'>
                                                 End Date<span className="text-danger">*</span>:
                                             </Form.Label>
                                             {/* <Form.Control
@@ -261,6 +262,7 @@ const Create = ({ modal, closeModal }) => {
                                                 onChange={(date)=>handleEndDate(date)}
                                                 placeholderText="mm-dd-yyyy"
                                                 minDate={startDate}
+                                                className='add_width_input'
                                             />
                                         </Form.Group>
                                     </Col>
