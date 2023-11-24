@@ -247,7 +247,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
 
                                                     <Form.Select {...register('Assignee', { required: true })}>
-                                                        <option value={''}>--Select--</option>
+                                                        <option value={''} hidden selected>--Select--</option>
                                                         {store?.getAllUsers?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}>
                                                                 {' '}
@@ -271,7 +271,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         Reporter<span className="text-danger">*</span>:
                                                     </Form.Label>
                                                     <Form.Select {...register('Reporter', { required: true })}>
-                                                        <option value={''}>--Select--</option>
+                                                        <option value={''} hidden selected>--Select--</option>
                                                         {store?.getAllRoles?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.role} </option>
                                                         ))}
@@ -288,7 +288,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         Priority <span className="text-danger">*</span>:
                                                     </Form.Label>
                                                     <Form.Select {...register('priority', { required: true })}>
-                                                        <option>-------select----</option>
+                                                        <option hidden selected>-------select----</option>
                                                         <option value="1">High</option>
                                                         <option value="2">Medium</option>
                                                         <option value="3">Low</option>
@@ -345,7 +345,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         Status <span className="text-danger">*</span>:
                                                     </Form.Label>
                                                     <Form.Select {...register('status', { required: true })}>
-                                                        <option>-------select----</option>
+                                                        <option hidden selected>-------select----</option>
                                                         <option value="1">todo</option>
                                                         <option value="2">inProgress</option>
                                                         <option value="3">Hold</option>

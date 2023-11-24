@@ -66,6 +66,7 @@ const ASSIGN_USER_INITIAL_STATE = {
     message:""
 }
 export const createTaskReducer = (state = INITIAL_STATE, action) => {
+    console.log(action ,"bbbbbbbbbbbbbbbbbbbbbbbb")
     switch (action.type) {
         case TASK_TYPES.CREATE_TASK_LOADING:
             return {
@@ -85,6 +86,7 @@ export const createTaskReducer = (state = INITIAL_STATE, action) => {
         case TASK_TYPES.CREATE_TASK_ERROR:
             return {
                 data: [],
+                status:!200,
                 loading: false,
                 message: action?.payload,
             };
