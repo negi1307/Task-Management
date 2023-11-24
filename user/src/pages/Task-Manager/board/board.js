@@ -55,7 +55,7 @@ const Title = styled.span`
 
 const Boards = (props) => {
     const { projectId, milestoneId, spriteId } = useParams();
-    console.log(projectId, 'sprintttt');
+    console.log(projectId, 'sprinttttdddddddd');
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
     const store = useSelector((state) => state);

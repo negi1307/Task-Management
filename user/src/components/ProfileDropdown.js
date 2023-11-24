@@ -46,7 +46,7 @@ const ProfileDropdown = (props: ProfileDropdownProps, state: ProfileDropdownStat
                 </span>
                 <span>
                     <span className="account-user-name">{props.username}</span>
-                    <span className="account-position">{props.userTitle}</span>
+                    <span className="account-position">{props.firstName} {props.lastName}</span>
                 </span>
             </Dropdown.Toggle>
             <Dropdown.Menu align={'end'} className="dropdown-menu-animated topbar-dropdown-menu profile-dropdown">

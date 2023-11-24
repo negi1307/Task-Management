@@ -97,6 +97,7 @@ const Projects = () => {
             flag: 1,
             projectId: '',
             milestoneId: '',
+            projectStatus:1,
             skip: 1,
         };
         dispatch(getAllProjects(body));
@@ -112,12 +113,33 @@ const Projects = () => {
         }
     }, [deletehandle]);
 
+    const statusInfo =(status)=>{
+        let body = {
+            flag: 1,
+            projectId: '',
+            milestoneId: '',
+            projectStatus:status,
+            skip: 1,
+        };
+        dispatch(getAllProjects(body));
+
+    }
+
     return (
         <>
             <div>
             <div className='title'><h3>PROJECTS</h3></div>
                 <Card>
                     <Card.Body>
+                    <div class="row mx-auto border-bottom mb-2">
+                    <div class="row d-flex align-items-center pb-2">
+                    <div class="col-auto  cp InActive_data">
+                    <p class="p-0 m-0 p-1 cp" onClick={()=>statusInfo(1)}> Todo</p></div>
+                    <div class="col-auto  cp InActive_data"><p onClick={()=>statusInfo(2)} class="p-0 m-0 p-1 cp">Live</p></div>
+                    <div class="col-auto  cp InActive_data"><p onClick={()=>statusInfo(3)} class=" p-0 m-0 p-1 cp">Hold</p></div>
+                    <div class="col-auto  cp InActive_data"><p onClick={()=>statusInfo(4)} class=" p-0 m-0 p-1 cp">Completed</p></div>
+                    </div>
+                    </div>
                         <div className="row mx-auto mt-2">
                             {/* <div className="d-flex col-4">
                                 <div className="row d-flex align-items-center">
