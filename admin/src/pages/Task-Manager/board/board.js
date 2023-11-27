@@ -186,8 +186,9 @@ const Boards = () => {
             closeModal('render');
         } else if (statushandle?.data?.status == 400) {
             ToastHandle('error', statushandle?.data?.message);
-        } else if (statushandle?.data?.status == 500) {
-            ToastHandle('error', statushandle?.data?.message);
+        } 
+        else if (statushandle?.status !== 200) {
+            ToastHandle('error', statushandle?.message?.error);
         }
     }, [statushandle]);
     useEffect(() => {
@@ -196,8 +197,9 @@ const Boards = () => {
             closeModal('render');
         } else if (deletehandel?.data?.status == 400) {
             ToastHandle('error', deletehandel?.data?.message);
-        } else if (deletehandel?.data?.status == 500) {
-            ToastHandle('error', deletehandel?.data?.message);
+        } 
+        else if (deletehandel?.status !== 200) {
+            ToastHandle('error', deletehandel?.message?.error);
         }
     }, [deletehandel]);
     useEffect(() => {
@@ -206,8 +208,8 @@ const Boards = () => {
             ToastHandle('success', 'Updated Successfully');
         } else if (updatehandel?.data?.status == 400) {
             ToastHandle('error', updatehandel?.data?.message);
-        } else if (updatehandel?.data?.status == 500) {
-            ToastHandle('error', updatehandel?.data?.message);
+        }  else if (updatehandel?.status !== 200) {
+            ToastHandle('error', updatehandel?.message?.error);
         }
         setloader(false);
     }, [updatehandel]);
@@ -237,8 +239,8 @@ const Boards = () => {
             dispatch(getComment({ taskId: taskId }));
         } else if (CreateCommenthandel?.data?.status == 400) {
             ToastHandle('error', CreateCommenthandel?.data?.message);
-        } else if (CreateCommenthandel?.data?.status == 500) {
-            ToastHandle('error', CreateCommenthandel?.data?.message);
+        }  else if (CreateCommenthandel?.status !== 200) {
+            ToastHandle('error', CreateCommenthandel?.message?.error);
         }
     }, [CreateCommenthandel]);
     useEffect(() => {
@@ -247,8 +249,8 @@ const Boards = () => {
             dispatch(getComment({ taskId: taskId }));
         } else if (deleteCommenthandel?.data?.status == 400) {
             ToastHandle('error', deleteCommenthandel?.data?.message);
-        } else if (deleteCommenthandel?.data?.status == 500) {
-            ToastHandle('error', deleteCommenthandel?.data?.message);
+        } else if (deleteCommenthandel?.status !== 200) {
+            ToastHandle('error', deleteCommenthandel?.message?.error);
         }
     }, [deleteCommenthandel]);
     useEffect(() => {
@@ -257,8 +259,8 @@ const Boards = () => {
             dispatch(getComment({ taskId: taskId }));
         } else if (updateComment?.data?.status == 400) {
             ToastHandle('error', updateComment?.data?.message);
-        } else if (updateComment?.data?.status == 500) {
-            ToastHandle('error', updateComment?.data?.message);
+        }  else if (updateComment?.status !== 200) {
+            ToastHandle('error', updateComment?.message?.error);
         }
     }, [updateComment]);
     useEffect(() => {
