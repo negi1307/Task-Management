@@ -377,6 +377,7 @@ const AllRoutes = () => {
                     path: 'boards',
                     element: <LoadComponent component={Boards} />,
                 },
+                
                 //new code add routing
                 // {
                 //     path: 'user',

@@ -522,8 +522,10 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     width: 75px;
 }
 .add_position_modal_edit {
-    transform: translate(-612px, 12.5rem);
+    transform: translate(-611px, 12.5rem);
+    border-radius: 6px;
 }
+
 tr {
     text-align: center;
 }
@@ -539,4 +541,23 @@ tr {
 .projects_info p {
     text-align: center;
     flex: 0 0 14%;
+}
+@media (min-width: 1300px) and (max-width: 1700px) {
+    .add_position_modal_edit {
+        transform: translate(-422px, 11.5rem) !important;
+    }
+}
+
+/* .modal-backdrop.fade {
+    opacity: 0 !important;
+} */
+.react-datepicker-wrapper {
+    /* border: 1px solid gray; */
+    width: 100%;
+}
+input.add_width_input {
+    border: 1px solid #d8cccc;
+    width: 100%;
+    padding: 6px;
+    border-radius: 4px;
 }
