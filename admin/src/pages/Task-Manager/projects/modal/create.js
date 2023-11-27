@@ -56,8 +56,8 @@ const Create = ({ modal, closeModal }) => {
         let body = {
             projectName: data?.projectName,
             clientName: data?.clientName,
-            startDate: moment(startDate).format('L'),
-            endDate: moment(endDate).format('L'),
+            startDate: startDate,
+            endDate: endDate,
             projectType: data?.project_type,
             projectStatus: data?.status,
             technology: addValue,
