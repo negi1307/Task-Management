@@ -5,6 +5,7 @@ import { createTask } from '../redux/actions';
 import { useParams } from 'react-router-dom';
 // import {getassignee} from '../../src/redux/assigneeid/actions'
 import { getAllUsers, getAllRoles } from './../redux/user/action';
+import { getAllProjects } from '../redux/actions';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useState } from 'react';
@@ -26,7 +27,19 @@ export default function RightBar(props) {
 //     const projectId=store?.getProjectId?.data
 // const milstoneId=store?.getMilestoneId?.data
 // const SprintId=store?.getSprintId?.data
+
     const {projectId,milestoneId,spriteId}=useParams()
+
+    useEffect(() => {
+        let body = {
+            flag: 1,
+            projectId: projectId,
+            milestoneId:milestoneId,            
+            projectStatus:1,
+            skip: 1,
+        };
+        dispatch(getAllProjects(body));
+    }, []);
 
 
     const[fileData,setFile]=useState(null)
@@ -85,7 +98,10 @@ export default function RightBar(props) {
     // useEffect(() => {
     // call click outside
     // }, []);
-
+    const[fileName,setFileName] = useState('');
+const onFileChange =(e)=>{
+    setFileName(e.target.files[0].name);
+}
     return (
         <div className={showModal ? 'rightBar show' : 'rightBar'} role="document">
             <div className="modal-content">
@@ -186,7 +202,7 @@ export default function RightBar(props) {
                                             }}
                                         /> */}
                                         
-                                            <textarea col='5' row='4'  onChange={(e) => {
+                                            <textarea col='5' row='6' class="form-control" onChange={(e) => {
                                                 
                                                 setDescription(e.target.value);
                                             }}>
@@ -338,7 +354,9 @@ export default function RightBar(props) {
                                             id="file"
                                             class="form-control"
                                             {...register('attachment')}
+                                            onChange={onFileChange}
                                         />
+                                        {fileName}
                                     </div>
                                 </div>
                             <div class=""></div>

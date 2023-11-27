@@ -47,7 +47,7 @@ import { useParams } from 'react-router-dom';
 import Buttons from '../pages/uikit/Buttons';
 import ToastHandle from '../constants/toaster/toaster';
 import { Button } from 'react-bootstrap';
-import { useStopwatch } from 'react-timer-hook';
+import { useStopwatch,useTime } from 'react-timer-hook';
 
 // get the notifications
 const Notifications = [
@@ -148,7 +148,6 @@ type TopbarProps = {
 const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: TopbarProps): React$Element<any> => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    console.log('storeeeeeee', store);
     const [isopen, setIsopen] = useState(false);
     const [startLoginTime, setLoginTime] = useState(false);
     const [loginTimee,setLoginTimee] = useState();
@@ -169,17 +168,26 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         leftSideBarType: state.Layout.leftSideBarType,
     }));
    
-    const {
-        totalSeconds,
-        seconds,
-        minutes,
-        hours,
-        days,
-        isRunning,
-        start,
-        pause,
-        reset,
-      } = useStopwatch({ autoStart: false});
+    // const {
+    //     totalSeconds,
+    //     seconds,
+    //     minutes,
+    //     hours,
+    //     days,
+    //     isRunning,
+    //     start,
+    //     pause,
+    //     reset,
+    //   } = useStopwatch({ autoStart: false});
+
+       const {
+    seconds,
+    minutes,
+    hours,
+    start,
+    pause,
+    ampm,
+  } = useTime({ format: '12-hour'});
 
     // useEffect(() => {
     //     let data = {
@@ -278,15 +286,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     }, [loginTimeMessage]);
     const logoutTime = () => {
         
-        if(hours >= 9){            
-           sessionStorage.removeItem('startButton');
-            pause();
-            setShowButton(true); 
-
-        }
-        else{
-            ToastHandle('warning', "Your time is not done please wait for 9 hour");
-        }
+        sessionStorage.removeItem('startButton');
+        pause();
+        setShowButton(true); 
     };
     
     return (
@@ -313,7 +315,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             )}
                             <div class="menuinfo">
                                 <ul>
-                                    <li>
+                                    {/* <li>
                                         <Link to="" className="list_padding">
                                             Apps
                                         </Link>
@@ -332,79 +334,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                         <Link to="" className="list_padding">
                                             Teams
                                         </Link>
-                                    </li>
-                                    {/* <li>
-                                    {/* <li>
-                                        <div class="project_names">
-                                            <select
-                                                name="ddlProject"
-                                                class="form-select "
-                                                id="exampleForm.ControlInput1"
-                                                onChange={onChangeProject}>
-                                                <option>Projects</option>
-                                                {allProjects?.map((item, index) => (
-                                                    <option key={index} value={item._id}>
-                                                        {item.projectName}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="project_names">
-                                            <select
-                                                name="ddlMilestone"
-                                                class="form-select "
-                                                id="exampleForm.ControlInput1"
-                                                onChange={onChangeMilestone}>
-                                                <option> MileStone</option>
-                                                {getAllMilestoneData?.map((item, index) => (
-                                                    <option key={index} value={item._id}>
-                                                        {item.title}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
                                     </li> */}
-                                    {/* 
-                                    <li>
-                                        <div class="project_names">
-                                            <select
-                                                name="ddlSprint"
-                                                class="form-select "
-                                                id="exampleForm.ControlInput1"
-                                                onChange={onChangeSprint}>
-                                                <option> Sprint</option>
-                                                {getAllSingleSprints?.map((item, index) => (
-                                                    <option key={index} value={item._id}>
-                                                        {item.sprintName}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </li> */}
-                                    {/* <li>
-                            <div class="project_names">
-                                                        <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeProject}>
-                                <option>--Select Project--</option>
-                                {allProjects?.map((item,index)=>
-                                    <option key={index} value={item._id}>{item.projectName}</option>
-                                )}
-                            </select>
-                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeMilestone}>
-                                <option>--Select MileStone--</option>
-                                {getAllMilestoneData?.map((item,index)=>
-                                    <option key={index} value={item._id}>{item.title}</option>
-                                )}
-                            </select>
-                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeSprint}>
-                                <option>--Select Sprint--</option>
-                                {getAllSingleSprints?.map((item,index)=>
-                                    <option key={index} value={item._id}>{item.sprintName}</option>
-                                )}
-                            </select>
-                            </div>
-                            </li> */}
+                                    
                                     {showButton ? (
                                         <li>
                                             <Button type="submit" onClick={loginTime}>

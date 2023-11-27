@@ -534,7 +534,6 @@ h5.count {
     list-style: none;
     display: flex;
     justify-content: space-between;
-
     align-items: center;
 }
 .assignee_name ul {
@@ -542,15 +541,21 @@ h5.count {
 }
 .status ul li {
     margin-right: 29px;
-    font-size: 17px;
+    font-size: 20px;
     color: #39afd1;
     font-weight: 600;
 }
 
 .status {
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    margin: 18px 0px;
 }
+.add_task {
+    margin-left: 15px;
+}
+
 
 .status h4 {
     font-size: 20px;
@@ -671,6 +676,7 @@ li.info_cls {
 .assignee_name ul li {
     margin-right: 0px;
     color: #fff;
+    font-size: 14px;
 }
 
 
@@ -684,9 +690,9 @@ li.info_cls {
 }
 
 .assignee_name {
-    background: orange;
+    background: rgb(43, 35, 23);
     border-radius: 100%;
-    padding: 8px;
+    padding: 5px;
 }
 .menuinfo ul li span {
     font-size: 22px;
@@ -700,21 +706,25 @@ li.info_cls {
     display: flex;
 }
 
+.username_info ul li:nth-child(1) {
+    background: #3b99a3;
+}
+
 .username_info ul li:nth-child(2) {
-    background: green;
+    background: #2b2317;
 }
 
 .username_info ul li {
-    padding: 8px 10px;
+    padding: 5px;
     border-radius: 100%;
     color: #fff;
-    background: orange;
+    font-weight: 600;
 }
 .status input[type="search"] {
     border-radius: 34px;
-    padding: 15px 16px;
+    padding: 7px 16px;
     width: 320px;
-    border: 2px solid gray;
+    border: 2px solid #c4c1c1;
 }
 
 tr.align-middle i {
@@ -737,4 +747,16 @@ button.attachment {
 
 button.attachment i {
     font-size: 30px !important;
+}
+.card-body table tr {
+    text-align: center;
+}
+
+.search_info {
+    display: flex;
+    align-items: center;
+}
+
+.status ul {
+    padding-left: 0px;
 }
