@@ -8,6 +8,7 @@ import Edit from "./modal/edit"
 import { useSelector, useDispatch } from "react-redux";
 import ToastHandle from "../../../constants/toaster/toaster";
 import MainLoader from '../../../constants/Loader/loader';
+import { getAllTechnology } from '../../../redux/technology/action';
 const CustomerIndex = () => {
     const store = useSelector((state) => state);
    
@@ -57,6 +58,7 @@ const EditModalhandle=(ele)=>{
             dispatch(getPreSalesData());
             setDeleteModel(false)
         }
+        dispatch(getAllTechnology())
     }, [preSaleDeleteStatus])
     return (
         <>
