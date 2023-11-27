@@ -443,6 +443,7 @@ const getUserTasks = async (req, res) => {
                 summary: '$taskInfo.summary',
                 description: '$taskInfo.description',
                 priority: '$taskInfo.priority',
+                expectedHours : '$taskInfo.expectedHours',
                 startDate: '$taskInfo.startDate',
                 dueDate: '$taskInfo.dueDate',
                 status: '$taskInfo.status',
