@@ -5,10 +5,10 @@ import { createTask } from '../redux/actions';
 import { useParams } from 'react-router-dom';
 // import {getassignee} from '../../src/redux/assigneeid/actions'
 import { getAllUsers, getAllRoles } from './../redux/user/action';
-import { getAllProjects } from '../redux/actions';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useState } from 'react';
+import {getAllProjects} from '../../src/redux/projects/action'
 
 
 export default function RightBar(props) {
@@ -32,10 +32,10 @@ export default function RightBar(props) {
 
     useEffect(() => {
         let body = {
-            flag: 1,
             projectId: projectId,
-            milestoneId:milestoneId,            
-            projectStatus:1,
+            milestoneId:milestoneId, 
+            sprintId: spriteId,  
+            flag:4,        
             skip: 1,
         };
         dispatch(getAllProjects(body));
@@ -160,8 +160,7 @@ const onFileChange =(e)=>{
                             <div class="row">
                                 <div class="">
                                     <div class="mb-2">
-                                        {/* <label class="form-label" for="exampleForm.ControlTextarea1">Sprint
-                  <span class="text-danger">*</span>:</label> */}
+
                                         <input
                                             placeholder="sprint id"
                                             name="clientName"
@@ -173,11 +172,7 @@ const onFileChange =(e)=>{
                                     </div>
                                 </div>
 
-                                {/* <div class=""><div class="mb-2"><label class="form-label" for="exampleForm.ControlInput1">Type Of Project 
-         <span class="text-danger">*</span>:</label><select name="project_type" class="form-select" id="exampleForm.ControlInput1">
-         <option>Choose an Project Type </option><option value="T&amp;M">T&amp;M</option><option value="Fixed Cost">Fixed Cost</option>
-         <option value=" Hourly">Hourly</option><option value="Dedicated team">Dedicated team</option></select></div>
-         </div> */}
+                   
                             </div>
 
                             <div class="row">
@@ -187,20 +182,7 @@ const onFileChange =(e)=>{
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             Description <span class="text-danger">*</span>:
                                         </label><br/>
-                                        {/* <CKEditor
-                                            editor={ClassicEditor}
-                                            config={{
-                                                ckfinder: {
-                                                    uploadUrl:
-                                                        'https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
-                                                },
-                                            }}
-                                            data=""
-                                            onChange={(event, editor) => {
-                                                const data = editor.getData();
-                                                setDescription(data);
-                                            }}
-                                        /> */}
+                                       
                                         
                                             <textarea col='5' row='6' class="form-control" onChange={(e) => {
                                                 
@@ -208,16 +190,31 @@ const onFileChange =(e)=>{
                                             }}>
                                             </textarea>
 
-                                         {/* <input
-                                            placeholder="Please Enter Description"
-                                            type="text"
-                                            id="exampleForm.ControlInput1"
-                                            class="form-control"
-                                            {...register('Description')}/> */}
+                                        
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
+                            
+                            <div class="col-lg-12">
+                                    <div class="mb-2">
+                                        <label class="form-label" for="exampleForm.ControlTextarea1">
+                                            Summary
+                                            <span class="text-danger">*</span>:
+                                        </label>
+                                        <input
+                                            
+                                            placeholder="Please Enter Summary"
+                                            type="text"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('Summary')}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+
                             <div class="col-lg-12">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
@@ -235,25 +232,7 @@ const onFileChange =(e)=>{
                                 </div>
                             </div>
                             <div class="row">
-                                {/* <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            Assignee
-                                            <span class="text-danger">*</span>:
-                                        </label>
-
-                                        <select
-                                            name="Assignee"
-                                            class="form-select"
-                                            id="exampleForm.ControlInput1"
-                                            {...register('Assignee')}>
-                                            <option value="">--Select--</option>
-                                            {getAllUserData?.map((items, index) => <option key={index} value={items._id}>{items.firstName}</option>)}
-                                           
-                                        </select>
-
-                                          </div>
-                                </div> */}
+                                
                                 <div class="col-lg-12">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlInput1">
@@ -271,7 +250,7 @@ const onFileChange =(e)=>{
 
 
                                         </select>
-                                        {/* <input placeholder="Please Enter Report" type="text" id="exampleForm.ControlInput1" class="form-control"  {...register("Report")} /> */}
+                                        
                                     </div>
                                 </div>
                             </div>

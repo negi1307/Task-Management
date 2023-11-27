@@ -11,6 +11,8 @@ import Update from './modal/update';
 import { Link } from 'react-router-dom';
 import MainLoader from '../../../../../constants/Loader/loader';
 import { getAllProjects } from '../../../../../redux/projects/action';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 const Sprint = () => {
     const { projectId, milestoneId } = useParams();
     console.log(projectId, 'bvcxcvbnbvcxcvbnmnbvcxn');
@@ -29,6 +31,7 @@ const Sprint = () => {
     console.log(GetAllSingleSprintData, 'jjkkjkkyawsdfghjnmk');
     const deletehandle = store?.deleteSprint?.data;
     const loaderhandel = store?.getAllSingleSprints;
+    const [skip, setSkip] = useState(1);
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
@@ -103,6 +106,8 @@ const Sprint = () => {
     // useEffect(() => {
     //     dispatch(getSingleSprint({status:status ,id:milestoneId}));
     // }, [render]);
+
+
     useEffect(() => {
         let body = {
             flag: 3,
@@ -113,6 +118,16 @@ const Sprint = () => {
 
         dispatch(getAllProjects(body));
     }, []);
+    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setSkip(value);
+        let body = {
+            flag: 3,
+            projectId: projectId,
+            milestoneId: milestoneId,
+            skip: 1,
+        };
+        dispatch(getAllProjects(body));
+    };
     return (
         <>
         <div className='title'><h3>SPRINTS</h3></div>
@@ -215,6 +230,21 @@ const Sprint = () => {
                             )}
                         </Row>
                     </Col>
+                    <Row>
+                            <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
+                                {store?.getProject?.data?.totalPages > 0 && (
+                                    <Stack spacing={2}>
+                                        <Pagination
+                                            defaultPage={skip}
+                                            count={store?.getProject?.data?.totalPages}
+                                            color="primary"
+                                            variant="outlined"
+                                            onChange={handlePaginationChange}
+                                        />
+                                    </Stack>
+                                )}
+                            </Col>
+                        </Row>
                 </Card.Body>
             </Card>
             <Create modal={openModal} CloseModal={CloseModal} projectId={projectId} milestoneId={milestoneId} />

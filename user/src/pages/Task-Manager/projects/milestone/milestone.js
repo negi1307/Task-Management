@@ -28,7 +28,6 @@ const Milestone = () => {
     const [status, setStatus] = useState(1);
    
     const GetDataById = store?.getProjectById?.data?.project;
-
     // const GetSinglemilstonesData = store?.getSigleMileStone?.data?.Response;
     const getMileStoneData = store?.getProject?.data?.response;
     console.log('getMileStoneData', getMileStoneData);

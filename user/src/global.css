@@ -347,6 +347,22 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
 .history_data_info p {
     margin-left: 35px;
 }
+.leftside-menu {
+    background: #000 !important;
+}
+ul.side-nav li a:hover {
+    color: rgba(236, 172, 55, 0.8901960784) !important;  
+}
+
+ul.side-nav li a {
+    color: #fff!important;
+    font-weight: 500;
+}
+
+span.logo-lg {
+    background: #000;
+}
+
 /* start header css--------------------------------------------- */
 /* .leftside-menu {
     background: #b88d42 !important;
