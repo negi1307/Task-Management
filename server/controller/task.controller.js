@@ -3,7 +3,6 @@ const taskModel = require("../models/task.model");
 const assignUserModel = require("../models/assignUser.model");
 const historyModel = require("../models/history.model");
 const rolesModel = require('../models/role.model');
-const milestoneModel = require("../models/milestone.model");
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -144,6 +143,7 @@ const task_list = async (query, totalCount, pageSize, skip, arr) => {
         summary: { $first: "$summary" },
         description: { $first: "$description" },
         priority: { $first: "$priority" },
+        expectedHours: { $first: "$expectedHours" },
         startDate: { $first: "$startDate" },
         dueDate: { $first: "$dueDate" },
         status: { $first: "$status" },
@@ -318,6 +318,7 @@ const getTasks = async (req, res) => {
           summary: { $first: "$summary" },
           description: { $first: "$description" },
           priority: { $first: "$priority" },
+          expectedHours: { $first: "$expectedHours" },
           startDate: { $first: "$startDate" },
           dueDate: { $first: "$dueDate" },
           status: { $first: "$status" },
@@ -347,22 +348,23 @@ const getTasks = async (req, res) => {
 // Update Task
 const updateTask = async (req, res) => {
   try {
-    const taskId = req.body.taskId;
-    const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : req.body.attachment;
+    const { taskId, summary, description, priority, expectedHours, startDate, dueDate, status, attachment, assigneeId, reporterId } = req.body;
+    const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : attachment;
     const fileExtension = req.file ? req.file.mimetype : undefined;
     const obj = {
-      summary: req.body.summary,
-      description: req.body.description,
-      priority: req.body.priority,
-      startDate: req.body.startDate,
-      dueDate: req.body.dueDate,
-      status: req.body.status,
+      summary,
+      description,
+      priority,
+      expectedHours,
+      startDate,
+      dueDate,
+      status,
       attachment: attachmentPath,
       attachmentType: fileExtension,
     };
     const secObj = {
-      assigneeId: req.body.assigneeId,
-      reporterId: req.body.reporterId
+      assigneeId,
+      reporterId
     };
     await taskModel.findByIdAndUpdate(taskId, obj, { new: true });
     await assignUserModel.findOneAndUpdate({ taskId }, secObj, { new: true });
@@ -545,6 +547,7 @@ const getTasksAccToStatus = async (req, res) => {
             summary: { $first: "$summary" },
             description: { $first: "$description" },
             priority: { $first: "$priority" },
+            expectedHours: { $first: "$expectedHours" },
             startDate: { $first: "$startDate" },
             dueDate: { $first: "$dueDate" },
             status: { $first: "$status" },
@@ -563,7 +566,6 @@ const getTasksAccToStatus = async (req, res) => {
         { $sort: { createdAt: -1 } },
       ]);
       let taskCount = await taskModel.countDocuments(query);
-
       if (i == 1) {
         todo = { tasks, taskCount };
       }
