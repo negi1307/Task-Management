@@ -22,6 +22,7 @@ const AllUsers = () => {
     const deletehandle = store?.deleteUser;
     const [deletemodal, setDeleteModal] = useState(false);
     const [csvdownload, setcsvdownload] = useState([]);
+    const [csvName ,setCsvName]=useState();
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const csvdownloaddata = store?.getCsvDataReducer;
@@ -65,6 +66,7 @@ const AllUsers = () => {
         }
     }, [deletehandle]);
     const handelCsvDownload = (ele) => {
+        setCsvName(ele?.firstName + ele?.lastName +".csv")
         dispatch(getCSVdata(ele?._id));
     };
     useEffect(() => {
@@ -169,7 +171,7 @@ const AllUsers = () => {
                     )}
                     <CSVLink
                         data={csvdownload}
-                        filename="userdata.csv"
+                        filename={csvName}
                         className="hidden"
                         ref={csvLink}
                         id={`csvid`}
