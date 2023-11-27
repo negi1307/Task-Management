@@ -38,12 +38,13 @@ const getPreSaleData = async (req, res) => {
             response: result,
             totalDocuments,
             currentPage: page,
-            totalPages: Math.ceil(result.length / limit),
+            totalPages: Math.ceil(totalDocuments / limit),
         });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
 };
+
 
 
 
