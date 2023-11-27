@@ -1,6 +1,7 @@
 const { mongoose } = require("mongoose");
 const assignUserModel = require("../models/assignUser.model");
 const taskModel = require("../models/task.model");
+const sprintModel = require('../models/sprint.model');
 
 // Assign the user
 const addUserAssignments = async (req, res) => {
@@ -33,7 +34,7 @@ const getUserAssignments = async (req, res) => {
   try {
     let pageSize = 10;
     let todayDate = new Date()
-    let { flag, skip, projectId, milestoneId } = req.query;
+    let { flag, skip, projectId, milestoneId, sprintId } = req.query;
     let taskIds = await assignUserModel.distinct("taskId", { assigneeId: req.user._id });
 
     if (flag == 1) {
@@ -42,11 +43,11 @@ const getUserAssignments = async (req, res) => {
           $match: { _id: { $in: taskIds }, projectId: { $exists: true } }
         },
         {
-          $lookup : {
-            from : 'projects',
-            localField : 'projectId',
-            foreignField : '_id',
-            as : 'ProjectInfo'
+          $lookup: {
+            from: 'projects',
+            localField: 'projectId',
+            foreignField: '_id',
+            as: 'ProjectInfo'
           }
         },
         // {
@@ -238,6 +239,13 @@ const getUserAssignments = async (req, res) => {
       const sprintDetails = await taskModel.aggregate(queries);
       const totalPages = Math.ceil(totalCount / pageSize);
       return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: sprintDetails, totalCount, totalPages });
+    }
+    if (flag == 4) {
+      const sprint = await sprintModel.findById(sprintId).populate([
+        { path: 'projectId', select: 'projectName' },
+        { path: 'milestoneId', select: 'title' }
+      ]).select('sprintName');
+      return res.status(200).json({ status: '200', message: 'Sprint details fetch successfully', response: sprint })
     }
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -443,7 +451,7 @@ const getUserTasks = async (req, res) => {
                 summary: '$taskInfo.summary',
                 description: '$taskInfo.description',
                 priority: '$taskInfo.priority',
-                expectedHours : '$taskInfo.expectedHours',
+                expectedHours: '$taskInfo.expectedHours',
                 startDate: '$taskInfo.startDate',
                 dueDate: '$taskInfo.dueDate',
                 status: '$taskInfo.status',
@@ -537,7 +545,7 @@ const getUserTasks = async (req, res) => {
       queries[15] = { $limit: pageSize };
     }
     const resultGet = await assignUserModel.aggregate(queries);
-    const result = resultGet.length!=0?resultGet[0] :resultGet
+    const result = resultGet.length != 0 ? resultGet[0] : resultGet
     const totalCount = counts.length != 0 ? counts[0].totalCount : 0
     const totalPages = Math.ceil(totalCount / pageSize);
     return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result, totalCount, totalPages });
