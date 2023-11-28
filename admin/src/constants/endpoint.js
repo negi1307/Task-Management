@@ -54,7 +54,7 @@ export const updateComment ="/comments/updateComment"
 export const GetAssignUser ="/assignUser/getuserListprojectAssigned?projectId=" 
 export const GetCsvData ="/userLogin/getLoginTimeFile?userId=" 
 
-export const GetPreSale ="/preSale/getPreSalesData" 
+export const GetPreSale ="/preSale/getPreSalesData?skip=" 
 export const AddPreSale ="/preSale/addPreSalesData" 
 export const UpdatePreSale ="preSale/updatePreSales" 
 export const DeletePreSale ="/preSale/deletePreSales?preSalesId=" 

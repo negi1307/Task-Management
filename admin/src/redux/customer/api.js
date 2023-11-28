@@ -3,8 +3,9 @@ import { APICore } from "../../helpers/api/apiCore"
 const api = new APICore()
 
 
-export function getPreSaleApiEndPoint(): any {
-    return api.get(URL.GetPreSale)
+export function getPreSaleApiEndPoint(data): any {
+    console.log(data ,"mmmmmmmmmmmmmmmmmmmmmmmm")
+    return api.get(URL.GetPreSale + data?.payload?.skip)
 }
 export function addPreSaleApiEndPoint(payload): any {
     const {data}=payload
