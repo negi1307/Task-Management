@@ -29,8 +29,8 @@ const getPreSaleData = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
-        const skip = (page - 1) * limit;
-        const result = await preSalesModel.find().skip(skip).limit(limit).exec();
+        let skip = parseInt(req.query.skip);
+        const result = await preSalesModel.find().skip(((skip - 1) * limit)).limit(limit).exec();
         const totalDocuments = await preSalesModel.countDocuments();
         return res.status(200).json({
             status: "200",
@@ -44,6 +44,8 @@ const getPreSaleData = async (req, res) => {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
 };
+
+
 
 
 
@@ -68,11 +70,10 @@ const updatePreSalesData = async (req, res) => {
                 projectType,
                 projectStatus
             };
-            console.log(newProjectData, "newProjectData")
-            const createdProject = await projectModel.create(newProjectData);
+            createdProject = await projectModel.create(newProjectData);
         }
         const updatedPreSales = await preSalesModel.findByIdAndUpdate({ _id: req.body.preSalesId }, req.body, { new: true });
-        return res.status(200).json({ status: "200", message: "Pre Sale data updated Successfully", updatedPreSales });
+        return res.status(200).json({ status: "200", message: "Pre Sale data updated Successfully", data: { updatedPreSales, createdProject } });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
