@@ -34,7 +34,10 @@ function* createTaskFunction({ payload }) {
             type: TASK_TYPES.CREATE_TASK_ERROR,
             payload: { error }
         });
-
+        yield put({
+            type: TASK_TYPES.CREATE_TASK_RESET,
+            payload: {},
+        });
     }
 }
 function* getSingleSprintTaskFunction({ payload }) {
