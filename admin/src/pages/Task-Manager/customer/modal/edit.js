@@ -18,9 +18,9 @@ const Edit = ({ modal, editData, closemodal }) => {
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const [selected, setSelected] = useState([]);
-    const [selectedType, setSelectedType] = useState(["Web","Mobile"]);
-    const [addValueType, setAddValueType] = useState([])
-    console.log(addValueType,"yyyyyyyyyyyyyyyyyyyyyyyyyyyy")
+    const [selectedType, setSelectedType] = useState(['Web', 'Mobile']);
+    const [addValueType, setAddValueType] = useState([]);
+    console.log(addValueType, 'yyyyyyyyyyyyyyyyyyyyyyyyyyyy');
     // const [selectedTypeValue, setSelectedTypeValue] = useState(['Web', 'Mobile']);
     console.log(startDate, 'hiiiiiiiiiiiiiiiiiiiiiiiiiiii');
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
@@ -57,7 +57,7 @@ const Edit = ({ modal, editData, closemodal }) => {
                 technology: addValue,
                 startDate: startDate,
                 endDate: endDate,
-                projectType: data?.project_type,             
+                projectType: data?.project_type,
                 projectStatus: data?.Projectstatus,
             })
         );
@@ -81,17 +81,18 @@ const Edit = ({ modal, editData, closemodal }) => {
             status: editData?.status,
             stage: editData?.stage,
             type: editData?.type,
+            project_type: editData?.Project?.projectType,
+            Projectstatus: editData?.Project?.projectStatus,
         });
         // setSelectedType(editData?.type?.map((ele) => ele));
-      
     }, [modal]);
-    const selectedValues = editData?.type?.map((item) => {
-        return item
+    const selectedTypeValues = editData?.type?.map((item) => {
+        return item;
     });
-    const addTypehandle=(selectedList, selectItem)=>{
-        setAddValueType(selectedList)
-    }
-    const removeTypehandle=(selectedList, removedItem)=>{
+    const addTypehandle = (selectedList, selectItem) => {
+        setAddValueType(selectedList);
+    };
+    const removeTypehandle = (selectedList, removedItem) => {
         const remove = selectedType.filter((ele, ind) => {
             return ele !== removedItem;
         });
@@ -101,36 +102,36 @@ const Edit = ({ modal, editData, closemodal }) => {
                 if (ele === element) {
                     arr.push(ele);
                     return setAddValueType(arr);
-                    
                 }
             });
         });
-    }
-  
-    const removehandle = (selectedList, removedItem) => {
-        const remove = getTechnology.filter((ele, ind) => {
-            return ele?.techName == removedItem;
-        });
-        // make a separate copy of the array
-        var index = addValue.indexOf(remove[0]._id);
-        if (index !== -1) {
-            addValue.splice(index, 1);
-            setAddValue(addValue);
-            console.log('remove', addValue);
-        } else {
-            setAddValue(null);
-        }
     };
-
     const addhandle = (selectedList, selectItem) => {
-        console.log(selectedList, selectItem, 'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
         const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
         });
-        setAddValue([...addValue, add[0]._id]);
-        // console.log(addValue, 'addvalue info');
+        console.log(add[0], 'addddd');
+        setAddValue([...addValue, add[0]]);
+        console.log(addValue, 'addvalue info');
     };
-
+    const removehandle = (selectedList, removedItem) => {
+        console.log(selectedList);
+        const remove = getTechnology.filter((ele, ind) => {
+            return ele?.techName !== removedItem;
+        });
+        const arr = [];
+        selectedList.forEach((element) => {
+            getTechnology.filter((ele) => {
+                if (ele?.techName === element) {
+                    arr.push(ele);
+                    return setAddValue(arr);
+                }
+            });
+        });
+    };
+    const selectedValues = editData?.Project?.technology?.map((item) => {
+        return item;
+    });
     useEffect(() => {
         const getTechnologyname = [];
         dispatch(getAllTechnology({ status: true }));
@@ -267,7 +268,7 @@ const Edit = ({ modal, editData, closemodal }) => {
                                         onSelect={addTypehandle}
                                         isObject={false}
                                         options={selectedType}
-                                        selectedValues={selectedValues}
+                                        selectedValues={selectedTypeValues}
                                         showCheckbox
                                         placeholder="Select Type"
                                     />
@@ -308,17 +309,17 @@ const Edit = ({ modal, editData, closemodal }) => {
                                             </Form.Label>
 
                                             <Multiselect
-                                                // options={options}
-                                                // value={selected}
-                                                // onChange={setSelected}
-                                                // labelledBy="Select"
+                                                {...register('technology', { required: false })}
                                                 onRemove={removehandle}
                                                 onSelect={addhandle}
                                                 isObject={false}
                                                 options={selected}
-                                                showCheckbox
+                                                selectedValues={selectedValues}
                                                 placeholder="Select Technology"
                                             />
+                                            {errors.technology?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
                                         </Form.Group>
                                     </Col>
                                 </Row>
