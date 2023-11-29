@@ -11,6 +11,7 @@ import { showRightSidebar, changeSidebarType } from '../redux/actions';
 // import { getAllProjects } from '../../src/redux/projects/action';
 import { getallMileStones, getMileStoneById } from '../redux/actions';
 import { getAllSprint, getSingleSprint } from '../redux/actions';
+import {updateTaskStatusTime} from '../../src/redux/task/action'
 // components
 // import LanguageDropdown from '../components/LanguageDropdown';
 // import NotificationDropdown from '../components/NotificationDropdown';
@@ -289,6 +290,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         pause();
         setShowButton(true); 
     };
+    const logouttimeinfo=()=>{
+        dispatch(updateTaskStatusTime())
+    }
     
     return (
         <>
@@ -369,8 +373,12 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                     username={store?.Auth?.user?.username}
                                     firstName={store?.Auth?.user?.firstName}
                                     lastName={store?.Auth?.user?.lastName}
+                                    
                                 />
+                                <Link to="/account/logout" onClick={logouttimeinfo}>logout</Link>
+                              
                             </li>
+                        
                         </ul>
 
                         {/* {/ toggle for vertical layout /} */}
