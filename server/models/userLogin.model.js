@@ -11,6 +11,10 @@ const userLogin = mongoose.model(
         },
         logoutTime: {
             type: Date,
+        },
+        leaveMessageId: {
+            type: mongoose.Types.ObjectId,
+            ref: "leaveMessage"
         }
     },
         {

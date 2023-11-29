@@ -55,12 +55,13 @@ const Title = styled.span`
 
 const Boards = (props) => {
     const { projectId, milestoneId, spriteId } = useParams();
-    console.log(projectId, 'sprinttttdddddddd');
+
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
     const store = useSelector((state) => state);
     const { register, setValue } = useForm();
     const taskId = store?.getTaskId?.data;
+    console.log('store', store);
     const taskStatusCount = store?.getTaskStatusCount?.data?.response;
     // for status count on board page(get all task api)============================
     const taskStatusCountdata = store?.getAllTaskReducer?.data;
@@ -69,8 +70,8 @@ const Boards = (props) => {
     const successHandle = store?.getAllTaskReducer;
     console.log(successHandle, 'success');
     const statushandle = store?.updateTaskStatus;
-    const assigneeName = store?.getAllAssigneeName?.data?.response
-    console.log("assigneeName",assigneeName)
+    const assigneeName = store?.getAllAssigneeName?.data?.response;
+    console.log('assigneeName', assigneeName);
 
     useEffect(() => {
         let body = {
@@ -81,23 +82,16 @@ const Boards = (props) => {
             milestoneId: milestoneId,
             sprintId: spriteId,
             skip: 1,
+            activeStatus: '',
         };
 
         dispatch(getAllTask(body));
     }, []);
 
     useEffect(() => {
-        let body = {
-            status: 1,
-            projectstatus: 1,
-        };
-        dispatch(getAllProjects(body));
-    }, []);
-
-    useEffect(() => {
-      dispatch(listProjectAssignee({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }))
+        dispatch(listProjectAssignee({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
         dispatch(getTaskStatusCount());
-    },[]);
+    }, []);
 
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
@@ -158,6 +152,7 @@ const Boards = (props) => {
                     milestoneId: milestoneId,
                     sprintId: spriteId,
                     skip: 1,
+                    activeStatus: '',
                 };
                 dispatch(getAllTask(body));
             }, 30);
@@ -251,6 +246,7 @@ const Boards = (props) => {
             milestoneId: milestoneId,
             sprintId: spriteId,
             skip: 1,
+            activeStatus: '',
         };
         dispatch(getAllTask(body));
     };
@@ -275,6 +271,7 @@ const Boards = (props) => {
                     milestoneId: milestoneId,
                     sprintId: spriteId,
                     skip: 1,
+                    activeStatus: '',
                 };
                 dispatch(getAllTask(body));
             }, 500);
@@ -283,8 +280,8 @@ const Boards = (props) => {
     return (
         <>
             <div class="status">
-                <h4>Task Status Count</h4>
                 <ul>
+                    <li>Task Status Count</li>
                     <li>
                         TO-DO:
                         {taskStatusCountdata?.response?.TodoCount}
@@ -305,53 +302,47 @@ const Boards = (props) => {
                         Due Task:
                         {taskStatusCountdata?.response?.DueTasksCount}
                     </li>
-                    <li className='info_cls'>
-                        {assigneeName?.map((item,index)=>
-                        <div className='assignee_name'>
-                            <ul>
-                                <li>{item?.assigneeId?.firstName.charAt(0)}{item?.assigneeId?.lastName.charAt(0)}</li>
-                            </ul>
-                        </div>
-                        )}
-                    </li>
-        
-                    <li>
-                        <input
-                            type="search"
-                            placeholder="Search here..."
-                            onKeyUp={selectTask}
-                            {...register('textSearch')}
-                        />
+                    <li className="info_cls">
+                        {assigneeName?.map((item, index) => (
+                            <div className="assignee_name">
+                                <ul>
+                                    <li>
+                                        {item?.assigneeId?.firstName.charAt(0)}
+                                        {item?.assigneeId?.lastName.charAt(0)}
+                                    </li>
+                                </ul>
+                            </div>
+                        ))}
                     </li>
                 </ul>
-                {/* <ul>
-        
-        {taskStatusCount?.map((item,index)=>
-        
-          <li>{item.name} : {item.count}</li>
-        )}
-        
-      </ul> */}
-            </div>
-            <div className="add_task">
-                <button
-                    type="button"
-                    className="mybutton btn btn-info"
-                    onClick={() => {
-                        console.log('button click');
-                        setShowModal(!showModal);
-                    }}>
-                    Add Task
-                </button>
-                <RightBar
-                    callAlltaskData={callAlltaskData}
-                    className="d-none"
-                    projectId={props.projectId}
-                    mileStoneId={props.mileStoneId}
-                    sprintId={props.sprintId}
-                    showModal={showModal}
-                    setShowModal={setShowModal}
-                />
+                <div className="search_info">
+                    <input
+                        type="search"
+                        placeholder="Search here..."
+                        onKeyUp={selectTask}
+                        {...register('textSearch')}
+                    />
+                    <div className="add_task">
+                        <button
+                            type="button"
+                            className="mybutton btn btn-info"
+                            onClick={() => {
+                                console.log('button click');
+                                setShowModal(!showModal);
+                            }}>
+                            Add Task
+                        </button>
+                        <RightBar
+                            callAlltaskData={callAlltaskData}
+                            className="d-none"
+                            projectId={props.projectId}
+                            mileStoneId={props.mileStoneId}
+                            sprintId={props.sprintId}
+                            showModal={showModal}
+                            setShowModal={setShowModal}
+                        />
+                    </div>
+                </div>
             </div>
 
             <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>

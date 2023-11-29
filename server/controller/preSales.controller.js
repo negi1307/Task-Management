@@ -39,33 +39,46 @@ const getPreSaleData = async (req, res) => {
                     as: "Project"
                 }
             },
+            // {
+            //     $unwind: "$Project"
+            // },
+            // { $unwind: "$Project" },
+            // { $unwind: "$Project.technology" },
             {
-                $skip: (skip - 1) * limit
+                $lookup:
+                {
+                    from: "technology",
+                    localField: "Project.technology",
+                    foreignField: "_id",
+                    as: "tecres"
+                },
             },
-            {
-                $limit: limit
-            },
-            {   
-                $unwind: "$Project"
-            },
+            //  { $unwind: "$tecres" },
             {
                 $project: {
                     _id: 1,
                     clientName: 1,
-                    description: 1, 
-                    projectName: 1, 
-                    status: 1, 
-                    stage: 1, 
-                    type: 1, 
-                    "Project._id": 1, 
-                    "Project.technology": 1, 
-                    "Project.startDate": 1, 
-                    "Project.endDate": 1, 
-                    "Project.projectStatus": 1, 
-                    "Project.projectType": 1
+                    description: 1,
+                    projectName: 1,
+                    status: 1,
+                    stage: 1,
+                    type: 1,
+                    "Project._id": 1,
+                    "Project.technology": 1,
+                    "Project.startDate": 1,
+                    "Project.endDate": 1,
+                    "Project.projectStatus": 1,
+                    "Project.projectType": 1,
+                    // "tecres._id": 1,
+                    // "tecres.techName": 1
                 }
+            }
+            , {
+                $skip: (skip - 1) * limit
+            },
+            {
+                $limit: limit
             }])
-            .exec();
         const totalDocuments = await preSalesModel.countDocuments();
         return res.status(200).json({
             status: "200",
@@ -90,28 +103,42 @@ const getPreSaleData = async (req, res) => {
 const updatePreSalesData = async (req, res) => {
     try {
         let createdProject;
+        const { technology, startDate, endDate, projectType, projectStatus } = req.body;
+        console.log(technology, "technology")
         const presale_data = await preSalesModel.findById({ _id: req.body.preSalesId });
-        let clientName = presale_data.clientName;
-        let projectName = presale_data.projectName;
-        let projectDesc = presale_data.description;
-        let preSalesId = presale_data._id;
-        if (req.body.status === 1) {
-            const { technology, startDate, endDate, projectType, projectStatus } = req.body;
-            const newProjectData = {
-                projectName,
-                clientName,
-                technology,
-                startDate,
-                endDate,
-                projectDesc,
-                projectType,
-                projectStatus,
-                preSalesId
-            };
-            createdProject = await projectModel.create(newProjectData);
+        const project_data = await projectModel.findOne({ preSalesId: req.body.preSalesId });
+        if (project_data) {
+            const updatedPreSales = await preSalesModel.findByIdAndUpdate({ _id: req.body.preSalesId }, req.body, { new: true });
+            await projectModel.findByIdAndUpdate({ _id: project_data._id }, req.body, { new: true });
+            return res.status(200).json({ status: "200", message: "Pre Sale data updated Successfully", data: { updatedPreSales, createdProject } });
+
         }
-        const updatedPreSales = await preSalesModel.findByIdAndUpdate({ _id: req.body.preSalesId }, req.body, { new: true });
-        return res.status(200).json({ status: "200", message: "Pre Sale data updated Successfully", data: { updatedPreSales, createdProject } });
+        else {
+            let clientName = presale_data.clientName;
+            let projectName = presale_data.projectName;
+            let projectDesc = presale_data.description;
+            let preSalesId = presale_data._id;
+            if (req.body.status === 1) {
+                const newProjectData = {
+                    projectName,
+                    clientName,
+                    technology,
+                    startDate,
+                    endDate,
+                    projectDesc,
+                    projectType,
+                    projectStatus,
+                    preSalesId
+                };
+                const createdProject = await projectModel.create(newProjectData);
+                return res.status(200).json({ status: "200", message: "Project created successfully", response: createdProject });
+
+            };
+
+        }
+
+        // const updatedPreSales = await preSalesModel.findByIdAndUpdate({ _id: req.body.preSalesId }, req.body, { new: true });
+        // return res.status(200).json({ status: "200", message: "Pre Sale data updated Successfully", data: { updatedPreSales, createdProject } });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }

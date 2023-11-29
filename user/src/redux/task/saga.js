@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import TASK_TYPES from './constant';
-import { UpdateTaskApi, createTaskApi, deleteTaskApi, getAllTaskApi, getSingleSprintTaskApi,updateTaskStatusApi,getAllAssigneeNamesApi } from './api';
+import { UpdateTaskApi, createTaskApi, deleteTaskApi, getAllTaskApi, getSingleSprintTaskApi,updateTaskStatusApi,getAllAssigneeNamesApi,UpdateTaskStatusTimekApi } from './api';
 
 function* createTaskFunction({ payload }) {
     try {
@@ -176,6 +176,40 @@ function* updateTaskFunction({ payload }) {
     }
 }
 
+function* updateTaskTimeStatusFunction({ payload }) {
+    try {
+        yield put({
+            type: TASK_TYPES.UPDATE_TASK_LOADING_STATUS_TIME,
+            payload: {}
+        })
+        const response = yield call(UpdateTaskStatusTimekApi, { payload });
+        console.log(response,"bbbvvv")
+        if (response.data.status) {
+            yield put({
+                type: TASK_TYPES.UPDATE_TASK_SUCCESS_STATUS_TIME,
+                payload: { ...response.data },
+            });
+            yield put({
+                type: TASK_TYPES.UPDATE_TASK_RESET_STATUS_TIME,
+                payload: {},
+            });
+        }
+        else {
+            yield put({
+                type: TASK_TYPES.UPDATE_TASK_ERROR_STATUS_TIME,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: TASK_TYPES.UPDATE_TASK_ERROR_STATUS_TIME,
+            payload: { message: error?.message }
+        });
+
+    }
+}
+
 function* deleteTaskFunction({ payload }) {
     try {
         yield put({
@@ -262,6 +296,10 @@ export function* getAllAssigneeNameSaga(): any {
 export function* updateTask(): any {
     yield takeEvery(TASK_TYPES.UPDATE_TASK, updateTaskFunction);
 }
+
+export function* updateTaskStatusTimeSaga(): any {
+    yield takeEvery(TASK_TYPES.UPDATE_TASK_STATUS_TIME, updateTaskTimeStatusFunction);
+}
 export function* deleteTask(): any {
     yield takeEvery(TASK_TYPES.DELETE_TASK, deleteTaskFunction);
 }
@@ -276,7 +314,8 @@ function* AllTaskSaga(): any {
         fork(updateTask),
         fork(deleteTask),
         fork(updateTaskStatus),
-        fork(getAllAssigneeNameSaga)
+        fork(getAllAssigneeNameSaga),
+        fork(updateTaskStatusTimeSaga)
 
     ])
 }

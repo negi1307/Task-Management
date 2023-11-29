@@ -6,6 +6,7 @@ const rolesModel = require('../models/role.model');
 // Create or add tasks
 const createtask = async (req, res) => {
   try {
+
     const { projectId, milestoneId, sprintId, summary, description, priority, expectedHours, startDate, dueDate, assigneeId, parentId } = req.body;
     const existingTask = await taskModel.findOne({
       summary: new RegExp(`^${summary.replace(/[\s]+/g, '\\s*')}\\s*$`, 'i'),
@@ -381,7 +382,7 @@ const deleteTask = async (req, res) => {
     return res.status(200).json({ status: "200", message: "Task Deleted successfully" });
   } catch (err) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: err.message });
-  } 
+  }
 };
 
 // update Status of a task AND TimeTracking

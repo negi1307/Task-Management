@@ -7,4 +7,5 @@ export * from './task/action';
 export * from './user/action';
 export * from './technology/action';
 export * from './Summary/action';
-export * from './clientRepository/action'
+export * from './clientRepository/action';
+export * from '../reduxSales/preSales/action';
