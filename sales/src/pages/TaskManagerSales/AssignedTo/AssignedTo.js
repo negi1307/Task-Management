@@ -8,6 +8,7 @@ const AssignedTo = () => {
     const [modal, setModal] = useState(false);
     const [childModal, setChildModal] = useState(false);
     const dispatch = useDispatch();
+
     const store = useSelector((state) => state);
     const getPresaleReducer = store?.getPreSales?.data?.response;
     console.log(getPresaleReducer, '00000000000000');
