@@ -1,9 +1,12 @@
-import react, { useEffect, useState } from 'react';
+import react, { useEffect, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { createTask, getAllRoles, getAllUsers, getSingleSprint } from '../redux/actions';
 import Form from 'react-bootstrap/Form';
 import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
+import pdfImage from '../../src/assets/images/pdf.png';
+import DatePicker from 'react-datepicker';
+import '../../node_modules/react-datepicker/dist/react-datepicker.css';
 
 export default function RightBar(props) {
     const {
@@ -15,7 +18,23 @@ export default function RightBar(props) {
         formState: { errors },
     } = useForm();
     const { showModal, setShowModal, content, projectId, mileStoneId, sprintId } = props;
+    const [selectedFile, setSelectedFile] = useState('');
+    const handleFileSelect = (event) => {
+        const file = event.target.files[0];
+        if(file){
+            setSelectedFile(file);
+            alert('File selected');
+        }
+     else {
+        alert('File Not selected');
+        setSelectedFile("");
+     }   
+       
+    };
 
+    const openFileInput = () => {
+        document.getElementById('fileInput').click();
+    };
     const store = useSelector((state) => state);
     // const projectId = store?.getProjectId?.data;
     // const milestoneId = store?.getMilestoneId?.data;
@@ -36,7 +55,8 @@ export default function RightBar(props) {
         body.append('startDate', e.start_date);
         body.append('dueDate', e.last_date);
         body.append('status', 1);
-        body.append('attachment', e.Attachment[0]);
+        body.append("expectedHours",e.expectedHours)
+        body.append('attachment', selectedFile ? selectedFile :"");
         if (projectId !== '' && mileStoneId !== '' && sprintId !== '') {
             dispatch(createTask(body));
         } else {
@@ -48,10 +68,21 @@ export default function RightBar(props) {
         setValue('priority', '');
         setValue('start_date', '');
         setValue('last_date', '');
-        setValue('Attachment', '');
-        setValue('description', '');
+        setValue('description','')
         setShowModal(false);
+        setSelectedFile("")
     };
+    const handelClose=()=>{
+        setValue('Summary', '');
+        setValue('Assignee', '');
+        setValue('Report', '');
+        setValue('priority', '');
+        setValue('start_date', '');
+        setValue('last_date', '');
+        setValue('description','')
+        setShowModal(false);
+        setSelectedFile("")
+    }
     useEffect(() => {
         reset({ projectname: projectId, Milestone: mileStoneId, Sprint: sprintId });
     }, [showModal]);
@@ -59,18 +90,7 @@ export default function RightBar(props) {
     useEffect(() => {
         dispatch(getAllRoles());
         dispatch(getAllUsers());
-        // dispatch(getSingleSprint({ activeStatus: 1, id: mileStoneId , skip:1}));
     }, []);
-    // useEffect(() => {
-    //     if (sucesshandel?.data?.status == 200) {
-    //         ToastHandle('success', 'Updated Successfully');
-    //         closeModal('render');
-    //     } else if (sucesshandel?.data?.status == 400) {
-    //         ToastHandle('error', sucesshandel?.data?.message);
-    //     } else if (sucesshandel?.data?.status == 500) {
-    //         ToastHandle('error', sucesshandel?.data?.message);
-    //     }
-    // }, [sucesshandel]);
     return (
         <div className={showModal ? 'rightBar show' : 'rightBar'} role="document">
             <div className="modal-content">
@@ -81,9 +101,7 @@ export default function RightBar(props) {
                         className="close "
                         data-dismiss="modal"
                         aria-label="Close"
-                        onClick={() => {
-                            setShowModal(false);
-                        }}>
+                        onClick={handelClose}>
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 className="modal-title" id="myModalLabel"></h4>
@@ -169,8 +187,8 @@ export default function RightBar(props) {
                                         {...register('Summary', { required: true })}
                                     />
                                     {errors.Summary?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
+                                        <span className="text-danger"> This feild is required *</span>
+                                    )}
                                 </div>
                             </div>
                             <div className="row">
@@ -205,8 +223,8 @@ export default function RightBar(props) {
                                             name="Assignee"
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
-                                            {...register('Assignee' , { required: true })}>
-                                            <option value={''}>--Select--</option>
+                                            {...register('Assignee', { required: true })}>
+                                            <option value={''} hidden selected>--Select--</option>
                                             {store?.getAllUsers?.data?.response?.map((ele, ind) => (
                                                 <option value={ele?._id}>
                                                     {' '}
@@ -224,22 +242,16 @@ export default function RightBar(props) {
                                 <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlInput1">
-                                            Report <span class="text-danger">*</span>:
+                                        Expected Hours <span class="text-danger">*</span>:
                                         </label>
-                                        <select
-                                            name="Reporter"
-                                            defaultValue="Admin"
-                                            class="form-select"
-                                            id="exampleForm.ControlInput1"
-                                            {...register('Report' , { required: true })}>
-                                            <option value={''}>--Select--</option>
-                                            {store?.getAllRoles?.data?.response?.map((ele, ind) => (
-                                                <option value={ele?._id}> {ele?.role} </option>
-                                            ))}
-                                        </select>
-                                        {errors.Report?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
+                                        <input
+                                            placeholder="Please Expected Hours "
+                                            type="time"
+                                           
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('expectedHours', { required: true })}
+                                        />
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -253,7 +265,7 @@ export default function RightBar(props) {
                                             min={today}
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
-                                            {...register('start_date' , { required: true })}
+                                            {...register('start_date', { required: true })}
                                         />
                                         {errors.start_date?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
@@ -274,7 +286,7 @@ export default function RightBar(props) {
                                             min={watch('start_date')}
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
-                                            {...register('last_date' , { required: true })}
+                                            {...register('last_date', { required: true })}
                                         />
                                         {errors.last_date?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
@@ -291,14 +303,14 @@ export default function RightBar(props) {
                                             name="Priority"
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
-                                            {...register('priority' , { required: true })}>
-                                            <option>-----select----</option>
+                                            {...register('priority', { required: true })}>
+                                            <option hidden selected>-----select----</option>
                                             <option value="1">High</option>
                                             <option value="2">Medium</option>
                                             <option value="3">Low</option>
                                         </select>
-                                        
-                                         {errors?.priority?.type === 'required' && (
+
+                                        {errors?.priority?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
                                         )}
                                     </div>
@@ -323,18 +335,36 @@ export default function RightBar(props) {
                                 <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            Attachment<span class="text-danger">*</span>:
+                                            Attachment :
                                         </label>
+                                        <div onClick={openFileInput}>
+                                            <i className="mdi mdi-attachment m-0 p-0 font-20 cp"></i>
+                                        </div>
                                         <input
                                             type="file"
                                             accept="application/pdf,image/png,image/jpeg,image/jpg"
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('Attachment' , { required: true })}
-                                        />
-                                          {errors?.Attachment?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
+                                            id="fileInput"
+                                            className="file-input"
+                                            onChange={handleFileSelect}
+                                            style={{ display: 'none' }}
+                                            // {...register('Attachment', { required: true })}
+                                        />{' '}
+                                        {selectedFile ? (
+                                            <img
+                                                src={
+                                                    selectedFile?.type == 'image/png' ||
+                                                    selectedFile?.type == 'image/jpg' ||
+                                                    selectedFile?.type === 'image/jpeg'
+                                                        ?  URL.createObjectURL( selectedFile)
+                                                        : pdfImage
+                                                }
+                                                className="add_upload_icon_load me-2 h-auto w-75 cp"
+                                                alt=""
+                                            />
+                                        ) : (
+                                            ''
                                         )}
+                                       
                                     </div>
                                 </div>
                             </div>

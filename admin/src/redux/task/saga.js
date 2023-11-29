@@ -10,7 +10,7 @@ function* createTaskFunction({ payload }) {
         })
         
         const response = yield call(createTaskApi, { payload });
-    //   alert(response)
+       console.log(response ,"hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii") ;
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.CREATE_TASK_SUCCESS,
@@ -29,11 +29,15 @@ function* createTaskFunction({ payload }) {
         }
 
     } catch (error) {
+    //    console.log(error,"mmmmmmmmmmmmmmmmmmmmmm")
         yield put({
             type: TASK_TYPES.CREATE_TASK_ERROR,
-            payload: { message: error?.message }
+            payload: { error }
         });
-
+        yield put({
+            type: TASK_TYPES.CREATE_TASK_RESET,
+            payload: {},
+        });
     }
 }
 function* getSingleSprintTaskFunction({ payload }) {
@@ -64,9 +68,12 @@ function* getSingleSprintTaskFunction({ payload }) {
     } catch (error) {
         yield put({
             type: TASK_TYPES.GET_SINGLE_SPRINT_TASK_ERROR,
-            payload: { message: error?.message }
+            payload: { error }
         });
-
+ yield put({
+                type: TASK_TYPES.GET_SINGLE_SPRINT_TASK_RESET,
+                payload: {},
+            });
     }
 }
 function* getAllTaskFunction({ payload }) {
@@ -97,8 +104,12 @@ function* getAllTaskFunction({ payload }) {
     } catch (error) {
         yield put({
             type: TASK_TYPES.GET_ALL_TASK_ERROR,
-            payload: { message: error?.message }
+            payload: { error }
         });
+         yield put({
+                type: TASK_TYPES.GET_ALL_TASK_RESET,
+                payload: {},
+            });
 
     }
 }
@@ -130,9 +141,12 @@ function* updateTaskFunction({ payload }) {
     } catch (error) {
         yield put({
             type: TASK_TYPES.UPDATE_TASK_ERROR,
-            payload: { message: error?.message }
+            payload: { error }
         });
-
+        yield put({
+            type: TASK_TYPES.UPDATE_TASK_RESET,
+            payload: {},
+        });
     }
 }
 
@@ -164,7 +178,7 @@ function* deleteTaskFunction({ payload }) {
     } catch (error) {
         yield put({
             type: TASK_TYPES.DELETE_TASK_ERROR,
-            payload: { message: error?.message }
+            payload: { error }
         });
         yield put({
             type: TASK_TYPES.DELETE_TASK_RESET,
@@ -201,7 +215,7 @@ function* updateTaskStatusFunction({ payload }) {
     } catch (error) {
         yield put({
             type: TASK_TYPES.UPDATE_TASK_STATU_ERROR,
-            payload: { message: error?.message }
+            payload: { error }
         });
         yield put({
             type: TASK_TYPES.UPDATE_TASK_STATU_RESET,
@@ -239,7 +253,7 @@ function* TaskStatusFunction({ payload }) {
     } catch (error) {
         yield put({
             type: TASK_TYPES.TASK_STATUS_ERROR,
-            payload: { message: error?.message }
+            payload: { error }
         });
         yield put({
             type: TASK_TYPES.TASK_STATUS_RESET,
@@ -277,9 +291,12 @@ function* addCommentFunction({ payload }) {
     } catch (error) {
         yield put({
             type: TASK_TYPES.ADD_COMMENT_ERROR,
-            payload: { message: error?.message }
+            payload: { error }
         });
-
+        yield put({
+            type: TASK_TYPES.ADD_COMMENT_RESET,
+            payload: {},
+        });
     }
 }
 
@@ -310,7 +327,7 @@ function* getCommentFunction({ payload }) {
     } catch (error) {
         yield put({
             type: TASK_TYPES.GET_COMMENT_ERROR,
-            payload: { message: error?.message }
+            payload: { error }
         });
         yield put({
             type: TASK_TYPES.GET_COMMENT_RESET,
@@ -346,7 +363,7 @@ function* deleteCommentFunction({ payload }) {
     } catch (error) {
         yield put({
             type: TASK_TYPES.DELETE_COMMENT_ERROR,
-            payload: { message: error?.message }
+            payload: { error }
         });
         yield put({
             type: TASK_TYPES.DELETE_COMMENT_RESET,
@@ -382,7 +399,7 @@ function* updateCommentFunction({ payload }) {
     } catch (error) {
         yield put({
             type: TASK_TYPES.UPDATE_COMMENT_ERROR,
-            payload: { message: error?.message }
+            payload: { error }
         });
         yield put({
             type: TASK_TYPES.UPDATE_COMMENT_RESET,
@@ -428,9 +445,12 @@ function* AssignUserFunction({ payload }) {
     } catch (error) {
         yield put({
             type: TASK_TYPES.GET_ASSIGN_USER_ERROR,
-            payload: { message: error?.message }
+            payload: { error }
         });
-
+        yield put({
+            type: TASK_TYPES.GET_ASSIGN_USER_RESET,
+            payload: {},
+        });
     }
 }
 export function* createTaskSaga(): any {

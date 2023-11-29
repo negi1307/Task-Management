@@ -7,7 +7,7 @@ const addTechCategory = async (req, res) => {
         const result = await techCategoryModel.create({ name: req.body.name });
         return res.status(200).json({ status: '200', message: 'Tech Category Added Successfully', response: result })
     } catch (err) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong' })
+        return res.status(500).json({ status: '500', message: 'Something went wrong' })
     }
 }
 
@@ -17,7 +17,7 @@ const getTechCategory = async (req, res) => {
         const result = await techCategoryModel.find({ status: req.query.status }).sort({ createdAt: -1 });
         return res.status(200).json({ status: '200', message: 'Tech Category data feteched Successfully', response: result })
     } catch (err) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong' })
+        return res.status(500).json({ status: '500', message: 'Something went wrong' })
     }
 }
 
@@ -27,7 +27,7 @@ const updateTechCategory = async (req, res) => {
         await techCategoryModel.findByIdAndUpdate({ _id: req.body.id }, req.body);
         return res.status(200).json({ status: '200', message: 'Tech Category updated Successfully' })
     } catch (err) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong' })
+        return res.status(500).json({ status: '500', message: 'Something went wrong' })
     }
 }
 
@@ -37,7 +37,7 @@ const updateTechCategoryStatus = async (req, res) => {
         await techCategoryModel.findByIdAndUpdate({ _id: req.body.id }, { status: req.body.status });
         return res.status(200).json({ status: '200', message: 'Tech category status updated Successfully' });
     } catch (err) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong' })
+        return res.status(500).json({ status: '500', message: 'Something went wrong' })
     }
 }
 
@@ -51,7 +51,7 @@ const addTechnology = async (req, res) => {
         });
         return res.status(200).json({ status: '200', message: 'Technology Added Successfully', response: result })
     } catch (err) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong' })
+        return res.status(500).json({ status: '500', message: 'Something went wrong' })
     }
 }
 
@@ -61,7 +61,7 @@ const getTechnology = async (req, res) => {
         const result = await technologyModel.find({ status: req.query.status }).populate('techCategory_id').sort({ createdAt: -1 });
         return res.status(200).json({ status: '200', message: 'Technology data feteched Successfully', response: result })
     } catch (err) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong' })
+        return res.status(500).json({ status: '500', message: 'Something went wrong' })
     }
 }
 
@@ -71,7 +71,7 @@ const updateTechnology = async (req, res) => {
         await technologyModel.findByIdAndUpdate({ _id: req.body.id }, req.body);
         return res.status(200).json({ status: '200', message: 'Technology updated Successfully' })
     } catch (err) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong' })
+        return res.status(500).json({ status: '500', message: 'Something went wrong' })
     }
 }
 
@@ -81,7 +81,7 @@ const updateTechnologyStatus = async (req, res) => {
         await technologyModel.findByIdAndUpdate({ _id: req.body.id }, { status: req.body.status });
         return res.status(200).json({ status: '200', message: 'Technology status updated Successfully' });
     } catch (err) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong' })
+        return res.status(500).json({ status: '500', message: 'Something went wrong' })
     }
 }
 

@@ -534,11 +534,15 @@ h5.count {
     list-style: none;
     display: flex;
     justify-content: space-between;
-}
 
+    align-items: center;
+}
+.assignee_name ul {
+    padding-left: 0px;
+}
 .status ul li {
-    margin-right: 58px;
-    font-size: 20px;
+    margin-right: 29px;
+    font-size: 17px;
     color: #39afd1;
     font-weight: 600;
 }
@@ -602,6 +606,9 @@ td.user_name {
 td.user_comment {
     font-size: 18px;
 }
+p.action-icon i {
+    font-size: 27px;
+}
 
 /* end status count------------------------------------------- */
 /* Filter */
@@ -657,4 +664,77 @@ td.user_comment {
 
 .round_icons:nth-child(3n + 1) {
     background: #ec616c;
+}
+li.info_cls {
+    display: flex;
+}
+.assignee_name ul li {
+    margin-right: 0px;
+    color: #fff;
+}
+
+
+.assignee_name ul li:nth-child(2) {
+    background: orange !important;
+
+}
+
+.assignee_name:nth-child(2) {
+    background: green;
+}
+
+.assignee_name {
+    background: orange;
+    border-radius: 100%;
+    padding: 8px;
+}
+.menuinfo ul li span {
+    font-size: 22px;
+    color: green;
+    font-weight: bold;
+}
+
+.username_info ul {
+    padding-left: 0px;
+    list-style: none;
+    display: flex;
+}
+
+.username_info ul li:nth-child(2) {
+    background: green;
+}
+
+.username_info ul li {
+    padding: 8px 10px;
+    border-radius: 100%;
+    color: #fff;
+    background: orange;
+}
+.status input[type="search"] {
+    border-radius: 34px;
+    padding: 15px 16px;
+    width: 320px;
+    border: 2px solid gray;
+}
+
+tr.align-middle i {
+    font-size: 27px;
+}
+.title h3 {
+    color: #424040;
+    margin: 20px 0px;
+}
+
+.title h3 {
+    color: #424040;
+    margin: 20px 0px;
+}
+button.attachment {
+    background: transparent;
+    border: 0px;
+    transform: rotate(130deg);
+}
+
+button.attachment i {
+    font-size: 30px !important;
 }

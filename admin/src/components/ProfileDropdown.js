@@ -36,9 +36,9 @@ const ProfileDropdown = (props: ProfileDropdownProps, state: ProfileDropdownStat
         <Dropdown show={dropdownOpen} className="w-100" onToggle={toggleDropdown}>
             <div className="row pb-2">
                 <div className="col-6 d-flex align-items-center justify-content-start">
-                    <div className="name_div px-5 py-2">
+                    {/* <div className="name_div px-5 py-2">
                         <h5 className="m-0 p-0">Welcome</h5>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="col-6 d-flex align-items-center justify-content-end">
                     <Dropdown.Toggle

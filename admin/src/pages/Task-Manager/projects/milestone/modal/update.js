@@ -82,7 +82,7 @@ const Update = ({ modal, closeModal, editData }) => {
                         <Row>
                             <Col lg={9} className="text-end">
                                 <Modal.Title id="" className="mx-auto">
-                                    Update MileStone Details
+                                    Update Milestone Details
                                 </Modal.Title>
                             </Col>
                             <Col lg={3} className="text-end pt-2">
@@ -93,7 +93,7 @@ const Update = ({ modal, closeModal, editData }) => {
                 </Row>
 
                 <Modal.Body className="py-0">
-                    <Card className="p-3">
+                    <div className="p-3">
                         <Form onSubmit={handleSubmit(onSubmit)}>
                             <Row>
                                 <Col lg={12}>
@@ -173,7 +173,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                 </Col>
                             </Row>
                         </Form>
-                    </Card>
+                    </div>
                 </Modal.Body>
             </Modal>
         </>

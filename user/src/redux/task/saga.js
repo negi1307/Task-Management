@@ -110,8 +110,8 @@ function* getAllAssigneeName({ payload }) {
             payload: {}
         })
         const response = yield call(getAllAssigneeNamesApi, { payload });
-        console.log("get All TAsk Data",response)
-        if (response.data.status) {
+        console.log(response, "LLLLLLLLLLL")
+        if (response.data.status==200) {
             yield put({
                 type: TASK_TYPES.GET_ALL_ASSIGNEE_NAME_SUCCESS,
                 payload: { ...response.data },
@@ -120,6 +120,12 @@ function* getAllAssigneeName({ payload }) {
             //     type: TASK_TYPES.GET_ALL_TASK_RESET,
             //     payload: {},
             // });
+        }
+        else if(response.data.status == 404) {
+            yield put({
+                type: TASK_TYPES.GET_ALL_ASSIGNEE_NAME_RESET,
+                payload: { ...response.data }
+            });
         }
         else {
             yield put({

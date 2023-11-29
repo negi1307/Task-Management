@@ -13,7 +13,7 @@ const addRole = async (req, res) => {
             res.status(200).json({ status: "400", message: "This role already exist" });
         }
     } catch (err) {
-        res.status(200).json({ status: "500", message: "something went wrong" });
+        res.status(500).json({ status: "500", message: "something went wrong" });
     }
 }
 
@@ -60,7 +60,7 @@ const deleteRole = async (req, res) => {
             res.status(200).json({ status: "400", message: "Role wasn,t found" })
         }
     } catch (err) {
-        return res.status(200).json({ status: "500", message: 'Something went wrong', error: err.message })
+        return res.status(500).json({ status: "500", message: 'Something went wrong', error: err.message })
     }
 }
 

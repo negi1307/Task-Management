@@ -7,7 +7,6 @@ const path = require('path');
 const addProject = async (req, res) => {
   try {
     const { projectName, clientName, technology, startDate, endDate, projectDesc, projectType, projectStatus } = req.body;
-
     const existingProjectName = await projectModel.findOne({ projectName: new RegExp(`^${projectName.replace(/[\s]+/g, '\\s*')}\\s*$`, 'i') });
     if (existingProjectName) {
       return res.status(200).json({ status: "400", message: "Project Name Already exist" });
@@ -25,44 +24,9 @@ const addProject = async (req, res) => {
       return res.status(200).json({ status: "200", message: "Project created successfully", response: result });
     }
   } catch (error) {
-    return res.status(200).json({ status: "500", message: "Something went wrong", error: error.message });
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 };
-
-// Get all Projects WRT status
-// const getProjects = async (req, res) => {
-//     try {
-//         const pageSize = 10;
-//         // const projectStatus = parseInt(req.query.projectStatus);
-//         // if (projectStatus) {
-//             if (parseInt(req.query.skip) === 0) {
-//                 if (req.query.projectId) {
-//                     const project = await projectModel.findById({ _id: req.query.projectId });
-//                     return res.status(200).json({ status: '200', message: 'Project Details fetched successfully', response: project })
-//                 } else {
-//                     const projectStatus = parseInt(req.query.projectStatus);
-//                     const projects = await projectModel.find({ activeStatus: req.query.activeStatus ,projectStatus}).populate('technology', 'techName')
-//                         .sort({ createdAt: -1 })
-//                     return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects })
-//                 }
-//             } else {
-//                 const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus,projectStatus});
-//                 const projects = await projectModel.find({ activeStatus: req.query.activeStatus,projectStatus}).populate('technology', 'techName')
-//                     .sort({ createdAt: -1 })
-//                     .limit(pageSize)
-//                     .skip((parseInt(req.query.skip) - 1) * pageSize);
-//                 const totalPages = Math.ceil(totalCount / pageSize);
-
-//                 return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects, totalCount, totalPages })
-//             }
-//         // }
-//         // else{
-//         //     res.status(200).json({status:201,message:"Invalid or missing projectStatus. It should be 1, 2,3 or 4"})
-//         // }
-//     } catch (error) {
-//         return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message });
-//     }
-// }
 
 
 const getProjects = async (req, res) => {
@@ -71,7 +35,6 @@ const getProjects = async (req, res) => {
     if (req.query.activeStatus == 1) { active = true }
     else { active = false }
     const pageSize = 10;
-
     if (req.query.activeStatus && !req.query.skip && !req.query.projectId) {
       const projects = await projectModel.aggregate([{ $match: { activeStatus: JSON.parse(active) } },
       {
@@ -103,10 +66,9 @@ const getProjects = async (req, res) => {
           },
         },
       }, {
-        $sort: { startDate: 1 }
+        $sort: { daysLeft: 1 }
       }
       ]);
-
       return res.status(200).json({ status: "200", message: "Project Details fetched successfully", response: projects });
     }
     const projectStatus = parseInt(req.query.projectStatus)
@@ -140,7 +102,7 @@ const getProjects = async (req, res) => {
           },
         },
         {
-          $sort: { startDate: 1 }
+          $sort: { daysLeft: 1 }
         }
       ]);
       return res.status(200).json({ status: "200", message: "Projects fetched successfully 1", response: projects });
@@ -179,7 +141,7 @@ const getProjects = async (req, res) => {
               },
             },
           }, {
-            $sort: { startDate: 1 }
+            $sort: { daysLeft: 1 }
           }
           ]);
           return res.status(200).json({ status: "200", message: "Project Details fetched successfully", response: project });
@@ -215,7 +177,7 @@ const getProjects = async (req, res) => {
                 },
               },
             }, {
-              $sort: { startDate: 1 }
+              $sort: { daysLeft: 1 }
             }
           ])
           // const projects = await projectModel.find({ activeStatus: req.query.activeStatus, projectStatus }).populate('technology', 'techName')
@@ -250,17 +212,18 @@ const getProjects = async (req, res) => {
               daysLeft: {
                 $divide: [
                   { $subtract: ["$endDate", "$startDate"] },
-                  1000 * 60 * 60 * 24, // Convert milliseconds to days
+                  1000 * 60 * 60 * 24,  
                 ],
               },
             },
-          }, {
-            $sort: { startDate: 1 }
-          }
-        ])
-          .sort({ createdAt: -1 })
-          .limit(pageSize)
-          .skip((skip - 1) * pageSize);
+          }, 
+          {
+            $sort: { daysLeft: 1 }
+          },
+          { $skip: (skip - 1) *  pageSize}, { $limit: pageSize }
+        ]);
+           
+
         const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus, projectStatus });
         // const projects = await projectModel
         //   .find({ activeStatus: req.query.activeStatus, projectStatus })
@@ -283,7 +246,7 @@ const updateProject = async (req, res) => {
     await projectModel.findByIdAndUpdate({ _id: req.body.projectId }, req.body, { new: true });
     return res.status(200).json({ status: "200", message: "Project updated successfully" });
   } catch (error) {
-    return res.status(200).json({ status: "500", message: "Something went wrong", error: error.message });
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 };
 
@@ -293,9 +256,9 @@ const updateStatus = async (req, res) => {
     await projectModel.findByIdAndUpdate({ _id: req.body.projectId }, { activeStatus: req.body.activeStatus });
     return res.status(200).json({ status: '200', message: 'Project status updated Successfully' });
   } catch (error) {
-    return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+    return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message })
   }
-}
+};
 
 
 //upload file of project
@@ -320,7 +283,7 @@ const uploadProject_File =async(req, res)=>{
     }
 
     } catch (error) {
-    return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+    return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message })
 
   }
 }
@@ -333,7 +296,7 @@ const getallProject=async (req, res) => {
     ;
     res.status(200).json({ status: '200', message: 'Project file uploaded Successfully' ,response:allProjectsName})
   } catch (error) {
-    return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+    return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message })
 
   }
 };
@@ -356,7 +319,7 @@ try {
   });
 
 } catch (error) {
-  return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+  return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message })
 
   }
 }
@@ -371,7 +334,7 @@ const allProjectFiles =async(req,res)=>{
     const totalPages = Math.ceil(totalCount / pageSize);
     res.status(200).json({ status: '200', message: 'Project file get Successfully',response: allProjectFiles, totalCount, totalPages })
   } catch (error) {
-    return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+    return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message })
 
   }
 };

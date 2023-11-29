@@ -27,6 +27,9 @@ const tasks = mongoose.model(
         priority: {
             type: Number,// 1=high, 2=medium, 3=low
         },
+        expectedHours : {
+            type : Number
+        },
         startDate: {
             type: Date
         },
@@ -36,6 +39,15 @@ const tasks = mongoose.model(
         status: {
             type: Number,
             default: 1 // 1=,todo, 2=inProgress, 3=hold, 4=done 
+        },
+        inProgressDate: {
+            type: Date
+        },
+        doneDate: {
+            type: Date
+        },
+        timeTracker : {
+            type : Number
         },
         activeStatus: {
             type: Boolean,
@@ -47,9 +59,15 @@ const tasks = mongoose.model(
         attachmentType: {
             type: String
         },
-        taskId:{
-            type:mongoose.Types.ObjectId,
-            ref:"Task"
+        taskId: {
+            type: mongoose.Types.ObjectId,
+            ref: "Task"
+        },
+        logInTime : {
+            type : Date
+        },
+        logOutTime : {
+            type : Date
         }
     },
         {

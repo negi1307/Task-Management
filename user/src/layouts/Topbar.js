@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import MainLoader from '../constants/Loader/loader';
+import moment from 'moment';
 
 // actions
 import { showRightSidebar, changeSidebarType } from '../redux/actions';
@@ -46,6 +47,7 @@ import { useParams } from 'react-router-dom';
 import Buttons from '../pages/uikit/Buttons';
 import ToastHandle from '../constants/toaster/toaster';
 import { Button } from 'react-bootstrap';
+import { useStopwatch } from 'react-timer-hook';
 
 // get the notifications
 const Notifications = [
@@ -149,18 +151,13 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     console.log('storeeeeeee', store);
     const [isopen, setIsopen] = useState(false);
     const [startLoginTime, setLoginTime] = useState(false);
+    const [loginTimee,setLoginTimee] = useState();
     const allProjects = store?.getProject?.data?.response;
     const loginTimeMessage = store?.createUserTime;
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
     const getAllSingleSprints = store?.getAllSingleSprints?.data?.Response;
     const { projectId, milestoneId, spriteId } = useParams();
-    //=====================================user login time=========================================================
-    // useEffect(()=>{
-
-    //         dispatch(addLoginTime())
-
-    // },[])
-    //=======================================user login time=================================================================
+    
 
     const [projectNameHeading, setProjectName] = useState('Select Project Name');
 
@@ -171,6 +168,18 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         layoutType: state.Layout.layoutType,
         leftSideBarType: state.Layout.leftSideBarType,
     }));
+   
+    const {
+        totalSeconds,
+        seconds,
+        minutes,
+        hours,
+        days,
+        isRunning,
+        start,
+        pause,
+        reset,
+      } = useStopwatch({ autoStart: false});
 
     // useEffect(() => {
     //     let data = {
@@ -254,20 +263,32 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         sessionStorage.setItem('startButton', true);
         console.log(sessionStorage?.getItem('startButton'), 'llakakokokjkkkas');
         if (sessionStorage?.getItem('startButton')) {
+            
+            start();
             setShowButton(false);
         }
-        console.log(token?.token, 'tokennnnnnn');
-        console.log(token, 'tokennnnnnn');
+        
     };
     useEffect(() => {
         if (loginTimeMessage?.data?.status == 200) {
             ToastHandle('success', loginTimeMessage?.data?.message);
+            setLoginTimee(loginTimeMessage?.data?.loginTime)
+            
         }
     }, [loginTimeMessage]);
     const logoutTime = () => {
-        sessionStorage.removeItem('startButton');
-        setShowButton(true);
+        
+        if(hours >= 9){            
+           sessionStorage.removeItem('startButton');
+            pause();
+            setShowButton(true); 
+
+        }
+        else{
+            ToastHandle('warning', "Your time is not done please wait for 9 hour");
+        }
     };
+    
     return (
         <>
             <div className={classNames('navbar-custom', navbarCssClasses)}>
@@ -397,6 +418,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                             </Button>
                                         </li>
                                     )}
+                                    <li>   <span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span></li>
+                                    {/* {moment(loginTimee).format("LTS")} */}
                                 </ul>
                             </div>
                         </div>
@@ -414,7 +437,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                     profilePic={profilePic}
                                     menuItems={ProfileMenus}
                                     username={store?.Auth?.user?.username}
-                                    userTitle={store?.Auth?.user?.firstName}
+                                    firstName={store?.Auth?.user?.firstName}
+                                    lastName={store?.Auth?.user?.lastName}
                                 />
                             </li>
                         </ul>

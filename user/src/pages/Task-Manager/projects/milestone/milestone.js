@@ -136,6 +136,7 @@ const Milestone = () => {
                         </Button>
                     </Col>
                 </Row> */}
+                <div className='title'><h3>MILESTONES</h3></div>
             {loaderhandel.loading ? (
                 <MainLoader />
             ) : (
@@ -202,8 +203,7 @@ const Milestone = () => {
                                                     <th> MileStone Name</th>
                                                     <th> Description</th>
                                                     <th> Start Date</th>
-                                                    <th> End Date</th>
-                                                    {/* <th>Status</th> */}
+                                                    <th>Due Days</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -223,7 +223,9 @@ const Milestone = () => {
 
                                                         <td> {moment(item?.milestoneId?.start_date).format('L')}</td>
                                                         <td>
-                                                            {moment(item?.milestoneId?.completion_date).format('L')}
+                                                        {item?.milestoneId?.daysLeft}
+                                                        
+                                                            {/* {moment(item?.milestoneId?.completion_date).format('L')} */}
                                                         </td>
                                                         {/* <td> <Form.Check
                                                                 type="switch"
@@ -236,7 +238,7 @@ const Milestone = () => {
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0 ">
                                                                         <Link
-                                                                            to={`/dashboard/singleMilestonesprint/projectId=/${item?.projectId}&milestoneId=/${item?.milestoneId?._id}`}>
+                                                                            to={`/dashboard/singleMilestonesprint/projectId=/${item?.milestoneId?.projectId}&milestoneId=/${item?.milestoneId?._id}`}>
                                                                             <i className="mdi mdi-eye m-0 p-0"></i>
                                                                         </Link>
                                                                     </p>
