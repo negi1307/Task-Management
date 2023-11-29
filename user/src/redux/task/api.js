@@ -23,8 +23,11 @@ export function getAllAssigneeNamesApi(data): any {
 export function UpdateTaskApi(data): any {
     return api.update(URL.UpdateTask, data.payload);
 }
-export function deleteTaskApi(data): any {
-    
+
+export function UpdateTaskStatusTimekApi(data): any {
+    return api.update(URL.updateTaskStatusTime, data.payload);
+}
+export function deleteTaskApi(data): any {    
     return api.delete(URL.DeleteTask+"taskId="+data.payload.taskId);
 }
 

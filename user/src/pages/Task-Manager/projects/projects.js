@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import MainLoader from '../../../constants/Loader/loader';
 import ToastHandle from '../../../constants/toaster/toaster';
 import moment from 'moment';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const Projects = () => {
     const dispatch = useDispatch();
@@ -23,6 +25,9 @@ const Projects = () => {
     const getProjectList = store?.getProject;
     const deletehandle = store?.deleteProject?.data;
     const [status, setStatus] = useState(1);
+    const [skip, setSkip] = useState(1);
+    const [projectStatus, setprojectStatus] = useState(1);
+   
     const [checkedData, setCheckedData] = useState();
     const [checkedStatus, setCheckedStatus] = useState();
     const [statusModal, setStatusModal] = useState(false);
@@ -43,6 +48,7 @@ const Projects = () => {
         setEditData(data);
         setOpenEditModal(true);
     };
+    
     const closeupdatemodal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -65,7 +71,7 @@ const Projects = () => {
         }
         setStatusModal(false);
     };
-    console.log(checkedData, 'oooooooooooooooooooooooooooo');
+    
     const handleStatusChange = (e, data) => {
         if (e.target.checked) {
             setCheckedStatus(true);
@@ -97,6 +103,7 @@ const Projects = () => {
             flag: 1,
             projectId: '',
             milestoneId: '',
+            sprintId:'',
             projectStatus:1,
             skip: 1,
         };
@@ -121,8 +128,17 @@ const Projects = () => {
             skip: 1,
         };
         dispatch(getAllProjects(body));
-
     }
+    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setSkip(value);
+        let body = {
+            flag: 1,
+            projectId: '',
+            milestoneId: '',
+            skip: value,
+        };
+        dispatch(getAllProjects(body));
+    };
 
     return (
         <>
@@ -217,7 +233,7 @@ const Projects = () => {
                                                     <Row>
                                                         <Col>
                                                             <p className="action-icon m-0 p-0 ">
-                                                                <Link to={`/dashboard/projects/${ele?.projectId?._id}`}>
+                                                                <Link to={`/dashboard/projects/${ele?.projectId?._id}`} >
                                                                     <i className="mdi mdi-eye m-0 p-0"></i>
                                                                 </Link>
                                                             </p>
@@ -231,6 +247,21 @@ const Projects = () => {
                                 </tbody>
                             </Table>
                         )}
+                        <Row>
+                            <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
+                                {store?.getProject?.data?.totalPages > 0 && (
+                                    <Stack spacing={2}>
+                                        <Pagination
+                                            defaultPage={skip}
+                                            count={store?.getProject?.data?.totalPages}
+                                            color="primary"
+                                            variant="outlined"
+                                            onChange={handlePaginationChange}
+                                        />
+                                    </Stack>
+                                )}
+                            </Col>
+                        </Row>
                     </Card.Body>
                     
                 </Card>
