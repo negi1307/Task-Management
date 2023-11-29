@@ -83,6 +83,7 @@ const Edit = ({ modal, editData, closemodal }) => {
             type: editData?.type,
             project_type: editData?.Project?.projectType,
             Projectstatus: editData?.Project?.projectStatus,
+            
         });
         // setSelectedType(editData?.type?.map((ele) => ele));
     }, [modal]);
