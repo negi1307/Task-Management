@@ -8,7 +8,7 @@ export function addProjectApi(data): any {
 export function getProjectApi(data): any {
     
     // return api.get(URL.GetAllProject+data.payload.status+"&projectStatus="+data.payload.projectstatus)
-    return api.get(URL.GetAllProject+data.payload.flag+'&projectId='+data.payload.projectId+"&milestoneId="+data.payload.milestoneId+"&skip="+data.payload.skip+"&projectStatus="+data.payload.projectStatus)
+    return api.get(URL.GetAllProject+data.payload.flag+'&projectId='+data.payload.projectId+"&milestoneId="+data.payload.milestoneId+"&sprintId="+data.payload.sprintId+"&skip="+data.payload.skip)
     
 }
 export function updateProjectApi(data): any {    
