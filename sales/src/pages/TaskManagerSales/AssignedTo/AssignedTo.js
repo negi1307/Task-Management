@@ -17,7 +17,6 @@ const AssignedTo = () => {
             setPreSale(getPresaleReducer?.data?.response);
         }
     }, []);
-    const abc = 'abc';
     return (
         <>
             <HeaderMain />
