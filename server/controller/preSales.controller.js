@@ -103,22 +103,20 @@ const getPreSaleData = async (req, res) => {
 const updatePreSalesData = async (req, res) => {
     try {
         let createdProject;
-        const { technology, startDate, endDate, projectType, projectStatus } = req.body;
-        console.log(technology, "technology")
+        const { technology, startDate, endDate, projectType, projectStatus, clientName, description } = req.body;
         const presale_data = await preSalesModel.findById({ _id: req.body.preSalesId });
         const project_data = await projectModel.findOne({ preSalesId: req.body.preSalesId });
         if (project_data) {
             const updatedPreSales = await preSalesModel.findByIdAndUpdate({ _id: req.body.preSalesId }, req.body, { new: true });
             await projectModel.findByIdAndUpdate({ _id: project_data._id }, req.body, { new: true });
             return res.status(200).json({ status: "200", message: "Pre Sale data updated Successfully", data: { updatedPreSales, createdProject } });
-
         }
         else {
             let clientName = presale_data.clientName;
             let projectName = presale_data.projectName;
             let projectDesc = presale_data.description;
             let preSalesId = presale_data._id;
-            if (req.body.status === 1) {
+            if (parseInt(req.body.status) === 1) {
                 const newProjectData = {
                     projectName,
                     clientName,
@@ -132,13 +130,8 @@ const updatePreSalesData = async (req, res) => {
                 };
                 const createdProject = await projectModel.create(newProjectData);
                 return res.status(200).json({ status: "200", message: "Project created successfully", response: createdProject });
-
             };
-
         }
-
-        // const updatedPreSales = await preSalesModel.findByIdAndUpdate({ _id: req.body.preSalesId }, req.body, { new: true });
-        // return res.status(200).json({ status: "200", message: "Pre Sale data updated Successfully", data: { updatedPreSales, createdProject } });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
