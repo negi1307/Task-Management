@@ -288,6 +288,7 @@ const Projects = () => {
                 </Card>
 
                 <Create modal={openModal} closeModal={closeModal} />
+                
                 <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
                 {/* delete modal */}
                 <Modal show={statusModal} onHide={() => setStatusModal(false)}>

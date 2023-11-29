@@ -3,13 +3,14 @@ const taskModel = require("../models/task.model");
 const assignUserModel = require("../models/assignUser.model");
 const historyModel = require("../models/history.model");
 const rolesModel = require('../models/role.model');
-const milestoneModel = require("../models/milestone.model");
-const {userHistory} = require("../models/history.model");
+const userLoginModel = require("../models/userLogin.model");
+const { verifyUser } = require("../middleware/jwt.auth");
+const { userHistory } = require("../controller/history.controller");
 
 // Create or add tasks
 const createtask = async (req, res) => {
   try {
-    
+
     const { projectId, milestoneId, sprintId, summary, description, priority, expectedHours, startDate, dueDate, assigneeId, parentId } = req.body;
     const existingTask = await taskModel.findOne({
       summary: new RegExp(`^${summary.replace(/[\s]+/g, '\\s*')}\\s*$`, 'i'),
@@ -21,7 +22,7 @@ const createtask = async (req, res) => {
       const lastTask = await taskModel.countDocuments();
       const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : req.body.attachment;
       const fileExtension = req.file ? req.file.mimetype : undefined;
-      const task = await taskModel.create({ 
+      const task = await taskModel.create({
         taskMannualId: lastTask + 1,
         projectId,
         milestoneId,
@@ -146,6 +147,7 @@ const task_list = async (query, totalCount, pageSize, skip, arr) => {
         summary: { $first: "$summary" },
         description: { $first: "$description" },
         priority: { $first: "$priority" },
+        expectedHours: { $first: "$expectedHours" },
         startDate: { $first: "$startDate" },
         dueDate: { $first: "$dueDate" },
         status: { $first: "$status" },
@@ -320,6 +322,7 @@ const getTasks = async (req, res) => {
           summary: { $first: "$summary" },
           description: { $first: "$description" },
           priority: { $first: "$priority" },
+          expectedHours: { $first: "$expectedHours" },
           startDate: { $first: "$startDate" },
           dueDate: { $first: "$dueDate" },
           status: { $first: "$status" },
@@ -349,22 +352,23 @@ const getTasks = async (req, res) => {
 // Update Task
 const updateTask = async (req, res) => {
   try {
-    const taskId = req.body.taskId;
-    const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : req.body.attachment;
+    const { taskId, summary, description, priority, expectedHours, startDate, dueDate, status, attachment, assigneeId, reporterId } = req.body;
+    const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : attachment;
     const fileExtension = req.file ? req.file.mimetype : undefined;
     const obj = {
-      summary: req.body.summary,
-      description: req.body.description,
-      priority: req.body.priority,
-      startDate: req.body.startDate,
-      dueDate: req.body.dueDate,
-      status: req.body.status,
+      summary,
+      description,
+      priority,
+      expectedHours,
+      startDate,
+      dueDate,
+      status,
       attachment: attachmentPath,
       attachmentType: fileExtension,
     };
     const secObj = {
-      assigneeId: req.body.assigneeId,
-      reporterId: req.body.reporterId
+      assigneeId,
+      reporterId
     };
     await taskModel.findByIdAndUpdate(taskId, obj, { new: true });
     await assignUserModel.findOneAndUpdate({ taskId }, secObj, { new: true });
@@ -385,30 +389,65 @@ const deleteTask = async (req, res) => {
   }
 };
 
-// update Status of a task
+// update Status of a task AND TimeTracking
 const updateTaskStatus = async (req, res) => {
   try {
-    const { taskId, status } = req.body;
-    let query = { status };
-    if (status === 2) {
-      query.inProgressDate = new Date();
-    }
-    if (status === 4) {
-      query.doneDate = new Date();
+    if (Object.keys(req.body).length !== 0) {
+      const { taskId, status } = req.body;
 
-      const task = await taskModel.findById(taskId);
-      if (task && task.inProgressDate) {
-        const timeDifferenceInHours = (query.doneDate.getTime() - task.inProgressDate.getTime()) / (1000 * 60 * 60);
-        if (task.timeTracker) {
-          query.timeTracker = task.timeTracker + timeDifferenceInHours;
-        } else {
-          query.timeTracker = timeDifferenceInHours;
+      let query = { status };
+      if (status === 2) {
+        query.inProgressDate = new Date();
+      }
+
+      if (status === 4) {
+        query.doneDate = new Date();
+
+        const task = await taskModel.findById(taskId);
+        if (task && task.inProgressDate) {
+          let timeDifference = (query.doneDate.getTime() - task.inProgressDate.getTime());
+          query.timeTracker = timeDifference
+        }
+        if (task && task.logInTime && task.timeTracker) {
+          let timeDifference = (query.doneDate.getTime() - task.logInTime.getTime());
+          query.timeTracker = task.timeTracker + timeDifference
         }
       }
+      const result = await taskModel.findByIdAndUpdate({ _id: taskId }, query, { new: true });
+      return res.status(200).json({ status: "200", message: "Task Status updated successfully", data: result });
+    } else {
+      const taskIds = await assignUserModel.distinct('taskId', { assigneeId: req.user._id });
+      const tasks = await taskModel.find({ _id: { $in: taskIds }, status: 2 });
+
+      if (tasks.length > 0) {
+        for (const task of tasks) {
+          const updatedLogOutTime = await taskModel.findByIdAndUpdate(
+            { _id: task._id },
+            { $currentDate: { logOutTime: true } },
+            { new: true }
+          );
+
+          if (updatedLogOutTime) {
+            const taskDetails = await taskModel.findById(task._id);
+
+            if (taskDetails && taskDetails.logOutTime && taskDetails.inProgressDate) {
+              let timeDifference = taskDetails.logOutTime.getTime() - taskDetails.inProgressDate.getTime();
+              await taskModel.findByIdAndUpdate({ _id: task._id }, { timeTracker: timeDifference }, { new: true });
+            }
+
+            if (taskDetails && taskDetails.logInTime && taskDetails.logOutTime) {
+              let timeDifference = taskDetails.logOutTime.getTime() - taskDetails.logInTime.getTime();
+              await taskModel.findByIdAndUpdate({ _id: task._id }, { timeTracker: taskDetails.timeTracker + timeDifference }, { new: true });
+            }
+          }
+        }
+        return res.status(200).json({ status: "200", message: "Tasks updated successfully" });
+      }
+      return res.status(200).json({ status: "200", message: "No tasks found" });
     }
-    const result = await taskModel.findByIdAndUpdate({ _id: taskId }, query, { new: true });
-    return res.status(200).json({ status: "200", message: "Task Status updated successfully", data: result });
+    // return false
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 };
@@ -547,6 +586,7 @@ const getTasksAccToStatus = async (req, res) => {
             summary: { $first: "$summary" },
             description: { $first: "$description" },
             priority: { $first: "$priority" },
+            expectedHours: { $first: "$expectedHours" },
             startDate: { $first: "$startDate" },
             dueDate: { $first: "$dueDate" },
             status: { $first: "$status" },
@@ -565,7 +605,6 @@ const getTasksAccToStatus = async (req, res) => {
         { $sort: { createdAt: -1 } },
       ]);
       let taskCount = await taskModel.countDocuments(query);
-
       if (i == 1) {
         todo = { tasks, taskCount };
       }

@@ -330,7 +330,7 @@ export default function RightBar(props) {
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                            Attachment<span class="text-danger">*</span>:
                                         </label>
-                                        <button type='button' onClick={()=>document.getElementById('file').click()}>Attachment</button>
+                                        <button type='button' onClick={()=>document.getElementById('file').click()} className='attachment' >  <i className="mdi mdi-attachment m-0 p-0 font-20 cp"></i></button>
                                         <input
                                         hidden="hidden"
                                             placeholder="Please start Date "

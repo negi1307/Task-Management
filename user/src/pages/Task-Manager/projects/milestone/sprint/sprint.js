@@ -193,7 +193,7 @@ const Sprint = () => {
                                                             <Col>
                                                                 <p className="action-icon m-0 p-0 ">
                                                                     <Link
-                                                                        to={`/dashboard/taskboard/projectId=/${item?.projectId}&milestoneId=/${item?.milestoneId}&spriteId=/${item?.sprintId?._id}`}>
+                                                                        to={`/dashboard/taskboard/projectId=/${item?.sprintId?.projectId}&milestoneId=/${item?.sprintId?.milestoneId}&spriteId=/${item?.sprintId?._id}`}>
                                                                         <i className="mdi mdi-eye m-0 p-0"></i>
                                                                     </Link>
                                                                 </p>

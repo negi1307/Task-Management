@@ -238,7 +238,7 @@ const Milestone = () => {
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0 ">
                                                                         <Link
-                                                                            to={`/dashboard/singleMilestonesprint/projectId=/${item?.projectId}&milestoneId=/${item?.milestoneId?._id}`}>
+                                                                            to={`/dashboard/singleMilestonesprint/projectId=/${item?.milestoneId?.projectId}&milestoneId=/${item?.milestoneId?._id}`}>
                                                                             <i className="mdi mdi-eye m-0 p-0"></i>
                                                                         </Link>
                                                                     </p>

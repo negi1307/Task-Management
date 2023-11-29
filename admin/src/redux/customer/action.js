@@ -2,8 +2,9 @@ import PreSaleType from "./constant";
 type AuthAction = { type: string, payload: {} | string };
 
 
-export const getPreSalesData = (): AuthAction => ({
+export const getPreSalesData = (data): AuthAction => ({
     type: PreSaleType.GET_PRE_SALE_FIRST,
+     payload: data
 })
 
 export const addPreSalesData = (data): AuthAction => ({

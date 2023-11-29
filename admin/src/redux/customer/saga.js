@@ -2,13 +2,15 @@ import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import PreSaleType from './constant';
 import { getPreSaleApiEndPoint, addPreSaleApiEndPoint, updatePreSaleApiEndPoint, deletePreSaleApiEndPoint } from './api';
 
-function* getPreSale() {
+function* getPreSale({payload}) {
     try {
         yield put({
             type: PreSaleType.GET_PRE_SALE_LOADING,
             payload: {}
         })
-        const response = yield call(getPreSaleApiEndPoint);
+        const response = yield call(getPreSaleApiEndPoint ,{ payload });
+        console.log(payload, ".......")
+
         if (response.data.status) {
             yield put({
                 type: PreSaleType.GET_PRE_SALE_SUCCESS,

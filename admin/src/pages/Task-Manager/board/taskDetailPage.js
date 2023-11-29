@@ -8,6 +8,7 @@ import { AddComment, UpdateCommentAction, deleteComment, getComment } from '../.
 import ToastHandle from '../../../constants/toaster/toaster';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
+import noimage from '../../../assets/images/noimage.png';
 const TaskDetailPage = ({ modal, editData, closeModal }) => {
     // console.log(editData, 'editdataaaaaaaaaaa');
     const store = useSelector((state) => state);
@@ -371,7 +372,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                             : ''}
                                     </p>
                                 </div>
-                                <div className=" d-flex">
+                                {editData?.attachment !== "" ?  <div className=" d-flex">
                                     <h4 className="m-0 p-0 me-2">Attachment:</h4>
                                     <a href={editData?.attachment} download target="_blank" className="align_icon_dowl">
                                         <i className="dripicons-download download_color"></i>
@@ -382,11 +383,13 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                         src={
                                             editData?.attachmentType !== 'application/pdf'
                                                 ? editData?.attachment
-                                                : pdfImage
+                                                : pdfImage 
                                         }
                                     />
+                                    
                                     {/* <img src={editData?.attachment} /> */}
-                                </div>
+                                </div> : ""}
+                               
                             </Card>
                         </Col>
                     </Row>

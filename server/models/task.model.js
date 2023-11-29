@@ -62,6 +62,12 @@ const tasks = mongoose.model(
         taskId: {
             type: mongoose.Types.ObjectId,
             ref: "Task"
+        },
+        logInTime : {
+            type : Date
+        },
+        logOutTime : {
+            type : Date
         }
     },
         {
