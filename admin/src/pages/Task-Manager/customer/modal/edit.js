@@ -7,6 +7,7 @@ import { getAllTechnology } from '../../../../redux/technology/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import Multiselect from 'multiselect-react-dropdown';
 import DatePicker from 'react-datepicker';
+import { parseISO } from 'date-fns';
 // import {ButtonLoading} from '../../../../constants/Loader/loader';
 const Edit = ({ modal, editData, closemodal }) => {
     console.log(editData, 'mmmmmmmmmmmmmmmmmmm');
@@ -86,6 +87,8 @@ const Edit = ({ modal, editData, closemodal }) => {
             
         });
         // setSelectedType(editData?.type?.map((ele) => ele));
+        setStartDate(parseISO(editData?.Project?.startDate))
+        setEndDate(parseISO(editData?.Project?.endDate))
     }, [modal]);
     const selectedTypeValues = editData?.type?.map((item) => {
         return item;
