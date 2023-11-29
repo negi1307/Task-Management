@@ -190,7 +190,6 @@ const CustomerCreateFrom = (props) => {
                             </Form.Group>
                         </Col>
                     </Row>
-
                     <Row>
                         <Col lg={6}>
                             <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
