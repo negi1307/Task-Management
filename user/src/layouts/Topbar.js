@@ -211,7 +211,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
             dispatch(getTaskStatusCount());
         }
     };
-    const [countdown, setCountdown] = useState(null);
+
     /**
      * Toggle the leftmenu when having mobile screen
      */
@@ -282,8 +282,6 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
     return (
         <>
-            {/* <button onClick={startCountdown}>Start Countdown</button> */}
-            {countdown !== null && <p>Time remaining: {Math.ceil(countdown / 1000)} seconds</p>}
             <div className={classNames('navbar-custom', navbarCssClasses)}>
                 <div className={containerCssClasses}>
                     <div className="topbarinfo">

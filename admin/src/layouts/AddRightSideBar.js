@@ -21,15 +21,13 @@ export default function RightBar(props) {
     const [selectedFile, setSelectedFile] = useState('');
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
-        if(file){
+        if (file) {
             setSelectedFile(file);
             alert('File selected');
+        } else {
+            alert('File Not selected');
+            setSelectedFile('');
         }
-     else {
-        alert('File Not selected');
-        setSelectedFile("");
-     }   
-       
     };
 
     const openFileInput = () => {
@@ -43,7 +41,6 @@ export default function RightBar(props) {
     const today = new Date().toISOString().split('T')[0];
     const dispatch = useDispatch();
     const onSubmit = (e) => {
-        console.log(errors);
         let body = new FormData();
         body.append('projectId', projectId);
         body.append('milestoneId', mileStoneId);
@@ -56,8 +53,8 @@ export default function RightBar(props) {
         body.append('startDate', e.start_date);
         body.append('dueDate', e.last_date);
         body.append('status', 1);
-        body.append("expectedHours",e.expectedHours)
-        body.append('attachment', selectedFile ? selectedFile :"");
+        body.append('expectedHours', e.expectedHours);
+        body.append('attachment', selectedFile ? selectedFile : '');
         if (projectId !== '' && mileStoneId !== '' && sprintId !== '') {
             dispatch(createTask(body));
         } else {
@@ -69,21 +66,21 @@ export default function RightBar(props) {
         setValue('priority', '');
         setValue('start_date', '');
         setValue('last_date', '');
-        setValue('description','')
+        setValue('description', '');
         setShowModal(false);
-        setSelectedFile("")
+        setSelectedFile('');
     };
-    const handelClose=()=>{
+    const handelClose = () => {
         setValue('Summary', '');
         setValue('Assignee', '');
         setValue('Report', '');
         setValue('priority', '');
         setValue('start_date', '');
         setValue('last_date', '');
-        setValue('description','')
+        setValue('description', '');
         setShowModal(false);
-        setSelectedFile("")
-    }
+        setSelectedFile('');
+    };
     useEffect(() => {
         reset({ projectname: projectId, Milestone: mileStoneId, Sprint: sprintId });
     }, [showModal]);
@@ -225,7 +222,9 @@ export default function RightBar(props) {
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('Assignee', { required: true })}>
-                                            <option value={''} hidden selected>--Select--</option>
+                                            <option value={''} hidden selected>
+                                                --Select--
+                                            </option>
                                             {store?.getAllUsers?.data?.response?.map((ele, ind) => (
                                                 <option value={ele?._id}>
                                                     {' '}
@@ -243,12 +242,11 @@ export default function RightBar(props) {
                                 <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlInput1">
-                                        Expected Hours <span class="text-danger">*</span>:
+                                            Expected Hours <span class="text-danger">*</span>:
                                         </label>
                                         <input
                                             placeholder="Please Expected Hours "
                                             type="time"
-                                           
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
                                             {...register('expectedHours', { required: true })}
@@ -305,7 +303,9 @@ export default function RightBar(props) {
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('priority', { required: true })}>
-                                            <option hidden selected>-----select----</option>
+                                            <option hidden selected>
+                                                -----select----
+                                            </option>
                                             <option value="1">High</option>
                                             <option value="2">Medium</option>
                                             <option value="3">Low</option>
@@ -356,7 +356,7 @@ export default function RightBar(props) {
                                                     selectedFile?.type == 'image/png' ||
                                                     selectedFile?.type == 'image/jpg' ||
                                                     selectedFile?.type === 'image/jpeg'
-                                                        ?  URL.createObjectURL( selectedFile)
+                                                        ? URL.createObjectURL(selectedFile)
                                                         : pdfImage
                                                 }
                                                 className="add_upload_icon_load me-2 h-auto w-75 cp"
@@ -365,7 +365,6 @@ export default function RightBar(props) {
                                         ) : (
                                             ''
                                         )}
-                                       
                                     </div>
                                 </div>
                             </div>

@@ -190,6 +190,7 @@ export const updateLogoutTime = (state = UPDATE_USER_LOGIN_TIME, action) => {
         case USERS_TYPES.CREATE_USER_TIME_STOP_ERROR:
             return {
                 data: [],
+                // status: 403,
                 loading: false,
                 message: action?.payload,
             };

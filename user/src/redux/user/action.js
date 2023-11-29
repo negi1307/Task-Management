@@ -6,12 +6,6 @@ export const addLoginTime = (data): AuthAction => ({
     type: ALL_USERS.CREATE_USER_TIME,
     payload: data,
 });
-
-// export const addLoginTimeStop = (data): AuthAction => ({
-//     type: ALL_USERS.CREATE_USER_TIME_STOP,
-//     payload: data,
-// });
-
 // addd login tIME ------------------------------------
 
 export const getAllUsers = (data): AuthAction => ({

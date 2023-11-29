@@ -78,7 +78,9 @@ const Login = (): React$Element<any> => {
             <AccountLayout bottomLinks={<BottomLink />}>
                 <div className="text-center w-75 m-auto">
                     <h4 className="text-dark-50 text-center mt-0 fw-bold">{t('Sign In')}</h4>
-                    <p className="text-muted mb-4">{t('Enter your email address and password to Admin panel.')}</p>
+                    <p className="text-muted mb-4">
+                        {t('Enter your email address and password to access admin panel.')}
+                    </p>
                 </div>
 
                 {error && (

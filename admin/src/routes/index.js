@@ -62,9 +62,6 @@ const AllUsers = React.lazy(() => import('../pages/Task-Manager/AllUsers'));
 // InviteUsers
 const InviteUsers = React.lazy(() => import('../pages/Task-Manager/inviteUser'));
 
-// Assigned to
-// const AssingnedTo = React.lazy(() => import('../pages/Task-Manager/AssignedTo/Index'));
-
 // apps
 const CalendarApp = React.lazy(() => import('../pages/apps/Calendar'));
 // const Projects = React.lazy(() => import('../pages/apps/Projects'));
@@ -309,7 +306,6 @@ const AllRoutes = () => {
                             path: 'boards',
                             element: <LoadComponent component={Boards} />,
                         },
-
                         // {
                         //     path: 'allmillstones',
                         //     element: <LoadComponent component={AllMillStone} />,

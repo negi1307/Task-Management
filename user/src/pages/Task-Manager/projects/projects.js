@@ -27,7 +27,7 @@ const Projects = () => {
     const [status, setStatus] = useState(1);
     const [skip, setSkip] = useState(1);
     const [projectStatus, setprojectStatus] = useState(1);
-   
+
     const [checkedData, setCheckedData] = useState();
     const [checkedStatus, setCheckedStatus] = useState();
     const [statusModal, setStatusModal] = useState(false);
@@ -48,7 +48,7 @@ const Projects = () => {
         setEditData(data);
         setOpenEditModal(true);
     };
-    
+
     const closeupdatemodal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -71,7 +71,7 @@ const Projects = () => {
         }
         setStatusModal(false);
     };
-    
+
     const handleStatusChange = (e, data) => {
         if (e.target.checked) {
             setCheckedStatus(true);
@@ -103,8 +103,8 @@ const Projects = () => {
             flag: 1,
             projectId: '',
             milestoneId: '',
-            sprintId:'',
-            projectStatus:1,
+            sprintId: '',
+            projectStatus: 1,
             skip: 1,
         };
         dispatch(getAllProjects(body));
@@ -120,7 +120,7 @@ const Projects = () => {
         }
     }, [deletehandle]);
 
-    const statusInfo =(status)=>{
+    const statusInfo = (status) => {
         let body = {
             flag: 1,
             projectId: '',
@@ -128,7 +128,7 @@ const Projects = () => {
             skip: 1,
         };
         dispatch(getAllProjects(body));
-    }
+    };
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
         let body = {
@@ -148,7 +148,7 @@ const Projects = () => {
                 </div>
                 <Card>
                     <Card.Body>
-                    {/* <div class="row mx-auto border-bottom mb-2">
+                        {/* <div class="row mx-auto border-bottom mb-2">
                     <div class="row d-flex align-items-center pb-2">
                     <div class="col-auto  cp InActive_data">
                     <p class="p-0 m-0 p-1 cp" onClick={()=>statusInfo(1)}> Todo</p></div>
@@ -233,7 +233,7 @@ const Projects = () => {
                                                     <Row>
                                                         <Col>
                                                             <p className="action-icon m-0 p-0 ">
-                                                                <Link to={`/dashboard/projects/${ele?.projectId?._id}`} >
+                                                                <Link to={`/dashboard/projects/${ele?.projectId?._id}`}>
                                                                     <i className="mdi mdi-eye m-0 p-0"></i>
                                                                 </Link>
                                                             </p>

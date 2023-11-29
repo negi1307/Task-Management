@@ -179,7 +179,6 @@ function* updateLoginTime({ payload }) {
             payload: {},
         });
         const response = yield call(UserLoginTimeStopApi, { payload });
-        console.log(response, 'resppppppp');
         if (response.data.status) {
             yield put({
                 type: USERS_TYPES.CREATE_USER_TIME_STOPSUCCESS,
