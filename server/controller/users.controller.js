@@ -1,7 +1,6 @@
 const userModel = require("../models/users.model");
 const assignUserModel = require("../models/assignUser.model");
 const taskModel = require("../models/task.model");
-const userLoginModel = require("../models/userLogin.model");
 const nodemailer = require("../middleware/nodemailer");
 const bcrypt = require("bcrypt");
 const { accessToken } = require("../middleware/jwt.auth");
@@ -99,14 +98,98 @@ const deleteUser = async (req, res) => {
   }
 }
 
-// Time tracking of users spend time
+// Time tracking of users spend time in a month
 const trackTime = async (req, res) => {
   try {
-    const userIds = await userModel.distinct('_id', { role: { $in: ['Employee', 'Sales'] } });
-    console.log(userIds);
-    const assignedTasksIds = await assignUserModel.distinct('taskId', { assigneeId: { $in: userIds } });
-    console.log(assignedTasksIds);
-    return res.send('okk')
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+    const timeTrackingData = await taskModel.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: monthStart,
+            $lt: monthEnd,
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'projects',
+          localField: 'projectId',
+          foreignField: '_id',
+          as: 'projects',
+        },
+      },
+      {
+        $lookup: {
+          from: 'assignusers',
+          localField: '_id',
+          foreignField: 'taskId',
+          as: 'assignedUser',
+        },
+      },
+      {
+        $unwind: '$assignedUser',
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'assignedUser.assigneeId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $group: {
+          _id: {
+            project: { $first: '$projects.projectName' },
+            userName: '$user.firstName',
+            userLastName: '$user.lastName',
+          },
+          totalTrackingTime: { $sum: '$timeTracker' },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          project: '$_id.project',
+          userName: '$_id.userName',
+          userLastName: '$_id.userLastName',
+          formattedTrackingTime: {
+            $concat: [
+              {
+                $toString: {
+                  $trunc: {
+                    $divide: ['$totalTrackingTime', 3600000], // Convert to hours
+                  },
+                },
+              },
+              'h ',
+              {
+                $toString: {
+                  $trunc: {
+                    $mod: [
+                      {
+                        $divide: ['$totalTrackingTime', 60000], // Convert to minutes
+                      },
+                      60,
+                    ],
+                  },
+                },
+              },
+              'm',
+            ],
+          },
+        },
+      },
+    ]);
+
+    res.json(timeTrackingData);
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }

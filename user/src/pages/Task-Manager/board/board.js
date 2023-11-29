@@ -55,13 +55,13 @@ const Title = styled.span`
 
 const Boards = (props) => {
     const { projectId, milestoneId, spriteId } = useParams();
-    
+
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
     const store = useSelector((state) => state);
     const { register, setValue } = useForm();
     const taskId = store?.getTaskId?.data;
-    console.log("store",store);
+    console.log('store', store);
     const taskStatusCount = store?.getTaskStatusCount?.data?.response;
     // for status count on board page(get all task api)============================
     const taskStatusCountdata = store?.getAllTaskReducer?.data;
@@ -70,8 +70,8 @@ const Boards = (props) => {
     const successHandle = store?.getAllTaskReducer;
     console.log(successHandle, 'success');
     const statushandle = store?.updateTaskStatus;
-    const assigneeName = store?.getAllAssigneeName?.data?.response
-    console.log("assigneeName", assigneeName)
+    const assigneeName = store?.getAllAssigneeName?.data?.response;
+    console.log('assigneeName', assigneeName);
 
     useEffect(() => {
         let body = {
@@ -82,16 +82,14 @@ const Boards = (props) => {
             milestoneId: milestoneId,
             sprintId: spriteId,
             skip: 1,
-            activeStatus:""
+            activeStatus: '',
         };
 
         dispatch(getAllTask(body));
     }, []);
 
-    
-
     useEffect(() => {
-        dispatch(listProjectAssignee({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }))
+        dispatch(listProjectAssignee({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
         dispatch(getTaskStatusCount());
     }, []);
 
@@ -154,7 +152,7 @@ const Boards = (props) => {
                     milestoneId: milestoneId,
                     sprintId: spriteId,
                     skip: 1,
-                    activeStatus:""
+                    activeStatus: '',
                 };
                 dispatch(getAllTask(body));
             }, 30);
@@ -248,7 +246,7 @@ const Boards = (props) => {
             milestoneId: milestoneId,
             sprintId: spriteId,
             skip: 1,
-            activeStatus:""
+            activeStatus: '',
         };
         dispatch(getAllTask(body));
     };
@@ -273,7 +271,7 @@ const Boards = (props) => {
                     milestoneId: milestoneId,
                     sprintId: spriteId,
                     skip: 1,
-                    activeStatus:""
+                    activeStatus: '',
                 };
                 dispatch(getAllTask(body));
             }, 500);
@@ -282,7 +280,6 @@ const Boards = (props) => {
     return (
         <>
             <div class="status">
-
                 <ul>
                     <li>Task Status Count</li>
                     <li>
@@ -305,20 +302,20 @@ const Boards = (props) => {
                         Due Task:
                         {taskStatusCountdata?.response?.DueTasksCount}
                     </li>
-                    <li className='info_cls'>
-                        {assigneeName?.map((item, index) =>
-                            <div className='assignee_name'>
+                    <li className="info_cls">
+                        {assigneeName?.map((item, index) => (
+                            <div className="assignee_name">
                                 <ul>
-                                    <li>{item?.assigneeId?.firstName.charAt(0)}{item?.assigneeId?.lastName.charAt(0)}</li>
+                                    <li>
+                                        {item?.assigneeId?.firstName.charAt(0)}
+                                        {item?.assigneeId?.lastName.charAt(0)}
+                                    </li>
                                 </ul>
                             </div>
-                        )}
+                        ))}
                     </li>
-
-
-
                 </ul>
-                <div className='search_info'>
+                <div className="search_info">
                     <input
                         type="search"
                         placeholder="Search here..."
@@ -346,8 +343,6 @@ const Boards = (props) => {
                         />
                     </div>
                 </div>
-
-
             </div>
 
             <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
