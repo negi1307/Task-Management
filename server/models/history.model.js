@@ -18,8 +18,11 @@ const history = mongoose.model(
         time: {
             type: Date
         },
-        useractivity: {
+        userActivity: {
             type: String
+        },
+        user:{
+            type:String
         },
         userId: {
             type: mongoose.Types.ObjectId,
