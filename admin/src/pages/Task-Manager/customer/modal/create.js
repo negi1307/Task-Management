@@ -4,11 +4,13 @@ import { useForm } from 'react-hook-form';
 import { addPreSalesData, getPreSalesData, updatePreSalesData } from '../../../../redux/customer/action';
 import { useSelector, useDispatch } from 'react-redux';
 import ToastHandle from '../../../../constants/toaster/toaster';
+import Multiselect from 'multiselect-react-dropdown';
 // import {ButtonLoading} from '../../../../constants/Loader/loader';
-const CustomerCreateFrom = (props) => {
-    const { checkModel, show } = props;
-    console.log(checkModel, 'nnnnnnnnnnnnnnnnnnnnnnnnnnn');
+const Create = ({ modal, closemodal }) => {
     const store = useSelector((state) => state);
+    const [selected, setSelected] = useState(['Web', 'Mobile']);
+    const [addValue, setAddValue] = useState();
+    // console.log(selected ,"ppppppppppppppppppp")
     const dispatch = useDispatch();
     // create
     const customerCreateStatus = store?.addPreSaleReducer?.data?.status;
@@ -19,12 +21,19 @@ const CustomerCreateFrom = (props) => {
     const updatePreSaleStatus = store?.updatePreSaleReducer?.updatePreSale?.status;
     const updatePreSaleMessage = store?.updatePreSaleReducer?.updatePreSale?.message;
     // update
-
-    const [showModel, setShowModel] = useState({
-        modelType: '',
-        modelShow: '',
-        editData: '',
-    });
+    const addhandle = (selectedList, selectItem) => {
+        setAddValue(selectedList);
+    };
+    const removehandle = (selectedList, removedItem) => {
+        const remove = selected.filter((ele, ind) => {
+            return ele !== removedItem;
+        });
+        setAddValue(remove);
+    };
+    console.log(addValue, 'ttttttttttttttttttt');
+    const closeModal = () => {
+        closemodal();
+    };
     const {
         register,
         handleSubmit,
@@ -32,100 +41,39 @@ const CustomerCreateFrom = (props) => {
         formState: { errors },
     } = useForm();
     const onSubmit = (data) => {
-        if (showModel.modelType === 'add') {
-            dispatch(
-                addPreSalesData({
-                    clientName: data?.name,
-                    projectName: data?.project,
-                    description: data?.description,
-                    stage: data?.stage,
-                    type: data?.type,
-                    status: 2,
-                })
-            );
-        } else if (showModel.modelType === 'edit') {
-            dispatch(
-                updatePreSalesData({
-                    preSalesId: showModel?.editData?._id,
-                    clientName: data?.name,
-                    projectName: data?.project,
-                    description: data?.description,
-                    stage: data?.stage,
-                    type: data?.type,
-                    status: data?.status,
-                })
-            );
-        }
+        dispatch(
+            addPreSalesData({
+                clientName: data?.name,
+                projectName: data?.project,
+                description: data?.description,
+                stage: data?.stage,
+                type: addValue,
+                status: 2,
+            })
+        );
     };
 
     useEffect(() => {
         if (customerCreateStatus === '200') {
             ToastHandle('success', customerCreateMessage);
-            checkModel(false, '');
-            dispatch(getPreSalesData());
-        } else if (updatePreSaleStatus === '200') {
-            ToastHandle('success', updatePreSaleMessage);
-            checkModel(false, '');
-            dispatch(getPreSalesData());
+            closemodal('render');
         } else if (customerCreateStatus === '400') {
             ToastHandle('error', customerCreateMessage);
         }
-    }, [customerCreateStatus, updatePreSaleStatus]);
+    }, [customerCreateStatus]);
     // model check two type add and edite;
-
-    useEffect(() => {
-        if (show?.type !== '') {
-            if (show?.type === 'add') {
-                setShowModel({
-                    ...showModel,
-                    modelType: show?.type,
-                    modelShow: show?.item,
-                });
-                reset({
-                    name: '',
-                    project: '',
-                    description: '',
-                    status: '',
-                    STAGE: '',
-                    TYPE: '',
-                });
-            } else if (show?.type === 'edit') {
-                setShowModel({
-                    ...showModel,
-                    modelType: show?.type,
-                    modelShow: show?.item,
-                    editData: show?.dataEdit,
-                });
-                reset({
-                    name: show?.dataEdit?.clientName,
-                    project: show?.dataEdit?.projectName,
-                    description: show?.dataEdit?.description,
-                    status: show?.dataEdit?.description?.status,
-                    STAGE: show?.dataEdit?.description?.stage,
-                    TYPE: show?.dataEdit?.description?.type,
-                });
-            }
-        } else if (show?.type === '') {
-            setShowModel({
-                modelType: '',
-                modelShow: '',
-            });
-        }
-    }, [show?.type]);
 
     return (
         <>
             <Modal
                 // {...props}
-                show={showModel?.modelShow}
-                onHide={() => checkModel(false, '')}
+                show={modal}
+                onHide={closeModal}
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered>
                 <Modal.Header>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        {showModel.modelType === 'edit' ? <>Update</> : <>Create</>}
-                    </Modal.Title>
+                    <Modal.Title id="contained-modal-title-vcenter">Create</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -182,27 +130,13 @@ const CustomerCreateFrom = (props) => {
                                     <Form.Label>
                                         Status<span className="text-danger">*</span>:
                                     </Form.Label>
-                                    {showModel.modelType === 'add' ? (
-                                        <Form.Control
-                                            type="text"
-                                            placeholder="NOT-CONVERTED"
-                                            disabled={true}
-                                            {...register('type')}
-                                        />
-                                    ) : (
-                                        <Form.Select {...register('status', { required: true })}>
-                                            <option value="" hidden selected>
-                                                {' '}
-                                                --select--
-                                            </option>
-                                            <option value="1" selected={showModel?.editData?.status === 1 && true}>
-                                                CONVERTED
-                                            </option>
-                                            <option value="2" selected={showModel?.editData?.status === 2 && true}>
-                                                NOT-CONVERTED
-                                            </option>
-                                        </Form.Select>
-                                    )}
+
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="NOT-CONVERTED"
+                                        disabled={true}
+                                        {...register('type')}
+                                    />
 
                                     {errors?.status?.type === 'required' && (
                                         <span className="text-danger"> This feild is required *</span>
@@ -222,15 +156,9 @@ const CustomerCreateFrom = (props) => {
                                             {' '}
                                             --select--
                                         </option>
-                                        <option value="1" selected={showModel?.editData?.stage === 1 && true}>
-                                            HOT
-                                        </option>
-                                        <option value="2" selected={showModel?.editData?.stage === 2 && true}>
-                                            COLD
-                                        </option>
-                                        <option value="3" selected={showModel?.editData?.stage === 3 && true}>
-                                            MEDIUM
-                                        </option>
+                                        <option value="1">HOT</option>
+                                        <option value="2">COLD</option>
+                                        <option value="3">MEDIUM</option>
                                     </Form.Select>
                                     {errors?.stage?.type === 'required' && (
                                         <span className="text-danger"> This feild is required *</span>
@@ -243,21 +171,25 @@ const CustomerCreateFrom = (props) => {
                                         TYPE<span className="text-danger">*</span>:
                                     </Form.Label>
 
-                                    <Form.Select {...register('type', { required: true })}>
+                                    {/* <Form.Select {...register('type', { required: true })}>
                                         <option value="" hidden selected>
                                             {' '}
                                             --select--
                                         </option>
-                                        <option value="1" selected={showModel?.editData?.type?.[0] === 1 && true}>
-                                            WEB
-                                        </option>
-                                        <option value="2" selected={showModel?.editData?.type?.[0] === 2 && true}>
-                                            MOBILE
-                                        </option>
+                                        <option value="1">WEB</option>
+                                        <option value="2">MOBILE</option>
                                     </Form.Select>
                                     {errors?.type?.type === 'required' && (
                                         <span className="text-danger"> This feild is required *</span>
-                                    )}
+                                    )} */}
+                                    <Multiselect
+                                        onRemove={removehandle}
+                                        onSelect={addhandle}
+                                        isObject={false}
+                                        options={selected}
+                                        showCheckbox
+                                        placeholder="Select Type"
+                                    />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -265,15 +197,12 @@ const CustomerCreateFrom = (props) => {
                             <Col lg={6} className="text-end">
                                 <Button type="submit web_button" className="web_button">
                                     {' '}
-                                    {showModel.modelType === 'edit' ? <>Update</> : <>Add</>}
+                                    Add
                                 </Button>
                             </Col>
                             <Col lg={6}>
-                                <Button
-                                    type="submit web_button"
-                                    className="btn btn-danger "
-                                    onClick={() => checkModel(false, '')}>
-                                    Cancle
+                                <Button className="btn btn-danger " onClick={closemodal}>
+                                    Cancel
                                 </Button>
                             </Col>
                         </Row>
@@ -283,4 +212,4 @@ const CustomerCreateFrom = (props) => {
         </>
     );
 };
-export default CustomerCreateFrom;
+export default Create;

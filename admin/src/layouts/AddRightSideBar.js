@@ -5,6 +5,9 @@ import { createTask, getAllRoles, getAllUsers, getSingleSprint } from '../redux/
 import Form from 'react-bootstrap/Form';
 import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
 import pdfImage from '../../src/assets/images/pdf.png';
+import DatePicker from 'react-datepicker';
+import '../../node_modules/react-datepicker/dist/react-datepicker.css';
+
 export default function RightBar(props) {
     const {
         register,
@@ -52,6 +55,7 @@ export default function RightBar(props) {
         body.append('startDate', e.start_date);
         body.append('dueDate', e.last_date);
         body.append('status', 1);
+        body.append("expectedHours",e.expectedHours)
         body.append('attachment', selectedFile ? selectedFile :"");
         if (projectId !== '' && mileStoneId !== '' && sprintId !== '') {
             dispatch(createTask(body));
@@ -238,22 +242,16 @@ export default function RightBar(props) {
                                 <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlInput1">
-                                            Report <span class="text-danger">*</span>:
+                                        Expected Hours <span class="text-danger">*</span>:
                                         </label>
-                                        <select
-                                            name="Reporter"
-                                            defaultValue="Admin"
-                                            class="form-select"
-                                            id="exampleForm.ControlInput1"
-                                            {...register('Report', { required: true })}>
-                                            <option value={''} hidden selected>--Select--</option>
-                                            {store?.getAllRoles?.data?.response?.map((ele, ind) => (
-                                                <option value={ele?._id}> {ele?.role} </option>
-                                            ))}
-                                        </select>
-                                        {errors.Report?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
+                                        <input
+                                            placeholder="Please Expected Hours "
+                                            type="time"
+                                           
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('expectedHours', { required: true })}
+                                        />
                                     </div>
                                 </div>
                                 <div class="col-lg-6">

@@ -9,12 +9,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import MainLoader from '../../../../constants/Loader/loader';
 import Multiselect from 'multiselect-react-dropdown';
 import { getAllTechnology } from '../../../../redux/technology/action';
+import DatePicker from 'react-datepicker';
+import '../../../../../node_modules/react-datepicker/dist/react-datepicker.css';
+import { parseISO } from 'date-fns';
+
+
 const Update = ({ modal, closeModal, editData }) => {
+    
     console.log(editData);
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const sucesshandel = store?.updateProject;
     const loaderhandle = store?.updateProject;
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+    const handleStartDate = (date) => {
+        setStartDate(date);
+    };
+    const handleEndDate = (date) => {
+        setEndDate(date);
+    };
     const {
         register,
         handleSubmit,
@@ -56,6 +70,7 @@ const Update = ({ modal, closeModal, editData }) => {
         return formattedDate;
     };
     useEffect(() => {
+        console.log(modal, "lllllll")
         console.log(editData, 'dattatatatatatat');
         setFinalTechnology(editData?.technology);
         setAddValue(editData?.technology);
@@ -64,15 +79,29 @@ const Update = ({ modal, closeModal, editData }) => {
             clientName: editData?.clientName,
             access: editData?.projectAccess,
             key: editData?.key,
-            startDate: handleDate(editData?.startDate),
-            endDate: handleDate(editData?.endDate),
+            // startDate: editData?.startDate,
+            // endDate: handleDate(editData?.endDate),
+
             expectedEndDate: handleDate(editData?.CompilationDate),
             project_type: editData?.projectType,
             technology: editData?.technology,
             projectstatus: editData?.projectStatus,
             expectedEndDate: handleDate(editData?.expectedDate),
         });
+        console.log(editData?.startDate)
+
+        // setStartDate (parseISO(editData?.startDate));
+        if (editData?.startDate) {
+            const parsedDate = parseISO(editData?.startDate);
+            if (parsedDate) {
+              setStartDate(parsedDate);
+            } else {
+              console.error('Invalid date format:', editData.startDate);
+            }
+          }
+        // setEndDate(editData?.endDate);
     }, [modal]);
+    console.log(startDate);
     const removehandle = (selectedList, removedItem) => {
         console.log(selectedList);
         const remove = getTechnology.filter((ele, ind) => {
@@ -101,8 +130,8 @@ const Update = ({ modal, closeModal, editData }) => {
         let body = {
             projectId: editData?._id,
             projectName: data?.projectName,
-            startDate: data?.startDate,
-            endDate: data?.endDate,
+            startDate: startDate,
+            endDate: endDate,
             clientName: data?.clientName,
             projectType: data?.project_type,
             technology: addValue,
@@ -199,7 +228,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             <Form.Label>
                                                 Start Date<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control
+                                            {/* <Form.Control
                                                 type="date"
                                                 min={handleDate(minimumStartDate)}
                                                 {...register('startDate', { required: true })}
@@ -207,7 +236,17 @@ const Update = ({ modal, closeModal, editData }) => {
                                             />
                                             {errors.startDate?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
-                                            )}
+                                            )} */}
+                                            <DatePicker
+                                                selected={startDate}
+                                                // defaultValue={startDate}
+                                                // onChange={(date) => setStartDate(date)}
+                                                onChange={(date) => setStartDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                // minDate={today}
+                                                dateFormat={"yyyy-MM-dd"}
+                                                className="add_width_input"
+                                            />
                                         </Form.Group>
                                     </Col>
                                     <Col lg={6}>
@@ -215,7 +254,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             <Form.Label>
                                                 End Date<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control
+                                            {/* <Form.Control
                                                 type="date"
                                                 min={watch('startDate')}
                                                 {...register('endDate', { required: true })}
@@ -223,7 +262,16 @@ const Update = ({ modal, closeModal, editData }) => {
                                             />
                                             {errors.endDate?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
-                                            )}
+                                            )} */}
+                                            <DatePicker
+                                                selected={endDate}
+                                                disabled={startDate == '' || startDate == undefined}
+                                                // onChange={(date) => setEndDate(date)}
+                                                onChange={(date) => handleEndDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={startDate}
+                                                className="add_width_input"
+                                            />
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -234,7 +282,9 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('project_type', { required: true })}>
-                                                <option value="" hidden selected>Choose an Project Type </option>
+                                                <option value="" hidden selected>
+                                                    Choose an Project Type{' '}
+                                                </option>
                                                 <option value="T&M">T&M</option>
                                                 <option value="FC">FC</option>
                                                 <option value=" HR">HR</option>
@@ -262,7 +312,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 isObject={false}
                                                 options={selected}
                                                 selectedValues={selectedValues}
-                                                placeholder='Select Technology'
+                                                placeholder="Select Technology"
                                             />
                                             {errors.technology?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
@@ -277,7 +327,9 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 Status<span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('projectstatus', { required: true })}>
-                                                <option hidden selected>Choose an Project Status</option>
+                                                <option hidden selected>
+                                                    Choose an Project Status
+                                                </option>
                                                 <option value="1">To-Do</option>
                                                 <option value="2">Live</option>
                                                 <option value="3">Hold</option>
