@@ -18,18 +18,22 @@ const Edit = ({ modal, editData, closemodal }) => {
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const [selected, setSelected] = useState([]);
-    console.log(startDate,"hiiiiiiiiiiiiiiiiiiiiiiiiiiii")
+    const [selectedType, setSelectedType] = useState(["Web","Mobile"]);
+    const [addValueType, setAddValueType] = useState([])
+    console.log(addValueType,"yyyyyyyyyyyyyyyyyyyyyyyyyyyy")
+    // const [selectedTypeValue, setSelectedTypeValue] = useState(['Web', 'Mobile']);
+    console.log(startDate, 'hiiiiiiiiiiiiiiiiiiiiiiiiiiii');
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     // disable previous date
     const today = new Date();
-    console.log(today,"today")
+    console.log(today, 'today');
     // end date
-    const handleStartDate=(date)=>{
-        setStartDate(date)
-    }
-    const handleEndDate=(date)=>{
-        setEndDate(date)
-    }
+    const handleStartDate = (date) => {
+        setStartDate(date);
+    };
+    const handleEndDate = (date) => {
+        setEndDate(date);
+    };
     // update
     const closeModal = () => {};
     const {
@@ -48,8 +52,13 @@ const Edit = ({ modal, editData, closemodal }) => {
                 projectName: data?.project,
                 description: data?.description,
                 stage: data?.stage,
-                type: data?.type,
+                type: addValueType,
                 status: data?.status,
+                technology: addValue,
+                startDate: startDate,
+                endDate: endDate,
+                projectType: data?.project_type,             
+                projectStatus: data?.Projectstatus,
             })
         );
     };
@@ -73,7 +82,31 @@ const Edit = ({ modal, editData, closemodal }) => {
             stage: editData?.stage,
             type: editData?.type,
         });
+        // setSelectedType(editData?.type?.map((ele) => ele));
+      
     }, [modal]);
+    const selectedValues = editData?.type?.map((item) => {
+        return item
+    });
+    const addTypehandle=(selectedList, selectItem)=>{
+        setAddValueType(selectedList)
+    }
+    const removeTypehandle=(selectedList, removedItem)=>{
+        const remove = selectedType.filter((ele, ind) => {
+            return ele !== removedItem;
+        });
+        const arr = [];
+        selectedList.forEach((element) => {
+            selectedType.filter((ele) => {
+                if (ele === element) {
+                    arr.push(ele);
+                    return setAddValueType(arr);
+                    
+                }
+            });
+        });
+    }
+  
     const removehandle = (selectedList, removedItem) => {
         const remove = getTechnology.filter((ele, ind) => {
             return ele?.techName == removedItem;
@@ -217,7 +250,7 @@ const Edit = ({ modal, editData, closemodal }) => {
                                         TYPE<span className="text-danger">*</span>:
                                     </Form.Label>
 
-                                    <Form.Select {...register('type', { required: true })}>
+                                    {/* <Form.Select {...register('type', { required: true })}>
                                         <option value="" hidden selected>
                                             {' '}
                                             --select--
@@ -227,61 +260,75 @@ const Edit = ({ modal, editData, closemodal }) => {
                                     </Form.Select>
                                     {errors?.type?.type === 'required' && (
                                         <span className="text-danger"> This feild is required *</span>
-                                    )}
-                                </Form.Group>
-                            </Col>
-                        </Row>
-
-                        {watch('status')== 1 ?(
-                        <> <Row>
-                            <Col lg={6}>
-                                <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-                                    <Form.Label>
-                                        Type Of Project <span className="text-danger">*</span>:
-                                    </Form.Label>
-                                    <Form.Select {...register('project_type', { required: true })}>
-                                        <option hidden selected>
-                                            Choose an Project Type{' '}
-                                        </option>
-                                        <option value="T&M">T&M</option>
-                                        <option value="FC">FC</option>
-                                        <option value=" HR">HR</option>
-                                        <option value="DT">DT</option>
-                                    </Form.Select>
-                                    {errors.project_type?.type === 'required' && (
+                                    )} */}
+                                    <Multiselect
+                                        {...register('type', { required: false })}
+                                        onRemove={removeTypehandle}
+                                        onSelect={addTypehandle}
+                                        isObject={false}
+                                        options={selectedType}
+                                        selectedValues={selectedValues}
+                                        showCheckbox
+                                        placeholder="Select Type"
+                                    />
+                                    {errors.type?.type === 'required' && (
                                         <span className="text-danger"> This feild is required *</span>
                                     )}
                                 </Form.Group>
                             </Col>
-                            <Col lg={6}>
-                                <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-                                    <Form.Label>
-                                        Select Your Technology <span className="text-danger">*</span>:
-                                    </Form.Label>
-
-                                    <Multiselect
-                                        // options={options}
-                                        // value={selected}
-                                        // onChange={setSelected}
-                                        // labelledBy="Select"
-                                        onRemove={removehandle}
-                                        onSelect={addhandle}
-                                        isObject={false}
-                                        options={selected}
-                                        showCheckbox
-                                        placeholder="Select Technology"
-                                    />
-                                </Form.Group>
-                            </Col>
                         </Row>
 
-                        <Row>
-                            <Col lg={6}>
-                                <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                    <Form.Label className="w-100">
-                                        Start Date<span className="text-danger">*</span>:
-                                    </Form.Label>
-                                    {/* <Form.Control
+                        {watch('status') == 1 ? (
+                            <>
+                                {' '}
+                                <Row>
+                                    <Col lg={6}>
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
+                                            <Form.Label>
+                                                Type Of Project <span className="text-danger">*</span>:
+                                            </Form.Label>
+                                            <Form.Select {...register('project_type', { required: true })}>
+                                                <option hidden selected>
+                                                    Choose an Project Type{' '}
+                                                </option>
+                                                <option value="T&M">T&M</option>
+                                                <option value="FC">FC</option>
+                                                <option value=" HR">HR</option>
+                                                <option value="DT">DT</option>
+                                            </Form.Select>
+                                            {errors.project_type?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
+                                        </Form.Group>
+                                    </Col>
+                                    <Col lg={6}>
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
+                                            <Form.Label>
+                                                Select Your Technology <span className="text-danger">*</span>:
+                                            </Form.Label>
+
+                                            <Multiselect
+                                                // options={options}
+                                                // value={selected}
+                                                // onChange={setSelected}
+                                                // labelledBy="Select"
+                                                onRemove={removehandle}
+                                                onSelect={addhandle}
+                                                isObject={false}
+                                                options={selected}
+                                                showCheckbox
+                                                placeholder="Select Technology"
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col lg={6}>
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                Start Date<span className="text-danger">*</span>:
+                                            </Form.Label>
+                                            {/* <Form.Control
                                                 type="date"
                                                 min={today} // Set the minimum date to today
                                                 {...register('startDate', { required: true })}
@@ -291,22 +338,22 @@ const Edit = ({ modal, editData, closemodal }) => {
                                                 <span className="text-danger"> This feild is required *</span>
                                             )} */}
 
-                                    <DatePicker
-                                        selected={startDate}
-                                        // onChange={(date) => setStartDate(date)}
-                                        onChange={(date) => handleStartDate(date)}
-                                        placeholderText="mm-dd-yyyy"
-                                        minDate={today}
-                                        className="add_width_input"
-                                    />
-                                </Form.Group>
-                            </Col>
-                            <Col lg={6}>
-                                <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                    <Form.Label className="w-100">
-                                        End Date<span className="text-danger">*</span>:
-                                    </Form.Label>
-                                    {/* <Form.Control
+                                            <DatePicker
+                                                selected={startDate}
+                                                // onChange={(date) => setStartDate(date)}
+                                                onChange={(date) => handleStartDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={today}
+                                                className="add_width_input"
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col lg={6}>
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                End Date<span className="text-danger">*</span>:
+                                            </Form.Label>
+                                            {/* <Form.Control
                                                 type="date"
                                                 disabled={watch('startDate') == '' || watch('startDate') == undefined}
                                                 min={watch('startDate')}
@@ -317,38 +364,41 @@ const Edit = ({ modal, editData, closemodal }) => {
                                                 <span className="text-danger"> This feild is required *</span>
                                             )} */}
 
-                                    <DatePicker
-                                        selected={endDate}
-                                        disabled={startDate == '' || startDate == undefined}
-                                        // onChange={(date) => setEndDate(date)}
-                                        onChange={(date) => handleEndDate(date)}
-                                        placeholderText="mm-dd-yyyy"
-                                        minDate={startDate}
-                                        className="add_width_input"
-                                    />
-                                </Form.Group>
-                            </Col>
-                        </Row>
+                                            <DatePicker
+                                                selected={endDate}
+                                                disabled={startDate == '' || startDate == undefined}
+                                                // onChange={(date) => setEndDate(date)}
+                                                onChange={(date) => handleEndDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={startDate}
+                                                className="add_width_input"
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col lg={6}>
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label>
+                                                Status<span className="text-danger">*</span>:
+                                            </Form.Label>
+                                            <Form.Select {...register('Projectstatus', { required: true })}>
+                                                <option hidden selected>
+                                                    Select Status
+                                                </option>
+                                                <option value="1">To-Do</option>
+                                                <option value="2">Live</option>
+                                                <option value="3">Hold</option>
+                                                <option value="4">Completed</option>
+                                            </Form.Select>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                            </>
+                        ) : (
+                            ''
+                        )}
 
-                        <Row>
-                            <Col lg={6}>
-                                <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                    <Form.Label>
-                                        Status<span className="text-danger">*</span>:
-                                    </Form.Label>
-                                    <Form.Select {...register('Projectstatus', { required: true })}>
-                                        <option hidden selected>
-                                            Select Status
-                                        </option>
-                                        <option value="1">To-Do</option>
-                                        <option value="2">Live</option>
-                                        <option value="3">Hold</option>
-                                        <option value="4">Completed</option>
-                                    </Form.Select>
-                                </Form.Group>
-                            </Col>
-                        </Row></>) :""}
-                       
                         <Row>
                             <Col lg={6} className="text-end">
                                 <Button type="submit web_button" className="web_button">

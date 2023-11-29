@@ -29,8 +29,43 @@ const getPreSaleData = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
-        const skip = (page - 1) * limit;
-        const result = await preSalesModel.find().skip(skip).limit(limit).exec();
+        let skip = parseInt(req.query.skip);
+        const result = await preSalesModel.aggregate([
+            {
+                $lookup: {
+                    from: "projects",
+                    localField: "_id",
+                    foreignField: "preSalesId",
+                    as: "Project"
+                }
+            },
+            {
+                $skip: (skip - 1) * limit
+            },
+            {
+                $limit: limit
+            },
+            {   
+                $unwind: "$Project"
+            },
+            {
+                $project: {
+                    _id: 1,
+                    clientName: 1,
+                    description: 1, 
+                    projectName: 1, 
+                    status: 1, 
+                    stage: 1, 
+                    type: 1, 
+                    "Project._id": 1, 
+                    "Project.technology": 1, 
+                    "Project.startDate": 1, 
+                    "Project.endDate": 1, 
+                    "Project.projectStatus": 1, 
+                    "Project.projectType": 1
+                }
+            }])
+            .exec();
         const totalDocuments = await preSalesModel.countDocuments();
         return res.status(200).json({
             status: "200",
@@ -48,6 +83,9 @@ const getPreSaleData = async (req, res) => {
 
 
 
+
+
+
 // Update the preSale 
 const updatePreSalesData = async (req, res) => {
     try {
@@ -56,6 +94,7 @@ const updatePreSalesData = async (req, res) => {
         let clientName = presale_data.clientName;
         let projectName = presale_data.projectName;
         let projectDesc = presale_data.description;
+        let preSalesId = presale_data._id;
         if (req.body.status === 1) {
             const { technology, startDate, endDate, projectType, projectStatus } = req.body;
             const newProjectData = {
@@ -66,13 +105,13 @@ const updatePreSalesData = async (req, res) => {
                 endDate,
                 projectDesc,
                 projectType,
-                projectStatus
+                projectStatus,
+                preSalesId
             };
-            console.log(newProjectData, "newProjectData")
-            const createdProject = await projectModel.create(newProjectData);
+            createdProject = await projectModel.create(newProjectData);
         }
         const updatedPreSales = await preSalesModel.findByIdAndUpdate({ _id: req.body.preSalesId }, req.body, { new: true });
-        return res.status(200).json({ status: "200", message: "Pre Sale data updated Successfully", updatedPreSales });
+        return res.status(200).json({ status: "200", message: "Pre Sale data updated Successfully", data: { updatedPreSales, createdProject } });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }

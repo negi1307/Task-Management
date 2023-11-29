@@ -30,6 +30,10 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             },
             projectType : {
                 type : String
+            },
+            preSalesId :{
+                type : mongoose.Types.ObjectId,
+                ref : "preSales"
             }
         },
         {

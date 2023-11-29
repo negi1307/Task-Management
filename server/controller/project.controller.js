@@ -7,7 +7,6 @@ const path = require('path');
 const addProject = async (req, res) => {
   try {
     const { projectName, clientName, technology, startDate, endDate, projectDesc, projectType, projectStatus } = req.body;
-
     const existingProjectName = await projectModel.findOne({ projectName: new RegExp(`^${projectName.replace(/[\s]+/g, '\\s*')}\\s*$`, 'i') });
     if (existingProjectName) {
       return res.status(200).json({ status: "400", message: "Project Name Already exist" });
@@ -36,7 +35,6 @@ const getProjects = async (req, res) => {
     if (req.query.activeStatus == 1) { active = true }
     else { active = false }
     const pageSize = 10;
-
     if (req.query.activeStatus && !req.query.skip && !req.query.projectId) {
       const projects = await projectModel.aggregate([{ $match: { activeStatus: JSON.parse(active) } },
       {
@@ -71,7 +69,6 @@ const getProjects = async (req, res) => {
         $sort: { daysLeft: 1 }
       }
       ]);
-
       return res.status(200).json({ status: "200", message: "Project Details fetched successfully", response: projects });
     }
     const projectStatus = parseInt(req.query.projectStatus)
