@@ -1,4 +1,5 @@
 const commentsModel = require('../models/comments.model');
+const { userHistory } = require("../controller/history.controller");
 
 // Add a Comment to a task
 const addComment = async (req, res) => {
@@ -8,6 +9,8 @@ const addComment = async (req, res) => {
             userId: req.user._id,
             comment: req.body.comment
         })
+        const userActivityValue = `Comment added to taskId: ${req.body.taskId}`;
+        await userHistory(req, res, next, userActivityValue);
         return res.status(200).json({ status: "200", message: "Comment added Successfully", response: result });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
