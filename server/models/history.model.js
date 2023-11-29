@@ -10,33 +10,34 @@ const HistoryTypeEnum = {
 
 const history = mongoose.model(
     'History', mongoose.Schema({
-        type: {
-            type: String,
-            enum: Object.values(HistoryTypeEnum),
-            required: true,
+        // type: {
+        //     type: String,
+        //     enum: Object.values(HistoryTypeEnum),
+        //     required: true,
+        // },
+        time: {
+            type: Date
+        },
+        useractivity: {
+            type: String
+        },
+        userId: {
+            type: mongoose.Types.ObjectId,
+            ref: 'User'
         },
         taskId: {
             type: mongoose.Types.ObjectId,
             ref: 'Task'
         },
-        assigneeId: {
-            type: mongoose.Types.ObjectId,
-            ref: 'User',
-        },
         reporterId: {
             type: mongoose.Types.ObjectId,
-            ref: 'User',
+            ref: 'roles',
         },
-        previousStatus: {
-            type: Number
-        },
-        currentStatus: {
-            type: Number
-        },
-        userId: {
+        projectId: {
             type: mongoose.Types.ObjectId,
-            ref: 'User'
+            ref: 'projects'
         }
+        
     },
         {
             timestamps: true

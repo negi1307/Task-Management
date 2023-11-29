@@ -1,5 +1,25 @@
 const historyModel = require('../models/history.model');
 
+async function userHistory(req, res, next, value) {
+    try {
+        let time = new Date();
+        let userhistory = await historyModel({
+            time: time,
+            useractivity: value,
+            userId: req.user.userId,
+            taskId: req.user.taskId,
+            reporterId: req.user.reporterId,
+            projectId: req.user.projectId
+        });
+        await userhistory.save();
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
+
 // Get History or recent activities
 const getHistory = async (req, res) => {
     try {
@@ -10,4 +30,4 @@ const getHistory = async (req, res) => {
     }
 }
 
-module.exports = { getHistory }
+module.exports = { userHistory, getHistory }

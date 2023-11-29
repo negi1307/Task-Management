@@ -4,10 +4,12 @@ const assignUserModel = require("../models/assignUser.model");
 const historyModel = require("../models/history.model");
 const rolesModel = require('../models/role.model');
 const milestoneModel = require("../models/milestone.model");
+const {userHistory} = require("../models/history.model");
 
 // Create or add tasks
 const createtask = async (req, res) => {
   try {
+    
     const { projectId, milestoneId, sprintId, summary, description, priority, expectedHours, startDate, dueDate, assigneeId, parentId } = req.body;
     const existingTask = await taskModel.findOne({
       summary: new RegExp(`^${summary.replace(/[\s]+/g, '\\s*')}\\s*$`, 'i'),
@@ -19,7 +21,7 @@ const createtask = async (req, res) => {
       const lastTask = await taskModel.countDocuments();
       const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : req.body.attachment;
       const fileExtension = req.file ? req.file.mimetype : undefined;
-      const task = await taskModel.create({
+      const task = await taskModel.create({ 
         taskMannualId: lastTask + 1,
         projectId,
         milestoneId,
