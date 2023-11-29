@@ -116,6 +116,7 @@ const Milestone = () => {
             flag: 2,
             projectId: id,
             milestoneId: '',
+            sprintId:'',
             skip: 1,
         };
         dispatch(getAllProjects(body));

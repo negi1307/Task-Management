@@ -25,3 +25,7 @@ export const getAllRoles = (data): AuthAction => ({
     type: ALL_USERS.GET_ALL_ROLES,
     payload: data
 })
+export const addLoginTimeStop = (data): AuthAction => ({
+    type: ALL_USERS.CREATE_USER_TIME_STOP,
+    payload: data,
+});

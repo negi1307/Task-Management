@@ -26,6 +26,9 @@ const ListTask=()=>{
 //       }
 //       dispatch(getAllTask(body))   
 //   }, [])
+useEffect(()=>{
+    statusInfo(1)
+},[])
 
   const statusInfo =(status)=>{
     let body = {

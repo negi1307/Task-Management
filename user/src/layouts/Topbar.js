@@ -41,7 +41,7 @@ import { getProjectId } from '../../src/redux/projects/action';
 import { getMilestoneId } from '../../src/redux/milestone/action';
 import { getSprintId } from '../../src/redux/sprint/action';
 import { getTaskStatusCount } from '../../src/redux/Summary/action';
-import { addLoginTime } from '../../src/redux/user/action';
+import { addLoginTime,addLoginTimeStop } from '../../src/redux/user/action';
 import Filter from '../pages/Task-Manager/board/Modal/Filter';
 import { useParams } from 'react-router-dom';
 import Buttons from '../pages/uikit/Buttons';
@@ -269,7 +269,6 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const loginTime = () => {
         dispatch(addLoginTime());
         sessionStorage.setItem('startButton', true);
-        console.log(sessionStorage?.getItem('startButton'), 'llakakokokjkkkas');
         if (sessionStorage?.getItem('startButton')) {
             
             start();
@@ -280,11 +279,11 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     useEffect(() => {
         if (loginTimeMessage?.data?.status == 200) {
             ToastHandle('success', loginTimeMessage?.data?.message);
-            setLoginTimee(loginTimeMessage?.data?.loginTime)
-            
+            setLoginTimee(loginTimeMessage?.data?.loginTime)   
         }
     }, [loginTimeMessage]);
     const logoutTime = () => {
+        dispatch(addLoginTimeStop())
         
         sessionStorage.removeItem('startButton');
         pause();

@@ -114,16 +114,16 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         Project<span className="text-danger">*</span>:
                                                     </Form.Label>
 
-                                                    <Form.Select
+                                                    {/* <Form.Select
                                                         {...register('projectname', {
                                                             required: true,
                                                             disabled: true,
                                                         })}>
-                                                        {/* <option value={''}>--Select--</option> */}
+                                                     
                                                         {store?.getProject?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.projectName} </option>
                                                         ))}
-                                                    </Form.Select>
+                                                    </Form.Select> */}
                                                     {errors.projectname?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>
                                                     )}

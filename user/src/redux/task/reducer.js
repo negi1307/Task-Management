@@ -25,6 +25,11 @@ const UPDATE_STATUS_TASK_INITIAL_STATE = {
     loading:false,
     message:""
 }
+const UPDATE_STATUS_TASK_TIME_INITIAL_STATE = {
+    data:[],
+    loading:false,
+    message:""
+}
 
 
 export const createTaskReducer = (state = INITIAL_STATE, action) => {
@@ -152,6 +157,36 @@ export const UpdateTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) =>
                 }
 
         case TASK_TYPES.UPDATE_TASK_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+
+export const UpdateTaskStatusTime = (state = UPDATE_STATUS_TASK_TIME_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case TASK_TYPES.UPDATE_TASK_LOADING_STATUS_TIME:
+            return {
+                data: UPDATE_STATUS_TASK_TIME_INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.UPDATE_TASK_SUCCESS_STATUS_TIME:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+            case TASK_TYPES.UPDATE_TASK_RESET_STATUS_TIME:
+                return {
+                    data: UPDATE_STATUS_TASK_TIME_INITIAL_STATE.data,
+                    loading: false
+                }
+
+        case TASK_TYPES.UPDATE_TASK_ERROR_STATUS_TIME:
             return {
                 data: [],
                 loading: false,

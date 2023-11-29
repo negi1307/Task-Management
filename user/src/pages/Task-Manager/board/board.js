@@ -82,6 +82,7 @@ const Boards = (props) => {
             milestoneId: milestoneId,
             sprintId: spriteId,
             skip: 1,
+            activeStatus:""
         };
 
         dispatch(getAllTask(body));
@@ -153,6 +154,7 @@ const Boards = (props) => {
                     milestoneId: milestoneId,
                     sprintId: spriteId,
                     skip: 1,
+                    activeStatus:""
                 };
                 dispatch(getAllTask(body));
             }, 30);
@@ -246,6 +248,7 @@ const Boards = (props) => {
             milestoneId: milestoneId,
             sprintId: spriteId,
             skip: 1,
+            activeStatus:""
         };
         dispatch(getAllTask(body));
     };
@@ -270,6 +273,7 @@ const Boards = (props) => {
                     milestoneId: milestoneId,
                     sprintId: spriteId,
                     skip: 1,
+                    activeStatus:""
                 };
                 dispatch(getAllTask(body));
             }, 500);

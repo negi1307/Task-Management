@@ -8,12 +8,12 @@ import { getAllUsers, getAllRoles } from './../redux/user/action';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useState } from 'react';
-import {getAllProjects} from '../../src/redux/projects/action'
+import { getAllProjects } from '../../src/redux/projects/action'
 
 
 export default function RightBar(props) {
-    
-    const { showModal, setShowModal, content,callAlltaskData } = props;
+
+    const { showModal, setShowModal, content, callAlltaskData } = props;
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [description, setDescription] = useState('');
@@ -24,26 +24,26 @@ export default function RightBar(props) {
 
 
     const id = store?.Auth?.user?.userId
-//     const projectId=store?.getProjectId?.data
-// const milstoneId=store?.getMilestoneId?.data
-// const SprintId=store?.getSprintId?.data
+    //     const projectId=store?.getProjectId?.data
+    // const milstoneId=store?.getMilestoneId?.data
+    // const SprintId=store?.getSprintId?.data
 
-    const {projectId,milestoneId,spriteId}=useParams()
+    const { projectId, milestoneId, spriteId } = useParams()
 
     useEffect(() => {
         let body = {
             projectId: projectId,
-            milestoneId:milestoneId, 
-            sprintId: spriteId,  
-            flag:4,        
+            milestoneId: milestoneId,
+            sprintId: spriteId,
+            flag: 4,
             skip: 1,
         };
         dispatch(getAllProjects(body));
     }, []);
 
 
-    const[fileData,setFile]=useState(null)
-   
+    const [fileData, setFile] = useState(null)
+
     const {
         register,
         handleSubmit,
@@ -59,27 +59,28 @@ export default function RightBar(props) {
 
 
     const onSubmit = (e) => {
-        const formData=new FormData()
-        formData.append('projectId',projectId)
-        formData.append('milestoneId',milestoneId)
-        formData.append('sprintId',spriteId)
-        formData.append('summary',e.Summary)
-        formData.append('description',description)
-        formData.append('assigneeId',e.Assignee)
-        formData.append('reporterId',e.Report)
-        formData.append('priority',e.priority)
-        formData.append('startDate',e.start_date)
-        formData.append('dueDate',e.last_date)
-        formData.append('attachment',e.attachment[0]);
-        
-        if ( projectId !== '' &&  milestoneId !== '' && spriteId !== '') {
-            
+        const formData = new FormData()
+        formData.append('projectId', projectId)
+        formData.append('milestoneId', milestoneId)
+        formData.append('sprintId', spriteId)
+        formData.append('summary', e.Summary)
+        formData.append('expectedHours', e.expectedHours)
+        formData.append('description', description)
+        formData.append('assigneeId', e.Assignee)
+        formData.append('reporterId', e.Report)
+        formData.append('priority', e.priority)
+        formData.append('startDate', e.start_date)
+        formData.append('dueDate', e.last_date)
+        formData.append('attachment', e.attachment[0] ? e.attachment[0] : "");
+
+        if (projectId !== '' && milestoneId !== '' && spriteId !== '') {
+
             dispatch(createTask(formData));
             setTimeout(() => {
                 callAlltaskData();
             }, 600);
-            
-            
+
+
         } else {
             alert('plsease select project');
         }
@@ -87,6 +88,7 @@ export default function RightBar(props) {
         setValue('Summary', '')
         setValue('Description', '')
         setValue('Assignee', '')
+        setValue('expectedHours', '')
         setValue('Report', '')
         setValue('priority', '')
         setValue('start_date', '')
@@ -98,10 +100,12 @@ export default function RightBar(props) {
     // useEffect(() => {
     // call click outside
     // }, []);
-    const[fileName,setFileName] = useState('');
-const onFileChange =(e)=>{
-    setFileName(e.target.files[0].name);
-}
+    const [fileName, setFileName] = useState('');
+    const[filePreviewData,setfilePreviewData]= useState(null);
+    const onFileChange = (e) => {
+        setFileName(e.target.files[0].name);
+        setfilePreviewData(e.target.files[0]);
+    }
     return (
         <div className={showModal ? 'rightBar show' : 'rightBar'} role="document">
             <div className="modal-content">
@@ -118,12 +122,7 @@ const onFileChange =(e)=>{
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 className="modal-title" id="myModalLabel"></h4>
-                    {/* <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-            vitae nulla ut ex lobortis aliquet eu non urna. Morbi fringilla,
-            nulla sit amet vulputate lobortis, justo lectus porta erat, vitae
-        
-          </p> */}
+
                 </div>
 
                 <div className="modal-body">
@@ -133,7 +132,7 @@ const onFileChange =(e)=>{
                             <div class="row">
                                 <div class="">
                                     <div class="mb-2">
-                                        {/* <label class="form-label" for="exampleForm.ControlInput1">Project  <span class="text-danger">*</span>:</label> */}
+
                                         <input
                                             placeholder="project id"
                                             type="hidden"
@@ -145,8 +144,7 @@ const onFileChange =(e)=>{
                                 </div>
                                 <div class="">
                                     <div class="mb-2">
-                                        {/* <label class="form-label" for="exampleForm.ControlTextarea1">Milestone
-                  <span class="text-danger">*</span>:</label> */}
+
                                         <input
                                             placeholder="milestone id"
                                             type="hidden"
@@ -172,38 +170,106 @@ const onFileChange =(e)=>{
                                     </div>
                                 </div>
 
-                   
+
                             </div>
 
                             <div class="row">
-                              
+
+                                <div class="col-lg-6">
+                                    <div class="mb-2 textarea_section">
+                                        <label class="form-label" for="exampleForm.ControlInput1">
+                                            Project Name <span class="text-danger">*</span>:
+                                        </label><br />
+                                        <input
+                                            disabled
+                                            value={store?.getProject?.data?.response?.projectId?.projectName}
+                                            placeholder="Please Enter Summary"
+                                            type="text"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+
+                                        />
+
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-2 textarea_section">
+                                        <label class="form-label" for="exampleForm.ControlInput1">
+                                            Milestone Name <span class="text-danger">*</span>:
+                                        </label><br />
+                                        <input
+                                            disabled
+                                            value={store?.getProject?.data?.response?.milestoneId?.title}
+                                            placeholder="Please Enter Summary"
+                                            type="text"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+
+                                        />
+
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-2 textarea_section">
+                                        <label class="form-label" for="exampleForm.ControlInput1">
+                                            Sprint Name <span class="text-danger">*</span>:
+                                        </label><br />
+                                        <input
+                                            disabled
+                                            value={store?.getProject?.data?.response?.sprintName}
+                                            placeholder="Please Enter Summary"
+                                            type="text"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+
                                 <div class="col-lg-12">
                                     <div class="mb-2 textarea_section">
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             Description <span class="text-danger">*</span>:
-                                        </label><br/>
-                                       
-                                        
-                                            <textarea col='5' row='6' class="form-control" onChange={(e) => {
-                                                
-                                                setDescription(e.target.value);
-                                            }}>
-                                            </textarea>
+                                        </label><br />
 
-                                        
+
+                                        <textarea col='5' row='6' class="form-control" onChange={(e) => {
+
+                                            setDescription(e.target.value);
+                                        }}>
+                                        </textarea>
+
+
                                     </div>
                                 </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-2">
+
+                                        <input
+                                            placeholder="Please Enter Summary"
+                                            type="hidden"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('expectedHours')}
+                                        />
+                                    </div>
+                                </div>
+
                             </div>
+
                             <div class="row">
-                            
-                            <div class="col-lg-12">
+
+                                <div class="col-lg-12">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Summary
                                             <span class="text-danger">*</span>:
                                         </label>
                                         <input
-                                            
                                             placeholder="Please Enter Summary"
                                             type="text"
                                             id="exampleForm.ControlTextarea1"
@@ -215,24 +281,6 @@ const onFileChange =(e)=>{
                             </div>
                             <div class="row">
 
-                            <div class="col-lg-12">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            Summary
-                                            <span class="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            placeholder="Please Enter Summary"
-                                            type="text"
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('Summary')}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                
                                 <div class="col-lg-12">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlInput1">
@@ -250,7 +298,7 @@ const onFileChange =(e)=>{
 
 
                                         </select>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -263,6 +311,7 @@ const onFileChange =(e)=>{
                                         <input
                                             placeholder="Please start Date "
                                             type="date"
+                                            min={new Date().toISOString().split('T')[0]}
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
                                             {...register('start_date')}
@@ -295,9 +344,9 @@ const onFileChange =(e)=>{
                                             name="Priority"
                                             class="form-select"
                                             id="exampleForm.ControlInput2"
-                                            
+
                                             {...register('priority')} >
-                                           
+
                                             <option value="1">High</option>
                                             <option value="2">Medium</option>
                                             <option value="3">Low</option>
@@ -321,23 +370,26 @@ const onFileChange =(e)=>{
                                 </div>
                             </div>
                             <div class="">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                           Attachment<span class="text-danger">*</span>:
-                                        </label>
-                                        <button type='button' onClick={()=>document.getElementById('file').click()} className='attachment' >  <i className="mdi mdi-attachment m-0 p-0 font-20 cp"></i></button>
-                                        <input
+                                <div class="mb-2">
+                                    <label class="form-label" for="exampleForm.ControlTextarea1">
+                                        Attachment<span class="text-danger">*</span>:
+                                    </label>
+                                    <button type='button' onClick={() => document.getElementById('file').click()} className='attachment' >
+                                        <i className="mdi mdi-attachment m-0 p-0 font-20 cp"></i>
+                                    </button>
+                                    <input
                                         hidden="hidden"
-                                            placeholder="Please start Date "
-                                            type="file"
-                                            id="file"
-                                            class="form-control"
-                                            {...register('attachment')}
-                                            onChange={onFileChange}
-                                        />
-                                        {fileName}
-                                    </div>
+                                        placeholder="Please start Date "
+                                        type="file"
+                                        id="file"
+                                        class="form-control"
+                                        {...register('attachment')}
+                                        onChange={onFileChange}
+                                    />
+                                    {filePreviewData && <img src={URL.createObjectURL(filePreviewData)}/>}
+                                   
                                 </div>
+                            </div>
                             <div class=""></div>
                             <div class="row">
                                 <div class="text-start d-flex align-items-end justify-content-end col">
