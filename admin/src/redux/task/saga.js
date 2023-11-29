@@ -70,7 +70,10 @@ function* getSingleSprintTaskFunction({ payload }) {
             type: TASK_TYPES.GET_SINGLE_SPRINT_TASK_ERROR,
             payload: { error }
         });
-
+ yield put({
+                type: TASK_TYPES.GET_SINGLE_SPRINT_TASK_RESET,
+                payload: {},
+            });
     }
 }
 function* getAllTaskFunction({ payload }) {
@@ -103,6 +106,10 @@ function* getAllTaskFunction({ payload }) {
             type: TASK_TYPES.GET_ALL_TASK_ERROR,
             payload: { error }
         });
+         yield put({
+                type: TASK_TYPES.GET_ALL_TASK_RESET,
+                payload: {},
+            });
 
     }
 }
@@ -136,7 +143,10 @@ function* updateTaskFunction({ payload }) {
             type: TASK_TYPES.UPDATE_TASK_ERROR,
             payload: { error }
         });
-
+        yield put({
+            type: TASK_TYPES.UPDATE_TASK_RESET,
+            payload: {},
+        });
     }
 }
 
@@ -283,7 +293,10 @@ function* addCommentFunction({ payload }) {
             type: TASK_TYPES.ADD_COMMENT_ERROR,
             payload: { error }
         });
-
+        yield put({
+            type: TASK_TYPES.ADD_COMMENT_RESET,
+            payload: {},
+        });
     }
 }
 
@@ -434,7 +447,10 @@ function* AssignUserFunction({ payload }) {
             type: TASK_TYPES.GET_ASSIGN_USER_ERROR,
             payload: { error }
         });
-
+        yield put({
+            type: TASK_TYPES.GET_ASSIGN_USER_RESET,
+            payload: {},
+        });
     }
 }
 export function* createTaskSaga(): any {
