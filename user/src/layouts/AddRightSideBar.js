@@ -8,27 +8,24 @@ import { getAllUsers, getAllRoles } from './../redux/user/action';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useState } from 'react';
-import { getAllProjects } from '../../src/redux/projects/action'
-
+import { getAllProjects } from '../../src/redux/projects/action';
 
 export default function RightBar(props) {
-
     const { showModal, setShowModal, content, callAlltaskData } = props;
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [description, setDescription] = useState('');
-    const getAllUserData = store?.getAllUsers?.data?.response
-    const getAllRole = store?.getAllRoles?.data?.response
+    const getAllUserData = store?.getAllUsers?.data?.response;
+    const getAllRole = store?.getAllRoles?.data?.response;
     // console.log("getAllRoleeeee",getAllRole)
     // console.log("getAllUserTask",getAllUserData)
 
-
-    const id = store?.Auth?.user?.userId
+    const id = store?.Auth?.user?.userId;
     //     const projectId=store?.getProjectId?.data
     // const milstoneId=store?.getMilestoneId?.data
     // const SprintId=store?.getSprintId?.data
 
-    const { projectId, milestoneId, spriteId } = useParams()
+    const { projectId, milestoneId, spriteId } = useParams();
 
     useEffect(() => {
         let body = {
@@ -41,8 +38,7 @@ export default function RightBar(props) {
         dispatch(getAllProjects(body));
     }, []);
 
-
-    const [fileData, setFile] = useState(null)
+    const [fileData, setFile] = useState(null);
 
     const {
         register,
@@ -52,48 +48,43 @@ export default function RightBar(props) {
     } = useForm();
     useEffect(() => {
         // dispatch(getassignee(id))
-        dispatch(getAllUsers())
-        dispatch(getAllRoles())
-
-    }, [])
-
+        dispatch(getAllUsers());
+        dispatch(getAllRoles());
+    }, []);
 
     const onSubmit = (e) => {
-        const formData = new FormData()
-        formData.append('projectId', projectId)
-        formData.append('milestoneId', milestoneId)
-        formData.append('sprintId', spriteId)
-        formData.append('summary', e.Summary)
-        formData.append('expectedHours', e.expectedHours)
-        formData.append('description', description)
-        formData.append('assigneeId', e.Assignee)
-        formData.append('reporterId', e.Report)
-        formData.append('priority', e.priority)
-        formData.append('startDate', e.start_date)
-        formData.append('dueDate', e.last_date)
-        formData.append('attachment', e.attachment[0] ? e.attachment[0] : "");
+        const formData = new FormData();
+        formData.append('projectId', projectId);
+        formData.append('milestoneId', milestoneId);
+        formData.append('sprintId', spriteId);
+        formData.append('summary', e.Summary);
+        formData.append('expectedHours', e.expectedHours);
+        formData.append('description', description);
+        formData.append('assigneeId', e.Assignee);
+        formData.append('reporterId', e.Report);
+        formData.append('priority', e.priority);
+        formData.append('startDate', e.start_date);
+        formData.append('dueDate', e.last_date);
+        formData.append('attachment', e.attachment[0] ? e.attachment[0] : '');
 
         if (projectId !== '' && milestoneId !== '' && spriteId !== '') {
-
             dispatch(createTask(formData));
             setTimeout(() => {
                 callAlltaskData();
             }, 600);
-
-
         } else {
             alert('plsease select project');
         }
 
-        setValue('Summary', '')
-        setValue('Description', '')
-        setValue('Assignee', '')
-        setValue('expectedHours', '')
-        setValue('Report', '')
-        setValue('priority', '')
-        setValue('start_date', '')
-        setValue('last_date', '')
-        setValue('attachment', '')
+        setValue('Summary', '');
+        setValue('Description', '');
+        setValue('Assignee', '');
+        setValue('expectedHours', '');
+        setValue('Report', '');
+        setValue('priority', '');
+        setValue('start_date', '');
+        setValue('last_date', '');
+        setValue('attachment', '');
         setShowModal(false);
     };
 
@@ -101,11 +92,11 @@ export default function RightBar(props) {
     // call click outside
     // }, []);
     const [fileName, setFileName] = useState('');
-    const[filePreviewData,setfilePreviewData]= useState(null);
+    const [filePreviewData, setfilePreviewData] = useState(null);
     const onFileChange = (e) => {
         setFileName(e.target.files[0].name);
         setfilePreviewData(e.target.files[0]);
-    }
+    };
     return (
         <div className={showModal ? 'rightBar show' : 'rightBar'} role="document">
             <div className="modal-content">
@@ -122,7 +113,6 @@ export default function RightBar(props) {
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 className="modal-title" id="myModalLabel"></h4>
-
                 </div>
 
                 <div className="modal-body">
@@ -132,7 +122,6 @@ export default function RightBar(props) {
                             <div class="row">
                                 <div class="">
                                     <div class="mb-2">
-
                                         <input
                                             placeholder="project id"
                                             type="hidden"
@@ -144,7 +133,6 @@ export default function RightBar(props) {
                                 </div>
                                 <div class="">
                                     <div class="mb-2">
-
                                         <input
                                             placeholder="milestone id"
                                             type="hidden"
@@ -158,7 +146,6 @@ export default function RightBar(props) {
                             <div class="row">
                                 <div class="">
                                     <div class="mb-2">
-
                                         <input
                                             placeholder="sprint id"
                                             name="clientName"
@@ -169,17 +156,15 @@ export default function RightBar(props) {
                                         />
                                     </div>
                                 </div>
-
-
                             </div>
 
                             <div class="row">
-
                                 <div class="col-lg-6">
                                     <div class="mb-2 textarea_section">
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             Project Name <span class="text-danger">*</span>:
-                                        </label><br />
+                                        </label>
+                                        <br />
                                         <input
                                             disabled
                                             value={store?.getProject?.data?.response?.projectId?.projectName}
@@ -187,17 +172,15 @@ export default function RightBar(props) {
                                             type="text"
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
-
                                         />
-
-
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="mb-2 textarea_section">
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             Milestone Name <span class="text-danger">*</span>:
-                                        </label><br />
+                                        </label>
+                                        <br />
                                         <input
                                             disabled
                                             value={store?.getProject?.data?.response?.milestoneId?.title}
@@ -205,17 +188,15 @@ export default function RightBar(props) {
                                             type="text"
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
-
                                         />
-
-
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="mb-2 textarea_section">
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             Sprint Name <span class="text-danger">*</span>:
-                                        </label><br />
+                                        </label>
+                                        <br />
                                         <input
                                             disabled
                                             value={store?.getProject?.data?.response?.sprintName}
@@ -223,32 +204,29 @@ export default function RightBar(props) {
                                             type="text"
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
-
                                         />
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-
                                 <div class="col-lg-12">
                                     <div class="mb-2 textarea_section">
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             Description <span class="text-danger">*</span>:
-                                        </label><br />
+                                        </label>
+                                        <br />
 
-
-                                        <textarea col='5' row='6' class="form-control" onChange={(e) => {
-
-                                            setDescription(e.target.value);
-                                        }}>
-                                        </textarea>
-
-
+                                        <textarea
+                                            col="5"
+                                            row="6"
+                                            class="form-control"
+                                            onChange={(e) => {
+                                                setDescription(e.target.value);
+                                            }}></textarea>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="mb-2">
-
                                         <input
                                             placeholder="Please Enter Summary"
                                             type="hidden"
@@ -258,11 +236,9 @@ export default function RightBar(props) {
                                         />
                                     </div>
                                 </div>
-
                             </div>
 
                             <div class="row">
-
                                 <div class="col-lg-12">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
@@ -280,7 +256,6 @@ export default function RightBar(props) {
                                 </div>
                             </div>
                             <div class="row">
-
                                 <div class="col-lg-12">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlInput1">
@@ -293,12 +268,10 @@ export default function RightBar(props) {
                                             id="exampleForm.ControlInput1"
                                             {...register('Report')}>
                                             <option value="">--Select--</option>
-                                            {getAllRole?.map((items, index) => <option value={items._id}> {items.role} </option>)}
-
-
-
+                                            {getAllRole?.map((items, index) => (
+                                                <option value={items._id}> {items.role} </option>
+                                            ))}
                                         </select>
-
                                     </div>
                                 </div>
                             </div>
@@ -344,9 +317,7 @@ export default function RightBar(props) {
                                             name="Priority"
                                             class="form-select"
                                             id="exampleForm.ControlInput2"
-
-                                            {...register('priority')} >
-
+                                            {...register('priority')}>
                                             <option value="1">High</option>
                                             <option value="2">Medium</option>
                                             <option value="3">Low</option>
@@ -374,7 +345,10 @@ export default function RightBar(props) {
                                     <label class="form-label" for="exampleForm.ControlTextarea1">
                                         Attachment<span class="text-danger">*</span>:
                                     </label>
-                                    <button type='button' onClick={() => document.getElementById('file').click()} className='attachment' >
+                                    <button
+                                        type="button"
+                                        onClick={() => document.getElementById('file').click()}
+                                        className="attachment">
                                         <i className="mdi mdi-attachment m-0 p-0 font-20 cp"></i>
                                     </button>
                                     <input
@@ -386,8 +360,7 @@ export default function RightBar(props) {
                                         {...register('attachment')}
                                         onChange={onFileChange}
                                     />
-                                    {filePreviewData && <img src={URL.createObjectURL(filePreviewData)}/>}
-                                   
+                                    {filePreviewData && <img src={URL.createObjectURL(filePreviewData)} />}
                                 </div>
                             </div>
                             <div class=""></div>
