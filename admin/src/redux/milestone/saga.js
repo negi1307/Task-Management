@@ -29,9 +29,12 @@ function* getAllMileStonesFunction({ payload }) {
     } catch (error) {
         yield put({
             type: MileStoneType.GET_ALL_MILESTONES_ERROR,
-            payload: { message: error?.message }
+            payload: { error }
         });
-
+        yield put({
+                type: MileStoneType.GET_ALL_MILESTONES_RESET,
+                payload: {},
+            });
     }
 }
 function* addAllMileStonesFunction({ payload }) {
@@ -61,7 +64,7 @@ function* addAllMileStonesFunction({ payload }) {
     } catch (error) {
         yield put({
             type: MileStoneType.ADD_ALL_MILESTONES_ERROR,
-            payload: { message: error?.message }
+            payload: { error }
         });
         yield put({
             type: MileStoneType.ADD_ALL_MILESTONES_RESET,
@@ -97,7 +100,7 @@ function* MileStonedeleteFunction({ payload }) {
     } catch (error) {
         yield put({
             type: MileStoneType.DELETE_MILE_STONE_ERROR,
-            payload: { message: error?.message }
+         payload: { error }
         });
         yield put({
             type: MileStoneType.DELETE_MILE_STONE_RESET,
@@ -134,9 +137,12 @@ function* getMileStoneFunction({ payload }) {
     } catch (error) {
         yield put({
             type: MileStoneType.GET_ALL_MILESTONE_BY_ID_ERROR,
-            payload: { message: error?.message }
+         payload: { error }
         });
-
+  yield put({
+                type: MileStoneType.GET_ALL_MILESTONE_BY_ID_RESET,
+                payload: {},
+            });
     }
 }
 function* updateMileStoneFunction({ payload }) {
@@ -206,9 +212,12 @@ function* getSingleMileStoneFunction({ payload }) {
     } catch (error) {
         yield put({
             type: MileStoneType.GET_SINGLE_MILESTONE_ERROR,
-            payload: { message: error?.message }
+         payload: { error }
         });
-
+ yield put({
+                type: MileStoneType.GET_SINGLE_MILESTONE_RESET,
+                payload: {},
+            });
     }
 }
 export function* addAllMileStonesSaga(): any {

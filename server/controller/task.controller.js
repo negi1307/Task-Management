@@ -1,11 +1,7 @@
 const mongoose = require("mongoose");
 const taskModel = require("../models/task.model");
 const assignUserModel = require("../models/assignUser.model");
-const historyModel = require("../models/history.model");
 const rolesModel = require('../models/role.model');
-const userLoginModel = require("../models/userLogin.model");
-const { verifyUser } = require("../middleware/jwt.auth");
-const { userHistory } = require("../controller/history.controller");
 
 // Create or add tasks
 const createtask = async (req, res) => {

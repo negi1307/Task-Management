@@ -590,3 +590,22 @@ th.check_info {
     padding-left: 0px !important;
     padding-right: 0px !important;
 }
+
+.accordionColumn {
+    /* border-bottom: 1px solid #000; */
+    /* border-top: 1px solid #000; */
+    border-left: 1px solid #000;
+}
+button.accordion-button.collapsed {
+    padding: 0px;
+}
+.accordianHeader {
+    padding: 0 !important;
+    /* margin: 0 !important; */
+}
+
+.downButtonParent {
+    color: black !important;
+    background-color: white !important;
+    border: 1px solid grey;
+}

@@ -39,7 +39,7 @@ const Login = (): React$Element<any> => {
     const dispatch = useDispatch();
 
     const location = useLocation();
-    const redirectUrl =  '/';
+    const redirectUrl = '/';
 
     useEffect(() => {
         dispatch(resetAuth());
@@ -67,8 +67,8 @@ const Login = (): React$Element<any> => {
     */
     const onSubmit = (formData) => {
         dispatch(loginUser(formData['username'], formData['password']));
-        const roleId = store?.Auth?.user
-        localStorage.setItem("roleId",roleId);
+        const roleId = store?.Auth?.user;
+        localStorage.setItem('roleId', roleId);
     };
 
     return (
@@ -92,7 +92,7 @@ const Login = (): React$Element<any> => {
                 <VerticalForm
                     onSubmit={onSubmit}
                     resolver={schemaResolver}
-                // defaultValues={{ username: 'test', password: 'test' }}
+                    // defaultValues={{ username: 'test', password: 'test' }}
                 >
                     <FormInput
                         label={t('Username')}

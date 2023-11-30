@@ -14,6 +14,8 @@ import Modal from 'react-bootstrap/Modal';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import Update from './modal/update';
 import { getAllProjects } from '../../../../redux/projects/action';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 // import ToastHandle from '../../../constants/toaster/toaster';
 const Milestone = () => {
     const { id } = useParams();
@@ -24,8 +26,8 @@ const Milestone = () => {
     const [openModel, setOpenModel] = useState(false);
     const [render, setRender] = useState(false);
     const [status, setStatus] = useState(1);
+   
     const GetDataById = store?.getProjectById?.data?.project;
-
     // const GetSinglemilstonesData = store?.getSigleMileStone?.data?.Response;
     const getMileStoneData = store?.getProject?.data?.response;
     console.log('getMileStoneData', getMileStoneData);
@@ -35,6 +37,7 @@ const Milestone = () => {
     const [checkedData, setCheckedData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const [editData, setEditData] = useState();
+    const [skip, setSkip] = useState(1);
     const deletehandle = store?.deleteMileStone?.data;
     const closeModal = (val) => {
         if (val == 'render') {
@@ -113,10 +116,21 @@ const Milestone = () => {
             flag: 2,
             projectId: id,
             milestoneId: '',
+            sprintId:'',
             skip: 1,
         };
         dispatch(getAllProjects(body));
     }, []);
+    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setSkip(value);
+        let body = {
+            flag: 2,
+            projectId: id,
+            milestoneId: '',
+            skip: value,
+        };
+        dispatch(getAllProjects(body));
+    };
 
     return (
         <>
@@ -260,6 +274,21 @@ const Milestone = () => {
                                     </Col>
                                 </Row>
                             </Col>
+                            <Row>
+                            <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
+                                {store?.getProject?.data?.totalPages > 0 && (
+                                    <Stack spacing={2}>
+                                        <Pagination
+                                            defaultPage={skip}
+                                            count={store?.getProject?.data?.totalPages}
+                                            color="primary"
+                                            variant="outlined"
+                                            onChange={handlePaginationChange}
+                                        />
+                                    </Stack>
+                                )}
+                            </Col>
+                        </Row>
                         </Card.Body>
                     </Card>
                 </>

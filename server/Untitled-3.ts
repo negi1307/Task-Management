@@ -19,7 +19,6 @@ const Taskdetail = (props) => {
     const [unchangeComment, setUnchangeComment] = useState('');
     const [error, setError] = useState('');
     const allComments = store?.getAllComment?.data?.response;
-    console.log("tasl",props.item?.taskInfo)
 
     const {
         register,
@@ -31,7 +30,15 @@ const Taskdetail = (props) => {
 
     const onSubmitComment = (e) => {
         console.log(e);
-       
+        // if (getCommentIdDta == '') {
+
+        // } else {
+        //     const body = {
+        //         commentId: getCommentIdDta,
+        //         comment: e.comment,
+        //     };
+        //     dispatch(updateComment(body));
+        // }
         const commentData = {
             userId: props.userId,
             taskId: item?.taskId,
@@ -79,32 +86,57 @@ const Taskdetail = (props) => {
     };
     console.log(updatedCommentValue, 'data===');
     const updateHandle = (condition) => {
-        
-        if (updatedCommentInitialValue !== '') {
-            if (condition === 'updateComment') {
-                let body = {
-                    commentId: allCommetUpdateId,
-                    comment: updatedCommentInitialValue,
-                };
-                dispatch(updateComment(body));
-                setInputForUpdate(false);
+        console.log(unchangeComment, updatedCommentValue, 'unchangeComment=====0000');
+        if (updatedCommentValue !== '') {
+            console.log(updatedCommentValue, '=====updatedCommentValue======');
+            if (condition == 'updateComment') {
+                console.log(updatedCommentValue, 'dettaaaaa');
+                if (updatedCommentValue !== '') {
+                    let body = {
+                        commentId: allCommetUpdateId,
+                        comment: updatedCommentValue,
+                    };
+                    dispatch(updateComment(body));
+                    setInputForUpdate(false);
+                } else {
+                    // let body = {
+                    //     commentId: allCommetUpdateId,
+                    //     comment: unchangeComment,
+                    // };
+                    // dispatch(updateComment(body));
+                    // setInputForUpdate(false);
+                }
             } else {
                 setInputForUpdate(false);
             }
+            setError('');
+        } else if (updatedCommentValue !== '') {
+            if (condition == 'updateComment') {
+                let body = {
+                    commentId: allCommetUpdateId,
+                    comment: updatedCommentValue,
+                };
+                dispatch(updateComment(body));
+                setInputForUpdate(false);
+            }
         } else {
-            setError('This field is required');
-            setInputForUpdate(false);
+            console.log('error');
+            if (error == '') {
+                setError('This Field is required');
+            } else {
+                // setInputForUpdate(false);
+            }
         }
     };
     const handelUpdateAll = (data, indx) => {
-        
+        console.log('i am working here handelUpdateAll');
         setError('');
         setUnchangeComment(data?.comment);
         setAllCommetUpdateId(data?._id);
         setInputForUpdate(indx);
         setUpdatedCommentInitialValue(data?.comment);
     };
-    
+    const handeldelete = () => {};
     return (
         <>
             <Modal
@@ -169,11 +201,8 @@ const Taskdetail = (props) => {
                                 tabindex="0">
                                 <div className="taskcardinfo">
                                     <Row className="mt-3">
-                                        {allComments?.map((comm, ind) =>
-
-                                        (
+                                        {allComments?.map((comm, ind) => (
                                             <ul style={{ listStyle: 'none' }}>
-                                                {/* <h6>{comm}</h6> */}
                                                 <Row>
                                                     <Col lg={12} className="d-flex">
                                                         <Col lg={2} className="pt-1">
@@ -198,9 +227,9 @@ const Taskdetail = (props) => {
                                                                 </h4>
                                                                 <p className="ps-1 m-0 p-0">
                                                                     {moment(comm?.createdAt).format('LT')}{' '}
-
+                                                                    {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
                                                                 </p>
-
+                                                                {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
                                                             </div>
                                                             {inputForUpdate === ind ? (
                                                                 <form>
@@ -216,7 +245,7 @@ const Taskdetail = (props) => {
                                                                                         updatedCommentInitialValue
                                                                                     }
                                                                                     onChange={(e) =>
-                                                                                        setUpdatedCommentInitialValue(
+                                                                                        setUpdatedCommentValue(
                                                                                             e.target.value
                                                                                         )
                                                                                     }
@@ -253,7 +282,11 @@ const Taskdetail = (props) => {
                                                                             onClick={() => handelUpdateAll(comm, ind)}>
                                                                             Edit
                                                                         </p>
-
+                                                                        <p
+                                                                            className=" cp  p-0 ps-2"
+                                                                            onClick={() => DeleteData(comm)}>
+                                                                            Delete
+                                                                        </p>
                                                                     </div>
                                                                 </>
                                                             )}
@@ -263,7 +296,7 @@ const Taskdetail = (props) => {
                                             </ul>
                                         ))}
                                     </Row>
-
+                                    <table></table>
                                 </div>
                             </div>
                             <div
@@ -344,8 +377,8 @@ const Taskdetail = (props) => {
                                                                     </div>
 
                                                                     <div className="d-flex m-0 p-0">
-                                                                        <p className=" p-0" onClick={() => handelUpdateAll(comm, ind)}>Edit</p>
-                                                                        {/* <p className=" cp  p-0 ps-2">Delete</p> */}
+                                                                        <p className=" p-0">Edit</p>
+                                                                        <p className=" cp  p-0 ps-2">Delete</p>
                                                                     </div>
                                                                 </Col>
                                                             </Col>
@@ -353,7 +386,7 @@ const Taskdetail = (props) => {
                                                     </>
                                                 ))}
                                             </table>
-
+                                            <table></table>
                                         </div>
                                     </div>
                                 </div>
@@ -391,19 +424,6 @@ const Taskdetail = (props) => {
                     <div class="card_detail">
                         <h4>Details</h4>
                         <ul style={{ listStyle: 'none' }}>
-                            <li>
-                                <label>Project Name:</label>
-
-                                {props.item.projectInfo?.projectName}
-                            </li>
-                            <li>
-                                <label>Milestone Name:</label>
-                                {props.item.milestoneInfo?.title}
-                            </li>
-                            <li>
-                                <label>Sprint Name:</label>
-                                {props.item.sprintInfo?.sprintName}
-                            </li>
                             <li>
                                 <label>Summary:</label>
                                 {props.item?.taskInfo?.summary}
@@ -450,12 +470,15 @@ const Taskdetail = (props) => {
                                 {props.item.reporterInfo?.role}
                             </li>
 
+                            <li>
+                                <label>Project Name:</label>
 
-                            <li class="card_img">
+                                {props.item.projectInfo?.projectName}
+                            </li>
+                            <li>
                                 <label>Attachment:</label>
 
                                 {(() => {
-
                                     const ext = props.item.taskInfo?.attachment
                                         ? getfileNameExt(props.item.taskInfo?.attachment)
                                         : '';
@@ -469,7 +492,7 @@ const Taskdetail = (props) => {
                                                         : ''
                                                 }
                                                 width={150}
-                                                height={150}
+                                                height={100}
                                             />
                                         );
                                     } else if (ext == 'pdf') {
@@ -495,12 +518,12 @@ const Taskdetail = (props) => {
                                         );
                                     }
                                 })()}
-                                {props.item.taskInfo?.attachment ? getfileNameFromUrl(props.item?.taskInfo?.attachment): ''}
-                                <button type="button" onClick={() => downloadFile(props.item?.taskInfo?.attachment)}>
-                                    <i class="dripicons-download download_color"></i>
+                            </li>
+                            <li>
+                                <button type="button" onClick={() => downloadFile(props.item.taskInfo?.attachment)}>
+                                    Download
                                 </button>
                             </li>
-                            
                         </ul>
                     </div>
                 </Modal.Body>
