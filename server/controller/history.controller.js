@@ -6,7 +6,7 @@ async function userHistory(req, res, next, value) {
         let userhistory = await historyModel({
             time: time,
             userActivity: value,
-            user: req.user.firstName+req.user.lastName,
+            user: req.user.firstName + req.user.lastName,
             userId: req.user._id,
             taskId: req.body.taskId,
             reporterId: req.user.reporterId,
