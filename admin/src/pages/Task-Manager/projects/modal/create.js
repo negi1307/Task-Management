@@ -36,13 +36,7 @@ const Create = ({ modal, closeModal }) => {
     const handleEndDate=(date)=>{
         setEndDate(date)
     }
-    function findMinimumEndDate(date1, date2) {
-        return new Date(Math.min(new Date(date1), new Date(date2)));
-    }
-    const date1 = new Date();
-    const date2 = selectedenDate;
-    const minimumEndDate = findMinimumEndDate(date1, date2);
-    console.log(minimumEndDate, 'mindate');
+    
     //
     const {
         register,

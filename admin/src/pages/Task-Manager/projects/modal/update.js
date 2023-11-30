@@ -13,9 +13,7 @@ import DatePicker from 'react-datepicker';
 import '../../../../../node_modules/react-datepicker/dist/react-datepicker.css';
 import { parseISO } from 'date-fns';
 
-
 const Update = ({ modal, closeModal, editData }) => {
-    
     console.log(editData);
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -45,63 +43,32 @@ const Update = ({ modal, closeModal, editData }) => {
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     // disable previous date
     const today = new Date().toISOString().split('T')[0];
-    // start date
-    function findMinimumStartDate(startdate1, startdate2) {
-        return new Date(Math.min(new Date(startdate1), new Date(startdate2)));
-    }
-    const startdate1 = new Date();
-    const startdate2 = editData?.startDate;
-    const minimumStartDate = findMinimumStartDate(startdate1, startdate2);
-    //
-    // end date
-    function findMinimumEndDate(date1, date2) {
-        return new Date(Math.min(new Date(date1), new Date(date2)));
-    }
-    const date1 = new Date();
-    const date2 = editData?.endDate;
-    const minimumEndDate = findMinimumEndDate(date1, date2);
-    //
-    const handleDate = (data) => {
-        let date = new Date(data);
-        let year = date.toLocaleString('default', { year: 'numeric' });
-        let month = date.toLocaleString('default', { month: '2-digit' });
-        let day = date.toLocaleString('default', { day: '2-digit' });
-        let formattedDate = year + '-' + month + '-' + day;
-        return formattedDate;
-    };
+
     useEffect(() => {
-        console.log(modal, "lllllll")
-        console.log(editData, 'dattatatatatatat');
         setFinalTechnology(editData?.technology);
         setAddValue(editData?.technology);
+        // setStartDate(parseISO(editData?.startDate));
         reset({
             projectName: editData?.projectName,
             clientName: editData?.clientName,
             access: editData?.projectAccess,
             key: editData?.key,
-            // startDate: editData?.startDate,
-            // endDate: handleDate(editData?.endDate),
-
-            expectedEndDate: handleDate(editData?.CompilationDate),
             project_type: editData?.projectType,
             technology: editData?.technology,
             projectstatus: editData?.projectStatus,
-            expectedEndDate: handleDate(editData?.expectedDate),
         });
-        console.log(editData?.startDate)
 
-        // setStartDate (parseISO(editData?.startDate));
+    
         if (editData?.startDate) {
             const parsedDate = parseISO(editData?.startDate);
             if (parsedDate) {
-              setStartDate(parsedDate);
+                setStartDate(parsedDate);
             } else {
-              console.error('Invalid date format:', editData.startDate);
+                console.error('Invalid date format:', editData.startDate);
             }
-          }
+        }
         // setEndDate(editData?.endDate);
     }, [modal]);
-    console.log(startDate);
     const removehandle = (selectedList, removedItem) => {
         console.log(selectedList);
         const remove = getTechnology.filter((ele, ind) => {
@@ -228,23 +195,12 @@ const Update = ({ modal, closeModal, editData }) => {
                                             <Form.Label>
                                                 Start Date<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            {/* <Form.Control
-                                                type="date"
-                                                min={handleDate(minimumStartDate)}
-                                                {...register('startDate', { required: true })}
-                                                placeholder="Please start Date "
-                                            />
-                                            {errors.startDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )} */}
+
                                             <DatePicker
                                                 selected={startDate}
-                                                // defaultValue={startDate}
-                                                // onChange={(date) => setStartDate(date)}
-                                                onChange={(date) => setStartDate(date)}
+                                                onChange={(date) => handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
-                                                // minDate={today}
-                                                dateFormat={"yyyy-MM-dd"}
+                                                minDate={today}
                                                 className="add_width_input"
                                             />
                                         </Form.Group>
