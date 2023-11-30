@@ -57,26 +57,20 @@ const recordStopTime = async (req, res) => {
             mostRecentRecord.logoutTime = logoutTime;
 
             if (logoutTimeDiff < 9 * 60 * 60 * 1000) {
-                // If logout is within 9 hours, check if leaveMessageId is provided
                 if (leaveMessageId) {
-                    // If leaveMessageId is provided by the frontend, use it
                     mostRecentRecord.leaveMessageId = leaveMessageId;
                 } else {
-                    // If leaveMessageId is not provided, respond with a message indicating that a reason is required
-                    return res.status(400).json({
-                        status: 400,
+                    return res.status(200).json({
+                        status: 200,
                         message: "A reason for leaving early is required",
                     });
                 }
-            } else {
-                // If logout is after 9 hours, set leaveMessageId to "defaultId"
-                mostRecentRecord.leaveMessageId = "defaultId";
             }
+            // } else {
+            //     mostRecentRecord.leaveMessageId = "defaultId";
+            // }
 
-            // Save the updated record in the database
             await mostRecentRecord.save();
-
-            // Respond with a success message and the updated record
             return res.status(200).json({
                 status: 200,
                 message: "Logout time and leave message updated successfully",
@@ -84,11 +78,9 @@ const recordStopTime = async (req, res) => {
                 leaveMessageId: mostRecentRecord.leaveMessageId,
             });
         } else {
-            // If no record is found, respond with a 404 status and message
-            return res.status(404).json({ status: 404, message: "No record found to update logout time" });
+            return res.status(200).json({ status: 404, message: "No record found to update logout time" });
         }
     } catch (error) {
-        // Handle any errors and respond with a 500 status and message
         console.error(error);
         return res.status(500).json({ status: 500, message: "Server error" });
     }

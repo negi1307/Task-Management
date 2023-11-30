@@ -12,7 +12,6 @@ import DetachedLayout from '../layouts/Detached';
 import HorizontalLayout from '../layouts/Horizontal';
 import FullLayout from '../layouts/Full';
 
-
 // lazy load all the views
 
 // auth
@@ -29,7 +28,7 @@ const Register2 = React.lazy(() => import('../pages/account2/Register2'));
 const Confirm2 = React.lazy(() => import('../pages/account2/Confirm2'));
 const ForgetPassword2 = React.lazy(() => import('../pages/account2/ForgetPassword2'));
 const LockScreen2 = React.lazy(() => import('../pages/account2/LockScreen2'));
-const UserNotFound = React.lazy(() => import("../components/UserNotFound"))
+const UserNotFound = React.lazy(() => import('../components/UserNotFound'));
 // dashboard
 const Projects = React.lazy(() => import('../pages/Task-Manager/projects/projects'));
 const AnalyticsDashboard = React.lazy(() => import('../pages/dashboard/Analytics'));
@@ -48,8 +47,8 @@ const MileStone = React.lazy(() => import('../pages/Task-Manager/projects/milest
 const Sprint = React.lazy(() => import('../pages/Task-Manager/projects/milestone/sprint/sprint'));
 const Task = React.lazy(() => import('../pages/Task-Manager/projects/milestone/sprint/task/task'));
 const TaskBoard = React.lazy(() => import('../pages/Task-Manager/TaskBoard/taskBoard'));
-const Technology  = React.lazy(() => import('../pages/Task-Manager/Technology/technology'));
-const TechnologyCategory  = React.lazy(() => import('../pages/Task-Manager/TechnologyCategory/category'));
+const Technology = React.lazy(() => import('../pages/Task-Manager/Technology/technology'));
+const TechnologyCategory = React.lazy(() => import('../pages/Task-Manager/TechnologyCategory/category'));
 const AllTaskList = React.lazy(() => import('../pages/Task-Manager/TaskList/list'));
 const Summary = React.lazy(() => import('../pages/Task-Manager/Summary/summary'));
 const clientRepository = React.lazy(() => import('../pages/Task-Manager/ClientReprojeteries/clientRepository'));
@@ -79,7 +78,6 @@ const CRMProjects = React.lazy(() => import('../pages/apps/CRM/Projects'));
 const CRMManagement = React.lazy(() => import('../pages/apps/CRM/Management'));
 const CRMClients = React.lazy(() => import('../pages/apps/CRM/Clients'));
 const CRMOrderList = React.lazy(() => import('../pages/apps/CRM/OrderList'));
-
 
 // customer
 const CustomerIndex = React.lazy(() => import('../pages/Task-Manager/customer/CustomerIndex'));
@@ -327,16 +325,16 @@ const AllRoutes = () => {
                             element: <LoadComponent component={InviteUsers} />,
                         },
                         {
-                            path: "singleMilestonesprint/projectId=/:projectId&milestoneId=/:milestoneId" ,
-                            element: <LoadComponent component={Sprint} />
+                            path: 'singleMilestonesprint/projectId=/:projectId&milestoneId=/:milestoneId',
+                            element: <LoadComponent component={Sprint} />,
                         },
                         {
-                            path: "singleSprintTask/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId" ,
-                            element: <LoadComponent component={Task} />
+                            path: 'singleSprintTask/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId',
+                            element: <LoadComponent component={Task} />,
                         },
                         {
-                            path: "taskBord/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId" ,
-                            element: <LoadComponent component={TaskBoard} />
+                            path: 'taskBord/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId',
+                            element: <LoadComponent component={TaskBoard} />,
                         },
                         {
                             path: 'technology',
@@ -359,8 +357,8 @@ const AllRoutes = () => {
                             element: <LoadComponent component={clientRepository} />,
                         },
                         {
-                            path: "clientRepository/uploadData/projectId=/:projectId" ,
-                            element: <LoadComponent component={GetUploadData} />
+                            path: 'clientRepository/uploadData/projectId=/:projectId',
+                            element: <LoadComponent component={GetUploadData} />,
                         },
                         {
                             path: "timeTracker" ,
@@ -374,7 +372,7 @@ const AllRoutes = () => {
                         {
                             path: 'pageNotFound',
                             element: <LoadComponent component={UserNotFound} />,
-                        }
+                        },
                     ],
                 },
                 {
@@ -440,7 +438,6 @@ const AllRoutes = () => {
                 //     ],
                 // },
                 //new code add routing
-
 
                 // {
                 //     path: 'projects',

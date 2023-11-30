@@ -41,13 +41,13 @@ import { getProjectId } from '../../src/redux/projects/action';
 import { getMilestoneId } from '../../src/redux/milestone/action';
 import { getSprintId } from '../../src/redux/sprint/action';
 import { getTaskStatusCount } from '../../src/redux/Summary/action';
-import { addLoginTime,addLoginTimeStop } from '../../src/redux/user/action';
+import { addLoginTime, addLoginTimeStop } from '../../src/redux/user/action';
 import Filter from '../pages/Task-Manager/board/Modal/Filter';
 import { useParams } from 'react-router-dom';
 import Buttons from '../pages/uikit/Buttons';
 import ToastHandle from '../constants/toaster/toaster';
 import { Button } from 'react-bootstrap';
-import { useStopwatch,useTime } from 'react-timer-hook';
+import { useStopwatch, useTime } from 'react-timer-hook';
 
 // get the notifications
 const Notifications = [
@@ -150,13 +150,12 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const store = useSelector((state) => state);
     const [isopen, setIsopen] = useState(false);
     const [startLoginTime, setLoginTime] = useState(false);
-    const [loginTimee,setLoginTimee] = useState();
+    const [loginTimee, setLoginTimee] = useState();
     const allProjects = store?.getProject?.data?.response;
     const loginTimeMessage = store?.createUserTime;
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
     const getAllSingleSprints = store?.getAllSingleSprints?.data?.Response;
     const { projectId, milestoneId, spriteId } = useParams();
-    
 
     const [projectNameHeading, setProjectName] = useState('Select Project Name');
 
@@ -167,7 +166,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         layoutType: state.Layout.layoutType,
         leftSideBarType: state.Layout.leftSideBarType,
     }));
-   
+
     // const {
     //     totalSeconds,
     //     seconds,
@@ -180,14 +179,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     //     reset,
     //   } = useStopwatch({ autoStart: false});
 
-       const {
-    seconds,
-    minutes,
-    hours,
-    start,
-    pause,
-    ampm,
-  } = useTime({ format: '12-hour'});
+    const { seconds, minutes, hours, start, pause, ampm } = useTime({ format: '12-hour' });
 
     // useEffect(() => {
     //     let data = {
@@ -270,26 +262,24 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         dispatch(addLoginTime());
         sessionStorage.setItem('startButton', true);
         if (sessionStorage?.getItem('startButton')) {
-            
             start();
             setShowButton(false);
         }
-        
     };
     useEffect(() => {
         if (loginTimeMessage?.data?.status == 200) {
             ToastHandle('success', loginTimeMessage?.data?.message);
-            setLoginTimee(loginTimeMessage?.data?.loginTime)   
+            setLoginTimee(loginTimeMessage?.data?.loginTime);
         }
     }, [loginTimeMessage]);
     const logoutTime = () => {
-        dispatch(addLoginTimeStop())
-        
+        dispatch(addLoginTimeStop());
+
         sessionStorage.removeItem('startButton');
         pause();
-        setShowButton(true); 
+        setShowButton(true);
     };
-    
+
     return (
         <>
             <div className={classNames('navbar-custom', navbarCssClasses)}>
@@ -334,7 +324,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                             Teams
                                         </Link>
                                     </li> */}
-                                    
+
                                     {showButton ? (
                                         <li>
                                             <Button type="submit" onClick={loginTime}>
@@ -348,7 +338,10 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                             </Button>
                                         </li>
                                     )}
-                                    <li>   <span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span></li>
+                                    <li>
+                                        {' '}
+                                        <span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span>
+                                    </li>
                                     {/* {moment(loginTimee).format("LTS")} */}
                                 </ul>
                             </div>
