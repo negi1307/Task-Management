@@ -31,11 +31,12 @@ const createtask = async (req, res) => {
         dueDate,
         attachment: attachmentPath,
         attachmentType: fileExtension,
-        parentId
+        parentId,
       });
       if (task) {
         const roles = ['CTO', 'PM', 'Admin'];
         const role = await rolesModel.findOne({ role: roles.includes(req.user.role) ? req.user.role : "PM" }).select("_id role");
+        userHistory(req,res,"Create Task")
         const assignedUser = await assignUserModel.create({
           assigneeId: roles.includes(req.user.role) ? assigneeId : req.user._id,
           reporterId: role._id,
