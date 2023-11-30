@@ -5,9 +5,10 @@ async function userHistory(req, res, next, value) {
         let time = new Date();
         let userhistory = await historyModel({
             time: time,
-            useractivity: value,
-            userId: req.user.userId,
-            taskId: req.user.taskId,
+            userActivity: value,
+            user: req.user.firstName+req.user.lastName,
+            userId: req.user._id,
+            taskId: req.body.taskId,
             reporterId: req.user.reporterId,
             projectId: req.user.projectId
         });
