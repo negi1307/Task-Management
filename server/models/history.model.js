@@ -32,6 +32,10 @@ const history = mongoose.model(
             type: mongoose.Types.ObjectId,
             ref: 'Task'
         },
+        commentId:{
+            type:mongoose.Types.ObjectId,
+            ref:"Comment"
+        },
         reporterId: {
             type: mongoose.Types.ObjectId,
             ref: 'roles',
