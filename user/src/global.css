@@ -776,3 +776,16 @@ button.attachment i {
 .status ul {
     padding-left: 0px;
 }
+li.leave_data label {
+    font-size: 19px;
+    font-weight: 400;
+    margin-right: 10px;
+}
+
+li.leave_data select {
+    width: 242px;
+    padding: 10px;
+    border: 2px solid #d8d6d6;
+    border-radius: 9px;
+    height: 45px;
+}

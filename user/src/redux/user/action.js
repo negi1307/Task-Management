@@ -28,11 +28,8 @@ export const addLoginTimeStop = (data): AuthAction => ({
     type: ALL_USERS.CREATE_USER_TIME_STOP,
     payload: data,
 });
-<<<<<<< HEAD
 
 export const getAllLogoutReason = (data): AuthAction => ({
     type: ALL_USERS.GET_USER_LOGOUT_LEAVEREASON,
     payload: data
 })
-=======
->>>>>>> 1672b2ba97d4fcf30aea7b8e253364715a78a3e7

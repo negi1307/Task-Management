@@ -20,7 +20,7 @@ export function UserLoginTimeStopApi(data): any {
     return api.update(URL.userLoginTimeStop, data.payload);
 }
 export function UserLogoutReasonApi(data): any {
-    return api.update(URL.userLogoutReason, data.payload);
+    return api.get(URL.userLogoutReason, data.payload);
 }
 // user time --------------------------------
 export function getallRolesApi(data): any {
