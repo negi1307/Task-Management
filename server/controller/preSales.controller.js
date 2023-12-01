@@ -25,35 +25,131 @@ const createPreSales = async (req, res) => {
 
 
 // get the pre Sale data which is create
+// const getPreSaleData = async (req, res) => {
+//     try {
+//         const page = parseInt(req.query.page) || 1;
+//         const limit = parseInt(req.query.limit) || 10;
+//         let skip = parseInt(req.query.skip);
+//         const result = await preSalesModel.aggregate([
+//             // {
+//             //     $lookup:
+//             //     {
+//             //         from: "technology",
+//             //         localField: "Project.technology",
+//             //         foreignField: "_id",
+//             //         as: "tecres"
+//             //     },
+//             // },
+//             {
+//                 $lookup: {
+//                     from: "projects",
+//                     localField: "_id",
+//                     foreignField: "preSalesId",
+//                     as: "Project"
+//                 }
+//             },
+//             {
+//                 $unwind: "$Project"
+//             },
+//             {
+//                 $lookup: {
+//                     from: "technology",
+//                     localField: "Project.technology",
+//                     foreignField: "_id",
+//                     as: "technologyInfo"
+//                 }
+//             },
+//             // { $unwind: "$Project" },
+//             // { $unwind: "$Project.technology" },
+
+//             //  { $unwind: "$tecres" },
+//             {
+//                 $project: {
+//                     _id: 1,
+//                     clientName: 1,
+//                     description: 1,
+//                     projectName: 1,
+//                     status: 1,
+//                     stage: 1,
+//                     type: 1,
+//                     "Project._id": 1,
+//                     "Project.technology": 1,
+//                     "Project.startDate": 1,
+//                     "Project.endDate": 1,
+//                     "Project.projectStatus": 1,
+//                     "Project.projectType": 1,
+//                     // "tecres._id": 1,
+//                     // "tecres.techName": 1
+//                 }
+//             }
+//             ,
+//             {
+//                 $skip: (skip - 1) * limit
+//             },
+//             {
+//                 $limit: limit
+//             }])
+//         const totalDocuments = await preSalesModel.countDocuments();
+//         return res.status(200).json({
+//             status: "200",
+//             message: "Pre Sales fetched Successfully",
+//             response: result,
+//             totalDocuments,
+//             currentPage: page,
+//             totalPages: Math.ceil(totalDocuments / limit),
+//         });
+//     } catch (error) {
+//         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+//     }
+// };
+
 const getPreSaleData = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         let skip = parseInt(req.query.skip);
+
         const result = await preSalesModel.aggregate([
             {
                 $lookup: {
                     from: "projects",
-                    localField: "_id",
-                    foreignField: "preSalesId",
+                    let: { preSalesId: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $eq: ["$preSalesId", "$$preSalesId"] }
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: "technologies",
+                                localField: "technology",
+                                foreignField: "_id",
+                                as: "technologyInfo"
+                            }
+                        },
+                        {
+                            $unwind: "$technologyInfo"
+                        },
+                        {
+                            $group: {
+                                _id: "$_id",
+                                technologies: {
+                                    $push: {
+                                        _id: "$technologyInfo._id",
+                                        techName: "$technologyInfo.techName"
+                                    }
+                                },
+                                startDate: { $first: "$startDate" },
+                                endDate: { $first: "$endDate" },
+                                projectStatus: { $first: "$projectStatus" },
+                                projectType: { $first: "$projectType" }
+                            }
+                        }
+                    ],
                     as: "Project"
                 }
             },
-            // {
-            //     $unwind: "$Project"
-            // },
-            // { $unwind: "$Project" },
-            // { $unwind: "$Project.technology" },
-            {
-                $lookup:
-                {
-                    from: "technology",
-                    localField: "Project.technology",
-                    foreignField: "_id",
-                    as: "tecres"
-                },
-            },
-            //  { $unwind: "$tecres" },
             {
                 $project: {
                     _id: 1,
@@ -63,22 +159,17 @@ const getPreSaleData = async (req, res) => {
                     status: 1,
                     stage: 1,
                     type: 1,
-                    "Project._id": 1,
-                    "Project.technology": 1,
-                    "Project.startDate": 1,
-                    "Project.endDate": 1,
-                    "Project.projectStatus": 1,
-                    "Project.projectType": 1,
-                    // "tecres._id": 1,
-                    // "tecres.techName": 1
+                    Project: 1
                 }
-            }
-            , {
+            },
+            {
                 $skip: (skip - 1) * limit
             },
             {
                 $limit: limit
-            }])
+            }
+        ]);
+
         const totalDocuments = await preSalesModel.countDocuments();
         return res.status(200).json({
             status: "200",
@@ -92,9 +183,6 @@ const getPreSaleData = async (req, res) => {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
 };
-
-
-
 
 
 
