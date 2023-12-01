@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Row, Col } from 'react-bootstrap';
+// import { updateTaskStatusTime } from '../../../src/redux/user/action'
+import { updateTaskStatusTime } from '../../redux/actions';
 
 //actions
 import { logoutUser } from '../../redux/actions';
@@ -37,7 +39,9 @@ const Logout = (): React$Element<any> | React$Element<React$FragmentType> => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(updateTaskStatusTime())
         dispatch(logoutUser());
+
     }, [dispatch]);
 
     return (
