@@ -52,7 +52,7 @@ const ProfileDropdown = (props: ProfileDropdownProps, state: ProfileDropdownStat
                             <img src={profilePic} className="rounded-circle" alt="user" />
                         </span>
                         <span>
-                            <span className="account-user-name">{props.username}</span>
+                            <span className="account-user-name" >{props.username}</span>
                             <span className="account-position">{props.userTitle}</span>
                         </span>
                     </Dropdown.Toggle>
