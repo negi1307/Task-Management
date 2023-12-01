@@ -145,57 +145,170 @@ const trackTime = async (req, res) => {
         $unwind: '$user',
       },
       {
-        $group: {
-          _id: {
-            project: { $first: '$projects.projectName' },
-            userName: '$user.firstName',
-            userLastName: '$user.lastName',
-          },
-          totalTrackingTime: { $sum: '$timeTracker' },
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          project: '$_id.project',
-          userName: '$_id.userName',
-          userLastName: '$_id.userLastName',
-          formattedTrackingTime: {
-            $concat: [
-              {
-                $toString: {
-                  $trunc: {
-                    $divide: ['$totalTrackingTime', 3600000], // Convert to hours
-                  },
+        $facet: {
+          // Branch 1: Original output grouped by project and user
+          "projectUserTime": [
+            {
+              $group: {
+                _id: {
+                  userId: '$user._id',
+                  userName: '$user.firstName',
+                  userLastName: '$user.lastName',
+                  project: { $first: '$projects.projectName' },
+                },
+                totalTrackingTime: {
+                  $sum: '$timeTracker',
                 },
               },
-              'h ',
-              {
-                $toString: {
-                  $trunc: {
-                    $mod: [
-                      {
-                        $divide: ['$totalTrackingTime', 60000], // Convert to minutes
+            },
+            {
+              $project: {
+                _id: 0,
+                project: '$_id.project',
+                userId: '$_id.userId',
+                userName: '$_id.userName',
+                userLastName: '$_id.userLastName',
+                formattedTrackingTime: {
+                  $concat: [
+                    {
+                      $toString: {
+                        $trunc: {
+                          $divide: ['$totalTrackingTime', 3600000], // Convert to hours
+                        },
                       },
-                      60,
-                    ],
-                  },
+                    },
+                    'h ',
+                    {
+                      $toString: {
+                        $trunc: {
+                          $mod: [
+                            {
+                              $divide: ['$totalTrackingTime', 60000], // Convert to minutes
+                            },
+                            60,
+                          ],
+                        },
+                      },
+                    },
+                    'm',
+                  ],
                 },
               },
-              'm',
-            ],
-          },
+            },
+          ],
+          // Branch 2: Total time spent by each user across all projects
+          "totalUserTime": [
+            {
+              $group: {
+                _id: {
+                  userId: '$user._id',
+                  userName: '$user.firstName',
+                  userLastName: '$user.lastName',
+                },
+                totalTrackingTime: {
+                  $sum: '$timeTracker',
+                },
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+                userId: '$_id.userId',
+                userName: '$_id.userName',
+                userLastName: '$_id.userLastName',
+                totalTrackingTime: {
+                  $concat: [
+                    {
+                      $toString: {
+                        $trunc: {
+                          $divide: ['$totalTrackingTime', 3600000], // Convert to hours
+                        },
+                      },
+                    },
+                    'h ',
+                    {
+                      $toString: {
+                        $trunc: {
+                          $mod: [
+                            {
+                              $divide: ['$totalTrackingTime', 60000], // Convert to minutes
+                            },
+                            60,
+                          ],
+                        },
+                      },
+                    },
+                    'm',
+                  ],
+                },
+              },
+            },
+          ],
         },
       },
-    ]);
 
-    res.json(timeTrackingData);
+    ]);
+    return res.status(200).json({ status: "200", message: "Time Tracking Data Fetched Successfully", response: {
+      projectUserTime: timeTrackingData[0].projectUserTime,
+      totalUserTime: timeTrackingData[0].totalUserTime,
+    },  });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 }
 
 
+      // {
+      //   // $project: {
+      //     "response": {
+      //       $concatArrays: ["$projectUserTime", "$totalUserTime"],
+      //     },
+      //   // },
+      // },
+      // {
+      //   $group: {
+      //     _id: {
+      //       project: { $first: '$projects.projectName' },
+      //       userName: '$user.firstName',
+      //       userLastName: '$user.lastName',
+      //     },
+      //     totalTrackingTime: { $sum: '$timeTracker' },
+      //   },
+      // },
+      // {
+      //   $project: {
+      //     _id: 0,
+      //     project: '$_id.project',
+      //     userName: '$_id.userName',
+      //     userLastName: '$_id.userLastName',
+      //     formattedTrackingTime: {
+      //       $concat: [
+      //         {
+      //           $toString: {
+      //             $trunc: {
+      //               $divide: ['$totalTrackingTime', 3600000], // Convert to hours
+      //             },
+      //           },
+      //         },
+      //         'h ',
+      //         {
+      //           $toString: {
+      //             $trunc: {
+      //               $mod: [
+      //                 {
+      //                   $divide: ['$totalTrackingTime', 60000], // Convert to minutes
+      //                 },
+      //                 60,
+      //               ],
+      //             },
+      //           },
+      //         },
+      //         'm',
+      //       ],
+      //     },
+      //     // totalSpentTime : { $sum : '$totaltrackingTime'}
+      //   },
+      // }
 
 
 module.exports = {

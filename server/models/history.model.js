@@ -18,8 +18,11 @@ const history = mongoose.model(
         time: {
             type: Date
         },
-        useractivity: {
+        userActivity: {
             type: String
+        },
+        user:{
+            type:String
         },
         userId: {
             type: mongoose.Types.ObjectId,
@@ -28,6 +31,10 @@ const history = mongoose.model(
         taskId: {
             type: mongoose.Types.ObjectId,
             ref: 'Task'
+        },
+        commentId:{
+            type:mongoose.Types.ObjectId,
+            ref:"Comment"
         },
         reporterId: {
             type: mongoose.Types.ObjectId,
