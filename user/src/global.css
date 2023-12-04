@@ -351,11 +351,11 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
     background: #000 !important;
 }
 ul.side-nav li a:hover {
-    color: rgba(236, 172, 55, 0.8901960784) !important;  
+    color: rgba(236, 172, 55, 0.8901960784) !important;
 }
 
 ul.side-nav li a {
-    color: #fff!important;
+    color: #fff !important;
     font-weight: 500;
 }
 
@@ -572,7 +572,6 @@ h5.count {
     margin-left: 15px;
 }
 
-
 .status h4 {
     font-size: 20px;
     color: #39afd1;
@@ -627,9 +626,9 @@ td.user_name {
 td.user_comment {
     font-size: 18px;
 }
-p.action-icon i {
+/* p.action-icon i {
     font-size: 27px;
-}
+} */
 
 /* end status count------------------------------------------- */
 /* Filter */
@@ -695,10 +694,8 @@ li.info_cls {
     font-size: 14px;
 }
 
-
 .assignee_name ul li:nth-child(2) {
     background: orange !important;
-
 }
 
 .assignee_name:nth-child(2) {
@@ -736,16 +733,16 @@ li.info_cls {
     color: #fff;
     font-weight: 600;
 }
-.status input[type="search"] {
+.status input[type='search'] {
     border-radius: 34px;
     padding: 7px 16px;
     width: 320px;
     border: 2px solid #c4c1c1;
 }
 
-tr.align-middle i {
+/* tr.align-middle i {
     font-size: 27px;
-}
+} */
 .title h3 {
     color: #424040;
     margin: 20px 0px;
@@ -788,4 +785,16 @@ li.leave_data select {
     border: 2px solid #d8d6d6;
     border-radius: 9px;
     height: 45px;
+}
+.mdi.mdi-eye {
+    color: black;
+}
+.table .action-icon {
+    color: #98a6ad;
+    font-size: 1.2rem;
+    display: inline-block;
+    padding: 0 3px;
+}
+table.table-striped tbody tr:nth-of-type(odd) > * {
+    --ct-table-accent-bg: #c9c8c8 !important;
 }
