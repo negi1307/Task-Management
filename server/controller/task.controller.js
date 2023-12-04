@@ -51,7 +51,6 @@ const createtask = async (req, res) => {
 
 
 const task_list = async (query, totalCount, pageSize, skip, arr) => {
-
   var tasks = await taskModel.aggregate([
     {
       $match: query,
@@ -172,6 +171,8 @@ const getTasks = async (req, res) => {
     var totalPages = 0;
     var totalCount = 0;
     const query = {};
+    query.activeStatus = JSON.parse(req.query.activeStatus)
+    query.status = parseInt(req.query.status);
     if (!req.query.projectId && !req.query.milestoneId && !req.query.sprintId && !req.query.taskStatus && parseInt(req.query.skip) === 1) {
       let query = {};
       const taskStatus = JSON.parse(req.query.taskStatus);
@@ -190,10 +191,13 @@ const getTasks = async (req, res) => {
     }
 
     if (parseInt(req.query.skip) === 0) {
+
       if (req.query.sprintId) {
         totalCount = await taskModel.countDocuments(query);
         query.sprintId = new mongoose.Types.ObjectId(req.query.sprintId);
         query.activeStatus = JSON.parse(req.query.activeStatus);
+        query.projectId = new mongoose.Types.ObjectId(req.query.projectId);
+        query.milestoneId = new mongoose.Types.ObjectId(req.query.milestoneId);
         totalCount = await taskModel.countDocuments(query);
         var pageSize = totalCount === 0 ? 1 : totalCount;
         var skip = 1;
@@ -209,14 +213,12 @@ const getTasks = async (req, res) => {
       var skip = parseInt(req.query.skip);
     }
     query.status = parseInt(req.query.status)
-    console.log(query)
     // totalCount = await taskModel.countDocuments(query, projectId, milestoneId, sprintId);
     totalCount = await taskModel.countDocuments({
       activeStatus: JSON.parse(req.query.activeStatus),
       status: parseInt(req.query.status), projectId: req.query.projectId,
-      milestoneId: req.query.milestoneId, sprintId: req.query.sprintId
-    })
-
+      milestoneId: req.query.milestoneId, sprintId: req.query.sprintId,
+    });
     var tasks = await taskModel.aggregate([
       {
         $match: {
@@ -280,7 +282,7 @@ const getTasks = async (req, res) => {
         },
       },
       {
-        $unwind: "$assignees", // Unwind the assignees array
+        $unwind: "$assignees",
       },
       {
         $addFields: {
