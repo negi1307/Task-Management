@@ -66,6 +66,7 @@ const Create = ({ modal, closeModal }) => {
             ToastHandle('error', sucesshandel?.data?.message);
         }
     }, [sucesshandel]);
+    console.log(sucesshandel,'====')
 
     return (
         <>

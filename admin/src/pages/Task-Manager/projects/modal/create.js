@@ -67,7 +67,7 @@ const Create = ({ modal, closeModal }) => {
         } else if (errorhandel?.data?.status == 500) {
             ToastHandle('error', errorhandel?.data?.message);
         }
-    }, [errorhandel]);
+    }, [errorhandel?.data?.status]);
     useEffect(() => {
         reset();
         setStartDate('');

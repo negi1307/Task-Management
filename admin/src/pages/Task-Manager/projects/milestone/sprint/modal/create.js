@@ -14,7 +14,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.addSprint;
-    
+    const loaderHandle = store?.addSprint
     //
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
@@ -27,6 +27,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
     };
     const handleEndDate = (date) => {
         setEndDate(date);
+        
     };
     const {
         register,
@@ -50,6 +51,8 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
     };
     useEffect(() => {
         reset();
+        setStartDate("")
+        setEndDate("")
     }, [modal]);
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
@@ -60,7 +63,8 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
         } else if (successHandle?.data?.status == 500) {
             ToastHandle('error', successHandle?.data?.message);
         }
-    }, [successHandle]);
+    }, [successHandle?.data?.status]);
+    console.log(successHandle,'testing')
     const handleClose = () => {
         CloseModal();
     };
@@ -81,7 +85,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
                         </Row>
                     </Col>
                 </Row>
-                {successHandle?.loading ? (
+                {loaderHandle?.loading ? (
                     <MainLoader />
                 ) : (
                     <Modal.Body className="py-0">

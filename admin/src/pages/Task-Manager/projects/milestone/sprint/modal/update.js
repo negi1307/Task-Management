@@ -7,37 +7,28 @@ import ToastHandle from '../../../../../../constants/toaster/toaster';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSprint } from '../../../../../../redux/sprint/action';
 import MainLoader from '../../../../../../constants/Loader/loader';
-// import MainLoader from '../../../../constants/Loader/loader';
-import { EditorState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
+import DatePicker from 'react-datepicker';
+import '../../../../../../../node_modules/react-datepicker/dist/react-datepicker.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { parseISO } from 'date-fns';
 const Update = ({ modal, closeModal, editData }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    const [description, setDescription] = useState('');
     const sucesshandel = store?.updateSprint;
     const loaderhandel = store?.updateSprint;
+
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
     // disable previous date
-    const today = new Date().toISOString().split('T')[0];
-    // start date
-    function findMinimumStartDate(startdate1, startdate2) {
-        return new Date(Math.min(new Date(startdate1), new Date(startdate2)));
-    }
-    const startdate1 = new Date();
-    const startdate2 = editData?.startDate;
-    const minimumStartDate = findMinimumStartDate(startdate1, startdate2);
-    //
+    const today = new Date();
+    console.log(today, 'today');
     // end date
-    function findMinimumEndDate(date1, date2) {
-        return new Date(Math.min(new Date(date1), new Date(date2)));
-    }
-    const date1 = new Date();
-    const date2 = editData?.endDate;
-    const minimumEndDate = findMinimumEndDate(date1, date2);
-    //
+    const handleStartDate = (date) => {
+        setStartDate(date);
+    };
+    const handleEndDate = (date) => {
+        setEndDate(date);
+    };
     const {
         register,
         handleSubmit,
@@ -54,8 +45,8 @@ const Update = ({ modal, closeModal, editData }) => {
             sprintId: editData?._id,
             sprintName: data?.title,
             sprintDesc: data?.description,
-            startDate: data?.startDate,
-            endDate: data?.endDate,
+            startDate: startDate,
+            endDate: endDate,
         };
         console.log('editsprit', body);
         dispatch(updateSprint(body));
@@ -63,20 +54,21 @@ const Update = ({ modal, closeModal, editData }) => {
     useEffect(() => {
         reset({
             title: editData?.sprintName,
-            startDate: handleDate(editData?.startDate),
-            endDate: handleDate(editData?.endDate),
             description: editData?.sprintDesc,
         });
+        if (editData?.startDate || editData?.endDate) {
+            const parsedDate = parseISO(editData?.startDate) 
+            const endate = parseISO(editData?.endDate)
+            if (parsedDate || endate) {
+                setStartDate(parsedDate);
+                setEndDate(endate)
+            } else {
+                console.error('Invalid date format:', editData.startDate);
+            }
+        }
     }, [modal]);
     console.log(editData, 'pppppp');
-    const handleDate = (data) => {
-        let date = new Date(data);
-        let year = date.toLocaleString('default', { year: 'numeric' });
-        let month = date.toLocaleString('default', { month: '2-digit' });
-        let day = date.toLocaleString('default', { day: '2-digit' });
-        let formattedDate = year + '-' + month + '-' + day;
-        return formattedDate;
-    };
+   
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
             ToastHandle('success', 'Updated Successfully');
@@ -86,7 +78,7 @@ const Update = ({ modal, closeModal, editData }) => {
         } else if (sucesshandel?.data?.status == 500) {
             ToastHandle('error', sucesshandel?.data?.message);
         }
-    }, [sucesshandel]);
+    }, [sucesshandel?.data?.status]);
     return (
         <>
             <Modal show={modal} onHide={CloseModaal}>
@@ -127,7 +119,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                         </Form.Group>
                                     </Col>
                                     <Col lg={12}>
-                                        <Form.Group className="mb-2 border" controlId="exampleForm.ControlTextarea1">
+                                        <Form.Group className="mb-2 " controlId="exampleForm.ControlTextarea1">
                                             <Form.Label>
                                                 Description <span className="text-danger">*</span>:
                                             </Form.Label>
@@ -146,34 +138,35 @@ const Update = ({ modal, closeModal, editData }) => {
 
                                     <Col lg={12}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label>
+                                            <Form.Label className="w-100">
                                                 Start Date<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                min={handleDate(minimumStartDate)}
-                                                {...register('startDate', { required: true })}
-                                                placeholder="Please start Date "
+
+                                            <DatePicker
+                                                selected={startDate}
+                                                // onChange={(date) => setStartDate(date)}
+                                                onChange={(date) => handleStartDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={today}
+                                                className="add_width_input"
                                             />
-                                            {errors.startDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
                                         </Form.Group>
                                     </Col>
                                     <Col lg={12}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label>
+                                            <Form.Label className="w-100">
                                                 End Date<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                min={watch('startDate')}
-                                                {...register('endDate', { required: true })}
-                                                placeholder="Please end Date"
+
+                                            <DatePicker
+                                                selected={endDate}
+                                                disabled={startDate == '' || startDate == undefined}
+                                                // onChange={(date) => setEndDate(date)}
+                                                onChange={(date) => handleEndDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={startDate}
+                                                className="add_width_input"
                                             />
-                                            {errors.endDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
                                         </Form.Group>
                                     </Col>
                                 </Row>
