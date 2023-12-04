@@ -12,7 +12,6 @@ async function userHistory(req, value) {
             reporterId: req.user.reporterId,
             projectId: req.user.projectId,
             commentId: req.body.commentId,
-            commentContent: commentContent
         });
         await userhistory.save();
     } catch (error) {
@@ -24,16 +23,31 @@ async function userHistory(req, value) {
 
 
 // Get History or recent activities
+// const getHistory = async (req, res) => {
+//     try {
+//         const taskId = req.query.taskId;
+//         const userId = req.user._id;
+//         const result = await historyModel.find({ userId, taskId })
+//             .populate('taskId').populate('userId');
+//         return res.status(200).json({ status: "200", message: "History fetched successfully", response: result });
+//     } catch (error) {
+//         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+//     }
+// };
+
+
 const getHistory = async (req, res) => {
     try {
-        const taskId = req.query.taskId;
         const userId = req.user._id;
-        const result = await historyModel.find({ userId, taskId })
-            .populate('taskId').populate('userId');
+        const taskId = req.query.taskId;
+        const query = taskId ? { taskId } : {}; 
+        const result = await historyModel.find(query).populate('taskId').populate('userId');
         return res.status(200).json({ status: "200", message: "History fetched successfully", response: result });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
 };
+
+
 
 module.exports = { userHistory, getHistory }
