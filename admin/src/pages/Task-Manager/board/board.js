@@ -76,7 +76,7 @@ const Boards = () => {
     const deleteCommenthandel = store?.deleteCommentReducer;
     const [loader, setloader] = useState(false);
     const [search, setSearch] = useState('');
-    console.log(Createhandel,"nnnnnnnnnnnnnnnnnnnnnnnnnnn")
+    console.log(Createhandel, 'nnnnnnnnnnnnnnnnnnnnnnnnnnn');
     // const projectId = store?.getProjectId?.data;
     // const milestoneId = store?.getMilestoneId?.data;
     const {
@@ -186,8 +186,7 @@ const Boards = () => {
             closeModal('render');
         } else if (statushandle?.data?.status == 400) {
             ToastHandle('error', statushandle?.data?.message);
-        } 
-        else if (statushandle?.status !== 200) {
+        } else if (statushandle?.status !== 200) {
             ToastHandle('error', statushandle?.message?.error);
         }
     }, [statushandle]);
@@ -197,8 +196,7 @@ const Boards = () => {
             closeModal('render');
         } else if (deletehandel?.data?.status == 400) {
             ToastHandle('error', deletehandel?.data?.message);
-        } 
-        else if (deletehandel?.status !== 200) {
+        } else if (deletehandel?.status !== 200) {
             ToastHandle('error', deletehandel?.message?.error);
         }
     }, [deletehandel]);
@@ -208,7 +206,7 @@ const Boards = () => {
             ToastHandle('success', 'Updated Successfully');
         } else if (updatehandel?.data?.status == 400) {
             ToastHandle('error', updatehandel?.data?.message);
-        }  else if (updatehandel?.status !== 200) {
+        } else if (updatehandel?.status !== 200) {
             ToastHandle('error', updatehandel?.message?.error);
         }
         setloader(false);
@@ -231,7 +229,6 @@ const Boards = () => {
         } else if (Createhandel?.status !== 200) {
             ToastHandle('error', Createhandel?.message?.error);
         }
-      
     }, [Createhandel]);
     useEffect(() => {
         if (CreateCommenthandel?.data?.status == 200) {
@@ -239,7 +236,7 @@ const Boards = () => {
             dispatch(getComment({ taskId: taskId }));
         } else if (CreateCommenthandel?.data?.status == 400) {
             ToastHandle('error', CreateCommenthandel?.data?.message);
-        }  else if (CreateCommenthandel?.status !== 200) {
+        } else if (CreateCommenthandel?.status !== 200) {
             ToastHandle('error', CreateCommenthandel?.message?.error);
         }
     }, [CreateCommenthandel]);
@@ -259,7 +256,7 @@ const Boards = () => {
             dispatch(getComment({ taskId: taskId }));
         } else if (updateComment?.data?.status == 400) {
             ToastHandle('error', updateComment?.data?.message);
-        }  else if (updateComment?.status !== 200) {
+        } else if (updateComment?.status !== 200) {
             ToastHandle('error', updateComment?.message?.error);
         }
     }, [updateComment]);
