@@ -221,7 +221,6 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
             setShowButton(false);
         }
     };
-    const currTime = new Date();
     const[leave,setLeave]=useState('');
     useEffect(() => {
         if (loginTimeMessage?.data?.status == 200) {
@@ -234,7 +233,6 @@ dispatch(getAllLogoutReason())
     },[])
     const logoutTime = () => {
         if(leave !==""){
-            
             dispatch(addLoginTimeStop({leaveMessageId:leave}));
             sessionStorage.removeItem('startButton');             
             setShowButton(true);
@@ -247,6 +245,43 @@ dispatch(getAllLogoutReason())
 const onChangeLeave =(e)=>{
     setLeave(e.target.value);
 }
+
+
+const [time, setTime] = useState(1);
+const start = sessionStorage.getItem('startButton');
+const [incrementValue, setIncrementValue] = useState(0);
+  const increment = () =>
+    setTime((prevTime) => {
+      return prevTime === 0 ? 0 : prevTime + 1;
+    });
+ 
+  useEffect(() => {
+    if(start){
+        setIncrementValue(setInterval(increment, 1000));
+    }
+   else{
+    clearInterval(incrementValue);
+   }
+    return () => clearInterval(incrementValue);
+  }, [start]);
+
+  const format = (num: number): string => {
+    return num < 10 ? '0' + num : num.toString();
+  };
+
+//const days = format(Math.floor(time / (3600 * 24)));
+const hours = format(Math.floor((time / 3600) % 24));
+const minutes = format(Math.floor((time / 60) % 60));
+const seconds = format(time % 60);
+if(start){    
+    localStorage.setItem("hours",hours);
+    localStorage.setItem("minutes",minutes);
+    localStorage.setItem("seconds",seconds);
+}
+
+
+
+
 
     return (
         <>
@@ -271,27 +306,7 @@ const onChangeLeave =(e)=>{
                                     </button>
                                 )}
                             <div class="menuinfo">
-                                <ul>
-                                    {/* <li>
-                                        <Link to="" className="list_padding">
-                                            Apps
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link onClick={() => setModal(true)} className="list_padding">
-                                            Filters
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="" className="list_padding">
-                                            Dashboard
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="" className="list_padding">
-                                            Teams
-                                        </Link>
-                                    </li> */}
+                                <ul>                                   
 
                                     {showButton ? (
                                         <li>
@@ -306,7 +321,13 @@ const onChangeLeave =(e)=>{
                                             </Button>
                                         </li>
                                     )}
-                                   <li>{moment(currTime).format('h:mm:ss')}</li>
+                                   <li>
+                                   {/* {moment(currTime).format('h:mm:ss')} */}
+                                   {localStorage.getItem("hours")+
+                                   ':'+localStorage.getItem('minutes')+
+                                   ':'+ localStorage.getItem('seconds')}
+                                   
+                                   </li>
                                     <li className='leave_data'>
                                    
                                         <select id="leave" onChange={onChangeLeave} name="cars" disabled={showButton}>
