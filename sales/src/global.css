@@ -541,7 +541,7 @@ th.check_info {
 }
 
 .accordion {
-    background-color: white;
+    /* background-color: white; */
 }
 
 .highlightCircle {
@@ -594,7 +594,7 @@ th.check_info {
 .accordionColumn {
     /* border-bottom: 1px solid #000; */
     /* border-top: 1px solid #000; */
-    border-left: 1px solid #000;
+    border-left: 1px solid #000 !important;
 }
 button.accordion-button.collapsed {
     padding: 0px;
@@ -607,5 +607,10 @@ button.accordion-button.collapsed {
 .downButtonParent {
     color: black !important;
     background-color: white !important;
-    border: 1px solid grey;
+
+    border: 1px solid grey !important;
+}
+
+.innerModal {
+    border-top: 1px solid black;
 }
