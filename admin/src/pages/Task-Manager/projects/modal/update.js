@@ -59,10 +59,12 @@ const Update = ({ modal, closeModal, editData }) => {
         });
 
     
-        if (editData?.startDate) {
-            const parsedDate = parseISO(editData?.startDate);
-            if (parsedDate) {
+        if (editData?.startDate || editData?.endDate) {
+            const parsedDate = parseISO(editData?.startDate) 
+            const endate = parseISO(editData?.endDate)
+            if (parsedDate || endate) {
                 setStartDate(parsedDate);
+                setEndDate(endate)
             } else {
                 console.error('Invalid date format:', editData.startDate);
             }

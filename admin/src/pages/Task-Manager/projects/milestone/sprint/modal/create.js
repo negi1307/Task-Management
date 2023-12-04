@@ -8,13 +8,26 @@ import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
 import { addSprint } from '../../../../../../redux/sprint/action';
 import ToastHandle from '../../../../../../constants/toaster/toaster';
 import MainLoader from '../../../../../../constants/Loader/loader';
+import DatePicker from 'react-datepicker';
+import '../../../../../../../node_modules/react-datepicker/dist/react-datepicker.css';
 const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.addSprint;
-    // disable previous date
-    const today = new Date().toISOString().split('T')[0];
+    
     //
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+    // disable previous date
+    const today = new Date();
+    console.log(today, 'today');
+    // end date
+    const handleStartDate = (date) => {
+        setStartDate(date);
+    };
+    const handleEndDate = (date) => {
+        setEndDate(date);
+    };
     const {
         register,
         handleSubmit,
@@ -30,8 +43,8 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
             milestoneId: milestoneId,
             sprintName: val?.Name,
             sprintDesc: val?.description,
-            startDate: val?.Startdate,
-            endDate: val?.Enddate,
+            startDate: startDate,
+            endDate: endDate,
         };
         dispatch(addSprint(body));
     };
@@ -109,36 +122,36 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
                                         </Form.Group>
                                     </Col>
                                     <Col lg={12}>
-                                        <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                {' '}
-                                                Start date <span className="text-danger">*</span>:
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                Start Date<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                min={today}
-                                                {...register('Startdate', { required: true })}
-                                            />{' '}
-                                            {errors.Startdate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
+
+                                            <DatePicker
+                                                selected={startDate}
+                                                // onChange={(date) => setStartDate(date)}
+                                                onChange={(date) => handleStartDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={today}
+                                                className="add_width_input"
+                                            />
                                         </Form.Group>
                                     </Col>
                                     <Col lg={12}>
-                                        <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                {' '}
-                                                End date <span className="text-danger">*</span>:
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                End Date<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                disabled={watch('Startdate') == '' || watch('Startdate') == undefined}
-                                                min={watch('Startdate')}
-                                                {...register('Enddate', { required: true })}
-                                            />{' '}
-                                            {errors.Enddate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
+
+                                            <DatePicker
+                                                selected={endDate}
+                                                disabled={startDate == '' || startDate == undefined}
+                                                // onChange={(date) => setEndDate(date)}
+                                                onChange={(date) => handleEndDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={startDate}
+                                                className="add_width_input"
+                                            />
                                         </Form.Group>
                                     </Col>
                                 </Row>
