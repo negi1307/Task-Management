@@ -123,7 +123,7 @@ const Update = ({ modal, closeModal, editData }) => {
         } else if (sucesshandel?.data?.status == 500) {
             ToastHandle('error', sucesshandel?.data?.message);
         }
-    }, [sucesshandel]);
+    }, [sucesshandel?.data?.status]);
 
     useEffect(() => {
         const getTechnologyname = [];
