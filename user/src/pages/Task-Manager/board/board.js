@@ -63,15 +63,12 @@ const Boards = (props) => {
     const taskId = store?.getTaskId?.data;
     console.log('store', store);
     const taskStatusCount = store?.getTaskStatusCount?.data?.response;
-    // for status count on board page(get all task api)============================
     const taskStatusCountdata = store?.getAllTaskReducer?.data;
-    // for status count on board page (get all task api)============================
     const updateComment = store?.updateComment;
     const successHandle = store?.getAllTaskReducer;
-    console.log(successHandle, 'success');
     const statushandle = store?.updateTaskStatus;
     const assigneeName = store?.getAllAssigneeName?.data?.response;
-    console.log('assigneeName', assigneeName);
+    
 
     useEffect(() => {
         let body = {

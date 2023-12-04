@@ -19,9 +19,8 @@ export function updateTask(data): any {
 }
 
 
-export function getHistoryApi(data): any {
-    
-    return api.get(URL.getHistory);
+export function getHistoryApi(data): any { 
+    return api.get(URL.getHistory,data.payload);
 }
 
 
