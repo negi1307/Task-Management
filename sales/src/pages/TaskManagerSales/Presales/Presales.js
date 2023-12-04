@@ -50,7 +50,7 @@ const AssignedTo = () => {
     };
     const toggle = (id, index) => {
         setPreSaleId(index);
-        console.log(id);
+        console.log(id, preSaleId !== preSaleId, 'kkkkkk');
         setIsOpen((isOpen) => !isOpen);
     };
     return (
@@ -99,7 +99,7 @@ const AssignedTo = () => {
                                             className="downButtonParent mt-2">
                                             <Row className="accordion d-flex flex-row">
                                                 <Col className="accordionColumn d-flex flex-row justify-content-between">
-                                                    <span className="mdi mdi-36px mdi-chevron-down"></span>
+                                                    <span className="mdi mdi-36px mdi-chxevron-down"></span>
                                                     <div className="d-flex flex-column">
                                                         <label htmlFor="">Assigned To</label>
                                                         <div className="d-flex flex-row">

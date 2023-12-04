@@ -8,7 +8,8 @@ import { getAllUsers, getAllRoles } from './../redux/user/action';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useState } from 'react';
-import { getAllProjects } from '../../src/redux/projects/action'
+import { getAllProjects } from '../../src/redux/projects/action';
+import DatePicker from "react-datepicker";
 
 
 export default function RightBar(props) {
@@ -17,6 +18,8 @@ export default function RightBar(props) {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [description, setDescription] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndtDate] = useState('');
     const getAllUserData = store?.getAllUsers?.data?.response
     const getAllRole = store?.getAllRoles?.data?.response
     // console.log("getAllRoleeeee",getAllRole)
@@ -57,21 +60,22 @@ export default function RightBar(props) {
 
     }, [])
 
-
+    const [fileName, setFileName] = useState('');
+    const[filePreviewData,setfilePreviewData]= useState(null);
     const onSubmit = (e) => {
         const formData = new FormData()
         formData.append('projectId', projectId)
         formData.append('milestoneId', milestoneId)
         formData.append('sprintId', spriteId)
         formData.append('summary', e.Summary)
-        formData.append('expectedHours', e.expectedHours)
+        //formData.append('expectedHours', e.expectedHours)
         formData.append('description', description)
         formData.append('assigneeId', e.Assignee)
         formData.append('reporterId', e.Report)
         formData.append('priority', e.priority)
-        formData.append('startDate', e.start_date)
-        formData.append('dueDate', e.last_date)
-        formData.append('attachment', e.attachment[0] ? e.attachment[0] : "");
+        formData.append('startDate', startDate)
+        formData.append('dueDate', endDate)
+        formData.append('attachment',filePreviewData);
 
         if (projectId !== '' && milestoneId !== '' && spriteId !== '') {
 
@@ -100,8 +104,7 @@ export default function RightBar(props) {
     // useEffect(() => {
     // call click outside
     // }, []);
-    const [fileName, setFileName] = useState('');
-    const[filePreviewData,setfilePreviewData]= useState(null);
+ 
     const onFileChange = (e) => {
         setFileName(e.target.files[0].name);
         setfilePreviewData(e.target.files[0]);
@@ -304,18 +307,34 @@ export default function RightBar(props) {
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <div class="mb-2">
+                                    <div class="mb-2 ">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Start Date<span class="text-danger">*</span>:
                                         </label>
-                                        <input
+                                        {/* <input
                                             placeholder="Please start Date "
                                             type="date"
                                             min={new Date().toISOString().split('T')[0]}
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
                                             {...register('start_date')}
-                                        />
+                                        /> */}
+                                        {/* <DatePicker
+                                                selected={startDate}
+                                                // onChange={(date) => setStartDate(date)}
+                                                onChange={(date)=>handleStartDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={today}
+                                                className='add_width_input'
+                                            /> */}
+                                          
+                                         <DatePicker selected={startDate}
+                                          
+                                         onChange={(date) => setStartDate(date)} 
+                                         minDate={new Date()}
+                                         placeholderText='mm/dd/yyyy'
+                                         dateFormat={"MM/dd/yyyy"}
+                                          />
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -323,13 +342,20 @@ export default function RightBar(props) {
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             End Date<span class="text-danger">*</span>:
                                         </label>
-                                        <input
+                                        {/* <input
                                             placeholder="Please end Date"
                                             type="date"
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
                                             {...register('last_date')}
-                                        />
+                                        /> */}
+                                        <DatePicker selected={endDate} 
+                                         onChange={(date) => setEndtDate(date)} 
+                                         minDate={new Date()}
+                                         disabled={startDate ? false:true }
+                                         placeholderText='mm/dd/yyyy'
+                                         dateFormat={"MM/dd/yyyy"}
+                                         class="form-control" />
                                     </div>
                                 </div>
                             </div>

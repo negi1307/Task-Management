@@ -7,6 +7,7 @@ import { getAllTechnology } from '../../../../redux/technology/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import Multiselect from 'multiselect-react-dropdown';
 import DatePicker from 'react-datepicker';
+import { parseISO } from 'date-fns';
 // import {ButtonLoading} from '../../../../constants/Loader/loader';
 const Edit = ({ modal, editData, closemodal }) => {
     console.log(editData, 'mmmmmmmmmmmmmmmmmmm');
@@ -61,6 +62,7 @@ const Edit = ({ modal, editData, closemodal }) => {
                 projectStatus: data?.Projectstatus,
             })
         );
+        setAddValue("")
     };
 
     useEffect(() => {
@@ -74,6 +76,8 @@ const Edit = ({ modal, editData, closemodal }) => {
     // model check two type add and edite;
 
     useEffect(() => {
+        setAddValue(editData?.Project[0]?.technology ? editData?.Project[0]?.technology :"")
+        setAddValueType( editData?.type)
         reset({
             name: editData?.clientName,
             project: editData?.projectName,
@@ -81,10 +85,13 @@ const Edit = ({ modal, editData, closemodal }) => {
             status: editData?.status,
             stage: editData?.stage,
             type: editData?.type,
-            project_type: editData?.Project?.projectType,
-            Projectstatus: editData?.Project?.projectStatus,
+            project_type: editData?.Project[0]?.projectType,
+            Projectstatus: editData?.Project[0]?.projectStatus,
+            
         });
         // setSelectedType(editData?.type?.map((ele) => ele));
+        setStartDate(editData?.Project[0]?.startDate ? parseISO(editData?.Project[0]?.startDate) :"")
+        setEndDate(editData?.Project[0]?.endDate ? parseISO(editData?.Project[0]?.endDate ):"")
     }, [modal]);
     const selectedTypeValues = editData?.type?.map((item) => {
         return item;
@@ -110,8 +117,8 @@ const Edit = ({ modal, editData, closemodal }) => {
         const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
         });
-        console.log(add[0], 'addddd');
-        setAddValue([...addValue, add[0]]);
+        console.log(add[0]?._id, 'addddd');
+        setAddValue([...addValue, add[0]?._id]);
         console.log(addValue, 'addvalue info');
     };
     const removehandle = (selectedList, removedItem) => {
@@ -129,7 +136,7 @@ const Edit = ({ modal, editData, closemodal }) => {
             });
         });
     };
-    const selectedValues = editData?.Project?.technology?.map((item) => {
+    const selectedValues = editData?.Project[0]?.technology?.map((item) => {
         return item;
     });
     useEffect(() => {
@@ -209,7 +216,7 @@ const Edit = ({ modal, editData, closemodal }) => {
                                         Status<span className="text-danger">*</span>:
                                     </Form.Label>
 
-                                    <Form.Select {...register('status', { required: true })}>
+                                    <Form.Select {...register('status', { required: true })} disabled={ editData?.status == 1 ? true :""}>
                                         <option value="" hidden selected>
                                             {' '}
                                             --select--

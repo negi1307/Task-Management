@@ -1,11 +1,7 @@
 const mongoose = require("mongoose");
 const taskModel = require("../models/task.model");
 const assignUserModel = require("../models/assignUser.model");
-const historyModel = require("../models/history.model");
 const rolesModel = require('../models/role.model');
-const userLoginModel = require("../models/userLogin.model");
-const { verifyUser } = require("../middleware/jwt.auth");
-const { userHistory } = require("../controller/history.controller");
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -35,11 +31,12 @@ const createtask = async (req, res) => {
         dueDate,
         attachment: attachmentPath,
         attachmentType: fileExtension,
-        parentId
+        parentId,
       });
       if (task) {
         const roles = ['CTO', 'PM', 'Admin'];
         const role = await rolesModel.findOne({ role: roles.includes(req.user.role) ? req.user.role : "PM" }).select("_id role");
+        userHistory(req,res,"Create Task")
         const assignedUser = await assignUserModel.create({
           assigneeId: roles.includes(req.user.role) ? assigneeId : req.user._id,
           reporterId: role._id,

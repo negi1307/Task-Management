@@ -8,18 +8,22 @@ const addComment = async (req, res) => {
             taskId: req.body.taskId,
             userId: req.user._id,
             comment: req.body.comment
-        })
-        const userActivityValue = `Comment added to taskId: ${req.body.taskId}`;
-        await userHistory(req, res, next, userActivityValue);
+        });
+        const userActivity = `Comment added `;
+        await userHistory(req, userActivity);
         return res.status(200).json({ status: "200", message: "Comment added Successfully", response: result });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
-}
+};
+
+
 
 // Get A task's Comments
 const getTaskComment = async (req, res) => {
     try {
+        // const userActivity = "Comments fetched for taskId: " + req.query.taskId;
+        // await userHistory(req, userActivity);
         const result = await commentsModel.find({ taskId: req.query.taskId }).populate('userId', 'firstName lastName')
         return res.status(200).json({ status: "200", message: "Comments fetched Successfully", response: result });
     } catch (error) {
@@ -30,6 +34,8 @@ const getTaskComment = async (req, res) => {
 // Update the Comment 
 const updateComment = async (req, res) => {
     try {
+        const userActivity = "Update the Comment";
+        await userHistory(req, userActivity);
         await commentsModel.findByIdAndUpdate({ _id: req.body.commentId }, req.body, { new: true });
         return res.status(200).json({ status: "200", message: "Comment updated Successfully" })
     } catch (error) {
@@ -40,6 +46,8 @@ const updateComment = async (req, res) => {
 // delete a Comment
 const deleteComment = async (req, res) => {
     try {
+        const userActivity = "Delete the Comment";
+        await userHistory(req, userActivity);
         await commentsModel.findByIdAndDelete({ _id: req.query.commentId });
         return res.status(200).json({ status: "200", message: "Comment deleted Successfully" })
     } catch (error) {
