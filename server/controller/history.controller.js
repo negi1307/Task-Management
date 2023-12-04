@@ -11,7 +11,8 @@ async function userHistory(req, value) {
             taskId: req.body.taskId,
             reporterId: req.user.reporterId,
             projectId: req.user.projectId,
-            commentId: req.body.commentId
+            commentId: req.body.commentId,
+            commentContent: commentContent
         });
         await userhistory.save();
     } catch (error) {
