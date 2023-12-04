@@ -10,7 +10,6 @@ import Attachments from './../../apps/Tasks/Details/Attachments';
 
 const Taskdetail = (props) => {
     const { item } = props;
-    console.log("item",item)
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [inputForUpdate, setInputForUpdate] = useState('');
@@ -20,7 +19,6 @@ const Taskdetail = (props) => {
     const [unchangeComment, setUnchangeComment] = useState('');
     const [error, setError] = useState('');
     const allComments = store?.getAllComment?.data?.response;
-    console.log("tasl",props.item?.taskInfo)
 
     const {
         register,
@@ -368,12 +366,23 @@ const Taskdetail = (props) => {
                                 <div className="history">
                                     <div className="history_data_info">
                                         {props.historyData?.map((datainfo, index) => (
-                                            <h4>{datainfo.currentStatus}</h4>
+                                            <>
+                                            <ul>
+                                            <li>{datainfo?.time}</li>
+                                                <li>{datainfo.user}</li>
+                                                <li>
+                                                    {datainfo.userActivity}
+                                                </li>
+                                                <li>{datainfo.userId?.role}</li>
+                                            </ul>
+                                            
+                                            </>
+                                       
                                         ))}
                                     </div>
                                     <div className="history_data_info">
                                         {props.historyData?.map((datainfo, index) => (
-                                            <p>{datainfo?.taskId?.summary}</p>
+                                            <p>{datainfo?.taskId?.time}</p>
                                         ))}
                                     </div>
                                 </div>
