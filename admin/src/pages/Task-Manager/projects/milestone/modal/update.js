@@ -48,14 +48,7 @@ const Update = ({ modal, closeModal, editData }) => {
             }
         }
     }, [modal]);
-    const handleDate = (data) => {
-        let date = new Date(data);
-        let year = date.toLocaleString('default', { year: 'numeric' });
-        let month = date.toLocaleString('default', { month: '2-digit' });
-        let day = date.toLocaleString('default', { day: '2-digit' });
-        let formattedDate = year + '-' + month + '-' + day;
-        return formattedDate;
-    };
+   
     const onSubmit = (data) => {
         let body = {
             milestoneId: editData?._id,
