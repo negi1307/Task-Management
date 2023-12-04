@@ -24,7 +24,7 @@ const users = mongoose.model(
     },
     role: {
       type: String,
-      enum: ['Admin', 'Employee', 'Sales', 'PM', 'CTO']
+      enum: ['Admin', 'Employee', 'CTO', 'PM', 'Sales', 'Testing']
     }
   },
     {
