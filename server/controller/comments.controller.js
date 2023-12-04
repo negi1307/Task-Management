@@ -9,7 +9,7 @@ const addComment = async (req, res) => {
             userId: req.user._id,
             comment: req.body.comment
         });
-        const userActivity = `Comment added to taskId: ${req.body.taskId}`;
+        const userActivity = `Comment added `;
         await userHistory(req, userActivity);
         return res.status(200).json({ status: "200", message: "Comment added Successfully", response: result });
     } catch (error) {
@@ -22,8 +22,8 @@ const addComment = async (req, res) => {
 // Get A task's Comments
 const getTaskComment = async (req, res) => {
     try {
-        const userActivity = "Comments fetched for taskId: " + req.query.taskId;
-        await userHistory(req, userActivity);
+        // const userActivity = "Comments fetched for taskId: " + req.query.taskId;
+        // await userHistory(req, userActivity);
         const result = await commentsModel.find({ taskId: req.query.taskId }).populate('userId', 'firstName lastName')
         return res.status(200).json({ status: "200", message: "Comments fetched Successfully", response: result });
     } catch (error) {

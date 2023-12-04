@@ -8,45 +8,54 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateMileStone } from '../../../../../redux/milestone/action';
 // import MainLoader from '../../../../constants/Loader/loader';
 import { Container, Form } from 'react-bootstrap';
-
+import DatePicker from 'react-datepicker';
+import '../../../../../../node_modules/react-datepicker/dist/react-datepicker.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { parseISO } from 'date-fns';
 const Update = ({ modal, closeModal, editData }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const sucesshandel = store?.updateMilestone;
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
     // disable previous date
-    const today = new Date().toISOString().split('T')[0];
-    // start date
-    function findMinimumStartDate(startdate1, startdate2) {
-        return new Date(Math.min(new Date(startdate1), new Date(startdate2)));
-    }
-    const startdate1 = new Date();
-    const startdate2 = editData?.startDate;
-    const minimumStartDate = findMinimumStartDate(startdate1, startdate2);
-    //
+    const today = new Date();
+    console.log(today, 'today');
+    // end date
+    const handleStartDate = (date) => {
+        setStartDate(date);
+    };
+    const handleEndDate = (date) => {
+        setEndDate(date);
+    };
     useEffect(() => {
         reset({
             title: editData?.title,
-            startDate: handleDate(editData?.startDate),
-            endDate: handleDate(editData?.completionDate),
+            // startDate: handleDate(editData?.startDate),
+            // endDate: handleDate(editData?.completionDate),
             description: editData?.description,
         });
+        // setStartDate(handleDate(editData?.startDate))
+        // setEndDate(handleDate(editData?.completionDate))
+        if (editData?.startDate || editData?.completionDate) {
+            const parsedDate = parseISO(editData?.startDate) 
+            const endate = parseISO(editData?.completionDate)
+            if (parsedDate || endate) {
+                setStartDate(parsedDate);
+                setEndDate(endate)
+            } else {
+                console.error('Invalid date format:', editData.startDate);
+            }
+        }
     }, [modal]);
-    const handleDate = (data) => {
-        let date = new Date(data);
-        let year = date.toLocaleString('default', { year: 'numeric' });
-        let month = date.toLocaleString('default', { month: '2-digit' });
-        let day = date.toLocaleString('default', { day: '2-digit' });
-        let formattedDate = year + '-' + month + '-' + day;
-        return formattedDate;
-    };
+   
     const onSubmit = (data) => {
         let body = {
             milestoneId: editData?._id,
             title: data?.title,
             description: data?.description,
-            startDate: data?.startDate,
-            completionDate: data?.endDate,
+            startDate: startDate,
+            completionDate: endDate,
         };
         dispatch(updateMileStone(body));
         closeModal('render');
@@ -128,39 +137,39 @@ const Update = ({ modal, closeModal, editData }) => {
                                         )}
                                     </Form.Group>
                                 </Col>
+                                <Col lg={12}>
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                Start Date<span className="text-danger">*</span>:
+                                            </Form.Label>
 
-                                <Col lg={12}>
-                                    <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                        <Form.Label>
-                                            Start Date<span className="text-danger">*</span>:
-                                        </Form.Label>
-                                        <Form.Control
-                                            type="date"
-                                            min={handleDate(minimumStartDate)}
-                                            {...register('startDate', { required: true })}
-                                            placeholder="Please Enter start Date "
-                                        />
-                                        {errors.startDate?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
-                                    </Form.Group>
-                                </Col>
-                                <Col lg={12}>
-                                    <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                        <Form.Label>
-                                            End Date<span className="text-danger">*</span>:
-                                        </Form.Label>
-                                        <Form.Control
-                                            type="date"
-                                            min={watch('startDate')}
-                                            {...register('endDate', { required: true })}
-                                            placeholder="Please Enter end Date"
-                                        />
-                                        {errors.endDate?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
-                                    </Form.Group>
-                                </Col>
+                                            <DatePicker
+                                                selected={startDate}
+                                                // onChange={(date) => setStartDate(date)}
+                                                onChange={(date) => handleStartDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={today}
+                                                className="add_width_input"
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col lg={12}>
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                End Date<span className="text-danger">*</span>:
+                                            </Form.Label>
+
+                                            <DatePicker
+                                                selected={endDate}
+                                                disabled={startDate == '' || startDate == undefined}
+                                                // onChange={(date) => setEndDate(date)}
+                                                onChange={(date) => handleEndDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={startDate}
+                                                className="add_width_input"
+                                            />
+                                        </Form.Group>
+                                    </Col>
                             </Row>
                             <Row>
                                 <Col className="text-start d-flex align-items-center justify-content-center">

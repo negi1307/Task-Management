@@ -11,7 +11,8 @@ async function userHistory(req, value) {
             taskId: req.body.taskId,
             reporterId: req.user.reporterId,
             projectId: req.user.projectId,
-            commentId:req.body.commentId
+            commentId: req.body.commentId,
+            commentContent: commentContent
         });
         await userhistory.save();
     } catch (error) {
@@ -25,11 +26,14 @@ async function userHistory(req, value) {
 // Get History or recent activities
 const getHistory = async (req, res) => {
     try {
-        const result = await historyModel.find().populate('taskId').populate('userId').populate('commentId')
-        return res.status(200).json({ status: "200", message: "History fetched sucessfully", response: result })
+        const taskId = req.query.taskId;
+        const userId = req.user._id;
+        const result = await historyModel.find({ userId, taskId })
+            .populate('taskId').populate('userId');
+        return res.status(200).json({ status: "200", message: "History fetched successfully", response: result });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
-}
+};
 
 module.exports = { userHistory, getHistory }
