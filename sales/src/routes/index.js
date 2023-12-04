@@ -186,7 +186,7 @@ const GoogleMaps = React.lazy(() => import('../pages/maps/GoogleMaps'));
 const VectorMaps = React.lazy(() => import('../pages/maps/VectorMaps'));
 
 // Sales Routes
-const AssignedTo = React.lazy(() => import('../pages/TaskManagerSales/AssignedTo/AssignedTo'));
+const AssignedTo = React.lazy(() => import('../pages/TaskManagerSales/Presales/Presales'));
 
 const loading = () => <div className=""></div>;
 
@@ -285,7 +285,7 @@ const AllRoutes = () => {
                             element: <LoadComponent component={EcommerceDashboard} />,
                         },
                         {
-                            path: 'assignedto',
+                            path: 'presales',
                             element: <LoadComponent component={AssignedTo} />,
                         },
                         {

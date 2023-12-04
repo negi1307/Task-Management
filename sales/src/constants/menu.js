@@ -1,9 +1,9 @@
 const MENU_ITEMS = [
     { key: 'navigation', label: 'Navigation', isTitle: true },
     {
-        key: 'Assigned',
-        label: 'Assigned',
-        url: 'dashboard/assignedto',
+        key: 'Presales',
+        label: 'Presales',
+        url: 'dashboard/presales',
         icon: 'uil-home',
     },
     // {
