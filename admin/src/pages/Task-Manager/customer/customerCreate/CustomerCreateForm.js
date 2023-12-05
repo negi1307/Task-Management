@@ -182,7 +182,7 @@ const CustomerCreateFrom = (props) => {
                                 <Form.Select {...register('status', { required: true })}>
                                     <option value='' hidden selected> --select--</option>
                                     <option value="1" selected={showModel?.editData?.status === 1 && true}>CONVERTED</option>
-                                    <option value="2" selected={showModel?.editData?.status === 2 && true}>NOT-CONVERTED</option>
+                                    <option value="0" selected={showModel?.editData?.status === 0 && true}>NOT-CONVERTED</option>
                                 </Form.Select>
                                 {errors?.status?.type === 'required' && (
                                     <span className="text-danger"> This feild is required *</span>
