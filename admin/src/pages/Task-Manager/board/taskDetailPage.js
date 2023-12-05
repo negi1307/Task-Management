@@ -27,6 +27,8 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
     const getHistory = store?.getHistoryReducer?.data?.response;
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
+        setValue('comment', "");
+        setButtonChange(true);
         if (type === 'History') {
             dispatch(getHistoryAction(editData?.id));
         }
@@ -90,6 +92,11 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
         setInputForUpdate(false);
         console.log(data, allCommetUpdateId);
     };
+    const closeModalHandle =()=>{
+        closeModal()
+        setValue('comment', "");
+        setButtonChange(true);
+    }
     return (
         <>
             <Modal show={modal} onHide={closeModal} size={'lg'}>
@@ -102,7 +109,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                 </Modal.Title>
                             </Col>
                             <Col lg={5} className="text-end pt-2">
-                                <CloseButton onClick={closeModal} />
+                                <CloseButton onClick={closeModalHandle} />
                             </Col>
                         </Row>
                     </Col>

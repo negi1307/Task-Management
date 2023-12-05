@@ -142,7 +142,7 @@ const CustomerIndex = () => {
                                                             <span className="namelink">
                                                                 {ele?.status === 1 ? (
                                                                     <>CONVERTED</>
-                                                                ) : ele?.status === 2 ? (
+                                                                ) : ele?.status === 0 ? (
                                                                     <>NOT-CONVERTED</>
                                                                 ) : (
                                                                     ''
