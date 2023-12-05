@@ -99,7 +99,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                 <hr />
                 <Modal.Body>
                     <Row>
-                        <Col lg={6}>
+                        <Col lg={7}>
                             <h4>Activity</h4>
                             <Row>
                                 <Col lg={12}>
@@ -294,7 +294,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                 ''
                             )}
                         </Col>
-                        <Col lg={6}>
+                        <Col lg={5}>
                             <div className="p-2">
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Project Name :</h4>
