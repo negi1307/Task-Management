@@ -65,6 +65,12 @@ const ASSIGN_USER_INITIAL_STATE = {
     loading:false,
     message:""
 }
+
+const GET_HISTORY_INITIAL_STATE = {
+    data:[],
+    loading:false,
+    message:""
+}
 export const createTaskReducer = (state = INITIAL_STATE, action) => {
     // console.log(action ,"bbbbbbbbbbbbbbbbbbbbbbbb")
     switch (action.type) {
@@ -422,6 +428,36 @@ export const getAssignUserReducer = (state = ASSIGN_USER_INITIAL_STATE, action) 
             //         loading: false
             //     }
         case TASK_TYPES.GET_ASSIGN_USER_ERROR:
+            return {
+                data: [],
+                status:!200,
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+export const getHistoryReducer = (state = GET_HISTORY_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case TASK_TYPES.GET_HISTORY_LOADING:
+            return {
+                data: GET_HISTORY_INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.GET_HISTORY_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+            // case TASK_TYPES.GET_HISTORY_RESET:
+            //     return {
+            //         data: GET_HISTORY_INITIAL_STATE.data,
+            //         loading: false
+            //     }
+        case TASK_TYPES.GET_HISTORY_ERROR:
             return {
                 data: [],
                 status:!200,

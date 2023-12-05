@@ -248,8 +248,8 @@ const TaskList = () => {
                                                         ? 'Low'
                                                         : ''}
                                                 </td>
-                                                <td> {moment(item?.startDate).format('L')}</td>
-                                                <td>{moment(item?.dueDate).format('L')}</td>
+                                                <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
+                                                <td>{moment(item?.dueDate).format("DD/MM/YYYY")}</td>
                                                 <td>
                                                     <Form.Check
                                                         type="switch"
