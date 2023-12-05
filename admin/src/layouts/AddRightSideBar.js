@@ -241,7 +241,7 @@ export default function RightBar(props) {
                                             id="exampleForm.ControlInput1"
                                             {...register('Assignee', { required: true })}>
                                             <option value={''} hidden selected>
-                                                --Select--
+                                                Select
                                             </option>
                                             {store?.getAllUsers?.data?.response?.map((ele, ind) => (
                                                 <option value={ele?._id}>
@@ -264,7 +264,7 @@ export default function RightBar(props) {
                                         </label>
                                         <input
                                             placeholder="Please Expected Hours "
-                                            type="time"
+                                            type="number"
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
                                             {...register('expectedHours', { required: true })}
@@ -318,7 +318,7 @@ export default function RightBar(props) {
                                             id="exampleForm.ControlInput1"
                                             {...register('priority', { required: true })}>
                                             <option hidden selected>
-                                                -----select----
+                                                select
                                             </option>
                                             <option value="1">High</option>
                                             <option value="2">Medium</option>
