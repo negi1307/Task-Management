@@ -128,12 +128,12 @@ const Upload = () => {
                                                         ) : '' ||
                                                           ele?.attachmentType ==
                                                               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ? (
-                                                            <img style={{ width: '66%%' }} src={excel} />
+                                                            <img style={{ width: '66%' }} src={excel} />
                                                         ) : '' ||
                                                           ele?.attachmentType == 'application/vnd.ms-powerpoint' ? (
-                                                            <img style={{ width: '66%%' }} src={powerPoint} />
+                                                            <img style={{ width: '66%' }} src={powerPoint} />
                                                         ) : '' || ele?.attachmentType == 'application/msword' ? (
-                                                            <img style={{ width: '66%%' }} src={Word} />
+                                                            <img style={{ width: '66%' }} src={Word} />
                                                         ) : (
                                                             ''
                                                         )}
