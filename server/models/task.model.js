@@ -28,7 +28,7 @@ const tasks = mongoose.model(
             type: Number,// 1=high, 2=medium, 3=low
         },
         expectedHours : {
-            type : String
+            type : Number
         },
         startDate: {
             type: Date
