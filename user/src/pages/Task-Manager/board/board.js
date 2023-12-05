@@ -168,9 +168,7 @@ const Boards = (props) => {
         }
     };
 
-    useEffect(() => {
-        dispatch(getHistory());
-    }, []);
+  
 
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
@@ -218,7 +216,8 @@ const Boards = (props) => {
     const showTaskDetailMOdel = (item) => {
         setshowTaskModel(true);
         setCommentData(item);
-        dispatch(getComment({ taskId: item?.taskInfo?._id }));
+       dispatch(getComment(item?.taskId));
+       dispatch(getHistory(item?.taskId));
     };
 
     const closeTaskDetailMOdel = () => {
