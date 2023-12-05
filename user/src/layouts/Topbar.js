@@ -279,10 +279,6 @@ if(start){
     localStorage.setItem("seconds",seconds);
 }
 
-
-
-
-
     return (
         <>
             <div className={classNames('navbar-custom', navbarCssClasses)}>

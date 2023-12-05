@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const taskModel = require("../models/task.model");
 const assignUserModel = require("../models/assignUser.model");
 const rolesModel = require('../models/role.model');
+const { userHistory } = require('../controller/history.controller');
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -51,7 +52,6 @@ const createtask = async (req, res) => {
 
 
 const task_list = async (query, totalCount, pageSize, skip, arr) => {
-
   var tasks = await taskModel.aggregate([
     {
       $match: query,
@@ -172,6 +172,8 @@ const getTasks = async (req, res) => {
     var totalPages = 0;
     var totalCount = 0;
     const query = {};
+    query.activeStatus = JSON.parse(req.query.activeStatus)
+    query.status = parseInt(req.query.status);
     if (!req.query.projectId && !req.query.milestoneId && !req.query.sprintId && !req.query.taskStatus && parseInt(req.query.skip) === 1) {
       let query = {};
       const taskStatus = JSON.parse(req.query.taskStatus);
@@ -190,10 +192,13 @@ const getTasks = async (req, res) => {
     }
 
     if (parseInt(req.query.skip) === 0) {
+
       if (req.query.sprintId) {
         totalCount = await taskModel.countDocuments(query);
         query.sprintId = new mongoose.Types.ObjectId(req.query.sprintId);
         query.activeStatus = JSON.parse(req.query.activeStatus);
+        query.projectId = new mongoose.Types.ObjectId(req.query.projectId);
+        query.milestoneId = new mongoose.Types.ObjectId(req.query.milestoneId);
         totalCount = await taskModel.countDocuments(query);
         var pageSize = totalCount === 0 ? 1 : totalCount;
         var skip = 1;
@@ -209,14 +214,12 @@ const getTasks = async (req, res) => {
       var skip = parseInt(req.query.skip);
     }
     query.status = parseInt(req.query.status)
-    console.log(query)
     // totalCount = await taskModel.countDocuments(query, projectId, milestoneId, sprintId);
     totalCount = await taskModel.countDocuments({
       activeStatus: JSON.parse(req.query.activeStatus),
       status: parseInt(req.query.status), projectId: req.query.projectId,
-      milestoneId: req.query.milestoneId, sprintId: req.query.sprintId
-    })
-
+      milestoneId: req.query.milestoneId, sprintId: req.query.sprintId,
+    });
     var tasks = await taskModel.aggregate([
       {
         $match: {
@@ -280,7 +283,7 @@ const getTasks = async (req, res) => {
         },
       },
       {
-        $unwind: "$assignees", // Unwind the assignees array
+        $unwind: "$assignees",
       },
       {
         $addFields: {
@@ -346,6 +349,34 @@ const getTasks = async (req, res) => {
 };
 
 // Update Task
+// const updateTask = async (req, res) => {
+//   try {
+//     const { taskId, summary, description, priority, expectedHours, startDate, dueDate, status, attachment, assigneeId, reporterId } = req.body;
+//     const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : attachment;
+//     const fileExtension = req.file ? req.file.mimetype : undefined;
+//     const obj = {
+//       summary,
+//       description,
+//       priority,
+//       expectedHours,
+//       startDate,
+//       dueDate,
+//       status,
+//       attachment: attachmentPath,
+//       attachmentType: fileExtension,
+//     };
+//     const secObj = {
+//       assigneeId,
+//       reporterId
+//     };
+//     await taskModel.findByIdAndUpdate(taskId, obj, { new: true });
+//     await assignUserModel.findOneAndUpdate({ taskId }, secObj, { new: true });
+//     return res.status(200).json({ status: "200", message: "Task updated successfully" });
+//   } catch (error) {
+//     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+//   }
+// };
+
 const updateTask = async (req, res) => {
   try {
     const { taskId, summary, description, priority, expectedHours, startDate, dueDate, status, attachment, assigneeId, reporterId } = req.body;
@@ -362,10 +393,16 @@ const updateTask = async (req, res) => {
       attachment: attachmentPath,
       attachmentType: fileExtension,
     };
-    const secObj = {
-      assigneeId,
-      reporterId
-    };
+    const secObj = { assigneeId, reporterId };
+    const existingTask = await taskModel.findById(taskId);
+    if (existingTask.assigneeId !== assigneeId) {
+      const assigneeChangeMessage = `Assignee ID changed`;
+      await userHistory(req, assigneeChangeMessage);
+    }
+    if (existingTask.reporterId !== reporterId) {
+      const reporterChangeMessage = `Reporter ID changed`;
+      await userHistory(req, reporterChangeMessage);
+    }
     await taskModel.findByIdAndUpdate(taskId, obj, { new: true });
     await assignUserModel.findOneAndUpdate({ taskId }, secObj, { new: true });
     return res.status(200).json({ status: "200", message: "Task updated successfully" });
@@ -373,6 +410,9 @@ const updateTask = async (req, res) => {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 };
+
+
+
 
 // Delete A Task
 const deleteTask = async (req, res) => {
@@ -410,6 +450,8 @@ const updateTaskStatus = async (req, res) => {
         }
       }
       const result = await taskModel.findByIdAndUpdate({ _id: taskId }, query, { new: true });
+      // get history
+      await userHistory(req, `Task Status updated to ${status}`);
       return res.status(200).json({ status: "200", message: "Task Status updated successfully", data: result });
     } else {
       const taskIds = await assignUserModel.distinct('taskId', { assigneeId: req.user._id });
@@ -437,6 +479,7 @@ const updateTaskStatus = async (req, res) => {
             }
           }
         }
+        await userHistory(req, "Tasks updated");
         return res.status(200).json({ status: "200", message: "Tasks updated successfully" });
       }
       return res.status(200).json({ status: "200", message: "No tasks found" });
@@ -455,6 +498,7 @@ const updateTaskActiveStatus = async (req, res) => {
     const data = await taskModel.findByIdAndUpdate({ _id: req.body.taskId }, { activeStatus: req.body.activeStatus }, { new: true });
     if (data) {
       req.body.activeStatus == false ? (status = "Deactivated") : (status = "Activated");
+      await userHistory(req, `Task ${status}`);
     }
     return res.status(200).json({ status: "200", message: `Task has been ${status} successfully` });
   } catch (error) {

@@ -20,12 +20,12 @@ export function updateTask(data): any {
 
 
 export function getHistoryApi(data): any { 
-    return api.get(URL.getHistory,data.payload);
+    return api.get(URL.getHistory+data.payload);
 }
 
 
 export function getTaskCommentApi(data): any {
     
-    return api.get(URL.GetComment+data?.payload.taskId)
+    return api.get(URL.GetComment+data?.payload)
     
 }

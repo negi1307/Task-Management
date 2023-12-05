@@ -35,13 +35,19 @@ const getTaskComment = async (req, res) => {
 const updateComment = async (req, res) => {
     try {
         const userActivity = "Update the Comment";
-        await userHistory(req, userActivity);
-        await commentsModel.findByIdAndUpdate({ _id: req.body.commentId }, req.body, { new: true });
-        return res.status(200).json({ status: "200", message: "Comment updated Successfully" })
+        const taskId = req.body.taskId;
+        const commentId = req.body.commentId;
+        await userHistory(req, userActivity, taskId, commentId);
+        const updatedComment = await commentsModel.findByIdAndUpdate({ _id: commentId, taskId: taskId },req.body,{ new: true });
+        if (!updatedComment) {
+            return res.status(404).json({ status: "404", message: "Comment not found" });
+        }
+        return res.status(200).json({ status: "200", message: "Comment updated successfully", response: updatedComment });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
-}
+};
+
 
 // delete a Comment
 const deleteComment = async (req, res) => {
