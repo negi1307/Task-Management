@@ -559,8 +559,8 @@ h5.count {
 }
 .status ul li {
     margin-right: 29px;
-    font-size: 20px;
-    color: #39afd1;
+    font-size: 16px;
+    color: black;
     font-weight: 600;
 }
 
@@ -575,7 +575,7 @@ h5.count {
 }
 
 .status h4 {
-    font-size: 20px;
+    font-size: 16px;
     color: #39afd1;
 }
 
@@ -739,10 +739,11 @@ li.info_cls {
     font-weight: 600;
 }
 .status input[type='search'] {
-    border-radius: 34px;
+    /* border-radius: 34px; */
     padding: 7px 16px;
-    width: 320px;
-    border: 2px solid #c4c1c1;
+    background-color: #f1f3fa;
+    width: 250px;
+    /* border: 2px solid #c4c1c1; */
 }
 
 /* tr.align-middle i {
@@ -803,10 +804,17 @@ li.leave_data select {
 table.table-striped tbody tr:nth-of-type(odd) > * {
     --ct-table-accent-bg: #c9c8c8 !important;
 }
+.web_button {
+    background-color: black !important;
+    color: white !important;
+    box-shadow: none !important;
+    border: none !important;
+}
 
 .history_data_info ul li {
     list-style: none;
 }
+<<<<<<< HEAD
 
 .startinfodate input {
     display: block;
@@ -856,3 +864,5 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
 .taskcardinfo table {
     width: 100%;
 }
+=======
+>>>>>>> 2ef8951cd150eb8a2f1aa3937d5a7042907a541e

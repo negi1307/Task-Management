@@ -218,7 +218,7 @@ const Edit = ({ modal, editData, closemodal }) => {
                                             --select--
                                         </option>
                                         <option value="1">CONVERTED</option>
-                                        <option value="2">NOT-CONVERTED</option>
+                                        <option value="0">NOT-CONVERTED</option>
                                     </Form.Select>
 
                                     {errors?.status?.type === 'required' && (

@@ -59,7 +59,6 @@ const Sprint = () => {
                             <Col className="text-center" lg={12}>
                                 <h4> Sprint</h4>
                             </Col>
-
                             <ListGroup as="ol" numbered style={{ marginLeft: '20px', position: 'sticky' }}>
                                 <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
                                     <div className="ms-2 me-auto">
@@ -119,7 +118,6 @@ const Sprint = () => {
                                                 <td>{index + 1}</td>
                                                 <td>{item?.task_name}</td>
                                                 <td>{item?.task_summery}</td>
-
                                                 <td> {moment(item?.createdAt).format('L')}</td>
                                                 <td>{moment(item?.due_date).format('L')}</td>
                                             </tr>

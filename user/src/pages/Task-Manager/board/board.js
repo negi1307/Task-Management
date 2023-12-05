@@ -1,6 +1,8 @@
 import { React, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
+import { Row, Col, Breadcrumb, Badge } from 'react-bootstrap';
+
 import { columnsFromBackend } from './data';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
@@ -68,7 +70,6 @@ const Boards = (props) => {
     const successHandle = store?.getAllTaskReducer;
     const statushandle = store?.updateTaskStatus;
     const assigneeName = store?.getAllAssigneeName?.data?.response;
-    
 
     useEffect(() => {
         let body = {
@@ -278,35 +279,81 @@ const Boards = (props) => {
             <div class="status">
                 <ul>
                     <li>Task Status Count</li>
-                    <li>
-                        TO-DO:
-                        {taskStatusCountdata?.response?.TodoCount}
-                    </li>
-                    <li>
-                        In-Progress:
-                        {taskStatusCountdata?.response?.InprogressCount}
-                    </li>
-                    <li>
-                        Hold:
-                        {taskStatusCountdata?.response?.HoldCount}
-                    </li>
-                    <li>
-                        Done:
-                        {taskStatusCountdata?.response?.DoneCount}
-                    </li>
-                    <li>
-                        Due Task:
-                        {taskStatusCountdata?.response?.DueTasksCount}
-                    </li>
+                    <div>
+                        {' '}
+                        <h4 className="page-title bg-black  text-white rounded-2 p-2 py-1">
+                            {' '}
+                            To-Do :
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
+                                {taskStatusCountdata?.response?.TodoCount}
+                            </Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3">
+                        {' '}
+                        <h4 className="page-title bg-black text-white rounded-2 p-2 py-1">
+                            {' '}
+                            In-Progress :
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
+                                {taskStatusCountdata?.response?.InprogressCount}
+                            </Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3">
+                        {' '}
+                        <h4 className="page-title bg-black text-white rounded-2 p-2 py-1">
+                            {' '}
+                            Hold :
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
+                                {taskStatusCountdata?.response?.HoldCount}
+                            </Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3">
+                        {' '}
+                        <h4 className="page-title  bg-black text-white rounded-2 p-2 py-1">
+                            {' '}
+                            Done :
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
+                                {taskStatusCountdata?.response?.DoneCount}
+                            </Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3 me-2">
+                        {' '}
+                        <h4 className="page-title bg-black text-white rounded-2 p-2 py-1">
+                            {' '}
+                            Due Task:
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
+                                {taskStatusCountdata?.response?.DueTasksCount}
+                            </Badge>
+                        </h4>{' '}
+                    </div>
+
                     <li className="info_cls">
                         {assigneeName?.map((item, index) => (
-                            <div className="assignee_name">
-                                <ul>
-                                    <li>
-                                        {item?.assigneeId?.firstName.charAt(0)}
-                                        {item?.assigneeId?.lastName.charAt(0)}
-                                    </li>
-                                </ul>
+                            <div className=" d-flex align-items-center cp">
+                                <span
+                                    style={{
+                                        zIndex: '0000000',
+                                        backgroundColor: '#605e5a',
+                                        borderRadius: '100%',
+                                        // padding: '8px',
+                                        height: '35px',
+                                        width: '35px',
+                                        display: 'flex',
+                                        // alignitems: 'center',
+                                        alignItems: 'center',
+                                        // justifycontent: 'center',
+                                        justifyContent: 'center',
+                                        color: 'white',
+                                        fontWeight: '800',
+                                        marginRight: '-8px',
+                                        // zIndex: '999999',
+                                    }}>
+                                    {item?.assigneeId?.firstName.charAt(0)}
+                                    {item?.assigneeId?.lastName.charAt(0)}
+                                </span>
                             </div>
                         ))}
                     </li>
@@ -315,13 +362,14 @@ const Boards = (props) => {
                     <input
                         type="search"
                         placeholder="Search here..."
+                        className="border-0 rounded-2"
                         onKeyUp={selectTask}
                         {...register('textSearch')}
                     />
                     <div className="add_task">
                         <button
                             type="button"
-                            className="mybutton btn btn-info"
+                            className="mybutton btn btn-info web_button"
                             onClick={() => {
                                 console.log('button click');
                                 setShowModal(!showModal);

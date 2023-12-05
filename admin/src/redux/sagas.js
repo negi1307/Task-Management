@@ -12,6 +12,7 @@ import  AllTechnologySaga from './technology/saga';
 import AllSummarySaga from "./Summary/saga"
 import AllPreSaleSaga from './customer/saga';
 import ClientRepositorySaga from './clientRepository/saga';
+import AllTimeTrackerSaga from './timeTracker/saga';
 export default function* rootSaga(): any {
     yield all([authSaga(),
          layoutSaga(),
@@ -23,6 +24,7 @@ export default function* rootSaga(): any {
           AllTechnologySaga(),
           AllSummarySaga(),
           AllPreSaleSaga(),
-          ClientRepositorySaga()
+          ClientRepositorySaga(),
+          AllTimeTrackerSaga()
         ]);
 }

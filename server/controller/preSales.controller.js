@@ -191,7 +191,7 @@ const getPreSaleData = async (req, res) => {
 const updatePreSalesData = async (req, res) => {
     try {
         let createdProject;
-        const { technology, startDate, endDate, projectType, projectStatus, clientName, description } = req.body;
+        const { status, technology, startDate, endDate, projectType, projectStatus, clientName, description } = req.body;
         const presale_data = await preSalesModel.findById({ _id: req.body.preSalesId });
         const project_data = await projectModel.findOne({ preSalesId: req.body.preSalesId });
         if (project_data) {
@@ -209,6 +209,7 @@ const updatePreSalesData = async (req, res) => {
                     projectName,
                     clientName,
                     technology,
+                    status,
                     startDate,
                     endDate,
                     projectDesc,

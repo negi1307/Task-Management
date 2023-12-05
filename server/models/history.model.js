@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
-const HistoryTypeEnum = {
-    // Define your enum values here
-    // For example:
-    CREATED: 'created',
-    UPDATED: 'updated',
-    DELETED: 'deleted',
-};
+// const HistoryTypeEnum = {
+//     // Define your enum values here
+//     // For example:
+//     CREATED: 'created',
+//     UPDATED: 'updated',
+//     DELETED: 'deleted',
+// };
 
 const history = mongoose.model(
     'History', mongoose.Schema({
@@ -21,9 +21,9 @@ const history = mongoose.model(
         userActivity: {
             type: String
         },
-        user:{
-            type:String
-        },
+        // user: {
+        //     type: String
+        // },
         userId: {
             type: mongoose.Types.ObjectId,
             ref: 'User'
@@ -32,9 +32,9 @@ const history = mongoose.model(
             type: mongoose.Types.ObjectId,
             ref: 'Task'
         },
-        commentId:{
-            type:mongoose.Types.ObjectId,
-            ref:"Comment"
+        commentId: {
+            type: mongoose.Types.ObjectId,
+            ref: "Comment"
         },
         reporterId: {
             type: mongoose.Types.ObjectId,
@@ -43,8 +43,11 @@ const history = mongoose.model(
         projectId: {
             type: mongoose.Types.ObjectId,
             ref: 'projects'
-        }
-        
+        },
+        assigneeId: {
+            type: mongoose.Types.ObjectId,
+            ref: 'users'
+        } 
     },
         {
             timestamps: true

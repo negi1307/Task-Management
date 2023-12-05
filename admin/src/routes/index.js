@@ -82,6 +82,8 @@ const CRMOrderList = React.lazy(() => import('../pages/apps/CRM/OrderList'));
 // customer
 const CustomerIndex = React.lazy(() => import('../pages/Task-Manager/customer/CustomerIndex'));
 const ClientIndex = React.lazy(() => import('../pages/Task-Manager/client/ClientIndex'));
+// time tracker
+const TimeTrackerIndex =React.lazy(()=>import('../pages/Task-Manager/timeTracker/TimeTrackerIndex'))
 
 // - ecommece pages
 const EcommerceProducts = React.lazy(() => import('../pages/apps/Ecommerce/Products'));
@@ -357,6 +359,10 @@ const AllRoutes = () => {
                         {
                             path: 'clientRepository/uploadData/projectId=/:projectId',
                             element: <LoadComponent component={GetUploadData} />,
+                        },
+                        {
+                            path: "timeTracker" ,
+                            element: <LoadComponent component={TimeTrackerIndex} />
                         },
                     ],
                 },

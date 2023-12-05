@@ -61,7 +61,14 @@
         label: 'Client Repository',
         url: 'dashboard/clientRepository',
         icon: 'uil-users-alt',
+    },
+    {
+        key: 'timeTracker',
+        label: 'Time Tracker',
+        url: 'dashboard/timeTracker',
+        icon: 'bi-clock',
     }
+
     
   
 ];
