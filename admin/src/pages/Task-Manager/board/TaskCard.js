@@ -87,7 +87,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
     const handleDetailPage = (data) => {
         setOpenDetailPage(true);
         setDetailData(data);
-        dispatch(getComment({taskId: data?.id}));
+        dispatch(getComment({ taskId: data?.id }));
         dispatch(gettaskId(data?.id));
     };
     const closeDetailPage = () => {
