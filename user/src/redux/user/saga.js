@@ -8,6 +8,7 @@ import {
     getallUsersApi,
     UserLoginTimeApi,
     UserLoginTimeStopApi,
+    UserLogoutReasonApi
 } from './api';
 
 function* getAllUsersFunction({ payload }) {
@@ -172,6 +173,37 @@ function* getAllRolesFunction({ payload }) {
     }
 }
 
+function* getUserLogoutReasonFunction({ payload }) {
+    try {
+        yield put({
+            type: USERS_TYPES.GET_USER_LOGOUT_LEAVEREASON_LOADING,
+            payload: {},
+        });
+        const response = yield call(UserLogoutReasonApi, { payload });
+
+        if (response.data.status) {
+            yield put({
+                type: USERS_TYPES.GET_USER_LOGOUT_LEAVEREASON_SUCCESS,
+                payload: { ...response.data },
+            });
+            // yield put({
+            //     type: USERS_TYPES.GET_ALL_ROLES_RESET,
+            //     payload: {},
+            // });
+        } else {
+            yield put({
+                type: USERS_TYPES.GET_USER_LOGOUT_LEAVEREASON_ERROR,
+                payload: { ...response.data },
+            });
+        }
+    } catch (error) {
+        yield put({
+            type: USERS_TYPES.GET_USER_LOGOUT_LEAVEREASON_ERROR,
+            payload: { message: error?.message },
+        });
+    }
+}
+
 function* updateLoginTime({ payload }) {
     try {
         yield put({
@@ -209,6 +241,9 @@ function* updateLoginTime({ payload }) {
 export function* getAllUsersSaga(): any {
     yield takeEvery(USERS_TYPES.GET_ALL_USERS, getAllUsersFunction);
 }
+export function* getUserLogoutReasonSaga(): any {
+    yield takeEvery(USERS_TYPES.GET_USER_LOGOUT_LEAVEREASON, getUserLogoutReasonFunction);
+}
 export function* deleteUserSaga(): any {
     yield takeEvery(USERS_TYPES.DELETE_USER, deleteUserFunction);
 }
@@ -235,6 +270,7 @@ function* AllUsersSaga(): any {
         fork(inviteuserSaga),
         fork(loginUserTimeSaga),
         fork(loginUserTimeStopSaga),
+        fork(getUserLogoutReasonSaga)
     ]);
 }
 export default AllUsersSaga;

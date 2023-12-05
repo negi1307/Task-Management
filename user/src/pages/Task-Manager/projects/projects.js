@@ -222,7 +222,9 @@ const Projects = () => {
                                                 </td>
                                                 <td>
                                                     <span className="namelink">
-                                                        {moment(ele?.projectId?.startDate).format('L')}
+                                                   
+                                                    {moment(ele?.projectId?.startDate).format('DD/MM/YYYY')}
+                                                   
                                                     </span>
                                                 </td>
                                                 <td>

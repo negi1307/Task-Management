@@ -5,11 +5,12 @@ import moment from 'moment';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { addComment, getComment, updateComment, deleteComment, getCommentId } from '../../../redux/addcomment/actions';
+import { addComment, getComment, updateComment, deleteComment, getCommentId,getHistory } from '../../../redux/addcomment/actions';
 import Attachments from './../../apps/Tasks/Details/Attachments';
 
 const Taskdetail = (props) => {
     const { item } = props;
+    console.log("itemmmmmmmmmmmmmmmmmmmmmmm",item)
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [inputForUpdate, setInputForUpdate] = useState('');
@@ -19,8 +20,6 @@ const Taskdetail = (props) => {
     const [unchangeComment, setUnchangeComment] = useState('');
     const [error, setError] = useState('');
     const allComments = store?.getAllComment?.data?.response;
-    console.log("tasl",props.item?.taskInfo)
-
     const {
         register,
         handleSubmit,
@@ -31,14 +30,15 @@ const Taskdetail = (props) => {
 
     const onSubmitComment = (e) => {
         console.log(e);
-       
+
         const commentData = {
             userId: props.userId,
             taskId: item?.taskId,
             comment: e.comment,
         };
         dispatch(addComment(commentData));
-        dispatch(getComment({ taskId: props.item?.taskInfo?._id }));
+        dispatch(getComment(item?.taskId));
+        dispatch(getHistory(item?.taskId))
         setValue('comment', '');
     };
 
@@ -74,19 +74,23 @@ const Taskdetail = (props) => {
         console.log(id);
         dispatch(deleteComment({ commentId: id._id }));
         setTimeout(() => {
-            dispatch(getComment({ taskId: props.item?.taskInfo?._id }));
+            dispatch(getComment(item?.taskId));
         }, 500);
     };
     console.log(updatedCommentValue, 'data===');
     const updateHandle = (condition) => {
-        
+
         if (updatedCommentInitialValue !== '') {
             if (condition === 'updateComment') {
                 let body = {
+                    taskId:item?.taskId,
                     commentId: allCommetUpdateId,
                     comment: updatedCommentInitialValue,
                 };
                 dispatch(updateComment(body));
+                setTimeout(() => {
+                    dispatch(getComment(item?.taskId));
+                }, 500);
                 setInputForUpdate(false);
             } else {
                 setInputForUpdate(false);
@@ -97,14 +101,14 @@ const Taskdetail = (props) => {
         }
     };
     const handelUpdateAll = (data, indx) => {
-        
+
         setError('');
         setUnchangeComment(data?.comment);
         setAllCommetUpdateId(data?._id);
         setInputForUpdate(indx);
         setUpdatedCommentInitialValue(data?.comment);
     };
-    
+
     return (
         <>
             <Modal
@@ -197,7 +201,7 @@ const Taskdetail = (props) => {
                                                                     {comm?.userId?.lastName}
                                                                 </h4>
                                                                 <p className="ps-1 m-0 p-0">
-                                                                    {moment(comm?.createdAt).format('LT')}{' '}
+                                                                    {moment(comm?.createdAt).fromNow()}{' '}
 
                                                                 </p>
 
@@ -245,7 +249,7 @@ const Taskdetail = (props) => {
                                                             ) : (
                                                                 <>
                                                                     <div className="m-0 p-0">
-                                                                        <li className="font-18  ">{comm?.comment}</li>
+                                                                        <li className="font-18  comment_info">{comm?.comment}</li>
                                                                     </div>
                                                                     <div className="d-flex m-0 p-0">
                                                                         <p
@@ -302,7 +306,7 @@ const Taskdetail = (props) => {
                                                 </Row>
                                             </form>
                                             <table>
-                                                {allComments?.map((comm, ind) => (
+                                                {allComments?.reverse()?.map((comm, ind) => (
                                                     <>
                                                         <Row>
                                                             <Col lg={12} className="d-flex">
@@ -330,7 +334,7 @@ const Taskdetail = (props) => {
                                                                             {comm?.userId?.lastName}
                                                                         </h4>
                                                                         <p className="ps-1 m-0 p-0">
-                                                                            {moment(comm?.createdAt).format('LT')}{' '}
+                                                                            {moment(comm?.createdAt).fromNow()}{' '}
                                                                             {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
                                                                         </p>
                                                                         {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
@@ -367,12 +371,22 @@ const Taskdetail = (props) => {
                                 <div className="history">
                                     <div className="history_data_info">
                                         {props.historyData?.map((datainfo, index) => (
-                                            <h4>{datainfo.currentStatus}</h4>
+                                            <>
+                                                <ul>
+                                                    
+                                                    <li>
+                                                    <p class="username">{datainfo.userId?.firstName.charAt(0)}{datainfo.userId?.lastName.charAt(0)}</p> <span>{datainfo.userId?.firstName} {datainfo.userId?.lastName}</span>  {datainfo.userActivity} {moment(datainfo?.createdAt).fromNow()}
+                                                    </li>
+                                                    
+                                                </ul>
+
+                                            </>
+
                                         ))}
                                     </div>
                                     <div className="history_data_info">
                                         {props.historyData?.map((datainfo, index) => (
-                                            <p>{datainfo?.taskId?.summary}</p>
+                                            <p>{datainfo?.taskId?.time}</p>
                                         ))}
                                     </div>
                                 </div>
@@ -453,54 +467,17 @@ const Taskdetail = (props) => {
 
                             <li class="card_img">
                                 <label>Attachment:</label>
-
-                                {(() => {
-
-                                    const ext = props.item.taskInfo?.attachment
-                                        ? getfileNameExt(props.item.taskInfo?.attachment)
-                                        : '';
-                                    if (ext == 'png' || ext == 'jpg' || ext == 'jpeg') {
-                                        return (
-                                            <img
-                                                src={props.item?.taskInfo?.attachment}
-                                                title={
-                                                    props.item.taskInfo?.attachment
-                                                        ? getfileNameFromUrl(props.item.taskInfo?.attachment)
-                                                        : ''
-                                                }
-                                                width={150}
-                                                height={150}
-                                            />
-                                        );
-                                    } else if (ext == 'pdf') {
-                                        return (
-                                            <a
-                                                href={props.item?.taskInfo?.attachment}
-                                                title={
-                                                    props.item.taskInfo?.attachment
-                                                        ? getfileNameFromUrl(props.item.taskInfo?.attachment)
-                                                        : ''
-                                                }>
-                                                {' '}
-                                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                            </a>
-                                        );
-                                    } else if (ext == 'docx' || ext == 'doc') {
-                                        return (
-                                            <a href={props.item?.taskInfo?.attachment}>
-                                                {props.item.taskInfo?.attachment
-                                                    ? getfileNameFromUrl(props.item.taskInfo?.attachment)
-                                                    : ''}
-                                            </a>
-                                        );
-                                    }
-                                })()}
-                                {props.item.taskInfo?.attachment ? getfileNameFromUrl(props.item?.taskInfo?.attachment): ''}
+                                <img
+                                    src={props.item?.taskInfo?.attachment}
+                                    width={150}
+                                    height={150}
+                                />
                                 <button type="button" onClick={() => downloadFile(props.item?.taskInfo?.attachment)}>
                                     <i class="dripicons-download download_color"></i>
                                 </button>
+
                             </li>
-                            
+
                         </ul>
                     </div>
                 </Modal.Body>

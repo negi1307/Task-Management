@@ -10,13 +10,24 @@ import { addAllmilstones } from '../../../../../redux/milestone/action';
 import ToastHandle from '../../../../../constants/toaster/toaster';
 import MainLoader from './../../../../../constants/Loader/loader';
 import '../../../../../../node_modules/react-quill/dist/quill.snow.css';
+import DatePicker from 'react-datepicker';
+import '../../../../../../node_modules/react-datepicker/dist/react-datepicker.css'
 const Create = ({ modal, closeModal }) => {
     const store = useSelector((state) => state);
     const sucesshandel = store?.addAllmilstones;
     const loaderhandel = store?.addAllmilstones;
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
     // disable previous date
-    const today = new Date().toISOString().split('T')[0];
-    //
+    const today = new Date();
+    console.log(today, 'today');
+    // end date
+    const handleStartDate = (date) => {
+        setStartDate(date);
+    };
+    const handleEndDate = (date) => {
+        setEndDate(date);
+    };
     const { id } = useParams();
     const {
         register,
@@ -32,14 +43,16 @@ const Create = ({ modal, closeModal }) => {
             projectId: id,
             title: data.Title,
             description: data?.description,
-            startDate: data.Start_date,
-            completionDate: data.End_date,
+            startDate: startDate,
+            completionDate: endDate,
         };
         dispatch(addAllmilstones(milStones));
         closeModal();
     };
     useEffect(() => {
         reset();
+        setStartDate("")
+        setEndDate("")
     }, [modal]);
 
     useEffect(() => {
@@ -53,6 +66,7 @@ const Create = ({ modal, closeModal }) => {
             ToastHandle('error', sucesshandel?.data?.message);
         }
     }, [sucesshandel]);
+    console.log(sucesshandel,'====')
 
     return (
         <>
@@ -114,39 +128,42 @@ const Create = ({ modal, closeModal }) => {
                                             )}
                                         </Form.Group>
                                     </Col>
+                                    
                                     <Col lg={12}>
-                                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                {' '}
-                                                Start date <span className="text-danger">*</span>:
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                Start Date<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                min={today}
-                                                {...register('Start_date', { required: true })}
+
+                                            <DatePicker
+                                                selected={startDate}
+                                                // onChange={(date) => setStartDate(date)}
+                                                onChange={(date) => handleStartDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={today}
+                                                className="add_width_input"
                                             />
-                                            {errors.Start_date?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
                                         </Form.Group>
                                     </Col>
                                     <Col lg={12}>
-                                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                {' '}
-                                                End date <span className="text-danger">*</span>:
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                End Date<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                disabled={watch('Start_date') == '' || watch('Start_date') == undefined}
-                                                min={watch('Start_date')}
-                                                {...register('End_date', { required: true })}
-                                            />{' '}
-                                            {errors.End_date?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
+
+                                            <DatePicker
+                                                selected={endDate}
+                                                disabled={startDate == '' || startDate == undefined}
+                                                // onChange={(date) => setEndDate(date)}
+                                                onChange={(date) => handleEndDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={startDate}
+                                                className="add_width_input"
+                                            />
                                         </Form.Group>
                                     </Col>
+                                
+
                                 </Row>
                                 <Row>
                                     <Col className="text-start d-flex align-items-center justify-content-center">

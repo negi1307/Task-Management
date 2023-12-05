@@ -29,16 +29,8 @@ import {
     getAllSingleSprints,
     getSprintId,
 } from './sprint/reducres';
-import {
-    createTaskReducer,
-    getSigleSprintTask,
-    getAllTaskReducer,
-    UpdateTaskReducer,
-    deleteTask,
-    getAllAssigneeName,
-    UpdateTaskStatusTime,
-} from './task/reducer';
-import { getAllUsers, deleteUser, createUser, getAllRoles, createUserTime } from './user/reducer';
+import { createTaskReducer, getSigleSprintTask, getAllTaskReducer, UpdateTaskReducer,deleteTask,getAllAssigneeName,UpdateTaskStatusTime } from './task/reducer';
+import { getAllUsers, deleteUser, createUser ,getAllRoles,createUserTime,getUserLogoutReason} from './user/reducer';
 import {
     createTechnologyReducer,
     getAllTechnologyReducer,
@@ -112,4 +104,5 @@ export default (combineReducers({
     createUserTime,
     getAllAssigneeName,
     UpdateTaskStatusTime,
+    getUserLogoutReason
 }): any);

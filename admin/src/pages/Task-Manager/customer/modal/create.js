@@ -37,7 +37,7 @@ const Create = ({ modal, closemodal }) => {
     const {
         register,
         handleSubmit,
-        reset,
+        reset,setValue,
         formState: { errors },
     } = useForm();
     const onSubmit = (data) => {
@@ -48,9 +48,14 @@ const Create = ({ modal, closemodal }) => {
                 description: data?.description,
                 stage: data?.stage,
                 type: addValue,
-                status: 2,
+                status: 0,
             })
         );
+        setValue("name","")
+        setValue("project","")
+        setValue("description","")
+        setValue("type","")
+        setValue("stage","")
     };
 
     useEffect(() => {
@@ -171,17 +176,7 @@ const Create = ({ modal, closemodal }) => {
                                         TYPE<span className="text-danger">*</span>:
                                     </Form.Label>
 
-                                    {/* <Form.Select {...register('type', { required: true })}>
-                                        <option value="" hidden selected>
-                                            {' '}
-                                            --select--
-                                        </option>
-                                        <option value="1">WEB</option>
-                                        <option value="2">MOBILE</option>
-                                    </Form.Select>
-                                    {errors?.type?.type === 'required' && (
-                                        <span className="text-danger"> This feild is required *</span>
-                                    )} */}
+                                    
                                     <Multiselect
                                         onRemove={removehandle}
                                         onSelect={addhandle}

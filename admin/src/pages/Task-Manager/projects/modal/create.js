@@ -24,19 +24,19 @@ const Create = ({ modal, closeModal }) => {
     const [addValue, setAddValue] = useState([]);
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
-    console.log(startDate,"hiiiiiiiiiiiiiiiiiiiiiiiiiiii")
+    console.log(startDate, 'hiiiiiiiiiiiiiiiiiiiiiiiiiiii');
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     // disable previous date
     const today = new Date();
-    console.log(today,"today")
+    console.log(today, 'today');
     // end date
-    const handleStartDate=(date)=>{
-        setStartDate(date)
-    }
-    const handleEndDate=(date)=>{
-        setEndDate(date)
-    }
-    
+    const handleStartDate = (date) => {
+        setStartDate(date);
+    };
+    const handleEndDate = (date) => {
+        setEndDate(date);
+    };
+
     //
     const {
         register,
@@ -67,11 +67,11 @@ const Create = ({ modal, closeModal }) => {
         } else if (errorhandel?.data?.status == 500) {
             ToastHandle('error', errorhandel?.data?.message);
         }
-    }, [errorhandel]);
+    }, [errorhandel?.data?.status]);
     useEffect(() => {
         reset();
-        setStartDate("")
-        setEndDate("")
+        setStartDate('');
+        setEndDate('');
     }, [modal]);
     const removehandle = (selectedList, removedItem) => {
         const remove = getTechnology.filter((ele, ind) => {
@@ -191,10 +191,6 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
 
                                             <Multiselect
-                                                // options={options}
-                                                // value={selected}
-                                                // onChange={setSelected}
-                                                // labelledBy="Select"
                                                 onRemove={removehandle}
                                                 onSelect={addhandle}
                                                 isObject={false}
@@ -209,54 +205,34 @@ const Create = ({ modal, closeModal }) => {
                                 <Row>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label className='w-100'>
+                                            <Form.Label className="w-100">
                                                 Start Date<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            {/* <Form.Control
-                                                type="date"
-                                                min={today} // Set the minimum date to today
-                                                {...register('startDate', { required: true })}
-                                                placeholder="Please start Date "
-                                            />
-                                            {errors.startDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )} */}
 
                                             <DatePicker
                                                 selected={startDate}
                                                 // onChange={(date) => setStartDate(date)}
-                                                onChange={(date)=>handleStartDate(date)}
+                                                onChange={(date) => handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
                                                 minDate={today}
-                                                className='add_width_input'
+                                                className="add_width_input"
                                             />
                                         </Form.Group>
                                     </Col>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label className='w-100'>
+                                            <Form.Label className="w-100">
                                                 End Date<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            {/* <Form.Control
-                                                type="date"
-                                                disabled={watch('startDate') == '' || watch('startDate') == undefined}
-                                                min={watch('startDate')}
-                                                {...register('endDate', { required: true })}
-                                                placeholder="Please end Date"
-                                            />
-                                            {errors.endDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )} */}
-                                            
-                                          
+
                                             <DatePicker
                                                 selected={endDate}
                                                 disabled={startDate == '' || startDate == undefined}
                                                 // onChange={(date) => setEndDate(date)}
-                                                onChange={(date)=>handleEndDate(date)}
+                                                onChange={(date) => handleEndDate(date)}
                                                 placeholderText="mm-dd-yyyy"
                                                 minDate={startDate}
-                                                className='add_width_input'
+                                                className="add_width_input"
                                             />
                                         </Form.Group>
                                     </Col>

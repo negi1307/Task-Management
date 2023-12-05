@@ -59,3 +59,6 @@ export const AddPreSale ="/preSale/addPreSalesData"
 export const UpdatePreSale ="preSale/updatePreSales" 
 export const DeletePreSale ="/preSale/deletePreSales?preSalesId=" 
 
+export const getTimeTracker ="/users/trackTime" 
+export const getHistory ="/history/getHistory?taskId="
+

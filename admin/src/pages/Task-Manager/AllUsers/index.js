@@ -140,7 +140,7 @@ const AllUsers = () => {
 
                                                 <td>
                                                     <span className="namelink">
-                                                        {moment(ele?.createdAt).format('L')}
+                                                        {moment(ele?.createdAt).format("DD/MM/YYYY")}
                                                     </span>
                                                 </td>
 

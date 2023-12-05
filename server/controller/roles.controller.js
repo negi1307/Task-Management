@@ -20,17 +20,17 @@ const addRole = async (req, res) => {
 // Get roles Acc to user Token
 const getRoles = async (req, res) => {
     try {
-      const currentUserRole = req.user.role;
-      let query = {};
-      if (currentUserRole === 'Admin') {
-        query = { role: { $ne: currentUserRole } };
-      } else if (currentUserRole === 'CTO') {
-        query = { role: { $nin: ['Admin', currentUserRole] } };
-      } else if (currentUserRole === 'PM') {
-        query = { role: { $nin: ['Admin', 'CTO', currentUserRole] } };
-      }
+    //   const currentUserRole = req.user.role;
+    //   let query = {};
+    //   if (currentUserRole === 'Admin') {
+    //     query = { role: { $ne: currentUserRole } };
+    //   } else if (currentUserRole === 'CTO') {
+    //     query = { role: { $nin: ['Admin', currentUserRole] } };
+    //   } else if (currentUserRole === 'PM') {
+    //     query = { role: { $nin: ['Admin', 'CTO', currentUserRole] } };
+    //   }
   
-      const result = await rolesModel.find(query);      
+      const result = await rolesModel.find();      
       return res.status(200).json({ status: "200", message: "Roles retrieved successfully", response: result });
     } catch (error) {
       return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -41,8 +41,8 @@ const getRoles = async (req, res) => {
 // Get All roles for admin
 const getAllRoles = async (req, res) => {
     try {
-        const currentUserRole = req.user.role;
-        const result = await rolesModel.find({role: { $ne: currentUserRole }});
+        // const currentUserRole = req.user.role;
+        const result = await rolesModel.find(/*{role: { $ne: currentUserRole }}*/);
         return res.status(200).json({ status: "200", message: "Roles get successfully", response: result })
     } catch (error) {
         return res.status(500).json({ status: "500", message: "something went wrong", error: error.message })

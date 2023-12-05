@@ -11,6 +11,7 @@ import { showRightSidebar, changeSidebarType } from '../redux/actions';
 // import { getAllProjects } from '../../src/redux/projects/action';
 import { getallMileStones, getMileStoneById } from '../redux/actions';
 import { getAllSprint, getSingleSprint } from '../redux/actions';
+import { updateTaskStatusTime } from '../../src/redux/task/action'
 // components
 // import LanguageDropdown from '../components/LanguageDropdown';
 // import NotificationDropdown from '../components/NotificationDropdown';
@@ -48,6 +49,8 @@ import Buttons from '../pages/uikit/Buttons';
 import ToastHandle from '../constants/toaster/toaster';
 import { Button } from 'react-bootstrap';
 import { useStopwatch, useTime } from 'react-timer-hook';
+import {getAllLogoutReason} from '../../src/redux/user/action'
+import Modal from 'react-bootstrap/Modal';
 
 // get the notifications
 const Notifications = [
@@ -156,6 +159,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
     const getAllSingleSprints = store?.getAllSingleSprints?.data?.Response;
     const { projectId, milestoneId, spriteId } = useParams();
+    const getLeaveDetails=store?.getUserLogoutReason?.data?.response
 
     const [projectNameHeading, setProjectName] = useState('Select Project Name');
 
@@ -167,54 +171,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         leftSideBarType: state.Layout.leftSideBarType,
     }));
 
-    // const {
-    //     totalSeconds,
-    //     seconds,
-    //     minutes,
-    //     hours,
-    //     days,
-    //     isRunning,
-    //     start,
-    //     pause,
-    //     reset,
-    //   } = useStopwatch({ autoStart: false});
-
-    const { seconds, minutes, hours, start, pause, ampm } = useTime({ format: '12-hour' });
-
-    // useEffect(() => {
-    //     let data = {
-    //         status: 1,
-    //         projectstatus: 1,
-    //     };
-    //     dispatch(getAllProjects(data));
-
-    // }, []);
-
-    const onChangeProject = (e) => {
-        if (e.target.value !== '') {
-            const projectData = allProjects?.filter((item) => item._id == e.target.value);
-            setProjectName(projectData[0].projectName);
-            dispatch(getProjectId(e.target.value));
-            dispatch(getsingleMileStone({ id: e.target.value, status: 1 }));
-        }
-    };
-    const onChangeMilestone = (e) => {
-        if (e.target.value !== '') {
-            dispatch(getMilestoneId(e.target.value));
-            dispatch(getAllMilstoneSprints({ milestoneId: e.target.value, status: 1 }));
-        }
-    };
-    const onChangeSprint = (e) => {
-        //setSprintId(e.target.value)
-        if (e.target.value !== '') {
-            dispatch(getSprintId(e.target.value));
-            dispatch(getTaskStatusCount());
-        }
-    };
-
-    /**
-     * Toggle the leftmenu when having mobile screen
-     */
+   
     const handleLeftMenuCallBack = () => {
         setIsopen((prevState) => !prevState);
         if (openLeftMenuCallBack) openLeftMenuCallBack();
@@ -262,24 +219,70 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         dispatch(addLoginTime());
         sessionStorage.setItem('startButton', true);
         if (sessionStorage?.getItem('startButton')) {
-            start();
             setShowButton(false);
         }
     };
+    const[leave,setLeave]=useState('');
     useEffect(() => {
         if (loginTimeMessage?.data?.status == 200) {
             ToastHandle('success', loginTimeMessage?.data?.message);
             setLoginTimee(loginTimeMessage?.data?.loginTime);
         }
     }, [loginTimeMessage]);
+    useEffect(()=>{
+dispatch(getAllLogoutReason())
+    },[])
     const logoutTime = () => {
-        dispatch(addLoginTimeStop());
-
-        sessionStorage.removeItem('startButton');
-        pause();
-        setShowButton(true);
+        if(leave !==""){
+            dispatch(addLoginTimeStop({leaveMessageId:leave}));
+            sessionStorage.removeItem('startButton');             
+            setShowButton(true);
+        }
+        else{
+            ToastHandle('success', "please select leave reason");
+        }
     };
 
+const onChangeLeave =(e)=>{
+    setLeave(e.target.value);
+}
+
+
+const [time, setTime] = useState(1);
+const start = sessionStorage.getItem('startButton');
+const [incrementValue, setIncrementValue] = useState(0);
+  const increment = () =>
+    setTime((prevTime) => {
+      return prevTime === 0 ? 0 : prevTime + 1;
+    });
+ 
+  useEffect(() => {
+    if(start){
+        setIncrementValue(setInterval(increment, 1000));
+    }
+   else{
+    clearInterval(incrementValue);
+   }
+    return () => clearInterval(incrementValue);
+  }, [start]);
+
+  const format = (num: number): string => {
+    return num < 10 ? '0' + num : num.toString();
+  };
+
+//const days = format(Math.floor(time / (3600 * 24)));
+const hours = format(Math.floor((time / 3600) % 24));
+const minutes = format(Math.floor((time / 60) % 60));
+const seconds = format(time % 60);
+if(start){    
+    localStorage.setItem("hours",hours);
+    localStorage.setItem("minutes",minutes);
+    localStorage.setItem("seconds",seconds);
+}
+const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
     return (
         <>
             <div className={classNames('navbar-custom', navbarCssClasses)}>
@@ -298,32 +301,12 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                         <div className="lefbar_info">
                             {(layoutType === layoutConstants.LAYOUT_VERTICAL ||
                                 layoutType === layoutConstants.LAYOUT_FULL) && (
-                                <button className="button-menu-mobile open-left" onClick={handleLeftMenuCallBack}>
-                                    <i className="mdi mdi-menu" />
-                                </button>
-                            )}
+                                    <button className="button-menu-mobile open-left" onClick={handleLeftMenuCallBack}>
+                                        <i className="mdi mdi-menu" />
+                                    </button>
+                                )}
                             <div class="menuinfo">
-                                <ul>
-                                    {/* <li>
-                                        <Link to="" className="list_padding">
-                                            Apps
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link onClick={() => setModal(true)} className="list_padding">
-                                            Filters
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="" className="list_padding">
-                                            Dashboard
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="" className="list_padding">
-                                            Teams
-                                        </Link>
-                                    </li> */}
+                                <ul>                                   
 
                                     {showButton ? (
                                         <li>
@@ -338,9 +321,24 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                             </Button>
                                         </li>
                                     )}
-                                    <li>
-                                        {' '}
-                                        <span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span>
+                                   <li>
+                                   {/* {moment(currTime).format('h:mm:ss')} */}
+                                   {localStorage.getItem("hours")+
+                                   ':'+localStorage.getItem('minutes')+
+                                   ':'+ localStorage.getItem('seconds')}
+                                   
+                                   </li>
+                                    <li className='leave_data'>
+                                   
+                                        <select id="leave" onChange={onChangeLeave} name="cars" disabled={showButton}>
+                                            <option value="">Select Reason</option>
+                                            {getLeaveDetails?.map((item,index)=>
+                                                <option key={index} value={item?._id} >{item?.leaveReason}</option>
+                                            )}
+                                            
+                                          
+                                           
+                                        </select>
                                     </li>
                                     {/* {moment(loginTimee).format("LTS")} */}
                                 </ul>
@@ -362,13 +360,48 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                     username={store?.Auth?.user?.username}
                                     firstName={store?.Auth?.user?.firstName}
                                     lastName={store?.Auth?.user?.lastName}
+
                                 />
+                                {/* <Link to="/account/logout" onClick={logouttimeinfo}>logout</Link> */}
+
                             </li>
+
                         </ul>
+                                                {/* <Button variant="primary" onClick={handleShow}>
+        Launch demo modal
+      </Button> */}
 
-                        {/* {/ toggle for vertical layout /} */}
-
-                        {/* {/ toggle for horizontal layout /} */}
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            <ul>
+            <li className='leave_data'>
+                                   
+                                   <select id="leave" onChange={onChangeLeave} name="cars" disabled={showButton}>
+                                       <option value="" >Select Reason</option>
+                                       {getLeaveDetails?.map((item,index)=>
+                                           <option key={index} value={item?._id} onClick={handleClose}>{item?.leaveReason}</option>
+                                       )}
+                                       
+                                     
+                                      
+                                   </select>
+                               </li>
+            </ul>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+         
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+         
+          </Button>
+        </Modal.Footer>
+      </Modal>
+                        
+                    
                         {layoutType === layoutConstants.LAYOUT_HORIZONTAL && (
                             <Link
                                 to="#"

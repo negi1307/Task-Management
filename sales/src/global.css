@@ -138,8 +138,8 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
 .modal-header button {
     /* box-shadow: 0px 2px 6px 0px rgba(57, 175, 209, 0.5); */
     color: #fff;
-    background-color: #37216c;
-    border-color: #37216c;
+    background-color:black;
+    border-color: black;
     border: 0px;
 }
 
@@ -541,7 +541,7 @@ th.check_info {
 }
 
 .accordion {
-    background-color: white;
+    /* background-color: white; */
 }
 
 .highlightCircle {
@@ -594,7 +594,7 @@ th.check_info {
 .accordionColumn {
     /* border-bottom: 1px solid #000; */
     /* border-top: 1px solid #000; */
-    border-left: 1px solid #000;
+    border-left: 1px solid #000 !important;
 }
 button.accordion-button.collapsed {
     padding: 0px;
@@ -607,5 +607,10 @@ button.accordion-button.collapsed {
 .downButtonParent {
     color: black !important;
     background-color: white !important;
-    border: 1px solid grey;
+
+    border: 1px solid grey !important;
+}
+
+.innerModal {
+    border-top: 1px solid black;
 }

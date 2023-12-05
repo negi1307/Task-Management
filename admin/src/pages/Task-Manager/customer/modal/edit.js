@@ -8,7 +8,6 @@ import ToastHandle from '../../../../constants/toaster/toaster';
 import Multiselect from 'multiselect-react-dropdown';
 import DatePicker from 'react-datepicker';
 import { parseISO } from 'date-fns';
-// import {ButtonLoading} from '../../../../constants/Loader/loader';
 const Edit = ({ modal, editData, closemodal }) => {
     console.log(editData, 'mmmmmmmmmmmmmmmmmmm');
     const store = useSelector((state) => state);
@@ -21,9 +20,6 @@ const Edit = ({ modal, editData, closemodal }) => {
     const [selected, setSelected] = useState([]);
     const [selectedType, setSelectedType] = useState(['Web', 'Mobile']);
     const [addValueType, setAddValueType] = useState([]);
-    console.log(addValueType, 'yyyyyyyyyyyyyyyyyyyyyyyyyyyy');
-    // const [selectedTypeValue, setSelectedTypeValue] = useState(['Web', 'Mobile']);
-    console.log(startDate, 'hiiiiiiiiiiiiiiiiiiiiiiiiiiii');
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     // disable previous date
     const today = new Date();
@@ -62,6 +58,7 @@ const Edit = ({ modal, editData, closemodal }) => {
                 projectStatus: data?.Projectstatus,
             })
         );
+        setAddValue('');
     };
 
     useEffect(() => {
@@ -75,6 +72,10 @@ const Edit = ({ modal, editData, closemodal }) => {
     // model check two type add and edite;
 
     useEffect(() => {
+        setAddValue(editData?.Project[0]?.technologies ? editData?.Project[0]?.technologies : '');
+        setStartDate(editData?.Project[0]?.startDate ? parseISO(editData?.Project[0]?.startDate) : '');
+        setEndDate(editData?.Project[0]?.endDate ? parseISO(editData?.Project[0]?.endDate) : '');
+        setAddValueType(editData?.type);
         reset({
             name: editData?.clientName,
             project: editData?.projectName,
@@ -82,13 +83,9 @@ const Edit = ({ modal, editData, closemodal }) => {
             status: editData?.status,
             stage: editData?.stage,
             type: editData?.type,
-            project_type: editData?.Project?.projectType,
-            Projectstatus: editData?.Project?.projectStatus,
-            
+            project_type: editData?.Project[0]?.projectType,
+            Projectstatus: editData?.Project[0]?.projectStatus,
         });
-        // setSelectedType(editData?.type?.map((ele) => ele));
-        setStartDate(parseISO(editData?.Project?.startDate))
-        setEndDate(parseISO(editData?.Project?.endDate))
     }, [modal]);
     const selectedTypeValues = editData?.type?.map((item) => {
         return item;
@@ -114,8 +111,8 @@ const Edit = ({ modal, editData, closemodal }) => {
         const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
         });
-        console.log(add[0], 'addddd');
-        setAddValue([...addValue, add[0]]);
+        console.log(add[0]?._id, 'addddd');
+        setAddValue([...addValue, add[0]?._id]);
         console.log(addValue, 'addvalue info');
     };
     const removehandle = (selectedList, removedItem) => {
@@ -133,8 +130,8 @@ const Edit = ({ modal, editData, closemodal }) => {
             });
         });
     };
-    const selectedValues = editData?.Project?.technology?.map((item) => {
-        return item;
+    const selectedValues = editData?.Project[0]?.technologies?.map((item) => {
+        return item?.techName;
     });
     useEffect(() => {
         const getTechnologyname = [];
@@ -213,13 +210,15 @@ const Edit = ({ modal, editData, closemodal }) => {
                                         Status<span className="text-danger">*</span>:
                                     </Form.Label>
 
-                                    <Form.Select {...register('status', { required: true })}>
+                                    <Form.Select
+                                        {...register('status', { required: true })}
+                                        disabled={editData?.status == 1 ? true : ''}>
                                         <option value="" hidden selected>
                                             {' '}
                                             --select--
                                         </option>
                                         <option value="1">CONVERTED</option>
-                                        <option value="2">NOT-CONVERTED</option>
+                                        <option value="0">NOT-CONVERTED</option>
                                     </Form.Select>
 
                                     {errors?.status?.type === 'required' && (
@@ -254,18 +253,6 @@ const Edit = ({ modal, editData, closemodal }) => {
                                     <Form.Label>
                                         TYPE<span className="text-danger">*</span>:
                                     </Form.Label>
-
-                                    {/* <Form.Select {...register('type', { required: true })}>
-                                        <option value="" hidden selected>
-                                            {' '}
-                                            --select--
-                                        </option>
-                                        <option value="1">WEB</option>
-                                        <option value="2">MOBILE</option>
-                                    </Form.Select>
-                                    {errors?.type?.type === 'required' && (
-                                        <span className="text-danger"> This feild is required *</span>
-                                    )} */}
                                     <Multiselect
                                         {...register('type', { required: false })}
                                         onRemove={removeTypehandle}
@@ -333,19 +320,9 @@ const Edit = ({ modal, editData, closemodal }) => {
                                             <Form.Label className="w-100">
                                                 Start Date<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            {/* <Form.Control
-                                                type="date"
-                                                min={today} // Set the minimum date to today
-                                                {...register('startDate', { required: true })}
-                                                placeholder="Please start Date "
-                                            />
-                                            {errors.startDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )} */}
 
                                             <DatePicker
                                                 selected={startDate}
-                                                // onChange={(date) => setStartDate(date)}
                                                 onChange={(date) => handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
                                                 minDate={today}
@@ -358,21 +335,10 @@ const Edit = ({ modal, editData, closemodal }) => {
                                             <Form.Label className="w-100">
                                                 End Date<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            {/* <Form.Control
-                                                type="date"
-                                                disabled={watch('startDate') == '' || watch('startDate') == undefined}
-                                                min={watch('startDate')}
-                                                {...register('endDate', { required: true })}
-                                                placeholder="Please end Date"
-                                            />
-                                            {errors.endDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )} */}
 
                                             <DatePicker
                                                 selected={endDate}
                                                 disabled={startDate == '' || startDate == undefined}
-                                                // onChange={(date) => setEndDate(date)}
                                                 onChange={(date) => handleEndDate(date)}
                                                 placeholderText="mm-dd-yyyy"
                                                 minDate={startDate}
