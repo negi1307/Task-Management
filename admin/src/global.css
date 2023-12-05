@@ -561,3 +561,17 @@ input.add_width_input {
     padding: 6px;
     border-radius: 4px;
 }
+.modal-content {
+    height: auto !important;
+}
+.add_padding_box {
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+}
+.add_padding_box {
+    background: #c9c8c8 !important;
+    /* text: white !important; */
+}
+.del_edit {
+    color: white;
+}

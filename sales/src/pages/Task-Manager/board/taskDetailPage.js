@@ -295,7 +295,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                             )}
                         </Col>
                         <Col lg={6}>
-                            <Card className="p-2">
+                            <div className="p-2">
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Project Name :</h4>
                                     <p className="ms-2 p-0">{editData?.projectInfo?.projectName}</p>
@@ -387,7 +387,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                     />
                                     {/* <img src={editData?.attachment} /> */}
                                 </div>
-                            </Card>
+                            </div>
                         </Col>
                     </Row>
                 </Modal.Body>

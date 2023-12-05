@@ -274,7 +274,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                                     {ele?.userId?.lastName}
                                                                 </h4>
                                                                 <p className="ps-1 m-0 p-0">
-                                                                    {moment(ele?.createdAt).fromNow()}
+                                                                    {moment(ele?.createdAt).fromNow()}{' '}
                                                                     {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
                                                                 </p>
                                                                 {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
@@ -326,7 +326,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                             )}
                         </Col>
                         <Col lg={6}>
-                            <Card className="p-2">
+                            <div className="p-2">
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Project Name :</h4>
                                     <p className="ms-2 p-0">{editData?.projectInfo?.projectName}</p>
@@ -427,7 +427,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                 ) : (
                                     ''
                                 )}
-                            </Card>
+                            </div>
                         </Col>
                     </Row>
                 </Modal.Body>
