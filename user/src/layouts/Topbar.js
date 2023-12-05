@@ -50,6 +50,7 @@ import ToastHandle from '../constants/toaster/toaster';
 import { Button } from 'react-bootstrap';
 import { useStopwatch, useTime } from 'react-timer-hook';
 import {getAllLogoutReason} from '../../src/redux/user/action'
+import Modal from 'react-bootstrap/Modal';
 
 // get the notifications
 const Notifications = [
@@ -278,7 +279,10 @@ if(start){
     localStorage.setItem("minutes",minutes);
     localStorage.setItem("seconds",seconds);
 }
+const [show, setShow] = useState(false);
 
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
     return (
         <>
             <div className={classNames('navbar-custom', navbarCssClasses)}>
@@ -363,7 +367,39 @@ if(start){
                             </li>
 
                         </ul>
+                                                {/* <Button variant="primary" onClick={handleShow}>
+        Launch demo modal
+      </Button> */}
 
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            <ul>
+            <li className='leave_data'>
+                                   
+                                   <select id="leave" onChange={onChangeLeave} name="cars" disabled={showButton}>
+                                       <option value="" >Select Reason</option>
+                                       {getLeaveDetails?.map((item,index)=>
+                                           <option key={index} value={item?._id} onClick={handleClose}>{item?.leaveReason}</option>
+                                       )}
+                                       
+                                     
+                                      
+                                   </select>
+                               </li>
+            </ul>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+         
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+         
+          </Button>
+        </Modal.Footer>
+      </Modal>
                         
                     
                         {layoutType === layoutConstants.LAYOUT_HORIZONTAL && (

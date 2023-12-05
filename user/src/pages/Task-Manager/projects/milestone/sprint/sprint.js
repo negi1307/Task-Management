@@ -167,7 +167,7 @@ const Sprint = () => {
                                                         />
                                                     </td>
 
-                                                    <td> {moment(item?.sprintId?.startDate).format('L')}</td>
+                                                    <td> {moment(item?.sprintId?.startDate).format('DD/MM/YYYY')}</td>
                                                     <td> {item?.sprintId?.daysLeft}</td>
                                                     
                                                     <td>

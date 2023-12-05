@@ -83,10 +83,14 @@ const Taskdetail = (props) => {
         if (updatedCommentInitialValue !== '') {
             if (condition === 'updateComment') {
                 let body = {
+                    taskId:item?.taskId,
                     commentId: allCommetUpdateId,
                     comment: updatedCommentInitialValue,
                 };
                 dispatch(updateComment(body));
+                setTimeout(() => {
+                    dispatch(getComment(item?.taskId));
+                }, 500);
                 setInputForUpdate(false);
             } else {
                 setInputForUpdate(false);
@@ -197,7 +201,7 @@ const Taskdetail = (props) => {
                                                                     {comm?.userId?.lastName}
                                                                 </h4>
                                                                 <p className="ps-1 m-0 p-0">
-                                                                    {moment(comm?.createdAt).format('LT')}{' '}
+                                                                    {moment(comm?.createdAt).fromNow()}{' '}
 
                                                                 </p>
 
@@ -245,7 +249,7 @@ const Taskdetail = (props) => {
                                                             ) : (
                                                                 <>
                                                                     <div className="m-0 p-0">
-                                                                        <li className="font-18  ">{comm?.comment}</li>
+                                                                        <li className="font-18  comment_info">{comm?.comment}</li>
                                                                     </div>
                                                                     <div className="d-flex m-0 p-0">
                                                                         <p
@@ -302,7 +306,7 @@ const Taskdetail = (props) => {
                                                 </Row>
                                             </form>
                                             <table>
-                                                {allComments?.map((comm, ind) => (
+                                                {allComments?.reverse()?.map((comm, ind) => (
                                                     <>
                                                         <Row>
                                                             <Col lg={12} className="d-flex">
@@ -330,7 +334,7 @@ const Taskdetail = (props) => {
                                                                             {comm?.userId?.lastName}
                                                                         </h4>
                                                                         <p className="ps-1 m-0 p-0">
-                                                                            {moment(comm?.createdAt).format('LT')}{' '}
+                                                                            {moment(comm?.createdAt).fromNow()}{' '}
                                                                             {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
                                                                         </p>
                                                                         {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
@@ -369,12 +373,11 @@ const Taskdetail = (props) => {
                                         {props.historyData?.map((datainfo, index) => (
                                             <>
                                                 <ul>
-                                                    <li>{moment(datainfo?.time).format('LT')}</li>
-                                                    <li>{datainfo.user}</li>
+                                                    
                                                     <li>
-                                                        {datainfo.userActivity}
+                                                    <p class="username">{datainfo.userId?.firstName.charAt(0)}{datainfo.userId?.lastName.charAt(0)}</p> <span>{datainfo.userId?.firstName} {datainfo.userId?.lastName}</span>  {datainfo.userActivity} {moment(datainfo?.createdAt).fromNow()}
                                                     </li>
-                                                    <li>{datainfo.userId?.role}</li>
+                                                    
                                                 </ul>
 
                                             </>
