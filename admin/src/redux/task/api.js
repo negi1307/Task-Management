@@ -39,3 +39,6 @@ export function UpdateCommentApi(data): any {
 export function GetAssignUserApi(data): any {
     return api.get(`${URL.GetAssignUser}${data.payload.projectId}&milestoneId=${data.payload.milestoneId}&sprintId=${data.payload.sprintId}`);
 }
+export function GetHistoryApi(data): any {
+    return api.get(URL.getHistory + data.payload);
+}

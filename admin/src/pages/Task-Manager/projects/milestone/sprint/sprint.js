@@ -180,7 +180,7 @@ const Sprint = () => {
                                                         />
                                                     </td>
 
-                                                    <td> {moment(item?.startDate).format("Do MMM YYYY")}</td>
+                                                    <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
                                                     <td>{item?.daysLeft}</td>
                                                     {/* <td>{moment(item?.endDate).format('L')}</td> */}
                                                     <td>

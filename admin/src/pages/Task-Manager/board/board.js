@@ -11,7 +11,7 @@ import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
-import { getAssignUserAction, getComment, updateTaskStatus } from '../../../../src/redux/task/action';
+import { getAssignUserAction, getComment, getHistoryAction, updateTaskStatus } from '../../../../src/redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
@@ -269,6 +269,7 @@ const Boards = () => {
         dispatch(getAllProjects(body));
         dispatch(getsingleMileStone({ id: '', activeStatus: 1, skip: 0, mileStoneId: '' }));
         dispatch(getSingleSprint({ activeStatus: 1, id: '', skip: 0 }));
+    
     }, []);
     const handleSearchChange = (e) => {
         e.preventDefault();
