@@ -4,13 +4,19 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import moment from 'moment';
-import { AddComment, UpdateCommentAction, deleteComment, getComment } from '../../../redux/task/action';
+import {
+    AddComment,
+    UpdateCommentAction,
+    deleteComment,
+    getComment,
+    getHistoryAction,
+} from '../../../redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 import noimage from '../../../assets/images/noimage.png';
 const TaskDetailPage = ({ modal, editData, closeModal }) => {
-    // console.log(editData, 'editdataaaaaaaaaaa');
+    console.log(editData, 'editdataaaaaaaaaaa');
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [connectComponent, setConnectComponent] = useState('All');
@@ -18,8 +24,12 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
     const [commentId, setCommentId] = useState();
     const [commentTextUpdate, setCommentTextUpdate] = useState(false);
     const getCommentData = store?.getComment?.data?.response;
+    const getHistory = store?.getHistoryReducer?.data?.response;
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
+        if (type === 'History') {
+            dispatch(getHistoryAction(editData?.id));
+        }
     };
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
     const [inputForUpdate, setInputForUpdate] = useState('');
@@ -290,7 +300,27 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                     </Row>
                                 </>
                             ) : connectComponent === 'History' ? (
-                                ''
+                                getHistory?.map((ele) => (
+                                    <>
+                                        <div className="d-flex align-items-center">
+                                            <span
+                                                style={{
+                                                    backgroundColor: '#605e5a',
+                                                    borderRadius: '100%',
+                                                    padding: '9px',
+                                                    color: 'white',
+                                                    fontWeight: '800',
+                                                }}>
+                                                {ele?.userId?.firstName.charAt(0)}
+                                                {ele?.userId?.lastName.charAt(0)}
+                                            </span>
+                                            <h4 className="pe-1 ps-1">
+                                                {ele?.userId?.firstName} {ele?.userId?.lastName}
+                                            </h4>
+                                            {ele?.userActivity} {moment(ele?.time).format('LLL')}
+                                        </div>
+                                    </>
+                                ))
                             ) : (
                                 ''
                             )}
@@ -326,13 +356,13 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0"> Start Date :</h4>
                                     <p className="ms-2 p-0">
-                                        {editData?.startDate ? moment(editData?.startDate).format('L') : ''}
+                                        {editData?.startDate ? moment(editData?.startDate).format('DD/MM/YYYY') : ''}
                                     </p>
                                 </div>
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0"> End Date :</h4>
                                     <p className="ms-2 p-0">
-                                        {editData?.dueDate ? moment(editData?.dueDate).format('L') : ''}
+                                        {editData?.dueDate ? moment(editData?.dueDate).format('DD/MM/YYYY') : ''}
                                     </p>
                                 </div>
                                 <div className=" d-flex">
