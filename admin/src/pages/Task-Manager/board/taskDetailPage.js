@@ -25,6 +25,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
     const [commentTextUpdate, setCommentTextUpdate] = useState(false);
     const getCommentData = store?.getComment?.data?.response;
     const getHistory = store?.getHistoryReducer?.data?.response;
+    const historyLoader = store?.getHistoryReducer
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
         setValue('comment', "");
@@ -307,8 +308,11 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                     </Row>
                                 </>
                             ) : connectComponent === 'History' ? (
-                                getHistory?.map((ele) => (
+                               
+                                <div>
+                                   {  getHistory?.map((ele) => (
                                     <>
+                                    
                                         <div className="d-flex align-items-center pt-2">
                                             <span
                                                 style={{
@@ -327,7 +331,9 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                             {ele?.userActivity} {moment(ele?.time).format('LLL')}
                                         </div>
                                     </>
-                                ))
+                                ))}
+                                </div>
+                               
                             ) : (
                                 ''
                             )}
