@@ -10,7 +10,7 @@ import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 import noimage from '../../../assets/images/noimage.png';
 const TaskDetailPage = ({ modal, editData, closeModal }) => {
-    // console.log(editData, 'editdataaaaaaaaaaa');
+    console.log(editData, 'editdataaaaaaaaaaa');
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [connectComponent, setConnectComponent] = useState('All');

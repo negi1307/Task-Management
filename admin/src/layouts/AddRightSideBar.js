@@ -9,6 +9,20 @@ import DatePicker from 'react-datepicker';
 import '../../node_modules/react-datepicker/dist/react-datepicker.css';
 
 export default function RightBar(props) {
+      //
+      const [startDate, setStartDate] = useState();
+      const [endDate, setEndDate] = useState();
+      // disable previous date
+      const today = new Date();
+      console.log(today, 'today');
+      // end date
+      const handleStartDate = (date) => {
+          setStartDate(date);
+      };
+      const handleEndDate = (date) => {
+          setEndDate(date);
+          
+      };
     const {
         register,
         handleSubmit,
@@ -38,7 +52,7 @@ export default function RightBar(props) {
     // const milestoneId = store?.getMilestoneId?.data;
     // const sprintid = store?.getSprintId?.data;
     // const sucesshandel =store?.createTaskReducer?.data
-    const today = new Date().toISOString().split('T')[0];
+
     const dispatch = useDispatch();
     const onSubmit = (e) => {
         let body = new FormData();
@@ -50,8 +64,8 @@ export default function RightBar(props) {
         body.append('assigneeId ', e.Assignee);
         body.append('reporterId', e.Report);
         body.append('priority', e.priority);
-        body.append('startDate', e.start_date);
-        body.append('dueDate', e.last_date);
+        body.append('startDate', startDate);
+        body.append('dueDate', endDate);
         body.append('status', 1);
         body.append('expectedHours', e.expectedHours);
         body.append('attachment', selectedFile ? selectedFile : '');
@@ -69,6 +83,8 @@ export default function RightBar(props) {
         setValue('description', '');
         setShowModal(false);
         setSelectedFile('');
+        setStartDate("");
+        setEndDate("")
     };
     const handelClose = () => {
         setValue('Summary', '');
@@ -80,6 +96,8 @@ export default function RightBar(props) {
         setValue('description', '');
         setShowModal(false);
         setSelectedFile('');
+        setStartDate("");
+        setEndDate("")
     };
     useEffect(() => {
         reset({ projectname: projectId, Milestone: mileStoneId, Sprint: sprintId });
@@ -223,7 +241,7 @@ export default function RightBar(props) {
                                             id="exampleForm.ControlInput1"
                                             {...register('Assignee', { required: true })}>
                                             <option value={''} hidden selected>
-                                                --Select--
+                                                Select
                                             </option>
                                             {store?.getAllUsers?.data?.response?.map((ele, ind) => (
                                                 <option value={ele?._id}>
@@ -246,7 +264,7 @@ export default function RightBar(props) {
                                         </label>
                                         <input
                                             placeholder="Please Expected Hours "
-                                            type="time"
+                                            type="number"
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
                                             {...register('expectedHours', { required: true })}
@@ -254,44 +272,40 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            Start Date<span class="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            placeholder="Please start Date "
-                                            type="date"
-                                            min={today}
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('start_date', { required: true })}
-                                        />
-                                        {errors.start_date?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                Start Date<span className="text-danger">*</span>:
+                                            </Form.Label>
+
+                                            <DatePicker
+                                                selected={startDate}
+                                                // onChange={(date) => setStartDate(date)}
+                                                onChange={(date) => handleStartDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={today}
+                                                className="add_width_input"
+                                            />
+                                        </Form.Group>
                                     </div>
-                                </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            End Date<span class="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            placeholder="Please end Date"
-                                            type="date"
-                                            disabled={watch('start_date') == '' || watch('start_date') == undefined}
-                                            min={watch('start_date')}
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('last_date', { required: true })}
-                                        />
-                                        {errors.last_date?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
+                            <div class="col-lg-6">
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                End Date<span className="text-danger">*</span>:
+                                            </Form.Label>
+
+                                            <DatePicker
+                                                selected={endDate}
+                                                disabled={startDate == '' || startDate == undefined}
+                                                // onChange={(date) => setEndDate(date)}
+                                                onChange={(date) => handleEndDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={startDate}
+                                                className="add_width_input"
+                                            />
+                                        </Form.Group>
                                     </div>
-                                </div>
                                 <div class="col-lg-6">
                                     <div class="mb-1">
                                         <label class="form-label" for="exampleForm.ControlInput1">
@@ -304,7 +318,7 @@ export default function RightBar(props) {
                                             id="exampleForm.ControlInput1"
                                             {...register('priority', { required: true })}>
                                             <option hidden selected>
-                                                -----select----
+                                                select
                                             </option>
                                             <option value="1">High</option>
                                             <option value="2">Medium</option>
