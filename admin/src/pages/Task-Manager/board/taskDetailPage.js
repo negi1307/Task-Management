@@ -110,7 +110,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                 <hr />
                 <Modal.Body>
                     <Row>
-                        <Col lg={6}>
+                        <Col lg={7}>
                             <h4>Activity</h4>
                             <Row>
                                 <Col lg={12}>
@@ -160,12 +160,12 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                         <ul style={{ listStyle: 'none' }}>
                                             <Row>
                                                 <Col lg={12} className="d-flex">
-                                                    <Col lg={2} className="pt-1">
+                                                    <Col lg={2} className="pt-2">
                                                         <span
                                                             style={{
                                                                 backgroundColor: '#605e5a',
                                                                 borderRadius: '100%',
-                                                                padding: '9px',
+                                                                padding: '11px 15px',
                                                                 color: 'white',
                                                                 fontWeight: '800',
                                                             }}>
@@ -252,13 +252,13 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                         {getCommentData?.map((ele, ind) => (
                                             <ul style={{ listStyle: 'none' }}>
                                                 <Row>
-                                                    <Col lg={12} className="d-flex">
-                                                        <Col lg={2} className="pt-1">
+                                                    <Col lg={12} className="d-flex pt-2">
+                                                        <Col lg={2} className="pt-2">
                                                             <span
                                                                 style={{
                                                                     backgroundColor: '#605e5a',
                                                                     borderRadius: '100%',
-                                                                    padding: '9px',
+                                                                    padding: '11px 15px',
                                                                     color: 'white',
                                                                     fontWeight: '800',
                                                                 }}>
@@ -302,12 +302,12 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                             ) : connectComponent === 'History' ? (
                                 getHistory?.map((ele) => (
                                     <>
-                                        <div className="d-flex align-items-center">
+                                        <div className="d-flex align-items-center pt-2">
                                             <span
                                                 style={{
                                                     backgroundColor: '#605e5a',
                                                     borderRadius: '100%',
-                                                    padding: '9px',
+                                                    padding: '11px 15px',
                                                     color: 'white',
                                                     fontWeight: '800',
                                                 }}>
@@ -325,7 +325,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                 ''
                             )}
                         </Col>
-                        <Col lg={6}>
+                        <Col lg={5}>
                             <div className="p-2">
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Project Name :</h4>
