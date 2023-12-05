@@ -24,6 +24,7 @@ export default function RightBar(props) {
     // console.log("getAllUserTask",getAllUserData)
 
     const id = store?.Auth?.user?.userId;
+    console.log("userID",id)
     //     const projectId=store?.getProjectId?.data
     // const milstoneId=store?.getMilestoneId?.data
     // const SprintId=store?.getSprintId?.data
@@ -65,11 +66,11 @@ export default function RightBar(props) {
         formData.append('summary', e.Summary);
         //formData.append('expectedHours', e.expectedHours)
         formData.append('description', description);
-        formData.append('assigneeId', e.Assignee);
+        formData.append('assigneeId', id);
         formData.append('reporterId', e.Report);
         formData.append('priority', e.priority);
         formData.append('startDate', startDate);
-        formData.append('dueDate', endDate);
+        formData.append('dueDate', endDate);        
         formData.append('attachment', filePreviewData);
 
         if (projectId !== '' && milestoneId !== '' && spriteId !== '') {
@@ -83,7 +84,6 @@ export default function RightBar(props) {
 
         setValue('Summary', '');
         setValue('Description', '');
-        setValue('Assignee', '');
         setValue('expectedHours', '');
         setValue('Report', '');
         setValue('priority', '');

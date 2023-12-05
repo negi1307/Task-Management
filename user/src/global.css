@@ -50,10 +50,12 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
 
 .menuinfo ul li {
     padding-right: 15px;
+    font-size: 24px;
 }
 
 .menuinfo li:last-child {
     padding-right: 0px;
+    font-size: 16px;
 }
 
 .menuinfo ul li a {
@@ -804,4 +806,8 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     color: white !important;
     box-shadow: none !important;
     border: none !important;
+}
+
+.history_data_info ul li {
+    list-style: none;
 }

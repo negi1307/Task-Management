@@ -47,7 +47,7 @@ export default function RightBar(props) {
         body.append('sprintId', sprintId);
         body.append('summary', e.Summary);
         body.append('description', e.description);
-        body.append('assigneeId', e.Assignee);
+        body.append('assigneeId ', e.Assignee);
         body.append('reporterId', e.Report);
         body.append('priority', e.priority);
         body.append('startDate', e.start_date);
