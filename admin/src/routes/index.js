@@ -77,7 +77,7 @@ const CRMDashboard = React.lazy(() => import('../pages/apps/CRM/Dashboard'));
 const CRMProjects = React.lazy(() => import('../pages/apps/CRM/Projects'));
 const CRMManagement = React.lazy(() => import('../pages/apps/CRM/Management'));
 const CRMClients = React.lazy(() => import('../pages/apps/CRM/Clients'));
-const CRMOrderList = React.lazy(() => import('../pages/apps/CRM/OrderList'));
+// const CRMOrderList = React.lazy(() => import('../pages/apps/CRM/OrderList'));
 
 // customer
 const CustomerIndex = React.lazy(() => import('../pages/Task-Manager/customer/CustomerIndex'));
@@ -509,10 +509,10 @@ const AllRoutes = () => {
                                     path: 'clients',
                                     element: <LoadComponent component={CRMClients} />,
                                 },
-                                {
-                                    path: 'orders',
-                                    element: <LoadComponent component={CRMOrderList} />,
-                                },
+                                // {
+                                //     path: 'orders',
+                                //     element: <LoadComponent component={CRMOrderList} />,
+                                // },
                             ],
                         },
                         {
