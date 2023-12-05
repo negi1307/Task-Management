@@ -318,9 +318,10 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                 style={{
                                                     backgroundColor: '#605e5a',
                                                     borderRadius: '100%',
-                                                    padding: '11px 15px',
+                                                    padding: '11px 11px',
                                                     color: 'white',
                                                     fontWeight: '800',
+                                                    textTransform: "uppercase"
                                                 }}>
                                                 {ele?.userId?.firstName.charAt(0)}
                                                 {ele?.userId?.lastName.charAt(0)}
@@ -328,7 +329,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                             <h4 className="pe-1 ps-1">
                                                 {ele?.userId?.firstName} {ele?.userId?.lastName}
                                             </h4>
-                                            {ele?.userActivity} {moment(ele?.time).format('LLL')}
+                                            {ele?.userActivity}  {moment(ele?.time).format('LLL')}
                                         </div>
                                     </>
                                 ))}
