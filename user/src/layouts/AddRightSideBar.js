@@ -281,7 +281,7 @@ export default function RightBar(props) {
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <div class="mb-2 ">
+                                    <div class="mb-2  startinfodate">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Start Date<span class="text-danger">*</span>:
                                         </label>
@@ -312,7 +312,7 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="mb-2">
+                                    <div class="mb-2 startinfodate">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             End Date<span class="text-danger">*</span>:
                                         </label>

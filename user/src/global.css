@@ -595,7 +595,7 @@ li.card_img button {
     width: 30px;
     background: #3294b0;
     border-radius: 100%;
-    /* padding: 10px; */
+    padding: 0px!important;
     font-size: 20px;
     /* margin-top: 20px !important; */
     display: inline-block;
@@ -627,6 +627,9 @@ td.user_name {
 
 td.user_comment {
     font-size: 18px;
+}
+.comment_info {
+    color: #000;
 }
 /* p.action-icon i {
     font-size: 27px;
@@ -803,4 +806,53 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
 
 .history_data_info ul li {
     list-style: none;
+}
+
+.startinfodate input {
+    display: block;
+    width: 100%;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.9rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--ct-input-color);
+    background-color: var(--ct-input-bg);
+    background-clip: padding-box;
+    border: 1px solid var(--ct-input-border-color);
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.history_data_info ul {
+    padding-left: 0px;
+}
+
+.history_data_info p {
+    margin: 0px;
+}
+
+.history_data_info ul li {
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+}
+
+.history_data_info span {
+    color: #000;
+    font-size: 15px;
+    font-weight: 900;
+    margin: 0px 5px;
+}
+
+.history_data_info p.username {
+    color: #fff;
+    background: #000;
+    border-radius: 100%;
+    padding: 5px;
+    text-transform: uppercase;
+}
+
+.taskcardinfo table {
+    width: 100%;
 }
