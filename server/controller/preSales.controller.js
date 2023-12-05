@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const preSalesModel = require("../models/preSales.model")
 const projectModel = require("../models/project.model")
 
@@ -191,12 +192,12 @@ const getPreSaleData = async (req, res) => {
 const updatePreSalesData = async (req, res) => {
     try {
         let createdProject;
-        const { status, technology, startDate, endDate, projectType, projectStatus, clientName, description } = req.body;
-        const presale_data = await preSalesModel.findById({ _id: req.body.preSalesId });
+        const { status, technology, startDate, endDate, projectType, projectStatus, clientName, description, projectName } = req.body;
+        const presale_data = await preSalesModel.findById({ _id: new mongoose.Types.ObjectId(req.body.preSalesId) });
         const project_data = await projectModel.findOne({ preSalesId: req.body.preSalesId });
-        if (project_data) {
-            const updatedPreSales = await preSalesModel.findByIdAndUpdate({ _id: req.body.preSalesId }, req.body, { new: true });
-            await projectModel.findByIdAndUpdate({ _id: project_data._id }, req.body, { new: true });
+        if (presale_data) {
+            const updatedPreSales = await preSalesModel.findByIdAndUpdate({ _id: req.body.preSalesId }, { $set: req.body }, { new: true });
+            project_data != null ? await projectModel.findByIdAndUpdate({ _id: project_data._id }, { $set: req.body }, { new: true }) : console.log("hey");
             return res.status(200).json({ status: "200", message: "Pre Sale data updated Successfully", data: { updatedPreSales, createdProject } });
         }
         else {
