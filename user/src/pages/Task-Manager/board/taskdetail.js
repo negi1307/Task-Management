@@ -10,7 +10,6 @@ import Attachments from './../../apps/Tasks/Details/Attachments';
 
 const Taskdetail = (props) => {
     const { item } = props;
-    console.log("itemmmmmmmmmmmmmmmmmmmmmmm",item)
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [inputForUpdate, setInputForUpdate] = useState('');
@@ -29,19 +28,43 @@ const Taskdetail = (props) => {
     } = useForm();
 
     const onSubmitComment = (e) => {
-        console.log(e);
-
-        const commentData = {
-            userId: props.userId,
-            taskId: item?.taskId,
-            comment: e.comment,
-        };
-        dispatch(addComment(commentData));
-        dispatch(getComment(item?.taskId));
-        dispatch(getHistory(item?.taskId))
+        if(e.commentId !== ""){
+            updateCommentData(e);
+        }
+        else{
+            const commentData = {
+                userId: props.userId,
+                taskId: item?.taskId,
+                comment: e.comment,
+            };
+            dispatch(addComment(commentData));
+            dispatch(getComment(item?.taskId));
+            dispatch(getHistory(item?.taskId))            
+        }
         setValue('comment', '');
     };
+    const[isUpdate,setIsUpdate] = useState(false);
+    const updateCommentData=(e)=>{
+       const commentData = {
+        taskId:item?.taskId,
+        commentId : e.commentId,
+        comment : e.comment
+       }
+       dispatch(updateComment(commentData));
+       setTimeout(() => {
+        dispatch(getComment(item?.taskId));
+       dispatch(getHistory(item?.taskId)); 
+       }, 500);
+       setIsUpdate(false);
+    }
 
+
+    const editComment =(item)=>{
+        setValue('comment',item?.comment);
+        setValue('commentId',item?._id);
+        setIsUpdate(true);
+      }
+     
     const downloadFile = (file) => {
         fetch(file).then((response) => {
             response.blob().then((blob) => {
@@ -108,7 +131,8 @@ const Taskdetail = (props) => {
         setInputForUpdate(indx);
         setUpdatedCommentInitialValue(data?.comment);
     };
-
+  
+    
     return (
         <>
             <Modal
@@ -280,13 +304,10 @@ const Taskdetail = (props) => {
                                     <div className="edit_delte">
                                         <div className="taskcardinfo">
                                             <form onSubmit={handleSubmit(onSubmitComment)}>
-                                                {/* <input
-                                                    type="hidden"
-                                                    value={props.item?.taskInfo?._id}
-                                                    {...register('taskid')}
-                                                /> */}
+                                               
                                                 <Row className="mt-2">
                                                     <Col lg={10}>
+                                                    
                                                         <Form.Group
                                                             className="mb-1"
                                                             controlId="exampleForm.ControlInput1">
@@ -295,13 +316,12 @@ const Taskdetail = (props) => {
                                                                 placeholder="Add comment"
                                                                 {...register('comment', { required: true })}
                                                             />
-                                                            {/* {errors.comment?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )} */}
+                                                        <input {...register('commentId')} type='hidden'></input>
                                                         </Form.Group>
                                                     </Col>
                                                     <Col className="m-0 p-0" lg={2}>
-                                                        <Button type="submit">Add</Button>
+                                                       
+                                                        <Button type="submit">{isUpdate ? "Update":"Add"}</Button>
                                                     </Col>
                                                 </Row>
                                             </form>
@@ -348,8 +368,7 @@ const Taskdetail = (props) => {
                                                                     </div>
 
                                                                     <div className="d-flex m-0 p-0">
-                                                                        <p className=" p-0" onClick={() => handelUpdateAll(comm, ind)}>Edit</p>
-                                                                        {/* <p className=" cp  p-0 ps-2">Delete</p> */}
+                                                                        <a  className=" p-0" onClick={() => editComment(comm)}>Edit</a>
                                                                     </div>
                                                                 </Col>
                                                             </Col>
@@ -370,7 +389,7 @@ const Taskdetail = (props) => {
                                 tabindex="0">
                                 <div className="history">
                                     <div className="history_data_info">
-                                        {props.historyData?.map((datainfo, index) => (
+                                        {props.historyData?.reverse()?.map((datainfo, index) => (
                                             <>
                                                 <ul>
                                                     
@@ -463,9 +482,8 @@ const Taskdetail = (props) => {
 
                                 {props.item.reporterInfo?.role}
                             </li>
-
-
-                            <li class="card_img">
+                         
+                               {props?.item?.taskInfo?.attachment !== "null" ? (<li class="card_img">
                                 <label>Attachment:</label>
                                 <img
                                     src={props.item?.taskInfo?.attachment}
@@ -476,7 +494,7 @@ const Taskdetail = (props) => {
                                     <i class="dripicons-download download_color"></i>
                                 </button>
 
-                            </li>
+                            </li>):('')}
 
                         </ul>
                     </div>

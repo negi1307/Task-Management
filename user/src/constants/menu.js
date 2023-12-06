@@ -9,12 +9,12 @@ const MENU_ITEMS = [
         icon: 'uil-chart',
     },
 
-    {
-        key: 'boards',
-        label: 'Boards',
-        url: 'dashboard/boards',
-        icon: 'uil-chart',
-    },
+    // {
+    //     key: 'boards',
+    //     label: 'Boards',
+    //     url: 'dashboard/boards',
+    //     icon: 'uil-chart',
+    // },
   
 ];
 
