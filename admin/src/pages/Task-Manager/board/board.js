@@ -135,6 +135,7 @@ const Boards = () => {
     useEffect(() => {
         dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
         dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
+        dispatch(getAllRoles())
     }, [render]);
     useEffect(() => {
         if (successHandle?.data?.status == 200) {

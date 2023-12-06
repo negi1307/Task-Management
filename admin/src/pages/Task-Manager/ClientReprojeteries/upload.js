@@ -95,7 +95,6 @@ const Upload = () => {
                     </Row> */}
                     <Row>
                         <Col lg={12}>
-                        
                             {getUploadedData?.loading ? (
                                 <MainLoader />
                             ) : (
@@ -113,28 +112,28 @@ const Upload = () => {
                                             <tr>
                                                 <td>{(skip - 1) * 10 + ind + 1}</td>
                                                 <td>{ele?.fileName}</td>
-                                                <td>
+                                                <td className="d-flex align-items-center justify-content-center">
                                                     <div style={{ width: '3rem' }}>
                                                         {ele?.attachmentType == 'application/x-zip-compressed' ? (
-                                                            <img style={{ width: '100%' }} src={zip} />
+                                                            <img style={{ width: '66%' }} src={zip} />
                                                         ) : '' ||
                                                           ele?.attachmentType == 'image/png' ||
                                                           ele?.attachmentType == 'image/jpeg' ||
                                                           ele?.attachmentType == 'image/webp' ? (
-                                                            <img style={{ width: '100%' }} src={image} />
+                                                            <img style={{ width: '66%' }} src={image} />
                                                         ) : '' || ele?.attachmentType == 'text/csv' ? (
-                                                            <img style={{ width: '100%' }} src={csv} />
+                                                            <img style={{ width: '66%' }} src={csv} />
                                                         ) : '' || ele?.attachmentType == 'application/pdf' ? (
-                                                            <img style={{ width: '100%' }} src={pdf} />
+                                                            <img style={{ width: '66%' }} src={pdf} />
                                                         ) : '' ||
                                                           ele?.attachmentType ==
                                                               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ? (
-                                                            <img style={{ width: '100%' }} src={excel} />
+                                                            <img style={{ width: '66%' }} src={excel} />
                                                         ) : '' ||
                                                           ele?.attachmentType == 'application/vnd.ms-powerpoint' ? (
-                                                            <img style={{ width: '100%' }} src={powerPoint} />
+                                                            <img style={{ width: '66%' }} src={powerPoint} />
                                                         ) : '' || ele?.attachmentType == 'application/msword' ? (
-                                                            <img style={{ width: '100%' }} src={Word} />
+                                                            <img style={{ width: '66%' }} src={Word} />
                                                         ) : (
                                                             ''
                                                         )}
