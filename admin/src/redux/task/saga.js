@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import TASK_TYPES from './constant';
-import { AddCommentApi, GetAssignUserApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi,updateTaskStatusApi } from './api';
+import { AddCommentApi, GetAssignUserApi, GetHistoryApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi,updateTaskStatusApi } from './api';
 
 function* createTaskFunction({ payload }) {
     try {
@@ -453,6 +453,43 @@ function* AssignUserFunction({ payload }) {
         });
     }
 }
+
+function* getHistoryFunction({ payload }) {
+    try {
+        yield put({
+            type: TASK_TYPES.GET_HISTORY_LOADING,
+            payload: {}
+        })
+        const response = yield call(GetHistoryApi, { payload });
+        if (response.data.status) {
+            yield put({
+                type: TASK_TYPES.GET_HISTORY_SUCCESS,
+                payload: { ...response.data },
+            });
+            // yield put({
+            //     type: TASK_TYPES.GET_HISTORY_RESET,
+            //     payload: {},
+            // });
+        }
+        else {
+            yield put({
+                type: TASK_TYPES.GET_HISTORY_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: TASK_TYPES.GET_HISTORY_ERROR,
+            payload: { error }
+        });
+        yield put({
+            type: TASK_TYPES.GET_HISTORY_RESET,
+            payload: {},
+        });
+
+    }
+}
 export function* createTaskSaga(): any {
     yield takeEvery(TASK_TYPES.CREATE_TASK, createTaskFunction);
 }
@@ -489,6 +526,9 @@ export function* updateCommentSaga(): any {
 export function* getAssignUserSaga(): any {
     yield takeEvery(TASK_TYPES. GET_ASSIGN_USER, AssignUserFunction);
 }
+export function* getHistorySaga(): any {
+    yield takeEvery(TASK_TYPES. GET_HISTORY, getHistoryFunction);
+}
 function* AllTaskSaga(): any {
     yield all([
         fork(createTaskSaga),
@@ -502,7 +542,8 @@ function* AllTaskSaga(): any {
         fork(getCommentSaga),
         fork(deleteCommentSaga),
         fork(updateCommentSaga),
-        fork(getAssignUserSaga)
+        fork(getAssignUserSaga),
+        fork (getHistorySaga)
     ])
 }
 export default AllTaskSaga;

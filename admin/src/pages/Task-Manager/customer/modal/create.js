@@ -37,7 +37,7 @@ const Create = ({ modal, closemodal }) => {
     const {
         register,
         handleSubmit,
-        reset,
+        reset,setValue,
         formState: { errors },
     } = useForm();
     const onSubmit = (data) => {
@@ -48,9 +48,14 @@ const Create = ({ modal, closemodal }) => {
                 description: data?.description,
                 stage: data?.stage,
                 type: addValue,
-                status: 2,
+                status: 0,
             })
         );
+        setValue("name","")
+        setValue("project","")
+        setValue("description","")
+        setValue("type","")
+        setValue("stage","")
     };
 
     useEffect(() => {

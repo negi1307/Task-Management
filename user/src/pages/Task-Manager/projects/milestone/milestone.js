@@ -235,7 +235,7 @@ const Milestone = () => {
                                                             />
                                                         </td>
 
-                                                        <td> {moment(item?.milestoneId?.start_date).format('L')}</td>
+                                                        <td> {moment(item?.milestoneId?.start_date).format('DD/MM/YYYY')}</td>
                                                         <td>
                                                         {item?.milestoneId?.daysLeft}
                                                         

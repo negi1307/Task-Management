@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
-const HistoryTypeEnum = {
-    // Define your enum values here
-    // For example:
-    CREATED: 'created',
-    UPDATED: 'updated',
-    DELETED: 'deleted',
-};
+// const HistoryTypeEnum = {
+//     // Define your enum values here
+//     // For example:
+//     CREATED: 'created',
+//     UPDATED: 'updated',
+//     DELETED: 'deleted',
+// };
 
 const history = mongoose.model(
     'History', mongoose.Schema({
@@ -21,9 +21,9 @@ const history = mongoose.model(
         userActivity: {
             type: String
         },
-        user: {
-            type: String
-        },
+        // user: {
+        //     type: String
+        // },
         userId: {
             type: mongoose.Types.ObjectId,
             ref: 'User'
