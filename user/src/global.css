@@ -823,17 +823,10 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
 .history_data_info ul li {
     list-style: none;
 }
-<<<<<<< HEAD
-.history_data_info ul li {
-    display: flex;
-    align-items: center;
-    font-size: 13px;
-=======
 
 
 .history_data_info ul li {
     display: flex;
->>>>>>> ffb7b84d7c522ba54aac69559408567d8d0b206d
 }
 
 .history_data_info ul {
@@ -856,8 +849,4 @@ p.username {
 .history_data_info span {
     color: #000;
     font-weight: 700;
-}
-.menuinfo li {
-    color: #000;
-    font-size: 23px !important;
 }
