@@ -786,11 +786,20 @@ li.leave_data label {
 }
 
 li.leave_data select {
-    width: 242px;
+    width: 100%;
     padding: 10px;
     border: 2px solid #d8d6d6;
     border-radius: 9px;
     height: 45px;
+}
+.reason_type ul {
+    list-style: none;
+    padding-left: 0px;
+    margin-bottom: 0px;
+}
+
+li.leave_data input {
+    width: 100% !important;
 }
 .mdi.mdi-eye {
     color: black;
@@ -814,10 +823,17 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
 .history_data_info ul li {
     list-style: none;
 }
+<<<<<<< HEAD
+.history_data_info ul li {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+=======
 
 
 .history_data_info ul li {
     display: flex;
+>>>>>>> ffb7b84d7c522ba54aac69559408567d8d0b206d
 }
 
 .history_data_info ul {
@@ -840,4 +856,8 @@ p.username {
 .history_data_info span {
     color: #000;
     font-weight: 700;
+}
+.menuinfo li {
+    color: #000;
+    font-size: 23px !important;
 }

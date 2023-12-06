@@ -235,16 +235,17 @@ dispatch(getAllLogoutReason())
     const logoutTime = () => {
         if(leave !==""){
             dispatch(addLoginTimeStop({leaveMessageId:leave}));
-            sessionStorage.removeItem('startButton');             
-            setShowButton(true);
+            sessionStorage.removeItem('startButton');  
+            setShowButton(true);            
         }
         else{
-            ToastHandle('success', "please select leave reason");
+            handleShow();
         }
     };
 
 const onChangeLeave =(e)=>{
     setLeave(e.target.value);
+    handleClose();
 }
 
 
@@ -328,7 +329,7 @@ const [show, setShow] = useState(false);
                                    ':'+ localStorage.getItem('seconds')}
                                    
                                    </li>
-                                    <li className='leave_data'>
+                                    {/* <li className='leave_data'>
                                    
                                         <select id="leave" onChange={onChangeLeave} name="cars" disabled={showButton}>
                                             <option value="">Select Reason</option>
@@ -339,7 +340,7 @@ const [show, setShow] = useState(false);
                                           
                                            
                                         </select>
-                                    </li>
+                                    </li> */}
                                     {/* {moment(loginTimee).format("LTS")} */}
                                 </ul>
                             </div>
@@ -367,22 +368,22 @@ const [show, setShow] = useState(false);
                             </li>
 
                         </ul>
-                                                {/* <Button variant="primary" onClick={handleShow}>
+         {/* <Button variant="primary" onClick={handleShow}>
         Launch demo modal
       </Button> */}
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Select Reason for Leave</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className='reason_type'>
             <ul>
             <li className='leave_data'>
                                    
                                    <select id="leave" onChange={onChangeLeave} name="cars" disabled={showButton}>
                                        <option value="" >Select Reason</option>
                                        {getLeaveDetails?.map((item,index)=>
-                                           <option key={index} value={item?._id} onClick={handleClose}>{item?.leaveReason}</option>
+                                           <option key={index} value={item?._id} >{item?.leaveReason}</option>
                                        )}
                                        
                                      
@@ -392,12 +393,12 @@ const [show, setShow] = useState(false);
             </ul>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          {/* <Button variant="secondary" onClick={handleClose}>
          
           </Button>
           <Button variant="primary" onClick={handleClose}>
          
-          </Button>
+          </Button> */}
         </Modal.Footer>
       </Modal>
                         
