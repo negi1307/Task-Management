@@ -850,3 +850,7 @@ p.username {
     color: #000;
     font-weight: 700;
 }
+.menuinfo li {
+    color: #000;
+    font-size: 23px !important;
+}

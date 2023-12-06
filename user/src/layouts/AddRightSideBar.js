@@ -71,7 +71,12 @@ export default function RightBar(props) {
         formData.append('priority', e.priority);
         formData.append('startDate', startDate);
         formData.append('dueDate', endDate);        
-        formData.append('attachment', filePreviewData);
+        if(filePreviewData == null){
+            formData.append('attachment', "");
+        }
+        else{
+            formData.append('attachment', filePreviewData);
+        }       
 
         if (projectId !== '' && milestoneId !== '' && spriteId !== '') {
             dispatch(createTask(formData));
@@ -87,7 +92,7 @@ export default function RightBar(props) {
         setValue('expectedHours', '');
         setValue('Report', '');
         setValue('priority', '');
-        setValue('start_date', '');
+        setValue('startDate', '');
         setValue('last_date', '');
         setValue('attachment', '');
         setShowModal(false);

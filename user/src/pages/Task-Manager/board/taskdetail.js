@@ -132,7 +132,6 @@ const Taskdetail = (props) => {
         setUpdatedCommentInitialValue(data?.comment);
     };
   
-    
     return (
         <>
             <Modal
@@ -483,7 +482,7 @@ const Taskdetail = (props) => {
                                 {props.item.reporterInfo?.role}
                             </li>
                          
-                               {props?.item?.taskInfo?.attachment !== "null" ? (<li class="card_img">
+                               {props?.item?.taskInfo?.attachment !== "null"  && props?.item?.taskInfo?.attachment !== "" ? (<li class="card_img">
                                 <label>Attachment:</label>
                                 <img
                                     src={props.item?.taskInfo?.attachment}
