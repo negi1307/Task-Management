@@ -269,6 +269,9 @@ export default function RightBar(props) {
                                             class="form-control"
                                             {...register('expectedHours', { required: true })}
                                         />
+                                            {errors.expectedHours?.type === 'required' && (
+                                                        <span className="text-danger"> This feild is required *</span>
+                                                    )}
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
