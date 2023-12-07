@@ -96,7 +96,7 @@ const Summary = () => {
                     <div className="row">
                         <div className="col  border_clr  m-2 rounded-4 bg-white">
                             <div className="d-flex  p-4  px-4 align-items-center jusstify-content-center">
-                                <div className="bg_clr  p-3 rounded-circle text-center ">
+                                <div className="bg_clr rounded-circle text-center ">
                                     <i className="bi bi-check-lg w-size" />
                                 </div>
                                 <div className="mx-3 ">
@@ -113,7 +113,7 @@ const Summary = () => {
                         </div>
                         <div className="col  border_clr  m-2 rounded-4 bg-white">
                             <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
-                                <div className="bg_clr  p-3 rounded-circle text-center ">
+                                <div className="bg_clr rounded-circle text-center ">
                                     <i className="bi bi-pencil-fill w-size" />
                                 </div>
                                 <div className="mx-3 ">
@@ -131,7 +131,7 @@ const Summary = () => {
                         </div>
                         <div className="col  border_clr  m-2 rounded-4 bg-white">
                             <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
-                                <div className="bg_clr  p-3 rounded-circle text-center ">
+                                <div className="bg_clr rounded-circle text-center ">
                                     <i className="bi bi-plus-lg w-size " />
                                 </div>
                                 <div className="mx-3 ">
@@ -148,7 +148,7 @@ const Summary = () => {
                         </div>
                         <div className="col  border_clr  m-2 rounded-4 bg-white">
                             <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
-                                <div className="bg_clr  p-3 rounded-circle text-center ">
+                                <div className="bg_clr rounded-circle text-center ">
                                     <i className="bi bi-calendar-week w-size" />
                                 </div>
                                 <div className="mx-3 ">
@@ -228,8 +228,8 @@ const Summary = () => {
                                         </div>
                                         <div className="row">
                                             <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                <div className="bg-dark rounded-circle text-center d-flex align-items-center justify-content-center add_hei_width">
+                                                    <h6 className="text-white m-0 p-0">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -246,8 +246,8 @@ const Summary = () => {
                                         </div>
                                         <div className="row">
                                             <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                <div className="bg-dark rounded-circle text-center d-flex align-items-center justify-content-center add_hei_width">
+                                                    <h6 className="text-white m-0 p-0">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -264,8 +264,8 @@ const Summary = () => {
                                         </div>
                                         <div className="row">
                                             <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                <div className="bg-dark rounded-circle text-center d-flex align-items-center justify-content-center add_hei_width">
+                                                    <h6 className="text-white m-0 p-0">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -282,8 +282,8 @@ const Summary = () => {
                                         </div>
                                         <div className="row">
                                             <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                <div className="bg-dark rounded-circle text-center d-flex align-items-center justify-content-center add_hei_width">
+                                                    <h6 className="text-white m-0 p-0">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -300,8 +300,8 @@ const Summary = () => {
                                         </div>
                                         <div className="row">
                                             <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                <div className="bg-dark rounded-circle text-center d-flex align-items-center justify-content-center add_hei_width">
+                                                    <h6 className="text-white m-0 p-0">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -318,8 +318,8 @@ const Summary = () => {
                                         </div>
                                         <div className="row">
                                             <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                <div className="bg-dark rounded-circle text-center d-flex align-items-center justify-content-center add_hei_width">
+                                                    <h6 className="text-white m-0 p-0">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -336,8 +336,8 @@ const Summary = () => {
                                         </div>
                                         <div className="row">
                                             <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                <div className="bg-dark rounded-circle text-center d-flex align-items-center justify-content-center add_hei_width">
+                                                    <h6 className="text-white m-0 p-0">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -354,8 +354,8 @@ const Summary = () => {
                                         </div>
                                         <div className="row">
                                             <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                <div className="bg-dark rounded-circle text-center d-flex align-items-center justify-content-center add_hei_width">
+                                                    <h6 className="text-white m-0 p-0">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -372,8 +372,8 @@ const Summary = () => {
                                         </div>
                                         <div className="row">
                                             <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                <div className="bg-dark rounded-circle text-center d-flex align-items-center justify-content-center add_hei_width">
+                                                    <h6 className="text-white m-0 p-0">NN</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">

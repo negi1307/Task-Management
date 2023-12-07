@@ -126,7 +126,7 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
 .modal-header button {
     box-shadow: 0px 2px 6px 0px rgba(57, 175, 209, 0.5);
     color: #fff;
-    background-color:black;
+    background-color: black;
     border-color: black;
     border: 0px;
 }
@@ -213,9 +213,12 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
     display: flex;
     margin-bottom: 15px;
 }
-
+.add_hei_width {
+    width: 50px;
+    height: 50px;
+}
 .all_bg {
-    padding: 70px 0px;
+    /* padding: 70px 0px; */
     background-color: rgb(202 129 255 / 7%);
 }
 .bg_clr {
@@ -595,7 +598,7 @@ li.card_img button {
     width: 30px;
     background: #3294b0;
     border-radius: 100%;
-    padding: 0px!important;
+    padding: 0px !important;
     font-size: 20px;
     /* margin-top: 20px !important; */
     display: inline-block;
@@ -733,10 +736,15 @@ li.info_cls {
 }
 
 .username_info ul li {
-    padding: 5px;
+    /* padding: 5px; */
     border-radius: 100%;
     color: #fff;
     font-weight: 600;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .status input[type='search'] {
     /* border-radius: 34px; */
@@ -824,7 +832,6 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     list-style: none;
 }
 
-
 .history_data_info ul li {
     display: flex;
 }
@@ -849,4 +856,47 @@ p.username {
 .history_data_info span {
     color: #000;
     font-weight: 700;
+}
+.css-1com30x {
+    height: 73vh !important;
+    overflow-y: scroll !important;
+}
+.css-1com30x::-webkit-scrollbar {
+    display: none;
+}
+
+.css-1com30x {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+.add_height_task {
+    height: 80vh !important;
+    overflow-y: scroll !important;
+}
+
+.all_bg {
+    background-color: rgb(218, 235, 255);
+}
+.scrollable-content::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollable-content {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+.add_height_task::-webkit-scrollbar {
+    display: none;
+}
+
+.add_height_task {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+.bg_clr {
+    height: 65px;
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

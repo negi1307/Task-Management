@@ -4,16 +4,14 @@ import styled from '@emotion/styled';
 import { deleteTask, getAllTask } from '../../../redux/task/action';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
-import { useState, useEffect,useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { useForm } from 'react-hook-form';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import UpdateTask from '../board/update';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { addComment, getComment, updateComment, deleteComment,getCommentId } from '../../../redux/addcomment/actions';
+import { addComment, getComment, updateComment, deleteComment, getCommentId } from '../../../redux/addcomment/actions';
 import { getsingleMileStone } from '../../../redux/milestone/action';
-
-
 
 // import CustomAvatar from '../TableComponents/CustomAvatar'
 
@@ -43,16 +41,16 @@ const TaskInformation = styled.div`
     }
 `;
 
-const TaskCard = ({ item, index, closeModal,showTaskDetailMOdel }) => {
-    console.log("itmmmem")
-    const store = useSelector(state => state)
+const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
+    console.log('itmmmem');
+    const store = useSelector((state) => state);
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
     const userId = store?.Auth?.user?.userId;
     const getComments = item?.comments;
     const historyData = store?.getHistoryData?.data?.response;
-    
+
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
@@ -70,37 +68,34 @@ const TaskCard = ({ item, index, closeModal,showTaskDetailMOdel }) => {
     };
     const dispatch = useDispatch();
 
-
     const deleteData = (id) => {
         dispatch(deleteTask({ taskId: id }));
         dispatch(getAllTask());
     };
-    
-    
-    const[commentId,setCommentId] = useState('');
+
+    const [commentId, setCommentId] = useState('');
 
     const [showData, setShowData] = useState(false);
 
     const handleCloseData = () => setShowData(false);
     const handleShowData = () => {
-        setShowData(true)
+        setShowData(true);
     };
-   
 
     const EditData = (item) => {
         setCommentId(item?._id);
-        setValue("comment", item?.comment);
-    }
+        setValue('comment', item?.comment);
+    };
     const DeleteData = (id) => {
         dispatch(deleteComment({ commentId: id }));
-    }
-// console.log(item ,"item")
+    };
+    // console.log(item ,"item")
     return (
         <>
             <Draggable key={item?.taskInfo?._id} draggableId={item?.taskInfo?._id} index={index}>
                 {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                        <TaskInformation onClick={()=>showTaskDetailMOdel(item)}>
+                        <TaskInformation onClick={() => showTaskDetailMOdel(item)}>
                             {/* <div className="action_icon">
                                 <button
                                     type="button"
@@ -113,10 +108,9 @@ const TaskCard = ({ item, index, closeModal,showTaskDetailMOdel }) => {
                                     <i class="mdi mdi-delete m-0 p-0"></i>
                                 </button>
                             </div> */}
-                            <div >
-                   
+                            <div>
                                 <p>{item?.taskInfo?.summary}</p>
-                                
+
                                 <div
                                     dangerouslySetInnerHTML={{
                                         __html: item?.taskInfo?.description,
@@ -124,33 +118,27 @@ const TaskCard = ({ item, index, closeModal,showTaskDetailMOdel }) => {
 
                                 <div className="secondary-details">
                                     <p>
-                                        <span>{item?.taskInfo?.startDate ? moment(item?.taskInfo?.startDate).format('ll') : ''}</span>
+                                        <span>
+                                            {item?.taskInfo?.startDate
+                                                ? moment(item?.taskInfo?.startDate).format('ll')
+                                                : ''}
+                                        </span>
                                     </p>
                                 </div>
                             </div>
-                            <div className='username_info'>
-                            <ul>
-                                <li>
-                                {item?.reporterInfo?.role.charAt(0)}
-                                </li>
-                                <li>
-                                {item?.assigneeInfo?.firstName.charAt(0)}{item?.assigneeInfo?.lastName.charAt(0)}
-                                </li>
-                            </ul>
-                            
+                            <div className="username_info">
+                                <ul>
+                                    <li>{item?.reporterInfo?.role.charAt(0)}</li>
+                                    <li>
+                                        {item?.assigneeInfo?.firstName.charAt(0)}
+                                        {item?.assigneeInfo?.lastName.charAt(0)}
+                                    </li>
+                                </ul>
                             </div>
-                          
-                            
-                          
-                          
-
-
                         </TaskInformation>
                     </div>
                 )}
             </Draggable>
-
-         
 
             <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
         </>

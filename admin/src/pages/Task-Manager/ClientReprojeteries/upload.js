@@ -115,7 +115,7 @@ const Upload = () => {
                                                 <td className="d-flex align-items-center justify-content-center">
                                                     <div style={{ width: '3rem' }}>
                                                         {ele?.attachmentType == 'application/x-zip-compressed' ? (
-                                                            <img style={{ width: '66%' }} src={zip} />
+                                                            <img style={{ width: '66%' }} src={zip} alt="" />
                                                         ) : '' ||
                                                           ele?.attachmentType == 'image/png' ||
                                                           ele?.attachmentType == 'image/jpeg' ||
