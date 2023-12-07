@@ -112,6 +112,7 @@ const trackTime = async (req, res) => {
             $gte: monthStart,
             $lt: monthEnd,
           },
+          'timeTracker': { $exists: true }
         },
       },
       {
@@ -145,45 +146,66 @@ const trackTime = async (req, res) => {
         $unwind: '$user',
       },
       {
-        $facet: {
-          // Branch 1: Original output grouped by project and user
-          "projectUserTime": [
-            {
-              $group: {
-                _id: {
-                  userId: '$user._id',
-                  userName: '$user.firstName',
-                  userLastName: '$user.lastName',
-                  project: { $first: '$projects.projectName' },
-                },
-                totalTrackingTime: {
-                  $sum: '$timeTracker',
-                },
-              },
+        $group: {
+          _id: {
+            userId: '$user._id',
+            projectName: '$projects.projectName',
+            firstName: '$user.firstName',
+            lastName: '$user.lastName',
+          },
+          timeSpent: {
+            $sum: '$timeTracker',
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$_id.userId',
+          user: {
+            $first: {
+              firstName: '$_id.firstName',
+              lastName: '$_id.lastName',
             },
-            {
-              $project: {
-                _id: 0,
-                project: '$_id.project',
-                userId: '$_id.userId',
-                userName: '$_id.userName',
-                userLastName: '$_id.userLastName',
-                formattedTrackingTime: {
+          },
+          projects: {
+            $push: {
+              projectName: '$_id.projectName',
+              timeSpent: '$timeSpent',
+            },
+          },
+          totaltimeSpent: {
+            $sum: '$timeSpent',
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          userId: '$_id',
+          firstName: '$user.firstName',
+          lastName: '$user.lastName',
+          projects: {
+            $map: {
+              input: '$projects',
+              as: 'project',
+              in: {
+                projectName: { $arrayElemAt: ['$$project.projectName', 0] }, // Extract the single element from the array
+                timeSpent: {
                   $concat: [
                     {
                       $toString: {
-                        $trunc: {
-                          $divide: ['$totalTrackingTime', 3600000], // Convert to hours
+                        $floor: {
+                          $divide: ['$$project.timeSpent', 3600000], // Convert milliseconds to hours
                         },
                       },
                     },
                     'h ',
                     {
                       $toString: {
-                        $trunc: {
+                        $floor: {
                           $mod: [
                             {
-                              $divide: ['$totalTrackingTime', 60000], // Convert to minutes
+                              $divide: ['$$project.timeSpent', 60000], // Convert milliseconds to minutes
                             },
                             60,
                           ],
@@ -195,66 +217,143 @@ const trackTime = async (req, res) => {
                 },
               },
             },
-          ],
-          // Branch 2: Total time spent by each user across all projects
-          "totalUserTime": [
-            {
-              $group: {
-                _id: {
-                  userId: '$user._id',
-                  userName: '$user.firstName',
-                  userLastName: '$user.lastName',
-                },
-                totalTrackingTime: {
-                  $sum: '$timeTracker',
+          },
+          totalTimeSpent: {
+            $concat: [
+              {
+                $toString: {
+                  $floor: {
+                    $divide: ['$totaltimeSpent', 3600000],
+                  },
                 },
               },
-            },
-            {
-              $project: {
-                _id: 0,
-                userId: '$_id.userId',
-                userName: '$_id.userName',
-                userLastName: '$_id.userLastName',
-                totalTrackingTime: {
-                  $concat: [
-                    {
-                      $toString: {
-                        $trunc: {
-                          $divide: ['$totalTrackingTime', 3600000], // Convert to hours
-                        },
+              'h ',
+              {
+                $toString: {
+                  $floor: {
+                    $mod: [
+                      {
+                        $divide: ['$totaltimeSpent', 60000],
                       },
-                    },
-                    'h ',
-                    {
-                      $toString: {
-                        $trunc: {
-                          $mod: [
-                            {
-                              $divide: ['$totalTrackingTime', 60000], // Convert to minutes
-                            },
-                            60,
-                          ],
-                        },
-                      },
-                    },
-                    'm',
-                  ],
+                      60,
+                    ],
+                  },
                 },
               },
-            },
-          ],
+              'm',
+            ],
+          },
         },
       },
     ]);
-    return res.status(200).json({ status: "200", message: "Time Tracking Data Fetched Successfully", response: {
-      projectUserTime: timeTrackingData[0].projectUserTime,
-      totalUserTime: timeTrackingData[0].totalUserTime,
-    }});
+    return res.status(200).json({ status: "200", message: "Time Tracking Data Fetched Successfully", response: timeTrackingData });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 }
+
+// {
+//   $facet: {
+//     // Branch 1: Original output grouped by project and user
+//     "projectUserTime": [
+//       {
+//         $group: {
+//           _id: {
+//             userId: '$user._id',
+//             userName: '$user.firstName',
+//             userLastName: '$user.lastName',
+//             project: { $first: '$projects.projectName' },
+//           },
+//           totalTrackingTime: {
+//             $sum: '$timeTracker',
+//           },
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: 0,
+//           project: '$_id.project',
+//           userId: '$_id.userId',
+//           userName: '$_id.userName',
+//           userLastName: '$_id.userLastName',
+//           formattedTrackingTime: {
+//             $concat: [
+//               {
+//                 $toString: {
+//                   $trunc: {
+//                     $divide: ['$totalTrackingTime', 3600000], // Convert to hours
+//                   },
+//                 },
+//               },
+//               'h ',
+//               {
+//                 $toString: {
+//                   $trunc: {
+//                     $mod: [
+//                       {
+//                         $divide: ['$totalTrackingTime', 60000], // Convert to minutes
+//                       },
+//                       60,
+//                     ],
+//                   },
+//                 },
+//               },
+//               'm',
+//             ],
+//           },
+//         },
+//       },
+//     ],
+//     // Branch 2: Total time spent by each user across all projects
+//     "totalUserTime": [
+//       {
+//         $group: {
+//           _id: {
+//             userId: '$user._id',
+//             userName: '$user.firstName',
+//             userLastName: '$user.lastName',
+//           },
+//           totalTrackingTime: {
+//             $sum: '$timeTracker',
+//           },
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: 0,
+//           userId: '$_id.userId',
+//           userName: '$_id.userName',
+//           userLastName: '$_id.userLastName',
+//           totalTrackingTime: {
+//             $concat: [
+//               {
+//                 $toString: {
+//                   $trunc: {
+//                     $divide: ['$totalTrackingTime', 3600000], // Convert to hours
+//                   },
+//                 },
+//               },
+//               'h ',
+//               {
+//                 $toString: {
+//                   $trunc: {
+//                     $mod: [
+//                       {
+//                         $divide: ['$totalTrackingTime', 60000], // Convert to minutes
+//                       },
+//                       60,
+//                     ],
+//                   },
+//                 },
+//               },
+//               'm',
+//             ],
+//           },
+//         },
+//       },
+//     ],
+//   },
+// },
 
 
 module.exports = {

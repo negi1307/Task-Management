@@ -511,7 +511,7 @@ const AllRoutes = () => {
                                 },
                                 // {
                                 //     path: 'orders',
-                                //     element: <LoadComponent component={CRMOrderList} />,
+                                //     // element: <LoadComponent component={CRMOrderList} />,
                                 // },
                             ],
                         },
