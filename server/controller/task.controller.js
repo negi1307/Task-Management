@@ -411,9 +411,6 @@ const updateTask = async (req, res) => {
   }
 };
 
-
-
-
 // Delete A Task
 const deleteTask = async (req, res) => {
   try {
@@ -450,7 +447,6 @@ const updateTaskStatus = async (req, res) => {
         }
       }
       const result = await taskModel.findByIdAndUpdate({ _id: taskId }, query, { new: true });
-      // get history
       await userHistory(req, `Task Status updated to ${status}`);
       return res.status(200).json({ status: "200", message: "Task Status updated successfully", data: result });
     } else {
@@ -484,7 +480,6 @@ const updateTaskStatus = async (req, res) => {
       }
       return res.status(200).json({ status: "200", message: "No tasks found" });
     }
-    // return false
   } catch (error) {
     console.log(error);
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
