@@ -1,15 +1,14 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'), { Schema } = mongoose,
 
-// const HistoryTypeEnum = {
-//     // Define your enum values here
-//     // For example:
-//     CREATED: 'created',
-//     UPDATED: 'updated',
-//     DELETED: 'deleted',
-// };
+    // const HistoryTypeEnum = {
+    //     // Define your enum values here
+    //     // For example:
+    //     CREATED: 'created',
+    //     UPDATED: 'updated',
+    //     DELETED: 'deleted',
+    // };
 
-const history = mongoose.model(
-    'History', mongoose.Schema({
+    historySchema = new Schema({
         // type: {
         //     type: String,
         //     enum: Object.values(HistoryTypeEnum),
@@ -47,11 +46,10 @@ const history = mongoose.model(
         assigneeId: {
             type: mongoose.Types.ObjectId,
             ref: 'users'
-        } 
+        }
     },
         {
             timestamps: true
         }
     )
-);
-module.exports = history;
+module.exports = mongoose.model("History", historySchema);
