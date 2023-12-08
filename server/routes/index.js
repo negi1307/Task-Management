@@ -14,6 +14,7 @@ const commentsRoute = require("./comments.route");
 const historyRoute = require("./history.route");
 const preSalesRoute = require("./preSale.route");
 const leavesRoute = require("./leaveMessage.route");
+const salesRoute = require("./sales.route");
 
 
 router.use("/users", userRoutes);
@@ -29,5 +30,6 @@ router.use("/comments", commentsRoute);
 router.use("/history", historyRoute);
 router.use("/preSale", preSalesRoute);
 router.use("/reason", leavesRoute);
+router.use("/sales", salesRoute);
 
 module.exports = router;
