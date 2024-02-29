@@ -14,6 +14,8 @@ import Modal from 'react-bootstrap/Modal';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import Update from './modal/update';
 import { getAllProjects } from '../../../../redux/projects/action';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 // import ToastHandle from '../../../constants/toaster/toaster';
 const Milestone = () => {
     const { id } = useParams();
@@ -24,8 +26,8 @@ const Milestone = () => {
     const [openModel, setOpenModel] = useState(false);
     const [render, setRender] = useState(false);
     const [status, setStatus] = useState(1);
+   
     const GetDataById = store?.getProjectById?.data?.project;
-
     // const GetSinglemilstonesData = store?.getSigleMileStone?.data?.Response;
     const getMileStoneData = store?.getProject?.data?.response;
     console.log('getMileStoneData', getMileStoneData);
@@ -35,6 +37,7 @@ const Milestone = () => {
     const [checkedData, setCheckedData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const [editData, setEditData] = useState();
+    const [skip, setSkip] = useState(1);
     const deletehandle = store?.deleteMileStone?.data;
     const closeModal = (val) => {
         if (val == 'render') {
@@ -113,10 +116,21 @@ const Milestone = () => {
             flag: 2,
             projectId: id,
             milestoneId: '',
+            sprintId:'',
             skip: 1,
         };
         dispatch(getAllProjects(body));
     }, []);
+    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setSkip(value);
+        let body = {
+            flag: 2,
+            projectId: id,
+            milestoneId: '',
+            skip: value,
+        };
+        dispatch(getAllProjects(body));
+    };
 
     return (
         <>
@@ -136,6 +150,7 @@ const Milestone = () => {
                         </Button>
                     </Col>
                 </Row> */}
+                <div className='title'><h3>MILESTONES</h3></div>
             {loaderhandel.loading ? (
                 <MainLoader />
             ) : (
@@ -202,8 +217,7 @@ const Milestone = () => {
                                                     <th> MileStone Name</th>
                                                     <th> Description</th>
                                                     <th> Start Date</th>
-                                                    <th> End Date</th>
-                                                    {/* <th>Status</th> */}
+                                                    <th>Due Days</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -221,9 +235,11 @@ const Milestone = () => {
                                                             />
                                                         </td>
 
-                                                        <td> {moment(item?.milestoneId?.start_date).format('L')}</td>
+                                                        <td> {moment(item?.milestoneId?.start_date).format('DD/MM/YYYY')}</td>
                                                         <td>
-                                                            {moment(item?.milestoneId?.completion_date).format('L')}
+                                                        {item?.milestoneId?.daysLeft}
+                                                        
+                                                            {/* {moment(item?.milestoneId?.completion_date).format('L')} */}
                                                         </td>
                                                         {/* <td> <Form.Check
                                                                 type="switch"
@@ -236,7 +252,7 @@ const Milestone = () => {
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0 ">
                                                                         <Link
-                                                                            to={`/dashboard/singleMilestonesprint/projectId=/${item?.projectId}&milestoneId=/${item?.milestoneId?._id}`}>
+                                                                            to={`/dashboard/singleMilestonesprint/projectId=/${item?.milestoneId?.projectId}&milestoneId=/${item?.milestoneId?._id}`}>
                                                                             <i className="mdi mdi-eye m-0 p-0"></i>
                                                                         </Link>
                                                                     </p>
@@ -258,6 +274,21 @@ const Milestone = () => {
                                     </Col>
                                 </Row>
                             </Col>
+                            <Row>
+                            <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
+                                {store?.getProject?.data?.totalPages > 0 && (
+                                    <Stack spacing={2}>
+                                        <Pagination
+                                            defaultPage={skip}
+                                            count={store?.getProject?.data?.totalPages}
+                                            color="primary"
+                                            variant="outlined"
+                                            onChange={handlePaginationChange}
+                                        />
+                                    </Stack>
+                                )}
+                            </Col>
+                        </Row>
                         </Card.Body>
                     </Card>
                 </>

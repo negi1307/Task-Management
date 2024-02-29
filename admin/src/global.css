@@ -138,8 +138,8 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
 .modal-header button {
     /* box-shadow: 0px 2px 6px 0px rgba(57, 175, 209, 0.5); */
     color: #fff;
-    background-color: #37216c;
-    border-color: #37216c;
+    background-color: black;
+    border-color: black;
     border: 0px;
 }
 
@@ -450,6 +450,11 @@ span.logo-lg {
 }
 .form-switch .form-check-input:checked[type='checkbox']:after {
     background-color: black !important;
+    width: 1rem !important;
+    height: 1rem !important;
+    /* background-color: #3b71ca; */
+    margin-top: -1px !important;
+    margin-left: 0.8rem !important;
 }
 .form-check-input[type='checkbox']:checked {
     /* background-image: none; */
@@ -498,8 +503,13 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     overflow: hidden !important;
 } */
 .form-switch .form-check-input {
-    width: 2.5em !important;
+    width: 2em !important;
     margin-left: -2.5em !important;
+}
+.form-switch .form-check-input:after {
+    width: 1rem !important;
+    height: 1rem !important;
+    margin-top: -1px !important;
 }
 .side-nav-item {
     color: white !important;
@@ -511,6 +521,18 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
     height: 75px;
     width: 75px;
 }
+.add_position_modal_edit {
+    transform: translate(-611px, 12.5rem);
+    border-radius: 6px;
+}
+
+tr {
+    text-align: center;
+}
+.header-title.heading_data {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+}
 .projects_info {
     display: flex;
     flex-wrap: wrap;
@@ -519,4 +541,37 @@ table.table-striped tbody tr:nth-of-type(odd) > * {
 .projects_info p {
     text-align: center;
     flex: 0 0 14%;
+}
+@media (min-width: 1300px) and (max-width: 1700px) {
+    .add_position_modal_edit {
+        transform: translate(-422px, 11.5rem) !important;
+    }
+}
+
+/* .modal-backdrop.fade {
+    opacity: 0 !important;
+} */
+.react-datepicker-wrapper {
+    /* border: 1px solid gray; */
+    width: 100%;
+}
+input.add_width_input {
+    border: 1px solid #d8cccc;
+    width: 100%;
+    padding: 6px;
+    border-radius: 4px;
+}
+.modal-content {
+    height: auto !important;
+}
+.add_padding_box {
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+}
+.add_padding_box {
+    background: #c9c8c8 !important;
+    /* text: white !important; */
+}
+.del_edit {
+    color: white;
 }

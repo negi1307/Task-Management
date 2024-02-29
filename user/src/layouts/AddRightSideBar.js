@@ -8,29 +8,42 @@ import { getAllUsers, getAllRoles } from './../redux/user/action';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useState } from 'react';
-
+import { getAllProjects } from '../../src/redux/projects/action';
+import DatePicker from 'react-datepicker';
 
 export default function RightBar(props) {
-    
-    const { showModal, setShowModal, content,callAlltaskData } = props;
+    const { showModal, setShowModal, content, callAlltaskData } = props;
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [description, setDescription] = useState('');
-    const getAllUserData = store?.getAllUsers?.data?.response
-    const getAllRole = store?.getAllRoles?.data?.response
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndtDate] = useState('');
+    const getAllUserData = store?.getAllUsers?.data?.response;
+    const getAllRole = store?.getAllRoles?.data?.response;
     // console.log("getAllRoleeeee",getAllRole)
     // console.log("getAllUserTask",getAllUserData)
 
+    const id = store?.Auth?.user?.userId;
+    console.log("userID",id)
+    //     const projectId=store?.getProjectId?.data
+    // const milstoneId=store?.getMilestoneId?.data
+    // const SprintId=store?.getSprintId?.data
 
-    const id = store?.Auth?.user?.userId
-//     const projectId=store?.getProjectId?.data
-// const milstoneId=store?.getMilestoneId?.data
-// const SprintId=store?.getSprintId?.data
-    const {projectId,milestoneId,spriteId}=useParams()
+    const { projectId, milestoneId, spriteId } = useParams();
 
+    useEffect(() => {
+        let body = {
+            projectId: projectId,
+            milestoneId: milestoneId,
+            sprintId: spriteId,
+            flag: 4,
+            skip: 1,
+        };
+        dispatch(getAllProjects(body));
+    }, []);
 
-    const[fileData,setFile]=useState(null)
-   
+    const [fileData, setFile] = useState(null);
+
     const {
         register,
         handleSubmit,
@@ -39,46 +52,49 @@ export default function RightBar(props) {
     } = useForm();
     useEffect(() => {
         // dispatch(getassignee(id))
-        dispatch(getAllUsers())
-        dispatch(getAllRoles())
+        dispatch(getAllUsers());
+        dispatch(getAllRoles());
+    }, []);
 
-    }, [])
-
-
+    const [fileName, setFileName] = useState('');
+    const [filePreviewData, setfilePreviewData] = useState(null);
     const onSubmit = (e) => {
-        const formData=new FormData()
-        formData.append('projectId',projectId)
-        formData.append('milestoneId',milestoneId)
-        formData.append('sprintId',spriteId)
-        formData.append('summary',e.Summary)
-        formData.append('description',description)
-        formData.append('assigneeId',e.Assignee)
-        formData.append('reporterId',e.Report)
-        formData.append('priority',e.priority)
-        formData.append('startDate',e.start_date)
-        formData.append('dueDate',e.last_date)
-        formData.append('attachment',e.attachment[0]);
-        
-        if ( projectId !== '' &&  milestoneId !== '' && spriteId !== '') {
-            
+        const formData = new FormData();
+        formData.append('projectId', projectId);
+        formData.append('milestoneId', milestoneId);
+        formData.append('sprintId', spriteId);
+        formData.append('summary', e.Summary);
+        //formData.append('expectedHours', e.expectedHours)
+        formData.append('description', description);
+        formData.append('assigneeId', id);
+        formData.append('reporterId', e.Report);
+        formData.append('priority', e.priority);
+        formData.append('startDate', startDate);
+        formData.append('dueDate', endDate);        
+        if(filePreviewData == null){
+            formData.append('attachment', "");
+        }
+        else{
+            formData.append('attachment', filePreviewData);
+        }       
+
+        if (projectId !== '' && milestoneId !== '' && spriteId !== '') {
             dispatch(createTask(formData));
             setTimeout(() => {
                 callAlltaskData();
             }, 600);
-            
-            
         } else {
             alert('plsease select project');
         }
 
-        setValue('Summary', '')
-        setValue('Description', '')
-        setValue('Assignee', '')
-        setValue('Report', '')
-        setValue('priority', '')
-        setValue('start_date', '')
-        setValue('last_date', '')
-        setValue('attachment', '')
+        setValue('Summary', '');
+        setValue('Description', '');
+        setValue('expectedHours', '');
+        setValue('Report', '');
+        setValue('priority', '');
+        setValue('startDate', '');
+        setValue('last_date', '');
+        setValue('attachment', '');
         setShowModal(false);
     };
 
@@ -86,6 +102,10 @@ export default function RightBar(props) {
     // call click outside
     // }, []);
 
+    const onFileChange = (e) => {
+        setFileName(e.target.files[0].name);
+        setfilePreviewData(e.target.files[0]);
+    };
     return (
         <div className={showModal ? 'rightBar show' : 'rightBar'} role="document">
             <div className="modal-content">
@@ -102,12 +122,6 @@ export default function RightBar(props) {
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 className="modal-title" id="myModalLabel"></h4>
-                    {/* <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-            vitae nulla ut ex lobortis aliquet eu non urna. Morbi fringilla,
-            nulla sit amet vulputate lobortis, justo lectus porta erat, vitae
-        
-          </p> */}
                 </div>
 
                 <div className="modal-body">
@@ -117,7 +131,6 @@ export default function RightBar(props) {
                             <div class="row">
                                 <div class="">
                                     <div class="mb-2">
-                                        {/* <label class="form-label" for="exampleForm.ControlInput1">Project  <span class="text-danger">*</span>:</label> */}
                                         <input
                                             placeholder="project id"
                                             type="hidden"
@@ -129,8 +142,6 @@ export default function RightBar(props) {
                                 </div>
                                 <div class="">
                                     <div class="mb-2">
-                                        {/* <label class="form-label" for="exampleForm.ControlTextarea1">Milestone
-                  <span class="text-danger">*</span>:</label> */}
                                         <input
                                             placeholder="milestone id"
                                             type="hidden"
@@ -144,8 +155,6 @@ export default function RightBar(props) {
                             <div class="row">
                                 <div class="">
                                     <div class="mb-2">
-                                        {/* <label class="form-label" for="exampleForm.ControlTextarea1">Sprint
-                  <span class="text-danger">*</span>:</label> */}
                                         <input
                                             placeholder="sprint id"
                                             name="clientName"
@@ -156,53 +165,90 @@ export default function RightBar(props) {
                                         />
                                     </div>
                                 </div>
-
-                                {/* <div class=""><div class="mb-2"><label class="form-label" for="exampleForm.ControlInput1">Type Of Project 
-         <span class="text-danger">*</span>:</label><select name="project_type" class="form-select" id="exampleForm.ControlInput1">
-         <option>Choose an Project Type </option><option value="T&amp;M">T&amp;M</option><option value="Fixed Cost">Fixed Cost</option>
-         <option value=" Hourly">Hourly</option><option value="Dedicated team">Dedicated team</option></select></div>
-         </div> */}
                             </div>
 
                             <div class="row">
-                              
-                                <div class="col-lg-12">
+                                <div class="col-lg-6">
                                     <div class="mb-2 textarea_section">
                                         <label class="form-label" for="exampleForm.ControlInput1">
-                                            Description <span class="text-danger">*</span>:
-                                        </label><br/>
-                                        {/* <CKEditor
-                                            editor={ClassicEditor}
-                                            config={{
-                                                ckfinder: {
-                                                    uploadUrl:
-                                                        'https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
-                                                },
-                                            }}
-                                            data=""
-                                            onChange={(event, editor) => {
-                                                const data = editor.getData();
-                                                setDescription(data);
-                                            }}
-                                        /> */}
-                                        
-                                            <textarea col='5' row='4'  onChange={(e) => {
-                                                
-                                                setDescription(e.target.value);
-                                            }}>
-                                            </textarea>
-
-                                         {/* <input
-                                            placeholder="Please Enter Description"
+                                            Project Name <span class="text-danger">*</span>:
+                                        </label>
+                                        <br />
+                                        <input
+                                            disabled
+                                            value={store?.getProject?.data?.response?.projectId?.projectName}
+                                            placeholder="Please Enter Summary"
                                             type="text"
-                                            id="exampleForm.ControlInput1"
+                                            id="exampleForm.ControlTextarea1"
                                             class="form-control"
-                                            {...register('Description')}/> */}
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-2 textarea_section">
+                                        <label class="form-label" for="exampleForm.ControlInput1">
+                                            Milestone Name <span class="text-danger">*</span>:
+                                        </label>
+                                        <br />
+                                        <input
+                                            disabled
+                                            value={store?.getProject?.data?.response?.milestoneId?.title}
+                                            placeholder="Please Enter Summary"
+                                            type="text"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-2 textarea_section">
+                                        <label class="form-label" for="exampleForm.ControlInput1">
+                                            Sprint Name <span class="text-danger">*</span>:
+                                        </label>
+                                        <br />
+                                        <input
+                                            disabled
+                                            value={store?.getProject?.data?.response?.sprintName}
+                                            placeholder="Please Enter Summary"
+                                            type="text"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                        />
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-lg-12">
+                                <div class="col-lg-12">
+                                    <div class="mb-2 textarea_section">
+                                        <label class="form-label" for="exampleForm.ControlInput1">
+                                            Description <span class="text-danger">*</span>:
+                                        </label>
+                                        <br />
+
+                                        <textarea
+                                            col="5"
+                                            row="6"
+                                            class="form-control"
+                                            onChange={(e) => {
+                                                setDescription(e.target.value);
+                                            }}></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-2">
+                                        <input
+                                            placeholder="Please Enter Summary"
+                                            type="hidden"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('expectedHours')}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Summary
@@ -213,32 +259,16 @@ export default function RightBar(props) {
                                             type="text"
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
-                                            {...register('Summary')}
+                                            {...register('Summary',{ required: true })}
                                         />
+                                        {errors?.Summary?.type === 'required' && (
+                                        <span className="text-danger"> This feild is required *</span>
+                                    )}
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                {/* <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            Assignee
-                                            <span class="text-danger">*</span>:
-                                        </label>
-
-                                        <select
-                                            name="Assignee"
-                                            class="form-select"
-                                            id="exampleForm.ControlInput1"
-                                            {...register('Assignee')}>
-                                            <option value="">--Select--</option>
-                                            {getAllUserData?.map((items, index) => <option key={index} value={items._id}>{items.firstName}</option>)}
-                                           
-                                        </select>
-
-                                          </div>
-                                </div> */}
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             Report <span class="text-danger">*</span>:
@@ -248,44 +278,62 @@ export default function RightBar(props) {
                                             defaultValue="Admin"
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
-                                            {...register('Report')}>
+                                            {...register('Report',{ required: true })}>
                                             <option value="">--Select--</option>
-                                            {getAllRole?.map((items, index) => <option value={items._id}> {items.role} </option>)}
-
-
-
+                                            {getAllRole?.map((items, index) => (
+                                                <option value={items._id}> {items.role} </option>
+                                            ))}
                                         </select>
-                                        {/* <input placeholder="Please Enter Report" type="text" id="exampleForm.ControlInput1" class="form-control"  {...register("Report")} /> */}
+                                        {errors?.Report?.type === 'required' && (
+                                        <span className="text-danger"> This feild is required *</span>
+                                    )}
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <div class="mb-2">
+                                    <div class="mb-2  startinfodate">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Start Date<span class="text-danger">*</span>:
                                         </label>
-                                        <input
-                                            placeholder="Please start Date "
-                                            type="date"
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('start_date')}
+                                        <DatePicker
+                                            selected={startDate}
+                                            onChange={(date) => setStartDate(date)}
+                                            minDate={new Date()}
+                                            placeholderText="mm/dd/yyyy"
+                                            dateFormat={'MM/dd/yyyy'}
+                                            {...register('startDate', { required: true })}
                                         />
+                                          {errors?.startDate?.type === 'required' && (
+                                        <span className="text-danger"> This feild is required *</span>
+                                    )}
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="mb-2">
+                                    <div class="mb-2 startinfodate">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             End Date<span class="text-danger">*</span>:
                                         </label>
-                                        <input
+                                        {/* <input
                                             placeholder="Please end Date"
                                             type="date"
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
                                             {...register('last_date')}
+                                        /> */}
+                                        <DatePicker
+                                            selected={endDate}
+                                            onChange={(date) => setEndtDate(date)}
+                                            minDate={new Date()}
+                                            disabled={startDate ? false : true}
+                                            placeholderText="mm/dd/yyyy"
+                                            dateFormat={'MM/dd/yyyy'}
+                                            {...register('endDate', { required: true })}
+                                            class="form-control"
                                         />
+                                          {errors?.endDate?.type === 'required' && (
+                                        <span className="text-danger"> This feild is required *</span>
+                                    )}
                                     </div>
                                 </div>
                             </div>
@@ -297,17 +345,19 @@ export default function RightBar(props) {
                                             Priority <span class="text-danger">*</span>:
                                         </label>
                                         <select
-                                            name="Priority"
+                                            
                                             class="form-select"
                                             id="exampleForm.ControlInput2"
-                                            
-                                            {...register('priority')} >
-                                           
+                                            {...register('priority',{ required: true })}>
                                             <option value="1">High</option>
                                             <option value="2">Medium</option>
                                             <option value="3">Low</option>
                                         </select>
+                                       
                                     </div>
+                                    {errors?.priority?.type === 'required' && (
+                                        <span className="text-danger"> This feild is required *</span>
+                                    )}
                                 </div>
                                 <div class="">
                                     <div class="mb-2">
@@ -326,19 +376,28 @@ export default function RightBar(props) {
                                 </div>
                             </div>
                             <div class="">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                           Attachment<span class="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            placeholder="Please start Date "
-                                            type="file"
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('attachment')}
-                                        />
-                                    </div>
+                                <div class="mb-2">
+                                    <label class="form-label" for="exampleForm.ControlTextarea1">
+                                        Attachment<span class="text-danger">*</span>:
+                                    </label>
+                                    <button
+                                        type="button"
+                                        onClick={() => document.getElementById('file').click()}
+                                        className="attachment">
+                                        <i className="mdi mdi-attachment m-0 p-0 font-20 cp"></i>
+                                    </button>
+                                    <input
+                                        hidden="hidden"
+                                        placeholder="Please start Date "
+                                        type="file"
+                                        id="file"
+                                        class="form-control"
+                                        {...register('attachment')}
+                                        onChange={onFileChange}
+                                    />
+                                    {filePreviewData && <img src={URL.createObjectURL(filePreviewData)} />}
                                 </div>
+                            </div>
                             <div class=""></div>
                             <div class="row">
                                 <div class="text-start d-flex align-items-end justify-content-end col">

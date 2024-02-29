@@ -4,12 +4,19 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import moment from 'moment';
-import { AddComment, UpdateCommentAction, deleteComment, getComment } from '../../../redux/task/action';
+import {
+    AddComment,
+    UpdateCommentAction,
+    deleteComment,
+    getComment,
+    getHistoryAction,
+} from '../../../redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
+import noimage from '../../../assets/images/noimage.png';
 const TaskDetailPage = ({ modal, editData, closeModal }) => {
-    // console.log(editData, 'editdataaaaaaaaaaa');
+    console.log(editData, 'editdataaaaaaaaaaa');
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [connectComponent, setConnectComponent] = useState('All');
@@ -17,8 +24,15 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
     const [commentId, setCommentId] = useState();
     const [commentTextUpdate, setCommentTextUpdate] = useState(false);
     const getCommentData = store?.getComment?.data?.response;
+    const getHistory = store?.getHistoryReducer?.data?.response;
+    const historyLoader = store?.getHistoryReducer
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
+        setValue('comment', "");
+        setButtonChange(true);
+        if (type === 'History') {
+            dispatch(getHistoryAction(editData?.id));
+        }
     };
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
     const [inputForUpdate, setInputForUpdate] = useState('');
@@ -79,6 +93,11 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
         setInputForUpdate(false);
         console.log(data, allCommetUpdateId);
     };
+    const closeModalHandle =()=>{
+        closeModal()
+        setValue('comment', "");
+        setButtonChange(true);
+    }
     return (
         <>
             <Modal show={modal} onHide={closeModal} size={'lg'}>
@@ -91,7 +110,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                 </Modal.Title>
                             </Col>
                             <Col lg={5} className="text-end pt-2">
-                                <CloseButton onClick={closeModal} />
+                                <CloseButton onClick={closeModalHandle} />
                             </Col>
                         </Row>
                     </Col>
@@ -99,7 +118,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                 <hr />
                 <Modal.Body>
                     <Row>
-                        <Col lg={6}>
+                        <Col lg={7}>
                             <h4>Activity</h4>
                             <Row>
                                 <Col lg={12}>
@@ -149,12 +168,12 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                         <ul style={{ listStyle: 'none' }}>
                                             <Row>
                                                 <Col lg={12} className="d-flex">
-                                                    <Col lg={2} className="pt-1">
+                                                    <Col lg={2} className="pt-2">
                                                         <span
                                                             style={{
                                                                 backgroundColor: '#605e5a',
                                                                 borderRadius: '100%',
-                                                                padding: '9px',
+                                                                padding: '11px 15px',
                                                                 color: 'white',
                                                                 fontWeight: '800',
                                                             }}>
@@ -202,11 +221,11 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                                         onClick={() => handelUpdateAll(ele, ind)}>
                                                                         Edit
                                                                     </p>
-                                                                    <p
+                                                                    {/* <p
                                                                         className=" cp  p-0 ps-2"
                                                                         onClick={() => handeldelete(ele)}>
                                                                         Delete
-                                                                    </p>
+                                                                    </p> */}
                                                                 </div>
                                                             </>
                                                         )}
@@ -241,13 +260,13 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                         {getCommentData?.map((ele, ind) => (
                                             <ul style={{ listStyle: 'none' }}>
                                                 <Row>
-                                                    <Col lg={12} className="d-flex">
-                                                        <Col lg={2} className="pt-1">
+                                                    <Col lg={12} className="d-flex pt-2">
+                                                        <Col lg={2} className="pt-2">
                                                             <span
                                                                 style={{
                                                                     backgroundColor: '#605e5a',
                                                                     borderRadius: '100%',
-                                                                    padding: '9px',
+                                                                    padding: '11px 15px',
                                                                     color: 'white',
                                                                     fontWeight: '800',
                                                                 }}>
@@ -263,9 +282,9 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                                     {ele?.userId?.lastName}
                                                                 </h4>
                                                                 <p className="ps-1 m-0 p-0">
-                                                                {moment(ele?.createdAt).fromNow()}{' '}
-                                                                {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
-                                                            </p>
+                                                                    {moment(ele?.createdAt).fromNow()}{' '}
+                                                                    {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
+                                                                </p>
                                                                 {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
                                                             </div>
                                                             <div className="m-0 p-0">
@@ -275,11 +294,11 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                                 <p className=" p-0" onClick={() => handelUpdate(ele)}>
                                                                     Edit
                                                                 </p>
-                                                                <p
+                                                                {/* <p
                                                                     className=" cp  p-0 ps-2"
                                                                     onClick={() => handeldelete(ele)}>
                                                                     Delete
-                                                                </p>
+                                                                </p> */}
                                                             </div>
                                                         </Col>
                                                     </Col>
@@ -289,13 +308,39 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                     </Row>
                                 </>
                             ) : connectComponent === 'History' ? (
-                                ''
+                               
+                                <div>
+                                   {  getHistory?.map((ele) => (
+                                    <>
+                                    
+                                        <div className="d-flex align-items-center pt-2">
+                                            <span
+                                                style={{
+                                                    backgroundColor: '#605e5a',
+                                                    borderRadius: '100%',
+                                                    padding: '11px 11px',
+                                                    color: 'white',
+                                                    fontWeight: '800',
+                                                    textTransform: "uppercase"
+                                                }}>
+                                                {ele?.userId?.firstName.charAt(0)}
+                                                {ele?.userId?.lastName.charAt(0)}
+                                            </span>
+                                            <h4 className="pe-1 ps-1">
+                                                {ele?.userId?.firstName} {ele?.userId?.lastName}
+                                            </h4>
+                                            {ele?.userActivity}  {moment(ele?.time).format('LLL')}
+                                        </div>
+                                    </>
+                                ))}
+                                </div>
+                               
                             ) : (
                                 ''
                             )}
                         </Col>
-                        <Col lg={6}>
-                            <Card className="p-2">
+                        <Col lg={5}>
+                            <div className="p-2">
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Project Name :</h4>
                                     <p className="ms-2 p-0">{editData?.projectInfo?.projectName}</p>
@@ -325,13 +370,13 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0"> Start Date :</h4>
                                     <p className="ms-2 p-0">
-                                        {editData?.startDate ? moment(editData?.startDate).format('L') : ''}
+                                        {editData?.startDate ? moment(editData?.startDate).format('DD/MM/YYYY') : ''}
                                     </p>
                                 </div>
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0"> End Date :</h4>
                                     <p className="ms-2 p-0">
-                                        {editData?.dueDate ? moment(editData?.dueDate).format('L') : ''}
+                                        {editData?.dueDate ? moment(editData?.dueDate).format('DD/MM/YYYY') : ''}
                                     </p>
                                 </div>
                                 <div className=" d-flex">
@@ -371,23 +416,32 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                             : ''}
                                     </p>
                                 </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0 me-2">Attachment:</h4>
-                                    <a href={editData?.attachment} download target="_blank" className="align_icon_dowl">
-                                        <i className="dripicons-download download_color"></i>
-                                    </a>
-                                    <img
-                                        style={{ width: '10rem', height: '10rem' }}
-                                        className="img_style ps-1"
-                                        src={
-                                            editData?.attachmentType !== 'application/pdf'
-                                                ? editData?.attachment
-                                                : pdfImage
-                                        }
-                                    />
-                                    {/* <img src={editData?.attachment} /> */}
-                                </div>
-                            </Card>
+                                {editData?.attachment !== '' ? (
+                                    <div className=" d-flex">
+                                        <h4 className="m-0 p-0 me-2">Attachment:</h4>
+                                        <a
+                                            href={editData?.attachment}
+                                            download
+                                            target="_blank"
+                                            className="align_icon_dowl">
+                                            <i className="dripicons-download download_color"></i>
+                                        </a>
+                                        <img
+                                            style={{ width: '10rem', height: '10rem' }}
+                                            className="img_style ps-1"
+                                            src={
+                                                editData?.attachmentType !== 'application/pdf'
+                                                    ? editData?.attachment
+                                                    : pdfImage
+                                            }
+                                        />
+
+                                        {/* <img src={editData?.attachment} /> */}
+                                    </div>
+                                ) : (
+                                    ''
+                                )}
+                            </div>
                         </Col>
                     </Row>
                 </Modal.Body>

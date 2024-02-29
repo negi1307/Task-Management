@@ -57,13 +57,19 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openDetailPage, setOpenDetailPage] = useState(false);
     const [detailData, setDetailData] = useState();
+    const [openModal, setOpenModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const store = useSelector((state) => state);
 
     const dispatch = useDispatch();
+
+    const closeOpenModal = () => {
+        setOpenModal(false);
+    };
     const deleteData = (id) => {
         setDeleteId(id);
         setDeleteModal(true);
+        setOpenModal(false);
     };
     const handleYes = () => {
         dispatch(deleteTask({ taskId: deleteId }));
@@ -72,6 +78,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
+        setOpenModal(false);
     };
     const closeupdatemodal = (val) => {
         closeModal('render');
@@ -87,7 +94,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
         setOpenDetailPage(false);
     };
     function toggle() {
-        setIsOpen((isOpen) => !isOpen);
+        setOpenModal(true);
     }
     return (
         <>
@@ -98,7 +105,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                             <div className="row w-100">
                                 <div className="col-12">
                                     <div className="row">
-                                        <div className="col-6 d-flex align-items-center">
+                                        <div className="col-9 d-flex align-items-center">
                                             <a
                                                 href="#"
                                                 onClick={() => {
@@ -107,7 +114,31 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                                 {item.summary}
                                             </a>
                                         </div>
-                                        <div className="col-6 pe-0">
+
+                                        <div className="col-3 px-0">
+                                            <div className="row mx-auto border">
+                                                <div className="col-6 border-end add_padding_box ">
+                                                    <button type="button " className="m-0 p-0 border-0 bg-transparent">
+                                                        <i
+                                                            class="uil-edit-alt m-0 p-0 me-2 del_edit"
+                                                            onClick={() => {
+                                                                handelUpdate(item);
+                                                            }}></i>
+                                                        {/* Edit */}
+                                                    </button>
+                                                </div>
+                                                <div className="col-6 add_padding_box">
+                                                    <button
+                                                        type="button"
+                                                        className="m-0 p-0 border-0 bg-transparent"
+                                                        onClick={() => deleteData(item?.id)}>
+                                                        <i class="mdi mdi-delete m-0 p-0 me-2 del_edit"></i>
+                                                        {/* Delete */}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* <div className="col-6 pe-0">
                                             <div className="action_icon position-relative">
                                                 <div className="col-12 d-flex align-items-center justify-content-end">
                                                     <i
@@ -115,6 +146,43 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                                         class="fa fa-ellipsis-h cp bg-light p-2 rounded-3"
                                                         aria-hidden="true"></i>
                                                 </div>
+                                                <Modal
+                                                    show={openModal}
+                                                    onHide={closeOpenModal}
+                                                    className="bg_trans_modal">
+                                                    <Modal.Body className="p-0">
+                                                        <div className="row position-absolute add_position ">
+                                                            <div className="col-4 border p-2 bg-white add_position_modal_edit">
+                                                                <div className="row">
+                                                                    <div className="col-12 pb-2 d-flex align-items-center justify-content-start">
+                                                                        <h4 className="m-0 p-0">Action</h4>
+                                                                    </div>
+                                                                    <div className="col-12 pb-2 d-flex align-items-center justify-content-start">
+                                                                        <button
+                                                                            type="button "
+                                                                            className="m-0 p-0 border-0 bg-transparent">
+                                                                            <i
+                                                                                class="uil-edit-alt m-0 p-0 me-2"
+                                                                                onClick={() => {
+                                                                                    handelUpdate(item);
+                                                                                }}></i>
+                                                                            Edit
+                                                                        </button>
+                                                                    </div>
+                                                                    <div className="col-12 d-flex align-items-center justify-content-start">
+                                                                        <button
+                                                                            type="button"
+                                                                            className="m-0 p-0 border-0 bg-transparent"
+                                                                            onClick={() => deleteData(item?.id)}>
+                                                                            <i class="mdi mdi-delete m-0 p-0 me-2"></i>
+                                                                            Delete
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </Modal.Body>
+                                                </Modal>
                                                 {isOpen && (
                                                     <div className="row position-absolute add_position ">
                                                         <div className="col-12 border p-2 bg-white">
@@ -146,7 +214,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                                     </div>
                                                 )}
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                                 <div className="col-12 py-2">

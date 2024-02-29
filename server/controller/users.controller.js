@@ -1,4 +1,6 @@
 const userModel = require("../models/users.model");
+const assignUserModel = require("../models/assignUser.model");
+const taskModel = require("../models/task.model");
 const nodemailer = require("../middleware/nodemailer");
 const bcrypt = require("bcrypt");
 const { accessToken } = require("../middleware/jwt.auth");
@@ -12,28 +14,28 @@ const registerUser = async (req, res) => {
     }
     else {
       const existingUser = await userModel.findOne({ email });
-      if (existingUser) { 
+      if (existingUser) {
         return res.status(200).json({ status: "400", message: "Email already exists" });
       }
-      else{
-      const hashedPassword = await bcrypt.hash(password, 9);
-      const result = await userModel.create({
-        firstName,
-        lastName,
-        email,
-        password: hashedPassword,
-        plainPassword: password,
-        role
-      });
-      if (result) {
-        await nodemailer.emailSender(result);
-        return res.status(200).json({ status: "200", message: "User created Successfully", response: result });
-      }
-       else {
-        return res.status(200).json({ status: "400", message: 'User not created' });
+      else {
+        const hashedPassword = await bcrypt.hash(password, 9);
+        const result = await userModel.create({
+          firstName,
+          lastName,
+          email,
+          password: hashedPassword,
+          plainPassword: password,
+          role
+        });
+        if (result) {
+          await nodemailer.emailSender(result);
+          return res.status(200).json({ status: "200", message: "User created Successfully", response: result });
+        }
+        else {
+          return res.status(200).json({ status: "400", message: 'User not created' });
+        }
       }
     }
-  }
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
@@ -47,7 +49,10 @@ const logInUser = async (req, res) => {
       const isPasswordValid = await bcrypt.compare(req.body.password, existingUser.password);
       if (isPasswordValid) {
         const token = await accessToken(existingUser);
-        return res.status(200).json({ status: "200", message: "User logged in successfully", response: existingUser, token });
+        const update = await updateTaskStatus(existingUser._id)
+        if (update) {
+          return res.status(200).json({ status: "200", message: "User logged in successfully", response: existingUser, token });
+        }
       } else {
         return res.status(200).json({ status: "400", message: "Incorrect password" });
       }
@@ -55,10 +60,23 @@ const logInUser = async (req, res) => {
       return res.status(200).json({ status: "400", message: "User not found" });
     }
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 };
+
+async function updateTaskStatus(existingUser) {
+  try {
+    const taskIds = await assignUserModel.distinct('taskId', { assigneeId: existingUser._id });
+    const tasks = await taskModel.find({ _id: { $in: taskIds }, status: 2 });
+    for (const task of tasks) {
+      await taskModel.updateOne({ _id: task._id }, { $currentDate: { logInTime: true } });
+    }
+    return true;
+  } catch (error) {
+    console.error("Error in updateTaskStatus:", error);
+    return false;
+  }
+}
 
 // Get All Users
 const getUsers = async (req, res) => {
@@ -66,7 +84,7 @@ const getUsers = async (req, res) => {
     const result = await userModel.find({ role: { $ne: 'Admin' } }).sort({ createdAt: -1 });
     return res.status(200).json({ status: "200", message: 'User data fetched successfully', response: result });
   } catch (error) {
-    return res.status(200).json({ status: "500", message: 'Something went wrong' });
+    return res.status(500).json({ status: "500", message: 'Something went wrong' });
   }
 }
 
@@ -76,21 +94,266 @@ const deleteUser = async (req, res) => {
     await userModel.findByIdAndDelete({ _id: req.query.userId });
     return res.status(200).json({ status: "200", message: 'User deleted successfully' });
   } catch (error) {
-    return res.status(200).json({ status: '500', message: 'Something went wrong' })
+    return res.status(500).json({ status: '500', message: 'Something went wrong' })
   }
 }
 
-// Time tracking of users spend time
+// Time tracking of users spend time in a month
 const trackTime = async (req, res) => {
   try {
-    const userIds = await userModel.distinct('_id');
-    console.log(userIds);
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+    const timeTrackingData = await taskModel.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: monthStart,
+            $lt: monthEnd,
+          },
+          'timeTracker': { $exists: true }
+        },
+      },
+      {
+        $lookup: {
+          from: 'projects',
+          localField: 'projectId',
+          foreignField: '_id',
+          as: 'projects',
+        },
+      },
+      {
+        $lookup: {
+          from: 'assignusers',
+          localField: '_id',
+          foreignField: 'taskId',
+          as: 'assignedUser',
+        },
+      },
+      {
+        $unwind: '$assignedUser',
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'assignedUser.assigneeId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $group: {
+          _id: {
+            userId: '$user._id',
+            projectName: '$projects.projectName',
+            firstName: '$user.firstName',
+            lastName: '$user.lastName',
+          },
+          timeSpent: {
+            $sum: '$timeTracker',
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$_id.userId',
+          user: {
+            $first: {
+              firstName: '$_id.firstName',
+              lastName: '$_id.lastName',
+            },
+          },
+          projects: {
+            $push: {
+              projectName: '$_id.projectName',
+              timeSpent: '$timeSpent',
+            },
+          },
+          totaltimeSpent: {
+            $sum: '$timeSpent',
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          userId: '$_id',
+          firstName: '$user.firstName',
+          lastName: '$user.lastName',
+          projects: {
+            $map: {
+              input: '$projects',
+              as: 'project',
+              in: {
+                projectName: { $arrayElemAt: ['$$project.projectName', 0] }, // Extract the single element from the array
+                timeSpent: {
+                  $concat: [
+                    {
+                      $toString: {
+                        $floor: {
+                          $divide: ['$$project.timeSpent', 3600000], // Convert milliseconds to hours
+                        },
+                      },
+                    },
+                    'h ',
+                    {
+                      $toString: {
+                        $floor: {
+                          $mod: [
+                            {
+                              $divide: ['$$project.timeSpent', 60000], // Convert milliseconds to minutes
+                            },
+                            60,
+                          ],
+                        },
+                      },
+                    },
+                    'm',
+                  ],
+                },
+              },
+            },
+          },
+          totalTimeSpent: {
+            $concat: [
+              {
+                $toString: {
+                  $floor: {
+                    $divide: ['$totaltimeSpent', 3600000],
+                  },
+                },
+              },
+              'h ',
+              {
+                $toString: {
+                  $floor: {
+                    $mod: [
+                      {
+                        $divide: ['$totaltimeSpent', 60000],
+                      },
+                      60,
+                    ],
+                  },
+                },
+              },
+              'm',
+            ],
+          },
+        },
+      },
+    ]);
+    return res.status(200).json({ status: "200", message: "Time Tracking Data Fetched Successfully", response: timeTrackingData });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 }
 
-
+// {
+//   $facet: {
+//     // Branch 1: Original output grouped by project and user
+//     "projectUserTime": [
+//       {
+//         $group: {
+//           _id: {
+//             userId: '$user._id',
+//             userName: '$user.firstName',
+//             userLastName: '$user.lastName',
+//             project: { $first: '$projects.projectName' },
+//           },
+//           totalTrackingTime: {
+//             $sum: '$timeTracker',
+//           },
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: 0,
+//           project: '$_id.project',
+//           userId: '$_id.userId',
+//           userName: '$_id.userName',
+//           userLastName: '$_id.userLastName',
+//           formattedTrackingTime: {
+//             $concat: [
+//               {
+//                 $toString: {
+//                   $trunc: {
+//                     $divide: ['$totalTrackingTime', 3600000], // Convert to hours
+//                   },
+//                 },
+//               },
+//               'h ',
+//               {
+//                 $toString: {
+//                   $trunc: {
+//                     $mod: [
+//                       {
+//                         $divide: ['$totalTrackingTime', 60000], // Convert to minutes
+//                       },
+//                       60,
+//                     ],
+//                   },
+//                 },
+//               },
+//               'm',
+//             ],
+//           },
+//         },
+//       },
+//     ],
+//     // Branch 2: Total time spent by each user across all projects
+//     "totalUserTime": [
+//       {
+//         $group: {
+//           _id: {
+//             userId: '$user._id',
+//             userName: '$user.firstName',
+//             userLastName: '$user.lastName',
+//           },
+//           totalTrackingTime: {
+//             $sum: '$timeTracker',
+//           },
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: 0,
+//           userId: '$_id.userId',
+//           userName: '$_id.userName',
+//           userLastName: '$_id.userLastName',
+//           totalTrackingTime: {
+//             $concat: [
+//               {
+//                 $toString: {
+//                   $trunc: {
+//                     $divide: ['$totalTrackingTime', 3600000], // Convert to hours
+//                   },
+//                 },
+//               },
+//               'h ',
+//               {
+//                 $toString: {
+//                   $trunc: {
+//                     $mod: [
+//                       {
+//                         $divide: ['$totalTrackingTime', 60000], // Convert to minutes
+//                       },
+//                       60,
+//                     ],
+//                   },
+//                 },
+//               },
+//               'm',
+//             ],
+//           },
+//         },
+//       },
+//     ],
+//   },
+// },
 
 
 module.exports = {

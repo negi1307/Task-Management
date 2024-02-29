@@ -5,7 +5,24 @@ import { createTask, getAllRoles, getAllUsers, getSingleSprint } from '../redux/
 import Form from 'react-bootstrap/Form';
 import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
 import pdfImage from '../../src/assets/images/pdf.png';
+import DatePicker from 'react-datepicker';
+import '../../node_modules/react-datepicker/dist/react-datepicker.css';
+
 export default function RightBar(props) {
+      //
+      const [startDate, setStartDate] = useState();
+      const [endDate, setEndDate] = useState();
+      // disable previous date
+      const today = new Date();
+      console.log(today, 'today');
+      // end date
+      const handleStartDate = (date) => {
+          setStartDate(date);
+      };
+      const handleEndDate = (date) => {
+          setEndDate(date);
+          
+      };
     const {
         register,
         handleSubmit,
@@ -18,15 +35,13 @@ export default function RightBar(props) {
     const [selectedFile, setSelectedFile] = useState('');
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
-        if(file){
+        if (file) {
             setSelectedFile(file);
             alert('File selected');
+        } else {
+            alert('File Not selected');
+            setSelectedFile('');
         }
-     else {
-        alert('File Not selected');
-        setSelectedFile("");
-     }   
-       
     };
 
     const openFileInput = () => {
@@ -37,7 +52,7 @@ export default function RightBar(props) {
     // const milestoneId = store?.getMilestoneId?.data;
     // const sprintid = store?.getSprintId?.data;
     // const sucesshandel =store?.createTaskReducer?.data
-    const today = new Date().toISOString().split('T')[0];
+
     const dispatch = useDispatch();
     const onSubmit = (e) => {
         let body = new FormData();
@@ -49,10 +64,11 @@ export default function RightBar(props) {
         body.append('assigneeId', e.Assignee);
         body.append('reporterId', e.Report);
         body.append('priority', e.priority);
-        body.append('startDate', e.start_date);
-        body.append('dueDate', e.last_date);
+        body.append('startDate', startDate);
+        body.append('dueDate', endDate);
         body.append('status', 1);
-        body.append('attachment', selectedFile ? selectedFile :"");
+        body.append('expectedHours', e.expectedHours);
+        body.append('attachment', selectedFile ? selectedFile : '');
         if (projectId !== '' && mileStoneId !== '' && sprintId !== '') {
             dispatch(createTask(body));
         } else {
@@ -64,21 +80,25 @@ export default function RightBar(props) {
         setValue('priority', '');
         setValue('start_date', '');
         setValue('last_date', '');
-        setValue('description','')
+        setValue('description', '');
         setShowModal(false);
-        setSelectedFile("")
+        setSelectedFile('');
+        setStartDate("");
+        setEndDate("")
     };
-    const handelClose=()=>{
+    const handelClose = () => {
         setValue('Summary', '');
         setValue('Assignee', '');
         setValue('Report', '');
         setValue('priority', '');
         setValue('start_date', '');
         setValue('last_date', '');
-        setValue('description','')
+        setValue('description', '');
         setShowModal(false);
-        setSelectedFile("")
-    }
+        setSelectedFile('');
+        setStartDate("");
+        setEndDate("")
+    };
     useEffect(() => {
         reset({ projectname: projectId, Milestone: mileStoneId, Sprint: sprintId });
     }, [showModal]);
@@ -220,7 +240,9 @@ export default function RightBar(props) {
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('Assignee', { required: true })}>
-                                            <option value={''}>--Select--</option>
+                                            <option value={''} hidden selected>
+                                                Select
+                                            </option>
                                             {store?.getAllUsers?.data?.response?.map((ele, ind) => (
                                                 <option value={ele?._id}>
                                                     {' '}
@@ -238,63 +260,55 @@ export default function RightBar(props) {
                                 <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlInput1">
-                                            Report <span class="text-danger">*</span>:
+                                            Expected Hours <span class="text-danger">*</span>:
                                         </label>
-                                        <select
-                                            name="Reporter"
-                                            defaultValue="Admin"
-                                            class="form-select"
-                                            id="exampleForm.ControlInput1"
-                                            {...register('Report', { required: true })}>
-                                            <option value={''}>--Select--</option>
-                                            {store?.getAllRoles?.data?.response?.map((ele, ind) => (
-                                                <option value={ele?._id}> {ele?.role} </option>
-                                            ))}
-                                        </select>
-                                        {errors.Report?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
+                                        <input
+                                            placeholder="Please Expected Hours "
+                                            type="number"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('expectedHours', { required: true })}
+                                        />
+                                            {errors.expectedHours?.type === 'required' && (
+                                                        <span className="text-danger"> This feild is required *</span>
+                                                    )}
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            Start Date<span class="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            placeholder="Please start Date "
-                                            type="date"
-                                            min={today}
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('start_date', { required: true })}
-                                        />
-                                        {errors.start_date?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                Start Date<span className="text-danger">*</span>:
+                                            </Form.Label>
+
+                                            <DatePicker
+                                                selected={startDate}
+                                                // onChange={(date) => setStartDate(date)}
+                                                onChange={(date) => handleStartDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={today}
+                                                className="add_width_input"
+                                            />
+                                        </Form.Group>
                                     </div>
-                                </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            End Date<span class="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            placeholder="Please end Date"
-                                            type="date"
-                                            disabled={watch('start_date') == '' || watch('start_date') == undefined}
-                                            min={watch('start_date')}
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('last_date', { required: true })}
-                                        />
-                                        {errors.last_date?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
+                            <div class="col-lg-6">
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                End Date<span className="text-danger">*</span>:
+                                            </Form.Label>
+
+                                            <DatePicker
+                                                selected={endDate}
+                                                disabled={startDate == '' || startDate == undefined}
+                                                // onChange={(date) => setEndDate(date)}
+                                                onChange={(date) => handleEndDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={startDate}
+                                                className="add_width_input"
+                                            />
+                                        </Form.Group>
                                     </div>
-                                </div>
                                 <div class="col-lg-6">
                                     <div class="mb-1">
                                         <label class="form-label" for="exampleForm.ControlInput1">
@@ -306,7 +320,9 @@ export default function RightBar(props) {
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('priority', { required: true })}>
-                                            <option>-----select----</option>
+                                            <option hidden selected>
+                                                select
+                                            </option>
                                             <option value="1">High</option>
                                             <option value="2">Medium</option>
                                             <option value="3">Low</option>
@@ -357,16 +373,15 @@ export default function RightBar(props) {
                                                     selectedFile?.type == 'image/png' ||
                                                     selectedFile?.type == 'image/jpg' ||
                                                     selectedFile?.type === 'image/jpeg'
-                                                        ?  URL.createObjectURL( selectedFile)
+                                                        ? URL.createObjectURL(selectedFile)
                                                         : pdfImage
                                                 }
-                                                className="add_upload_icon_load me-2 h-auto w-25 cp"
+                                                className="add_upload_icon_load me-2 h-auto w-75 cp"
                                                 alt=""
                                             />
                                         ) : (
                                             ''
                                         )}
-                                       
                                     </div>
                                 </div>
                             </div>

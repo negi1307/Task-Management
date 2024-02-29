@@ -30,9 +30,6 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
         activeStatus: {
             type: Boolean,
             default: true
-        },
-        daysLeft : {
-            type : Number
         }
     },
         {

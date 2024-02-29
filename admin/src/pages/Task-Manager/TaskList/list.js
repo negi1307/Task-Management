@@ -36,7 +36,7 @@ const TaskList = () => {
     };
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getsingleSprintTask({ id: '', skip: value, activeStatus: activeStatus, taskStatus: taskStatus }));
+        dispatch(getsingleSprintTask({ id: spriteId, taskStatus: taskStatus, activeStatus: true, skip: skip ,projectId:projectId ,milestoneId:milestoneId }));
     };
     const CloseModal = (val) => {
         if (val == 'render') {
@@ -50,10 +50,13 @@ const TaskList = () => {
             setSkip(1);
 
             let data = {
-                id: '',
+                id: spriteId,
                 activeStatus: true,
                 skip: 1,
                 taskStatus: taskStatus,
+                projectId:projectId ,
+                milestoneId:milestoneId
+               
             };
             dispatch(getsingleSprintTask(data));
         } else {
@@ -61,10 +64,12 @@ const TaskList = () => {
             setSkip(1);
 
             let data = {
-                id: '',
+                id: spriteId,
                 activeStatus: false,
                 skip: 1,
                 taskStatus: taskStatus,
+                projectId:projectId ,
+                milestoneId:milestoneId
             };
             dispatch(getsingleSprintTask(data));
         }
@@ -96,7 +101,7 @@ const TaskList = () => {
         setStatus(1);
     };
     useEffect(() => {
-        dispatch(getsingleSprintTask({ id: '', taskStatus: taskStatus, activeStatus: true, skip: skip }));
+        dispatch(getsingleSprintTask({ id: spriteId, taskStatus: taskStatus, activeStatus: true, skip: skip ,projectId:projectId ,milestoneId:milestoneId }));
     }, [render]);
     useEffect(() => {
         dispatch(getAllRoles());
@@ -124,19 +129,19 @@ const TaskList = () => {
         if (val == '1') {
             settaskStatus(1);
             setSkip(1);
-            dispatch(getsingleSprintTask({ id: '', activeStatus: true, skip: 1, taskStatus: 1 }));
+            dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 1 , projectId:projectId ,milestoneId:milestoneId }));
         } else if (val == '2') {
             settaskStatus(2);
             setSkip(1);
-            dispatch(getsingleSprintTask({ id: '', activeStatus: true, skip: 1, taskStatus: 2 }));
+            dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 2 ,projectId:projectId ,milestoneId:milestoneId}));
         } else if (val == '3') {
             setSkip(1);
             settaskStatus(3);
-            dispatch(getsingleSprintTask({ id: '', activeStatus: true, skip: 1, taskStatus: 3 }));
+            dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 3 ,projectId:projectId ,milestoneId:milestoneId}));
         } else {
             setSkip(1);
             settaskStatus(4);
-            dispatch(getsingleSprintTask({ id: '', activeStatus: true, skip: 1, taskStatus: 4 }));
+            dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 4 ,projectId:projectId ,milestoneId:milestoneId}));
         }
     };
     return (
@@ -219,7 +224,7 @@ const TaskList = () => {
                                         {getSingleSprintTask?.map((item, index) => (
                                             <tr>
                                                 <td>{(skip - 1) * 10 + index + 1}</td>
-                                                <td>{item?.summary}</td>
+                                                <td >{item?.summary}</td>
                                                 <td>
                                                     {' '}
                                                     <div
@@ -243,8 +248,8 @@ const TaskList = () => {
                                                         ? 'Low'
                                                         : ''}
                                                 </td>
-                                                <td> {moment(item?.startDate).format('L')}</td>
-                                                <td>{moment(item?.dueDate).format('L')}</td>
+                                                <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
+                                                <td>{moment(item?.dueDate).format("DD/MM/YYYY")}</td>
                                                 <td>
                                                     <Form.Check
                                                         type="switch"

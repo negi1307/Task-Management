@@ -6,7 +6,7 @@ export function createTaskApi(data): any {
     return api.create(URL.CREATE_TASK, data.payload);
 }
 export function getSingleSprintTaskApi(data): any {
-    return api.get(`${URL.SingleSprintTask}${data.payload.id}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}&taskStatus=${data.payload.taskStatus}`);
+    return api.get(`${URL.SingleSprintTask}${data.payload.id}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}&status=${data.payload.taskStatus}&milestoneId=${data.payload.milestoneId}&projectId=${data.payload.projectId}`);
 }
 export function getAllTaskApi(data): any {
     return api.get(`${URL.GetAllTask}${data.payload.projectId}&milestoneId=${data.payload.milestoneId}&sprintId=${data.payload.sprintId}&searchString=${data.payload.searchString}`);
@@ -38,4 +38,7 @@ export function UpdateCommentApi(data): any {
 }
 export function GetAssignUserApi(data): any {
     return api.get(`${URL.GetAssignUser}${data.payload.projectId}&milestoneId=${data.payload.milestoneId}&sprintId=${data.payload.sprintId}`);
+}
+export function GetHistoryApi(data): any {
+    return api.get(URL.getHistory + data.payload);
 }

@@ -10,7 +10,10 @@ import MainLoader from '../../../../constants/Loader/loader';
 //import Multiselect from 'multiselect-react-dropdown';
 import { getAllTechnology } from '../../../../redux/technology/action';
 import Multiselect from 'multiselect-react-dropdown';
-import { Select } from 'react-select';
+import DatePicker from 'react-datepicker';
+import '../../../../../node_modules/react-datepicker/dist/react-datepicker.css';
+import moment from 'moment';
+// import "../../../../../node_modules/"
 const Create = ({ modal, closeModal }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -19,17 +22,21 @@ const Create = ({ modal, closeModal }) => {
     const errorhandel = store?.addProject;
     const loaderhandel = store?.addProject;
     const [addValue, setAddValue] = useState([]);
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+    console.log(startDate, 'hiiiiiiiiiiiiiiiiiiiiiiiiiiii');
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     // disable previous date
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date();
+    console.log(today, 'today');
     // end date
-    function findMinimumEndDate(date1, date2) {
-        return new Date(Math.min(new Date(date1), new Date(date2)));
-    }
-    const date1 = new Date();
-    const date2 = selectedenDate;
-    const minimumEndDate = findMinimumEndDate(date1, date2);
-    console.log(minimumEndDate, 'mindate');
+    const handleStartDate = (date) => {
+        setStartDate(date);
+    };
+    const handleEndDate = (date) => {
+        setEndDate(date);
+    };
+
     //
     const {
         register,
@@ -39,14 +46,12 @@ const Create = ({ modal, closeModal }) => {
         reset,
         formState: { errors },
     } = useForm();
-    console.log(watch('startDate'), 'watchhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
-    console.log(addValue, 'select');
     const onSubmit = (data) => {
         let body = {
             projectName: data?.projectName,
             clientName: data?.clientName,
-            startDate: data?.startDate,
-            endDate: data?.endDate,
+            startDate: startDate,
+            endDate: endDate,
             projectType: data?.project_type,
             projectStatus: data?.status,
             technology: addValue,
@@ -62,9 +67,11 @@ const Create = ({ modal, closeModal }) => {
         } else if (errorhandel?.data?.status == 500) {
             ToastHandle('error', errorhandel?.data?.message);
         }
-    }, [errorhandel]);
+    }, [errorhandel?.data?.status]);
     useEffect(() => {
         reset();
+        setStartDate('');
+        setEndDate('');
     }, [modal]);
     const removehandle = (selectedList, removedItem) => {
         const remove = getTechnology.filter((ele, ind) => {
@@ -82,7 +89,7 @@ const Create = ({ modal, closeModal }) => {
     };
 
     const addhandle = (selectedList, selectItem) => {
-        console.log(selectedList, selectItem,"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn");
+        console.log(selectedList, selectItem, 'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
         const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
         });
@@ -164,7 +171,9 @@ const Create = ({ modal, closeModal }) => {
                                                 Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('project_type', { required: true })}>
-                                                <option>Choose an Project Type </option>
+                                                <option hidden selected>
+                                                    Choose an Project Type{' '}
+                                                </option>
                                                 <option value="T&M">T&M</option>
                                                 <option value="FC">FC</option>
                                                 <option value=" HR">HR</option>
@@ -182,15 +191,12 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
 
                                             <Multiselect
-                                                // options={options}
-                                                // value={selected}
-                                                // onChange={setSelected}
-                                                // labelledBy="Select"
                                                 onRemove={removehandle}
                                                 onSelect={addhandle}
                                                 isObject={false}
                                                 options={selected}
                                                 showCheckbox
+                                                placeholder="Select Technology"
                                             />
                                         </Form.Group>
                                     </Col>
@@ -199,35 +205,35 @@ const Create = ({ modal, closeModal }) => {
                                 <Row>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label>
+                                            <Form.Label className="w-100">
                                                 Start Date<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                min={today} // Set the minimum date to today
-                                                {...register('startDate', { required: true })}
-                                                placeholder="Please start Date "
+
+                                            <DatePicker
+                                                selected={startDate}
+                                                // onChange={(date) => setStartDate(date)}
+                                                onChange={(date) => handleStartDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={today}
+                                                className="add_width_input"
                                             />
-                                            {errors.startDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
                                         </Form.Group>
                                     </Col>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label>
+                                            <Form.Label className="w-100">
                                                 End Date<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                disabled={watch('startDate') == '' || watch('startDate') == undefined}
-                                                min={watch('startDate')}
-                                                {...register('endDate', { required: true })}
-                                                placeholder="Please end Date"
+
+                                            <DatePicker
+                                                selected={endDate}
+                                                disabled={startDate == '' || startDate == undefined}
+                                                // onChange={(date) => setEndDate(date)}
+                                                onChange={(date) => handleEndDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={startDate}
+                                                className="add_width_input"
                                             />
-                                            {errors.endDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -239,7 +245,9 @@ const Create = ({ modal, closeModal }) => {
                                                 Status<span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('status', { required: true })}>
-                                                <option>--select--</option>
+                                                <option hidden selected>
+                                                    Select Status
+                                                </option>
                                                 <option value="1">To-Do</option>
                                                 <option value="2">Live</option>
                                                 <option value="3">Hold</option>

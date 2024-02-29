@@ -188,7 +188,7 @@ const Milestone = () => {
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th> MileStone Name</th>
+                                                        <th> Milestone Name</th>
                                                         <th> Description</th>
                                                         <th> Start Date</th>
                                                         <th>Days Left</th>
@@ -204,7 +204,7 @@ const Milestone = () => {
                                                             <td>{item?.title}</td>
                                                             <td>{item?.description}</td>
 
-                                                            <td> {moment(item?.startDate).format('L')}</td>
+                                                            <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
                                                             <td>{item?.daysLeft}</td>
                                                             {/* <td>{moment(item?.completionDate).format('L')}</td> */}
                                                             <td>

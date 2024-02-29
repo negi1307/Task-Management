@@ -49,6 +49,7 @@ export const getAllMileStones = (state = GET_ALL_MILESTONE_INTIAL_STATE, action)
         case MileStoneType.GET_ALL_MILESTONES_ERROR:
             return {
                 data: [],
+                status:!200,
                 loading: false,
                 message: action?.payload,
             };
@@ -78,6 +79,7 @@ export const addAllmilstones = (state = ADD_ALL_MILESTONE_INTIAL_STATE, action) 
         case MileStoneType.ADD_ALL_MILESTONES_ERROR:
             return {
                 data: [],
+                status:!200,
                 loading: false,
                 message: action?.payload,
             };
@@ -107,7 +109,7 @@ export const deleteMileStone = (state = DELETE_MILESTONE_INTIAL_STATE, action) =
         case MileStoneType.DELETE_MILE_STONE_ERROR:
             return {
                 data: [],
-                status: 403,
+                status:!200,
                 loading: false,
                 message: action?.payload,
             };
@@ -133,6 +135,7 @@ export const getMileStone = (state = GET_MILESTONE_INTIAL_STATE, action) => {
         case MileStoneType.GET_ALL_MILESTONE_BY_ID_ERROR:
             return {
                 data: [],
+                status:!200,
                 loading: false,
                 message: action?.payload,
             };
@@ -162,7 +165,7 @@ export const updateMilestone = (state = UPDATE_MILESTONE_INTIAL_STATE, action) =
         case MileStoneType.UPDATE_MILESTONE_ERROR:
             return {
                 data: [],
-                status: 403,
+                status:!200,
                 loading: false,
                 message: action?.payload,
             };
@@ -188,6 +191,7 @@ export const getSigleMileStone = (state = GET_SINGLE_MILESTONE_INTIAL_STATE, act
         case MileStoneType.GET_SINGLE_MILESTONE_ERROR:
             return {
                 data: [],
+                status:!200,
                 loading: false,
                 message: action?.payload,
             };

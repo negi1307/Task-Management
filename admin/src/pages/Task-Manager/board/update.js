@@ -10,39 +10,35 @@ import MainLoader from '../../../constants/Loader/loader';
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { getSingleSprint, getsingleMileStone, updateTask } from '../../../redux/actions';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import DatePicker from 'react-datepicker';
+import '../../../../node_modules/react-datepicker/dist/react-datepicker.css';
 import noimage from '../../../assets/images/noimage.png';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
+import { parseISO } from 'date-fns';
 const UpdateTask = ({ modal, closeModal, editData }) => {
+    
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+    // disable previous date
+    const today = new Date();
+    console.log(today, 'today');
+    // end date
+    const handleStartDate = (date) => {
+        setStartDate(date);
+    };
+    const handleEndDate = (date) => {
+        setEndDate(date);
+    };
     console.log(editData, 'update');
     const [data, setData] = useState({
         image: '',
     });
-    const [description, setDescription] = useState('');
     const [imageShow, setImageShow] = useState(true);
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
 
     const loaderhandel = store?.UpdateTaskReducer;
-    // disable previous date
-    const today = new Date().toISOString().split('T')[0];
-    // start date
-    function findMinimumStartDate(startdate1, startdate2) {
-        return new Date(Math.min(new Date(startdate1), new Date(startdate2)));
-    }
-    const startdate1 = new Date();
-    const startdate2 = editData?.startDate;
-    const minimumStartDate = findMinimumStartDate(startdate1, startdate2);
-    //
-    // end date
-    function findMinimumEndDate(date1, date2) {
-        return new Date(Math.min(new Date(date1), new Date(date2)));
-    }
-    const date1 = new Date();
-    const date2 = editData?.dueDate;
-    const minimumEndDate = findMinimumEndDate(date1, date2);
-    //
+   
     const {
         register,
         handleSubmit,
@@ -63,8 +59,8 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
         body.append('assigneeId', val?.Assignee);
         body.append('reporterId', val?.Reporter);
         body.append('priority', val?.priority);
-        body.append('startDate', val?.startDate);
-        body.append('dueDate', val?.dueDate);
+        body.append('startDate', startDate);
+        body.append('dueDate', endDate);
         body.append('status', val?.status);
         body.append('attachment', data?.image);
 
@@ -73,30 +69,32 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     };
 
     useEffect(() => {
+        console.log(editData, "lalalalalaalalalalalalalala")
         reset({
             projectname: editData?.projectInfo?._id,
             Milestone: editData?.milestoneInfo?._id,
             Sprint: editData?.sprintInfo?._id,
-            startDate: handleDate(editData?.startDate),
-            dueDate: handleDate(editData?.dueDate),
             summary: editData?.summary,
             Assignee: editData?.assignees?.assigneeId,
             Reporter: editData?.assignees?.reporterId,
             priority: editData?.priority,
             status: editData?.status,
             description: editData?.description,
+            expectedHours : editData?.expectedHours
         });
         setData({ image: editData?.attachment });
+        if (editData?.startDate || editData?.dueDate) {
+            const parsedDate = parseISO(editData?.startDate) 
+            const endate = parseISO(editData?.dueDate)
+            if (parsedDate || endate) {
+                setStartDate(parsedDate);
+                setEndDate(endate)
+            } else {
+                console.error('Invalid date format:', editData.startDate);
+            }
+        }
     }, [modal]);
-    console.log(editData, 'pppppp');
-    const handleDate = (data) => {
-        let date = new Date(data);
-        let year = date.toLocaleString('default', { year: 'numeric' });
-        let month = date.toLocaleString('default', { month: '2-digit' });
-        let day = date.toLocaleString('default', { day: '2-digit' });
-        let formattedDate = year + '-' + month + '-' + day;
-        return formattedDate;
-    };
+    
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         setData({ ...data, image: e.target.files[0] });
@@ -247,7 +245,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
 
                                                     <Form.Select {...register('Assignee', { required: true })}>
-                                                        <option value={''}>--Select--</option>
+                                                        <option value={''} hidden selected>--Select--</option>
                                                         {store?.getAllUsers?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}>
                                                                 {' '}
@@ -271,7 +269,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         Reporter<span className="text-danger">*</span>:
                                                     </Form.Label>
                                                     <Form.Select {...register('Reporter', { required: true })}>
-                                                        <option value={''}>--Select--</option>
+                                                        <option value={''} hidden selected>--Select--</option>
                                                         {store?.getAllRoles?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.role} </option>
                                                         ))}
@@ -288,7 +286,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         Priority <span className="text-danger">*</span>:
                                                     </Form.Label>
                                                     <Form.Select {...register('priority', { required: true })}>
-                                                        <option>-------select----</option>
+                                                        <option hidden selected>-------select----</option>
                                                         <option value="1">High</option>
                                                         <option value="2">Medium</option>
                                                         <option value="3">Low</option>
@@ -302,38 +300,39 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                     </Col>
                                     <Col lg={12}>
                                         <Row>
-                                            <Col lg={6}>
-                                                <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                                    <Form.Label>
-                                                        {' '}
-                                                        Start Date <span className="text-danger">*</span>:
-                                                    </Form.Label>
-                                                    <Form.Control
-                                                        type="date"
-                                                        min={handleDate(minimumStartDate)}
-                                                        {...register('startDate', { required: true })}
-                                                    />{' '}
-                                                    {errors.startDate?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
-                                                    )}
-                                                </Form.Group>
-                                            </Col>
-                                            <Col lg={6}>
-                                                <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                                    <Form.Label>
-                                                        {' '}
-                                                        Due Date<span className="text-danger">*</span>:
-                                                    </Form.Label>
-                                                    <Form.Control
-                                                        type="date"
-                                                        min={handleDate(minimumEndDate)}
-                                                        {...register('dueDate', { required: true })}
-                                                    />{' '}
-                                                    {errors.dueDate?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
-                                                    )}
-                                                </Form.Group>
-                                            </Col>
+                                        <Col lg={6}>
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                Start Date<span className="text-danger">*</span>:
+                                            </Form.Label>
+
+                                            <DatePicker
+                                                selected={startDate}
+                                                // onChange={(date) => setStartDate(date)}
+                                                onChange={(date) => handleStartDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={today}
+                                                className="add_width_input"
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col lg={6}>
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                End Date<span className="text-danger">*</span>:
+                                            </Form.Label>
+
+                                            <DatePicker
+                                                selected={endDate}
+                                                disabled={startDate == '' || startDate == undefined}
+                                                // onChange={(date) => setEndDate(date)}
+                                                onChange={(date) => handleEndDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={startDate}
+                                                className="add_width_input"
+                                            />
+                                        </Form.Group>
+                                    </Col>
                                         </Row>
                                     </Col>
                                     <Col lg={12}>
@@ -345,7 +344,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         Status <span className="text-danger">*</span>:
                                                     </Form.Label>
                                                     <Form.Select {...register('status', { required: true })}>
-                                                        <option>-------select----</option>
+                                                        <option hidden selected>-------select----</option>
                                                         <option value="1">todo</option>
                                                         <option value="2">inProgress</option>
                                                         <option value="3">Hold</option>
@@ -356,7 +355,25 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     )}
                                                 </Form.Group>
                                             </Col>
-                                            <Col>
+                                            <div class="col-lg-6">
+                                    <div class="mb-2">
+                                        <label class="form-label" for="exampleForm.ControlInput1">
+                                            Expected Hours <span class="text-danger">*</span>:
+                                        </label>
+                                        <input
+                                            placeholder="Please Expected Hours "
+                                            type="text"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('expectedHours', { required: true })}
+                                        />
+                                         {errors.expectedHours?.type === 'required' && (
+                                                        <span className="text-danger"> This feild is required *</span>
+                                                    )}
+                                    </div>
+                                </div>
+                                <Row>
+                                <Col>
                                                 <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
                                                     <Form.Label>
                                                         Attachment <span className="text-danger">*</span>
@@ -426,6 +443,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     )}
                                                 </Form.Group>
                                             </Col>
+                                            </Row>
                                         </Row>
                                     </Col>
                                 </Row>

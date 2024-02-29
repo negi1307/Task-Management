@@ -22,29 +22,72 @@ const userLogin = async (req, res) => {
         };
         return res.status(200).json(response);
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({ status: 400, message: "Server error" });
+        return res.status(500).json({ status: 500, message: "Server error" });
     }
 };
 
 
 // // update the stop time
+// const recordStopTime = async (req, res) => {
+//     try {
+//         const userId = req.user._id;
+//         const mostRecentRecord = await userLoginModel.findOne({ userId: userId }, {}, { sort: { createdAt: -1 } });
+//         if (mostRecentRecord) {
+//             mostRecentRecord.logoutTime = new Date();
+//             await mostRecentRecord.save();
+//             return res.status(200).json({ status: 200, message: "Logout time updated successfully", logoutTime: mostRecentRecord });
+//         } else {
+//             return res.status(404).json({ status: 404, message: "No record found to update logout time" });
+//         }
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({ status: 500, message: "Server error" });
+//     }
+// };
+
 const recordStopTime = async (req, res) => {
     try {
         const userId = req.user._id;
+        const { leaveMessageId } = req.body;
         const mostRecentRecord = await userLoginModel.findOne({ userId: userId }, {}, { sort: { createdAt: -1 } });
+
         if (mostRecentRecord) {
-            mostRecentRecord.logoutTime = new Date();
+            const logoutTime = new Date();
+            const logoutTimeDiff = logoutTime - mostRecentRecord.createdAt;
+            mostRecentRecord.logoutTime = logoutTime;
+
+            if (logoutTimeDiff < 9 * 60 * 60 * 1000) {
+                if (leaveMessageId) {
+                    mostRecentRecord.leaveMessageId = leaveMessageId;
+                } else {
+                    return res.status(200).json({
+                        status: 200,
+                        message: "A reason for leaving early is required",
+                    });
+                }
+            }
+            // } else {
+            //     mostRecentRecord.leaveMessageId = "defaultId";
+            // }
+
             await mostRecentRecord.save();
-            return res.status(200).json({ status: 200, message: "Logout time updated successfully", logoutTime: mostRecentRecord });
+            return res.status(200).json({
+                status: 200,
+                message: "Logout time and leave message updated successfully",
+                logoutTime: mostRecentRecord.logoutTime,
+                leaveMessageId: mostRecentRecord.leaveMessageId,
+            });
         } else {
-            return res.status(404).json({ status: 404, message: "No record found to update logout time" });
+            return res.status(200).json({ status: 404, message: "No record found to update logout time" });
         }
     } catch (error) {
         console.error(error);
         return res.status(500).json({ status: 500, message: "Server error" });
     }
 };
+
+
+
 
 
 

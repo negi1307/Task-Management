@@ -12,7 +12,24 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { getSingleSprint, getsingleMileStone } from '../../../../redux/actions';
 import moment from 'moment';
 import pdfImage from '../../../../../src/assets/images/pdf.png';
+import DatePicker from 'react-datepicker';
+import '../../../../../node_modules/react-datepicker/dist/react-datepicker.css';
+import { useParams } from 'react-router-dom';
 const Create = ({ modal, CloseModal }) => {
+    const { projectId, milestoneId, spriteId } = useParams();
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+    // disable previous date
+    const today = new Date();
+    console.log(today, 'today');
+    // end date
+    const handleStartDate = (date) => {
+        setStartDate(date);
+    };
+    const handleEndDate = (date) => {
+        setEndDate(date);
+    };
+
     const {
         register,
         handleSubmit,
@@ -24,9 +41,9 @@ const Create = ({ modal, CloseModal }) => {
     const [description, setDescription] = useState('');
     const [milestoneDisable,setMilestoneDisable]=useState(true)
     const [sprintDisable,setsprintDisable]=useState(true)
-    const projectId = store?.getProjectId?.data;
-    const milestoneId = store?.getMilestoneId?.data;
-    const sprintid = store?.getSprintId?.data;
+    // const projectId = store?.getProjectId?.data;
+    // const milestoneId = store?.getMilestoneId?.data;
+    // const sprintid = store?.getSprintId?.data;
     const Createhandel = store?.createTaskReducer;
     const [selectedFile, setSelectedFile] = useState('');
     const handleFileSelect = (event) => {
@@ -46,21 +63,20 @@ const Create = ({ modal, CloseModal }) => {
         document.getElementById('fileInput').click();
     };
     // const sucesshandel =store?.createTaskReducer?.data
-    const today = new Date().toISOString().split('T')[0];
+
     const dispatch = useDispatch();
 
     const onSubmit = (e) => {
         let body = new FormData();
-        body.append('projectId', e.projectname);
-        body.append('milestoneId', e.Milestone);
-        body.append('sprintId', e.Sprint);
+        body.append('projectId', projectId);
+        body.append('milestoneId', milestoneId);
+        body.append('sprintId', spriteId);
         body.append('summary', e.summary);
         body.append('description', e.description);
         body.append('assigneeId', e.Assignee);
-        body.append('reporterId', e.Reporter);
         body.append('priority', e.Priority);
-        body.append('startDate', e.startdate);
-        body.append('dueDate', e.dueDate);
+        body.append('startDate', startDate);
+        body.append('dueDate', endDate);
         body.append('status', 1);
         body.append('attachment', selectedFile);
         
@@ -73,11 +89,10 @@ const Create = ({ modal, CloseModal }) => {
             setValue('Sprint', '');
             setValue('summary', '');
             setValue('Assignee', '');
-            setValue('Reporter', '');
             setValue('Priority', '');
-            setValue('startdate', '');
-            setValue('dueDate', '');
             setSelectedFile("")
+            setEndDate("")
+            setStartDate("")
         // setShowModal(false);
     };
 
@@ -90,10 +105,9 @@ const Create = ({ modal, CloseModal }) => {
         setValue('Sprint', '');
         setValue('summary', '');
         setValue('Assignee', '');
-        setValue('Reporter', '');
         setValue('Priority', '');
-        setValue('startdate', '');
-        setValue('dueDate', '');
+        setEndDate("")
+        setStartDate("")
         setSelectedFile("")
         CloseModal();
     };
@@ -138,7 +152,7 @@ const Create = ({ modal, CloseModal }) => {
                 <div className="p-2">
                     <Form onSubmit={handleSubmit(onSubmit)}>
                         <Row>
-                            <Col lg={12}>
+                            {/* <Col lg={12}>
                                 <Row>
                                     <Col lg={6}>
                                         <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
@@ -178,10 +192,10 @@ const Create = ({ modal, CloseModal }) => {
                                         </Form.Group>
                                     </Col>
                                 </Row>
-                            </Col>
+                            </Col> */}
                             <Col lg={12}>
                                     <Row>
-                                        <Col lg={6}>
+                                        {/* <Col lg={6}>
                                             <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                 <Form.Label>
                                                     Sprint <span className="text-danger">*</span>:
@@ -197,7 +211,7 @@ const Create = ({ modal, CloseModal }) => {
                                                     <span className="text-danger"> This feild is required *</span>
                                                 )}
                                             </Form.Group>
-                                        </Col>
+                                        </Col> */}
                                         <Col lg={6}>
                                         <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
@@ -262,23 +276,7 @@ const Create = ({ modal, CloseModal }) => {
                             </Col>
                             <Col lg={12}>
                                 <Row>
-                                    <Col lg={6}>
-                                        <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                {' '}
-                                                Reporter<span className="text-danger">*</span>:
-                                            </Form.Label>
-                                            <Form.Select {...register('Reporter', { required: true })}>
-                                                <option value={''}>--Select--</option>
-                                                {store?.getAllRoles?.data?.response?.map((ele, ind) => (
-                                                    <option value={ele?._id}> {ele?.role} </option>
-                                                ))}
-                                            </Form.Select>
-                                            {errors.Reporter?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
+                                  
                                     <Col lg={6}>
                                         <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
@@ -296,47 +294,6 @@ const Create = ({ modal, CloseModal }) => {
                                             )}
                                         </Form.Group>
                                     </Col>
-                                </Row>
-                            </Col>
-                            <Col lg={12}>
-                                <Row>
-                                    <Col lg={6}>
-                                        <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                {' '}
-                                                Start Date <span className="text-danger">*</span>:
-                                            </Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                min={today}
-                                                {...register('startdate', { required: true })}
-                                            />{' '}
-                                            {errors.estimatedate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
-                                    <Col lg={6}>
-                                        <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                {' '}
-                                                Due Date<span className="text-danger">*</span>:
-                                            </Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                disabled={watch('startdate') == '' || watch('startdate') == undefined}
-                                                min={watch('startdate')}
-                                                {...register('dueDate', { required: true })}
-                                            />{' '}
-                                            {errors.dueDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col lg={12}>
-                                <Row>
                                     <Col lg={6}>
                                         <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
@@ -353,6 +310,48 @@ const Create = ({ modal, CloseModal }) => {
                                             )}
                                         </Form.Group>
                                     </Col>
+                                </Row>
+                            </Col>
+                            <Col lg={12}>
+                                <Row>
+                                <Col lg={6}>
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                Start Date<span className="text-danger">*</span>:
+                                            </Form.Label>
+
+                                            <DatePicker
+                                                selected={startDate}
+                                                // onChange={(date) => setStartDate(date)}
+                                                onChange={(date) => handleStartDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={today}
+                                                className="add_width_input"
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col lg={6}>
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label className="w-100">
+                                                End Date<span className="text-danger">*</span>:
+                                            </Form.Label>
+
+                                            <DatePicker
+                                                selected={endDate}
+                                                disabled={startDate == '' || startDate == undefined}
+                                                // onChange={(date) => setEndDate(date)}
+                                                onChange={(date) => handleEndDate(date)}
+                                                placeholderText="mm-dd-yyyy"
+                                                minDate={startDate}
+                                                className="add_width_input"
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col lg={12}>
+                                <Row>
+                                 
                                     <Col lg={6}>
                                    
                                     <div class="mb-2">

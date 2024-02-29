@@ -377,6 +377,7 @@ const AllRoutes = () => {
                     path: 'boards',
                     element: <LoadComponent component={Boards} />,
                 },
+                
                 //new code add routing
                 // {
                 //     path: 'user',
@@ -491,10 +492,10 @@ const AllRoutes = () => {
                                     path: 'dashboard',
                                     element: <LoadComponent component={CRMDashboard} />,
                                 },
-                                {
-                                    path: 'projects',
-                                    element: <LoadComponent component={CRMProjects} />,
-                                },
+                                // {
+                                //     path: 'projects',
+                                //     element: <LoadComponent component={CRMProjects} />,
+                                // },
                                 {
                                     path: 'management',
                                     element: <LoadComponent component={CRMManagement} />,

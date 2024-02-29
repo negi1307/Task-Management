@@ -22,6 +22,7 @@ const AllUsers = () => {
     const deletehandle = store?.deleteUser;
     const [deletemodal, setDeleteModal] = useState(false);
     const [csvdownload, setcsvdownload] = useState([]);
+    const [csvName ,setCsvName]=useState();
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const csvdownloaddata = store?.getCsvDataReducer;
@@ -65,12 +66,13 @@ const AllUsers = () => {
         }
     }, [deletehandle]);
     const handelCsvDownload = (ele) => {
+        setCsvName(ele?.firstName + ele?.lastName +".csv")
         dispatch(getCSVdata(ele?._id));
     };
     useEffect(() => {
         if (csvdownloaddata?.data?.status == 200 && csvdownloaddata?.data?.length !== 0) {
             setcsvdownload(
-                csvdownloaddata?.data?.loginRecords?.map((ele) => {
+                csvdownloaddata?.data?.data?.map((ele) => {
                     return {
                         Name: ele?.userId?.firstName + ' ' + ele?.userId?.lastName,
                         Time: moment(ele?.loginTime).format('LT'),
@@ -138,7 +140,7 @@ const AllUsers = () => {
 
                                                 <td>
                                                     <span className="namelink">
-                                                        {moment(ele?.createdAt).format('L')}
+                                                        {moment(ele?.createdAt).format("DD/MM/YYYY")}
                                                     </span>
                                                 </td>
 
@@ -169,7 +171,7 @@ const AllUsers = () => {
                     )}
                     <CSVLink
                         data={csvdownload}
-                        filename="userdata.csv"
+                        filename={csvName}
                         className="hidden"
                         ref={csvLink}
                         id={`csvid`}

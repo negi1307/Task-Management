@@ -54,7 +54,7 @@ export const GetComment = '/comments/getTaskComment?taskId=';
 export const delteTaskComment = '/comments/deleteComment?';
 export const updateTaskComment = '/comments/updateComment';
 
-export const getHistory = '/history/getHistory';
+export const getHistory = '/history/getHistory?taskId=';
 
 export const getPriorityTaskboard = '/task/getPriorityTasks';
 export const getWeekTaskCount = '/task/getTasksWeekCount';
@@ -65,6 +65,9 @@ export const getTaskCount = '/task/getTasksCount';
 
 export const userLoginTime = '/userLogin/loginTime';
 export const userLoginTimeStop = '/userLogin/updateLogoutTime';
+export const userLogoutReason = '/reason/getleaveReason';
+
 // get all assigne name on borad page========================
-export const getAllAssigneeName='/assignUser/getuserListprojectAssigned?projectId='
+export const getAllAssigneeName='/assignUser/getuserListprojectAssigned?projectId=';
 // get all assigne name on borad page========================
+export const updateTaskStatusTime='/task/updateTaskStatus'

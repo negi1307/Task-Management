@@ -1,6 +1,8 @@
 import { React, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
+import { Row, Col, Breadcrumb, Badge } from 'react-bootstrap';
+
 import { columnsFromBackend } from './data';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
@@ -55,20 +57,19 @@ const Title = styled.span`
 
 const Boards = (props) => {
     const { projectId, milestoneId, spriteId } = useParams();
-    console.log(spriteId, projectId, milestoneId, 'sprintttt');
+
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
     const store = useSelector((state) => state);
     const { register, setValue } = useForm();
     const taskId = store?.getTaskId?.data;
+    console.log('store', store);
     const taskStatusCount = store?.getTaskStatusCount?.data?.response;
-    // for status count on board page(get all task api)============================
     const taskStatusCountdata = store?.getAllTaskReducer?.data;
-    // for status count on board page (get all task api)============================
     const updateComment = store?.updateComment;
     const successHandle = store?.getAllTaskReducer;
-    console.log(successHandle, 'success');
     const statushandle = store?.updateTaskStatus;
+    const assigneeName = store?.getAllAssigneeName?.data?.response;
 
     useEffect(() => {
         let body = {
@@ -79,21 +80,14 @@ const Boards = (props) => {
             milestoneId: milestoneId,
             sprintId: spriteId,
             skip: 1,
+            activeStatus: '',
         };
 
         dispatch(getAllTask(body));
     }, []);
 
     useEffect(() => {
-        let body = {
-            status: 1,
-            projectstatus: 1,
-        };
-        dispatch(getAllProjects(body));
-    }, []);
-
-    useEffect(() => {
-        dispatch(listProjectAssignee());
+        dispatch(listProjectAssignee({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
         dispatch(getTaskStatusCount());
     }, []);
 
@@ -156,6 +150,7 @@ const Boards = (props) => {
                     milestoneId: milestoneId,
                     sprintId: spriteId,
                     skip: 1,
+                    activeStatus: '',
                 };
                 dispatch(getAllTask(body));
             }, 30);
@@ -174,9 +169,7 @@ const Boards = (props) => {
         }
     };
 
-    useEffect(() => {
-        dispatch(getHistory());
-    }, []);
+  
 
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
@@ -224,7 +217,8 @@ const Boards = (props) => {
     const showTaskDetailMOdel = (item) => {
         setshowTaskModel(true);
         setCommentData(item);
-        dispatch(getComment({ taskId: item?.taskInfo?._id }));
+       dispatch(getComment(item?.taskId));
+       dispatch(getHistory(item?.taskId));
     };
 
     const closeTaskDetailMOdel = () => {
@@ -249,6 +243,7 @@ const Boards = (props) => {
             milestoneId: milestoneId,
             sprintId: spriteId,
             skip: 1,
+            activeStatus: '',
         };
         dispatch(getAllTask(body));
     };
@@ -273,6 +268,7 @@ const Boards = (props) => {
                     milestoneId: milestoneId,
                     sprintId: spriteId,
                     skip: 1,
+                    activeStatus: '',
                 };
                 dispatch(getAllTask(body));
             }, 500);
@@ -281,66 +277,116 @@ const Boards = (props) => {
     return (
         <>
             <div class="status">
-                <h4>Task Status Count</h4>
                 <ul>
-                    <li>
-                        TO-DO:
-                        {taskStatusCountdata?.response?.TodoCount}
-                    </li>
-                    <li>
-                        In-Progress:
-                        {taskStatusCountdata?.response?.InprogressCount}
-                    </li>
-                    <li>
-                        Hold:
-                        {taskStatusCountdata?.response?.HoldCount}
-                    </li>
-                    <li>
-                        Done:
-                        {taskStatusCountdata?.response?.DoneCount}
-                    </li>
-                    <li>
-                        Due Task:
-                        {taskStatusCountdata?.response?.DueTasksCount}
-                    </li>
+                    <li>Task Status Count</li>
+                    <div>
+                        {' '}
+                        <h4 className="page-title bg-black  text-white rounded-2 p-2 py-1">
+                            {' '}
+                            To-Do :
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
+                                {taskStatusCountdata?.response?.TodoCount}
+                            </Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3">
+                        {' '}
+                        <h4 className="page-title bg-black text-white rounded-2 p-2 py-1">
+                            {' '}
+                            In-Progress :
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
+                                {taskStatusCountdata?.response?.InprogressCount}
+                            </Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3">
+                        {' '}
+                        <h4 className="page-title bg-black text-white rounded-2 p-2 py-1">
+                            {' '}
+                            Hold :
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
+                                {taskStatusCountdata?.response?.HoldCount}
+                            </Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3">
+                        {' '}
+                        <h4 className="page-title  bg-black text-white rounded-2 p-2 py-1">
+                            {' '}
+                            Done :
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
+                                {taskStatusCountdata?.response?.DoneCount}
+                            </Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3 me-2">
+                        {' '}
+                        <h4 className="page-title bg-black text-white rounded-2 p-2 py-1">
+                            {' '}
+                            Due Task:
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
+                                {taskStatusCountdata?.response?.DueTasksCount}
+                            </Badge>
+                        </h4>{' '}
+                    </div>
 
-                    <li>
-                        <input
-                            type="search"
-                            placeholder="Search here..."
-                            onKeyUp={selectTask}
-                            {...register('textSearch')}
-                        />
+                    <li className="info_cls">
+                        {assigneeName?.map((item, index) => (
+                            <div className=" d-flex align-items-center cp">
+                                <span
+                                    style={{
+                                        zIndex: '0000000',
+                                        backgroundColor: '#605e5a',
+                                        borderRadius: '100%',
+                                        // padding: '8px',
+                                        height: '35px',
+                                        width: '35px',
+                                        display: 'flex',
+                                        // alignitems: 'center',
+                                        alignItems: 'center',
+                                        // justifycontent: 'center',
+                                        justifyContent: 'center',
+                                        color: 'white',
+                                        fontWeight: '800',
+                                        marginRight: '-8px',
+                                        // zIndex: '999999',
+                                    }}>
+                                    {item?.assigneeId?.firstName.charAt(0)}
+                                    {item?.assigneeId?.lastName.charAt(0)}
+                                </span>
+                            </div>
+                        ))}
                     </li>
                 </ul>
-                {/* <ul>
-        
-        {taskStatusCount?.map((item,index)=>
-        
-          <li>{item.name} : {item.count}</li>
-        )}
-        
-      </ul> */}
-            </div>
-            <div className="add_task">
-                <button
-                    type="button"
-                    className="mybutton btn btn-info"
-                    onClick={() => {
-                        console.log('button click');
-                        setShowModal(!showModal);
-                    }}>
-                    Add Task
-                </button>
-                <RightBar
-                    callAlltaskData={callAlltaskData}
-                    className="d-none"
-                    projectId={props.projectId}
-                    mileStoneId={props.mileStoneId}
-                    sprintId={props.sprintId}
-                    showModal={showModal}
-                    setShowModal={setShowModal}
-                />
+                <div className="search_info">
+                    <input
+                        type="search"
+                        placeholder="Search here..."
+                        className="border-0 rounded-2"
+                        onKeyUp={selectTask}
+                        {...register('textSearch')}
+                    />
+                    <div className="add_task">
+                        <button
+                            type="button"
+                            className="mybutton btn btn-info web_button"
+                            onClick={() => {
+                                console.log('button click');
+                                setShowModal(!showModal);
+                            }}>
+                            Add Task
+                        </button>
+                        <RightBar
+                            callAlltaskData={callAlltaskData}
+                            className="d-none"
+                            projectId={props.projectId}
+                            mileStoneId={props.mileStoneId}
+                            sprintId={props.sprintId}
+                            showModal={showModal}
+                            setShowModal={setShowModal}
+                        />
+                    </div>
+                </div>
             </div>
 
             <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>

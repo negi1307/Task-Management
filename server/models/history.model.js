@@ -1,46 +1,55 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'), { Schema } = mongoose,
 
-const HistoryTypeEnum = {
-    // Define your enum values here
-    // For example:
-    CREATED: 'created',
-    UPDATED: 'updated',
-    DELETED: 'deleted',
-};
+    // const HistoryTypeEnum = {
+    //     // Define your enum values here
+    //     // For example:
+    //     CREATED: 'created',
+    //     UPDATED: 'updated',
+    //     DELETED: 'deleted',
+    // };
 
-const history = mongoose.model(
-    'History', mongoose.Schema({
-        type: {
-            type: String,
-            enum: Object.values(HistoryTypeEnum),
-            required: true,
+    historySchema = new Schema({
+        // type: {
+        //     type: String,
+        //     enum: Object.values(HistoryTypeEnum),
+        //     required: true,
+        // },
+        time: {
+            type: Date
+        },
+        userActivity: {
+            type: String
+        },
+        // user: {
+        //     type: String
+        // },
+        userId: {
+            type: mongoose.Types.ObjectId,
+            ref: 'User'
         },
         taskId: {
             type: mongoose.Types.ObjectId,
             ref: 'Task'
         },
-        assigneeId: {
+        commentId: {
             type: mongoose.Types.ObjectId,
-            ref: 'User',
+            ref: "Comment"
         },
         reporterId: {
             type: mongoose.Types.ObjectId,
-            ref: 'User',
+            ref: 'roles',
         },
-        previousStatus: {
-            type: Number
-        },
-        currentStatus: {
-            type: Number
-        },
-        userId: {
+        projectId: {
             type: mongoose.Types.ObjectId,
-            ref: 'User'
+            ref: 'projects'
+        },
+        assigneeId: {
+            type: mongoose.Types.ObjectId,
+            ref: 'users'
         }
     },
         {
             timestamps: true
         }
     )
-);
-module.exports = history;
+module.exports = mongoose.model("History", historySchema);

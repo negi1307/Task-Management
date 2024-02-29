@@ -11,6 +11,8 @@ import Update from './modal/update';
 import { Link } from 'react-router-dom';
 import MainLoader from '../../../../../constants/Loader/loader';
 import { getAllProjects } from '../../../../../redux/projects/action';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 const Sprint = () => {
     const { projectId, milestoneId } = useParams();
     console.log(projectId, 'bvcxcvbnbvcxcvbnmnbvcxn');
@@ -29,6 +31,7 @@ const Sprint = () => {
     console.log(GetAllSingleSprintData, 'jjkkjkkyawsdfghjnmk');
     const deletehandle = store?.deleteSprint?.data;
     const loaderhandel = store?.getAllSingleSprints;
+    const [skip, setSkip] = useState(1);
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
@@ -103,52 +106,39 @@ const Sprint = () => {
     // useEffect(() => {
     //     dispatch(getSingleSprint({status:status ,id:milestoneId}));
     // }, [render]);
+
+
     useEffect(() => {
         let body = {
             flag: 3,
             projectId: projectId,
             milestoneId: milestoneId,
+            sprintId:'',
             skip: 1,
         };
 
         dispatch(getAllProjects(body));
     }, []);
+    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setSkip(value);
+        let body = {
+            flag: 3,
+            projectId: projectId,
+            milestoneId: milestoneId,
+            sprintId:'',
+            skip: 1,
+        };
+        dispatch(getAllProjects(body));
+    };
     return (
         <>
+        <div className='title'><h3>SPRINTS</h3></div>
             <Card>
                 <Card.Body>
                     <Col className="mx-auto" lg={12}>
                         <Row>
-                            {/* <div className="row mx-auto mt-2">
-                            <div className="d-flex col-4">
-                                <div className="row d-flex align-items-center">
-                                    <div
-                                        className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
-                                        <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
-                                            Active
-                                        </p>
-                                    </div>
-                                    <div
-                                        className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
-                                        <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
-                                            Deactive
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-4 d-flex align-items-center justify-content-center">
-                                <h4 className="header-title heading_data"> Sprints</h4>
-                            </div>
-                            {status == 1 ? <div className="col-4 d-flex align-items-center justify-content-end pe-0">
-                            <Button
-                                variant="info"
-
-                                onClick={handleCreate}
-                                className="btn fs-5  text-white p-1   web_button">
-                                Add Sprint
-                            </Button>
-                            </div> : ""}
-                        </div> */}
+                            
+                        
                             {loaderhandel.loading ? (
                                 <MainLoader />
                             ) : (
@@ -160,8 +150,7 @@ const Sprint = () => {
                                                 <th>SprintName</th>
                                                 <th>Sprint Description</th>
                                                 <th>Sprint Start Date</th>
-                                                <th>Sprint End Date</th>
-                                                {/* <th>Status</th> */}
+                                                <th>Due Days</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -178,30 +167,20 @@ const Sprint = () => {
                                                         />
                                                     </td>
 
-                                                    <td> {moment(item?.sprintId?.startDate).format('L')}</td>
-                                                    <td>{moment(item?.sprintId?.endDate).format('L')}</td>
-                                                    {/* <td> <Form.Check
-                                                                type="switch"
-                                                                checked={item?.status}
-                                                                onChange={(e) => handleStatusChange(e, item)}
-                                                            /></td> */}
+                                                    <td> {moment(item?.sprintId?.startDate).format('DD/MM/YYYY')}</td>
+                                                    <td> {item?.sprintId?.daysLeft}</td>
+                                                    
                                                     <td>
                                                         {' '}
                                                         <Row>
                                                             <Col>
                                                                 <p className="action-icon m-0 p-0 ">
                                                                     <Link
-                                                                        to={`/dashboard/taskboard/projectId=/${item?.projectId}&milestoneId=/${item?.milestoneId}&spriteId=/${item?.sprintId?._id}`}>
+                                                                        to={`/dashboard/taskboard/projectId=/${item?.sprintId?.projectId}&milestoneId=/${item?.sprintId?.milestoneId}&spriteId=/${item?.sprintId?._id}`}>
                                                                         <i className="mdi mdi-eye m-0 p-0"></i>
                                                                     </Link>
                                                                 </p>
-                                                                {/* <p className="action-icon m-0 p-0  ">
-                                                                        <i
-                                                                            onClick={() => {
-                                                                                handelUpdate(item);
-                                                                            }}
-                                                                            className="uil-edit-alt m-0 p-0"></i>
-                                                                    </p> */}
+                                                              
                                                             </Col>
                                                         </Row>
                                                     </td>
@@ -213,6 +192,21 @@ const Sprint = () => {
                             )}
                         </Row>
                     </Col>
+                    <Row>
+                            <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
+                                {store?.getProject?.data?.totalPages > 0 && (
+                                    <Stack spacing={2}>
+                                        <Pagination
+                                            defaultPage={skip}
+                                            count={store?.getProject?.data?.totalPages}
+                                            color="primary"
+                                            variant="outlined"
+                                            onChange={handlePaginationChange}
+                                        />
+                                    </Stack>
+                                )}
+                            </Col>
+                        </Row>
                 </Card.Body>
             </Card>
             <Create modal={openModal} CloseModal={CloseModal} projectId={projectId} milestoneId={milestoneId} />
