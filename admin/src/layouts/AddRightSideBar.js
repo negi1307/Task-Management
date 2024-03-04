@@ -9,20 +9,20 @@ import DatePicker from 'react-datepicker';
 import '../../node_modules/react-datepicker/dist/react-datepicker.css';
 
 export default function RightBar(props) {
-      //
-      const [startDate, setStartDate] = useState();
-      const [endDate, setEndDate] = useState();
-      // disable previous date
-      const today = new Date();
-      console.log(today, 'today');
-      // end date
-      const handleStartDate = (date) => {
-          setStartDate(date);
-      };
-      const handleEndDate = (date) => {
-          setEndDate(date);
-          
-      };
+    //
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+    // disable previous date
+    const today = new Date();
+    console.log(today, 'today');
+    // end date
+    const handleStartDate = (date) => {
+        setStartDate(date);
+    };
+    const handleEndDate = (date) => {
+        setEndDate(date);
+
+    };
     const {
         register,
         handleSubmit,
@@ -126,8 +126,8 @@ export default function RightBar(props) {
                 <div className="modal-body">
                     <p>{content}</p>
                     <div className="model-content-detail">
-                        <form class="" onSubmit={handleSubmit(onSubmit)}>
-                            <div class="row">
+                        <form className="" onSubmit={handleSubmit(onSubmit)}>
+                            <div className="row">
                                 {' '}
                                 <Col lg={12}>
                                     <Row>
@@ -173,7 +173,7 @@ export default function RightBar(props) {
                                 </Col>
                             </div>
 
-                            <div class="row">
+                            <div className="row">
                                 <Col lg={6}>
                                     <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                         <Form.Label>
@@ -190,16 +190,16 @@ export default function RightBar(props) {
                                         )}
                                     </Form.Group>
                                 </Col>
-                                <div class="mb-2 col-6">
-                                    <label class="form-label" for="exampleForm.ControlTextarea1">
+                                <div className="mb-2 col-6">
+                                    <label className="form-label" for="exampleForm.ControlTextarea1">
                                         Summary
-                                        <span class="text-danger">*</span>:
+                                        <span className="text-danger">*</span>:
                                     </label>
                                     <input
                                         placeholder="Please Enter Summary"
                                         type="text"
                                         id="exampleForm.ControlTextarea1"
-                                        class="form-control"
+                                        className="form-control"
                                         {...register('Summary', { required: true })}
                                     />
                                     {errors.Summary?.type === 'required' && (
@@ -208,10 +208,10 @@ export default function RightBar(props) {
                                 </div>
                             </div>
                             <div className="row">
-                                <div class="col-lg-12">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlInput1">
-                                            Description <span class="text-danger">*</span>:
+                                <div className="col-lg-12">
+                                    <div className="mb-2">
+                                        <label className="form-label" for="exampleForm.ControlInput1">
+                                            Description <span className="text-danger">*</span>:
                                         </label>
 
                                         <Form.Control
@@ -227,17 +227,18 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="">
-                                <div class="">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
+
+                            <div className="">
+                                <div className="">
+                                    <div className="mb-2">
+                                        <label className="form-label" for="exampleForm.ControlTextarea1">
                                             Assignee
-                                            <span class="text-danger">*</span>:
+                                            <span className="text-danger">*</span>:
                                         </label>
 
                                         <select
                                             name="Assignee"
-                                            class="form-select"
+                                            className="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('Assignee', { required: true })}>
                                             <option value={''} hidden selected>
@@ -256,76 +257,86 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlInput1">
-                                            Expected Hours <span class="text-danger">*</span>:
+                            <div className="row">
+                                <div className="col-lg-6">
+                                    <div className="mb-2">
+                                        <label className="form-label" for="exampleForm.ControlInput1">
+                                            Expected Hours <span className="text-danger">*</span>:
                                         </label>
                                         <input
                                             placeholder="Please Expected Hours "
                                             type="number"
                                             id="exampleForm.ControlTextarea1"
-                                            class="form-control"
+                                            className="form-control"
                                             {...register('expectedHours', { required: true })}
                                         />
-                                            {errors.expectedHours?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
-                                                    )}
+                                        {errors.expectedHours?.type === 'required' && (
+                                            <span className="text-danger"> This feild is required *</span>
+                                        )}
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label className="w-100">
-                                                Start Date<span className="text-danger">*</span>:
-                                            </Form.Label>
+                                <div className="col-lg-6">
+                                    <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                        <Form.Label className="w-100">
+                                            Start Date<span className="text-danger">*</span>:
+                                        </Form.Label>
 
-                                            <DatePicker
-                                                selected={startDate}
-                                                // onChange={(date) => setStartDate(date)}
-                                                onChange={(date) => handleStartDate(date)}
-                                                placeholderText="mm-dd-yyyy"
-                                                minDate={today}
-                                                className="add_width_input"
-                                            />
-                                        </Form.Group>
-                                    </div>
+                                        <DatePicker
+                                            selected={startDate}
+                                            // onChange={(date) => setStartDate(date)}
+                                            onChange={(date) => handleStartDate(date)}
+                                            placeholderText="mm-dd-yyyy"
+                                            minDate={today}
+                                            className="add_width_input"
+                                        />
+                                    </Form.Group>
+                                </div>
                             </div>
-                            <div class="row">
-                            <div class="col-lg-6">
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label className="w-100">
-                                                End Date<span className="text-danger">*</span>:
-                                            </Form.Label>
+                            <div className="row">
+                                <div className="col-lg-6">
+                                    <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                        <Form.Label className="w-100">
+                                            End Date<span className="text-danger">*</span>:
+                                        </Form.Label>
 
-                                            <DatePicker
-                                                selected={endDate}
-                                                disabled={startDate == '' || startDate == undefined}
-                                                // onChange={(date) => setEndDate(date)}
-                                                onChange={(date) => handleEndDate(date)}
-                                                placeholderText="mm-dd-yyyy"
-                                                minDate={startDate}
-                                                className="add_width_input"
-                                            />
-                                        </Form.Group>
-                                    </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-1">
-                                        <label class="form-label" for="exampleForm.ControlInput1">
+                                        <DatePicker
+                                            selected={endDate}
+                                            disabled={startDate == '' || startDate == undefined}
+                                            // onChange={(date) => setEndDate(date)}
+                                            onChange={(date) => handleEndDate(date)}
+                                            placeholderText="mm-dd-yyyy"
+                                            minDate={startDate}
+                                            className="add_width_input"
+                                        />
+                                    </Form.Group>
+                                </div>
+                                <div className="col-lg-6">
+                                    <div className="mb-1">
+                                        <label className="form-label" for="exampleForm.ControlInput1">
                                             {' '}
-                                            Priority <span class="text-danger">*</span>:
+                                            Priority <span className="text-danger">*</span>:
                                         </label>
                                         <select
                                             name="Priority"
-                                            class="form-select"
+                                            className="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('priority', { required: true })}>
                                             <option hidden selected>
                                                 select
                                             </option>
-                                            <option value="1">High</option>
-                                            <option value="2">Medium</option>
-                                            <option value="3">Low</option>
+                                            <option value="1">
+                                                &#128308;
+                                                Critical
+                                            </option>
+                                            <option value="2">
+                                                &#128992;
+                                                High</option>
+                                            <option value="3">
+                                                &#128993;
+                                                Medium</option>
+                                            <option value="4">
+                                                &#128994;
+                                                Low</option>
                                         </select>
 
                                         {errors?.priority?.type === 'required' && (
@@ -334,11 +345,11 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            Status<span class="text-danger">*</span>:
+                            <div className="row">
+                                <div className="col-lg-6">
+                                    <div className="mb-2">
+                                        <label className="form-label" for="exampleForm.ControlTextarea1">
+                                            Status<span className="text-danger">*</span>:
                                         </label>
                                         <input
                                             disabled="Live"
@@ -346,13 +357,13 @@ export default function RightBar(props) {
                                             placeholder="To-Do"
                                             type="text"
                                             id="exampleForm.ControlTextarea1"
-                                            class="form-control"
+                                            className="form-control"
                                         />
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
+                                <div className="col-lg-6">
+                                    <div className="mb-2">
+                                        <label className="form-label" for="exampleForm.ControlTextarea1">
                                             Attachment :
                                         </label>
                                         <div onClick={openFileInput}>
@@ -365,14 +376,14 @@ export default function RightBar(props) {
                                             className="file-input"
                                             onChange={handleFileSelect}
                                             style={{ display: 'none' }}
-                                            // {...register('Attachment', { required: true })}
+                                        // {...register('Attachment', { required: true })}
                                         />{' '}
                                         {selectedFile ? (
                                             <img
                                                 src={
                                                     selectedFile?.type == 'image/png' ||
-                                                    selectedFile?.type == 'image/jpg' ||
-                                                    selectedFile?.type === 'image/jpeg'
+                                                        selectedFile?.type == 'image/jpg' ||
+                                                        selectedFile?.type === 'image/jpeg'
                                                         ? URL.createObjectURL(selectedFile)
                                                         : pdfImage
                                                 }
@@ -386,12 +397,12 @@ export default function RightBar(props) {
                                 </div>
                             </div>
 
-                            <div class="row"></div>
-                            <div class="row">
-                                <div class="text-start d-flex align-items-end justify-content-end col">
+                            <div className="row"></div>
+                            <div className="row">
+                                <div className="text-start d-flex align-items-end justify-content-end col">
                                     <button
                                         type="submit"
-                                        class="btn btn-sm  text-white pt-1 pb-1 mt-3 web_button  btn btn-info">
+                                        className="btn btn-sm  text-white pt-1 pb-1 mt-3 web_button  btn btn-info">
                                         Add
                                     </button>
                                 </div>
