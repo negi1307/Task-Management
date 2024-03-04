@@ -222,8 +222,6 @@ const getProjects = async (req, res) => {
           },
           { $skip: (skip - 1) * pageSize }, { $limit: pageSize }
         ]);
-
-
         const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus, projectStatus });
         // const projects = await projectModel
         //   .find({ activeStatus: req.query.activeStatus, projectStatus })
@@ -271,22 +269,15 @@ const uploadProject_File = async (req, res) => {
     let originalName = req.file.originalname;
     let fileName = req.body.fileName;
     if (projectId && attachment && fileName) {
-      const data = await projectupload({
-        projectId,
-        attachment, fileName, attachmentType, originalName
-      });
+      const data = await projectupload({ projectId, attachment, fileName, attachmentType, originalName });
       await data.save();
       res.status(200).json({ status: '200', message: 'Project file uploaded Successfully' })
-
     }
     else {
       return res.status(200).json({ status: '500', message: 'Something went wrong' })
-
     }
-
   } catch (error) {
     return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message })
-
   }
 }
 
@@ -294,12 +285,10 @@ const uploadProject_File = async (req, res) => {
 // only project name-------------
 const getallProject = async (req, res) => {
   try {
-    const allProjectsName = await projectModel.find().select({ projectName: 1 }).sort({ createdAt: -1 })
-      ;
+    const allProjectsName = await projectModel.find().select({ projectName: 1 }).sort({ createdAt: -1 });
     res.status(200).json({ status: '200', message: 'Project file uploaded Successfully', response: allProjectsName })
   } catch (error) {
     return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message })
-
   }
 };
 

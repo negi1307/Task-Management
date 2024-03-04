@@ -10,14 +10,7 @@ const createPreSales = async (req, res) => {
         if (existingProjectName) {
             return res.status(200).json({ status: "400", message: "ProjectName already exists" });
         } else {
-            const result = await preSalesModel.create({
-                clientName,
-                projectName,
-                description,
-                stage,
-                type,
-                status
-            });
+            const result = await preSalesModel.create({ clientName, projectName, description, stage, type, status });
             return res.status(200).json({ status: "200", message: "Pre Sale added successfully", response: result });
         }
     } catch (error) {
@@ -163,30 +156,14 @@ const getPreSaleData = async (req, res) => {
 const updatePreSalesData = async (req, res) => {
     try {
         const { preSalesId, projectName, clientName, description, stage, type, technology, startDate, endDate, projectType, projectStatus } = req.body;
-        const presaleData = {
-            projectName,
-            clientName,
-            description,
-            stage,
-            type
-        }
+        const presaleData = { projectName, clientName, description, stage, type }
         if (req.body.status) {
             presaleData.status = 1;
         }
         const preSaleUpdate = await preSalesModel.findByIdAndUpdate(preSalesId, presaleData, { new: true });
         if (preSaleUpdate.status == 1) {
             const { projectName, clientName, description } = preSaleUpdate;
-            const projectData = {
-                projectName,
-                clientName,
-                technology,
-                startDate,
-                endDate,
-                projectDesc: description,
-                projectStatus,
-                projectType,
-                preSalesId
-            };
+            const projectData = { projectName, clientName, technology, startDate, endDate, projectDesc: description, projectStatus, projectType, preSalesId };
             const addProject = await projectModel.create(projectData);
             return res.status(200).json({ status: 200, message: "Project converted successfully", response: addProject })
         }

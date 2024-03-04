@@ -29,7 +29,6 @@ const getRoles = async (req, res) => {
     //   } else if (currentUserRole === 'PM') {
     //     query = { role: { $nin: ['Admin', 'CTO', currentUserRole] } };
     //   }
-  
       const result = await rolesModel.find();      
       return res.status(200).json({ status: "200", message: "Roles retrieved successfully", response: result });
     } catch (error) {
