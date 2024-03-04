@@ -26,19 +26,6 @@ services:
       - PORT=6001
       - REACT_APP_API_URL=http://103.185.212.115:9000
       - SKIP_PREFLIGHT_CHECK=true
-  tmstsales:
-    image: tmstsales
-    build: ../../sales
-    ports:
-      - 6002:6002
-    container_name: tmstsales
-
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-    environment:
-      - PORT=6002
-      - REACT_APP_API_URL=http://103.185.212.115:9000
-      - SKIP_PREFLIGHT_CHECK=true
   tmstuser:
     image: tmstuser
     build: ../../user
