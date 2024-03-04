@@ -2,7 +2,7 @@ FROM node:16
 WORKDIR /app
 RUN echo "Copying files...."
 COPY . .
-WORKDIR app/admin
-RUN npm install
-CMD ["npm","run","build"]
+WORKDIR /app/
+RUN npm install --force
+CMD ["npm", "run", "start"]
 EXPOSE 6001
