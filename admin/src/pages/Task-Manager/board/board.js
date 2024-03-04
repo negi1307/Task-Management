@@ -29,11 +29,11 @@ const Container = styled.div`
 `;
 
 const TaskList = styled.div`
-    min-height: 100px;
+    height: 98vh;
     display: flex;
     flex-direction: column;
     background: #f3f3f3;
-    min-width: 341px;
+    width: 100%;
     border-radius: 5px;
     padding: 15px 15px;
     margin-right: 45px;
@@ -43,9 +43,16 @@ const TaskColumnStyles = styled.div`
     margin: 8px;
     display: flex;
     width: 100%;
-    min-height: 80vh;
     overflow: auto;
+
+    /* Bootstrap grid classes */
+    .task-list-col {
+        flex: 0 0 25%; 
+        max-width: 25%; 
+        padding: 0 8px; 
+    }
 `;
+
 
 const Title = styled.span`
     color: #10957d;
@@ -270,7 +277,7 @@ const Boards = () => {
         dispatch(getAllProjects(body));
         dispatch(getsingleMileStone({ id: '', activeStatus: 1, skip: 0, mileStoneId: '' }));
         dispatch(getSingleSprint({ activeStatus: 1, id: '', skip: 0 }));
-    
+
     }, []);
     const handleSearchChange = (e) => {
         e.preventDefault();
@@ -459,26 +466,29 @@ const Boards = () => {
                                 return (
                                     <Droppable key={columnId} droppableId={columnId}>
                                         {(provided, snapshot) => (
-                                            <TaskList
-                                                class="three"
-                                                ref={provided.innerRef}
-                                                {...provided.droppableProps}>
-                                                <Title class="">{column.title}</Title>
-                                                {column.items.map((item, index) => (
-                                                    <TaskCard
-                                                        key={item}
-                                                        item={item}
-                                                        index={index}
-                                                        closeModal={closeModal}
-                                                    />
-                                                ))}
-                                                {provided.placeholder}
-                                            </TaskList>
+                                            <div className="task-list-col"> {/* Add this div */}
+                                                <TaskList
+                                                    ref={provided.innerRef}
+                                                    {...provided.droppableProps}
+                                                >
+                                                    <Title class="">{column.title}</Title>
+                                                    {column.items.map((item, index) => (
+                                                        <TaskCard
+                                                            key={item}
+                                                            item={item}
+                                                            index={index}
+                                                            closeModal={closeModal}
+                                                        />
+                                                    ))}
+                                                    {provided.placeholder}
+                                                </TaskList>
+                                            </div>
                                         )}
                                     </Droppable>
                                 );
                             })}
                         </TaskColumnStyles>
+
                     </Container>
                 )}
             </DragDropContext>

@@ -228,7 +228,7 @@ const Projects = () => {
                                                 </td>
                                                 <td>
                                                     <span className="namelink">
-                                                        {moment(ele?.startDate).format("DD/MM/YYYY")} 
+                                                        {moment(ele?.startDate).format("DD/MM/YYYY")}
                                                     </span>
                                                 </td>
                                                 <td>{ele?.daysLeft}</td>
@@ -288,7 +288,7 @@ const Projects = () => {
                 </Card>
 
                 <Create modal={openModal} closeModal={closeModal} />
-                
+
                 <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
                 {/* delete modal */}
                 <Modal show={statusModal} onHide={() => setStatusModal(false)}>

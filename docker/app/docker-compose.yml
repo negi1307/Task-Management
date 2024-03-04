@@ -1,0 +1,54 @@
+version: "2"
+services:
+  tmstserver:
+    image: tmstserver
+    build: ../../server
+    ports:
+      - 9000:9000
+    container_name: tmstserver
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PORT=9000
+      - MONGO_URI=mongodb+srv://root:HvEZSrCDlTXhaRwq@jira-cluster.vy7mxrd.mongodb.net/jira_db?retryWrites=true&w=majority
+      - SECRET_ACCESS_TOKEN=5eebc7baf59fbb5cde8b8857a452e6aab114849f6a92dff682b742A
+  tmstadmin:
+    image: tmstadmin
+    build: ../../admin
+    ports:
+      - 6001:6001
+    container_name: tmstadmin
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PORT=6001
+      - REACT_APP_API_URL=http://103.185.212.115:9000
+      - SKIP_PREFLIGHT_CHECK=true
+  tmstsales:
+    image: tmstsales
+    build: ../../sales
+    ports:
+      - 6002:6002
+    container_name: tmstsales
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PORT=6002
+      - REACT_APP_API_URL=http://103.185.212.115:9000
+      - SKIP_PREFLIGHT_CHECK=true
+  tmstuser:
+    image: tmstuser
+    build: ../../user
+    ports:
+      - 6003:6003
+    container_name: tmstuser
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PORT=6003
+      - REACT_APP_API_URL=http://103.185.212.115:9000
+      - SKIP_PREFLIGHT_CHECK=true
