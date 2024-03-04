@@ -92,7 +92,7 @@ const Login = (): React$Element<any> => {
                 <VerticalForm
                     onSubmit={onSubmit}
                     resolver={schemaResolver}
-                    // defaultValues={{ username: 'test', password: 'test' }}
+                // defaultValues={{ username: 'test', password: 'test' }}
                 >
                     <FormInput
                         label={t('Username')}
@@ -113,7 +113,7 @@ const Login = (): React$Element<any> => {
                     </FormInput>
 
                     <div className="mb-3 mb-0 text-center">
-                        <Button variant="primary" type="submit" disabled={loading}>
+                        <Button variant="primary" className='bg-black border-0' type="submit" disabled={loading}>
                             {t('Log In')}
                         </Button>
                     </div>

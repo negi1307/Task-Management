@@ -27,6 +27,8 @@ body[data-leftbar-theme='dark'] .side-nav .menuitem-active>a {
     justify-content: space-between;
 }
 
+
+
 .lefbar_info {
     display: flex;
     align-items: center;

@@ -21,7 +21,7 @@ axios.interceptors.response.use(
         } else if (error && error.response && error.response.status === 403) {
             // alert(error)
             window.location.href = '/access-denied';
-        } 
+        }
         else {
             switch (error.response.status) {
                 case 401:
@@ -49,16 +49,37 @@ const AUTH_SESSION_KEY = 'hyper_user';
  * Sets the default authorization
  * @param {*} token
  */
+// const setAuthorization = (token) => {
+
+//     if (token) axios.defaults.headers.common['Authorization'] = 'JWT ' + token;
+//     else delete axios.defaults.headers.common['Authorization'];
+// };
+
+// const getUserFromSession = () => {
+//     const user = sessionStorage.getItem(AUTH_SESSION_KEY);
+//     return user ? (typeof user == 'object' ? user : JSON.parse(user)) : null;
+// };
+
+
 const setAuthorization = (token) => {
-    
-    if (token) axios.defaults.headers.common['Authorization'] = 'JWT ' + token;
-    else delete axios.defaults.headers.common['Authorization'];
+    if (token) {
+        axios.defaults.headers.common['Authorization'] = 'JWT ' + token;
+        localStorage.setItem(AUTH_SESSION_KEY, token); // Store token in local storage
+    } else {
+        delete axios.defaults.headers.common['Authorization'];
+        localStorage.removeItem(AUTH_SESSION_KEY); // Remove token from local storage if not available
+    }
 };
 
 const getUserFromSession = () => {
-    const user = sessionStorage.getItem(AUTH_SESSION_KEY);
-    return user ? (typeof user == 'object' ? user : JSON.parse(user)) : null;
+    const token = localStorage.getItem(AUTH_SESSION_KEY); // Retrieve token from local storage
+    if (token) {
+        const decodedToken = jwtDecode(token);
+        return { token, ...decodedToken };
+    }
+    return null;
 };
+
 class APICore {
     /**
      * Fetches data from given url
@@ -113,7 +134,7 @@ class APICore {
     /**
      * post given data to url
      */
-    create = (url, data) => {        
+    create = (url, data) => {
         return axios.post(url, data);
     };
 
@@ -223,12 +244,19 @@ class APICore {
 /*
 Check if token available in session
 */
+
+
+
+// let user = getUserFromSession();
+// if (user) {
+//     const { token } = user;
+//     if (token) {
+//         setAuthorization(token);
+//     }
+// }
 let user = getUserFromSession();
-if (user) {
-    const { token } = user;
-    if (token) {
-        setAuthorization(token);
-    }
+if (user && user.token) {
+    setAuthorization(user.token);
 }
 
 export { APICore, setAuthorization, getUserFromSession };
