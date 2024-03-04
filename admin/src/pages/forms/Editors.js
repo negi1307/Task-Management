@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Row, Col, Card } from 'react-bootstrap';
-import SimpleMDEReact from 'react-simplemde-editor';
+// import SimpleMDEReact from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 
 // components
@@ -36,7 +36,7 @@ const Editors = (): React$Element<React$FragmentType> => {
                                 SimpleMDE is a light-weight, simple, embeddable, and beautiful JS markdown editor
                             </p>
 
-                            <SimpleMDEReact id={1} options={options} />
+                            {/* <SimpleMDEReact id={1} options={options} /> */}
                         </Card.Body>
                     </Card>
                 </Col>
