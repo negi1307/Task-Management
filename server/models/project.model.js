@@ -10,7 +10,7 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             },
             technology: {
                 type: [mongoose.Types.ObjectId],
-                ref : 'Technology'
+                ref: 'Technology'
             },
             startDate: {
                 type: Date
@@ -26,14 +26,15 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
                 default: true
             },
             projectStatus: {
-                type: Number, // status :1-todo, 2- live, 3 : hold, 4 : completed 
+                //type: Number, // status :1-todo, 2- live, 3 : hold, 4 : completed 
+                type: String
             },
-            projectType : {
-                type : String
+            projectType: {
+                type: String
             },
-            preSalesId :{
-                type : mongoose.Types.ObjectId,
-                ref : "preSales"
+            preSalesId: {
+                type: mongoose.Types.ObjectId,
+                ref: "preSales"
             }
         },
         {

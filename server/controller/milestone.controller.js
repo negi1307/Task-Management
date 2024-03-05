@@ -5,7 +5,6 @@ const { ObjectId } = require('mongodb');
 const addMilestone = async (req, res) => {
   try {
     const { projectId, title, description, startDate, completionDate } = req.body;
-
     const existingMilestoneTitle = await milestoneModel.findOne({
       title: new RegExp(`^${title.replace(/[\s]+/g, '\\s*')}\\s*$`, 'i'),
       projectId: projectId
@@ -13,13 +12,7 @@ const addMilestone = async (req, res) => {
     if (existingMilestoneTitle) {
       return res.status(200).json({ status: "400", message: "Title Already Exists" });
     } else {
-      const result = await milestoneModel.create({
-        projectId,
-        title,
-        description,
-        startDate,
-        completionDate
-      });
+      const result = await milestoneModel.create({ projectId, title, description, startDate,completionDate });
       return res.status(200).json({ status: "200", message: "Milestone added Successfully", response: result });
     }
   } catch (error) {

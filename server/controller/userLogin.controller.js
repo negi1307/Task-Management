@@ -50,12 +50,10 @@ const recordStopTime = async (req, res) => {
         const userId = req.user._id;
         const { leaveMessageId } = req.body;
         const mostRecentRecord = await userLoginModel.findOne({ userId: userId }, {}, { sort: { createdAt: -1 } });
-
         if (mostRecentRecord) {
             const logoutTime = new Date();
             const logoutTimeDiff = logoutTime - mostRecentRecord.createdAt;
             mostRecentRecord.logoutTime = logoutTime;
-
             if (logoutTimeDiff < 9 * 60 * 60 * 1000) {
                 if (leaveMessageId) {
                     mostRecentRecord.leaveMessageId = leaveMessageId;

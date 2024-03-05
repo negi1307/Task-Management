@@ -4,6 +4,16 @@ const technologyModel = require('../models/technology.model');
 // Add  a Technology category
 const addTechCategory = async (req, res) => {
     try {
+        const existingCategory = await techCategoryModel.findOne({ name: req.body.name });
+        if (existingCategory) {
+            return res.status(400).json({ status: '400', message: 'Category with this name already exists' });
+        }
+
+        const existingTechnology = await technologyModel.findOne({ techName: req.body.name });
+        if (existingTechnology) {
+            return res.status(400).json({ status: '400', message: 'Category name exists in technologyModel' });
+        }
+
         const result = await techCategoryModel.create({ name: req.body.name });
         return res.status(200).json({ status: '200', message: 'Tech Category Added Successfully', response: result })
     } catch (err) {
@@ -45,11 +55,18 @@ const updateTechCategoryStatus = async (req, res) => {
 // Add  a Technology
 const addTechnology = async (req, res) => {
     try {
-        const result = await technologyModel.create({
-            techCategory_id: req.body.techCategory_id,
-            techName: req.body.techName
-        });
-        return res.status(200).json({ status: '200', message: 'Technology Added Successfully', response: result })
+        const { techCategory_id, techName } = req.body
+        const existingTechnology = await technologyModel.findOne({ techName });
+        if (existingTechnology) {
+            return res.status(400).json({ status: '400', message: 'Technology already exists' });
+        }
+        const existingTechCategory = await techCategoryModel.findOne({ techName: req.body.name });
+        if (existingTechCategory) {
+            return res.status(400).json({ status: '400', message: 'Technology already exists in the specified tech category' });
+        } else {
+            const result = await technologyModel.create({ techCategory_id, techName });
+            return res.status(200).json({ status: '200', message: 'Technology Added Successfully', response: result })
+        }
     } catch (err) {
         return res.status(500).json({ status: '500', message: 'Something went wrong' })
     }

@@ -4,7 +4,7 @@ const tasks = mongoose.model(
     'Task', mongoose.Schema({
         taskMannualId: {
             type: Number,
-            required: true,
+            // required: true,
         },
         projectId: {
             type: mongoose.Types.ObjectId,
@@ -27,8 +27,8 @@ const tasks = mongoose.model(
         priority: {
             type: Number,// 1=high, 2=medium, 3=low
         },
-        expectedHours : {
-            type : Number
+        expectedHours: {
+            type: Number
         },
         startDate: {
             type: Date
@@ -46,8 +46,8 @@ const tasks = mongoose.model(
         doneDate: {
             type: Date
         },
-        timeTracker : {
-            type : Number
+        timeTracker: {
+            type: Number
         },
         activeStatus: {
             type: Boolean,
@@ -63,11 +63,19 @@ const tasks = mongoose.model(
             type: mongoose.Types.ObjectId,
             ref: "Task"
         },
-        logInTime : {
-            type : Date
+        logInTime: {
+            type: Date
         },
-        logOutTime : {
-            type : Date
+        logOutTime: {
+            type: Date
+        },
+        assigneeId: {
+            type: mongoose.Types.ObjectId,
+            ref: 'User'
+        },
+        reporterId: {
+            type: mongoose.Types.ObjectId,
+            ref: 'roles'
         }
     },
         {
