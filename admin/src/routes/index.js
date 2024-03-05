@@ -83,7 +83,7 @@ const CRMClients = React.lazy(() => import('../pages/apps/CRM/Clients'));
 const CustomerIndex = React.lazy(() => import('../pages/Task-Manager/customer/CustomerIndex'));
 const ClientIndex = React.lazy(() => import('../pages/Task-Manager/client/ClientIndex'));
 // time tracker
-const TimeTrackerIndex =React.lazy(()=>import('../pages/Task-Manager/timeTracker/TimeTrackerIndex'))
+const TimeTrackerIndex = React.lazy(() => import('../pages/Task-Manager/timeTracker/TimeTrackerIndex'))
 
 // - ecommece pages
 const EcommerceProducts = React.lazy(() => import('../pages/apps/Ecommerce/Products'));
@@ -361,7 +361,7 @@ const AllRoutes = () => {
                             element: <LoadComponent component={GetUploadData} />,
                         },
                         {
-                            path: "timeTracker" ,
+                            path: "timeTracker",
                             element: <LoadComponent component={TimeTrackerIndex} />
                         },
                     ],
