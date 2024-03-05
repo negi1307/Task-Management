@@ -288,10 +288,10 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 <option hidden selected>
                                                     Choose an Project Status
                                                 </option>
-                                                <option value="1">To-Do</option>
-                                                <option value="2">Live</option>
-                                                <option value="3">Hold</option>
-                                                <option value="4">Completed</option>
+                                                <option value="1">Ongoing</option>
+                                                <option value="2">Support</option>
+                                                <option value="3">Deliverd</option>
+                                           
                                             </Form.Select>
                                             {errors.projectstatus?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
