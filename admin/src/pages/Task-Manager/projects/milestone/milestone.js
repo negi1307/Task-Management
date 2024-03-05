@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { ListGroup, Container, Row, Col, Card, Table, Form, Button } from 'react-bootstrap';
+import { ListGroup, Container, Row, Col, Card, Table, Form, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Accordion from 'react-bootstrap/Accordion';
 import './milstone.css';
 import { Link } from 'react-router-dom';
@@ -46,7 +46,7 @@ const Milestone = () => {
             let data = {
                 id: id,
                 activeStatus: 1,
-                skip:1,
+                skip: 1,
                 mileStoneId: '',
             };
             dispatch(getsingleMileStone(data));
@@ -56,7 +56,7 @@ const Milestone = () => {
             let data = {
                 id: id,
                 activeStatus: 0,
-                skip:1 ,
+                skip: 1,
                 mileStoneId: '',
             };
             dispatch(getsingleMileStone(data));
@@ -74,7 +74,7 @@ const Milestone = () => {
         }
         setCheckedData(data);
         setStatusModal(true);
-       
+
     };
     const handleYes = () => {
         if (checkedStatus) {
@@ -116,6 +116,14 @@ const Milestone = () => {
         dispatch(getsingleMileStone({ id: id, activeStatus: status, skip, mileStoneId: '' }));
     }, [render]);
 
+    const truncateDescription = (description, maxLength = 50) => {
+        if (description.length > maxLength) {
+            return description.substring(0, maxLength) + '...';
+        }
+        return description;
+    };
+
+
     return (
         <>
             {/* {/ <h1>{id}</h1> /} */}
@@ -147,9 +155,8 @@ const Milestone = () => {
                                             <div className="d-flex col-4">
                                                 <div className="row d-flex align-items-center">
                                                     <div
-                                                        className={`col-auto  cp ${
-                                                            status == 1 ? 'Active_data' : 'InActive_data'
-                                                        }`}>
+                                                        className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'
+                                                            }`}>
                                                         <p
                                                             className="p-0 m-0 p-1 cp"
                                                             onClick={() => handleActive(true)}>
@@ -157,9 +164,8 @@ const Milestone = () => {
                                                         </p>
                                                     </div>
                                                     <div
-                                                        className={`col-auto  cp ${
-                                                            status == 0 ? 'Active_data' : 'InActive_data'
-                                                        }`}>
+                                                        className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'
+                                                            }`}>
                                                         <p
                                                             className=" p-0 m-0 p-1 cp"
                                                             onClick={() => handleActive(false)}>
@@ -201,8 +207,22 @@ const Milestone = () => {
                                                     {GetSinglemilstonesData?.map((item, index) => (
                                                         <tr>
                                                             <td>{(skip - 1) * 10 + index + 1}</td>
-                                                            <td>{item?.title}</td>
-                                                            <td>{item?.description}</td>
+                                                            <td>
+                                                                <Link
+                                                                    to={`/dashboard/singleMilestonesprint/projectId=/${item?.projectId?._id}&milestoneId=/${item?._id}`}>
+                                                                    <span className="namelink text-secondary"> {item?.title} </span>
+
+                                                                </Link>
+                                                            </td>
+                                                            <td>
+                                                                <OverlayTrigger
+                                                                    placement="top"
+                                                                    overlay={<Tooltip id={`tooltip-${index}`}>{item?.description}</Tooltip>}
+                                                                >
+                                                                    <span>{truncateDescription(item?.description)}</span>
+                                                                </OverlayTrigger>
+                                                            </td>
+
 
                                                             <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
                                                             <td>{item?.daysLeft}</td>

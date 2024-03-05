@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { ListGroup, Container, Row, Col, Card, Table, Form, Button } from 'react-bootstrap';
+import { ListGroup, Container, Row, Col, Card, Table, Form, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import moment from 'moment';
 import { Modal } from 'react-bootstrap';
 import Create from './modal/create';
@@ -55,7 +55,7 @@ const Sprint = () => {
             let data = {
                 id: milestoneId,
                 activeStatus: 1,
-                skip:1
+                skip: 1
             };
             dispatch(getSingleSprint(data));
         } else {
@@ -64,7 +64,7 @@ const Sprint = () => {
             let data = {
                 id: milestoneId,
                 activeStatus: 0,
-                skip:1
+                skip: 1
             };
             dispatch(getSingleSprint(data));
         }
@@ -111,6 +111,15 @@ const Sprint = () => {
     useEffect(() => {
         dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
     }, [render]);
+
+    const truncateDescription = (description, maxLength = 30) => {
+        if (description.length > maxLength) {
+            return description.substring(0, maxLength) + '...';
+        }
+        return description;
+    };
+
+
     return (
         <>
             <Card>
@@ -171,15 +180,23 @@ const Sprint = () => {
                                             {GetAllSingleSprintData?.map((item, index) => (
                                                 <tr>
                                                     <td>{(skip - 1) * 10 + index + 1}</td>
-                                                    <td>{item?.sprintName}</td>
                                                     <td>
-                                                        <div
-                                                            dangerouslySetInnerHTML={{
-                                                                __html: item?.sprintDesc,
-                                                            }}
-                                                        />
+                                                        <Link
+                                                        className='text-secondary'
+                                                            to={`/dashboard/taskBord/projectId=/${item?.projectId?._id}&milestoneId=/${item?.milestoneId?._id}&spriteId=/${item?._id}`}>
+                                                            {item?.sprintName}
+                                                        </Link>
                                                     </td>
-
+                                                    <td>
+                                                        <OverlayTrigger
+                                                            placement="top"
+                                                        >
+                                                            <div>
+                                                                {/* Show only a part of the description */}
+                                                                <div>{truncateDescription(item?.sprintDesc)}</div>
+                                                            </div>
+                                                        </OverlayTrigger>
+                                                    </td>
                                                     <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
                                                     <td>{item?.daysLeft}</td>
                                                     {/* <td>{moment(item?.endDate).format('L')}</td> */}

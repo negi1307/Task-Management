@@ -440,6 +440,8 @@ option {
     color: white !important;
     box-shadow: none !important;
     border: none !important;
+    font-size: 13px !important;
+    height: 35px !important;
 }
 
 .add_color_gray {
@@ -515,9 +517,11 @@ table.table-striped tbody tr:nth-of-type(odd)>* {
     /* z-index: 99999; */
 }
 
-/* .page-title {
+.page-title {
     background: #37216c !important;
-} */
+    font-size: 13px  !important;
+    margin-top: 13px !important;
+}
 .css-1xb58ew {
     margin: 0px !important;
 }
