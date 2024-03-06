@@ -29,10 +29,33 @@ const addProject = async (req, res) => {
 };
 
 // get project detail by "ongoing, delivered, support"
+// const getProjects = async (req, res) => {
+//   try {
+//     const { activeStatus, projectStatus, projectId } = req.query;
+//     let query = {};
+//     if (activeStatus === undefined || activeStatus === '') {
+//       query.activeStatus = true;
+//     } else {
+//       query.activeStatus = activeStatus === 'true';
+//     }
+//     if (projectStatus !== undefined && projectStatus !== '') {
+//       query.projectStatus = projectStatus;
+//     }
+//     if (projectId !== undefined && projectId !== '') {
+//       query._id = projectId;
+//     }
+//     const projects = await projectModel.find(query);
+//     return res.status(200).json({ status: "200", message: "Projects fetched successfully", response: projects });
+//   } catch (error) {
+//     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+//   }
+// };
+
 const getProjects = async (req, res) => {
   try {
-    const { activeStatus, projectStatus, projectId } = req.query;
+    const { activeStatus, projectStatus, skip, limit = 10 } = req.query;
     let query = {};
+    let options = { limit: parseInt(limit), skip: (parseInt(skip) - 1) * parseInt(limit) };
     if (activeStatus === undefined || activeStatus === '') {
       query.activeStatus = true;
     } else {
@@ -41,16 +64,17 @@ const getProjects = async (req, res) => {
     if (projectStatus !== undefined && projectStatus !== '') {
       query.projectStatus = projectStatus;
     }
-    if (projectId !== undefined && projectId !== '') {
-      query._id = projectId;
-    }
-    const projects = await projectModel.find(query);
-    return res.status(200).json({ status: "200", message: "Projects fetched successfully", response: projects });
+    // if (projectId !== undefined && projectId !== '') {
+    //   query._id = projectId;
+    // }
+    const totalCount = await projectModel.countDocuments(query);
+    const projects = await projectModel.find(query, null, options);
+    const totalPages = Math.ceil(totalCount / parseInt(limit));
+    return res.status(200).json({ status: "200", message: "Projects fetched successfully", response: projects, currentPage: parseInt(skip), totalPages, totalCount });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 };
-
 
 
 
