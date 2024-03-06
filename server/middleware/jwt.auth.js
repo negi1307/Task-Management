@@ -61,7 +61,7 @@ const verifyEmployee = async (req, res, next) => {
             if (req.user.role === 'Employee') {
                 next();
             } else {
-                return res.status(403).json({ message: 'Access denied. Only the authenciated users are allowed.' });
+                return res.status(403).json({ message: 'Access denied. Only the authenciated Employes are allowed.' });
             }
         });
     } catch (error) {
