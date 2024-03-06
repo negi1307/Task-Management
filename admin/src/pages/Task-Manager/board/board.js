@@ -83,9 +83,7 @@ const Boards = () => {
     const deleteCommenthandel = store?.deleteCommentReducer;
     const [loader, setloader] = useState(false);
     const [search, setSearch] = useState('');
-    console.log(Createhandel, 'nnnnnnnnnnnnnnnnnnnnnnnnnnn');
-    // const projectId = store?.getProjectId?.data;
-    // const milestoneId = store?.getMilestoneId?.data;
+
     const {
         register,
         handleSubmit,
@@ -94,9 +92,8 @@ const Boards = () => {
         reset,
         formState: { errors },
     } = useForm();
-    const onDragEnd = (result, columns, setColumns) => {
-        console.log('colun', result);
 
+    const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return;
         const { source, destination } = result;
         if (source.droppableId !== destination.droppableId) {
@@ -133,17 +130,13 @@ const Boards = () => {
             });
         }
     };
-    // useEffect(() => {
-    //   dispatch(getProjectId( projectId));
-    //   dispatch(getMilestoneId(milestoneId));
-    //   dispatch(getSprintId(spriteId))
-    // }, [])
 
     useEffect(() => {
         dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
         dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
         dispatch(getAllRoles())
     }, [render]);
+
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
             setColumns({
@@ -174,14 +167,16 @@ const Boards = () => {
             });
         }
     }, [successHandle]);
+
     const handelupdatetask = (ele) => {
         let body = {
             taskId: ele?.draggableId,
             status: ele?.destination?.droppableId,
         };
         dispatch(updateTaskStatus(body));
-        setloader(true);
+        setloader(false);
     };
+
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -190,7 +185,6 @@ const Boards = () => {
 
     useEffect(() => {
         if (statushandle?.data?.status == 200) {
-            ToastHandle('success', statushandle?.data?.message);
             closeModal('render');
         } else if (statushandle?.data?.status == 400) {
             ToastHandle('error', statushandle?.data?.message);
@@ -198,87 +192,9 @@ const Boards = () => {
             ToastHandle('error', statushandle?.message?.error);
         }
     }, [statushandle]);
-    useEffect(() => {
-        if (deletehandel?.data?.status == 200) {
-            ToastHandle('success', deletehandel?.data?.message);
-            closeModal('render');
-        } else if (deletehandel?.data?.status == 400) {
-            ToastHandle('error', deletehandel?.data?.message);
-        } else if (deletehandel?.status !== 200) {
-            ToastHandle('error', deletehandel?.message?.error);
-        }
-    }, [deletehandel]);
-    useEffect(() => {
-        if (updatehandel?.data?.status == 200) {
-            closeModal('render');
-            ToastHandle('success', 'Updated Successfully');
-        } else if (updatehandel?.data?.status == 400) {
-            ToastHandle('error', updatehandel?.data?.message);
-        } else if (updatehandel?.status !== 200) {
-            ToastHandle('error', updatehandel?.message?.error);
-        }
-        setloader(false);
-    }, [updatehandel]);
-    useEffect(() => {
-        if (successHandle.loading) {
-            setloader(true);
-        } else {
-            setloader(false);
-        }
-    }, [successHandle, loader]);
 
-    useEffect(() => {
-        if (Createhandel?.data?.status == 200) {
-            closeModal('render');
-            reset();
-            ToastHandle('success', Createhandel?.data?.message);
-        } else if (Createhandel?.data?.status == 400) {
-            ToastHandle('error', Createhandel?.data?.message);
-        } else if (Createhandel?.status !== 200) {
-            ToastHandle('error', Createhandel?.message?.error);
-        }
-    }, [Createhandel]);
-    useEffect(() => {
-        if (CreateCommenthandel?.data?.status == 200) {
-            ToastHandle('success', CreateCommenthandel?.data?.message);
-            dispatch(getComment({ taskId: taskId }));
-        } else if (CreateCommenthandel?.data?.status == 400) {
-            ToastHandle('error', CreateCommenthandel?.data?.message);
-        } else if (CreateCommenthandel?.status !== 200) {
-            ToastHandle('error', CreateCommenthandel?.message?.error);
-        }
-    }, [CreateCommenthandel]);
-    useEffect(() => {
-        if (deleteCommenthandel?.data?.status == 200) {
-            ToastHandle('success', deleteCommenthandel?.data?.message);
-            dispatch(getComment({ taskId: taskId }));
-        } else if (deleteCommenthandel?.data?.status == 400) {
-            ToastHandle('error', deleteCommenthandel?.data?.message);
-        } else if (deleteCommenthandel?.status !== 200) {
-            ToastHandle('error', deleteCommenthandel?.message?.error);
-        }
-    }, [deleteCommenthandel]);
-    useEffect(() => {
-        if (updateComment?.data?.status == 200) {
-            ToastHandle('success', updateComment?.data?.message);
-            dispatch(getComment({ taskId: taskId }));
-        } else if (updateComment?.data?.status == 400) {
-            ToastHandle('error', updateComment?.data?.message);
-        } else if (updateComment?.status !== 200) {
-            ToastHandle('error', updateComment?.message?.error);
-        }
-    }, [updateComment]);
-    useEffect(() => {
-        let body = {
-            status: '',
-            skip: 0,
-            projectStatus: '',
-        };
-        dispatch(getAllProjects(body));
-        dispatch(getsingleMileStone({ id: '', activeStatus: 1, skip: 0, mileStoneId: '' }));
-        dispatch(getSingleSprint({ activeStatus: 1, id: '', skip: 0 }));
+    // Other useEffects for handling various Redux actions
 
-    }, []);
     const handleSearchChange = (e) => {
         e.preventDefault();
         setSearch(e.target.value);
@@ -291,6 +207,7 @@ const Boards = () => {
             })
         );
     };
+
     // const handleSearch=()=>{
     //     dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId ,searchString : search}));
     //     setSkip(1)
@@ -322,7 +239,7 @@ const Boards = () => {
                 <div className="col-lg-8 d-flex  align -items-center">
                     <div>
                         {' '}
-                        <h4 className="page-title bg-black  text-white rounded-2 p-2 py-1">
+                        <h4 className="page-title bg-black  text-white rounded-2 p-2 py-1" >
                             {' '}
                             To-Do :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
@@ -420,7 +337,7 @@ const Boards = () => {
                                             onChange={(e) => {
                                                 handleSearchChange(e);
                                             }}
-                                            className="form-control"
+                                            className="form-control  py-1  "
                                             placeholder="Search "
                                         />
                                         <span className="mdi mdi-magnify search-icon"></span>
@@ -437,7 +354,7 @@ const Boards = () => {
                     <div className="ms-2">
                         <button
                             type="button"
-                            className="mybutton btn btn-info web_button"
+                            className="mybutton btn p-1 fw-bold py-1  web_button"
                             onClick={() => {
                                 console.log('button click');
                                 setShowModal(!showModal);
@@ -456,7 +373,10 @@ const Boards = () => {
                 </div>
             </div>
 
-            <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
+            <DragDropContext
+                onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+                shouldRespectForcePress={true} // Add this line
+            >
                 {loader ? (
                     <MainLoader />
                 ) : (
@@ -466,29 +386,30 @@ const Boards = () => {
                                 return (
                                     <Droppable key={columnId} droppableId={columnId}>
                                         {(provided, snapshot) => (
-                                            <div className="task-list-col"> {/* Add this div */}
-                                                <TaskList
-                                                    ref={provided.innerRef}
-                                                    {...provided.droppableProps}
-                                                >
-                                                    <Title class="">{column.title}</Title>
+                                            <div className="task-list-col">
+                                                <TaskList ref={provided.innerRef} {...provided.droppableProps}>
+                                                    <Title>{column.title}</Title>
                                                     {column.items.map((item, index) => (
                                                         <TaskCard
-                                                            key={item}
+                                                            key={item.id}
                                                             item={item}
-                                                            index={index}
+                                                            index={index = 1}
                                                             closeModal={closeModal}
                                                         />
                                                     ))}
-                                                    {provided.placeholder}
+                                                    {provided.placeholder} 
                                                 </TaskList>
+                                                <div>
+                                            pankaj
+                                        </div>
                                             </div>
+                                            
                                         )}
+                                  
                                     </Droppable>
                                 );
                             })}
                         </TaskColumnStyles>
-
                     </Container>
                 )}
             </DragDropContext>

@@ -21,7 +21,7 @@ const Create = ({ modal, closeModal }) => {
     const [selectedenDate, setSelectedenDate] = useState();
     const errorhandel = store?.addProject;
     const loaderhandel = store?.addProject;
-    const [addValue, setAddValue] = useState([]);
+    const [addValue, setAddValue] = useState('Ongoing');
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     console.log(startDate, 'hiiiiiiiiiiiiiiiiiiiiiiiiiiii');
@@ -246,12 +246,11 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Select {...register('status', { required: true })}>
                                                 <option hidden selected>
-                                                    Select Status
+                                                    Ongoing
                                                 </option>
-                                                <option value="1">To-Do</option>
-                                                <option value="2">Live</option>
-                                                <option value="3">Hold</option>
-                                                <option value="4">Completed</option>
+                                                {/* <option value="1">Ongoing</option> */}
+                                             
+                                            
                                             </Form.Select>
                                         </Form.Group>
                                     </Col>

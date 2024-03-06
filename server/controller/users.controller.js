@@ -19,14 +19,7 @@ const registerUser = async (req, res) => {
       }
       else {
         const hashedPassword = await bcrypt.hash(password, 9);
-        const result = await userModel.create({
-          firstName,
-          lastName,
-          email,
-          password: hashedPassword,
-          plainPassword: password,
-          role
-        });
+        const result = await userModel.create({ firstName, lastName, email, password: hashedPassword, plainPassword: password, role });
         if (result) {
           await nodemailer.emailSender(result);
           return res.status(200).json({ status: "200", message: "User created Successfully", response: result });
@@ -64,9 +57,11 @@ const logInUser = async (req, res) => {
   }
 };
 
+// Update task status
 async function updateTaskStatus(existingUser) {
   try {
-    const taskIds = await assignUserModel.distinct('taskId', { assigneeId: existingUser._id });
+    // const taskIds = await assignUserModel.distinct('taskId', { assigneeId: existingUser._id });
+    const taskIds = await taskModel.distinct('taskId', { assigneeId: existingUser._id });
     const tasks = await taskModel.find({ _id: { $in: taskIds }, status: 2 });
     for (const task of tasks) {
       await taskModel.updateOne({ _id: task._id }, { $currentDate: { logInTime: true } });
@@ -104,7 +99,6 @@ const trackTime = async (req, res) => {
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
     const timeTrackingData = await taskModel.aggregate([
       {
         $match: {
