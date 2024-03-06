@@ -218,7 +218,10 @@ const Projects = () => {
                                             <tr className="align-middle">
                                                 <th scope="row">{(skip - 1) * 10 + ind + 1}</th>
                                                 <td className="cp">
-                                                    <span className="namelink"> {ele?.projectName} </span>
+                                                   
+                                                    <Link to={`/dashboard/projects/${ele?._id}`}>
+                                                    <span className="namelink text-secondary"> {ele?.projectName} </span>
+                                                                </Link>
                                                 </td>
                                                 <td className="w-20">
                                                     <span className="namelink"> {ele?.clientName}</span>
