@@ -140,25 +140,25 @@ const Projects = () => {
                             <div className="row d-flex align-items-center">
                                 <div className={`col-auto  cp ${projectStatus == 1 ? 'Active_data' : 'InActive_data'}`}>
                                     <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('1')}>
-                                        Todo
+                                        Ongoing
                                     </p>
                                 </div>
                                 <div className={`col-auto  cp ${projectStatus == 2 ? 'Active_data' : 'InActive_data'}`}>
                                     <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('2')}>
-                                        Live
+                                        Support
                                     </p>
                                 </div>
 
                                 <div className={`col-auto  cp ${projectStatus == 3 ? 'Active_data' : 'InActive_data'}`}>
                                     <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('3')}>
-                                        Hold
+                                        Delivered
                                     </p>
                                 </div>
-                                <div className={`col-auto  cp ${projectStatus == 4 ? 'Active_data' : 'InActive_data'}`}>
+                                {/* <div className={`col-auto  cp ${projectStatus == 4 ? 'Active_data' : 'InActive_data'}`}>
                                     <p className=" p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('4')}>
                                         Completed
                                     </p>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="d-flex col-4 mt-3">
                                 <div className="row d-flex align-items-center">
