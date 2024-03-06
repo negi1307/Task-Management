@@ -7,10 +7,9 @@ const path = require('path');
 
 projectRoute.use('/download', verifyAdmin, express.static(path.join(__dirname, '../upload')));
 
-projectRoute.get('/getProjects', projectPath.getProjects);
 projectRoute.post('/addProject', verifyAdmin, projectPath.addProject);
+projectRoute.get('/getProjects', projectPath.getProjects);
 projectRoute.put('/update', verifyAdmin, projectPath.updateProject);
-projectRoute.put('/updateStatus', verifyAdmin, projectPath.updateStatus);
 projectRoute.post("/upload", verifyAdmin, taskAttachmentUpload.single('project'), projectPath.uploadProject_File)
 projectRoute.get("/getProjectName", verifyAdmin, projectPath.getallProject);
 // projectRoute.get("/download/:filename",projectPath.download);

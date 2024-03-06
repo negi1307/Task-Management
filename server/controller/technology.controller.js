@@ -8,12 +8,6 @@ const addTechCategory = async (req, res) => {
         if (existingCategory) {
             return res.status(400).json({ status: '400', message: 'Category with this name already exists' });
         }
-
-        const existingTechnology = await technologyModel.findOne({ techName: req.body.name });
-        if (existingTechnology) {
-            return res.status(400).json({ status: '400', message: 'Category name exists in technologyModel' });
-        }
-
         const result = await techCategoryModel.create({ name: req.body.name });
         return res.status(200).json({ status: '200', message: 'Tech Category Added Successfully', response: result })
     } catch (err) {
@@ -41,32 +35,16 @@ const updateTechCategory = async (req, res) => {
     }
 }
 
-// Update status of a Technology category
-const updateTechCategoryStatus = async (req, res) => {
-    try {
-        await techCategoryModel.findByIdAndUpdate({ _id: req.body.id }, { status: req.body.status });
-        return res.status(200).json({ status: '200', message: 'Tech category status updated Successfully' });
-    } catch (err) {
-        return res.status(500).json({ status: '500', message: 'Something went wrong' })
-    }
-}
-
-
 // Add  a Technology
 const addTechnology = async (req, res) => {
     try {
         const { techCategory_id, techName } = req.body
-        const existingTechnology = await technologyModel.findOne({ techName });
+        const existingTechnology = await technologyModel.findOne({ techName: techName, techCategory_id: techCategory_id });
         if (existingTechnology) {
             return res.status(400).json({ status: '400', message: 'Technology already exists' });
         }
-        const existingTechCategory = await techCategoryModel.findOne({ techName: req.body.name });
-        if (existingTechCategory) {
-            return res.status(400).json({ status: '400', message: 'Technology already exists in the specified tech category' });
-        } else {
-            const result = await technologyModel.create({ techCategory_id, techName });
-            return res.status(200).json({ status: '200', message: 'Technology Added Successfully', response: result })
-        }
+        const result = await technologyModel.create({ techCategory_id, techName });
+        return res.status(200).json({ status: '200', message: 'Technology Added Successfully', response: result })
     } catch (err) {
         return res.status(500).json({ status: '500', message: 'Something went wrong' })
     }
@@ -92,16 +70,6 @@ const updateTechnology = async (req, res) => {
     }
 }
 
-// Update status of a Technology
-const updateTechnologyStatus = async (req, res) => {
-    try {
-        await technologyModel.findByIdAndUpdate({ _id: req.body.id }, { status: req.body.status });
-        return res.status(200).json({ status: '200', message: 'Technology status updated Successfully' });
-    } catch (err) {
-        return res.status(500).json({ status: '500', message: 'Something went wrong' })
-    }
-}
-
 // Get all technologies of a techCategory
 const getTechCategoryTechnologies = async (req, res) => {
     try {
@@ -114,6 +82,6 @@ const getTechCategoryTechnologies = async (req, res) => {
 
 
 module.exports = {
-    addTechCategory, getTechCategory, updateTechCategory, updateTechCategoryStatus,
-    addTechnology, getTechnology, updateTechnology, updateTechnologyStatus, getTechCategoryTechnologies
+    addTechCategory, getTechCategory, updateTechCategory,
+    addTechnology, getTechnology, updateTechnology, getTechCategoryTechnologies
 }

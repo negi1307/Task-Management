@@ -3,7 +3,6 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
         {
             projectName: {
                 type: String,
-                required: [true, 'Project Name is required'],
             },
             clientName: {
                 type: String
@@ -26,8 +25,7 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
                 default: true
             },
             projectStatus: {
-                //type: Number, // status :1-todo, 2- live, 3 : hold, 4 : completed 
-                type: String
+                type: String // Ongoing, Support, Delivered
             },
             projectType: {
                 type: String
