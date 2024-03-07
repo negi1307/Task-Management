@@ -12,7 +12,14 @@ const addSprint = async (req, res) => {
         if (existingSprintName) {
             return res.status(200).json({ status: '400', message: 'Sprint Name Already Exists' });
         } else {
-            const result = await sprintModel.create({ projectId, milestoneId, sprintName, sprintDesc, startDate, endDate });
+            const result = await sprintModel.create({
+                projectId,
+                milestoneId,
+                sprintName,
+                sprintDesc,
+                startDate,
+                endDate
+            });
             return res.status(200).json({ status: '200', message: 'Sprint Added Successfully', response: result });
         }
     } catch (error) {
@@ -25,16 +32,6 @@ const updateSprint = async (req, res) => {
     try {
         await sprintModel.findByIdAndUpdate({ _id: req.body.sprintId }, req.body, { new: true });
         return res.status(200).json({ status: '200', message: 'Sprint updated Successfully' });
-    } catch (error) {
-        return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });
-    }
-}
-
-// update sprint status
-const updateStatus = async (req, res) => {
-    try {
-        await sprintModel.findByIdAndUpdate({ _id: req.body.sprintId }, { activeStatus: req.body.activeStatus })
-        return res.status(200).json({ status: '200', message: 'Sprint status updated Successfully' });
     } catch (error) {
         return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });
     }
@@ -203,4 +200,4 @@ const getAMilestoneAllSprints = async (req, res) => {
     }
 }
 
-module.exports = { addSprint, updateSprint, updateStatus, getAMilestoneAllSprints }
+module.exports = { addSprint, updateSprint,  getAMilestoneAllSprints }
