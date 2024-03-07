@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-
+// Access Token
 const accessToken = (userId) => {
     return new Promise((resolve, reject) => {
         const payload = {
-            aud: userId
+            _id: userId._id,
+            role: userId.role
         };
         const options = {
             issuer: "TASKMANAGER",
@@ -19,7 +20,7 @@ const accessToken = (userId) => {
     })
 }
 
-
+// Token for Admin verification
 const verifyAdmin = async (req, res, next) => {
     try {
         const headerToken = req.headers['authorization'];
@@ -28,11 +29,13 @@ const verifyAdmin = async (req, res, next) => {
         }
         const bearerToken = headerToken.split(' ');
         const token = bearerToken[1];
-        jwt.verify(token, process.env.SECRET_ACCESS_TOKEN, async (err, user) => {
+        jwt.verify(token, process.env.SECRET_ACCESS_TOKEN, async (err, decoded) => {
             if (err) {
-                return res.status(401).json({ message: 'jwt token is expired' })
+                return res.status(401).json({ message: 'JWT token is expired or invalid' });
             }
-            req.user = user.aud;
+            const { _id, role } = decoded;
+            req.user = { _id, role };
+
             if (req.user.role === 'Admin') {
                 next();
             } else {
@@ -44,7 +47,7 @@ const verifyAdmin = async (req, res, next) => {
     }
 };
 
-
+// Token for Employee Verification
 const verifyEmployee = async (req, res, next) => {
     try {
         const headerToken = req.headers['authorization'];
@@ -53,15 +56,17 @@ const verifyEmployee = async (req, res, next) => {
         }
         const bearerToken = headerToken.split(' ');
         const token = bearerToken[1];
-        jwt.verify(token, process.env.SECRET_ACCESS_TOKEN, async (err, user) => {
+        jwt.verify(token, process.env.SECRET_ACCESS_TOKEN, async (err, decoded) => {
             if (err) {
-                return res.status(401).json({ message: 'jwt token is expired' })
+                return res.status(401).json({ message: 'JWT token is expired or invalid' });
             }
-            req.user = user.aud;
+            const { _id, role } = decoded;
+            req.user = { _id, role, };
+
             if (req.user.role === 'Employee') {
                 next();
             } else {
-                return res.status(403).json({ message: 'Access denied. Only the authenciated Employes are allowed.' });
+                return res.status(403).json({ message: 'Access denied. Only the authenticated Employees are allowed.' });
             }
         });
     } catch (error) {
@@ -69,6 +74,7 @@ const verifyEmployee = async (req, res, next) => {
     }
 };
 
+// token to verify the User
 const verifyUser = async (req, res, next) => {
     try {
         const headerToken = req.headers['authorization'];
@@ -81,7 +87,9 @@ const verifyUser = async (req, res, next) => {
             if (err) {
                 return res.status(401).json({ message: 'jwt token is expired' })
             }
-            req.user = user.aud;
+            const { _id, role } = user;
+            req.user = { _id, role, };
+
             if (req.user.role === 'Employee' || req.user.role === 'Admin' || req.user.role === 'PM' || req.user.role === 'CTO') {
                 next();
             } else {
