@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Create from './modal/create';
 import Update from './modal/update';
-import { deleteProject, getAllProjects } from '../../../redux/projects/action';
+import { deleteProject, getAllProjects, updateProject } from '../../../redux/projects/action';
 import { useDispatch, useSelector } from 'react-redux';
 import MainLoader from '../../../constants/Loader/loader';
 import ToastHandle from '../../../constants/toaster/toaster';
@@ -12,6 +12,7 @@ import moment from 'moment';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import HeaderMain from '../header/HeaderMain';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Projects = () => {
     const dispatch = useDispatch();
@@ -59,25 +60,34 @@ const Projects = () => {
                 projectId: checkedData._id,
                 activeStatus: true,
             };
-            dispatch(deleteProject(body));
+            dispatch(updateProject(body));
+            console.log('***************************************************************77777777777777777777')
         } else {
             let body = {
                 projectId: checkedData._id,
                 activeStatus: false,
             };
-            dispatch(deleteProject(body));
+            dispatch(updateProject(body));
+            console.log('***************55555555555555555555555555555555555555555555555555555555555')
         }
         setStatusModal(false);
     };
-    const handleStatusChange = (e, data) => {
-        if (e.target.checked) {
-            setCheckedStatus(true);
-        } else {
-            setCheckedStatus(false);
-        }
-        setCheckedData(data);
-        setStatusModal(true);
+      const handleStatusChange = (e, data) => {
+        const isChecked = e.target.checked;
+        const projectId = data._id;
+
+        const updatedStatus = isChecked ? true : false;
+        const body = {
+            projectId: projectId,
+            activeStatus: updatedStatus,
+        };
+        dispatch(updateProject(body));
+
+        dispatch(getAllProjects({ status: status, skip: skip, projectStatus: projectStatus }));
+
+        setRender(!render);
     };
+
     const handleActive = (val) => {
         if (val) {
             setStatus(1);
@@ -111,6 +121,8 @@ const Projects = () => {
         setSkip(value);
         dispatch(getAllProjects({ status: status, skip: value, projectStatus: projectStatus }));
     };
+
+
     const handleProjectStatus = (val) => {
         if (val == '1') {
             setprojectStatus(1);
@@ -130,6 +142,7 @@ const Projects = () => {
             dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 4 }));
         }
     };
+    
     return (
         <>
             <div>
@@ -162,7 +175,7 @@ const Projects = () => {
                             </div>
                             <div className="d-flex col-4 mt-3">
                                 <div className="row d-flex align-items-center">
-                                    <div className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
+                                    <div className={`col-auto  cp ${status == 1  ? 'Active_data' : 'InActive_data'}`}>
                                         <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
                                             Active
                                         </p>
@@ -185,7 +198,7 @@ const Projects = () => {
                                         onClick={() => {
                                             handelCreate();
                                         }}>
-                                        Add Projects
+                                        Add Projects 
                                     </Button>
                                 </div>
                             ) : (
@@ -207,7 +220,7 @@ const Projects = () => {
                                         <th>Project Type</th>
                                         <th>Project Start Date</th>
                                         <th>Days Left</th>
-                                        {/* <th>Project End Date</th> */}
+                                        <th>Project End Date</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -218,10 +231,10 @@ const Projects = () => {
                                             <tr className="align-middle">
                                                 <th scope="row">{(skip - 1) * 10 + ind + 1}</th>
                                                 <td className="cp">
-                                                   
+
                                                     <Link to={`/dashboard/projects/${ele?._id}`}>
-                                                    <span className="namelink text-secondary"> {ele?.projectName} </span>
-                                                                </Link>
+                                                        <span className="namelink text-secondary"> {ele?.projectName} </span>
+                                                    </Link>
                                                 </td>
                                                 <td className="w-20">
                                                     <span className="namelink"> {ele?.clientName}</span>
@@ -235,12 +248,12 @@ const Projects = () => {
                                                     </span>
                                                 </td>
                                                 <td>{ele?.daysLeft}</td>
-                                                {/* <td>
+                                                <td>
                                                     <span className="namelink">
                                                         {' '}
                                                         {moment(ele?.endDate).format('L')}
                                                     </span>
-                                                </td> */}
+                                                </td>
                                                 <td>
                                                     <Form.Check
                                                         type="switch"
@@ -272,43 +285,35 @@ const Projects = () => {
                                 </tbody>
                             </Table>
                         )}
-                        <Row>
-                            <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
-                                {store?.getProject?.data?.totalPages > 0 && (
-                                    <Stack spacing={2}>
-                                        <Pagination
-                                            defaultPage={skip}
-                                            count={store?.getProject?.data?.totalPages}
-                                            color="primary"
-                                            variant="outlined"
-                                            onChange={handlePaginationChange}
-                                        />
-                                    </Stack>
-                                )}
-                            </Col>
-                        </Row>
+                        {getProjectList?.data?.totalPages > 0 && (
+                            <Row>
+                                <Col lg={12} className="d-flex justify-content-end my-3 pe-4">
+                                    <Pagination
+                                        defaultPage={skip}
+                                        count={store?.getProject?.data?.totalPages}
+                                        color="primary"
+                                        variant="outlined"
+                                        onChange={handlePaginationChange}
+                                    />
+                                </Col>
+                            </Row>
+                        )}
                     </Card.Body>
                 </Card>
 
-                <Create modal={openModal} closeModal={closeModal} />
+                <Create modal={openModal} closeModal={() => setOpenModal(false)} />
 
-                <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
-                {/* delete modal */}
+                {/* Update modal */}
+                <Update modal={openEditModal} closeModal={() => setOpenEditModal(false)} editData={editData} />
+
+                {/* Delete confirmation modal */}
                 <Modal show={statusModal} onHide={() => setStatusModal(false)}>
                     <Modal.Body>
-                        Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this Project ?
+                        Are you sure you want to {checkedStatus ? 'Inactive' : 'active'} this Project?
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button
-                            variant="secondary"
-                            onClick={() => {
-                                setStatusModal(false);
-                            }}>
-                            No
-                        </Button>
-                        <Button className="web_button" variant="primary" onClick={() => handleYes()}>
-                            Yes
-                        </Button>
+                        <Button variant="secondary" onClick={() => setStatusModal(false)}>No</Button>
+                        <Button variant="primary" onClick={handleYes}>Yes</Button>
                     </Modal.Footer>
                 </Modal>
             </div>

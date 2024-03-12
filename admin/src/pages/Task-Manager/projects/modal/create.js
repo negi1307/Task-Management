@@ -53,10 +53,11 @@ const Create = ({ modal, closeModal }) => {
             startDate: startDate,
             endDate: endDate,
             projectType: data?.project_type,
-            projectStatus: 'Ongoing',
+            projectStatus: 1,
             technology: addValue,
         };
         dispatch(addProject(body));
+        console.log(body ,'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
     };
     useEffect(() => {
         if (errorhandel?.data?.status == 200) {

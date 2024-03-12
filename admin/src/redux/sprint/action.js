@@ -4,7 +4,7 @@ type AuthAction = { type: string, payload: {} | string };
 
 export const addSprint = (data): AuthAction => ({
     type: SprintTypes.ADD_SPRINT,
-    payload: data
+    payload: data,
 })
 export const getAllSprint = (data): AuthAction => ({
     type: SprintTypes.GET_ALL_SPRINT,

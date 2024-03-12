@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import Create from '../milestone/modal/create';
 import { getProjectsById } from '../../../../redux/projects/action';
-import { deleteMileStone, getallMileStones, getsingleMileStone } from './../../../../redux/milestone/action';
+import { deleteMileStone, getallMileStones, getsingleMileStone, updateMileStone } from './../../../../redux/milestone/action';
 import MainLoader from '../../../../constants/Loader/loader';
 import Modal from 'react-bootstrap/Modal';
 import ToastHandle from '../../../../constants/toaster/toaster';
@@ -33,6 +33,7 @@ const Milestone = () => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [editData, setEditData] = useState();
     const deletehandle = store?.deleteMileStone?.data;
+    console.log(GetSinglemilstonesData,"GetSinglemilstonesDataGetSinglemilstonesDataGetSinglemilstonesData")
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -82,13 +83,13 @@ const Milestone = () => {
                 milestoneId: checkedData._id,
                 activeStatus: true,
             };
-            dispatch(deleteMileStone(body));
+            dispatch(updateMileStone(body));
         } else {
             let body = {
                 milestoneId: checkedData._id,
                 activeStatus: false,
             };
-            dispatch(deleteMileStone(body));
+            dispatch(updateMileStone(body));
         }
         setStatusModal(false);
     };
@@ -198,7 +199,7 @@ const Milestone = () => {
                                                         <th> Description</th>
                                                         <th> Start Date</th>
                                                         <th>Days Left</th>
-                                                        {/* <th> End Date</th> */}
+                                                        <th> End Date</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
                                                     </tr>
@@ -209,7 +210,7 @@ const Milestone = () => {
                                                             <td>{(skip - 1) * 10 + index + 1}</td>
                                                             <td>
                                                                 <Link
-                                                                    to={`/dashboard/singleMilestonesprint/projectId=/${item?.projectId?._id}&milestoneId=/${item?._id}`}>
+                                                                    to={`/dashboard/singleMilestonesprint/projectId=/${item?.projectId}&milestoneId=/${item?._id}`}>
                                                                     <span className="namelink text-secondary"> {item?.title} </span>
 
                                                                 </Link>
@@ -226,7 +227,7 @@ const Milestone = () => {
 
                                                             <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
                                                             <td>{item?.daysLeft}</td>
-                                                            {/* <td>{moment(item?.completionDate).format('L')}</td> */}
+                                                            <td>{moment(item?.completionDate).format('L')}</td>
                                                             <td>
                                                                 {' '}
                                                                 <Form.Check
