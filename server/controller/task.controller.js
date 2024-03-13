@@ -37,21 +37,12 @@ const createtask = async (req, res) => {
         reporterId,
         assigneeId
       });
-      if (task) {
-        const roles = ['CTO', 'PM', 'Admin'];
-        const role = await rolesModel.findOne({ role: roles.includes(req.user.role) ? req.user.role : "PM" }).select("_id role");
-        const assignedUser = await taskModel.create({
-          assigneeId: roles.includes(req.user.role) ? assigneeId : req.user._id,
-          reporterId: role._id,
-          taskId: task._id,
-        });
-        return res.status(200).json({ status: "200", message: "Task created successfully", response: task, assignedUser });
-      }
+      return res.status(200).json({ status: "200", message: "Task created successfully", response: task });
     }
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
-};
+}
 
 // List of the tasks
 const task_list = async (query, totalCount, pageSize, skip, arr) => {
@@ -346,6 +337,23 @@ const getTasks = async (req, res) => {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 };
+
+// Get All tasks Of a Sprint with filters
+const getSprintTasks = async (req, res) => {
+  try {
+    const tasks = await taskModel.aggregate([
+      {
+        $match: {
+          sprintId: new mongoose.Types.ObjectId(req.query.sprintId),
+          status: req.query.status, activeStatus: req.query.activeStatus
+        }
+      }
+    ]);
+    return res.status(200).json({ status: "200", message: "Task created successfully", response: tasks });
+  } catch (error) {
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+  }
+}
 
 // Update Task
 // const updateTask = async (req, res) => {
