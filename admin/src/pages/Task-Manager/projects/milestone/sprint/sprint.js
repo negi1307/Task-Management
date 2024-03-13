@@ -12,7 +12,8 @@ import { Link } from 'react-router-dom';
 import MainLoader from '../../../../../constants/Loader/loader';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import { getAllSingleSprint } from '../../../../../constants/endpoint';
+import getAllSingleSprints  from '../../../../../constants/endpoint';
+
 const Sprint = () => {
     const { projectId, milestoneId } = useParams();
     const store = useSelector((state) => state);
@@ -74,20 +75,20 @@ const Sprint = () => {
 
     };
     const handleStatusChange = async (e, data) => {
-        const isChecked = e.target.checked;
-        const sprintId = data._id;
-        const updatedStatus = isChecked ? true : false;
-        
+        setCheckedStatus(e.target.checked);
+        setCheckedData(data);
         const body = {
-            sprintId: sprintId,
-            activeStatus: updatedStatus,
+            sprintId: data._id,
+            activeStatus: e.target.checked,
         };
-    
+
         await dispatch(updateSprint(body));
+
+
         dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
+
         setStatusModal(false);
     };
-    
     
 
 
@@ -111,6 +112,11 @@ const Sprint = () => {
         setSkip(value);
         dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip: value }));
     };
+
+    const fetchSprintData = () => {
+        dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
+    };
+
     useEffect(() => {
         if (deletehandle?.status === 200) {
             ToastHandle('success', deletehandle?.message);
@@ -121,8 +127,12 @@ const Sprint = () => {
             ToastHandle('error', deletehandle?.message);
         }
     }, [deletehandle]);
+    
     useEffect(() => {
-        dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
+        fetchSprintData(); // Fetch initial data
+        const intervalId = setInterval(fetchSprintData, 50000); // Fetch data every 5 seconds
+
+        return () => clearInterval(intervalId); // Clean up on unmount
     }, [status, milestoneId, skip]);
 
     const truncateDescription = (description, maxLength = 30) => {
@@ -131,7 +141,6 @@ const Sprint = () => {
         }
         return description;
     };
-
 
     return (
         <>
@@ -184,7 +193,7 @@ const Sprint = () => {
                                                 <th>Sprint Description</th>
                                                 <th>Sprint Start Date</th>
                                                 <th>Days Left</th>
-                                                <th>Sprint End Date</th>
+                                                {/* <th>Sprint End Date</th> */}
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>

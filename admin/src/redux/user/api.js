@@ -6,7 +6,8 @@ export function getallUsersApi(data): any {
     return api.get(URL.ALL_USERS, data.payload)
 }
 export function deleteUserApi(data): any {
-    return api.delete(URL.deleteUsers + data.payload)
+    return api.delete(`${URL.deleteUsers}?userId=${data.payload}`),
+    console.log(data,'*******************************************')
 }
 export function InviteUserApi(data): any {
     return api.create(URL.InviteUser , data.payload)

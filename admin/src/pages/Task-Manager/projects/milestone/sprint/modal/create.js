@@ -10,7 +10,7 @@ import MainLoader from '../../../../../../constants/Loader/loader';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
+const Create = ({ modal, CloseModal, projectId, milestoneId, }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.addSprint;

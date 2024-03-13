@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Button, Col, Form, Card, Table, CloseButton, Alert } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Create from './modal/create';
-import { deleteTechnology, getAllTechnology } from '../../../redux/technology/action';
+import { deleteTechnology, getAllTechnology, updateTechnology } from '../../../redux/technology/action';
 import Update from './modal/update';
 import { Modal } from 'react-bootstrap';
 import ToastHandle from '../../../constants/toaster/toaster';
@@ -69,13 +69,13 @@ const Technology = () => {
                 id: checkedData._id,
                 status: true,
             };
-            dispatch(deleteTechnology(body));
+            dispatch(updateTechnology(body));
         } else {
             let body = {
                 id: checkedData._id,
                 status: false,
             };
-            dispatch(deleteTechnology(body));
+            dispatch(updateTechnology(body));
         }
         setStatusModal(false);
     };

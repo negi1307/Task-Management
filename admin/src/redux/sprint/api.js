@@ -11,7 +11,7 @@ export function getallSprintApi(data): any {   // return api.get(URL.GetAllSprin
     return api.get(`${URL.GetAllSprints}$status=${data?.payload}`)
 }
 export function deleteSprintApi(data): any {
-    return api.update(URL.DeleteSprint , data.payload)
+    return api.update(URL.DeleteSprint , data?.payload)
 }
 
 export function getAllSingleSprintApi(data): any {
