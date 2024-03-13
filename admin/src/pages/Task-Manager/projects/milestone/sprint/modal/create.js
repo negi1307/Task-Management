@@ -1,73 +1,61 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
-import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
+import { Row, Col, Button, CloseButton } from 'react-bootstrap';
 import { addSprint } from '../../../../../../redux/sprint/action';
 import ToastHandle from '../../../../../../constants/toaster/toaster';
 import MainLoader from '../../../../../../constants/Loader/loader';
 import DatePicker from 'react-datepicker';
-import '../../../../../../../node_modules/react-datepicker/dist/react-datepicker.css';
+import 'react-datepicker/dist/react-datepicker.css';
+
 const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.addSprint;
-    const loaderHandle = store?.addSprint
-    //
+    const loaderHandle = store?.addSprint;
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
-    // disable previous date
     const today = new Date();
-    console.log(today, 'today');
-    // end date
+
     const handleStartDate = (date) => {
         setStartDate(date);
     };
+
     const handleEndDate = (date) => {
         setEndDate(date);
-        
     };
-    const {
-        register,
-        handleSubmit,
-        control,
-        watch,
-        reset,
-        formState: { errors },
-    } = useForm();
-    console.log(projectId, 'projectId');
+
+    const { register, handleSubmit, formState: { errors } } = useForm();
+
     const onSubmit = (val) => {
         let body = {
             projectId: projectId,
             milestoneId: milestoneId,
             sprintName: val?.Name,
             sprintDesc: val?.description,
-            startDate: startDate,
-            endDate: endDate,
+            startDate: startDate.toISOString(),
+            endDate: endDate.toISOString(),
         };
+
         dispatch(addSprint(body));
+        CloseModal();
     };
-    useEffect(() => {
-        reset();
-        setStartDate("")
-        setEndDate("")
-    }, [modal]);
-    useEffect(() => {
-        if (successHandle?.data?.status == 200) {
-            ToastHandle('success', successHandle?.data?.message);
-            CloseModal('render');
-        } else if (successHandle?.data?.status == 400) {
-            ToastHandle('error', successHandle?.data?.message);
-        } else if (successHandle?.data?.status == 500) {
-            ToastHandle('error', successHandle?.data?.message);
-        }
-    }, [successHandle?.data?.status]);
-    console.log(successHandle,'testing')
+
     const handleClose = () => {
         CloseModal();
     };
+
+    useEffect(() => {
+        if (successHandle?.data?.status === 200) {
+            ToastHandle('success', successHandle?.data?.message);
+            CloseModal('render');
+        } else if (successHandle?.data?.status === 400 || successHandle?.data?.status === 500) {
+            ToastHandle('error', successHandle?.data?.message);
+        }
+    }, [successHandle?.data?.status]);
+
     return (
         <>
             <Modal show={modal} onHide={handleClose}>
@@ -95,7 +83,6 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
                                     <Col lg={12}>
                                         <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
-                                                {' '}
                                                 Sprint Name <span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Control
@@ -104,7 +91,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
                                                 {...register('Name', { required: true })}
                                             />
                                             {errors.Name?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -121,7 +108,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
                                                 {...register('description', { required: true })}
                                             />
                                             {errors.description?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -133,7 +120,6 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
 
                                             <DatePicker
                                                 selected={startDate}
-                                                // onChange={(date) => setStartDate(date)}
                                                 onChange={(date) => handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
                                                 minDate={today}
@@ -150,7 +136,6 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
                                             <DatePicker
                                                 selected={endDate}
                                                 disabled={startDate == '' || startDate == undefined}
-                                                // onChange={(date) => setEndDate(date)}
                                                 onChange={(date) => handleEndDate(date)}
                                                 placeholderText="mm-dd-yyyy"
                                                 minDate={startDate}

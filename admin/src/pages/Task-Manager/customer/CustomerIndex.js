@@ -93,7 +93,7 @@ const CustomerIndex = () => {
                         </div> */}
                         </div>
                         <div className="col-4 d-flex align-items-center justify-content-center">
-                            <h4 className="header-title heading_data">Customer</h4>
+                            <h4 className="header-title heading_data">Customer </h4>
                         </div>
                         <div className="col-4 d-flex align-items-center justify-content-end pe-0">
                             <Button className="web_button" onClick={createhandle}>

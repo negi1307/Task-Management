@@ -21,7 +21,7 @@ const Create = ({ modal, closeModal }) => {
     const [selectedenDate, setSelectedenDate] = useState();
     const errorhandel = store?.addProject;
     const loaderhandel = store?.addProject;
-    const [addValue, setAddValue] = useState('Ongoing');
+    const [addValue, setAddValue] = useState('');
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     console.log(startDate, 'hiiiiiiiiiiiiiiiiiiiiiiiiiiii');
@@ -53,15 +53,17 @@ const Create = ({ modal, closeModal }) => {
             startDate: startDate,
             endDate: endDate,
             projectType: data?.project_type,
-            projectStatus: data?.status,
+            projectStatus: 1,
             technology: addValue,
         };
         dispatch(addProject(body));
+        console.log(body ,'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
     };
     useEffect(() => {
         if (errorhandel?.data?.status == 200) {
             ToastHandle('success', 'Successfully added');
             closeModal('render');
+            console.log(addValue)
         } else if (errorhandel?.data?.status == 400) {
             ToastHandle('error', errorhandel?.data?.message);
         } else if (errorhandel?.data?.status == 500) {
@@ -72,6 +74,8 @@ const Create = ({ modal, closeModal }) => {
         reset();
         setStartDate('');
         setEndDate('');
+        setAddValue('')
+        console.log(addValue)
     }, [modal]);
     const removehandle = (selectedList, removedItem) => {
         const remove = getTechnology.filter((ele, ind) => {
@@ -94,7 +98,7 @@ const Create = ({ modal, closeModal }) => {
             return ele?.techName == selectItem;
         });
         setAddValue([...addValue, add[0]._id]);
-        // console.log(addValue, 'addvalue info');
+        // alert(addValue, 'addvalue info');    
     };
 
     useEffect(() => {
@@ -238,7 +242,7 @@ const Create = ({ modal, closeModal }) => {
                                     </Col>
                                 </Row>
 
-                                <Row>
+                                {/* <Row>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
                                             <Form.Label>
@@ -248,13 +252,15 @@ const Create = ({ modal, closeModal }) => {
                                                 <option hidden selected>
                                                     Ongoing
                                                 </option>
-                                                {/* <option value="1">Ongoing</option> */}
+                                                <option value="1">Ongoing</option>
+                                                <option value="2">yhb</option>
+                                                <option value="3">fghjk</option>
                                              
                                             
                                             </Form.Select>
                                         </Form.Group>
                                     </Col>
-                                </Row>
+                                </Row>  */}
                                 <Row>
                                     <Col className="text-start d-flex align-items-center justify-content-center">
                                         <Button
