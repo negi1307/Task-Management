@@ -8,9 +8,9 @@ const ClientRepository = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const data = store?.getProjectNameReducer;
-    useEffect(() => {
-        dispatch(getAllProjectsName());
-    }, []);
+    // useEffect(() => {
+    //     dispatch(getAllProjectsName());
+    // }, []);
 
     return (
         <>

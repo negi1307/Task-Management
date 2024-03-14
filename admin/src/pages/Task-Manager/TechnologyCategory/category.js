@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Button, Col, Form, Card, Table, CloseButton, Alert } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import CreateCategory from './modal/create';
-import { deleteTechnologyCategory, getAllTechnologyCategory } from '../../../redux/technology/action';
+import { deleteTechnologyCategory, getAllTechnologyCategory, updateTechnologyCategory } from '../../../redux/technology/action';
 import CategoryUpdate from './modal/update';
 import { Modal } from 'react-bootstrap';
 import ToastHandle from '../../../constants/toaster/toaster';
@@ -69,13 +69,13 @@ const Category = () => {
                 id: checkedData._id,
                 status: true,
             };
-            dispatch(deleteTechnologyCategory(body));
+            dispatch(updateTechnologyCategory(body));
         } else {
             let body = {
                 id: checkedData._id,
                 status: false,
             };
-            dispatch(deleteTechnologyCategory(body));
+            dispatch(updateTechnologyCategory(body));
         }
         setStatusModal(false);
     };

@@ -5,13 +5,15 @@ import { ListGroup, Container, Row, Col, Card, Table, Form, Button, OverlayTrigg
 import moment from 'moment';
 import { Modal } from 'react-bootstrap';
 import Create from './modal/create';
-import { getSingleSprint, deleteSprint } from '../../../../../redux/sprint/action';
+import { getSingleSprint, deleteSprint, updateSprint } from '../../../../../redux/sprint/action';
 import ToastHandle from '../../../../../constants/toaster/toaster';
 import Update from './modal/update';
 import { Link } from 'react-router-dom';
 import MainLoader from '../../../../../constants/Loader/loader';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import getAllSingleSprints from '../../../../../constants/endpoint';
+
 const Sprint = () => {
     const { projectId, milestoneId } = useParams();
     const store = useSelector((state) => state);
@@ -33,6 +35,7 @@ const Sprint = () => {
         setEditData(data);
         setOpenEditModal(true);
     };
+
     const closeupdatemodal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -55,7 +58,7 @@ const Sprint = () => {
             let data = {
                 id: milestoneId,
                 activeStatus: 1,
-                skip: 1
+                skip: 1,
             };
             dispatch(getSingleSprint(data));
         } else {
@@ -64,33 +67,45 @@ const Sprint = () => {
             let data = {
                 id: milestoneId,
                 activeStatus: 0,
-                skip: 1
+                skip: 1,
             };
             dispatch(getSingleSprint(data));
         }
+        console.log('9999999999999999999999999********************//////////////////')
+
     };
-    const handleStatusChange = (e, data) => {
-        if (e.target.checked) {
-            setCheckedStatus(true);
-        } else {
-            setCheckedStatus(false);
-        }
+    const handleStatusChange = async (e, data) => {
+        setCheckedStatus(e.target.checked);
         setCheckedData(data);
-        setStatusModal(true);
+        const body = {
+            sprintId: data._id,
+            activeStatus: e.target.checked,
+        };
+
+        await dispatch(updateSprint(body));
+
+
+        dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
+
+        setStatusModal(false);
     };
+
+
+
     const handleYes = () => {
         if (checkedStatus) {
             let body = {
                 sprintId: checkedData._id,
                 activeStatus: true,
             };
-            dispatch(deleteSprint(body));
+            dispatch(updateSprint(body));
         } else {
             let body = {
                 sprintId: checkedData._id,
                 activeStatus: false,
             };
-            dispatch(deleteSprint(body));
+            dispatch(updateSprint(body));
+            console.log(checkedData, '2222222222222222222222222222222222222222222222222222222222222222222')
         }
         setStatusModal(false);
     };
@@ -98,19 +113,32 @@ const Sprint = () => {
         setSkip(value);
         dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip: value }));
     };
+
+    const fetchSprintData = () => {
+        dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
+    };
+
     useEffect(() => {
-        if (deletehandle?.status == 200) {
+        if (deletehandle?.status === 200) {
             ToastHandle('success', deletehandle?.message);
             CloseModal('render');
-        } else if (deletehandle?.status == 400) {
+        } else if (deletehandle?.status === 400) {
             ToastHandle('error', deletehandle?.message);
-        } else if (deletehandle?.status == 500) {
+        } else if (deletehandle?.status === 500) {
             ToastHandle('error', deletehandle?.message);
         }
     }, [deletehandle]);
     useEffect(() => {
-        dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
-    }, [render]);
+        console.log(projectId, milestoneId, '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+
+    }, [projectId, milestoneId]);
+
+    useEffect(() => {
+        fetchSprintData(); // Fetch initial data
+        const intervalId = setInterval(fetchSprintData, 50000); // Fetch data every 5 seconds
+
+        return () => clearInterval(intervalId); // Clean up on unmount
+    }, [status, milestoneId, skip]);
 
     const truncateDescription = (description, maxLength = 30) => {
         if (description.length > maxLength) {
@@ -118,7 +146,6 @@ const Sprint = () => {
         }
         return description;
     };
-
 
     return (
         <>
@@ -182,11 +209,13 @@ const Sprint = () => {
                                                     <td>{(skip - 1) * 10 + index + 1}</td>
                                                     <td>
                                                         <Link
-                                                        className='text-secondary'
+                                                            className='text-secondary'
                                                             to={`/dashboard/taskBord/projectId=/${item?.projectId?._id}&milestoneId=/${item?.milestoneId?._id}&spriteId=/${item?._id}`}>
                                                             {item?.sprintName}
                                                         </Link>
                                                     </td>
+
+
                                                     <td>
                                                         <OverlayTrigger
                                                             placement="top"
@@ -199,9 +228,8 @@ const Sprint = () => {
                                                     </td>
                                                     <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
                                                     <td>{item?.daysLeft}</td>
-                                                    {/* <td>{moment(item?.endDate).format('L')}</td> */}
+                                                    <td>{moment(item?.endDate).format('L')}</td>
                                                     <td>
-                                                        {console.log(item, 'ppppppppppp')}
                                                         <Form.Check
                                                             type="switch"
                                                             checked={item?.activeStatus}
