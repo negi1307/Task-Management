@@ -3,7 +3,8 @@ import { APICore } from '../../helpers/api/apiCore';
 const api = new APICore();
 
 export function createTaskApi(data): any {
-    return api.create(URL.CREATE_TASK, data.payload);
+    return api.create(URL.CREATE_TASK, data?.payload),
+    console.log(data.payload,'daaaaaaaaaaaaaaaatttttttttttttttaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
 }
 export function getSingleSprintTaskApi(data): any {
     return api.get(`${URL.SingleSprintTask}${data.payload.id}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}&status=${data.payload.taskStatus}&milestoneId=${data.payload.milestoneId}&projectId=${data.payload.projectId}`);

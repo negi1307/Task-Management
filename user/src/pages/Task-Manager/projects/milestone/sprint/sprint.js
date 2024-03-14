@@ -113,7 +113,7 @@ const Sprint = () => {
             flag: 3,
             projectId: projectId,
             milestoneId: milestoneId,
-            sprintId:'',
+            sprintId: '',
             skip: 1,
         };
 
@@ -125,20 +125,20 @@ const Sprint = () => {
             flag: 3,
             projectId: projectId,
             milestoneId: milestoneId,
-            sprintId:'',
+            sprintId: '',
             skip: 1,
         };
         dispatch(getAllProjects(body));
     };
     return (
         <>
-        <div className='title'><h3>SPRINTS</h3></div>
+            <div className='title'><h3>SPRINTS</h3></div>
             <Card>
                 <Card.Body>
                     <Col className="mx-auto" lg={12}>
                         <Row>
-                            
-                        
+
+
                             {loaderhandel.loading ? (
                                 <MainLoader />
                             ) : (
@@ -169,7 +169,7 @@ const Sprint = () => {
 
                                                     <td> {moment(item?.sprintId?.startDate).format('DD/MM/YYYY')}</td>
                                                     <td> {item?.sprintId?.daysLeft}</td>
-                                                    
+
                                                     <td>
                                                         {' '}
                                                         <Row>
@@ -180,7 +180,7 @@ const Sprint = () => {
                                                                         <i className="mdi mdi-eye m-0 p-0"></i>
                                                                     </Link>
                                                                 </p>
-                                                              
+
                                                             </Col>
                                                         </Row>
                                                     </td>
@@ -193,20 +193,20 @@ const Sprint = () => {
                         </Row>
                     </Col>
                     <Row>
-                            <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
-                                {store?.getProject?.data?.totalPages > 0 && (
-                                    <Stack spacing={2}>
-                                        <Pagination
-                                            defaultPage={skip}
-                                            count={store?.getProject?.data?.totalPages}
-                                            color="primary"
-                                            variant="outlined"
-                                            onChange={handlePaginationChange}
-                                        />
-                                    </Stack>
-                                )}
-                            </Col>
-                        </Row>
+                        <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
+                            {store?.getProject?.data?.totalPages > 0 && (
+                                <Stack spacing={2}>
+                                    <Pagination
+                                        defaultPage={skip}
+                                        count={store?.getProject?.data?.totalPages}
+                                        color="primary"
+                                        variant="outlined"
+                                        onChange={handlePaginationChange}
+                                    />
+                                </Stack>
+                            )}
+                        </Col>
+                    </Row>
                 </Card.Body>
             </Card>
             <Create modal={openModal} CloseModal={CloseModal} projectId={projectId} milestoneId={milestoneId} />

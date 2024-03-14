@@ -57,7 +57,6 @@ const Create = ({ modal, closeModal }) => {
             technology: addValue,
         };
         dispatch(addProject(body));
-        console.log(body ,'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
     };
     useEffect(() => {
         if (errorhandel?.data?.status == 200) {
@@ -81,7 +80,6 @@ const Create = ({ modal, closeModal }) => {
         const remove = getTechnology.filter((ele, ind) => {
             return ele?.techName == removedItem;
         });
-        // make a separate copy of the array
         var index = addValue.indexOf(remove[0]._id);
         if (index !== -1) {
             addValue.splice(index, 1);
@@ -93,12 +91,10 @@ const Create = ({ modal, closeModal }) => {
     };
 
     const addhandle = (selectedList, selectItem) => {
-        console.log(selectedList, selectItem, 'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
         const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
         });
         setAddValue([...addValue, add[0]._id]);
-        // alert(addValue, 'addvalue info');    
     };
 
     useEffect(() => {

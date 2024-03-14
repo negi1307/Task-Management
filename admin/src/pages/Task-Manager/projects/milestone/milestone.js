@@ -25,6 +25,7 @@ const Milestone = () => {
     const [render, setRender] = useState(false);
     const [status, setStatus] = useState(1);
     const GetSinglemilstonesData = store?.getSigleMileStone?.data?.response;
+    console.log(GetSinglemilstonesData, '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
     const loaderhandel = store?.getSigleMileStone;
     const [skip, setSkip] = useState(1);
     const [checkedStatus, setCheckedStatus] = useState();
@@ -33,7 +34,7 @@ const Milestone = () => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [editData, setEditData] = useState();
     const deletehandle = store?.deleteMileStone?.data;
-    console.log(GetSinglemilstonesData,"GetSinglemilstonesDataGetSinglemilstonesDataGetSinglemilstonesData")
+    console.log(GetSinglemilstonesData, "GetSinglemilstonesDataGetSinglemilstonesDataGetSinglemilstonesData")
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
