@@ -799,10 +799,12 @@ const getUserTasks = async (req, res) => {
   try {
     var pageSize = 10;
     let now = new Date();
-    let { flag, activeStatus, searchString, projectId, milestoneId, sprintId, skip, status } = req.query;
+    let { flag, activeStatus, searchString, 
+      // projectId, milestoneId,
+     sprintId, skip, status } = req.query;
     const query = {
-      projectId: new mongoose.Types.ObjectId(projectId),
-      milestoneId: new mongoose.Types.ObjectId(milestoneId),
+      // projectId: new mongoose.Types.ObjectId(projectId),
+      // milestoneId: new mongoose.Types.ObjectId(milestoneId),
       sprintId: new mongoose.Types.ObjectId(sprintId),
     };
     const taskIds = await taskModel.distinct('_id', query);
@@ -894,22 +896,22 @@ const getUserTasks = async (req, res) => {
           as: "taskInfo",
         },
       },
-      {
-        $lookup: {
-          from: "projects",
-          localField: "taskInfo.projectId",
-          foreignField: "_id",
-          as: "projectInfo"
-        }
-      },
-      {
-        $lookup: {
-          from: "milestones",
-          localField: "taskInfo.milestoneId",
-          foreignField: "_id",
-          as: "milestoneInfo"
-        }
-      },
+      // {
+      //   $lookup: {
+      //     from: "projects",
+      //     localField: "taskInfo.projectId",
+      //     foreignField: "_id",
+      //     as: "projectInfo"
+      //   }
+      // },
+      // {
+      //   $lookup: {
+      //     from: "milestones",
+      //     localField: "taskInfo.milestoneId",
+      //     foreignField: "_id",
+      //     as: "milestoneInfo"
+      //   }
+      // },
       {
         $lookup: {
           from: "sprints",
@@ -921,8 +923,8 @@ const getUserTasks = async (req, res) => {
       { $unwind: "$taskInfo" },
       { $unwind: "$assigneeInfo" },
       { $unwind: "$reporterInfo" },
-      { $unwind: "$projectInfo" },
-      { $unwind: "$milestoneInfo" },
+      // { $unwind: "$projectInfo" },
+      // { $unwind: "$milestoneInfo" },
       { $unwind: "$sprintInfo" },
       { $sort: { createdAt: -1 } },
       { $sort: { createdAt: -1 } },
@@ -1072,7 +1074,7 @@ const getUserTasks = async (req, res) => {
             _id: 0,
             // projectInfo:1,
             // milestoneInfo : 1,
-            // sprintInfo : 1,
+            sprintInfo : 1,
             // assigneeInfo: 1,
             // reporterInfo: 1,
             taskInfo: 1,
@@ -1087,7 +1089,8 @@ const getUserTasks = async (req, res) => {
       queries[15] = { $limit: pageSize };
     }
     const resultGet = await assignUserModel.aggregate(queries);
-    const result = resultGet.length != 0 ? resultGet[0] : resultGet
+    const result = resultGet.length != 0 ? resultGet[0] : resultGet;
+    console.log(resultGet,"result")
     const totalCount = counts.length != 0 ? counts[0].totalCount : 0
     const totalPages = Math.ceil(totalCount / pageSize);
     return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result, totalCount, totalPages });
