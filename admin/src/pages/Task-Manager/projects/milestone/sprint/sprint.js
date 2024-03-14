@@ -105,6 +105,7 @@ const Sprint = () => {
                 activeStatus: false,
             };
             dispatch(updateSprint(body));
+            console.log(checkedData,'2222222222222222222222222222222222222222222222222222222222222222222')
         }
         setStatusModal(false);
     };
@@ -127,6 +128,7 @@ const Sprint = () => {
             ToastHandle('error', deletehandle?.message);
         }
     }, [deletehandle]);
+    
     
     useEffect(() => {
         fetchSprintData(); // Fetch initial data
