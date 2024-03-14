@@ -40,7 +40,7 @@ const getMilestones = async (req, res) => {
   try {
     const pageSize = 10;
     const milestones = await milestoneModel.find({ projectId: req.query.projectId, activeStatus: req.query.activeStatus }).sort({ createdAt: -1 }).skip((parseInt(req.query.skip) - 1) * pageSize).limit(pageSize);
-    const totalCount = milestones.length
+    const totalCount = await milestoneModel.countDocuments({ projectId: req.query.projectId, activeStatus: req.query.activeStatus })
     const totalPages = Math.ceil(totalCount / pageSize);
     return res.status(200).json({ status: "200", message: "Milestone Fetched Successfully", response: milestones, totalCount, totalPages });
   } catch (error) {

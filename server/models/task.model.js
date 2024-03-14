@@ -38,7 +38,7 @@ const tasks = mongoose.model(
         },
         status: {
             type: Number,
-            default: 1 // 1=,todo, 2=inProgress, 3=hold, 4=done 
+            default: 1 // 1=,todo, 2=inProgress, 3=testing, 4=done 
         },
         inProgressDate: {
             type: Date
@@ -75,7 +75,11 @@ const tasks = mongoose.model(
         },
         reporterId: {
             type: mongoose.Types.ObjectId,
-            ref: 'roles'
+            ref: 'User'
+        },
+        lastUpdaterId:{
+            type :mongoose.Types.ObjectId,
+            ref: 'User'
         }
     },
         {
