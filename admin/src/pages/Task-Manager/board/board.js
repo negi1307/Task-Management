@@ -400,7 +400,7 @@ const Boards = () => {
                                                     {provided.placeholder} 
                                                 </TaskList>
                                                 <div>
-                                            pankaj
+                                            
                                         </div>
                                             </div>
                                             

@@ -10,7 +10,7 @@ import ToastHandle from '../../../constants/toaster/toaster';
 import { deleteUser, getAllUsers, getCSVdata } from '../../../redux/user/action';
 import HeaderMain from '../header/HeaderMain';
 import { CSVLink } from 'react-csv';
-// import Update from './Sprint/update';
+
 const AllUsers = () => {
     const store = useSelector((state) => state);
     const csvLink = useRef();
@@ -26,39 +26,31 @@ const AllUsers = () => {
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const csvdownloaddata = store?.getCsvDataReducer;
-    console.log(csvdownloaddata, csvdownloaddata?.data?.message, 'nnnnnllnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
-    // const handelUpdate = (data) => {
-    //     setEditData(data);
-    //     setOpenEditModal(true);
-    // };
-    const closeupdatemodal = (val) => {
-        if (val == 'render') {
-            setRender(!render);
-        }
-        setOpenEditModal(false);
-    };
+
     const handeldelete = (ele) => {
         setdeleteId(ele?._id);
         setDeleteModal(true);
     };
 
-    const handeldYes = () => {
-        dispatch(deleteUser(deleteId));
+    const handeldYes = async () => {
+        await dispatch(deleteUser(deleteId));
         setDeleteModal(false);
+        await dispatch(getAllUsers());
     };
 
     useEffect(() => {
         dispatch(getAllUsers());
     }, [render]);
+
     useEffect(() => {
         if (getUsers?.data?.status == 200) {
             setData(getUsers?.data?.response);
         }
     }, [getUsers]);
+
     useEffect(() => {
         if (deletehandle?.data?.status == 200) {
             ToastHandle('success', deletehandle?.data?.message);
-            closeupdatemodal('render');
         } else if (deletehandle?.status == 400) {
             ToastHandle('error', deletehandle?.data?.message);
         } else if (deletehandle?.status == 500) {
@@ -88,7 +80,6 @@ const AllUsers = () => {
     useEffect(() => {
         if (csvdownloaddata?.data?.status == 200) {
             ToastHandle('success', csvdownloaddata?.data?.message);
-            // closeupdatemodal('render');
         } else if (csvdownloaddata?.data?.status == 404) {
             ToastHandle('error', csvdownloaddata?.data?.message);
         } else if (csvdownloaddata?.data?.status == 500) {

@@ -71,6 +71,7 @@ export default function RightBar(props) {
         body.append('attachment', selectedFile ? selectedFile : '');
         if (projectId !== '' && mileStoneId !== '' && sprintId !== '') {
             dispatch(createTask(body));
+            console.log(body,'ddddddddddddddddd************************tttttttttttttttttt*****************')
         } else {
             alert('plsease select project');
         }
@@ -180,11 +181,14 @@ export default function RightBar(props) {
                                             Sprint <span className="text-danger">*</span>:
                                         </Form.Label>
 
-                                        <Form.Select {...register('Sprint', { required: true, disabled: true })}>
-                                            {store?.getAllSingleSprints?.data?.response?.map((ele, ind) => (
-                                                <option value={ele?._id}> {ele?.sprintName} </option>
-                                            ))}
-                                        </Form.Select>
+                                      
+                                        <Form.Select
+                                                    {...register('Sprint', { required: true, disabled: true })}>
+                                                    {/* <option value={''}>--Select--</option> */}
+                                                    {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
+                                                        <option value={ele?._id}> {ele?.sprintName} </option>
+                                                    ))}
+                                                </Form.Select>
                                         {errors.Sprint?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
                                         )}
