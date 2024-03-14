@@ -215,6 +215,7 @@ const Milestone = () => {
                                                                     <span className="namelink text-secondary"> {item?.title} </span>
 
                                                                 </Link>
+
                                                             </td>
                                                             <td>
                                                                 <OverlayTrigger
@@ -243,7 +244,7 @@ const Milestone = () => {
                                                                     <Col>
                                                                         <p className="action-icon m-0 p-0 ">
                                                                             <Link
-                                                                                to={`/dashboard/singleMilestonesprint/projectId=/${item?.projectId?._id}&milestoneId=/${item?._id}`}>
+                                                                                to={`/dashboard/singleMilestonesprint/projectId=/${item?.projectId}&milestoneId=/${item?._id}`}>
                                                                                 <i className="mdi mdi-eye m-0 p-0"></i>
                                                                             </Link>
                                                                         </p>
