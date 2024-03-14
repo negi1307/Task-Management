@@ -26,7 +26,7 @@ export const getAllSingleSprint ="/sprint/getAMilestoneAllSprints?milestoneId="
 export const CREATE_TASK = "/task/createtask";
 export const UPDATE_MILESTONE = "/milestone/update";
 export const ALL_USERS = "/users";
-export const deleteUsers = "/users/usersDelete/";
+export const deleteUsers = "/users/deleteUser";
 export const UpdateSprint = "/sprint/update";
 export const SingleMilestone = "/milestone/getMilestones?projectId="
 export const SingleSprintTask = "/task/getTasks?sprintId="

@@ -61,14 +61,12 @@ const Projects = () => {
                 activeStatus: true,
             };
             dispatch(updateProject(body));
-            console.log('***************************************************************77777777777777777777')
         } else {
             let body = {
                 projectId: checkedData._id,
                 activeStatus: false,
             };
             dispatch(updateProject(body));
-            console.log('***************55555555555555555555555555555555555555555555555555555555555')
         }
         setStatusModal(false);
     };
