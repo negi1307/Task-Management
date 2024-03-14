@@ -25,7 +25,7 @@ const Milestone = () => {
     const [render, setRender] = useState(false);
     const [status, setStatus] = useState(1);
     const GetSinglemilstonesData = store?.getSigleMileStone?.data?.response;
-    console.log(GetSinglemilstonesData, '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+    // console.log(GetSinglemilstonesData, '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
     const loaderhandel = store?.getSigleMileStone;
     const [skip, setSkip] = useState(1);
     const [checkedStatus, setCheckedStatus] = useState();
@@ -211,11 +211,10 @@ const Milestone = () => {
                                                             <td>{(skip - 1) * 10 + index + 1}</td>
                                                             <td>
                                                                 <Link
-                                                                    to={`/dashboard/singleMilestonesprint/projectId=/${item?.projectId}&milestoneId=/${item?._id}`}>
+                                                                    to={`/dashboard/singleMilestonesprint/${item?.projectId}/${item?._id}`}>
                                                                     <span className="namelink text-secondary"> {item?.title} </span>
 
                                                                 </Link>
-
                                                             </td>
                                                             <td>
                                                                 <OverlayTrigger
@@ -244,7 +243,7 @@ const Milestone = () => {
                                                                     <Col>
                                                                         <p className="action-icon m-0 p-0 ">
                                                                             <Link
-                                                                                to={`/dashboard/singleMilestonesprint/projectId=/${item?.projectId}&milestoneId=/${item?._id}`}>
+                                                                                to={`/dashboard/singleMilestonesprint/${item?.projectId}/${item?._id}`}>
                                                                                 <i className="mdi mdi-eye m-0 p-0"></i>
                                                                             </Link>
                                                                         </p>

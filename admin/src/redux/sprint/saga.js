@@ -46,7 +46,7 @@ function* getAllSprintFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getallSprintApi, { payload });
-      
+
         if (response.data.status) {
             yield put({
                 type: SprintTypes.GET_ALL_SPRINT_SUCCESS,
@@ -116,12 +116,14 @@ function* getAllSingleSprintFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getAllSingleSprintApi, { payload });
-        
+
         if (response.data.status) {
             yield put({
                 type: SprintTypes.GET_ALL_SINGLE_SPRINT_SUCCESS,
                 payload: { ...response.data },
             });
+            // console.log(response, 'saga')
+
             // yield put({
             //     type: SprintTypes.GET_SPRINT_BY_ID_RESET,
             //     payload: {},
@@ -202,10 +204,10 @@ function* AllSprintSaga(): any {
     yield all([
         fork(addSprintSaga),
         fork(getAllSprintSaga),
-        fork (deleteSprintSaga),
+        fork(deleteSprintSaga),
 
-       fork (updateSprintSaga),
-    fork(getAllSingleSprintSaga)
+        fork(updateSprintSaga),
+        fork(getAllSingleSprintSaga)
     ])
 }
 export default AllSprintSaga;
