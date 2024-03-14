@@ -37,16 +37,6 @@ const createtask = async (req, res) => {
         reporterId,
         assigneeId
       });
-      if (task) {
-        const roles = ['CTO', 'PM', 'Admin'];
-        const role = await rolesModel.findOne({ role: roles.includes(req.user.role) ? req.user.role : "PM" }).select("_id role");
-        const assignedUser = await taskModel.create({
-          assigneeId: roles.includes(req.user.role) ? assigneeId : req.user._id,
-          reporterId: role._id,
-          taskId: task._id,
-        });
-        return res.status(200).json({ status: "200", message: "Task created successfully", response: task, assignedUser });
-      }
     }
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
