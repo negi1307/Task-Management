@@ -3,8 +3,8 @@ import { APICore } from "../../helpers/api/apiCore"
 const api = new APICore()
 
 export function addSprintApi(data): any {
-    return api.create(URL.AddSprint, data?.payload),
-        // console.log(data.payload, '*****************888888888pppppppppppppppppppppppppppppppppp successfully your dta')
+    return api.create(URL.AddSprint, data?.payload)
+    // console.log(data.payload, '*****************888888888pppppppppppppppppppppppppppppppppp successfully your dta')
 }
 export function getallSprintApi(data): any {   // return api.get(URL.GetAllSprints, data.payload)
     //return api.get(URL.GetAllSprints, data.payload)

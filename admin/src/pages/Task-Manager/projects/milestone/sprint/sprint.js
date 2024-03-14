@@ -107,7 +107,7 @@ const Sprint = () => {
                 activeStatus: false,
             };
             dispatch(updateSprint(body));
-            // console.log(checkedData, '2222222222222222222222222222222222222222222222222222222222222222222')
+            console.log(checkedData, '2222222222222222222222222222222222222222222222222222222222222222222')
         }
         setStatusModal(false);
     };
@@ -134,7 +134,7 @@ const Sprint = () => {
 
 
     useEffect(() => {
-        // console.log("----------called");
+        console.log("----------called");
         fetchSprintData(); // Fetch initial data
         // const intervalId = setInterval(fetchSprintData, 50000); // Fetch data every 5 seconds
 
