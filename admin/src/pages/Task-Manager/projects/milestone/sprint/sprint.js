@@ -128,7 +128,10 @@ const Sprint = () => {
             ToastHandle('error', deletehandle?.message);
         }
     }, [deletehandle]);
+    useEffect(() => {
+        console.log(projectId, milestoneId, '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
 
+    }, [projectId, milestoneId]);
 
     useEffect(() => {
         fetchSprintData(); // Fetch initial data
@@ -176,7 +179,7 @@ const Sprint = () => {
                                             variant="info"
                                             onClick={handleCreate}
                                             className="btn fs-5  text-white p-1   web_button">
-                                            Add
+                                            Add Sprint
                                         </Button>
                                     </div>
                                 ) : (

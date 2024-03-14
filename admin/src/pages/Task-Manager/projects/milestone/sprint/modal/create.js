@@ -22,6 +22,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId, }) => {
     const handleStartDate = (date) => {
         setStartDate(date);
     };
+
     const handleEndDate = (date) => {
         setEndDate(date);
     };
@@ -37,7 +38,6 @@ const Create = ({ modal, CloseModal, projectId, milestoneId, }) => {
             startDate: startDate.toISOString(),
             endDate: endDate.toISOString(),
         };
-        console.log(body, '*********************--------------------------')
 
         dispatch(addSprint(body));
         CloseModal();
@@ -54,8 +54,8 @@ const Create = ({ modal, CloseModal, projectId, milestoneId, }) => {
         } else if (successHandle?.data?.status === 400 || successHandle?.data?.status === 500) {
             ToastHandle('error', successHandle?.data?.message);
         }
-    }, [successHandle?.data?.status]);
 
+    }, [successHandle?.data?.status]);
     return (
         <>
             <Modal show={modal} onHide={handleClose}>
