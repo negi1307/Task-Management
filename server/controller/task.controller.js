@@ -5,7 +5,6 @@ const rolesModel = require('../models/role.model');
 const { userHistory } = require('../controller/history.controller');
 // const sprintModel = require('../models/sprint.model');
 
-
 // Create or add tasks
 const createtask = async (req, res) => {
   try {
@@ -35,7 +34,8 @@ const createtask = async (req, res) => {
         attachmentType: fileExtension,
         parentId,
         reporterId,
-        assigneeId
+        assigneeId,
+        lastUpdaterId: req.user._id
       });
       return res.status(200).json({ status: "200", message: "Task created successfully", response: task });
     }
@@ -44,186 +44,17 @@ const createtask = async (req, res) => {
   }
 }
 
-// List of the tasks
-const task_list = async (query, totalCount, pageSize, skip, arr) => {
-  var tasks = await taskModel.aggregate([
-    {
-      $match: query,
-    },
-    {
-      $lookup: {
-        from: "projects",
-        localField: "projectId",
-        foreignField: "_id",
-        as: "projects",
-      },
-    },
-    {
-      $lookup: {
-        from: "milestones",
-        localField: "milestoneId",
-        foreignField: "_id",
-        as: "milestones",
-      },
-    },
-    {
-      $lookup: {
-        from: "sprints",
-        localField: "sprintId",
-        foreignField: "_id",
-        as: "sprints",
-      },
-    },
-    {
-      $lookup: {
-        from: "assignusers",
-        localField: "_id",
-        foreignField: "taskId",
-        as: "assignees",
-      },
-    },
-    {
-      $lookup: {
-        from: "users",
-        localField: "assignees.assigneeId",
-        foreignField: "_id",
-        as: "assigneeInfo",
-      },
-    },
-    {
-      $lookup: {
-        from: "roles",
-        localField: "assignees.reporterId",
-        foreignField: "_id",
-        as: "reporterInfo",
-      },
-    },
-    {
-      $unwind: "$assignees", // Unwind the assignees array
-    },
-    {
-      $addFields: {
-        "assignees.assigneeInfo": {
-          $arrayElemAt: [
-            {
-              $filter: {
-                input: "$assigneeInfo",
-                as: "info",
-                cond: { $eq: ["$$info._id", "$assignees.assigneeId"] },
-              },
-            },
-            0,
-          ],
-        },
-        "assignees.reporterId": "$assignees.reporterId",
-        "assignees.reporterInfo": {
-          $arrayElemAt: [
-            {
-              $filter: {
-                input: "$reporterInfo",
-                as: "reporter",
-                cond: { $eq: ["$$reporter._id", "$assignees.reporterId"] },
-              },
-            },
-            0,
-          ],
-        },
-      },
-    },
-    {
-      $group: {
-        _id: "$_id",
-        taskMannualId: { $first: "$taskMannualId" },
-        summary: { $first: "$summary" },
-        description: { $first: "$description" },
-        priority: { $first: "$priority" },
-        expectedHours: { $first: "$expectedHours" },
-        startDate: { $first: "$startDate" },
-        dueDate: { $first: "$dueDate" },
-        status: { $first: "$status" },
-        activeStatus: { $first: "$activeStatus" },
-        attachment: { $first: "$attachment" },
-        createdAt: { $first: "$createdAt" },
-        updatedAt: { $first: "$updatedAt" },
-        attachmentType: { $first: "$attachmentType" },
-        projectInfo: { $first: { $arrayElemAt: ["$projects", 0] } },
-        milestoneInfo: { $first: { $arrayElemAt: ["$milestones", 0] } },
-        sprintInfo: { $first: { $arrayElemAt: ["$sprints", 0] } },
-        assignees: { $first: { $arrayElemAt: [["$assignees"], 0] } },
-      },
-    },
-    { $skip: (parseInt(skip) - 1) * pageSize }, // Skip the specified number of documents
-    { $limit: pageSize },
-    { $sort: { createdAt: -1 } },
-  ]);
-  arr.push(tasks)
-  return arr;
-}
-
-// Get All tasks And Sprint id,s all tasks
+// Get All tasks Of a Sprint with filters
 const getTasks = async (req, res) => {
   try {
-    var totalPages = 0;
-    var totalCount = 0;
-    const query = {};
-    query.activeStatus = JSON.parse(req.query.activeStatus)
-    query.status = parseInt(req.query.status);
-    if (!req.query.projectId && !req.query.milestoneId && !req.query.sprintId && !req.query.taskStatus && parseInt(req.query.skip) === 1) {
-      let query = {};
-      const taskStatus = JSON.parse(req.query.taskStatus);
-      query.activeStatus = JSON.parse(req.query.activeStatus)
-      query.status = taskStatus;
-      totalCount = await taskModel.countDocuments(query);
-      var pageSize = 10;
-      var skip = 1;
-      let arr = [];
-      totalPages = Math.ceil(totalCount / pageSize);
-
-      const reponseCheck = await task_list(query, totalCount, pageSize, skip, arr);
-      const [tasks] = reponseCheck;
-      return reponseCheck ? res.status(200).json({ status: "200", message: "All Tasks fetched successfully", response: tasks, totalCount, totalPages }) : null
-    }
-    if (parseInt(req.query.skip) === 0) {
-      if (req.query.sprintId) {
-        totalCount = await taskModel.countDocuments(query);
-        query.sprintId = new mongoose.Types.ObjectId(req.query.sprintId);
-        query.activeStatus = JSON.parse(req.query.activeStatus);
-        query.projectId = new mongoose.Types.ObjectId(req.query.projectId);
-        query.milestoneId = new mongoose.Types.ObjectId(req.query.milestoneId);
-        totalCount = await taskModel.countDocuments(query);
-        var pageSize = totalCount === 0 ? 1 : totalCount;
-        var skip = 1;
-      } else {
-        query.activeStatus = JSON.parse(req.query.activeStatus);
-        totalCount = await taskModel.countDocuments(query);
-        var pageSize = totalCount === 0 ? 1 : totalCount;
-        var skip = 1;
-      }
-    } else {
-      query.activeStatus = JSON.parse(req.query.activeStatus);
-      var pageSize = 10;
-      var skip = parseInt(req.query.skip);
-    }
-    query.status = parseInt(req.query.status)
-    // totalCount = await taskModel.countDocuments(query, projectId, milestoneId, sprintId);
-    totalCount = await taskModel.countDocuments({
-      activeStatus: JSON.parse(req.query.activeStatus),
-      status: parseInt(req.query.status), projectId: req.query.projectId,
-      milestoneId: req.query.milestoneId, sprintId: req.query.sprintId,
-    });
-    var tasks = await taskModel.aggregate([
+    const { sprintId, status, activeStatus, skip } = req.query;
+    const pageSize = 10;
+    const totalCount = await taskModel.countDocuments({sprintId: sprintId, status: status, activeStatus: activeStatus})
+    const tasks = await taskModel.aggregate([
       {
         $match: {
-          $and: [
-            { projectId: req.query.projectId ? new mongoose.Types.ObjectId(req.query.projectId) : { $exists: true } },
-            { milestoneId: req.query.milestoneId ? new mongoose.Types.ObjectId(req.query.milestoneId) : { $exists: true } },
-            { sprintId: req.query.sprintId ? new mongoose.Types.ObjectId(req.query.sprintId) : { $exists: true } },
-            { activeStatus: JSON.parse(req.query.activeStatus) },
-          ],
-        },
-      },
-      {
-        $match: query,
+          sprintId: new mongoose.Types.ObjectId(sprintId), status: parseInt(status), activeStatus: JSON.parse(activeStatus)
+        }
       },
       {
         $lookup: {
@@ -233,6 +64,7 @@ const getTasks = async (req, res) => {
           as: "projects",
         },
       },
+      { $unwind: "$projects" },
       {
         $lookup: {
           from: "milestones",
@@ -241,6 +73,7 @@ const getTasks = async (req, res) => {
           as: "milestones",
         },
       },
+      { $unwind: "$milestones" },
       {
         $lookup: {
           from: "sprints",
@@ -249,144 +82,91 @@ const getTasks = async (req, res) => {
           as: "sprints",
         },
       },
-      {
-        $lookup: {
-          from: "assignusers",
-          localField: "_id",
-          foreignField: "taskId",
-          as: "assignees",
-        },
-      },
+      { $unwind: "$sprints" },
       {
         $lookup: {
           from: "users",
-          localField: "assignees.assigneeId",
+          localField: "assigneeId",
           foreignField: "_id",
           as: "assigneeInfo",
         },
       },
+      { $unwind: "$assigneeInfo" },
       {
         $lookup: {
-          from: "roles",
-          localField: "assignees.reporterId",
+          from: "users",
+          localField: "reporterId",
           foreignField: "_id",
           as: "reporterInfo",
         },
       },
+      { $unwind: "$reporterInfo" },
       {
-        $unwind: "$assignees",
-      },
-      {
-        $addFields: {
-          "assignees.assigneeInfo": {
-            $arrayElemAt: [
-              {
-                $filter: {
-                  input: "$assigneeInfo",
-                  as: "info",
-                  cond: { $eq: ["$$info._id", "$assignees.assigneeId"] },
-                },
-              },
-              0,
-            ],
-          },
-          "assignees.reporterId": "$assignees.reporterId",
-          "assignees.reporterInfo": {
-            $arrayElemAt: [
-              {
-                $filter: {
-                  input: "$reporterInfo",
-                  as: "reporter",
-                  cond: { $eq: ["$$reporter._id", "$assignees.reporterId"] },
-                },
-              },
-              0,
-            ],
-          },
+        $lookup: {
+          from: "users",
+          localField: "lastUpdaterId",
+          foreignField: "_id",
+          as: "lastUpdaterInfo",
         },
       },
+      { $unwind: "$lastUpdaterInfo" },
       {
-        $group: {
-          _id: "$_id",
-          taskMannualId: { $first: "$taskMannualId" },
-          summary: { $first: "$summary" },
-          description: { $first: "$description" },
-          priority: { $first: "$priority" },
-          expectedHours: { $first: "$expectedHours" },
-          startDate: { $first: "$startDate" },
-          dueDate: { $first: "$dueDate" },
-          status: { $first: "$status" },
-          activeStatus: { $first: "$activeStatus" },
-          attachment: { $first: "$attachment" },
-          createdAt: { $first: "$createdAt" },
-          updatedAt: { $first: "$updatedAt" },
-          attachmentType: { $first: "$attachmentType" },
-          projectInfo: { $first: { $arrayElemAt: ["$projects", 0] } },
-          milestoneInfo: { $first: { $arrayElemAt: ["$milestones", 0] } },
-          sprintInfo: { $first: { $arrayElemAt: ["$sprints", 0] } },
-          assignees: { $first: { $arrayElemAt: [["$assignees"], 0] } },
-        },
-      },
-      { $skip: (parseInt(skip) - 1) * pageSize },
-      { $limit: pageSize },
-      { $sort: { createdAt: -1 } },
-    ]);
-    totalPages = Math.ceil(totalCount / pageSize);
-    return res.status(200).json({ status: "200", message: "All Tasks fetched successfully", response: tasks, totalCount, totalPages });
-  } catch (error) {
-    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
-  }
-};
-
-// Get All tasks Of a Sprint with filters
-const getSprintTasks = async (req, res) => {
-  try {
-    const tasks = await taskModel.aggregate([
-      {
-        $match: {
-          sprintId: new mongoose.Types.ObjectId(req.query.sprintId),
-          status: req.query.status, activeStatus: req.query.activeStatus
+        $project: {
+          "projects._id": 1,
+          "projects.projectName": 1,
+          "milestones._id": 1,
+          "milestones.title": 1,
+          "sprints._id": 1,
+          "sprints.sprintName": 1,
+          _id: 1,
+          taskMannualId: 1,
+          summary: 1,
+          description: 1,
+          priority: 1,
+          expectedHours: 1,
+          startDate: 1,
+          dueDate: 1,
+          status: 1,
+          activeStatus: 1,
+          attachment: 1,
+          attachmentType: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          daysLeft: {
+            $divide: [
+              { $subtract: ["$endDate", "$startDate"] },
+              1000 * 60 * 60 * 24,
+            ],
+          },
+          "assigneeInfo._id":1,
+          "assigneeInfo.firstName":1,
+          "assigneeInfo.lastName":1,
+          "assigneeInfo.role":1,
+          "reporterInfo._id":1,
+          "reporterInfo.firstName":1,
+          "reporterInfo.lastName":1,
+          "reporterInfo.role":1,
+          "lastUpdaterInfo._id": 1,
+          "lastUpdaterInfo.firstName": 1,
+          "lastUpdaterInfo.lastName": 1,
+          "lastUpdaterInfo.role": 1,
         }
-      }
+      },
+      { $sort: { createdAt: -1 } },
+      { $skip: (parseInt(skip) - 1) * pageSize },
+      { $limit: pageSize }
     ]);
-    return res.status(200).json({ status: "200", message: "Task created successfully", response: tasks });
+    const totalPages = Math.ceil(totalCount / pageSize);
+    return res.status(200).json({ status: "200", message: "Tasks Fetched successfully", response: tasks, totalCount, totalPages });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 }
 
 // Update Task
-// const updateTask = async (req, res) => {
-//   try {
-//     const { taskId, summary, description, priority, expectedHours, startDate, dueDate, status, attachment, assigneeId, reporterId } = req.body;
-//     const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : attachment;
-//     const fileExtension = req.file ? req.file.mimetype : undefined;
-//     const obj = {
-//       summary,
-//       description,
-//       priority,
-//       expectedHours,
-//       startDate,
-//       dueDate,
-//       status,
-//       attachment: attachmentPath,
-//       attachmentType: fileExtension,
-//     };
-//     const secObj = {
-//       assigneeId,
-//       reporterId
-//     };
-//     await taskModel.findByIdAndUpdate(taskId, obj, { new: true });
-//     await assignUserModel.findOneAndUpdate({ taskId }, secObj, { new: true });
-//     return res.status(200).json({ status: "200", message: "Task updated successfully" });
-//   } catch (error) {
-//     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
-//   }
-// };
-
 const updateTask = async (req, res) => {
   try {
-    const { taskId, summary, description, priority, expectedHours, startDate, dueDate, status, attachment, assigneeId, reporterId } = req.body;
+    const { taskId, summary, description, priority, expectedHours, startDate, dueDate, activeStatus, attachment } = req.body;
     const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : attachment;
     const fileExtension = req.file ? req.file.mimetype : undefined;
     const obj = {
@@ -396,22 +176,12 @@ const updateTask = async (req, res) => {
       expectedHours,
       startDate,
       dueDate,
-      status,
+      activeStatus,
       attachment: attachmentPath,
       attachmentType: fileExtension,
+      lastUpdaterId: req.user._id
     };
-    const secObj = { assigneeId, reporterId };
-    const existingTask = await taskModel.findById(taskId);
-    if (existingTask.assigneeId !== assigneeId) {
-      const assigneeChangeMessage = `Assignee ID changed`;
-      await userHistory(req, assigneeChangeMessage);
-    }
-    if (existingTask.reporterId !== reporterId) {
-      const reporterChangeMessage = `Reporter ID changed`;
-      await userHistory(req, reporterChangeMessage);
-    }
     await taskModel.findByIdAndUpdate(taskId, obj, { new: true });
-    await assignUserModel.findOneAndUpdate({ taskId }, secObj, { new: true });
     return res.status(200).json({ status: "200", message: "Task updated successfully" });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -422,7 +192,6 @@ const updateTask = async (req, res) => {
 const deleteTask = async (req, res) => {
   try {
     await taskModel.findByIdAndDelete({ _id: req.query.taskId });
-    await assignUserModel.deleteMany({ taskId: req.query.taskId });
     return res.status(200).json({ status: "200", message: "Task Deleted successfully" });
   } catch (err) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: err.message });
@@ -490,21 +259,6 @@ const updateTaskStatus = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
-  }
-};
-
-// update Active inactive Status of a task
-const updateTaskActiveStatus = async (req, res) => {
-  try {
-    let status;
-    const data = await taskModel.findByIdAndUpdate({ _id: req.body.taskId }, { activeStatus: req.body.activeStatus }, { new: true });
-    if (data) {
-      req.body.activeStatus == false ? (status = "Deactivated") : (status = "Activated");
-      await userHistory(req, `Task ${status}`);
-    }
-    return res.status(200).json({ status: "200", message: `Task has been ${status} successfully` });
-  } catch (error) {
-    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.stack });
   }
 };
 
@@ -684,11 +438,9 @@ const getPriorityTasks = async (req, res) => {
       ];
       return res.status(200).json({ status: "200", message: "Prioity wise tasks for Admin fetched successfully", response: taskPriorityCount });
     } else {
-      const assigneeTasks = await assignUserModel.find({ assigneeId: req.user._id });
-      let taskIds = assigneeTasks.map((id) => id.taskId);
-      const firstPriority = await taskModel.countDocuments({ _id: { $in: taskIds }, priority: 1 });
-      const secondPriority = await taskModel.countDocuments({ _id: { $in: taskIds }, priority: 2 });
-      const thirdPriority = await taskModel.countDocuments({ _id: { $in: taskIds }, priority: 3 });
+      const firstPriority = await taskModel.countDocuments({ assigneeId: req.user._id, priority: 1 });
+      const secondPriority = await taskModel.countDocuments({assigneeId: req.user._id, priority: 2 });
+      const thirdPriority = await taskModel.countDocuments({ assigneeId: req.user._id, priority: 3 });
       const taskPriorityCount = [
         { name: "High", count: firstPriority },
         { name: "Medium", count: secondPriority },
@@ -719,12 +471,10 @@ const getTasksStatusCount = async (req, res) => {
       ];
       return res.status(200).json({ status: "200", message: "Tasks count for Admin fetched successfully", response: taskStatusCount });
     } else {
-      const assigneeTasks = await assignUserModel.find({ assigneeId: req.user._id });
-      let taskIds = assigneeTasks.map((id) => id.taskId);
-      const todoCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 1, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const inProgressCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 2, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const holdCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 3, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const doneCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 4, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const todoCount = await taskModel.countDocuments({ assigneeId: req.user._id, status: 1, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const inProgressCount = await taskModel.countDocuments({assigneeId: req.user._id, status: 2, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const holdCount = await taskModel.countDocuments({ assigneeId: req.user._id, status: 3, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const doneCount = await taskModel.countDocuments({ assigneeId: req.user._id, status: 4, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
       const taskStatusCount = [
         { name: "todo", count: todoCount },
         { name: "inProgress", count: inProgressCount },
@@ -745,9 +495,7 @@ const getTasksCount = async (req, res) => {
       const tasksCount = await taskModel.countDocuments();
       return res.status(200).json({ status: "200", message: "Tasks count for admin fetched successfully", response: { tasksCount } });
     } else {
-      const assigneeTasks = await assignUserModel.find({ assigneeId: req.user._id });
-      let taskIds = assigneeTasks.map((id) => id.taskId);
-      const tasksCount = await taskModel.countDocuments({ _id: { $in: taskIds } });
+      const tasksCount = await taskModel.countDocuments({ assigneeId: req.user._id});
       return res.status(200).json({ status: "200", message: "Tasks count for user fetched successfully", response: { tasksCount } });
     }
   } catch (error) {
@@ -789,13 +537,11 @@ const getTasksWeekCount = async (req, res) => {
       const dueCount = await taskModel.countDocuments({ status: { $ne: 4 }, dueDate: { $lte: now, $gte: sevenDaysAgo } });
       return res.status(200).json({ status: "200", message: "Tasks count fetched successfully", response: { doneCount, updatedCount: result, createdCount, dueCount } });
     } else {
-      const assigneeTasks = await assignUserModel.find({ assigneeId: req.user._id });
-      let taskIds = assigneeTasks.map((id) => id.taskId);
-      const doneCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 4, createdAt: { $gte: sevenDaysAgo } });
+      const doneCount = await taskModel.countDocuments({ assigneeId: req.user._id, status: 4, createdAt: { $gte: sevenDaysAgo } });
       const updatedCount = await taskModel.aggregate([
         {
           $match: {
-            _id: { $in: taskIds },
+            assigneeId: new mongoose.Types.ObjectId(req.user._id),
             updatedAt: { $gte: sevenDaysAgo },
           },
         },
@@ -816,35 +562,9 @@ const getTasksWeekCount = async (req, res) => {
         },
       ]);
       const result = updatedCount.length > 0 ? updatedCount[0].updatedCount : 0;
-      const createdCount = await taskModel.countDocuments({ _id: { $in: taskIds }, createdAt: { $gte: sevenDaysAgo } });
-      const dueCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: { $ne: 4 }, dueDate: { $lte: now, $gte: sevenDaysAgo } });
+      const createdCount = await taskModel.countDocuments({ assigneeId: req.user._id, createdAt: { $gte: sevenDaysAgo } });
+      const dueCount = await taskModel.countDocuments({ assigneeId: req.user._id, status: { $ne: 4 }, dueDate: { $lte: now, $gte: sevenDaysAgo } });
       return res.status(200).json({ status: "200", message: "Tasks count fetched successfully", response: { doneCount, updatedCount: result, createdCount, dueCount } });
-    }
-  } catch (error) {
-    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
-  }
-};
-
-// Assign the user
-const addUserAssignments = async (req, res) => {
-  try {
-    const { projectId, milestoneId, sprintId, taskId, assigneeId, reporterId } = req.body;
-    const query = {
-      assigneeId: assigneeId, // Always include assigneeId
-    };
-    // Add other fields to the query if they are present in the request body
-    if (projectId) query.projectId = projectId;
-    if (milestoneId) query.milestoneId = milestoneId;
-    if (sprintId) query.sprintId = sprintId;
-    if (taskId) query.taskId = taskId;
-    if (reporterId) query.reporterId = reporterId;
-
-    const alreadyAssigned = await taskModel.findOne(query);
-    if (alreadyAssigned) {
-      return res.status(200).json({ status: "400", message: `This ${projectId || milestoneId || sprintId || taskId} is already assigned to the User ${assigneeId}` });
-    } else {
-      const result = await taskModel.create({ projectId, milestoneId, sprintId, taskId, assigneeId, reporterId });
-      return res.status(200).json({ status: "200", message: "Assigned Successfully", response: result });
     }
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -1410,13 +1130,11 @@ module.exports = {
   updateTask,
   deleteTask,
   updateTaskStatus,
-  updateTaskActiveStatus,
   getTasksAccToStatus,
   getPriorityTasks,
   getTasksStatusCount,
   getTasksCount,
   getTasksWeekCount,
-  addUserAssignments,
   // getUserAssignments,
   getUserTasks,
   projectUserList

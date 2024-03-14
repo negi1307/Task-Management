@@ -5,7 +5,7 @@ const { verifyAdmin } = require('../middleware/jwt.auth');
 
 sprintRoute.post('/add', verifyAdmin, path.addSprint);
 sprintRoute.put('/update', verifyAdmin, path.updateSprint);
-sprintRoute.get('/getAMilestoneAllSprints', path.getAMilestoneAllSprints);
+sprintRoute.get('/getSprints', path.getSprints);
 
 
 module.exports = sprintRoute;
