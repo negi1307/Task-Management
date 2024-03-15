@@ -3,6 +3,7 @@ const taskModel = require("../models/task.model");
 const assignUserModel = require("../models/assignUser.model");
 const rolesModel = require('../models/role.model');
 const { userHistory } = require('../controller/history.controller');
+const subTaskModel = require("../models/subTask.model")
 // const sprintModel = require('../models/sprint.model');
 
 // Create or add tasks
@@ -49,7 +50,7 @@ const getTasks = async (req, res) => {
   try {
     const { sprintId, status, activeStatus, skip } = req.query;
     const pageSize = 10;
-    const totalCount = await taskModel.countDocuments({sprintId: sprintId, status: status, activeStatus: activeStatus})
+    const totalCount = await taskModel.countDocuments({ sprintId: sprintId, status: status, activeStatus: activeStatus })
     const tasks = await taskModel.aggregate([
       {
         $match: {
@@ -138,14 +139,14 @@ const getTasks = async (req, res) => {
               1000 * 60 * 60 * 24,
             ],
           },
-          "assigneeInfo._id":1,
-          "assigneeInfo.firstName":1,
-          "assigneeInfo.lastName":1,
-          "assigneeInfo.role":1,
-          "reporterInfo._id":1,
-          "reporterInfo.firstName":1,
-          "reporterInfo.lastName":1,
-          "reporterInfo.role":1,
+          "assigneeInfo._id": 1,
+          "assigneeInfo.firstName": 1,
+          "assigneeInfo.lastName": 1,
+          "assigneeInfo.role": 1,
+          "reporterInfo._id": 1,
+          "reporterInfo.firstName": 1,
+          "reporterInfo.lastName": 1,
+          "reporterInfo.role": 1,
           "lastUpdaterInfo._id": 1,
           "lastUpdaterInfo.firstName": 1,
           "lastUpdaterInfo.lastName": 1,
@@ -428,23 +429,27 @@ const getTasksAccToStatus = async (req, res) => {
 const getPriorityTasks = async (req, res) => {
   try {
     if (req.user.role === 'Admin') {
-      const firstPriority = await taskModel.countDocuments({ priority: 1 });
-      const secondPriority = await taskModel.countDocuments({ priority: 2 });
-      const thirdPriority = await taskModel.countDocuments({ priority: 3 });
+      const firstPriority = await taskModel.countDocuments({ priority: "High" });
+      const secondPriority = await taskModel.countDocuments({ priority: "Medium" });
+      const thirdPriority = await taskModel.countDocuments({ priority: "Low" });
+      const fourthPriority = await taskModel.countDocuments({ priority: "Critical" })
       const taskPriorityCount = [
         { name: "High", count: firstPriority },
         { name: "Medium", count: secondPriority },
         { name: "Low", count: thirdPriority },
+        { nameL: "Critical", count: fourthPriority }
       ];
       return res.status(200).json({ status: "200", message: "Prioity wise tasks for Admin fetched successfully", response: taskPriorityCount });
     } else {
-      const firstPriority = await taskModel.countDocuments({ assigneeId: req.user._id, priority: 1 });
-      const secondPriority = await taskModel.countDocuments({assigneeId: req.user._id, priority: 2 });
-      const thirdPriority = await taskModel.countDocuments({ assigneeId: req.user._id, priority: 3 });
+      const firstPriority = await taskModel.countDocuments({ assigneeId: req.user._id, priority: "High" });
+      const secondPriority = await taskModel.countDocuments({ assigneeId: req.user._id, priority: "Medium" });
+      const thirdPriority = await taskModel.countDocuments({ assigneeId: req.user._id, priority: "LOw" });
+      const fourthPriority = await taskModel.countDocuments({ assigneeId: req.user._id, priority: "Critical" })
       const taskPriorityCount = [
         { name: "High", count: firstPriority },
         { name: "Medium", count: secondPriority },
         { name: "Low", count: thirdPriority },
+        { name: "Critical", count: fourthPriority }
       ];
       return res.status(200).json({ status: "200", message: "Priority wise tasks for User fetched successfully", response: taskPriorityCount });
     }
@@ -463,23 +468,45 @@ const getTasksStatusCount = async (req, res) => {
       const inProgressCount = await taskModel.countDocuments({ status: 2, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
       const holdCount = await taskModel.countDocuments({ status: 3, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
       const doneCount = await taskModel.countDocuments({ status: 4, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+
+      const todoBugCount = await subTaskModel.countDocuments({ status: 1, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const inProgressBugCount = await subTaskModel.countDocuments({ type: "bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const holdBugCount = await subTaskModel.countDocuments({ type: "bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const doneBugCount = await subTaskModel.countDocuments({ type: "bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+
+      const todoSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const inProgressSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const holdSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const doneSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+
       const taskStatusCount = [
-        { name: "todo", count: todoCount },
-        { name: "inProgress", count: inProgressCount },
-        { name: "hold", count: holdCount },
-        { name: "Done", count: doneCount },
+        { name: "todo", taskCount: todoCount, bugCount: todoBugCount, subTaskCount: todoSubTaskCount },
+        { name: "inProgress", taskCount: inProgressCount, bugCount: inProgressBugCount, subTaskCount: inProgressSubTaskCount },
+        { name: "hold", taskCount: holdCount, bugCount: holdBugCount, subTaskCount: holdSubTaskCount },
+        { name: "Done", taskCount: doneCount, bugCount: doneBugCount, subTaskCount: doneSubTaskCount },
       ];
-      return res.status(200).json({ status: "200", message: "Tasks count for Admin fetched successfully", response: taskStatusCount });
+      return res.status(200).json({ status: "200", message: "Tasks, Bugs and SubTasks count for Admin fetched successfully", response: taskStatusCount });
     } else {
       const todoCount = await taskModel.countDocuments({ assigneeId: req.user._id, status: 1, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const inProgressCount = await taskModel.countDocuments({assigneeId: req.user._id, status: 2, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const inProgressCount = await taskModel.countDocuments({ assigneeId: req.user._id, status: 2, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
       const holdCount = await taskModel.countDocuments({ assigneeId: req.user._id, status: 3, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
       const doneCount = await taskModel.countDocuments({ assigneeId: req.user._id, status: 4, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+
+      const todoBugCount = await subTaskModel.countDocuments({ status: 1, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const inProgressBugCount = await subTaskModel.countDocuments({ type: "bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const holdBugCount = await subTaskModel.countDocuments({ type: "bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const doneBugCount = await subTaskModel.countDocuments({ type: "bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+
+      const todoSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const inProgressSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const holdSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const doneSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+
       const taskStatusCount = [
-        { name: "todo", count: todoCount },
-        { name: "inProgress", count: inProgressCount },
-        { name: "hold", count: holdCount },
-        { name: "Done", count: doneCount },
+        { name: "todo", taskCount: todoCount, bugCount: todoBugCount, subTaskCount: todoSubTaskCount },
+        { name: "inProgress", taskCount: inProgressCount, bugCount: inProgressBugCount, subTaskCount: inProgressSubTaskCount },
+        { name: "hold", taskCount: holdCount, bugCount: holdBugCount, subTaskCount: holdSubTaskCount },
+        { name: "Done", taskCount: doneCount, bugCount: doneBugCount, subTaskCount: doneSubTaskCount },
       ];
       return res.status(200).json({ status: "200", message: "Tasks count for User fetched successfully", response: taskStatusCount });
     }
@@ -488,6 +515,15 @@ const getTasksStatusCount = async (req, res) => {
   }
 };
 
+
+
+
+
+
+
+
+
+
 // Get count of all tasks
 const getTasksCount = async (req, res) => {
   try {
@@ -495,7 +531,7 @@ const getTasksCount = async (req, res) => {
       const tasksCount = await taskModel.countDocuments();
       return res.status(200).json({ status: "200", message: "Tasks count for admin fetched successfully", response: { tasksCount } });
     } else {
-      const tasksCount = await taskModel.countDocuments({ assigneeId: req.user._id});
+      const tasksCount = await taskModel.countDocuments({ assigneeId: req.user._id });
       return res.status(200).json({ status: "200", message: "Tasks count for user fetched successfully", response: { tasksCount } });
     }
   } catch (error) {
@@ -799,9 +835,9 @@ const getUserTasks = async (req, res) => {
   try {
     var pageSize = 10;
     let now = new Date();
-    let { flag, activeStatus, searchString, 
+    let { flag, activeStatus, searchString,
       // projectId, milestoneId,
-     sprintId, skip, status } = req.query;
+      sprintId, skip, status } = req.query;
     const query = {
       // projectId: new mongoose.Types.ObjectId(projectId),
       // milestoneId: new mongoose.Types.ObjectId(milestoneId),
@@ -817,270 +853,270 @@ const getUserTasks = async (req, res) => {
       {
         $match: { taskId: { $in: taskIds } },
       },
-      {
-        $lookup: {
-          from: "users",
-          localField: "assigneeId",
-          foreignField: "_id",
-          as: "assigneeInfo",
-        },
-      },
-      {
-        $lookup: {
-          from: "roles",
-          localField: "reporterId",
-          foreignField: "_id",
-          as: "reporterInfo",
-        },
-      },
-      // {
-      //   $lookup: {
-      //     from: "tasks",
-      //     let: { taskId: "$taskId" },
-      //     pipeline: [
-      //       {
-      //         $match: {
-      //           $expr: {
-      //             $and: [
-      //               { $eq: ["$_id", "$$taskId"] },
-      //               // flag != 1 ?
-      //               // { $eq: ['$status', parseInt(status)] } 
-      //               // :
-      //               { $eq: ["$activeStatus", JSON.parse(activeStatus)] },
-      //             ],
+      //   {
+      //     $lookup: {
+      //       from: "users",
+      //       localField: "assigneeId",
+      //       foreignField: "_id",
+      //       as: "assigneeInfo",
+      //     },
+      //   },
+      //   {
+      //     $lookup: {
+      //       from: "roles",
+      //       localField: "reporterId",
+      //       foreignField: "_id",
+      //       as: "reporterInfo",
+      //     },
+      //   },
+      //   // {
+      //   //   $lookup: {
+      //   //     from: "tasks",
+      //   //     let: { taskId: "$taskId" },
+      //   //     pipeline: [
+      //   //       {
+      //   //         $match: {
+      //   //           $expr: {
+      //   //             $and: [
+      //   //               { $eq: ["$_id", "$$taskId"] },
+      //   //               // flag != 1 ?
+      //   //               // { $eq: ['$status', parseInt(status)] } 
+      //   //               // :
+      //   //               { $eq: ["$activeStatus", JSON.parse(activeStatus)] },
+      //   //             ],
+      //   //           },
+      //   //         },
+      //   //       },
+      //   //       {
+      //   //         $match: { summary: { $regex: `.*${searchString.replace(/\s+/g, "\\s+")}.*`, $options: "i" } },
+      //   //       },
+      //   //     ],
+      //   //     as: "taskInfo",
+      //   //   },
+      //   // },
+      //   {
+      //     $lookup: {
+      //       from: "tasks",
+      //       let: { taskId: "$taskId", flag: parseInt(flag), status: parseInt(status), activeStatus: JSON.parse(activeStatus) },
+      //       pipeline: [
+      //         {
+      //           $match: {
+      //             $expr: {
+      //               $and: [
+      //                 { $eq: ["$_id", "$$taskId"] },
+      //                 {
+      //                   $or: [
+      //                     {
+      //                       $and: [
+      //                         { $eq: ["$$flag", 1] },
+      //                         { $eq: ["$activeStatus", "$$activeStatus"] },
+      //                       ],
+      //                     },
+      //                     {
+      //                       $and: [
+      //                         { $ne: ["$$flag", 1] },
+      //                         { $eq: ["$status", "$$status"] },
+      //                         { $eq: ["$activeStatus", "$$activeStatus"] },
+      //                       ],
+      //                     },
+      //                   ],
+      //                 },
+      //               ],
+      //             },
       //           },
       //         },
-      //       },
-      //       {
-      //         $match: { summary: { $regex: `.*${searchString.replace(/\s+/g, "\\s+")}.*`, $options: "i" } },
-      //       },
-      //     ],
-      //     as: "taskInfo",
+      //         {
+      //           $match: { summary: { $regex: `.*${searchString.replace(/\s+/g, "\\s+")}.*`, $options: "i" } },
+      //         },
+      //       ],
+      //       as: "taskInfo",
+      //     },
       //   },
-      // },
-      {
-        $lookup: {
-          from: "tasks",
-          let: { taskId: "$taskId", flag: parseInt(flag), status: parseInt(status), activeStatus: JSON.parse(activeStatus) },
-          pipeline: [
-            {
-              $match: {
-                $expr: {
-                  $and: [
-                    { $eq: ["$_id", "$$taskId"] },
-                    {
-                      $or: [
-                        {
-                          $and: [
-                            { $eq: ["$$flag", 1] },
-                            { $eq: ["$activeStatus", "$$activeStatus"] },
-                          ],
-                        },
-                        {
-                          $and: [
-                            { $ne: ["$$flag", 1] },
-                            { $eq: ["$status", "$$status"] },
-                            { $eq: ["$activeStatus", "$$activeStatus"] },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              },
-            },
-            {
-              $match: { summary: { $regex: `.*${searchString.replace(/\s+/g, "\\s+")}.*`, $options: "i" } },
-            },
-          ],
-          as: "taskInfo",
-        },
-      },
-      // {
-      //   $lookup: {
-      //     from: "projects",
-      //     localField: "taskInfo.projectId",
-      //     foreignField: "_id",
-      //     as: "projectInfo"
-      //   }
-      // },
-      // {
-      //   $lookup: {
-      //     from: "milestones",
-      //     localField: "taskInfo.milestoneId",
-      //     foreignField: "_id",
-      //     as: "milestoneInfo"
-      //   }
-      // },
-      {
-        $lookup: {
-          from: "sprints",
-          localField: "taskInfo.sprintId",
-          foreignField: "_id",
-          as: "sprintInfo"
-        }
-      },
-      { $unwind: "$taskInfo" },
-      { $unwind: "$assigneeInfo" },
-      { $unwind: "$reporterInfo" },
-      // { $unwind: "$projectInfo" },
-      // { $unwind: "$milestoneInfo" },
-      { $unwind: "$sprintInfo" },
-      { $sort: { createdAt: -1 } },
-      { $sort: { createdAt: -1 } },
-      { $sort: { createdAt: -1 } },
-      flag == 1 ? {
-        $group: {
-          _id: 'all',
-          Todo: {
-            $push: {
-              $cond: {
-                if: { $eq: ['$taskInfo.status', 1] },
-                then: '$$ROOT', // Push the entire document
-                else: null // Don't push if status is not "completed"
-              }
-            }
-          },
-          Inprogress: {
-            $push: {
-              $cond: {
-                if: { $eq: ['$taskInfo.status', 2] },
-                then: '$$ROOT',
-                else: null
-              }
-            }
-          },
-          Hold: {
-            $push: {
-              $cond: {
-                if: { $eq: ['$taskInfo.status', 3] },
-                then: '$$ROOT',
-                else: null
-              }
-            }
-          },
-          Done: {
-            $push: {
-              $cond: {
-                if: { $eq: ['$taskInfo.status', 4] },
-                then: '$$ROOT',
-                else: null
-              }
-            }
-          },
-          TodoCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 1] }, then: 1, else: 0 } } },
-          InprogressCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 2] }, then: 1, else: 0 } } },
-          HoldCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 3] }, then: 1, else: 0 } } },
-          DoneCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 4] }, then: 1, else: 0 } } },
-          totalCount: { $sum: 1 },
-          DueTasksCount: {
-            $sum: {
-              $cond: {
-                if: { $and: [{ $lt: ['$taskInfo.dueDate', now] }, { $ne: ['$taskInfo.status', 4] }] }, then: 1, else: 0
-              }
-            }
-          },
-        }
-      } :
-        {
-          $group: {
-            _id: 'all',
-            taskInfo: {
-              $push: {
-                _id: '$taskInfo._id',
-                taskMannualId: '$taskInfo.taskMannualId',
-                projectId: '$taskInfo.projectId',
-                milestoneId: '$taskInfo.milestoneId',
-                sprintId: '$taskInfo.sprintId',
-                summary: '$taskInfo.summary',
-                description: '$taskInfo.description',
-                priority: '$taskInfo.priority',
-                expectedHours: '$taskInfo.expectedHours',
-                startDate: '$taskInfo.startDate',
-                dueDate: '$taskInfo.dueDate',
-                status: '$taskInfo.status',
-                activeStatus: '$taskInfo.activeStatus',
-                attachment: '$taskInfo.attachment',
-                attachmentType: '$taskInfo.attachmentType',
-                createdAt: '$taskInfo.createdAt',
-                updatedAt: '$taskInfo.updatedAt',
-                __v: '$taskInfo.__v',
-                projectInfo: '$projectInfo',
-                milestoneInfo: '$milestoneInfo',
-                sprintInfo: '$sprintInfo',
-                assigneeInfo: '$assigneeInfo',
-                reporterInfo: '$reporterInfo'
-              }
-            },
-            totalCount: { $sum: 1 }
-          }
-        },
-      // {
-      //     $match: {
-      //         "Todo": { $ne: [null] },
-      //         "Inprogress": { $ne: [null] },
-      //         "Hold": { $ne: [null] },
-      //         "Done": { $ne: [null] }
+      //   {
+      //     $lookup: {
+      //       from: "projects",
+      //       localField: "taskInfo.projectId",
+      //       foreignField: "_id",
+      //       as: "projectInfo"
       //     }
-      // },
-      {
-        $addFields: {
-          Todo: {
-            $filter: {
-              input: '$Todo',
-              as: 'task',
-              cond: { $ne: ['$$task', null] }
-            }
-          },
-          Inprogress: {
-            $filter: {
-              input: '$Inprogress',
-              as: 'task',
-              cond: { $ne: ['$$task', null] }
-            }
-          },
-          Hold: {
-            $filter: {
-              input: '$Hold',
-              as: 'task',
-              cond: { $ne: ['$$task', null] }
-            }
-          },
-          Done: {
-            $filter: {
-              input: '$Done',
-              as: 'task',
-              cond: { $ne: ['$$task', null] }
-            }
-          },
-        }
-      },
-      {
-        $project: flag == 1
-          ? {
-            _id: 0,
-            Todo: 1,
-            Inprogress: 1,
-            Hold: 1,
-            Done: 1,
-            TodoCount: 1,
-            InprogressCount: 1,
-            HoldCount: 1,
-            DoneCount: 1,
-            totalCount: 1,
-            DueTasksCount: 1
-          }
-          : {
-            _id: 0,
-            // projectInfo:1,
-            // milestoneInfo : 1,
-            sprintInfo : 1,
-            // assigneeInfo: 1,
-            // reporterInfo: 1,
-            taskInfo: 1,
-            totalCount: 1
-          },
-      },
+      //   },
+      //   {
+      //     $lookup: {
+      //       from: "milestones",
+      //       localField: "taskInfo.milestoneId",
+      //       foreignField: "_id",
+      //       as: "milestoneInfo"
+      //     }
+      //   },
+      //   {
+      //     $lookup: {
+      //       from: "sprints",
+      //       localField: "taskInfo.sprintId",
+      //       foreignField: "_id",
+      //       as: "sprintInfo"
+      //     }
+      //   },
+      //   { $unwind: "$taskInfo" },
+      //   { $unwind: "$assigneeInfo" },
+      //   { $unwind: "$reporterInfo" },
+      //   { $unwind: "$projectInfo" },
+      //   { $unwind: "$milestoneInfo" },
+      //   { $unwind: "$sprintInfo" },
+      //   { $sort: { createdAt: -1 } },
+      //   { $sort: { createdAt: -1 } },
+      //   { $sort: { createdAt: -1 } },
+      //   flag == 1 ? {
+      //     $group: {
+      //       _id: 'all',
+      //       Todo: {
+      //         $push: {
+      //           $cond: {
+      //             if: { $eq: ['$taskInfo.status', 1] },
+      //             then: '$$ROOT', // Push the entire document
+      //             else: null // Don't push if status is not "completed"
+      //           }
+      //         }
+      //       },
+      //       Inprogress: {
+      //         $push: {
+      //           $cond: {
+      //             if: { $eq: ['$taskInfo.status', 2] },
+      //             then: '$$ROOT',
+      //             else: null
+      //           }
+      //         }
+      //       },
+      //       Hold: {
+      //         $push: {
+      //           $cond: {
+      //             if: { $eq: ['$taskInfo.status', 3] },
+      //             then: '$$ROOT',
+      //             else: null
+      //           }
+      //         }
+      //       },
+      //       Done: {
+      //         $push: {
+      //           $cond: {
+      //             if: { $eq: ['$taskInfo.status', 4] },
+      //             then: '$$ROOT',
+      //             else: null
+      //           }
+      //         }
+      //       },
+      //       TodoCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 1] }, then: 1, else: 0 } } },
+      //       InprogressCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 2] }, then: 1, else: 0 } } },
+      //       HoldCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 3] }, then: 1, else: 0 } } },
+      //       DoneCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 4] }, then: 1, else: 0 } } },
+      //       totalCount: { $sum: 1 },
+      //       DueTasksCount: {
+      //         $sum: {
+      //           $cond: {
+      //             if: { $and: [{ $lt: ['$taskInfo.dueDate', now] }, { $ne: ['$taskInfo.status', 4] }] }, then: 1, else: 0
+      //           }
+      //         }
+      //       },
+      //     }
+      //   } :
+      //     {
+      //       $group: {
+      //         _id: 'all',
+      //         taskInfo: {
+      //           $push: {
+      //             _id: '$taskInfo._id',
+      //             taskMannualId: '$taskInfo.taskMannualId',
+      //             projectId: '$taskInfo.projectId',
+      //             milestoneId: '$taskInfo.milestoneId',
+      //             sprintId: '$taskInfo.sprintId',
+      //             summary: '$taskInfo.summary',
+      //             description: '$taskInfo.description',
+      //             priority: '$taskInfo.priority',
+      //             expectedHours: '$taskInfo.expectedHours',
+      //             startDate: '$taskInfo.startDate',
+      //             dueDate: '$taskInfo.dueDate',
+      //             status: '$taskInfo.status',
+      //             activeStatus: '$taskInfo.activeStatus',
+      //             attachment: '$taskInfo.attachment',
+      //             attachmentType: '$taskInfo.attachmentType',
+      //             createdAt: '$taskInfo.createdAt',
+      //             updatedAt: '$taskInfo.updatedAt',
+      //             __v: '$taskInfo.__v',
+      //             projectInfo: '$projectInfo',
+      //             milestoneInfo: '$milestoneInfo',
+      //             sprintInfo: '$sprintInfo',
+      //             assigneeInfo: '$assigneeInfo',
+      //             reporterInfo: '$reporterInfo'
+      //           }
+      //         },
+      //         totalCount: { $sum: 1 }
+      //       }
+      //     },
+      //   // {
+      //   //     $match: {
+      //   //         "Todo": { $ne: [null] },
+      //   //         "Inprogress": { $ne: [null] },
+      //   //         "Hold": { $ne: [null] },
+      //   //         "Done": { $ne: [null] }
+      //   //     }
+      //   // },
+      //   {
+      //     $addFields: {
+      //       Todo: {
+      //         $filter: {
+      //           input: '$Todo',
+      //           as: 'task',
+      //           cond: { $ne: ['$$task', null] }
+      //         }
+      //       },
+      //       Inprogress: {
+      //         $filter: {
+      //           input: '$Inprogress',
+      //           as: 'task',
+      //           cond: { $ne: ['$$task', null] }
+      //         }
+      //       },
+      //       Hold: {
+      //         $filter: {
+      //           input: '$Hold',
+      //           as: 'task',
+      //           cond: { $ne: ['$$task', null] }
+      //         }
+      //       },
+      //       Done: {
+      //         $filter: {
+      //           input: '$Done',
+      //           as: 'task',
+      //           cond: { $ne: ['$$task', null] }
+      //         }
+      //       },
+      //     }
+      //   },
+      //   {
+      //     $project: flag == 1
+      //       ? {
+      //         _id: 0,
+      //         Todo: 1,
+      //         Inprogress: 1,
+      //         Hold: 1,
+      //         Done: 1,
+      //         TodoCount: 1,
+      //         InprogressCount: 1,
+      //         HoldCount: 1,
+      //         DoneCount: 1,
+      //         totalCount: 1,
+      //         DueTasksCount: 1
+      //       }
+      //       : {
+      //         _id: 0,
+      //         // projectInfo:1,
+      //         // milestoneInfo : 1,
+      //         sprintInfo : 1,
+      //         // assigneeInfo: 1,
+      //         // reporterInfo: 1,
+      //         taskInfo: 1,
+      //         totalCount: 1
+      //       },
+      //   },
     ]
     let counts = [{ totalCount: 0 }]
     if (flag != "1") {
@@ -1089,8 +1125,9 @@ const getUserTasks = async (req, res) => {
       queries[15] = { $limit: pageSize };
     }
     const resultGet = await assignUserModel.aggregate(queries);
+    console.log(queries, "result")
     const result = resultGet.length != 0 ? resultGet[0] : resultGet;
-    console.log(resultGet,"result")
+    console.log(result, "result")
     const totalCount = counts.length != 0 ? counts[0].totalCount : 0
     const totalPages = Math.ceil(totalCount / pageSize);
     return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result, totalCount, totalPages });
