@@ -18,7 +18,14 @@ const registerUser = async (req, res) => {
       }
       else {
         const hashedPassword = await bcrypt.hash(password, 9);
-        const result = await userModel.create({ firstName, lastName, email, password: hashedPassword, plainPassword: password, role });
+        const result = await userModel.create({ 
+          firstName, 
+          lastName, 
+          email, 
+          password: hashedPassword, 
+          plainPassword: password, 
+          role
+         });
         if (result) {
           await nodemailer.emailSender(result);
           return res.status(200).json({ status: "200", message: "User created Successfully", response: result });

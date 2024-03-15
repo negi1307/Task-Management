@@ -102,7 +102,7 @@ const verifyUser = async (req, res, next) => {
 };
 
 // token For Task Creators
-const verifyTaskCreators = async (req, res, next) => {
+const verifySeniority = async (req, res, next) => {
     try {
         const headerToken = req.headers['authorization'];
         if (!headerToken || headerToken === undefined) {
@@ -130,4 +130,4 @@ const verifyTaskCreators = async (req, res, next) => {
 
 
 
-module.exports = { accessToken, verifyAdmin, verifyEmployee, verifyUser, verifyTaskCreators };
+module.exports = { accessToken, verifyAdmin, verifyEmployee, verifyUser, verifySeniority };
