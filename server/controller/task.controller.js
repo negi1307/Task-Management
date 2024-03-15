@@ -570,308 +570,6 @@ const getTasksWeekCount = async (req, res) => {
   }
 };
 
-// Get A Users All tasks Acc to status & Search tasks & List of tasks
-// const getUserTasks = async (req, res) => {
-//   try {
-//     var pageSize = 10;
-//     let now = new Date();
-//     let { flag, activeStatus, searchString, projectId, milestoneId, sprintId, skip, status } = req.query;
-//     const query = {
-//       projectId: new mongoose.Types.ObjectId(projectId),
-//       milestoneId: new mongoose.Types.ObjectId(milestoneId),
-//       sprintId: new mongoose.Types.ObjectId(sprintId),
-//     };
-//     const taskIds = await taskModel.distinct('_id', query);
-//     // Flag = 1 :- Tasks acc to Status, Flag = 2 :- List of tasks
-//     if (flag == 1) {
-//       activeStatus = true
-//     }
-
-//     let queries = [
-//       {
-//         $match: { taskId: { $in: taskIds } },
-//       },
-//       {
-//         $lookup: {
-//           from: "users",
-//           localField: "assigneeId",
-//           foreignField: "_id",
-//           as: "assigneeInfo",
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "roles",
-//           localField: "reporterId",
-//           foreignField: "_id",
-//           as: "reporterInfo",
-//         },
-//       },
-//       // {
-//       //   $lookup: {
-//       //     from: "tasks",
-//       //     let: { taskId: "$taskId" },
-//       //     pipeline: [
-//       //       {
-//       //         $match: {
-//       //           $expr: {
-//       //             $and: [
-//       //               { $eq: ["$_id", "$$taskId"] },
-//       //               // flag != 1 ?
-//       //               // { $eq: ['$status', parseInt(status)] } 
-//       //               // :
-//       //               { $eq: ["$activeStatus", JSON.parse(activeStatus)] },
-//       //             ],
-//       //           },
-//       //         },
-//       //       },
-//       //       {
-//       //         $match: { summary: { $regex: `.*${searchString.replace(/\s+/g, "\\s+")}.*`, $options: "i" } },
-//       //       },
-//       //     ],
-//       //     as: "taskInfo",
-//       //   },
-//       // },
-//       {
-//         $lookup: {
-//           from: "tasks",
-//           let: { taskId: "$taskId", flag: parseInt(flag), status: parseInt(status), activeStatus: JSON.parse(activeStatus) },
-//           pipeline: [
-//             {
-//               $match: {
-//                 $expr: {
-//                   $and: [
-//                     { $eq: ["$_id", "$$taskId"] },
-//                     {
-//                       $or: [
-//                         {
-//                           $and: [
-//                             { $eq: ["$$flag", 1] },
-//                             { $eq: ["$activeStatus", "$$activeStatus"] },
-//                           ],
-//                         },
-//                         {
-//                           $and: [
-//                             { $ne: ["$$flag", 1] },
-//                             { $eq: ["$status", "$$status"] },
-//                             { $eq: ["$activeStatus", "$$activeStatus"] },
-//                           ],
-//                         },
-//                       ],
-//                     },
-//                   ],
-//                 },
-//               },
-//             },
-//             {
-//               $match: { summary: { $regex: `.*${searchString.replace(/\s+/g, "\\s+")}.*`, $options: "i" } },
-//             },
-//           ],
-//           as: "taskInfo",
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "projects",
-//           localField: "taskInfo.projectId",
-//           foreignField: "_id",
-//           as: "projectInfo"
-//         }
-//       },
-//       {
-//         $lookup: {
-//           from: "milestones",
-//           localField: "taskInfo.milestoneId",
-//           foreignField: "_id",
-//           as: "milestoneInfo"
-//         }
-//       },
-//       {
-//         $lookup: {
-//           from: "sprints",
-//           localField: "taskInfo.sprintId",
-//           foreignField: "_id",
-//           as: "sprintInfo"
-//         }
-//       },
-//       { $unwind: "$taskInfo" },
-//       { $unwind: "$assigneeInfo" },
-//       { $unwind: "$reporterInfo" },
-//       { $unwind: "$projectInfo" },
-//       { $unwind: "$milestoneInfo" },
-//       { $unwind: "$sprintInfo" },
-//       { $sort: { createdAt: -1 } },
-//       { $sort: { createdAt: -1 } },
-//       { $sort: { createdAt: -1 } },
-//       flag == 1 ? {
-//         $group: {
-//           _id: 'all',
-//           Todo: {
-//             $push: {
-//               $cond: {
-//                 if: { $eq: ['$taskInfo.status', 1] },
-//                 then: '$$ROOT', // Push the entire document
-//                 else: null // Don't push if status is not "completed"
-//               }
-//             }
-//           },
-//           Inprogress: {
-//             $push: {
-//               $cond: {
-//                 if: { $eq: ['$taskInfo.status', 2] },
-//                 then: '$$ROOT',
-//                 else: null
-//               }
-//             }
-//           },
-//           Hold: {
-//             $push: {
-//               $cond: {
-//                 if: { $eq: ['$taskInfo.status', 3] },
-//                 then: '$$ROOT',
-//                 else: null
-//               }
-//             }
-//           },
-//           Done: {
-//             $push: {
-//               $cond: {
-//                 if: { $eq: ['$taskInfo.status', 4] },
-//                 then: '$$ROOT',
-//                 else: null
-//               }
-//             }
-//           },
-//           TodoCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 1] }, then: 1, else: 0 } } },
-//           InprogressCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 2] }, then: 1, else: 0 } } },
-//           HoldCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 3] }, then: 1, else: 0 } } },
-//           DoneCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 4] }, then: 1, else: 0 } } },
-//           totalCount: { $sum: 1 },
-//           DueTasksCount: {
-//             $sum: {
-//               $cond: {
-//                 if: { $and: [{ $lt: ['$taskInfo.dueDate', now] }, { $ne: ['$taskInfo.status', 4] }] }, then: 1, else: 0
-//               }
-//             }
-//           },
-//         }
-//       } :
-//         {
-//           $group: {
-//             _id: 'all',
-//             taskInfo: {
-//               $push: {
-//                 _id: '$taskInfo._id',
-//                 taskMannualId: '$taskInfo.taskMannualId',
-//                 projectId: '$taskInfo.projectId',
-//                 milestoneId: '$taskInfo.milestoneId',
-//                 sprintId: '$taskInfo.sprintId',
-//                 summary: '$taskInfo.summary',
-//                 description: '$taskInfo.description',
-//                 priority: '$taskInfo.priority',
-//                 expectedHours: '$taskInfo.expectedHours',
-//                 startDate: '$taskInfo.startDate',
-//                 dueDate: '$taskInfo.dueDate',
-//                 status: '$taskInfo.status',
-//                 activeStatus: '$taskInfo.activeStatus',
-//                 attachment: '$taskInfo.attachment',
-//                 attachmentType: '$taskInfo.attachmentType',
-//                 createdAt: '$taskInfo.createdAt',
-//                 updatedAt: '$taskInfo.updatedAt',
-//                 __v: '$taskInfo.__v',
-//                 projectInfo: '$projectInfo',
-//                 milestoneInfo: '$milestoneInfo',
-//                 sprintInfo: '$sprintInfo',
-//                 assigneeInfo: '$assigneeInfo',
-//                 reporterInfo: '$reporterInfo'
-//               }
-//             },
-//             totalCount: { $sum: 1 }
-//           }
-//         },
-//       // {
-//       //     $match: {
-//       //         "Todo": { $ne: [null] },
-//       //         "Inprogress": { $ne: [null] },
-//       //         "Hold": { $ne: [null] },
-//       //         "Done": { $ne: [null] }
-//       //     }
-//       // },
-//       {
-//         $addFields: {
-//           Todo: {
-//             $filter: {
-//               input: '$Todo',
-//               as: 'task',
-//               cond: { $ne: ['$$task', null] }
-//             }
-//           },
-//           Inprogress: {
-//             $filter: {
-//               input: '$Inprogress',
-//               as: 'task',
-//               cond: { $ne: ['$$task', null] }
-//             }
-//           },
-//           Hold: {
-//             $filter: {
-//               input: '$Hold',
-//               as: 'task',
-//               cond: { $ne: ['$$task', null] }
-//             }
-//           },
-//           Done: {
-//             $filter: {
-//               input: '$Done',
-//               as: 'task',
-//               cond: { $ne: ['$$task', null] }
-//             }
-//           },
-//         }
-//       },
-//       {
-//         $project: flag == 1
-//           ? {
-//             _id: 0,
-//             Todo: 1,
-//             Inprogress: 1,
-//             Hold: 1,
-//             Done: 1,
-//             TodoCount: 1,
-//             InprogressCount: 1,
-//             HoldCount: 1,
-//             DoneCount: 1,
-//             totalCount: 1,
-//             DueTasksCount: 1
-//           }
-//           : {
-//             _id: 0,
-//             // projectInfo:1,
-//             // milestoneInfo : 1,
-//             // sprintInfo : 1,
-//             // assigneeInfo: 1,
-//             // reporterInfo: 1,
-//             taskInfo: 1,
-//             totalCount: 1
-//           },
-//       },
-//     ]
-//     let counts = [{ totalCount: 0 }]
-//     if (flag != "1") {
-//       counts = await assignUserModel.aggregate(queries);
-//       queries[14] = { $skip: (parseInt(skip) - 1) * pageSize }
-//       queries[15] = { $limit: pageSize };
-//     }
-//     const resultGet = await assignUserModel.aggregate(queries);
-//     const result = resultGet.length != 0 ? resultGet[0] : resultGet
-//     const totalCount = counts.length != 0 ? counts[0].totalCount : 0
-//     const totalPages = Math.ceil(totalCount / pageSize);
-//     return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result, totalCount, totalPages });
-//   } catch (error) {
-//     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
-//   }
-// }
-
 // All assignees of A project
 const projectUserList = async (req, res) => {
   try {
@@ -1016,6 +714,308 @@ const getUserAssignments = async (req, res) => {
     }
   } catch (error) {
     return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });
+  }
+}
+
+// Get A Users All tasks Acc to status & Search tasks & List of tasks
+const getUserTasks = async (req, res) => {
+  try {
+    var pageSize = 10;
+    let now = new Date();
+    let { flag, activeStatus, searchString, projectId, milestoneId, sprintId, skip, status } = req.query;
+    const query = {
+      projectId: new mongoose.Types.ObjectId(projectId),
+      milestoneId: new mongoose.Types.ObjectId(milestoneId),
+      sprintId: new mongoose.Types.ObjectId(sprintId),
+    };
+    const taskIds = await taskModel.distinct('_id', query);
+    // Flag = 1 :- Tasks acc to Status, Flag = 2 :- List of tasks
+    if (flag == 1) {
+      activeStatus = true
+    }
+
+    let queries = [
+      {
+        $match: { taskId: { $in: taskIds } },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "assigneeId",
+          foreignField: "_id",
+          as: "assigneeInfo",
+        },
+      },
+      {
+        $lookup: {
+          from: "roles",
+          localField: "reporterId",
+          foreignField: "_id",
+          as: "reporterInfo",
+        },
+      },
+      // {
+      //   $lookup: {
+      //     from: "tasks",
+      //     let: { taskId: "$taskId" },
+      //     pipeline: [
+      //       {
+      //         $match: {
+      //           $expr: {
+      //             $and: [
+      //               { $eq: ["$_id", "$$taskId"] },
+      //               // flag != 1 ?
+      //               // { $eq: ['$status', parseInt(status)] } 
+      //               // :
+      //               { $eq: ["$activeStatus", JSON.parse(activeStatus)] },
+      //             ],
+      //           },
+      //         },
+      //       },
+      //       {
+      //         $match: { summary: { $regex: `.*${searchString.replace(/\s+/g, "\\s+")}.*`, $options: "i" } },
+      //       },
+      //     ],
+      //     as: "taskInfo",
+      //   },
+      // },
+      {
+        $lookup: {
+          from: "tasks",
+          let: { taskId: "$taskId", flag: parseInt(flag), status: parseInt(status), activeStatus: JSON.parse(activeStatus) },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$_id", "$$taskId"] },
+                    {
+                      $or: [
+                        {
+                          $and: [
+                            { $eq: ["$$flag", 1] },
+                            { $eq: ["$activeStatus", "$$activeStatus"] },
+                          ],
+                        },
+                        {
+                          $and: [
+                            { $ne: ["$$flag", 1] },
+                            { $eq: ["$status", "$$status"] },
+                            { $eq: ["$activeStatus", "$$activeStatus"] },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+            },
+            {
+              $match: { summary: { $regex: `.*${searchString.replace(/\s+/g, "\\s+")}.*`, $options: "i" } },
+            },
+          ],
+          as: "taskInfo",
+        },
+      },
+      {
+        $lookup: {
+          from: "projects",
+          localField: "taskInfo.projectId",
+          foreignField: "_id",
+          as: "projectInfo"
+        }
+      },
+      {
+        $lookup: {
+          from: "milestones",
+          localField: "taskInfo.milestoneId",
+          foreignField: "_id",
+          as: "milestoneInfo"
+        }
+      },
+      {
+        $lookup: {
+          from: "sprints",
+          localField: "taskInfo.sprintId",
+          foreignField: "_id",
+          as: "sprintInfo"
+        }
+      },
+      { $unwind: "$taskInfo" },
+      { $unwind: "$assigneeInfo" },
+      { $unwind: "$reporterInfo" },
+      { $unwind: "$projectInfo" },
+      { $unwind: "$milestoneInfo" },
+      { $unwind: "$sprintInfo" },
+      { $sort: { createdAt: -1 } },
+      { $sort: { createdAt: -1 } },
+      { $sort: { createdAt: -1 } },
+      flag == 1 ? {
+        $group: {
+          _id: 'all',
+          Todo: {
+            $push: {
+              $cond: {
+                if: { $eq: ['$taskInfo.status', 1] },
+                then: '$$ROOT', // Push the entire document
+                else: null // Don't push if status is not "completed"
+              }
+            }
+          },
+          Inprogress: {
+            $push: {
+              $cond: {
+                if: { $eq: ['$taskInfo.status', 2] },
+                then: '$$ROOT',
+                else: null
+              }
+            }
+          },
+          Hold: {
+            $push: {
+              $cond: {
+                if: { $eq: ['$taskInfo.status', 3] },
+                then: '$$ROOT',
+                else: null
+              }
+            }
+          },
+          Done: {
+            $push: {
+              $cond: {
+                if: { $eq: ['$taskInfo.status', 4] },
+                then: '$$ROOT',
+                else: null
+              }
+            }
+          },
+          TodoCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 1] }, then: 1, else: 0 } } },
+          InprogressCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 2] }, then: 1, else: 0 } } },
+          HoldCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 3] }, then: 1, else: 0 } } },
+          DoneCount: { $sum: { $cond: { if: { $eq: ['$taskInfo.status', 4] }, then: 1, else: 0 } } },
+          totalCount: { $sum: 1 },
+          DueTasksCount: {
+            $sum: {
+              $cond: {
+                if: { $and: [{ $lt: ['$taskInfo.dueDate', now] }, { $ne: ['$taskInfo.status', 4] }] }, then: 1, else: 0
+              }
+            }
+          },
+        }
+      } :
+        {
+          $group: {
+            _id: 'all',
+            taskInfo: {
+              $push: {
+                _id: '$taskInfo._id',
+                taskMannualId: '$taskInfo.taskMannualId',
+                projectId: '$taskInfo.projectId',
+                milestoneId: '$taskInfo.milestoneId',
+                sprintId: '$taskInfo.sprintId',
+                summary: '$taskInfo.summary',
+                description: '$taskInfo.description',
+                priority: '$taskInfo.priority',
+                expectedHours: '$taskInfo.expectedHours',
+                startDate: '$taskInfo.startDate',
+                dueDate: '$taskInfo.dueDate',
+                status: '$taskInfo.status',
+                activeStatus: '$taskInfo.activeStatus',
+                attachment: '$taskInfo.attachment',
+                attachmentType: '$taskInfo.attachmentType',
+                createdAt: '$taskInfo.createdAt',
+                updatedAt: '$taskInfo.updatedAt',
+                __v: '$taskInfo.__v',
+                projectInfo: '$projectInfo',
+                milestoneInfo: '$milestoneInfo',
+                sprintInfo: '$sprintInfo',
+                assigneeInfo: '$assigneeInfo',
+                reporterInfo: '$reporterInfo'
+              }
+            },
+            totalCount: { $sum: 1 }
+          }
+        },
+      // {
+      //     $match: {
+      //         "Todo": { $ne: [null] },
+      //         "Inprogress": { $ne: [null] },
+      //         "Hold": { $ne: [null] },
+      //         "Done": { $ne: [null] }
+      //     }
+      // },
+      {
+        $addFields: {
+          Todo: {
+            $filter: {
+              input: '$Todo',
+              as: 'task',
+              cond: { $ne: ['$$task', null] }
+            }
+          },
+          Inprogress: {
+            $filter: {
+              input: '$Inprogress',
+              as: 'task',
+              cond: { $ne: ['$$task', null] }
+            }
+          },
+          Hold: {
+            $filter: {
+              input: '$Hold',
+              as: 'task',
+              cond: { $ne: ['$$task', null] }
+            }
+          },
+          Done: {
+            $filter: {
+              input: '$Done',
+              as: 'task',
+              cond: { $ne: ['$$task', null] }
+            }
+          },
+        }
+      },
+      {
+        $project: flag == 1
+          ? {
+            _id: 0,
+            Todo: 1,
+            Inprogress: 1,
+            Hold: 1,
+            Done: 1,
+            TodoCount: 1,
+            InprogressCount: 1,
+            HoldCount: 1,
+            DoneCount: 1,
+            totalCount: 1,
+            DueTasksCount: 1
+          }
+          : {
+            _id: 0,
+            // projectInfo:1,
+            // milestoneInfo : 1,
+            // sprintInfo : 1,
+            // assigneeInfo: 1,
+            // reporterInfo: 1,
+            taskInfo: 1,
+            totalCount: 1
+          },
+      },
+    ]
+    let counts = [{ totalCount: 0 }]
+    if (flag != "1") {
+      counts = await assignUserModel.aggregate(queries);
+      queries[14] = { $skip: (parseInt(skip) - 1) * pageSize }
+      queries[15] = { $limit: pageSize };
+    }
+    const resultGet = await assignUserModel.aggregate(queries);
+    const result = resultGet.length != 0 ? resultGet[0] : resultGet
+    const totalCount = counts.length != 0 ? counts[0].totalCount : 0
+    const totalPages = Math.ceil(totalCount / pageSize);
+    return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result, totalCount, totalPages });
+  } catch (error) {
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 }
 
