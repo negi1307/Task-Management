@@ -1,5 +1,4 @@
 const userModel = require("../models/users.model");
-// const assignUserModel = require("../models/assignUser.model");
 const taskModel = require("../models/task.model");
 const nodemailer = require("../middleware/nodemailer");
 const bcrypt = require("bcrypt");
@@ -60,7 +59,6 @@ const logInUser = async (req, res) => {
 // Update task status
 async function updateTaskStatus(existingUser) {
   try {
-    // const taskIds = await assignUserModel.distinct('taskId', { assigneeId: existingUser._id });
     const taskIds = await taskModel.distinct('taskId', { assigneeId: existingUser._id });
     const tasks = await taskModel.find({ _id: { $in: taskIds }, status: 2 });
     for (const task of tasks) {
@@ -119,19 +117,8 @@ const trackTime = async (req, res) => {
       },
       {
         $lookup: {
-          from: 'assignusers',
-          localField: '_id',
-          foreignField: 'taskId',
-          as: 'assignedUser',
-        },
-      },
-      {
-        $unwind: '$assignedUser',
-      },
-      {
-        $lookup: {
           from: 'users',
-          localField: 'assignedUser.assigneeId',
+          localField: 'assigneeId',
           foreignField: '_id',
           as: 'user',
         },
