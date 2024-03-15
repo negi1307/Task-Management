@@ -20,6 +20,7 @@ const addSprint = async (req, res) => {
                 startDate,
                 endDate
             });
+            await userHistory(req,"Sprint Created");
             return res.status(200).json({ status: '200', message: 'Sprint Added Successfully', response: result });
         }
     } catch (error) {
@@ -31,6 +32,7 @@ const addSprint = async (req, res) => {
 const updateSprint = async (req, res) => {
     try {
         await sprintModel.findByIdAndUpdate({ _id: req.body.sprintId }, req.body, { new: true });
+        await userHistory(req,"Update the Sprint");
         return res.status(200).json({ status: '200', message: 'Sprint updated Successfully' });
     } catch (error) {
         return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });

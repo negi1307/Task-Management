@@ -30,6 +30,7 @@ const getTaskComment = async (req, res) => {
 const updateComment = async (req, res) => {
     try {
         const { commentId, comment } = req.body;
+        await userHistory(req,"Update the Comment");
         // await userHistory(req, "Update the Comment", taskId, commentId);
         await commentsModel.findByIdAndUpdate({ _id: commentId }, { comment }, { new: true });
         return res.status(200).json({ status: "200", message: "Comment updated successfully" });

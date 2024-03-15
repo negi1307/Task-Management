@@ -19,6 +19,7 @@ const addProject = async (req, res) => {
         projectType,
         projectStatus,
       });
+      await userHistory(req,"Create Project");
       return res.status(200).json({ status: "200", message: "Project created successfully", response: result });
     }
   } catch (error) {
@@ -49,6 +50,7 @@ const getProjects = async (req, res) => {
 const updateProject = async (req, res) => {
   try {
     await projectModel.findByIdAndUpdate({ _id: req.body.projectId }, req.body, { new: true });
+    await userHistory(req,"Update the Project");
     return res.status(200).json({ status: "200", message: "Project updated successfully" });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -67,6 +69,7 @@ const uploadProject_File = async (req, res) => {
     if (projectId && attachment && fileName) {
       const data = await projectupload({ projectId, attachment, fileName, attachmentType, originalName });
       await data.save();
+      await userHistory(req,"Project File Upload");
       res.status(200).json({ status: '200', message: 'Project file uploaded Successfully' })
     }
     else {

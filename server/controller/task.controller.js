@@ -37,6 +37,7 @@ const createtask = async (req, res) => {
         assigneeId,
         lastUpdaterId: req.user._id
       });
+      await userHistory(req,"Task created");
       return res.status(200).json({ status: "200", message: "Task created successfully", response: task });
     }
   } catch (error) {
@@ -182,6 +183,7 @@ const updateTask = async (req, res) => {
       lastUpdaterId: req.user._id
     };
     await taskModel.findByIdAndUpdate(taskId, obj, { new: true });
+    await userHistory(req,"Task update");
     return res.status(200).json({ status: "200", message: "Task updated successfully" });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -192,6 +194,7 @@ const updateTask = async (req, res) => {
 const deleteTask = async (req, res) => {
   try {
     await taskModel.findByIdAndDelete({ _id: req.query.taskId });
+    await userHistory(req,"Task delete");
     return res.status(200).json({ status: "200", message: "Task Deleted successfully" });
   } catch (err) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: err.message });
@@ -209,7 +212,7 @@ const updateTaskStatus = async (req, res) => {
       if (status === 2) {
         if (status <= currentStatus && req.user.role !== 'Testing') {
           return res.status(403).json({ status: "403", message: "You are not authorized to update the task status backwards." });
-      }
+        }
         query.inProgressDate = new Date();
       }
 
@@ -226,10 +229,11 @@ const updateTaskStatus = async (req, res) => {
           }
         }
         else {
-          return res.status(200).json({ status: "200", message: "You are not authorised to do so."});
+          return res.status(200).json({ status: "200", message: "You are not authorised to do so." });
         }
       }
       const result = await taskModel.findByIdAndUpdate({ _id: taskId }, query, { new: true });
+      await userHistory(req,"Task Status update");
       return res.status(200).json({ status: "200", message: "Task Status updated successfully", data: result });
     } else {
       const tasks = await taskModel.find({ assigneeId: req.user._id, status: 2 });
@@ -599,7 +603,7 @@ const getTasksWeekCount = async (req, res) => {
 // Get User Assignments- Projects, milestones, and sprints
 const getUserAssignments = async (req, res) => {
   try {
-    const {flag, projectId, milestoneId, skip} = req.query;
+    const { flag, projectId, milestoneId, skip } = req.query;
     const pageSize = 10;
     const now = new Date();
 
@@ -610,7 +614,7 @@ const getUserAssignments = async (req, res) => {
           $match: { _id: { $in: projectIds } }
         },
         {
-          $lookup:{
+          $lookup: {
             from: "technologies",
             localField: "technology",
             foreignField: "_id",
@@ -619,25 +623,25 @@ const getUserAssignments = async (req, res) => {
         },
         {
           $project: {
-              _id: 1,
-              projectName: 1,
-              clientName : 1,
-              technologies: 1,
-              startDate: 1,
-              endDate: 1,
-              activeStatus: 1,
-              projectStatus: 1,
-              projectType: 1,
-              createdAt: 1,
-              updatedAt: 1,
-              daysLeft: {
-                  $divide: [
-                      { $subtract: ["$endDate", now] },
-                      1000 * 60 * 60 * 24,
-                  ],
-              },
+            _id: 1,
+            projectName: 1,
+            clientName: 1,
+            technologies: 1,
+            startDate: 1,
+            endDate: 1,
+            activeStatus: 1,
+            projectStatus: 1,
+            projectType: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            daysLeft: {
+              $divide: [
+                { $subtract: ["$endDate", now] },
+                1000 * 60 * 60 * 24,
+              ],
+            },
           }
-      },
+        },
         { $sort: { daysLeft: 1 } },
         { $skip: (parseInt(skip) - 1) * pageSize },
         { $limit: pageSize }
@@ -650,24 +654,24 @@ const getUserAssignments = async (req, res) => {
       const milestoneIds = await taskModel.distinct('milestoneId', { assigneeId: req.user._id });
       const milestones = await milestoneModel.aggregate([
         {
-          $match : { _id : { $in : milestoneIds}, projectId: new mongoose.Types.ObjectId(projectId)}
+          $match: { _id: { $in: milestoneIds }, projectId: new mongoose.Types.ObjectId(projectId) }
         },
         {
           $project: {
-              _id: 1,
-              title: 1,
-              description : 1,
-              startDate: 1,
-              completionDate: 1,
-              activeStatus: 1,
-              createdAt: 1,
-              updatedAt: 1,
-              daysLeft: {
-                  $divide: [
-                      { $subtract: ["$completionDate", now] },
-                      1000 * 60 * 60 * 24,
-                  ],
-              },
+            _id: 1,
+            title: 1,
+            description: 1,
+            startDate: 1,
+            completionDate: 1,
+            activeStatus: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            daysLeft: {
+              $divide: [
+                { $subtract: ["$completionDate", now] },
+                1000 * 60 * 60 * 24,
+              ],
+            },
           }
         },
         { $sort: { daysLeft: 1 } },
@@ -682,24 +686,24 @@ const getUserAssignments = async (req, res) => {
       const sprintIds = await taskModel.distinct('sprintId', { assigneeId: req.user._id });
       const sprints = await sprintModel.aggregate([
         {
-          $match: {_id: { $in: sprintIds }, milestoneId: mongoose.Types.ObjectId(milestoneId) }
+          $match: { _id: { $in: sprintIds }, milestoneId: mongoose.Types.ObjectId(milestoneId) }
         },
         {
           $project: {
-              _id: 1,
-              sprintName: 1,
-              sprintDesc : 1,
-              startDate: 1,
-              endDate: 1,
-              activeStatus: 1,
-              createdAt: 1,
-              updatedAt: 1,
-              daysLeft: {
-                  $divide: [
-                      { $subtract: ["$endDate", now] },
-                      1000 * 60 * 60 * 24,
-                  ],
-              },
+            _id: 1,
+            sprintName: 1,
+            sprintDesc: 1,
+            startDate: 1,
+            endDate: 1,
+            activeStatus: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            daysLeft: {
+              $divide: [
+                { $subtract: ["$endDate", now] },
+                1000 * 60 * 60 * 24,
+              ],
+            },
           }
         },
         { $sort: { daysLeft: 1 } },
