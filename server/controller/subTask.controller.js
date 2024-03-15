@@ -1,6 +1,5 @@
 const subTaskModel = require("../models/subTask.model");
 const rolesModel = require("../models/role.model");
-const assignUserModel = require("../models/assignUser.model");
 const { userHistory } = require('../controller/history.controller');
 
 // create sub task or bug
@@ -27,8 +26,7 @@ const addSubTask = async (req, res) => {
 const updateSubTask = async (req, res) => {
     try {
         const { subTaskId, summary, description, priority, expectedHours, startDate, dueDate, status, assigneeId, reporterId, type } = req.body;
-        const obj = { summary, description, priority, expectedHours, startDate, dueDate, status, type, };
-        const secObj = { assigneeId, reporterId };
+        const obj = { summary, description, priority, expectedHours, startDate, dueDate, status, type, assigneeId, reporterId };
 
         const existingSubTask = await subTaskModel.findById(subTaskId);
         if (existingSubTask.assigneeId !== assigneeId) {
@@ -40,7 +38,6 @@ const updateSubTask = async (req, res) => {
             await userHistory(req, reporterChangeMessage);
         }
         await subTaskModel.findByIdAndUpdate(subTaskId, obj, { new: true });
-        await assignUserModel.findOneAndUpdate({ subTaskId }, secObj, { new: true });
         return res.status(200).json({ status: 200, message: "Sub Task updated successfully" })
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -85,12 +82,10 @@ const deleteSubTask = async (req, res) => {
 
         if (subTaskId) {
             await subTaskModel.findByIdAndDelete({ _id: subTaskId });
-            await assignUserModel.deleteMany({ subTaskId });
             return res.status(200).json({ status: 200, message: "Sub task deleted successfully" });
         }
         if (bugId) {
             await subTaskModel.findByIdAndDelete({ _id: bugId, type: "Bug" });
-            await assignUserModel.deleteMany({ subTaskId: bugId, type: "Bug" });
             return res.status(200).json({ status: 200, message: "Bug deleted successfully" });
         }
     } catch (error) {

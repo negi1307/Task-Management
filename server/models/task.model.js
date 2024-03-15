@@ -25,7 +25,7 @@ const tasks = mongoose.model(
             type: String
         },
         priority: {
-            type: Number,// 1=high, 2=medium, 3=low
+            type: String,// 1=High, 2=Medium, 3=Low , 4= Critical
         },
         expectedHours: {
             type: Number
