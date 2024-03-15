@@ -10,9 +10,11 @@ const addSubTask = async (req, res) => {
         const createSubTask = await subTaskModel.create({ taskMannualId: lastTask + 1, projectId, milestoneId, sprintId, summary, description, priority, expectedHours, startDate, dueDate, parentId, reporterId, assigneeId, type });
 
         if (type === "Bug") {
+            await userHistory(req, `Bug Created`);
             return res.status(200).json({ status: 200, message: "Bug added successfully", response: createSubTask })
         }
         else {
+            await userHistory(req, `Sub Task Created `);
             return res.status(200).json({ status: 200, message: "Sub task added successfully", response: createSubTask })
         }
 
@@ -37,6 +39,7 @@ const updateSubTask = async (req, res) => {
             const reporterChangeMessage = `Reporter ID changed`;
             await userHistory(req, reporterChangeMessage);
         }
+        await userHistory(req, `Sub Task updated`);
         await subTaskModel.findByIdAndUpdate(subTaskId, obj, { new: true });
         return res.status(200).json({ status: 200, message: "Sub Task updated successfully" })
     } catch (error) {
@@ -82,10 +85,12 @@ const deleteSubTask = async (req, res) => {
 
         if (subTaskId) {
             await subTaskModel.findByIdAndDelete({ _id: subTaskId });
+            await userHistory(req, `Delete Sub Task `);
             return res.status(200).json({ status: 200, message: "Sub task deleted successfully" });
         }
         if (bugId) {
             await subTaskModel.findByIdAndDelete({ _id: bugId, type: "Bug" });
+            await userHistory(req, `Delete Bug `);
             return res.status(200).json({ status: 200, message: "Bug deleted successfully" });
         }
     } catch (error) {

@@ -43,6 +43,22 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             type: mongoose.Types.ObjectId,
             ref: 'projects'
         },
+        milestoneId: {
+            type: mongoose.Types.ObjectId,
+            ref: 'milestones'
+        },
+        sprintId: {
+            type: mongoose.Types.ObjectId,
+            ref: 'sprints'
+        },
+        subTaskId:{
+            type:mongoose.Types.ObjectId,
+            ref:'subtasks'
+        },
+        bugId:{
+            type:mongoose.Types.ObjectId,
+            ref:'subtasks'
+        },
         assigneeId: {
             type: mongoose.Types.ObjectId,
             ref: 'users'
