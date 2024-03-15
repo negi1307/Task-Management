@@ -16,8 +16,6 @@ const addComment = async (req, res) => {
     }
 };
 
-
-
 // Get A task's Comments
 const getTaskComment = async (req, res) => {
     try {
@@ -31,14 +29,10 @@ const getTaskComment = async (req, res) => {
 // Update the Comment 
 const updateComment = async (req, res) => {
     try {
-        const taskId = req.body.taskId;
-        const commentId = req.body.commentId;
-        await userHistory(req, "Update the Comment", taskId, commentId);
-        const updatedComment = await commentsModel.findByIdAndUpdate({ _id: commentId, taskId: taskId }, req.body, { new: true });
-        if (!updatedComment) {
-            return res.status(404).json({ status: "404", message: "Comment not found" });
-        }
-        return res.status(200).json({ status: "200", message: "Comment updated successfully", response: updatedComment });
+        const { commentId, comment } = req.body;
+        // await userHistory(req, "Update the Comment", taskId, commentId);
+        await commentsModel.findByIdAndUpdate({ _id: commentId }, { comment }, { new: true });
+        return res.status(200).json({ status: "200", message: "Comment updated successfully" });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
