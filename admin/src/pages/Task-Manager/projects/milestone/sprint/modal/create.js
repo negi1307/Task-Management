@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Button, CloseButton } from 'react-bootstrap';
-import { addSprint } from '../../../../../../redux/sprint/action';
+import { addSprint, getSingleSprint } from '../../../../../../redux/sprint/action';
 import ToastHandle from '../../../../../../constants/toaster/toaster';
 import MainLoader from '../../../../../../constants/Loader/loader';
 import DatePicker from 'react-datepicker';

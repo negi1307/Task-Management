@@ -349,11 +349,67 @@ const trackTime = async (req, res) => {
 //   },
 // },
 
+// list of assignees
+const getAssigneesList = async (req, res) => {
+  try {
+    const userRole = req.user.role;
+    let assignableRoles = [];
+
+    switch (userRole) {
+      case 'Admin':
+        assignableRoles = ['Employee', 'CTO', 'PM', 'Sales', 'Testing'];
+        break;
+      case 'CTO':
+        assignableRoles = ['Employee', 'PM', 'Sales', 'Testing'];
+        break;
+      case 'PM':
+        assignableRoles = ['Employee', 'CTO', 'PM', 'Sales', 'Testing'];
+        break;
+      default:
+        assignableRoles = [];
+        break;
+    }
+    const usersList = await userModel.find({ role: { $in: assignableRoles } });
+    return res.status(200).json({ status: 200, response: usersList });
+  } catch (error) {
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+  }
+}
+
+// get the list of reporters so the employee report to the senior
+const getReporterList = async (req, res) => {
+  try {
+    const userRole = req.user.role;
+    let assignableRoles = [];
+    switch (userRole) {
+      case 'Admin':
+        assignableRoles = ['Admin', 'CTO', 'PM'];
+        break;
+      case 'CTO':
+        assignableRoles = ['CTO', 'PM'];
+        break;
+      case 'PM':
+        assignableRoles = ['PM'];
+        break;
+      default:
+        assignableRoles = [];
+        break;
+    }
+    const reporterList = await userModel.find({ role: { $in: assignableRoles } });
+    return res.status(200).json({ status: 200, reporterList });
+  } catch (error) {
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+  }
+}
+
 
 module.exports = {
   registerUser,
   logInUser,
   getUsers,
   deleteUser,
-  trackTime
+  trackTime,
+  getAssigneesList,
+  getReporterList
+
 };

@@ -16,6 +16,7 @@ import getAllSingleSprints from '../../../../../constants/endpoint';
 
 const Sprint = () => {
     const { projectId, milestoneId } = useParams();
+    console.log({ projectId, milestoneId });
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
@@ -24,11 +25,11 @@ const Sprint = () => {
     const [checkedStatus, setCheckedStatus] = useState();
     const [statusModal, setStatusModal] = useState(false);
     const [checkedData, setCheckedData] = useState();
-    const [status, setStatus] = useState(1);
+    const [status, setStatus] = useState(true);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openModal, SetOpenModal] = useState(false);
     const [editData, setEditData] = useState();
-    const GetAllSingleSprintData = store?.getAllSingleSprints?.data?.Response;
+    const GetAllSingleSprintData = store?.getAllSingleSprints?.data?.response;
     const deletehandle = store?.deleteSprint?.data;
     const loaderhandel = store?.getAllSingleSprints;
     const handelUpdate = (data) => {
@@ -53,25 +54,26 @@ const Sprint = () => {
     };
     const handleActive = (val) => {
         if (val) {
-            setStatus(1);
+            setStatus(true);
             setSkip(1);
             let data = {
                 id: milestoneId,
-                activeStatus: 1,
+                activeStatus: true,
                 skip: 1,
             };
             dispatch(getSingleSprint(data));
         } else {
-            setStatus(0);
+            setStatus(false);
             setSkip(1);
+
             let data = {
                 id: milestoneId,
-                activeStatus: 0,
+                activeStatus: false,
                 skip: 1,
             };
             dispatch(getSingleSprint(data));
         }
-        console.log('9999999999999999999999999********************//////////////////')
+        // console.log('9999999999999999999999999********************//////////////////')
 
     };
     const handleStatusChange = async (e, data) => {
@@ -115,6 +117,7 @@ const Sprint = () => {
     };
 
     const fetchSprintData = () => {
+        console.log(status, milestoneId, skip);
         dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
     };
 
@@ -128,16 +131,14 @@ const Sprint = () => {
             ToastHandle('error', deletehandle?.message);
         }
     }, [deletehandle]);
-    useEffect(() => {
-        console.log(projectId, milestoneId, '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
 
-    }, [projectId, milestoneId]);
 
     useEffect(() => {
+        console.log("----------called");
         fetchSprintData(); // Fetch initial data
-        const intervalId = setInterval(fetchSprintData, 50000); // Fetch data every 5 seconds
+        // const intervalId = setInterval(fetchSprintData, 50000); // Fetch data every 5 seconds
 
-        return () => clearInterval(intervalId); // Clean up on unmount
+        // return () => clearInterval(intervalId); // Clean up on unmount
     }, [status, milestoneId, skip]);
 
     const truncateDescription = (description, maxLength = 30) => {

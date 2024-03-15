@@ -15,6 +15,7 @@ const historyRoute = require("./history.route");
 const preSalesRoute = require("./preSale.route");
 const leavesRoute = require("./leaveMessage.route");
 const salesRoute = require("./sales.route");
+const subTaskRoute = require("./subTask.route");
 
 
 router.use("/users", userRoutes);
@@ -31,5 +32,6 @@ router.use("/history", historyRoute);
 router.use("/preSale", preSalesRoute);
 router.use("/reason", leavesRoute);
 router.use("/sales", salesRoute);
+router.use("/subTask", subTaskRoute);
 
 module.exports = router;
