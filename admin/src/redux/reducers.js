@@ -41,9 +41,9 @@ import {
     getComment,
     deleteCommentReducer,
     getTaskId,
-    updateCommentReducer,getAssignUserReducer,getHistoryReducer
+    updateCommentReducer, getAssignUserReducer, getHistoryReducer
 } from './task/reducer';
-import { getAllUsers, deleteUser, createUser, getAllRoles,getCsvDataReducer } from './user/reducer';
+import { getAllUsers, deleteUser, createUser, getAllRoles, getCsvDataReducer } from './user/reducer';
 import { getTaskSummaryReducer, getPriorityGraphReducer, getTaskWeekCountReducer } from './Summary/reducer';
 import {
     createTechnologyReducer,
@@ -55,8 +55,8 @@ import {
     UpdateTechnologyCategoryReducer,
     deleteTechnologyCategory,
 } from './technology/reducer';
-import { getPreSaleReducer,addPreSaleReducer,updatePreSaleReducer,deletePreSaleReducer } from './customer/reducer';
-import {getProjectNameReducer ,uploadProjectDetail ,getuploadProjectDetailReducer} from "./clientRepository/reducers"
+import { getPreSaleReducer, addPreSaleReducer, updatePreSaleReducer, deletePreSaleReducer } from './customer/reducer';
+import { getProjectNameReducer, uploadProjectDetail, getuploadProjectDetailReducer } from "./clientRepository/reducers"
 import { getTimeTrackerReducer } from './timeTracker/reducer';
 export default (combineReducers({
     Auth,
@@ -113,6 +113,6 @@ export default (combineReducers({
     addPreSaleReducer,
     updatePreSaleReducer,
     deletePreSaleReducer,
-    getProjectNameReducer,uploadProjectDetail,getuploadProjectDetailReducer,
-    getTimeTrackerReducer,getHistoryReducer
+    getProjectNameReducer, uploadProjectDetail, getuploadProjectDetailReducer,
+    getTimeTrackerReducer, getHistoryReducer
 }): any);

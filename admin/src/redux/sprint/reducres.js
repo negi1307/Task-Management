@@ -57,6 +57,8 @@ export const addSprint = (state = ADD_SPRINT_INITIAL_STATE, action) => {
 };
 // get single sprint--------------------------------
 export const getAllSingleSprints = (state = GET_SINGLE_SPRINT_INITIAL_STATE, action) => {
+    // console.log(action.payload, 'reducer')
+
     switch (action.type) {
         case SprintTypes.GET_ALL_SINGLE_SPRINT_LOADING:
             return {
@@ -168,14 +170,14 @@ export const updateSprint = (state = UPDATE_SPRINT_INITIAL_STATE, action) => {
 
     }
 };
-export const getSprintId = (state = {data:""}, action) => {
+export const getSprintId = (state = { data: "" }, action) => {
     switch (action.type) {
         case "sprintId":
             return {
                 data: action.payload,
-                
+
             };
-      
+
         default:
             return { ...state };
 
