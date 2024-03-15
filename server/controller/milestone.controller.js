@@ -30,7 +30,8 @@ const addMilestone = async (req, res) => {
 const updateMilestone = async (req, res) => {
   try {
     await milestoneModel.findByIdAndUpdate({ _id: req.body.milestoneId }, req.body, { new: true });
-    await userHistory(req,"Update the Milestone");
+    const milestoneData = await milestoneModel.findById({ _id: req.body.milestoneId} )
+    await userHistory(req,milestoneData);
     return res.status(200).json({ status: "200", message: "Milestone updated Successfully" });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });

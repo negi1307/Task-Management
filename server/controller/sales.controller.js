@@ -22,8 +22,10 @@ const getTasks = async (req, res) => {
 
 const updateTask = async (req, res) => {
     try {
-        await salesModel.findByIdAndUpdate({ _id: req.body.salesId }, req.body, { new: true });
-        await userHistory(req,"Update the Task");
+        const salesId = req.body.salesId;
+        const sales = await salesModel.findById(salesId)
+        await salesModel.findByIdAndUpdate(salesId, req.body, { new: true });
+        await userHistory(req,sales);
         return res.status(200).json({ status: 200, message: "Task updated successfully" });
     } catch (error) {
         return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });

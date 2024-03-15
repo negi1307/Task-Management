@@ -18,14 +18,14 @@ const registerUser = async (req, res) => {
       }
       else {
         const hashedPassword = await bcrypt.hash(password, 9);
-        const result = await userModel.create({ 
-          firstName, 
-          lastName, 
-          email, 
-          password: hashedPassword, 
-          plainPassword: password, 
+        const result = await userModel.create({
+          firstName,
+          lastName,
+          email,
+          password: hashedPassword,
+          plainPassword: password,
           role
-         });
+        });
         if (result) {
           await nodemailer.emailSender(result);
           return res.status(200).json({ status: "200", message: "User created Successfully", response: result });
@@ -91,8 +91,10 @@ const getUsers = async (req, res) => {
 // Delete A User
 const deleteUser = async (req, res) => {
   try {
-    await userModel.findByIdAndDelete({ _id: req.query.userId });
-    await userHistory(req,"Delete User");
+    const userId = req.query.userId;
+    const user = await userModel.find(userId)
+    await userModel.findByIdAndDelete(userId);
+    await userHistory(req, user);
     return res.status(200).json({ status: "200", message: 'User deleted successfully' });
   } catch (error) {
     return res.status(500).json({ status: '500', message: 'Something went wrong' })

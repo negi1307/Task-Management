@@ -1,11 +1,11 @@
 const historyModel = require('../models/history.model');
 
-async function userHistory(req, value) {
+async function userHistory(req, userActivity) {
     try {
         let time = new Date();
         let userhistory = new historyModel({
             time: time,
-            userActivity: value,
+            userActivity: userActivity,
             // user: req.user.firstName + req.user.lastName,
             userId: req.user._id,
             taskId: req.body.taskId,
@@ -42,10 +42,10 @@ const getHistory = async (req, res) => {
         if (subTaskId) query.subTaskId = subTaskId;
         if (milestoneId) query.milestoneId = milestoneId;
         if (sprintId) query.sprintId = sprintId;
-        
+
         // const query = taskId ? { taskId } : {};
 
-        const result = await historyModel.find(query).populate('userId').populate('taskId').populate('subTaskId') .populate('projectId').populate('milestoneId').populate('sprintId').populate('reporterId').populate('commentId').populate('assigneeId');
+        const result = await historyModel.find(query).populate('userId').populate('taskId').populate('subTaskId').populate('projectId').populate('milestoneId').populate('sprintId').populate('reporterId').populate('commentId').populate('assigneeId');
         return res.status(200).json({ status: "200", message: "History fetched successfully", response: result });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });

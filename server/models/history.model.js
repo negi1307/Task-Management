@@ -5,47 +5,47 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             type: Date
         },
         userActivity: {
-            type: String
+            type: Schema.Types.Mixed
         },
         userId: {
             type: Schema.Types.Mixed,
-            ref: 'User'
+            // ref: 'User'
         },
         taskId: {
             type: Schema.Types.Mixed,
-            ref: 'Task'
+            // ref: 'Task'
         },
         commentId: {
             type: Schema.Types.Mixed,
-            ref: "Comment"
+            // ref: "Comment"
         },
         reporterId: {
             type: Schema.Types.Mixed,
-            ref: 'roles',
+            // ref: 'roles',
         },
         projectId: {
             type: Schema.Types.Mixed,
-            ref: 'projects'
+            // ref: 'projects'
         },
         milestoneId: {
             type: Schema.Types.Mixed,
-            ref: 'milestone'
+            // ref: 'milestone'
         },
         sprintId: {
             type: Schema.Types.Mixed,
-            ref: 'sprint'
+            // ref: 'sprint'
         },
         subTaskId: {
             type: Schema.Types.Mixed,
-            ref: 'subTask'
+            // ref: 'subTask'
         },
         bugId: {
             type: Schema.Types.Mixed,
-            ref: 'subTask'
+            // ref: 'subTask'
         },
         assigneeId: {
             type: Schema.Types.Mixed,
-            ref: 'User'
+            // ref: 'User'
         }
     },
         {

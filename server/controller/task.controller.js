@@ -38,7 +38,7 @@ const createtask = async (req, res) => {
         assigneeId,
         lastUpdaterId: req.user._id
       });
-      await userHistory(req,"Task created");
+      await userHistory(req, "Task created");
       return res.status(200).json({ status: "200", message: "Task created successfully", response: task });
     }
   } catch (error) {
@@ -184,7 +184,8 @@ const updateTask = async (req, res) => {
       lastUpdaterId: req.user._id
     };
     await taskModel.findByIdAndUpdate(taskId, obj, { new: true });
-    await userHistory(req,"Task update");
+    const task = await taskModel.findById(taskId)
+    await userHistory(req,task);
     return res.status(200).json({ status: "200", message: "Task updated successfully" });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -194,8 +195,10 @@ const updateTask = async (req, res) => {
 // Delete A Task
 const deleteTask = async (req, res) => {
   try {
-    await taskModel.findByIdAndDelete({ _id: req.query.taskId });
-    await userHistory(req,"Task delete");
+    const taskId = req.query.taskId;
+    const task = await taskModel.findById(taskId)
+    await taskModel.findByIdAndDelete(taskId);
+    await userHistory(req,  task );
     return res.status(200).json({ status: "200", message: "Task Deleted successfully" });
   } catch (err) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: err.message });
@@ -234,7 +237,8 @@ const updateTaskStatus = async (req, res) => {
         }
       }
       const result = await taskModel.findByIdAndUpdate({ _id: taskId }, query, { new: true });
-      await userHistory(req,"Task Status update");
+      const taskStatus = await taskModel.findById(taskId)
+      await userHistory(req, taskStatus);
       return res.status(200).json({ status: "200", message: "Task Status updated successfully", data: result });
     } else {
       const tasks = await taskModel.find({ assigneeId: req.user._id, status: 2 });

@@ -32,14 +32,15 @@ const updateSubTask = async (req, res) => {
 
         const existingSubTask = await subTaskModel.findById(subTaskId);
         if (existingSubTask.assigneeId !== assigneeId) {
-            const assigneeChangeMessage = `Assignee ID changed`;
-            await userHistory(req, assigneeChangeMessage);
+            const assignee = await subTaskModel.findById(subTaskId);
+            await userHistory(req, `Assignee ID changed`, assignee);
         }
         if (existingSubTask.reporterId !== reporterId) {
-            const reporterChangeMessage = `Reporter ID changed`;
-            await userHistory(req, reporterChangeMessage);
+            const reporter = await subTaskModel.findById(subTaskId);
+            await userHistory(req, `Reporter ID changed`);
         }
-        await userHistory(req, `Sub Task updated`);
+        const subTask = await subTaskModel.findById(subTaskId);
+        await userHistory(req, subTask);
         await subTaskModel.findByIdAndUpdate(subTaskId, obj, { new: true });
         return res.status(200).json({ status: 200, message: "Sub Task updated successfully" })
     } catch (error) {
@@ -84,13 +85,15 @@ const deleteSubTask = async (req, res) => {
         const { subTaskId, bugId } = req.query;
 
         if (subTaskId) {
+            const subTask = await subTaskId.findById(subTaskId)
             await subTaskModel.findByIdAndDelete({ _id: subTaskId });
-            await userHistory(req, `Delete Sub Task `);
+            await userHistory(req, subTask);
             return res.status(200).json({ status: 200, message: "Sub task deleted successfully" });
         }
         if (bugId) {
+            const bug = await subTaskId.findById(bugId)
             await subTaskModel.findByIdAndDelete({ _id: bugId, type: "Bug" });
-            await userHistory(req, `Delete Bug `);
+            await userHistory(req, bug);
             return res.status(200).json({ status: 200, message: "Bug deleted successfully" });
         }
     } catch (error) {
