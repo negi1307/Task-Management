@@ -4,6 +4,7 @@ const { userHistory } = require('../controller/history.controller');
 const projectModel = require("../models/project.model");
 const milestoneModel = require("../models/milestone.model");
 const sprintModel = require("../models/sprint.model");
+const userModel = require("../models/users.model");
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -722,26 +723,10 @@ const getUserAssignments = async (req, res) => {
 // All assignees of A project
 const projectUserList = async (req, res) => {
   try {
-    const { projectId, milestoneId, sprintId } = req.query;
-    const tasks = await taskModel.find({ projectId, milestoneId, sprintId })
-    const taskIds = tasks.map((task) => task._id);
-    const assignees = await taskModel.find({ taskId: { $in: taskIds } }).populate([
-      { path: "assigneeId", select: "firstName lastName" },
-      { path: "reporterId", select: "role" },
-      { path: "taskId" },
-    ]);
-    // Create a map to store unique assigneeIds
-    const uniqueAssigneesMap = new Map();
-    // Filter out duplicate assigneeIds
-    const uniqueAssignees = [];
-    assignees.forEach((assignee) => {
-      if (assignee.taskId && assignee.taskId._id) {
-        const taskId = assignee.taskId._id.toString();
-        if (!uniqueAssigneesMap.has(taskId)) { uniqueAssigneesMap.set(taskId, true); uniqueAssignees.push(assignee) }
-      }
-    });
-    // const users = await taskModel.find({ projectId: projectId })
-    return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: uniqueAssignees });
+    const { projectId } = req.query;
+    const assigneeIds = await taskModel.distinct('assigneeId', { projectId: projectId });
+    const users = await userModel.find({ _id: { $in: assigneeIds } }).select('firstName lastName')
+    return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: users });
   } catch (error) {
     return res.status(500).json({ status: "400", message: "Fill all the required fields", error: error.message });
   }

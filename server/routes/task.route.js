@@ -1,10 +1,10 @@
 const express = require('express');
 const taskRouter = express.Router();
 const tasks = require('../controller/task.controller');
-const { verifyAdmin, verifyUser, verifyEmployee, verifyTaskCreators } = require('../middleware/jwt.auth');
+const { verifyAdmin, verifyUser, verifyEmployee, verifySeniority } = require('../middleware/jwt.auth');
 const { taskAttachmentUpload } = require('../middleware/multer');
 
-taskRouter.post("/createtask", verifyTaskCreators, taskAttachmentUpload.single('attachment'), tasks.createtask);
+taskRouter.post("/createtask", verifySeniority, taskAttachmentUpload.single('attachment'), tasks.createtask);
 taskRouter.get("/getTasks", verifyUser, tasks.getTasks);
 taskRouter.put("/updateTask", verifyAdmin, taskAttachmentUpload.single('attachment'), tasks.updateTask);
 taskRouter.delete("/deletetask", verifyAdmin, tasks.deleteTask);
@@ -16,7 +16,7 @@ taskRouter.get("/getTasksCount", verifyUser, tasks.getTasksCount);
 taskRouter.get("/getTasksWeekCount", verifyUser, tasks.getTasksWeekCount);
 
 taskRouter.get('/getUserAssignments', verifyEmployee, tasks.getUserAssignments);
-taskRouter.get('/getuserListprojectAssigned', verifyUser, tasks.projectUserList);
+taskRouter.get('/projectUserList', verifyUser, tasks.projectUserList);
 
 
 module.exports = taskRouter;
