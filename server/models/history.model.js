@@ -1,66 +1,50 @@
 const mongoose = require('mongoose'), { Schema } = mongoose,
 
-    // const HistoryTypeEnum = {
-    //     // Define your enum values here
-    //     // For example:
-    //     CREATED: 'created',
-    //     UPDATED: 'updated',
-    //     DELETED: 'deleted',
-    // };
-
     historySchema = new Schema({
-        // type: {
-        //     type: String,
-        //     enum: Object.values(HistoryTypeEnum),
-        //     required: true,
-        // },
         time: {
             type: Date
         },
         userActivity: {
             type: String
         },
-        // user: {
-        //     type: String
-        // },
         userId: {
-            type: mongoose.Types.ObjectId,
+            type: Schema.Types.Mixed,
             ref: 'User'
         },
         taskId: {
-            type: mongoose.Types.ObjectId,
+            type: Schema.Types.Mixed,
             ref: 'Task'
         },
         commentId: {
-            type: mongoose.Types.ObjectId,
+            type: Schema.Types.Mixed,
             ref: "Comment"
         },
         reporterId: {
-            type: mongoose.Types.ObjectId,
+            type: Schema.Types.Mixed,
             ref: 'roles',
         },
         projectId: {
-            type: mongoose.Types.ObjectId,
+            type: Schema.Types.Mixed,
             ref: 'projects'
         },
         milestoneId: {
-            type: mongoose.Types.ObjectId,
+            type: Schema.Types.Mixed,
             ref: 'milestone'
         },
         sprintId: {
-            type: mongoose.Types.ObjectId,
+            type: Schema.Types.Mixed,
             ref: 'sprint'
         },
         subTaskId: {
-            type: mongoose.Types.ObjectId,
+            type: Schema.Types.Mixed,
             ref: 'subTask'
         },
         bugId: {
-            type: mongoose.Types.ObjectId,
+            type: Schema.Types.Mixed,
             ref: 'subTask'
         },
         assigneeId: {
-            type: mongoose.Types.ObjectId,
+            type: Schema.Types.Mixed,
             ref: 'User'
         }
     },
