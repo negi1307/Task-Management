@@ -15,8 +15,8 @@ taskRouter.get("/getTasksStatusCount", verifyUser, tasks.getTasksStatusCount);
 taskRouter.get("/getTasksCount", verifyUser, tasks.getTasksCount);
 taskRouter.get("/getTasksWeekCount", verifyUser, tasks.getTasksWeekCount);
 
-taskRouter.get('/getUserTasks', verifyEmployee, tasks.getUserTasks);
-// taskRouter.get('/getUserAssignments', verifyEmployee, tasks.getUserAssignments);
+// taskRouter.get('/getUserTasks', verifyEmployee, tasks.getUserTasks);
+taskRouter.get('/getUserAssignments', verifyEmployee, tasks.getUserAssignments);
 taskRouter.get('/getuserListprojectAssigned', verifyUser, tasks.projectUserList);
 
 
