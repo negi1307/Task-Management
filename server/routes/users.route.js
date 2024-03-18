@@ -4,9 +4,9 @@ const { verifyUser, verifyAdmin } = require("../middleware/jwt.auth");
 const userRoute = express.Router();
 
 
-userRoute.post("/register", users.registerUser);
+userRoute.post("/register", verifyAdmin, users.registerUser);
 userRoute.post("/login", users.logInUser);
-userRoute.get("", users.getUsers);
+userRoute.get("", verifyAdmin, users.getUsers);
 userRoute.delete("/deleteUser", verifyAdmin, users.deleteUser);
 userRoute.get("/trackTime",verifyUser, users.trackTime);
 userRoute.get("/getAssigneeList", verifyUser, users.getAssigneesList);

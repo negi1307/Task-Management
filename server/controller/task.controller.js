@@ -51,6 +51,7 @@ const getTasks = async (req, res) => {
   try {
     const { sprintId, status, activeStatus, skip } = req.query;
     const pageSize = 10;
+    const now = new Date()
     const totalCount = await taskModel.countDocuments({ sprintId: sprintId, status: status, activeStatus: activeStatus })
     const tasks = await taskModel.aggregate([
       {
@@ -135,10 +136,17 @@ const getTasks = async (req, res) => {
           createdAt: 1,
           updatedAt: 1,
           daysLeft: {
-            $divide: [
-              { $subtract: ["$endDate", "$startDate"] },
-              1000 * 60 * 60 * 24,
-            ],
+            $toInt: {
+              $max: [
+                0,
+                {
+                  $divide: [
+                    { $subtract: ["$dueDate", now] },
+                    1000 * 60 * 60 * 24,
+                  ]
+                }
+              ]
+            }
           },
           "assigneeInfo._id": 1,
           "assigneeInfo.firstName": 1,
@@ -376,10 +384,17 @@ const getTasksAccToStatus = async (req, res) => {
           createdAt: 1,
           updatedAt: 1,
           daysLeft: {
-            $divide: [
-              { $subtract: ["$endDate", "$startDate"] },
-              1000 * 60 * 60 * 24,
-            ],
+            $toInt: {
+              $max: [
+                0,
+                {
+                  $divide: [
+                    { $subtract: ["$dueDate", now] },
+                    1000 * 60 * 60 * 24,
+                  ]
+                }
+              ]
+            }
           },
           "assigneeInfo._id": 1,
           "assigneeInfo.firstName": 1,
@@ -612,7 +627,7 @@ const getUserAssignments = async (req, res) => {
     const pageSize = 10;
     const now = new Date();
 
-    if (flag == 1) {
+    if (flag == 'project') {
       const projectIds = await taskModel.distinct('projectId', { assigneeId: req.user._id });
       const projects = await projectModel.aggregate([
         {
@@ -628,6 +643,7 @@ const getUserAssignments = async (req, res) => {
         },
         {
           $project: {
+<<<<<<< HEAD
             _id: 1,
             projectName: 1,
             clientName: 1,
@@ -645,6 +661,32 @@ const getUserAssignments = async (req, res) => {
                 1000 * 60 * 60 * 24,
               ],
             },
+=======
+              _id: 1,
+              projectName: 1,
+              clientName : 1,
+              technologies: 1,
+              startDate: 1,
+              endDate: 1,
+              activeStatus: 1,
+              projectStatus: 1,
+              projectType: 1,
+              createdAt: 1,
+              updatedAt: 1,
+              daysLeft: {
+                $toInt: {
+                    $max: [
+                        0,
+                        {
+                            $divide: [
+                                { $subtract: ["$endDate", now] },
+                                1000 * 60 * 60 * 24,
+                            ]
+                        }
+                    ]
+                }
+            }
+>>>>>>> 499d3b6076515bff97a7b8da4691aaa2e2b60cc6
           }
         },
         { $sort: { daysLeft: 1 } },
@@ -655,7 +697,7 @@ const getUserAssignments = async (req, res) => {
       const totalPages = Math.ceil(totalCount / pageSize);
       return res.status(200).json({ status: "200", message: "Projects Fetched Successfully", response: projects, totalCount, totalPages });
     }
-    if (flag == 2) {
+    if (flag == 'milestone') {
       const milestoneIds = await taskModel.distinct('milestoneId', { assigneeId: req.user._id });
       const milestones = await milestoneModel.aggregate([
         {
@@ -672,11 +714,26 @@ const getUserAssignments = async (req, res) => {
             createdAt: 1,
             updatedAt: 1,
             daysLeft: {
+<<<<<<< HEAD
               $divide: [
                 { $subtract: ["$completionDate", now] },
                 1000 * 60 * 60 * 24,
               ],
             },
+=======
+              $toInt: {
+                  $max: [
+                      0,
+                      {
+                          $divide: [
+                              { $subtract: ["$completionDate", now] },
+                              1000 * 60 * 60 * 24,
+                          ]
+                      }
+                  ]
+              }
+          }
+>>>>>>> 499d3b6076515bff97a7b8da4691aaa2e2b60cc6
           }
         },
         { $sort: { daysLeft: 1 } },
@@ -687,7 +744,7 @@ const getUserAssignments = async (req, res) => {
       const totalPages = Math.ceil(totalCount / pageSize);
       return res.status(200).json({ status: '200', message: 'Milestones Fetched Successfully', response: milestones, totalCount, totalPages });
     }
-    if (flag == 3) {
+    if (flag == 'sprint') {
       const sprintIds = await taskModel.distinct('sprintId', { assigneeId: req.user._id });
       const sprints = await sprintModel.aggregate([
         {
@@ -695,6 +752,7 @@ const getUserAssignments = async (req, res) => {
         },
         {
           $project: {
+<<<<<<< HEAD
             _id: 1,
             sprintName: 1,
             sprintDesc: 1,
@@ -709,6 +767,29 @@ const getUserAssignments = async (req, res) => {
                 1000 * 60 * 60 * 24,
               ],
             },
+=======
+              _id: 1,
+              sprintName: 1,
+              sprintDesc : 1,
+              startDate: 1,
+              endDate: 1,
+              activeStatus: 1,
+              createdAt: 1,
+              updatedAt: 1,
+              daysLeft: {
+                $toInt: {
+                    $max: [
+                        0,
+                        {
+                            $divide: [
+                                { $subtract: ["$endDate", now] },
+                                1000 * 60 * 60 * 24,
+                            ]
+                        }
+                    ]
+                }
+            }
+>>>>>>> 499d3b6076515bff97a7b8da4691aaa2e2b60cc6
           }
         },
         { $sort: { daysLeft: 1 } },
