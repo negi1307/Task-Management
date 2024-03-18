@@ -6,18 +6,18 @@ export function addProjectApi(data): any {
     return api.create(URL.AddProject, data.payload)
 }
 export function getProjectApi(data): any {
-   
-    return api.get(URL.GetAllProject+data.payload.flag+'&projectId='+data.payload.projectId+"&milestoneId="+data.payload.milestoneId+"&sprintId="+data.payload.sprintId+"&skip="+data.payload.skip)
-    
+
+    return api.get(URL.GetAllProject + data.payload.flag + '&projectId=' + data.payload.projectId + "&milestoneId=" + data.payload.milestoneId + "&sprintId=" + data.payload.sprintId + "&skip=" + data.payload.skip)
+
 }
-export function updateProjectApi(data): any {    
+export function updateProjectApi(data): any {
     return api.update(URL.UpdateProjectDetails, data.payload)
 }
-export function deleteProjectApi(data): any { 
+export function deleteProjectApi(data): any {
     return api.update(URL.DeleteProject, data.payload)
     // return api.update(`${URL.DeleteProject}${data?.payload?.id}`)
 }
 export function getProjectByIdApi(data): any {
-    return api.get(URL.GetProjectById + data?.payload+'&projectId=')
+    return api.get(URL.GetProjectById + data?.payload + '&projectId=')
 }
 
