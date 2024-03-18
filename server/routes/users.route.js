@@ -11,5 +11,7 @@ userRoute.delete("/deleteUser", verifyAdmin, users.deleteUser);
 userRoute.get("/trackTime",verifyUser, users.trackTime);
 userRoute.get("/getAssigneeList", verifyUser, users.getAssigneesList);
 userRoute.get("/getReporterList", verifyUser, users.getReporterList);
+userRoute.get("/subTaskTrackTime",verifyUser, users.subTaskTrackTime);
+
 
 module.exports = userRoute;
