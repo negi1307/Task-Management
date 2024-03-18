@@ -49,7 +49,7 @@ const TaskInformation = styled.div`
     /* } */
 `;
 
-const TaskCard = ({ item, index, Column, closeModal }) => {
+const TaskCard = ({ item, index, closeModal }) => {
     console.log(item, 'item');
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState();
@@ -106,7 +106,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                 <div className="col-12">
                                     <div className="row">
                                         <div className="col-9 d-flex align-items-center">
-                                            <a
+                                            <a className='text-dark'
                                                 href="#"
                                                 onClick={() => {
                                                     handleDetailPage(item);
@@ -231,7 +231,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                             <div className="secondary-details d-flex align-items-center">
                                                 <p className="m-0 p-0">
                                                     <span>
-                                                        {item?.startDate ? moment(item?.startDate).format('ll') : ''}
+                                                        {item?.startDate ? moment(item?.startDate).format("DD/MM/YYYY"): ''}
                                                     </span>
                                                 </p>
                                             </div>

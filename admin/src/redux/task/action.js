@@ -55,6 +55,12 @@ export const getAssignUserAction= (data): AuthAction => ({
     type: TASK_TYPES.GET_ASSIGN_USER,
     payload: data
 })
+
+export const getReporterAction= (): AuthAction => ({
+    type: TASK_TYPES.GET_ALL_REPORTER,
+    
+})
+
 export const getHistoryAction = (data): AuthAction => ({
     type: TASK_TYPES.GET_HISTORY,
     payload: data

@@ -7,7 +7,7 @@ import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
 import pdfImage from '../../src/assets/images/pdf.png';
 import DatePicker from 'react-datepicker';
 import '../../node_modules/react-datepicker/dist/react-datepicker.css';
-
+import { getReporterAction } from '../redux/actions';
 export default function RightBar(props) {
     //
     const [startDate, setStartDate] = useState();
@@ -62,7 +62,7 @@ export default function RightBar(props) {
         body.append('summary', e.Summary);
         body.append('description', e.description);
         body.append('assigneeId', e.Assignee);
-        body.append('reporterId', e.Report);
+        body.append('reporterId', e.Reporter);
         body.append('priority', e.priority);
         body.append('startDate', startDate);
         body.append('dueDate', endDate);
@@ -77,7 +77,7 @@ export default function RightBar(props) {
         }
         setValue('Summary', '');
         setValue('Assignee', '');
-        setValue('Report', '');
+        setValue('Reporter', '');
         setValue('priority', '');
         setValue('start_date', '');
         setValue('last_date', '');
@@ -90,7 +90,7 @@ export default function RightBar(props) {
     const handelClose = () => {
         setValue('Summary', '');
         setValue('Assignee', '');
-        setValue('Report', '');
+        setValue('Reporter', '');
         setValue('priority', '');
         setValue('start_date', '');
         setValue('last_date', '');
@@ -108,6 +108,10 @@ export default function RightBar(props) {
         dispatch(getAllRoles());
         dispatch(getAllUsers());
     }, []);
+    useEffect(()=>{
+        dispatch(getReporterAction())
+    },[])
+    const reporter=store?.getReporterReducer?.data?.reporterList
     return (
         <div className={showModal ? 'rightBar show' : 'rightBar'} role="document">
             <div className="modal-content">
@@ -185,7 +189,7 @@ export default function RightBar(props) {
                                         <Form.Select
                                                     {...register('Sprint', { required: true, disabled: true })}>
                                                     {/* <option value={''}>--Select--</option> */}
-                                                    {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
+                                                    {store?.getAllSingleSprints?.data?.response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.sprintName} </option>
                                                     ))}
                                                 </Form.Select>
@@ -260,6 +264,33 @@ export default function RightBar(props) {
                                         )}
                                     </div>
                                 </div>
+                                <div className="">
+                                    <div className="mb-2">
+                                        <label className="form-label" for="exampleForm.ControlTextarea1">
+                                            Reporter
+                                            <span className="text-danger">*</span>:
+                                        </label>
+
+                                        <select
+                                            name="Reporetr"
+                                            className="form-select"
+                                            id="exampleForm.ControlInput1"
+                                            {...register('Reporter', { required: true })}>
+                                            <option value={''} hidden selected>
+                                                Select
+                                            </option>
+                                            {reporter?.map((ele, ind) => (
+                                                <option value={ele?._id}>
+                                                    {' '}
+                                                    {ele?.firstName} {ele?.lastName}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {errors.Reporter?.type === 'required' && (
+                                            <span className="text-danger"> This feild is required *</span>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                             <div className="row">
                                 <div className="col-lg-6">
@@ -328,17 +359,17 @@ export default function RightBar(props) {
                                             <option hidden selected>
                                                 select
                                             </option>
-                                            <option value="1">
+                                            <option value="Critical">
                                                 &#128308;
                                                 Critical
                                             </option>
-                                            <option value="2">
+                                            <option value="High">
                                                 &#128992;
                                                 High</option>
-                                            <option value="3">
+                                            <option value="Medium">
                                                 &#128993;
                                                 Medium</option>
-                                            <option value="4">
+                                            <option value="Low">
                                                 &#128994;
                                                 Low</option>
                                         </select>
@@ -349,7 +380,7 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                             </div>
-                            <div className="row">
+                            {/* <div className="row">
                                 <div className="col-lg-6">
                                     <div className="mb-2">
                                         <label className="form-label" for="exampleForm.ControlTextarea1">
@@ -399,7 +430,7 @@ export default function RightBar(props) {
                                         )}
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="row"></div>
                             <div className="row">

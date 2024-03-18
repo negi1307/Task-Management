@@ -66,6 +66,12 @@ const ASSIGN_USER_INITIAL_STATE = {
     message:""
 }
 
+const REPORTER_INITIAL_STATE = {
+    data:[],
+    loading:false,
+    message:""
+}
+
 const GET_HISTORY_INITIAL_STATE = {
     data:[],
     loading:false,
@@ -428,6 +434,37 @@ export const getAssignUserReducer = (state = ASSIGN_USER_INITIAL_STATE, action) 
             //         loading: false
             //     }
         case TASK_TYPES.GET_ASSIGN_USER_ERROR:
+            return {
+                data: [],
+                status:!200,
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+
+export const getReporterReducer = (state = REPORTER_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case TASK_TYPES.GET_ALL_REPORTER_LOADING:
+            return {
+                data: REPORTER_INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.GET_ALL_REPORTER_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+            // case TASK_TYPES.GET_ASSIGN_USER_RESET:
+            //     return {
+            //         data: REPORTER_INITIAL_STATE.data,
+            //         loading: false
+            //     }
+        case TASK_TYPES.GET_ALL_REPORTER_ERROR:
             return {
                 data: [],
                 status:!200,

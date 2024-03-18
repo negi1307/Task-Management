@@ -9,7 +9,7 @@ import { createTask } from '../../../../redux/task/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { getSingleSprint, getsingleMileStone } from '../../../../redux/actions';
+import { getSingleSprint, getsingleMileStone ,getReporterAction} from '../../../../redux/actions';
 import moment from 'moment';
 import pdfImage from '../../../../../src/assets/images/pdf.png';
 import DatePicker from 'react-datepicker';
@@ -75,12 +75,14 @@ const Create = ({ modal, CloseModal }) => {
         body.append('description', e.description);
         body.append('assigneeId', e.Assignee);
         body.append('priority', e.Priority);
+        body.append('reporterId', e.Reporter);
         body.append('startDate', startDate);
         body.append('dueDate', endDate);
         body.append('status', 1);
         body.append('attachment', selectedFile);
         
             dispatch(createTask(body));
+            console.log('project',projectId,'mile',milestoneId,'sprint',spriteId,'suummary',e.summary,'descrip',e.description,'reporterId',e.Reporter,'assign',e.Assignee,'prior',e.Priority,)
             setValue('projectname', '');
             setValue('Milestone', '');
             setsprintDisable(true)
@@ -89,6 +91,7 @@ const Create = ({ modal, CloseModal }) => {
             setValue('Sprint', '');
             setValue('summary', '');
             setValue('Assignee', '');
+            setValue('Reporter', '');
             setValue('Priority', '');
             setSelectedFile("")
             setEndDate("")
@@ -105,6 +108,7 @@ const Create = ({ modal, CloseModal }) => {
         setValue('Sprint', '');
         setValue('summary', '');
         setValue('Assignee', '');
+        setValue('Reporter', '');
         setValue('Priority', '');
         setEndDate("")
         setStartDate("")
@@ -130,8 +134,10 @@ const Create = ({ modal, CloseModal }) => {
         dispatch(getSingleSprint({ activeStatus: 1, id: e.target.value , skip:0}));
         setsprintDisable(false)
     }
-    
- 
+    useEffect(()=>{
+        dispatch(getReporterAction())
+    },[])
+    const reporter=store?.getReporterReducer?.data?.reporterList
     return (
         <Modal show={modal} onHide={handleClose} size="lg">
             <Row className="m-0 p-0">
@@ -228,6 +234,27 @@ const Create = ({ modal, CloseModal }) => {
                                             )}
                                         </Form.Group>
                                     </Col>
+                                    <Col lg={6}>
+                                        <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                            <Form.Label>
+                                                {' '}
+                                                Reporter <span className="text-danger">*</span>:
+                                            </Form.Label>
+
+                                            <Form.Select {...register('Reporter', { required: true })}>
+                                                <option value={''}>--Select--</option>
+                                                {reporter?.map((ele, ind) => (
+                                                    <option value={ele?._id}>
+                                                        {' '}
+                                                        {ele?.firstName} {ele?.lastName}
+                                                    </option>
+                                                ))}
+                                            </Form.Select>
+                                            {errors.Reporter?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
+                                        </Form.Group>
+                                    </Col>
                                     </Row>
                                 </Col>
                         
@@ -285,9 +312,20 @@ const Create = ({ modal, CloseModal }) => {
                                             </Form.Label>
                                             <Form.Select {...register('Priority', { required: true })}>
                                                 <option>-------select----</option>
-                                                <option value="1">High</option>
-                                                <option value="2">Medium</option>
-                                                <option value="3">Low</option>
+                                              
+                                            <option value="Critical">
+                                                &#128308;
+                                                Critical
+                                            </option>
+                                            <option value="High">
+                                                &#128992;
+                                                High</option>
+                                            <option value="Medium;">
+                                                &#128993;
+                                                Medium</option>
+                                            <option value="Low">
+                                                &#128994;
+                                                Low</option>
                                             </Form.Select>
                                             {errors.Priority?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
@@ -295,26 +333,6 @@ const Create = ({ modal, CloseModal }) => {
                                         </Form.Group>
                                     </Col>
                                     <Col lg={6}>
-                                        <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                {' '}
-                                                Status <span className="text-danger">*</span>:
-                                            </Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="To-Do"
-                                                {...register('status', { required: true, disabled: true })}
-                                            />
-                                            {errors.status?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col lg={12}>
-                                <Row>
-                                <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
                                             <Form.Label className="w-100">
                                                 Start Date<span className="text-danger">*</span>:
@@ -330,6 +348,12 @@ const Create = ({ modal, CloseModal }) => {
                                             />
                                         </Form.Group>
                                     </Col>
+                                  
+                                </Row>
+                            </Col>
+                            <Col lg={12}>
+                                <Row>
+                              
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
                                             <Form.Label className="w-100">

@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import TASK_TYPES from './constant';
-import { AddCommentApi, GetAssignUserApi, GetHistoryApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi,updateTaskStatusApi } from './api';
+import { AddCommentApi, GetAssignUserApi,getReporterListApi, GetHistoryApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi,updateTaskStatusApi } from './api';
 
 function* createTaskFunction({ payload }) {
     try {
@@ -454,6 +454,52 @@ function* AssignUserFunction({ payload }) {
     }
 }
 
+function* getReporterFunction({ payload }) {
+    try {
+        yield put({
+            type: TASK_TYPES.GET_ALL_REPORTER_LOADING,
+            payload: {}
+        })
+        const response = yield call(getReporterListApi, { payload });
+        if (response.data.status == 200) {
+            yield put({
+                type: TASK_TYPES.GET_ALL_REPORTER_SUCCESS,
+                payload: { ...response.data },
+            });
+            // yield put({
+            //     type: TASK_TYPES.GET_ASSIGN_USER_RESET,
+            //     payload: {},
+            // });
+        }
+        else if(response.data.status == 404){
+            // yield put({
+            //     type: TASK_TYPES.GET_ASSIGN_USER_ERROR,
+            //     payload: { ...response.data }
+            // });
+             yield put({
+                type: TASK_TYPES.GET_ALL_REPORTER_RESET,
+                payload: {},
+            });
+        }
+        else {
+            yield put({
+                type: TASK_TYPES.GET_ALL_REPORTER_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: TASK_TYPES.GET_ALL_REPORTER_ERROR,
+            payload: { error }
+        });
+        yield put({
+            type: TASK_TYPES.GET_ALL_REPORTER_RESET,
+            payload: {},
+        });
+    }
+}
+
 function* getHistoryFunction({ payload }) {
     try {
         yield put({
@@ -525,6 +571,7 @@ export function* updateCommentSaga(): any {
 }
 export function* getAssignUserSaga(): any {
     yield takeEvery(TASK_TYPES. GET_ASSIGN_USER, AssignUserFunction);
+    yield takeEvery(TASK_TYPES. GET_ALL_REPORTER, getReporterFunction);
 }
 export function* getHistorySaga(): any {
     yield takeEvery(TASK_TYPES. GET_HISTORY, getHistoryFunction);
