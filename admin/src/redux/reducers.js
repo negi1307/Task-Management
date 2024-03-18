@@ -41,7 +41,7 @@ import {
     getComment,
     deleteCommentReducer,
     getTaskId,
-    updateCommentReducer, getAssignUserReducer, getHistoryReducer
+    updateCommentReducer, getAssignUserReducer, getHistoryReducer,getReporterReducer
 } from './task/reducer';
 import { getAllUsers, deleteUser, createUser, getAllRoles, getCsvDataReducer } from './user/reducer';
 import { getTaskSummaryReducer, getPriorityGraphReducer, getTaskWeekCountReducer } from './Summary/reducer';
@@ -108,6 +108,7 @@ export default (combineReducers({
     getTaskId,
     updateCommentReducer,
     getAssignUserReducer,
+    getReporterReducer,
     getCsvDataReducer,
     getPreSaleReducer,
     addPreSaleReducer,

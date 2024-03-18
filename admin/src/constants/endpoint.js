@@ -30,7 +30,7 @@ export const deleteUsers = "/users/deleteUser";
 export const UpdateSprint = "/sprint/update";
 export const SingleMilestone = "/milestone/getMilestones?projectId="
 export const SingleSprintTask = "/task/getTasks?sprintId="
-export const GetAllTask = "/task/getTasksAccToStatus?projectId="
+export const GetAllTask = "/task/getTasksAccToStatus"
 export const UpdateTask = "/task/updateTask"
 export const DeleteTask = "/task/deletetask?taskId="
 export const UpdateTaskStatus = "/task/updateTaskStatus"
@@ -54,6 +54,7 @@ export const GetComment = "/comments/getTaskComment?taskId="
 export const deleteComment = "/comments/deleteComment?commentId="
 export const updateComment = "/comments/updateComment"
 export const GetAssignUser = "/assignUser/getuserListprojectAssigned?projectId="
+export const GET_REPORTER = "/users/getReporterList"
 export const GetCsvData = "/userLogin/getLoginTimeFile?userId="
 
 export const GetPreSale = "/preSale/getPreSalesData?skip="

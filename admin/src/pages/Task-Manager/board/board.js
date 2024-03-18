@@ -96,6 +96,7 @@ const Boards = () => {
     const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return;
         const { source, destination } = result;
+        
         if (source.droppableId !== destination.droppableId) {
             const sourceColumn = columns[source.droppableId];
             const destColumn = columns[destination.droppableId];
@@ -114,6 +115,7 @@ const Boards = () => {
                     items: destItems,
                 },
             });
+            console.log(columns,'columsssssssssssssssssssssssssssssssssssssssssss')
 
             handelupdatetask(result);
         } else {
@@ -135,6 +137,8 @@ const Boards = () => {
         dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
         dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
         dispatch(getAllRoles())
+        setColumns(columns)
+
     }, [render]);
 
     useEffect(() => {
@@ -142,7 +146,7 @@ const Boards = () => {
             setColumns({
                 [1]: {
                     title: 'To-do',
-                    items: successHandle?.data?.Response?.tasks?.map((ele) => {
+                    items: successHandle?.data?.Response?.todo?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
@@ -243,7 +247,7 @@ const Boards = () => {
                             {' '}
                             To-Do :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.Response?.taskCount}
+                                {successHandle?.data?.Response?.todoCount}
                             </Badge>
                         </h4>{' '}
                     </div>
@@ -253,7 +257,7 @@ const Boards = () => {
                             {' '}
                             In-Progress :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.inProgress?.taskCount}
+                                {successHandle?.data?.inProgress?.todoCount}
                             </Badge>
                         </h4>{' '}
                     </div>
@@ -263,7 +267,7 @@ const Boards = () => {
                             {' '}
                             Hold :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.hold?.taskCount}
+                                {successHandle?.data?.hold?.todoCount}
                             </Badge>
                         </h4>{' '}
                     </div>
@@ -273,7 +277,7 @@ const Boards = () => {
                             {' '}
                             Done :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.done?.taskCount}
+                                {successHandle?.data?.done?.todoCount}
                             </Badge>
                         </h4>{' '}
                     </div>
@@ -380,37 +384,32 @@ const Boards = () => {
                 {loader ? (
                     <MainLoader />
                 ) : (
-                    <Container>
-                        <TaskColumnStyles>
-                            {Object.entries(columns).map(([columnId, column], index) => {
-                                return (
-                                    <Droppable key={columnId} droppableId={columnId}>
-                                        {(provided, snapshot) => (
-                                            <div className="task-list-col">
-                                                <TaskList ref={provided.innerRef} {...provided.droppableProps}>
-                                                    <Title>{column.title}</Title>
-                                                    {column.items.map((item, index) => (
-                                                        <TaskCard
-                                                            key={item.id}
-                                                            item={item}
-                                                            index={index = 1}
-                                                            closeModal={closeModal}
-                                                        />
-                                                    ))}
-                                                    {provided.placeholder} 
-                                                </TaskList>
-                                                <div>
-                                            
-                                        </div>
-                                            </div>
-                                            
-                                        )}
-                                  
-                                    </Droppable>
-                                );
-                            })}
-                        </TaskColumnStyles>
-                    </Container>
+                   <Container>
+        <TaskColumnStyles>
+            {Object.entries(columns)?.map(([columnId, column]) => {
+                return (
+                    <Droppable key={columnId} droppableId={columnId}>
+                        {(provided, snapshot) => (
+                            <div className="task-list-col">
+                                <TaskList ref={provided.innerRef} {...provided.droppableProps}>
+                                    <Title>{column.title}</Title>
+                                    {column?.items?.map((item, index) => (
+                                        <TaskCard
+                                            key={item.id}
+                                            item={item}
+                                            index={index}
+                                            closeModal={closeModal}
+                                        />
+                                    ))}
+                                    {provided.placeholder}
+                                </TaskList>
+                            </div>
+                        )}
+                    </Droppable>
+                );
+            })}
+        </TaskColumnStyles>
+    </Container>
                 )}
             </DragDropContext>
         </>

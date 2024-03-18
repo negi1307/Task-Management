@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { ListGroup, Container, Row, Col, Table, Button, Form, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { TaskStatusAction, deleteTask, getsingleSprintTask } from '../../../redux/task/action';
+import { TaskStatusAction, deleteTask, getsingleSprintTask, updateTaskStatus } from '../../../redux/task/action';
 import MainLoader from '../../../constants/Loader/loader';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -13,6 +13,7 @@ import ToastHandle from '../../../constants/toaster/toaster';
 import Create from './modal/create';
 import { getAllProjects } from '../../../redux/projects/action';
 import { getAllRoles, getAllUsers, getSingleSprint, getsingleMileStone } from '../../../redux/actions';
+import { TaskStatus } from '../../../constants/endpoint';
 const TaskList = () => {
     const { projectId, milestoneId, spriteId } = useParams();
     const [skip, setSkip] = useState(1);
@@ -89,13 +90,13 @@ const TaskList = () => {
                 taskId: checkedData._id,
                 activeStatus: true,
             };
-            dispatch(TaskStatusAction(body));
+            dispatch(updateTaskStatus(body));
         } else {
             let body = {
                 taskId: checkedData._id,
                 activeStatus: false,
             };
-            dispatch(TaskStatusAction(body));
+            dispatch(updateTaskStatus(body));
         }
         setStatusModal(false);
         setStatus(1);
@@ -138,10 +139,14 @@ const TaskList = () => {
             setSkip(1);
             settaskStatus(3);
             dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 3 ,projectId:projectId ,milestoneId:milestoneId}));
-        } else {
+        } else if (val == '4') {
             setSkip(1);
             settaskStatus(4);
             dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 4 ,projectId:projectId ,milestoneId:milestoneId}));
+        } else {
+            setSkip(1);
+            settaskStatus(5);
+            dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 5 ,projectId:projectId ,milestoneId:milestoneId}));
         }
     };
     return (
@@ -167,6 +172,11 @@ const TaskList = () => {
                     <div className={`col-auto  cp ${taskStatus == 4 ? 'Active_data' : 'InActive_data'}`}>
                         <p className=" p-0 m-0 p-1 cp" onClick={() => handleTaskStatus('4')}>
                             Done
+                        </p>
+                    </div>
+                    <div className={`col-auto  cp ${taskStatus == 5 ? 'Active_data' : 'InActive_data'}`}>
+                        <p className=" p-0 m-0 p-1 cp" onClick={() => handleTaskStatus('5')}>
+                            Testing
                         </p>
                     </div>
                 </div>
@@ -235,10 +245,12 @@ const TaskList = () => {
                                                 </td>
 
                                                 <td>
-                                                    {item?.assignees?.assigneeInfo?.firstName}{' '}
-                                                    {item?.assignees?.assigneeInfo?.lastName}
+                                                    {item?.assigneeInfo?.firstName}{' '}
+                                                    {item?.assigneeInfo?.lastName}
                                                 </td>
-                                                <td>{item?.assignees?.reporterInfo?.role}</td>
+                                                <td>{item?.reporterInfo?.firstName} {''}
+                                                {item?.reporterInfo?.lastName}
+                                                </td>
                                                 <td>
                                                     {item?.priority == 1
                                                         ? 'High'

@@ -5,6 +5,11 @@ const GET_ALL_USER_INITIAL_STATE = {
     message: '',
     loading: false,
 };
+const GET_ALL_REPORTER_INITIAL_STATE = {
+    data: [],
+    message: '',
+    loading: false,
+};
 const DELETE_USER_INITIAL_STATE = {
     data: [],
     message: '',
@@ -50,6 +55,7 @@ export const getAllUsers = (state = GET_ALL_USER_INITIAL_STATE, action) => {
             return { ...state };
     }
 };
+
 export const deleteUser = (state = DELETE_USER_INITIAL_STATE, action) => {
     switch (action.type) {
         case USERS_TYPES.GET_DELETE_USER_LOADING:
