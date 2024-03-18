@@ -1,4 +1,5 @@
 const milestoneModel = require("../models/milestone.model");
+const { userHistory } = require('../controller/history.controller');
 
 // Add a Milestone
 const addMilestone = async (req, res) => {

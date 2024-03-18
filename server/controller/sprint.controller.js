@@ -1,5 +1,6 @@
 const sprintModel = require('../models/sprint.model');
 const { default: mongoose } = require('mongoose');
+const { userHistory } = require('../controller/history.controller');
 
 // Add a Sprint
 const addSprint = async (req, res) => {

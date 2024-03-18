@@ -1,4 +1,5 @@
 const salesModel = require('../models/sales.model');
+const { userHistory } = require('../controller/history.controller');
 
 const createTask = async (req, res) => {
     try {
