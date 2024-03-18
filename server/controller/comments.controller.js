@@ -1,6 +1,8 @@
 const commentsModel = require('../models/comments.model');
 const { userHistory } = require("../controller/history.controller");
 
+
+
 // Add a Comment to a task
 const addComment = async (req, res) => {
     try {
@@ -28,9 +30,11 @@ const getTaskComment = async (req, res) => {
 
 // Update the Comment 
 const updateComment = async (req, res) => {
+    console.log(req.body)
     try {
         const { commentId, comment } = req.body;
-        // await userHistory(req, "Update the Comment", taskId, commentId);
+        const currentComment = await commentsModel.findById(commentId)
+        await userHistory(req, currentComment);
         await commentsModel.findByIdAndUpdate({ _id: commentId }, { comment }, { new: true });
         return res.status(200).json({ status: "200", message: "Comment updated successfully" });
     } catch (error) {
@@ -42,8 +46,9 @@ const updateComment = async (req, res) => {
 // delete a Comment
 const deleteComment = async (req, res) => {
     try {
-        const userActivity = "Delete the Comment";
-        await userHistory(req, userActivity);
+        const commentId = req.query.commentId;
+        const comment = await commentsModel.findById(commentId);
+        await userHistory(req, comment);
         await commentsModel.findByIdAndDelete({ _id: req.query.commentId });
         return res.status(200).json({ status: "200", message: "Comment deleted Successfully" })
     } catch (error) {

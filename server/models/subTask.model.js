@@ -2,22 +2,6 @@ const mongoose = require('mongoose');
 
 const subTask = mongoose.model(
     'subTask', mongoose.Schema({
-        subTaskMannualId: {
-            type: Number,
-            // required: true,
-        },
-        projectId: {
-            type: mongoose.Types.ObjectId,
-            ref: 'projects'
-        },
-        milestoneId: {
-            type: mongoose.Types.ObjectId,
-            ref: 'milestone'
-        },
-        sprintId: {
-            type: mongoose.Types.ObjectId,
-            ref: 'sprint'
-        },
         taskId: {
             type: mongoose.Types.ObjectId,
             ref: "Task"
@@ -29,7 +13,8 @@ const subTask = mongoose.model(
             type: String
         },
         priority: {
-            type: String,// 1=High, 2=Medium, 3=Low, 4= Critical
+            type: String,
+            enum: ['High', 'Medium', 'Low', 'Critical']
         },
         expectedHours: {
             type: Number
@@ -77,8 +62,8 @@ const subTask = mongoose.model(
             type: mongoose.Types.ObjectId,
             ref: 'roles'
         },
-        type:{
-            type:String, //Bug,SubTask
+        type: {
+            type: String, //Bug,SubTask
         }
     },
         {

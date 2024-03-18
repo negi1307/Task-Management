@@ -3,6 +3,7 @@ const taskModel = require("../models/task.model");
 const nodemailer = require("../middleware/nodemailer");
 const bcrypt = require("bcrypt");
 const { accessToken } = require("../middleware/jwt.auth");
+const subTaskModel = require("../models/subTask.model");
 
 // Register a user or invite a user 
 const registerUser = async (req, res) => {
@@ -18,14 +19,14 @@ const registerUser = async (req, res) => {
       }
       else {
         const hashedPassword = await bcrypt.hash(password, 9);
-        const result = await userModel.create({ 
-          firstName, 
-          lastName, 
-          email, 
-          password: hashedPassword, 
-          plainPassword: password, 
+        const result = await userModel.create({
+          firstName,
+          lastName,
+          email,
+          password: hashedPassword,
+          plainPassword: password,
           role
-         });
+        });
         if (result) {
           await nodemailer.emailSender(result);
           return res.status(200).json({ status: "200", message: "User created Successfully", response: result });
@@ -91,7 +92,10 @@ const getUsers = async (req, res) => {
 // Delete A User
 const deleteUser = async (req, res) => {
   try {
-    await userModel.findByIdAndDelete({ _id: req.query.userId });
+    const userId = req.query.userId;
+    const user = await userModel.find(userId)
+    await userModel.findByIdAndDelete(userId);
+    await userHistory(req, user);
     return res.status(200).json({ status: "200", message: 'User deleted successfully' });
   } catch (error) {
     return res.status(500).json({ status: '500', message: 'Something went wrong' })
@@ -396,6 +400,147 @@ const getReporterList = async (req, res) => {
   }
 }
 
+// Time trackiing for subtasks
+const subTaskTrackTime = async (req, res) => {
+  try {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    const timeTrackingData = await subTaskModel.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: monthStart,
+            $lt: monthEnd,
+          },
+          'timeTracker': { $exists: true }
+        },
+      },
+      {
+        $lookup: {
+          from: 'projects',
+          localField: 'projectId',
+          foreignField: '_id',
+          as: 'projects',
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'assigneeId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $group: {
+          _id: {
+            userId: '$user._id',
+            projectName: '$projects.projectName',
+            firstName: '$user.firstName',
+            lastName: '$user.lastName',
+          },
+          timeSpent: {
+            $sum: '$timeTracker',
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$_id.userId',
+          user: {
+            $first: {
+              firstName: '$_id.firstName',
+              lastName: '$_id.lastName',
+            },
+          },
+          projects: {
+            $push: {
+              projectName: '$_id.projectName',
+              timeSpent: '$timeSpent',
+            },
+          },
+          totaltimeSpent: {
+            $sum: '$timeSpent',
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          userId: '$_id',
+          firstName: '$user.firstName',
+          lastName: '$user.lastName',
+          projects: {
+            $map: {
+              input: '$projects',
+              as: 'project',
+              in: {
+                projectName: { $arrayElemAt: ['$$project.projectName', 0] }, // Extract the single element from the array
+                timeSpent: {
+                  $concat: [
+                    {
+                      $toString: {
+                        $floor: {
+                          $divide: ['$$project.timeSpent', 3600000], // Convert milliseconds to hours
+                        },
+                      },
+                    },
+                    'h ',
+                    {
+                      $toString: {
+                        $floor: {
+                          $mod: [
+                            {
+                              $divide: ['$$project.timeSpent', 60000], // Convert milliseconds to minutes
+                            },
+                            60,
+                          ],
+                        },
+                      },
+                    },
+                    'm',
+                  ],
+                },
+              },
+            },
+          },
+          totalTimeSpent: {
+            $concat: [
+              {
+                $toString: {
+                  $floor: {
+                    $divide: ['$totaltimeSpent', 3600000],
+                  },
+                },
+              },
+              'h ',
+              {
+                $toString: {
+                  $floor: {
+                    $mod: [
+                      {
+                        $divide: ['$totaltimeSpent', 60000],
+                      },
+                      60,
+                    ],
+                  },
+                },
+              },
+              'm',
+            ],
+          },
+        },
+      },
+    ]);
+    return res.status(200).json({ status: "200", message: "Time Tracking Data Fetched Successfully", response: timeTrackingData });
+  } catch (error) {
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+  }
+}
 
 module.exports = {
   registerUser,
@@ -404,6 +549,6 @@ module.exports = {
   deleteUser,
   trackTime,
   getAssigneesList,
-  getReporterList
-
+  getReporterList,
+  subTaskTrackTime
 };

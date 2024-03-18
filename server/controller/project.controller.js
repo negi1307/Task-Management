@@ -19,6 +19,7 @@ const addProject = async (req, res) => {
         projectType,
         projectStatus,
       });
+      await userHistory(req, "Create Project");
       return res.status(200).json({ status: "200", message: "Project created successfully", response: result });
     }
   } catch (error) {
@@ -48,7 +49,10 @@ const getProjects = async (req, res) => {
 // Update a project
 const updateProject = async (req, res) => {
   try {
-    await projectModel.findByIdAndUpdate({ _id: req.body.projectId }, req.body, { new: true });
+    const projectId = req.body.projectId;
+    const oldProject = await projectModel.findById(projectId);
+    await projectModel.findByIdAndUpdate(projectId, req.body, { new: true });
+    await userHistory(req,oldProject);
     return res.status(200).json({ status: "200", message: "Project updated successfully" });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -67,6 +71,8 @@ const uploadProject_File = async (req, res) => {
     if (projectId && attachment && fileName) {
       const data = await projectupload({ projectId, attachment, fileName, attachmentType, originalName });
       await data.save();
+      const oldProjectFile = await projectModel.findById(projectId)
+      await userHistory(req,  oldProjectFile);
       res.status(200).json({ status: '200', message: 'Project file uploaded Successfully' })
     }
     else {
@@ -80,7 +86,7 @@ const uploadProject_File = async (req, res) => {
 // only project name Only-------------
 const getallProject = async (req, res) => {
   try {
-    const allProjectsName = await projectModel.find({activeStatus : true}).select({ projectName: 1 }).sort({ createdAt: -1 });
+    const allProjectsName = await projectModel.find({ activeStatus: true }).select({ projectName: 1 }).sort({ createdAt: -1 });
     return res.status(200).json({ status: '200', message: 'Project file uploaded Successfully', response: allProjectsName })
   } catch (error) {
     return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message })

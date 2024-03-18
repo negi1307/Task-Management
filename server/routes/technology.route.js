@@ -1,6 +1,6 @@
 const express = require("express");
 const technology = require("../controller/technology.controller");
-const { verifyAdmin } = require("../middleware/jwt.auth");
+const { verifyAdmin, verifyUser } = require("../middleware/jwt.auth");
 const technologyRoute = express.Router();
 
 // Crud of techCategory
