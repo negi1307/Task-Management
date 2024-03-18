@@ -5,9 +5,9 @@ const { userHistory } = require('../controller/history.controller');
 // create sub task or bug
 const addSubTask = async (req, res) => {
     try {
-        const { projectId, milestoneId, sprintId, summary, description, priority, expectedHours, startDate, dueDate, assigneeId, parentId, reporterId, type } = req.body;
+        const { taskId, summary, description, priority, expectedHours, startDate, dueDate, assigneeId, parentId, reporterId, type } = req.body;
         const lastTask = await subTaskModel.countDocuments();
-        const createSubTask = await subTaskModel.create({ taskMannualId: lastTask + 1, projectId, milestoneId, sprintId, summary, description, priority, expectedHours, startDate, dueDate, parentId, reporterId, assigneeId, type });
+        const createSubTask = await subTaskModel.create({ taskMannualId: lastTask + 1, taskId, summary, description, priority, expectedHours, startDate, dueDate, parentId, reporterId, assigneeId, type });
 
         if (type === "Bug") {
             await userHistory(req, `Bug Created`);
