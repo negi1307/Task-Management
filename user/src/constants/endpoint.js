@@ -2,7 +2,7 @@
 
 export const AddProject = '/project/addProject';
 // export const GetAllProject = "/project/getProjects?activeStatus=";
-export const GetAllProject = '/assignUser/getUserAssignments?flag=';
+export const GetAllProject = '/task/getUserAssignments?flag=';
 export const UpdateProjectDetails = '/project/update';
 export const DeleteProject = '/project/updateStatus';
 export const GetProjectById = '/project/getbyprojectid/';
@@ -68,6 +68,6 @@ export const userLoginTimeStop = '/userLogin/updateLogoutTime';
 export const userLogoutReason = '/reason/getleaveReason';
 
 // get all assigne name on borad page========================
-export const getAllAssigneeName='/assignUser/getuserListprojectAssigned?projectId=';
+export const getAllAssigneeName = '/assignUser/getuserListprojectAssigned?projectId=';
 // get all assigne name on borad page========================
-export const updateTaskStatusTime='/task/updateTaskStatus'
+export const updateTaskStatusTime = '/task/updateTaskStatus'

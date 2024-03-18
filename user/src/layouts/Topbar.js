@@ -49,7 +49,7 @@ import Buttons from '../pages/uikit/Buttons';
 import ToastHandle from '../constants/toaster/toaster';
 import { Button } from 'react-bootstrap';
 import { useStopwatch, useTime } from 'react-timer-hook';
-import {getAllLogoutReason} from '../../src/redux/user/action'
+import { getAllLogoutReason } from '../../src/redux/user/action'
 import Modal from 'react-bootstrap/Modal';
 
 // get the notifications
@@ -159,7 +159,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
     const getAllSingleSprints = store?.getAllSingleSprints?.data?.Response;
     const { projectId, milestoneId, spriteId } = useParams();
-    const getLeaveDetails=store?.getUserLogoutReason?.data?.response
+    const getLeaveDetails = store?.getUserLogoutReason?.data?.response
 
     const [projectNameHeading, setProjectName] = useState('Select Project Name');
 
@@ -171,7 +171,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         leftSideBarType: state.Layout.leftSideBarType,
     }));
 
-   
+
     const handleLeftMenuCallBack = () => {
         setIsopen((prevState) => !prevState);
         if (openLeftMenuCallBack) openLeftMenuCallBack();
@@ -222,68 +222,68 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
             setShowButton(false);
         }
     };
-    const[leave,setLeave]=useState('');
+    const [leave, setLeave] = useState('');
     useEffect(() => {
         if (loginTimeMessage?.data?.status == 200) {
             ToastHandle('success', loginTimeMessage?.data?.message);
             setLoginTimee(loginTimeMessage?.data?.loginTime);
         }
     }, [loginTimeMessage]);
-    useEffect(()=>{
-dispatch(getAllLogoutReason())
-    },[])
+    useEffect(() => {
+        dispatch(getAllLogoutReason())
+    }, [])
     const logoutTime = () => {
-        if(leave !==""){
-            dispatch(addLoginTimeStop({leaveMessageId:leave}));
-            sessionStorage.removeItem('startButton');  
-            setShowButton(true);            
+        if (leave !== "") {
+            dispatch(addLoginTimeStop({ leaveMessageId: leave }));
+            sessionStorage.removeItem('startButton');
+            setShowButton(true);
         }
-        else{
+        else {
             handleShow();
         }
     };
 
-const onChangeLeave =(e)=>{
-    setLeave(e.target.value);
-    handleClose();
-}
-
-
-const [time, setTime] = useState(1);
-const start = sessionStorage.getItem('startButton');
-const [incrementValue, setIncrementValue] = useState(0);
-  const increment = () =>
-    setTime((prevTime) => {
-      return prevTime === 0 ? 0 : prevTime + 1;
-    });
- 
-  useEffect(() => {
-    if(start){
-        setIncrementValue(setInterval(increment, 1000));
+    const onChangeLeave = (e) => {
+        setLeave(e.target.value);
+        handleClose();
     }
-   else{
-    clearInterval(incrementValue);
-   }
-    return () => clearInterval(incrementValue);
-  }, [start]);
 
-  const format = (num: number): string => {
-    return num < 10 ? '0' + num : num.toString();
-  };
 
-//const days = format(Math.floor(time / (3600 * 24)));
-const hours = format(Math.floor((time / 3600) % 24));
-const minutes = format(Math.floor((time / 60) % 60));
-const seconds = format(time % 60);
-if(start){    
-    localStorage.setItem("hours",hours);
-    localStorage.setItem("minutes",minutes);
-    localStorage.setItem("seconds",seconds);
-}
-const [show, setShow] = useState(false);
+    const [time, setTime] = useState(1);
+    const start = sessionStorage.getItem('startButton');
+    const [incrementValue, setIncrementValue] = useState(0);
+    const increment = () =>
+        setTime((prevTime) => {
+            return prevTime === 0 ? 0 : prevTime + 1;
+        });
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+    useEffect(() => {
+        if (start) {
+            setIncrementValue(setInterval(increment, 1000));
+        }
+        else {
+            clearInterval(incrementValue);
+        }
+        return () => clearInterval(incrementValue);
+    }, [start]);
+
+    const format = (num: number): string => {
+        return num < 10 ? '0' + num : num.toString();
+    };
+
+    //const days = format(Math.floor(time / (3600 * 24)));
+    const hours = format(Math.floor((time / 3600) % 24));
+    const minutes = format(Math.floor((time / 60) % 60));
+    const seconds = format(time % 60);
+    if (start) {
+        localStorage.setItem("hours", hours);
+        localStorage.setItem("minutes", minutes);
+        localStorage.setItem("seconds", seconds);
+    }
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     return (
         <>
             <div className={classNames('navbar-custom', navbarCssClasses)}>
@@ -307,7 +307,7 @@ const [show, setShow] = useState(false);
                                     </button>
                                 )}
                             <div class="menuinfo">
-                                <ul>                                   
+                                <ul>
 
                                     {showButton ? (
                                         <li>
@@ -322,13 +322,13 @@ const [show, setShow] = useState(false);
                                             </Button>
                                         </li>
                                     )}
-                                   <li>
-                                   {/* {moment(currTime).format('h:mm:ss')} */}
-                                   {localStorage.getItem("hours")+
-                                   ':'+localStorage.getItem('minutes')+
-                                   ':'+ localStorage.getItem('seconds')}
-                                   
-                                   </li>
+                                    <li>
+                                        {/* {moment(currTime).format('h:mm:ss')} */}
+                                        {localStorage.getItem("hours") +
+                                            ':' + localStorage.getItem('minutes') +
+                                            ':' + localStorage.getItem('seconds')}
+
+                                    </li>
                                     {/* <li className='leave_data'>
                                    
                                         <select id="leave" onChange={onChangeLeave} name="cars" disabled={showButton}>
@@ -368,41 +368,41 @@ const [show, setShow] = useState(false);
                             </li>
 
                         </ul>
-         {/* <Button variant="primary" onClick={handleShow}>
+                        {/* <Button variant="primary" onClick={handleShow}>
         Launch demo modal
       </Button> */}
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Select Reason for Leave</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className='reason_type'>
-            <ul>
-            <li className='leave_data'>
-                                   
-                                   <select id="leave" onChange={onChangeLeave} name="cars" disabled={showButton}>
-                                       <option value="" >Select Reason</option>
-                                       {getLeaveDetails?.map((item,index)=>
-                                           <option key={index} value={item?._id} >{item?.leaveReason}</option>
-                                       )}
-                                       
-                                     
-                                      
-                                   </select>
-                               </li>
-            </ul>
-        </Modal.Body>
-        <Modal.Footer>
-          {/* <Button variant="secondary" onClick={handleClose}>
+                        <Modal show={show} onHide={handleClose}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Select Reason for Leave</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body className='reason_type'>
+                                <ul>
+                                    <li className='leave_data'>
+
+                                        <select id="leave" onChange={onChangeLeave} name="cars" disabled={showButton}>
+                                            <option value="" >Select Reason</option>
+                                            {getLeaveDetails?.map((item, index) =>
+                                                <option key={index} value={item?._id} >{item?.leaveReason}</option>
+                                            )}
+
+
+
+                                        </select>
+                                    </li>
+                                </ul>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                {/* <Button variant="secondary" onClick={handleClose}>
          
           </Button>
           <Button variant="primary" onClick={handleClose}>
          
           </Button> */}
-        </Modal.Footer>
-      </Modal>
-                        
-                    
+                            </Modal.Footer>
+                        </Modal>
+
+
                         {layoutType === layoutConstants.LAYOUT_HORIZONTAL && (
                             <Link
                                 to="#"

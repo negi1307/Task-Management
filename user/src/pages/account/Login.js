@@ -39,7 +39,7 @@ const Login = (): React$Element<any> => {
     const dispatch = useDispatch();
 
     const location = useLocation();
-    const redirectUrl =  '/';
+    const redirectUrl = '/';
 
     useEffect(() => {
         dispatch(resetAuth());
@@ -68,8 +68,8 @@ const Login = (): React$Element<any> => {
     const onSubmit = (formData) => {
         dispatch(loginUser(formData['username'], formData['password']));
         const roleId = store?.Auth?.user
-        localStorage.setItem("roleId",roleId);
-        console.log(roleId,"priya")
+        localStorage.setItem("roleId", roleId);
+        console.log(roleId, "priya")
     };
 
     return (

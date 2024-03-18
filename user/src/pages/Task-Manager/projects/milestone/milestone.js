@@ -19,14 +19,14 @@ import Stack from '@mui/material/Stack';
 // import ToastHandle from '../../../constants/toaster/toaster';
 const Milestone = () => {
     const { id } = useParams();
-    console.log(id, 'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
+    // console.log(id, 'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
     const store = useSelector((state) => state);
 
     const dispatch = useDispatch();
     const [openModel, setOpenModel] = useState(false);
     const [render, setRender] = useState(false);
     const [status, setStatus] = useState(1);
-   
+
     const GetDataById = store?.getProjectById?.data?.project;
     // const GetSinglemilstonesData = store?.getSigleMileStone?.data?.Response;
     const getMileStoneData = store?.getProject?.data?.response;
@@ -116,7 +116,7 @@ const Milestone = () => {
             flag: 2,
             projectId: id,
             milestoneId: '',
-            sprintId:'',
+            sprintId: '',
             skip: 1,
         };
         dispatch(getAllProjects(body));
@@ -150,7 +150,7 @@ const Milestone = () => {
                         </Button>
                     </Col>
                 </Row> */}
-                <div className='title'><h3>MILESTONES</h3></div>
+            <div className='title'><h3>MILESTONES</h3></div>
             {loaderhandel.loading ? (
                 <MainLoader />
             ) : (
@@ -237,8 +237,8 @@ const Milestone = () => {
 
                                                         <td> {moment(item?.milestoneId?.start_date).format('DD/MM/YYYY')}</td>
                                                         <td>
-                                                        {item?.milestoneId?.daysLeft}
-                                                        
+                                                            {item?.milestoneId?.daysLeft}
+
                                                             {/* {moment(item?.milestoneId?.completion_date).format('L')} */}
                                                         </td>
                                                         {/* <td> <Form.Check
@@ -275,20 +275,20 @@ const Milestone = () => {
                                 </Row>
                             </Col>
                             <Row>
-                            <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
-                                {store?.getProject?.data?.totalPages > 0 && (
-                                    <Stack spacing={2}>
-                                        <Pagination
-                                            defaultPage={skip}
-                                            count={store?.getProject?.data?.totalPages}
-                                            color="primary"
-                                            variant="outlined"
-                                            onChange={handlePaginationChange}
-                                        />
-                                    </Stack>
-                                )}
-                            </Col>
-                        </Row>
+                                <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
+                                    {store?.getProject?.data?.totalPages > 0 && (
+                                        <Stack spacing={2}>
+                                            <Pagination
+                                                defaultPage={skip}
+                                                count={store?.getProject?.data?.totalPages}
+                                                color="primary"
+                                                variant="outlined"
+                                                onChange={handlePaginationChange}
+                                            />
+                                        </Stack>
+                                    )}
+                                </Col>
+                            </Row>
                         </Card.Body>
                     </Card>
                 </>
