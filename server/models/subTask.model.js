@@ -63,7 +63,8 @@ const subTask = mongoose.model(
             ref: 'roles'
         },
         type: {
-            type: String, //Bug,SubTask
+            type: String,
+            enum: ['Bug', 'SubTask']
         }
     },
         {

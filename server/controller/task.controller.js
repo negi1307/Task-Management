@@ -9,7 +9,7 @@ const userModel = require("../models/users.model");
 // Create or add tasks
 const createtask = async (req, res) => {
   try {
-    const { projectId, milestoneId, sprintId, summary, description, priority, expectedHours, startDate, dueDate, assigneeId, parentId, reporterId } = req.body;
+    const { projectId, milestoneId, sprintId, summary, description, priority, expectedHours, startDate, dueDate, assigneeId, reporterId } = req.body;
     const existingTask = await taskModel.findOne({
       summary: new RegExp(`^${summary.replace(/[\s]+/g, '\\s*')}\\s*$`, 'i'),
       sprintId: sprintId
@@ -33,7 +33,6 @@ const createtask = async (req, res) => {
         dueDate,
         attachment: attachmentPath,
         attachmentType: fileExtension,
-        parentId,
         reporterId,
         assigneeId,
         lastUpdaterId: req.user._id
@@ -292,6 +291,7 @@ const getTasksAccToStatus = async (req, res) => {
     let hold = [];
     let done = [];
     let testing = [];
+    const now = new Date();
 
     const tasks = await taskModel.aggregate([
       {
@@ -439,7 +439,6 @@ const getTasksAccToStatus = async (req, res) => {
     const holdCount = hold.length;
     const doneCount = done.length;
     const testingCount = testing.length;
-    const now = new Date();
     const dueTasksCount = await taskModel.countDocuments({ sprintId: sprintId, dueDate: { $lt: now }, status: { $ne: 4 } });
     return res.status(200).json({ status: "200", message: "fetched successfully", Response: { todo, todoCount, inProgress, inProgressCount, hold, holdCount, done, doneCount, testing, testingCount, dueTasksCount } });
   } catch (error) {

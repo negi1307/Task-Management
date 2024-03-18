@@ -4,6 +4,7 @@ const nodemailer = require("../middleware/nodemailer");
 const bcrypt = require("bcrypt");
 const { accessToken } = require("../middleware/jwt.auth");
 const subTaskModel = require("../models/subTask.model");
+const { userHistory } = require('../controller/history.controller');
 
 // Register a user or invite a user 
 const registerUser = async (req, res) => {
