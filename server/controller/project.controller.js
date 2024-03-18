@@ -28,24 +28,63 @@ const addProject = async (req, res) => {
   }
 };
 
-// get ALL projects According to activeStatus and ProjectStatus
+// // get ALL projects According to activeStatus and ProjectStatus
+// const getProjects = async (req, res) => {
+//   try {
+//     const { activeStatus, projectStatus, skip } = req.query;;
+//     const pageSize = 10;
+//     let query = {};
+//     query.activeStatus = activeStatus
+//     query.projectStatus = projectStatus
+
+//     const totalCount = await projectModel.countDocuments(query);
+//     const projects = await projectModel.find(query).sort({ createdAt: -1 }).skip((parseInt(skip) - 1) * pageSize).limit(pageSize);
+//     const totalPages = Math.ceil(totalCount / pageSize);
+
+//     return res.status(200).json({ status: "200", message: "Projects fetched successfully", response: projects, totalCount, totalPages });
+//   } catch (error) {
+//     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+//   }
+// };
+
 const getProjects = async (req, res) => {
   try {
-    const { activeStatus, projectStatus, skip } = req.query;;
+    const { activeStatus, projectStatus, skip } = req.query;
     const pageSize = 10;
     let query = {};
-    query.activeStatus = activeStatus
-    query.projectStatus = projectStatus
+    query.activeStatus = activeStatus;
+    query.projectStatus = projectStatus;
 
     const totalCount = await projectModel.countDocuments(query);
-    const projects = await projectModel.find(query).sort({ createdAt: -1 }).skip((parseInt(skip) - 1) * pageSize).limit(pageSize);
+    let projects = await projectModel.find(query).sort({ createdAt: -1 }).skip((parseInt(skip) - 1) * pageSize).limit(pageSize);
+
+    projects = projects.map(project => {
+      const millisecondsPerDay = 1000 * 60 * 60 * 24;
+      const endDate = new Date(project.endDate);
+      const startDate = new Date(project.startDate);
+      const daysLeft = Math.max(0, Math.ceil((endDate - startDate) / millisecondsPerDay));
+      return { ...project.toObject(), daysLeft };
+    });
+
     const totalPages = Math.ceil(totalCount / pageSize);
 
-    return res.status(200).json({ status: "200", message: "Projects fetched successfully", response: projects, totalCount, totalPages });
+    return res.status(200).json({
+      status: "200",
+      message: "Projects fetched successfully",
+      response: projects,
+      totalCount,
+      totalPages,
+    });
   } catch (error) {
-    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+    return res.status(500).json({
+      status: "500",
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
+
+
 
 // Update a project
 const updateProject = async (req, res) => {
@@ -53,7 +92,7 @@ const updateProject = async (req, res) => {
     const projectId = req.body.projectId;
     const oldProject = await projectModel.findById(projectId);
     await projectModel.findByIdAndUpdate(projectId, req.body, { new: true });
-    await userHistory(req,oldProject);
+    await userHistory(req, oldProject);
     return res.status(200).json({ status: "200", message: "Project updated successfully" });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -73,7 +112,7 @@ const uploadProject_File = async (req, res) => {
       const data = await projectupload({ projectId, attachment, fileName, attachmentType, originalName });
       await data.save();
       const oldProjectFile = await projectModel.findById(projectId)
-      await userHistory(req,  oldProjectFile);
+      await userHistory(req, oldProjectFile);
       res.status(200).json({ status: '200', message: 'Project file uploaded Successfully' })
     }
     else {
