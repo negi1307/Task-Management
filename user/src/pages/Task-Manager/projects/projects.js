@@ -100,7 +100,7 @@ const Projects = () => {
     };
     useEffect(() => {
         let body = {
-            flag: 1,
+            flag: "project",
             projectId: '',
             milestoneId: '',
             sprintId: '',
@@ -122,7 +122,7 @@ const Projects = () => {
 
     const statusInfo = (status) => {
         let body = {
-            flag: 1,
+            flag: 'project',
             projectId: '',
             milestoneId: '',
             skip: 1,
@@ -132,7 +132,7 @@ const Projects = () => {
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
         let body = {
-            flag: 1,
+            flag: 'project',
             projectId: '',
             milestoneId: '',
             skip: value,
@@ -189,7 +189,7 @@ const Projects = () => {
                             )}
                         </div>
 
-                        {getProjectList?.loading ? (
+                        {/* {getProjectList?.loading ? (
                             <>
                                 <MainLoader />
                             </>
@@ -222,7 +222,6 @@ const Projects = () => {
                                                 </td>
                                                 <td>
                                                     <span className="namelink">
-
                                                         {moment(ele?.projectId?.startDate).format('DD/MM/YYYY')}
 
                                                     </span>
@@ -248,6 +247,65 @@ const Projects = () => {
                                 </tbody>
                             </Table>
                         )}
+                         */}
+                        {getProjectList?.loading ? (
+                            <MainLoader />
+                        ) : (
+                            <Table className="mb-0 add_Color_font" striped>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Project Name</th>
+                                        <th>Client Name</th>
+                                        <th>Project Type</th>
+                                        <th>Project Start Date</th>
+                                        <th>Due Days</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {projectDataInfo?.map((ele, ind) => {
+                                        return (
+                                            <tr key={ind} className="align-middle">
+                                                <td scope="row">{ind + 1}</td>
+                                                <td className="cp">
+                                                    <Link to={`/dashboard/projects/${ele._id}`}>
+                                                        <span className="namelink text-dark">{ele.projectName}</span>
+                                                    </Link>
+                                                </td>
+
+                                                <td className="w-20">
+                                                    <span className="namelink">{ele.clientName}</span>
+                                                </td>
+                                                <td>
+                                                    <span className="namelink">{ele.projectType}</span>
+                                                </td>
+                                                <td>
+                                                    <span className="namelink">
+                                                        {moment(ele.startDate).format('DD/MM/YYYY')}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span className="namelink">{ele.daysLeft}</span>
+                                                </td>
+                                                <td>
+                                                    <Row>
+                                                        <Col>
+                                                            <p className="action-icon m-0 p-0 ">
+                                                                <Link to={`/dashboard/projects/${ele._id}`}>
+                                                                    <i className="mdi mdi-eye m-0 p-0"></i>
+                                                                </Link>
+                                                            </p>
+                                                        </Col>
+                                                    </Row>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </Table>
+                        )}
+
                         <Row>
                             <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
                                 {store?.getProject?.data?.totalPages > 0 && (

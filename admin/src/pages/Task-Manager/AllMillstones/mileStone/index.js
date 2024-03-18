@@ -120,7 +120,7 @@ const MileStone = () => {
                                 <Table>
                                     <thead className=" btom_Line_hide">
                                         <tr>
-                                            <th>SprintName</th>
+                                            <th>Sprint Name</th>
                                             <th>Sprint Description</th>
                                             <th>Sprint Start Date</th>
                                             <th>Sprint End Date</th>

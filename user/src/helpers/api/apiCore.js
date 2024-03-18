@@ -20,7 +20,7 @@ axios.interceptors.response.use(
             // window.location.href = '/not-found';
         } else if (error && error.response && error.response.status === 403) {
             // alert(error)
-            window.location.href = '/access-denied';
+            // window.location.href = '/access-denied';
         } else {
             switch (error.response.status) {
                 case 401:
@@ -66,8 +66,8 @@ class APICore {
         if (params) {
             var queryString = params
                 ? Object.keys(params)
-                      .map((key) => key + '=' + params[key])
-                      .join('&')
+                    .map((key) => key + '=' + params[key])
+                    .join('&')
                 : '';
             response = axios.get(`${url}?${queryString}`, params);
         } else {
@@ -81,8 +81,8 @@ class APICore {
         if (params) {
             var queryString = params
                 ? Object.keys(params)
-                      .map((key) => key + '=' + params[key])
-                      .join('&')
+                    .map((key) => key + '=' + params[key])
+                    .join('&')
                 : '';
             response = axios.get(`${url}?${queryString}`, { responseType: 'blob' });
         } else {
@@ -97,8 +97,8 @@ class APICore {
         if (params) {
             queryString = params
                 ? Object.keys(params)
-                      .map((key) => key + '=' + params[key])
-                      .join('&')
+                    .map((key) => key + '=' + params[key])
+                    .join('&')
                 : '';
         }
 

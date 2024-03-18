@@ -218,14 +218,18 @@ const Sprint = () => {
 
 
                                                     <td>
-                                                        <OverlayTrigger
-                                                            placement="top"
-                                                        >
-                                                            <div>
-                                                                {/* Show only a part of the description */}
-                                                                <div>{truncateDescription(item?.sprintDesc)}</div>
-                                                            </div>
-                                                        </OverlayTrigger>
+                                                        <td className='d-flex justify-content-center'>
+                                                            <OverlayTrigger
+                                                                placement="top"
+                                                                overlay={<Tooltip>{truncateDescription(item?.sprintDesc)}</Tooltip>}
+                                                            >
+                                                                <div>
+                                                                    {/* Show only a part of the description */}
+                                                                    <div>{truncateDescription(item?.sprintDesc)}</div>
+                                                                </div>
+                                                            </OverlayTrigger>
+                                                        </td>
+
                                                     </td>
                                                     <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
                                                     <td>{item?.daysLeft}</td>
