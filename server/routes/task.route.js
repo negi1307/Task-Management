@@ -9,7 +9,7 @@ taskRouter.get("/getTasks", verifyUser, tasks.getTasks);
 taskRouter.put("/updateTask", verifyAdmin, taskAttachmentUpload.single('attachment'), tasks.updateTask);
 taskRouter.delete("/deletetask", verifyAdmin, tasks.deleteTask);
 taskRouter.put("/updateTaskStatus", verifyUser, tasks.updateTaskStatus);
-taskRouter.get("/getTasksAccToStatus", verifyAdmin, tasks.getTasksAccToStatus);
+taskRouter.get("/getTasksAccToStatus", verifyUser, tasks.getTasksAccToStatus);
 taskRouter.get("/getPriorityTasks", verifyUser, tasks.getPriorityTasks);
 taskRouter.get("/getTasksStatusCount", verifyUser, tasks.getTasksStatusCount);
 taskRouter.get("/getTasksCount", verifyUser, tasks.getTasksCount);
