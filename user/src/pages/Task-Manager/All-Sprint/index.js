@@ -79,7 +79,7 @@ const AllSprint = () => {
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Milestone Name</th>
+                                        <th>Milestone e</th>
                                         <th> Sprint Name</th>
                                         <th>Description</th>
                                         <th> Start Date</th>

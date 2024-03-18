@@ -43,6 +43,10 @@ const Projects = () => {
             setRender(!render);
         }
         setOpenModal(false);
+        updateProjectList();
+    };
+    const updateProjectList = () => {
+        dispatch(getAllProjects({ status: status, skip: skip, projectStatus: projectStatus }));
     };
     const handelUpdate = (data) => {
         setEditData(data);
@@ -70,7 +74,7 @@ const Projects = () => {
         }
         setStatusModal(false);
     };
-      const handleStatusChange = (e, data) => {
+    const handleStatusChange = (e, data) => {
         const isChecked = e.target.checked;
         const projectId = data._id;
 
@@ -140,7 +144,7 @@ const Projects = () => {
             dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 4 }));
         }
     };
-    
+
     return (
         <>
             <div>
@@ -173,7 +177,7 @@ const Projects = () => {
                             </div>
                             <div className="d-flex col-4 mt-3">
                                 <div className="row d-flex align-items-center">
-                                    <div className={`col-auto  cp ${status == 1  ? 'Active_data' : 'InActive_data'}`}>
+                                    <div className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
                                         <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
                                             Active
                                         </p>
@@ -196,7 +200,7 @@ const Projects = () => {
                                         onClick={() => {
                                             handelCreate();
                                         }}>
-                                        Add Projects 
+                                        Add Projects
                                     </Button>
                                 </div>
                             ) : (
@@ -299,7 +303,7 @@ const Projects = () => {
                     </Card.Body>
                 </Card>
 
-                <Create modal={openModal} closeModal={() => setOpenModal(false)} />
+                <Create modal={openModal} closeModal={closeModal} />
 
                 {/* Update modal */}
                 <Update modal={openEditModal} closeModal={() => setOpenEditModal(false)} editData={editData} />

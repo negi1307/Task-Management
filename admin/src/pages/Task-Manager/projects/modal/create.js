@@ -9,6 +9,7 @@ import ToastHandle from '../../../../constants/toaster/toaster';
 import MainLoader from '../../../../constants/Loader/loader';
 //import Multiselect from 'multiselect-react-dropdown';
 import { getAllTechnology } from '../../../../redux/technology/action';
+import { getAllProjects } from '../../../../redux/projects/action';
 import Multiselect from 'multiselect-react-dropdown';
 import DatePicker from 'react-datepicker';
 import '../../../../../node_modules/react-datepicker/dist/react-datepicker.css';
@@ -56,7 +57,10 @@ const Create = ({ modal, closeModal }) => {
             projectStatus: 1,
             technology: addValue,
         };
-        dispatch(addProject(body));
+        dispatch(addProject(body)).then(() => {
+            // After adding the project, dispatch the action to get all projects
+            dispatch(getAllProjects());
+        });
     };
     useEffect(() => {
         if (errorhandel?.data?.status == 200) {
@@ -143,7 +147,7 @@ const Create = ({ modal, closeModal }) => {
                                                 {...register('projectName', { required: true })}
                                             />
                                             {errors.projectName?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -158,7 +162,7 @@ const Create = ({ modal, closeModal }) => {
                                                 {...register('clientName', { required: true })}
                                             />
                                             {errors.clientName?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
