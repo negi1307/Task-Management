@@ -643,25 +643,6 @@ const getUserAssignments = async (req, res) => {
         },
         {
           $project: {
-<<<<<<< HEAD
-            _id: 1,
-            projectName: 1,
-            clientName: 1,
-            technologies: 1,
-            startDate: 1,
-            endDate: 1,
-            activeStatus: 1,
-            projectStatus: 1,
-            projectType: 1,
-            createdAt: 1,
-            updatedAt: 1,
-            daysLeft: {
-              $divide: [
-                { $subtract: ["$endDate", now] },
-                1000 * 60 * 60 * 24,
-              ],
-            },
-=======
               _id: 1,
               projectName: 1,
               clientName : 1,
@@ -686,7 +667,6 @@ const getUserAssignments = async (req, res) => {
                     ]
                 }
             }
->>>>>>> 499d3b6076515bff97a7b8da4691aaa2e2b60cc6
           }
         },
         { $sort: { daysLeft: 1 } },
@@ -714,13 +694,6 @@ const getUserAssignments = async (req, res) => {
             createdAt: 1,
             updatedAt: 1,
             daysLeft: {
-<<<<<<< HEAD
-              $divide: [
-                { $subtract: ["$completionDate", now] },
-                1000 * 60 * 60 * 24,
-              ],
-            },
-=======
               $toInt: {
                   $max: [
                       0,
@@ -733,7 +706,6 @@ const getUserAssignments = async (req, res) => {
                   ]
               }
           }
->>>>>>> 499d3b6076515bff97a7b8da4691aaa2e2b60cc6
           }
         },
         { $sort: { daysLeft: 1 } },
@@ -752,22 +724,6 @@ const getUserAssignments = async (req, res) => {
         },
         {
           $project: {
-<<<<<<< HEAD
-            _id: 1,
-            sprintName: 1,
-            sprintDesc: 1,
-            startDate: 1,
-            endDate: 1,
-            activeStatus: 1,
-            createdAt: 1,
-            updatedAt: 1,
-            daysLeft: {
-              $divide: [
-                { $subtract: ["$endDate", now] },
-                1000 * 60 * 60 * 24,
-              ],
-            },
-=======
               _id: 1,
               sprintName: 1,
               sprintDesc : 1,
@@ -789,7 +745,6 @@ const getUserAssignments = async (req, res) => {
                     ]
                 }
             }
->>>>>>> 499d3b6076515bff97a7b8da4691aaa2e2b60cc6
           }
         },
         { $sort: { daysLeft: 1 } },
