@@ -29,24 +29,6 @@ const addProject = async (req, res) => {
 };
 
 // // get ALL projects According to activeStatus and ProjectStatus
-// const getProjects = async (req, res) => {
-//   try {
-//     const { activeStatus, projectStatus, skip } = req.query;;
-//     const pageSize = 10;
-//     let query = {};
-//     query.activeStatus = activeStatus
-//     query.projectStatus = projectStatus
-
-//     const totalCount = await projectModel.countDocuments(query);
-//     const projects = await projectModel.find(query).sort({ createdAt: -1 }).skip((parseInt(skip) - 1) * pageSize).limit(pageSize);
-//     const totalPages = Math.ceil(totalCount / pageSize);
-
-//     return res.status(200).json({ status: "200", message: "Projects fetched successfully", response: projects, totalCount, totalPages });
-//   } catch (error) {
-//     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
-//   }
-// };
-
 const getProjects = async (req, res) => {
   try {
     const { activeStatus, projectStatus, skip } = req.query;
