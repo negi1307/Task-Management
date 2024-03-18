@@ -101,10 +101,80 @@ const deleteSubTask = async (req, res) => {
     }
 }
 
+// update Status of a task AND TimeTracking
+const updateSubTaskStatus = async (req, res) => {
+    try {
+        if (Object.keys(req.body).length !== 0) {
+            const { subTaskId, status } = req.body;
+            const subTask = await subTaskModel.findById(subTaskId);
+
+            let query = { status };
+            if (status === 2) {
+                if (status <= currentStatus && req.user.role !== 'Testing') {
+                    return res.status(403).json({ status: "403", message: "You are not authorized to update the sub task status backwards." });
+                }
+                query.inProgressDate = new Date();
+            }
+
+            if (status === 4) {
+                if (req.user.role === 'Testing') {
+                    query.doneDate = new Date();
+                    if (subTask && subTask.inProgressDate) {
+                        let timeDifference = (query.doneDate.getTime() - subTask.inProgressDate.getTime());
+                        query.timeTracker = timeDifference
+                    }
+                    if (subTask && subTask.logInTime && subTask.timeTracker) {
+                        let timeDifference = (query.doneDate.getTime() - subTask.logInTime.getTime());
+                        query.timeTracker = subTask.timeTracker + timeDifference
+                    }
+                }
+                else {
+                    return res.status(200).json({ status: "200", message: "You are not authorised to do so." });
+                }
+            }
+            const result = await subTaskModel.findByIdAndUpdate({ _id: subTaskId }, query, { new: true });
+            const taskStatus = await subTaskModel.findById(subTaskId)
+            await userHistory(req, taskStatus);
+            return res.status(200).json({ status: "200", message: "Sub Task Status updated successfully", data: result });
+        } else {
+            const subTasks = await subTaskModel.find({ assigneeId: req.user._id, status: 2 });
+            if (subTasks.length > 0) {
+                for (const subTask of subTasks) {
+                    const updatedLogOutTime = await subTaskModel.findByIdAndUpdate(
+                        { _id: subTask._id },
+                        { $currentDate: { logOutTime: true } },
+                        { new: true }
+                    );
+
+                    if (updatedLogOutTime) {
+                        const subTaskDetails = await subTaskModel.findById(subTask._id);
+
+                        if (subTaskDetails && subTaskDetails.logOutTime && subTaskDetails.inProgressDate) {
+                            let timeDifference = subTaskDetails.logOutTime.getTime() - subTaskDetails.inProgressDate.getTime();
+                            await subTaskModel.findByIdAndUpdate({ _id: subTask._id }, { timeTracker: timeDifference }, { new: true });
+                        }
+
+                        if (subTaskDetails && subTaskDetails.logInTime && subTaskDetails.logOutTime) {
+                            let timeDifference = subTaskDetails.logOutTime.getTime() - subTaskDetails.logInTime.getTime();
+                            await subTaskModel.findByIdAndUpdate({ _id: subTask._id }, { timeTracker: subTaskDetails.timeTracker + timeDifference }, { new: true });
+                        }
+                    }
+                }
+                await userHistory(req, "Tasks updated");
+                return res.status(200).json({ status: "200", message: "Sub tasks updated successfully" });
+            }
+            return res.status(200).json({ status: "200", message: "No tasks found" });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+    }
+};
 
 module.exports = {
     addSubTask,
     updateSubTask,
     getSubTask,
     deleteSubTask,
+    updateSubTaskStatus
 }

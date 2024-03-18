@@ -193,7 +193,7 @@ const updateTask = async (req, res) => {
     };
     await taskModel.findByIdAndUpdate(taskId, obj, { new: true });
     const task = await taskModel.findById(taskId)
-    await userHistory(req,task);
+    await userHistory(req, task);
     return res.status(200).json({ status: "200", message: "Task updated successfully" });
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -206,7 +206,7 @@ const deleteTask = async (req, res) => {
     const taskId = req.query.taskId;
     const task = await taskModel.findById(taskId)
     await taskModel.findByIdAndDelete(taskId);
-    await userHistory(req,  task );
+    await userHistory(req, task);
     return res.status(200).json({ status: "200", message: "Task Deleted successfully" });
   } catch (err) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: err.message });
@@ -643,30 +643,30 @@ const getUserAssignments = async (req, res) => {
         },
         {
           $project: {
-              _id: 1,
-              projectName: 1,
-              clientName : 1,
-              technologies: 1,
-              startDate: 1,
-              endDate: 1,
-              activeStatus: 1,
-              projectStatus: 1,
-              projectType: 1,
-              createdAt: 1,
-              updatedAt: 1,
-              daysLeft: {
-                $toInt: {
-                    $max: [
-                        0,
-                        {
-                            $divide: [
-                                { $subtract: ["$endDate", now] },
-                                1000 * 60 * 60 * 24,
-                            ]
-                        }
+            _id: 1,
+            projectName: 1,
+            clientName: 1,
+            technologies: 1,
+            startDate: 1,
+            endDate: 1,
+            activeStatus: 1,
+            projectStatus: 1,
+            projectType: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            daysLeft: {
+              $toInt: {
+                $max: [
+                  0,
+                  {
+                    $divide: [
+                      { $subtract: ["$endDate", now] },
+                      1000 * 60 * 60 * 24,
                     ]
-                }
-            }
+                  }
+                ]
+              }
+            },
           }
         },
         { $sort: { daysLeft: 1 } },
@@ -695,17 +695,17 @@ const getUserAssignments = async (req, res) => {
             updatedAt: 1,
             daysLeft: {
               $toInt: {
-                  $max: [
-                      0,
-                      {
-                          $divide: [
-                              { $subtract: ["$completionDate", now] },
-                              1000 * 60 * 60 * 24,
-                          ]
-                      }
-                  ]
+                $max: [
+                  0,
+                  {
+                    $divide: [
+                      { $subtract: ["$completionDate", now] },
+                      1000 * 60 * 60 * 24,
+                    ]
+                  }
+                ]
               }
-          }
+            },
           }
         },
         { $sort: { daysLeft: 1 } },
@@ -724,26 +724,26 @@ const getUserAssignments = async (req, res) => {
         },
         {
           $project: {
-              _id: 1,
-              sprintName: 1,
-              sprintDesc : 1,
-              startDate: 1,
-              endDate: 1,
-              activeStatus: 1,
-              createdAt: 1,
-              updatedAt: 1,
-              daysLeft: {
-                $toInt: {
-                    $max: [
-                        0,
-                        {
-                            $divide: [
-                                { $subtract: ["$endDate", now] },
-                                1000 * 60 * 60 * 24,
-                            ]
-                        }
+            _id: 1,
+            sprintName: 1,
+            sprintDesc: 1,
+            startDate: 1,
+            endDate: 1,
+            activeStatus: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            daysLeft: {
+              $toInt: {
+                $max: [
+                  0,
+                  {
+                    $divide: [
+                      { $subtract: ["$endDate", now] },
+                      1000 * 60 * 60 * 24,
                     ]
-                }
+                  }
+                ]
+              }
             }
           }
         },

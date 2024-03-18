@@ -2,21 +2,9 @@ const mongoose = require('mongoose');
 
 const tasks = mongoose.model(
     'Task', mongoose.Schema({
-        taskMannualId: {
-            type: Number,
-            // required: true,
-        },
-        projectId: {
+        taskId: {
             type: mongoose.Types.ObjectId,
-            ref: 'projects'
-        },
-        milestoneId: {
-            type: mongoose.Types.ObjectId,
-            ref: 'milestone'
-        },
-        sprintId: {
-            type: mongoose.Types.ObjectId,
-            ref: 'sprint'
+            ref: "Task"
         },
         summary: {
             type: String
@@ -25,7 +13,8 @@ const tasks = mongoose.model(
             type: String
         },
         priority: {
-            type: String,// 1=High, 2=Medium, 3=Low , 4= Critical
+            type: String,
+            emun:['High','Medium','Low','Critial']
         },
         expectedHours: {
             type: Number
@@ -58,10 +47,6 @@ const tasks = mongoose.model(
         },
         attachmentType: {
             type: String
-        },
-        taskId: {
-            type: mongoose.Types.ObjectId,
-            ref: "Task"
         },
         logInTime: {
             type: Date
