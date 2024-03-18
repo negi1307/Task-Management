@@ -25,7 +25,8 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
         activeStatus: {
             type: Boolean,
             default: true
-        }
+        },
+        
     },
         {
             timestamps: true
