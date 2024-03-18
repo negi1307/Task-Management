@@ -30,7 +30,7 @@ const Milestone = () => {
     const GetDataById = store?.getProjectById?.data?.project;
     // const GetSinglemilstonesData = store?.getSigleMileStone?.data?.Response;
     const getMileStoneData = store?.getProject?.data?.response;
-    console.log('getMileStoneData', getMileStoneData);
+    console.log('getMileStoneData%%%%%%%%%%%%%%%%%%%%%%%%%%%', getMileStoneData);
     const loaderhandel = store?.getSigleMileStone;
     const [checkedStatus, setCheckedStatus] = useState();
     const [statusModal, setStatusModal] = useState(false);
@@ -113,7 +113,7 @@ const Milestone = () => {
     }, [render]);
     useEffect(() => {
         let body = {
-            flag: 2,
+            flag: 'milestone',
             projectId: id,
             milestoneId: '',
             sprintId: '',
@@ -124,7 +124,7 @@ const Milestone = () => {
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
         let body = {
-            flag: 2,
+            flag: 'milestone',
             projectId: id,
             milestoneId: '',
             skip: value,
@@ -225,19 +225,25 @@ const Milestone = () => {
                                                 {getMileStoneData?.map((item, index) => (
                                                     <tr>
                                                         <td>{index + 1}</td>
-                                                        <td>{item?.milestoneId?.title}</td>
+                                                        <td>
+                                                            <Link
+                                                                className='text-secondary'
+                                                                to={`/dashboard/singleMilestonesprint/projectId=/${item?.milestoneId?.projectId}&milestoneId=/${item?.milestoneId?._id}`}>
+                                                                {item.title}
+                                                            </Link>
+                                                        </td>
                                                         <td>
                                                             {' '}
                                                             <div
                                                                 dangerouslySetInnerHTML={{
-                                                                    __html: item?.milestoneId?.description,
+                                                                    __html: item.description,
                                                                 }}
                                                             />
                                                         </td>
 
-                                                        <td> {moment(item?.milestoneId?.start_date).format('DD/MM/YYYY')}</td>
+                                                        <td> {moment(item.start_date).format('DD/MM/YYYY')}</td>
                                                         <td>
-                                                            {item?.milestoneId?.daysLeft}
+                                                            {item.daysLeft}
 
                                                             {/* {moment(item?.milestoneId?.completion_date).format('L')} */}
                                                         </td>

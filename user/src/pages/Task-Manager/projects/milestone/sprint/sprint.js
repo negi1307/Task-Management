@@ -15,7 +15,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 const Sprint = () => {
     const { projectId, milestoneId } = useParams();
-    console.log(projectId, 'bvcxcvbnbvcxcvbnmnbvcxn');
+    // console.log(projectId, 'bvcxcvbnbvcxcvbnmnbvcxn');
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
@@ -28,7 +28,7 @@ const Sprint = () => {
     const [openModal, SetOpenModal] = useState(false);
     const [editData, setEditData] = useState();
     const GetAllSingleSprintData = store?.getProject?.data?.response;
-    console.log(GetAllSingleSprintData, 'jjkkjkkyawsdfghjnmk');
+    // console.log(GetAllSingleSprintData, 'jjkkjkkyawsdfghjnmk');
     const deletehandle = store?.deleteSprint?.data;
     const loaderhandel = store?.getAllSingleSprints;
     const [skip, setSkip] = useState(1);
@@ -110,7 +110,7 @@ const Sprint = () => {
 
     useEffect(() => {
         let body = {
-            flag: 3,
+            flag: 'sprint',
             projectId: projectId,
             milestoneId: milestoneId,
             sprintId: '',
@@ -122,7 +122,7 @@ const Sprint = () => {
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
         let body = {
-            flag: 3,
+            flag: 'sprint',
             projectId: projectId,
             milestoneId: milestoneId,
             sprintId: '',
@@ -147,7 +147,7 @@ const Sprint = () => {
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>SprintName</th>
+                                                <th>Sprint Name</th>
                                                 <th>Sprint Description</th>
                                                 <th>Sprint Start Date</th>
                                                 <th>Due Days</th>

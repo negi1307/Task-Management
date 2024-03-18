@@ -139,7 +139,7 @@ const Projects = () => {
         };
         dispatch(getAllProjects(body));
     };
-
+    console.log(getProjectList, '11111111111111111111111111111112222222222222222222222')
     return (
         <>
             <div>
