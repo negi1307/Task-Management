@@ -25,11 +25,11 @@ const Create = ({ modal, closeModal }) => {
     const [addValue, setAddValue] = useState('');
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
-    console.log(startDate, 'hiiiiiiiiiiiiiiiiiiiiiiiiiiii');
+    // console.log(startDate, 'hiiiiiiiiiiiiiiiiiiiiiiiiiiii');
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     // disable previous date
     const today = new Date();
-    console.log(today, 'today');
+    // console.log(today, 'today');
     // end date
     const handleStartDate = (date) => {
         setStartDate(date);
@@ -45,6 +45,7 @@ const Create = ({ modal, closeModal }) => {
         control,
         watch,
         reset,
+        setValue,
         formState: { errors },
     } = useForm();
     const onSubmit = (data) => {
@@ -57,10 +58,7 @@ const Create = ({ modal, closeModal }) => {
             projectStatus: 'Ongoing',
             technology: addValue,
         };
-        dispatch(addProject(body)).then(() => {
-            // After adding the project, dispatch the action to get all projects
-            dispatch(getAllProjects());
-        });
+        dispatch(addProject(body))
     };
     useEffect(() => {
         if (errorhandel?.data?.status == 200) {
@@ -174,19 +172,21 @@ const Create = ({ modal, closeModal }) => {
                                             <Form.Label>
                                                 Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Select {...register('project_type', { required: true })}>
-                                                <option hidden selected>
-                                                    Choose an Project Type{' '}
-                                                </option>
+                                            <Form.Select
+                                                {...register('project_type', { required: true })}
+                                                onChange={(e) => e.target.value && setValue('project_type', e.target.value, { shouldValidate: true })}
+                                            >
+                                                <option hidden value="">Choose a Project Type</option>
                                                 <option value="T&M">T&M</option>
                                                 <option value="FC">FC</option>
-                                                <option value=" HR">HR</option>
+                                                <option value="HR">HR</option>
                                                 <option value="DT">DT</option>
                                             </Form.Select>
-                                            {errors.project_type?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                            {errors.project_type && (
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
+
                                     </Col>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
@@ -215,13 +215,15 @@ const Create = ({ modal, closeModal }) => {
 
                                             <DatePicker
                                                 selected={startDate}
-                                                // onChange={(date) => setStartDate(date)}
                                                 onChange={(date) => handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
                                                 minDate={today}
                                                 className="add_width_input"
                                             />
+
                                         </Form.Group>
+
+
                                     </Col>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">

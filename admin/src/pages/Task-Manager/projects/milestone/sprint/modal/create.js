@@ -41,10 +41,15 @@ const Create = ({ modal, CloseModal, projectId, milestoneId, }) => {
 
         dispatch(addSprint(body));
         reset();
+        setStartDate(null); // Reset the startDate state variable
+        setEndDate(null);
         CloseModal();
     };
 
     const handleClose = () => {
+        reset();
+        setStartDate(null); // Reset the startDate state variable
+        setEndDate(null);
         CloseModal();
     };
 
