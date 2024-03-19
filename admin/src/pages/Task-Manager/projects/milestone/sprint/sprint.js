@@ -37,21 +37,35 @@ const Sprint = () => {
         setOpenEditModal(true);
     };
 
+    // for getting the sprints on update and after adding new sprints
+    const getUpdatedSprints = () => {
+        dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
+    }
+    // ///////////////////////////
     const closeupdatemodal = (val) => {
         if (val == 'render') {
             setRender(!render);
         }
         setOpenEditModal(false);
+        getUpdatedSprints();
+    };
+
+
+    // CReate nrw sprint modal functions
+    const getAddedSprints = () => {
+        dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
+    }
+    const handleCreate = () => {
+        SetOpenModal(true);
     };
     const CloseModal = (val) => {
         if (val == 'render') {
             setRender(!render);
         }
         SetOpenModal(false);
+        getAddedSprints();
     };
-    const handleCreate = () => {
-        SetOpenModal(true);
-    };
+
     const handleActive = (val) => {
         if (val) {
             setStatus(true);
@@ -107,7 +121,7 @@ const Sprint = () => {
                 activeStatus: false,
             };
             dispatch(updateSprint(body));
-            console.log(checkedData, '2222222222222222222222222222222222222222222222222222222222222222222')
+            // console.log(checkedData, '2222222222222222222222222222222222222222222222222222222222222222222')
         }
         setStatusModal(false);
     };
@@ -134,7 +148,7 @@ const Sprint = () => {
 
 
     useEffect(() => {
-        console.log("----------called");
+        // console.log("----------called");
         fetchSprintData(); // Fetch initial data
         // const intervalId = setInterval(fetchSprintData, 50000); // Fetch data every 5 seconds
 
@@ -195,7 +209,7 @@ const Sprint = () => {
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>SprintName</th>
+                                                <th>Sprint Name</th>
                                                 <th>Sprint Description</th>
                                                 <th>Sprint Start Date</th>
                                                 <th>Days Left</th>

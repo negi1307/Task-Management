@@ -14,7 +14,7 @@ import '../../../../../node_modules/react-datepicker/dist/react-datepicker.css';
 import { parseISO } from 'date-fns';
 
 const Update = ({ modal, closeModal, editData }) => {
-    console.log(editData);
+    // console.log(editData);
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const sucesshandel = store?.updateProject;
@@ -58,9 +58,9 @@ const Update = ({ modal, closeModal, editData }) => {
             projectstatus: editData?.projectStatus,
         });
 
-    
+
         if (editData?.startDate || editData?.endDate) {
-            const parsedDate = parseISO(editData?.startDate) 
+            const parsedDate = parseISO(editData?.startDate)
             const endate = parseISO(editData?.endDate)
             if (parsedDate || endate) {
                 setStartDate(parsedDate);
@@ -90,9 +90,9 @@ const Update = ({ modal, closeModal, editData }) => {
         const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
         });
-        console.log(add[0], 'addddd');
+        // console.log(add[0], 'addddd');
         setAddValue([...addValue, add[0]]);
-        console.log(addValue, 'addvalue info');
+        // console.log(addValue, 'addvalue info');
     };
 
     const onSubmit = (data) => {
@@ -106,17 +106,17 @@ const Update = ({ modal, closeModal, editData }) => {
             technology: addValue,
             projectStatus: data?.projectstatus,
         };
-        console.log('fsadsadsadsa', addValue);
+        // console.log('fsadsadsadsa', addValue);
         dispatch(updateProject(body));
     };
     const selectedValues = editData?.technology?.map((item) => {
         return item.techName;
     });
-    console.log(selected, 'aadadasa');
+    // console.log(selected, 'aadadasa');
     useEffect(() => {
-        console.log('llllllllll');
+        // console.log('llllllllll');
         if (sucesshandel?.data?.status == 200) {
-            ToastHandle('success', 'Updated Successfully');
+            ToastHandle('success', 'Project Updated Successfully');
             closeModal('render');
         } else if (sucesshandel?.data?.status == 400) {
             ToastHandle('error', sucesshandel?.data?.message);
@@ -288,10 +288,10 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 <option hidden selected>
                                                     Choose an Project Status
                                                 </option>
-                                                <option value="1">Ongoing</option>
-                                                <option value="2">Support</option>
-                                                <option value="3">Deliverd</option>
-                                           
+                                                <option value="Ongoing">Ongoing</option>
+                                                <option value="Support">Support</option>
+                                                <option value="Delivered">Deliverd</option>
+
                                             </Form.Select>
                                             {errors.projectstatus?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>

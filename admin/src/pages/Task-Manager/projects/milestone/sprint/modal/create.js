@@ -27,7 +27,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId, }) => {
         setEndDate(date);
     };
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
     const onSubmit = (val) => {
         let body = {
@@ -40,6 +40,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId, }) => {
         };
 
         dispatch(addSprint(body));
+        reset();
         CloseModal();
     };
 

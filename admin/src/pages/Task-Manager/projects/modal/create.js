@@ -54,7 +54,7 @@ const Create = ({ modal, closeModal }) => {
             startDate: startDate,
             endDate: endDate,
             projectType: data?.project_type,
-            projectStatus: 1,
+            projectStatus: 'Ongoing',
             technology: addValue,
         };
         dispatch(addProject(body)).then(() => {
@@ -66,7 +66,7 @@ const Create = ({ modal, closeModal }) => {
         if (errorhandel?.data?.status == 200) {
             ToastHandle('success', 'Successfully added');
             closeModal('render');
-            console.log(addValue)
+            // console.log(addValue)
         } else if (errorhandel?.data?.status == 400) {
             ToastHandle('error', errorhandel?.data?.message);
         } else if (errorhandel?.data?.status == 500) {
@@ -78,7 +78,7 @@ const Create = ({ modal, closeModal }) => {
         setStartDate('');
         setEndDate('');
         setAddValue('')
-        console.log(addValue)
+        // console.log(addValue)
     }, [modal]);
     const removehandle = (selectedList, removedItem) => {
         const remove = getTechnology.filter((ele, ind) => {
@@ -88,7 +88,7 @@ const Create = ({ modal, closeModal }) => {
         if (index !== -1) {
             addValue.splice(index, 1);
             setAddValue(addValue);
-            console.log('remove', addValue);
+            // console.log('remove', addValue);
         } else {
             setAddValue(null);
         }
