@@ -48,7 +48,7 @@ const getMilestones = async (req, res) => {
     milestones = milestones.map(milestone => {
       const startDate = milestone.startDate;
       const completionDate = milestone.completionDate;
-      const daysLeft = Math.ceil((completionDate - startDate) / (1000 * 60 * 60 * 24)); t
+      const daysLeft = Math.ceil((completionDate - startDate) / (1000 * 60 * 60 * 24)); 
       return { ...milestone._doc, daysLeft };
     });
 
