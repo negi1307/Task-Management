@@ -5,7 +5,8 @@ async function emailSender(user) {
         service: 'gmail',
         auth: {
             user: 'support@rowthtech.com',
-            pass: 'ofklgtdgpzkmhzqf'
+            pass: 'jzkaxixunjohaita'
+
         }
     });
 
@@ -14,7 +15,7 @@ async function emailSender(user) {
         to: user.email,
         subject: 'Testing mail',
         text: 'This mail is here to certify that our code is working',
-        html:`Dear ${user.userName}
+        html: `Dear ${user.userName}
               Here Your login credentials
               Email: ${user.email}
               Password: ${user.plainPassword}`
