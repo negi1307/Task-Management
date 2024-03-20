@@ -188,6 +188,7 @@ function* deleteTaskFunction({ payload }) {
     }
 }
 function* updateTaskStatusFunction({ payload }) {
+    console.log(payload,'saga')
     try {
         yield put({
             type: TASK_TYPES.UPDATE_TASK_STATU_LOADING,

@@ -50,7 +50,7 @@ const TaskInformation = styled.div`
 `;
 
 const TaskCard = ({ item, index, closeModal }) => {
-    console.log(item, 'item');
+    console.log(item, 'itemsssssssssssssssssssss');
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState();
     const [editData, setEditData] = useState();
@@ -98,9 +98,9 @@ const TaskCard = ({ item, index, closeModal }) => {
     }
     return (
         <>
-            <Draggable key={item.id} draggableId={item.id} index={index}>
+            <Draggable key={item.id} draggableId={item?.id} index={index}>
                 {(provided) => (
-                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                    <div ref={provided?.innerRef} {...provided?.draggableProps} {...provided?.dragHandleProps}>
                         <TaskInformation className="py-2 pe-0">
                             <div className="row w-100">
                                 <div className="col-12">
@@ -114,7 +114,6 @@ const TaskCard = ({ item, index, closeModal }) => {
                                                 {item.summary}
                                             </a>
                                         </div>
-
                                         <div className="col-3 px-0">
                                             <div className="row mx-auto border">
                                                 <div className="col-6 border-end add_padding_box ">
@@ -124,7 +123,6 @@ const TaskCard = ({ item, index, closeModal }) => {
                                                             onClick={() => {
                                                                 handelUpdate(item);
                                                             }}></i>
-                                                        {/* Edit */}
                                                     </button>
                                                 </div>
                                                 <div className="col-6 add_padding_box">
@@ -133,7 +131,6 @@ const TaskCard = ({ item, index, closeModal }) => {
                                                         className="m-0 p-0 border-0 bg-transparent"
                                                         onClick={() => deleteData(item?.id)}>
                                                         <i class="mdi mdi-delete m-0 p-0 me-2 del_edit"></i>
-                                                        {/* Delete */}
                                                     </button>
                                                 </div>
                                             </div>
@@ -251,13 +248,14 @@ const TaskCard = ({ item, index, closeModal }) => {
                                                         <span
                                                             style={{
                                                                 backgroundColor: '#605e5a',
-                                                                borderRadius: '100%',
-                                                                padding: '7px',
+                                                                borderRadius: '50%',
+                                                                padding: '5px 6px',
+                                                              
                                                                 color: 'white',
                                                                 fontWeight: '800',
                                                             }}>
-                                                            {item?.assignees?.assigneeInfo?.firstName.charAt(0)}
-                                                            {item?.assignees?.assigneeInfo?.lastName.charAt(0)}
+                                                            {item?.assigneeInfo?.firstName.charAt(0)}
+                                                            {item?.assigneeInfo?.lastName.charAt(0)}
                                                         </span>
                                                     </div>
                                                 </OverlayTrigger>

@@ -366,7 +366,7 @@ export default function RightBar(props) {
                                             <option value="High">
                                                 &#128992;
                                                 High</option>
-                                            <option value="Medium">
+                                            <option value="Medium;">
                                                 &#128993;
                                                 Medium</option>
                                             <option value="Low">
