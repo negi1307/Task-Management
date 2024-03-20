@@ -26,6 +26,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
     const getCommentData = store?.getComment?.data?.response;
     const getHistory = store?.getHistoryReducer?.data?.response;
     const historyLoader = store?.getHistoryReducer
+    console.log(editData,'pankaj singh pundir')
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
         setValue('comment', "");
@@ -34,6 +35,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
             dispatch(getHistoryAction(editData?.id));
         }
     };
+
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
     const [inputForUpdate, setInputForUpdate] = useState('');
     const {
@@ -343,15 +345,15 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                             <div className="p-2">
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Project Name :</h4>
-                                    <p className="ms-2 p-0">{editData?.projectInfo?.projectName}</p>
+                                    <p className="ms-2 p-0">{editData?.projects?.projectName}</p>
                                 </div>
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Milestone Name :</h4>
-                                    <p className="ms-2 p-0">{editData?.milestoneInfo?.title}</p>
+                                    <p className="ms-2 p-0">{editData?.milestones?.title}</p>
                                 </div>
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Sprint Name :</h4>
-                                    <p className="ms-2 p-0">{editData?.sprintInfo?.sprintName}</p>
+                                    <p className="ms-2 p-0">{editData?.sprints?.sprintName} </p>
                                 </div>
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Summary :</h4>
@@ -382,24 +384,24 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0"> Assignee :</h4>
                                     <p className="ms-2 p-0">
-                                        {editData?.assignees?.assigneeInfo?.firstName}
-                                        {editData?.assignees?.assigneeInfo?.lastName}
+                                    {editData?.assigneeInfo?.firstName}{' '}
+                                                    {editData?.assigneeInfo?.lastName}
                                     </p>
                                 </div>
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Reporter :</h4>
-                                    <p className="ms-2 p-0">{editData?.assignees?.reporterInfo?.role}</p>
+                                    <p className="ms-2 p-0">{editData?.reporterInfo?.firstName}{''}{editData?.reporterInfo?.lastName}</p>
                                 </div>
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Priority :</h4>
                                     <p className="ms-2 p-0">
-                                        {editData?.priority == 1
+                                        {editData?.priority == "High"
                                             ? 'High'
-                                            : '' || editData?.priority == 2
+                                            : '' || editData?.priority == "Medium"
                                             ? 'Medium'
-                                            : '' || editData?.priority == 3
+                                            : '' || editData?.priority == "Low"
                                             ? 'Low'
-                                            : ''}
+                                            : ''} 
                                     </p>
                                 </div>
                                 <div className=" d-flex">

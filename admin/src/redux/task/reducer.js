@@ -261,6 +261,7 @@ export const TaskStatusReducer= (state = STATUS_TASK_INITIAL_STATE, action) => {
                 loading: true,
             };
         case TASK_TYPES.TASK_STATUS_SUCCESS:
+            console.log(action.payload,'reducer')
             return {
                 data: action?.payload,
                 loading: false,

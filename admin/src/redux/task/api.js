@@ -20,6 +20,7 @@ export function deleteTaskApi(data): any {
 }
 
 export function updateTaskStatusApi(data): any {
+    console.log(data,'apiiiiiiiii')
     return api.update(URL.UpdateTaskStatus, data.payload);
 }
 export function TaskStatusApi(data): any {

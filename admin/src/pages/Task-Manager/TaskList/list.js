@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { ListGroup, Container, Row, Col, Table, Button, Form, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { TaskStatusAction, deleteTask, getsingleSprintTask, updateTaskStatus } from '../../../redux/task/action';
+import { TaskStatusAction, deleteTask, getsingleSprintTask,  updateTask } from '../../../redux/task/action';
 import MainLoader from '../../../constants/Loader/loader';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -13,7 +13,6 @@ import ToastHandle from '../../../constants/toaster/toaster';
 import Create from './modal/create';
 import { getAllProjects } from '../../../redux/projects/action';
 import { getAllRoles, getAllUsers, getSingleSprint, getsingleMileStone } from '../../../redux/actions';
-import { TaskStatus } from '../../../constants/endpoint';
 const TaskList = () => {
     const { projectId, milestoneId, spriteId } = useParams();
     const [skip, setSkip] = useState(1);
@@ -90,13 +89,13 @@ const TaskList = () => {
                 taskId: checkedData._id,
                 activeStatus: true,
             };
-            dispatch(updateTaskStatus(body));
+            dispatch(updateTask(body));
         } else {
             let body = {
                 taskId: checkedData._id,
                 activeStatus: false,
             };
-            dispatch(updateTaskStatus(body));
+            dispatch(updateTask(body));
         }
         setStatusModal(false);
         setStatus(1);

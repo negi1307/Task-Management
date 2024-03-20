@@ -67,6 +67,7 @@ const Boards = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.getAllTaskReducer;
+    console.log('successHandle', successHandle);
     const statushandle = store?.updateTaskStatus;
     const deletehandel = store?.deleteTask;
     const updatehandel = store?.UpdateTaskReducer;
@@ -77,6 +78,7 @@ const Boards = () => {
     const [projectNameHeading, setProjectName] = useState('Select Project Name');
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
+    console.log('columns', columns);
     const sprintId = store?.getSprintId?.data;
     const taskId = store?.getTaskId?.data;
     const CreateCommenthandel = store?.AddCommentReducer;
@@ -96,7 +98,8 @@ const Boards = () => {
     const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return;
         const { source, destination } = result;
-        
+        console.log(result, 'result')
+
         if (source.droppableId !== destination.droppableId) {
             const sourceColumn = columns[source.droppableId];
             const destColumn = columns[destination.droppableId];
@@ -115,9 +118,9 @@ const Boards = () => {
                     items: destItems,
                 },
             });
-            console.log(columns,'columsssssssssssssssssssssssssssssssssssssssssss')
-
             handelupdatetask(result);
+
+
         } else {
             const column = columns[source.droppableId];
             const copiedItems = [...column.items];
@@ -130,6 +133,8 @@ const Boards = () => {
                     items: copiedItems,
                 },
             });
+            handelupdatetask(result);
+
         }
     };
 
@@ -173,13 +178,18 @@ const Boards = () => {
     }, [successHandle]);
 
     const handelupdatetask = (ele) => {
+        console.log(ele, 'ele')
         let body = {
-            taskId: ele?.draggableId,
+            taskId: ele?.draggableId
+
+            ,
             status: ele?.destination?.droppableId,
         };
         dispatch(updateTaskStatus(body));
         setloader(false);
+
     };
+    console.log(handelupdatetask, 'handle')
 
     const closeModal = (val) => {
         if (val == 'render') {
@@ -384,32 +394,32 @@ const Boards = () => {
                 {loader ? (
                     <MainLoader />
                 ) : (
-                   <Container>
-        <TaskColumnStyles>
-            {Object.entries(columns)?.map(([columnId, column]) => {
-                return (
-                    <Droppable key={columnId} droppableId={columnId}>
-                        {(provided, snapshot) => (
-                            <div className="task-list-col">
-                                <TaskList ref={provided.innerRef} {...provided.droppableProps}>
-                                    <Title>{column.title}</Title>
-                                    {column?.items?.map((item, index) => (
-                                        <TaskCard
-                                            key={item.id}
-                                            item={item}
-                                            index={index}
-                                            closeModal={closeModal}
-                                        />
-                                    ))}
-                                    {provided.placeholder}
-                                </TaskList>
-                            </div>
-                        )}
-                    </Droppable>
-                );
-            })}
-        </TaskColumnStyles>
-    </Container>
+                    <Container>
+                        <TaskColumnStyles>
+                            {Object.entries(columns)?.map(([columnId, column]) => {
+                                return (
+                                    <Droppable key={columnId} droppableId={columnId}>
+                                        {(provided, snapshot) => (
+                                            <div className="task-list-col">
+                                                <TaskList ref={provided.innerRef} {...provided.droppableProps}>
+                                                    <Title>{column.title}</Title>
+                                                    {column?.items?.map((item, index) => (
+                                                        <TaskCard
+                                                            key={item.id}
+                                                            item={item}
+                                                            index={index}
+                                                            closeModal={closeModal}
+                                                        />
+                                                    ))}
+                                                    {provided.placeholder}
+                                                </TaskList>
+                                            </div>
+                                        )}
+                                    </Droppable>
+                                );
+                            })}
+                        </TaskColumnStyles>
+                    </Container>
                 )}
             </DragDropContext>
         </>
