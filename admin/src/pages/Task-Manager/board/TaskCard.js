@@ -50,7 +50,7 @@ const TaskInformation = styled.div`
 `;
 
 const TaskCard = ({ item, index, closeModal }) => {
-    console.log(item, 'item');
+    console.log(item, 'itemsssssssssssssssssssss');
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState();
     const [editData, setEditData] = useState();
@@ -98,10 +98,10 @@ const TaskCard = ({ item, index, closeModal }) => {
     }
     return (
         <>
-            <Draggable key={item.id} draggableId={item.id} index={index}>
+            <Draggable key={item.id} draggableId={item?.id} index={index}>
                 {(provided) => (
-                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                        <TaskInformation className="py-2  pe-0">
+                    <div ref={provided?.innerRef} {...provided?.draggableProps} {...provided?.dragHandleProps}>
+                        <TaskInformation className="py-2 pe-0">
                             <div className="row w-100">
                                 <div className="col-12">
                                     <div className="row">
@@ -248,13 +248,14 @@ const TaskCard = ({ item, index, closeModal }) => {
                                                         <span
                                                             style={{
                                                                 backgroundColor: '#605e5a',
-                                                                borderRadius: '100%',
-                                                                padding: '7px',
+                                                                borderRadius: '50%',
+                                                                padding: '5px 6px',
+                                                              
                                                                 color: 'white',
                                                                 fontWeight: '800',
                                                             }}>
-                                                            {item?.assignees?.assigneeInfo?.firstName.charAt(0)}
-                                                            {item?.assignees?.assigneeInfo?.lastName.charAt(0)}
+                                                            {item?.assigneeInfo?.firstName.charAt(0)}
+                                                            {item?.assigneeInfo?.lastName.charAt(0)}
                                                         </span>
                                                     </div>
                                                 </OverlayTrigger>
