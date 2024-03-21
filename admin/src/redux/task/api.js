@@ -20,6 +20,7 @@ export function deleteTaskApi(data): any {
 }
 
 export function updateTaskStatusApi(data): any {
+    console.log(data,'apiiiiiiiii')
     return api.update(URL.UpdateTaskStatus, data.payload);
 }
 export function TaskStatusApi(data): any {
@@ -45,5 +46,8 @@ export function getReporterListApi(data): any {
 }
 
 export function GetHistoryApi(data): any {
-    return api.get(URL.getHistory + data.payload);
+    return api.get(URL.getHistory + data?.payload);
 }
+// export function GetBugsApi(data): any {
+//     return api.get(URL.getBugs + data?.payload);
+// }

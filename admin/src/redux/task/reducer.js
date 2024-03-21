@@ -261,6 +261,7 @@ export const TaskStatusReducer= (state = STATUS_TASK_INITIAL_STATE, action) => {
                 loading: true,
             };
         case TASK_TYPES.TASK_STATUS_SUCCESS:
+            console.log(action.payload,'reducer')
             return {
                 data: action?.payload,
                 loading: false,
@@ -506,3 +507,33 @@ export const getHistoryReducer = (state = GET_HISTORY_INITIAL_STATE, action) => 
 
     }
 };
+// export const getBugsReducer = (state = GET_BUGS_INITIAL_STATE, action) => {
+//     switch (action.type) {
+//         case TASK_TYPES.GET_BUGS_LOADING:
+//             return {
+//                 data: GET_BUGS_INITIAL_STATE.data,
+//                 loading: true,
+//             };
+//         case TASK_TYPES.GET_BUGS_SUCCESS:
+//             return {
+//                 data: action?.payload,
+//                 loading: false,
+//             };
+
+//             // case TASK_TYPES.GET_HISTORY_RESET:
+//             //     return {
+//             //         data: GET_HISTORY_INITIAL_STATE.data,
+//             //         loading: false
+//             //     }
+//         case TASK_TYPES.GET_BUGS_ERROR:
+//             return {
+//                 data: [],
+//                 status:!200,
+//                 loading: false,
+//                 message: action?.payload,
+//             };
+//         default:
+//             return { ...state };
+
+//     }
+// };

@@ -188,6 +188,7 @@ function* deleteTaskFunction({ payload }) {
     }
 }
 function* updateTaskStatusFunction({ payload }) {
+    console.log(payload,'saga')
     try {
         yield put({
             type: TASK_TYPES.UPDATE_TASK_STATU_LOADING,
@@ -536,6 +537,42 @@ function* getHistoryFunction({ payload }) {
 
     }
 }
+// function* getBugsFunction({ payload }) {
+//     try {
+//         yield put({
+//             type: TASK_TYPES.GET_BUGS_LOADING,
+//             payload: {}
+//         })
+//         const response = yield call(GetBugsApi, { payload });
+//         if (response.data.status) {
+//             yield put({
+//                 type: TASK_TYPES.GET_BUGS_SUCCESS,
+//                 payload: { ...response.data },
+//             });
+//             // yield put({
+//             //     type: TASK_TYPES.GET_HISTORY_RESET,
+//             //     payload: {},
+//             // });
+//         }
+//         else {
+//             yield put({
+//                 type: TASK_TYPES.GET_BUGS_ERROR,
+//                 payload: { ...response.data }
+//             });
+//         }
+
+//     } catch (error) {
+//         yield put({
+//             type: TASK_TYPES.GET_BUGS_ERROR,
+//             payload: { error }
+//         });
+//         yield put({
+//             type: TASK_TYPES.GET_BUGS_RESET,
+//             payload: {},
+//         });
+
+//     }
+// }
 export function* createTaskSaga(): any {
     yield takeEvery(TASK_TYPES.CREATE_TASK, createTaskFunction);
 }
@@ -576,6 +613,9 @@ export function* getAssignUserSaga(): any {
 export function* getHistorySaga(): any {
     yield takeEvery(TASK_TYPES. GET_HISTORY, getHistoryFunction);
 }
+// export function* getBugsSaga(): any {
+//     yield takeEvery(TASK_TYPES. GET_BUGS, getBugsFunction);
+// }
 function* AllTaskSaga(): any {
     yield all([
         fork(createTaskSaga),
@@ -590,7 +630,8 @@ function* AllTaskSaga(): any {
         fork(deleteCommentSaga),
         fork(updateCommentSaga),
         fork(getAssignUserSaga),
-        fork (getHistorySaga)
+        fork (getHistorySaga),
+        // fork (getBugsSaga)
     ])
 }
 export default AllTaskSaga;

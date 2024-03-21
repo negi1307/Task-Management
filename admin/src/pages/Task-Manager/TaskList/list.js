@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { ListGroup, Container, Row, Col, Table, Button, Form, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { TaskStatusAction, deleteTask, getsingleSprintTask, updateTaskStatus } from '../../../redux/task/action';
+import { TaskStatusAction, deleteTask, getsingleSprintTask, updateTask } from '../../../redux/task/action';
 import MainLoader from '../../../constants/Loader/loader';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -13,7 +13,6 @@ import ToastHandle from '../../../constants/toaster/toaster';
 import Create from './modal/create';
 import { getAllProjects } from '../../../redux/projects/action';
 import { getAllRoles, getAllUsers, getSingleSprint, getsingleMileStone } from '../../../redux/actions';
-import { TaskStatus } from '../../../constants/endpoint';
 const TaskList = () => {
     const { projectId, milestoneId, spriteId } = useParams();
     const [skip, setSkip] = useState(1);
@@ -32,12 +31,13 @@ const TaskList = () => {
     const getSingleSprintTask = store?.getSigleSprintTask?.data?.response;
     const deletehandle = store?.TaskStatusReducer?.data;
     const loaderhandel = store?.getSigleSprintTask;
+    console.log(getSingleSprintTask,'11111111111111111111111111111111111111111111111111111111111111111111111111')
     const handleCreate = () => {
         SetOpenModal(true);
     };
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getsingleSprintTask({ id: spriteId, taskStatus: taskStatus, activeStatus: true, skip: skip ,projectId:projectId ,milestoneId:milestoneId }));
+        dispatch(getsingleSprintTask({ id: spriteId, taskStatus: taskStatus, activeStatus: true, skip: skip, projectId: projectId, milestoneId: milestoneId }));
     };
     const CloseModal = (val) => {
         if (val == 'render') {
@@ -55,9 +55,9 @@ const TaskList = () => {
                 activeStatus: true,
                 skip: 1,
                 taskStatus: taskStatus,
-                projectId:projectId ,
-                milestoneId:milestoneId
-               
+                projectId: projectId,
+                milestoneId: milestoneId
+
             };
             dispatch(getsingleSprintTask(data));
         } else {
@@ -69,8 +69,8 @@ const TaskList = () => {
                 activeStatus: false,
                 skip: 1,
                 taskStatus: taskStatus,
-                projectId:projectId ,
-                milestoneId:milestoneId
+                projectId: projectId,
+                milestoneId: milestoneId
             };
             dispatch(getsingleSprintTask(data));
         }
@@ -90,19 +90,19 @@ const TaskList = () => {
                 taskId: checkedData._id,
                 activeStatus: true,
             };
-            dispatch(updateTaskStatus(body));
+            dispatch(updateTask(body));
         } else {
             let body = {
                 taskId: checkedData._id,
                 activeStatus: false,
             };
-            dispatch(updateTaskStatus(body));
+            dispatch(updateTask(body));
         }
         setStatusModal(false);
         setStatus(1);
     };
     useEffect(() => {
-        dispatch(getsingleSprintTask({ id: spriteId, taskStatus: taskStatus, activeStatus: true, skip: skip ,projectId:projectId ,milestoneId:milestoneId }));
+        dispatch(getsingleSprintTask({ id: spriteId, taskStatus: taskStatus, activeStatus: true, skip: skip, projectId: projectId, milestoneId: milestoneId }));
     }, [render]);
     useEffect(() => {
         dispatch(getAllRoles());
@@ -130,23 +130,23 @@ const TaskList = () => {
         if (val == '1') {
             settaskStatus(1);
             setSkip(1);
-            dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 1 , projectId:projectId ,milestoneId:milestoneId }));
+            dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 1, projectId: projectId, milestoneId: milestoneId }));
         } else if (val == '2') {
             settaskStatus(2);
             setSkip(1);
-            dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 2 ,projectId:projectId ,milestoneId:milestoneId}));
+            dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 2, projectId: projectId, milestoneId: milestoneId }));
         } else if (val == '3') {
             setSkip(1);
             settaskStatus(3);
-            dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 3 ,projectId:projectId ,milestoneId:milestoneId}));
+            dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 3, projectId: projectId, milestoneId: milestoneId }));
         } else if (val == '4') {
             setSkip(1);
             settaskStatus(4);
-            dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 4 ,projectId:projectId ,milestoneId:milestoneId}));
+            dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 4, projectId: projectId, milestoneId: milestoneId }));
         } else {
             setSkip(1);
             settaskStatus(5);
-            dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 5 ,projectId:projectId ,milestoneId:milestoneId}));
+            dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 5, projectId: projectId, milestoneId: milestoneId }));
         }
     };
     return (
@@ -218,10 +218,8 @@ const TaskList = () => {
                                     <thead>
                                         <tr>
                                             <th>#</th>
-
                                             <th> Description</th>
                                             <th> Summary</th>
-
                                             <th>Assignee</th>
                                             <th>Reporter</th>
                                             <th>Priority</th>
@@ -232,6 +230,7 @@ const TaskList = () => {
                                     </thead>
                                     <tbody>
                                         {getSingleSprintTask?.map((item, index) => (
+                                            
                                             <tr>
                                                 <td>{(skip - 1) * 10 + index + 1}</td>
                                                 <td >{item?.summary}</td>
@@ -249,16 +248,18 @@ const TaskList = () => {
                                                     {item?.assigneeInfo?.lastName}
                                                 </td>
                                                 <td>{item?.reporterInfo?.firstName} {''}
-                                                {item?.reporterInfo?.lastName}
+                                                    {item?.reporterInfo?.lastName}
                                                 </td>
                                                 <td>
-                                                    {item?.priority == 1
-                                                        ? 'High'
-                                                        : '' || item?.priority == 2
-                                                        ? 'Medium'
-                                                        : '' || item?.priority == 3
-                                                        ? 'Low'
-                                                        : ''}
+                                                    {item?.priority == 'Critical'
+                                                        ? 'Critical'
+                                                        : '' || item?.priority == 'High'
+                                                            ? 'High'
+                                                            : '' || item?.priority == 'Medium'
+                                                            ? 'Medium'
+                                                            : '' || item?.priority == 'Low'
+                                                                ? 'Low'
+                                                                : ''} 
                                                 </td>
                                                 <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
                                                 <td>{moment(item?.dueDate).format("DD/MM/YYYY")}</td>

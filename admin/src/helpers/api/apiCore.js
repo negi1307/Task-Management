@@ -2,6 +2,7 @@ import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 
 import config from '../../config';
+import { useNavigate } from 'react-router-dom';
 
 // content type
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -13,14 +14,27 @@ axios.interceptors.response.use(
         return response;
     },
     (error) => {
+        const navigate = useNavigate();
+        const logoutUser = () => {
+            // Clear session and token from local storage
+            localStorage.removeItem(AUTH_SESSION_KEY);
+            // Redirect to logout page or perform any other necessary actions
+            navigate('/account/logout');
+        };
         // Any status codes that falls outside the range of 2xx cause this function to trigger
         let message;
 
         if (error && error.response && error.response.status === 404) {
             // window.location.href = '/not-found';
-        } else if (error && error.response && error.response.status === 403) {
+        }
+
+        else if (error && error.response && error.response.status === 403) {
             // alert(error)
-            window.location.href = '/access-denied';
+            // window.location.href = '/access-denied';
+        }
+        else if (error && error.response && error.response.status === 401) {
+            // Handle 401 error (token unauthorized or expired)
+            logoutUser(); // Call logout function when token is unauthorized or expired
         }
         else {
             switch (error.response.status) {
@@ -42,6 +56,7 @@ axios.interceptors.response.use(
         }
     }
 );
+
 
 const AUTH_SESSION_KEY = 'hyper_user';
 

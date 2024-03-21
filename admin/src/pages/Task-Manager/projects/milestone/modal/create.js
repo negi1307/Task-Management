@@ -66,7 +66,7 @@ const Create = ({ modal, closeModal }) => {
             ToastHandle('error', sucesshandel?.data?.message);
         }
     }, [sucesshandel]);
-    console.log(sucesshandel,'====')
+    console.log(sucesshandel, '====')
 
     return (
         <>
@@ -106,7 +106,7 @@ const Create = ({ modal, closeModal }) => {
                                                 {...register('Title', { required: true })}
                                             />
                                             {errors.Title?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -124,11 +124,11 @@ const Create = ({ modal, closeModal }) => {
                                                 {...register('description', { required: true })}
                                             />
                                             {errors.description?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
-                                    
+
                                     <Col lg={12}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
                                             <Form.Label className="w-100">
@@ -143,6 +143,7 @@ const Create = ({ modal, closeModal }) => {
                                                 minDate={today}
                                                 className="add_width_input"
                                             />
+
                                         </Form.Group>
                                     </Col>
                                     <Col lg={12}>
@@ -162,7 +163,7 @@ const Create = ({ modal, closeModal }) => {
                                             />
                                         </Form.Group>
                                     </Col>
-                                
+
 
                                 </Row>
                                 <Row>
