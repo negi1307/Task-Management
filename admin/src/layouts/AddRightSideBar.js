@@ -71,7 +71,7 @@ export default function RightBar(props) {
         body.append('attachment', selectedFile ? selectedFile : '');
         if (projectId !== '' && mileStoneId !== '' && sprintId !== '') {
             dispatch(createTask(body));
-            console.log(body,'ddddddddddddddddd************************tttttttttttttttttt*****************')
+            console.log(body, 'ddddddddddddddddd************************tttttttttttttttttt*****************')
         } else {
             alert('plsease select project');
         }
@@ -108,10 +108,10 @@ export default function RightBar(props) {
         dispatch(getAllRoles());
         dispatch(getAllUsers());
     }, []);
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(getReporterAction())
-    },[])
-    const reporter=store?.getReporterReducer?.data?.reporterList
+    }, [])
+    const reporter = store?.getReporterReducer?.data?.reporterList
     return (
         <div className={showModal ? 'rightBar show' : 'rightBar'} role="document">
             <div className="modal-content">
@@ -185,14 +185,14 @@ export default function RightBar(props) {
                                             Sprint <span className="text-danger">*</span>:
                                         </Form.Label>
 
-                                      
+
                                         <Form.Select
-                                                    {...register('Sprint', { required: true, disabled: true })}>
-                                                    {/* <option value={''}>--Select--</option> */}
-                                                    {store?.getAllSingleSprints?.data?.response?.map((ele, ind) => (
-                                                        <option value={ele?._id}> {ele?.sprintName} </option>
-                                                    ))}
-                                                </Form.Select>
+                                            {...register('Sprint', { required: true, disabled: true })}>
+                                            {/* <option value={''}>--Select--</option> */}
+                                            {store?.getAllSingleSprints?.data?.response?.map((ele, ind) => (
+                                                <option value={ele?._id}> {ele?.sprintName} </option>
+                                            ))}
+                                        </Form.Select>
                                         {errors.Sprint?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
                                         )}
@@ -381,56 +381,56 @@ export default function RightBar(props) {
                                 </div>
                             </div>
                             {/* <div className="row">
-                                <div className="col-lg-6">
-                                    <div className="mb-2">
-                                        <label className="form-label" for="exampleForm.ControlTextarea1">
-                                            Status<span className="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            disabled="Live"
-                                            name="status"
-                                            placeholder="To-Do"
-                                            type="text"
-                                            id="exampleForm.ControlTextarea1"
-                                            className="form-control"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="col-lg-6">
-                                    <div className="mb-2">
-                                        <label className="form-label" for="exampleForm.ControlTextarea1">
-                                            Attachment :
-                                        </label>
-                                        <div onClick={openFileInput}>
-                                            <i className="mdi mdi-attachment m-0 p-0 font-20 cp"></i>
-                                        </div>
-                                        <input
-                                            type="file"
-                                            accept="application/pdf,image/png,image/jpeg,image/jpg"
-                                            id="fileInput"
-                                            className="file-input"
-                                            onChange={handleFileSelect}
-                                            style={{ display: 'none' }}
-                                        // {...register('Attachment', { required: true })}
-                                        />{' '}
-                                        {selectedFile ? (
-                                            <img
-                                                src={
-                                                    selectedFile?.type == 'image/png' ||
-                                                        selectedFile?.type == 'image/jpg' ||
-                                                        selectedFile?.type === 'image/jpeg'
-                                                        ? URL.createObjectURL(selectedFile)
-                                                        : pdfImage
-                                                }
-                                                className="add_upload_icon_load me-2 h-auto w-75 cp"
-                                                alt=""
+                                    <div className="col-lg-6">
+                                        <div className="mb-2">
+                                            <label className="form-label" for="exampleForm.ControlTextarea1">
+                                                Status<span className="text-danger">*</span>:
+                                            </label>
+                                            <input
+                                                disabled="Live"
+                                                name="status"
+                                                placeholder="To-Do"
+                                                type="text"
+                                                id="exampleForm.ControlTextarea1"
+                                                className="form-control"
                                             />
-                                        ) : (
-                                            ''
-                                        )}
+                                        </div>
                                     </div>
-                                </div>
-                            </div> */}
+                                    <div className="col-lg-6">
+                                        <div className="mb-2">
+                                            <label className="form-label" for="exampleForm.ControlTextarea1">
+                                                Attachment :
+                                            </label>
+                                            <div onClick={openFileInput}>
+                                                <i className="mdi mdi-attachment m-0 p-0 font-20 cp"></i>
+                                            </div>
+                                            <input
+                                                type="file"
+                                                accept="application/pdf,image/png,image/jpeg,image/jpg"
+                                                id="fileInput"
+                                                className="file-input"
+                                                onChange={handleFileSelect}
+                                                style={{ display: 'none' }}
+                                            // {...register('Attachment', { required: true })}
+                                            />{' '}
+                                            {selectedFile ? (
+                                                <img
+                                                    src={
+                                                        selectedFile?.type == 'image/png' ||
+                                                            selectedFile?.type == 'image/jpg' ||
+                                                            selectedFile?.type === 'image/jpeg'
+                                                            ? URL.createObjectURL(selectedFile)
+                                                            : pdfImage
+                                                    }
+                                                    className="add_upload_icon_load me-2 h-auto w-75 cp"
+                                                    alt=""
+                                                />
+                                            ) : (
+                                                ''
+                                            )}
+                                        </div>
+                                    </div>
+                                </div> */}
 
                             <div className="row"></div>
                             <div className="row">

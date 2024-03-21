@@ -1,16 +1,54 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import TASK_TYPES from './constant';
-import { AddCommentApi, GetAssignUserApi,getReporterListApi, GetHistoryApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi,updateTaskStatusApi } from './api';
+import { AddCommentApi, GetAssignUserApi, createSubtaskApi, getReporterListApi, GetHistoryApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi, updateTaskStatusApi } from './api';
 
+function* createSubTaskFunction({ payload }) {
+    try {
+        yield put({
+            type: TASK_TYPES.CREATE_SUBTASK_LOADING,
+            payload: {}
+        })
+
+        const response = yield call(createSubtaskApi, { payload });
+        // console.log(response, "hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+        if (response.data.status) {
+            yield put({
+                type: TASK_TYPES.CREATE_SUBTASK_SUCCESS,
+                payload: { ...response.data },
+            });
+            yield put({
+                type: TASK_TYPES.CREATE_SUBTASK_RESET,
+                payload: {},
+            });
+        }
+        else {
+            yield put({
+                type: TASK_TYPES.CREATE_SUBTASK_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        //    console.log(error,"mmmmmmmmmmmmmmmmmmmmmm")
+        yield put({
+            type: TASK_TYPES.CREATE_SUBTASK_ERROR,
+            payload: { error }
+        });
+        yield put({
+            type: TASK_TYPES.CREATE_SUBTASK_RESET,
+            payload: {},
+        });
+    }
+}
 function* createTaskFunction({ payload }) {
     try {
         yield put({
             type: TASK_TYPES.CREATE_TASK_LOADING,
             payload: {}
         })
-        
+
         const response = yield call(createTaskApi, { payload });
-       console.log(response ,"hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii") ;
+        // console.log(response, "hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.CREATE_TASK_SUCCESS,
@@ -29,7 +67,7 @@ function* createTaskFunction({ payload }) {
         }
 
     } catch (error) {
-    //    console.log(error,"mmmmmmmmmmmmmmmmmmmmmm")
+        //    console.log(error,"mmmmmmmmmmmmmmmmmmmmmm")
         yield put({
             type: TASK_TYPES.CREATE_TASK_ERROR,
             payload: { error }
@@ -47,7 +85,7 @@ function* getSingleSprintTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getSingleSprintTaskApi, { payload });
-        console.log(response,"bbbvvv")
+        console.log(response, "bbbvvv")
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_SINGLE_SPRINT_TASK_SUCCESS,
@@ -70,10 +108,10 @@ function* getSingleSprintTaskFunction({ payload }) {
             type: TASK_TYPES.GET_SINGLE_SPRINT_TASK_ERROR,
             payload: { error }
         });
- yield put({
-                type: TASK_TYPES.GET_SINGLE_SPRINT_TASK_RESET,
-                payload: {},
-            });
+        yield put({
+            type: TASK_TYPES.GET_SINGLE_SPRINT_TASK_RESET,
+            payload: {},
+        });
     }
 }
 function* getAllTaskFunction({ payload }) {
@@ -83,7 +121,7 @@ function* getAllTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getAllTaskApi, { payload });
-        console.log(response,"bbbvvv")
+        console.log(response, "bbbvvv")
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_ALL_TASK_SUCCESS,
@@ -106,10 +144,10 @@ function* getAllTaskFunction({ payload }) {
             type: TASK_TYPES.GET_ALL_TASK_ERROR,
             payload: { error }
         });
-         yield put({
-                type: TASK_TYPES.GET_ALL_TASK_RESET,
-                payload: {},
-            });
+        yield put({
+            type: TASK_TYPES.GET_ALL_TASK_RESET,
+            payload: {},
+        });
 
     }
 }
@@ -120,7 +158,7 @@ function* updateTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(UpdateTaskApi, { payload });
-        console.log(response,"bbbvvv")
+        console.log(response, "bbbvvv")
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.UPDATE_TASK_SUCCESS,
@@ -188,14 +226,14 @@ function* deleteTaskFunction({ payload }) {
     }
 }
 function* updateTaskStatusFunction({ payload }) {
-    console.log(payload,'saga')
+    console.log(payload, 'saga')
     try {
         yield put({
             type: TASK_TYPES.UPDATE_TASK_STATU_LOADING,
             payload: {}
         })
         const response = yield call(updateTaskStatusApi, { payload });
-        console.log("dssfksf",payload)
+        console.log("dssfksf", payload)
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.UPDATE_TASK_STATU_SUCCESS,
@@ -233,7 +271,7 @@ function* TaskStatusFunction({ payload }) {
             payload: {}
         })
         const response = yield call(TaskStatusApi, { payload });
-        console.log("dssfksf",payload)
+        console.log("dssfksf", payload)
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.TASK_STATUS_SUCCESS,
@@ -269,9 +307,9 @@ function* addCommentFunction({ payload }) {
             type: TASK_TYPES.ADD_COMMENT_LOADING,
             payload: {}
         })
-        
+
         const response = yield call(AddCommentApi, { payload });
-    //   alert(response)
+        //   alert(response)
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.ADD_COMMENT_SUCCESS,
@@ -426,12 +464,12 @@ function* AssignUserFunction({ payload }) {
             //     payload: {},
             // });
         }
-        else if(response.data.status == 404){
+        else if (response.data.status == 404) {
             // yield put({
             //     type: TASK_TYPES.GET_ASSIGN_USER_ERROR,
             //     payload: { ...response.data }
             // });
-             yield put({
+            yield put({
                 type: TASK_TYPES.GET_ASSIGN_USER_RESET,
                 payload: {},
             });
@@ -472,12 +510,12 @@ function* getReporterFunction({ payload }) {
             //     payload: {},
             // });
         }
-        else if(response.data.status == 404){
+        else if (response.data.status == 404) {
             // yield put({
             //     type: TASK_TYPES.GET_ASSIGN_USER_ERROR,
             //     payload: { ...response.data }
             // });
-             yield put({
+            yield put({
                 type: TASK_TYPES.GET_ALL_REPORTER_RESET,
                 payload: {},
             });
@@ -540,6 +578,9 @@ function* getHistoryFunction({ payload }) {
 export function* createTaskSaga(): any {
     yield takeEvery(TASK_TYPES.CREATE_TASK, createTaskFunction);
 }
+export function* createSubTaskSaga(): any {
+    yield takeEvery(TASK_TYPES.CREATE_SUBTASK, createSubTaskFunction);
+}
 export function* getSingleSprintTaskSaga(): any {
     yield takeEvery(TASK_TYPES.GET_SINGLE_SPRINT_TASK, getSingleSprintTaskFunction);
 }
@@ -571,15 +612,16 @@ export function* updateCommentSaga(): any {
     yield takeEvery(TASK_TYPES.UPDATE_COMMENT, updateCommentFunction);
 }
 export function* getAssignUserSaga(): any {
-    yield takeEvery(TASK_TYPES. GET_ASSIGN_USER, AssignUserFunction);
-    yield takeEvery(TASK_TYPES. GET_ALL_REPORTER, getReporterFunction);
+    yield takeEvery(TASK_TYPES.GET_ASSIGN_USER, AssignUserFunction);
+    yield takeEvery(TASK_TYPES.GET_ALL_REPORTER, getReporterFunction);
 }
 export function* getHistorySaga(): any {
-    yield takeEvery(TASK_TYPES. GET_HISTORY, getHistoryFunction);
+    yield takeEvery(TASK_TYPES.GET_HISTORY, getHistoryFunction);
 }
 function* AllTaskSaga(): any {
     yield all([
         fork(createTaskSaga),
+        fork(createSubTaskSaga),
         fork(getSingleSprintTaskSaga),
         fork(getAllTaskSaga),
         fork(updateTaskSaga),
@@ -591,7 +633,7 @@ function* AllTaskSaga(): any {
         fork(deleteCommentSaga),
         fork(updateCommentSaga),
         fork(getAssignUserSaga),
-        fork (getHistorySaga)
+        fork(getHistorySaga)
     ])
 }
 export default AllTaskSaga;

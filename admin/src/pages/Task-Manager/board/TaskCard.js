@@ -61,6 +61,7 @@ const TaskCard = ({ item, index, closeModal }) => {
     const [isOpen, setIsOpen] = useState(false);
     const store = useSelector((state) => state);
 
+
     const dispatch = useDispatch();
 
     const closeOpenModal = () => {
@@ -228,7 +229,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                                             <div className="secondary-details d-flex align-items-center">
                                                 <p className="m-0 p-0">
                                                     <span>
-                                                        {item?.startDate ? moment(item?.startDate).format("DD/MM/YYYY"): ''}
+                                                        {item?.startDate ? moment(item?.startDate).format("DD/MM/YYYY") : ''}
                                                     </span>
                                                 </p>
                                             </div>
@@ -250,7 +251,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                                                                 backgroundColor: '#605e5a',
                                                                 borderRadius: '50%',
                                                                 padding: '5px 6px',
-                                                              
+
                                                                 color: 'white',
                                                                 fontWeight: '800',
                                                             }}>
@@ -290,7 +291,7 @@ const TaskCard = ({ item, index, closeModal }) => {
             </Modal>
 
             <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
-            <TaskDetailPage modal={openDetailPage} editData={detailData} closeModal={closeDetailPage} />
+            <TaskDetailPage modal={openDetailPage} editData={detailData} closeModal={closeDetailPage} taskId={item._id} />
         </>
     );
 };
