@@ -64,5 +64,5 @@ export const DeletePreSale = "/preSale/deletePreSales?preSalesId="
 
 export const getTimeTracker = "/users/trackTime"
 export const getHistory = "/history/getHistory?taskId="
-export const getBugs = "/subTask/getSubTask?="
+// export const getBugs = "/subTask/getSubTask?="
 

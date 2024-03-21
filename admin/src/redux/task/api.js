@@ -48,6 +48,6 @@ export function getReporterListApi(data): any {
 export function GetHistoryApi(data): any {
     return api.get(URL.getHistory + data?.payload);
 }
-export function GetBugsApi(data): any {
-    return api.get(URL.getBugs + data?.payload);
-}
+// export function GetBugsApi(data): any {
+//     return api.get(URL.getBugs + data?.payload);
+// }
