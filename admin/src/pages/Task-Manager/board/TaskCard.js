@@ -50,7 +50,6 @@ const TaskInformation = styled.div`
 `;
 
 const TaskCard = ({ item, index, closeModal }) => {
-    console.log(item, 'itemsssssssssssssssssssss');
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState();
     const [editData, setEditData] = useState();
@@ -60,6 +59,7 @@ const TaskCard = ({ item, index, closeModal }) => {
     const [openModal, setOpenModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const store = useSelector((state) => state);
+    console.log(detailData,'pankaj')
 
     const dispatch = useDispatch();
 

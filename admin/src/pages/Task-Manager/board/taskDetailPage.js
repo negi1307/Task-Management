@@ -16,17 +16,18 @@ import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 import noimage from '../../../assets/images/noimage.png';
 const TaskDetailPage = ({ modal, editData, closeModal }) => {
-    console.log(editData, 'editdataaaaaaaaaaa');
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [connectComponent, setConnectComponent] = useState('All');
     const [buttonChange, setButtonChange] = useState(true);
+    const [showBugForm,setShowBugForm] = useState(false)
     const [commentId, setCommentId] = useState();
     const [commentTextUpdate, setCommentTextUpdate] = useState(false);
     const getCommentData = store?.getComment?.data?.response;
     const getHistory = store?.getHistoryReducer?.data?.response;
+    // const getBugs = store?.getBugsReducer?.data?.response;
+    // console.log(getBugs, '0000000000000000000000000000000000000000000000000000000000p')
     const historyLoader = store?.getHistoryReducer
-    console.log(editData,'pankaj singh pundir')
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
         setValue('comment', "");
@@ -95,10 +96,13 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
         setInputForUpdate(false);
         console.log(data, allCommetUpdateId);
     };
-    const closeModalHandle =()=>{
+    const closeModalHandle = () => {
         closeModal()
         setValue('comment', "");
         setButtonChange(true);
+    }
+    const handleAddBugs = () =>{
+        setShowBugForm(true)
     }
     return (
         <>
@@ -161,6 +165,20 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                         }}
                                         className="ms-2">
                                         History
+                                    </Button>
+
+                                    <Button
+                                        onClick={() => {
+                                            connectComponentCheck('Bugs');
+                                        }}
+                                        style={{
+                                            backgroundColor: '#f3f3f3',
+                                            borderColor: '#f3f3f3',
+                                            color: 'black',
+                                            boxShadow: 'none',
+                                        }}
+                                        className="ms-2">
+                                        Bugs
                                     </Button>
                                 </Col>
                             </Row>
@@ -310,33 +328,132 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                     </Row>
                                 </>
                             ) : connectComponent === 'History' ? (
-                               
+
                                 <div>
-                                   {  getHistory?.map((ele) => (
-                                    <>
-                                    
-                                        <div className="d-flex align-items-center pt-2">
-                                            <span
-                                                style={{
-                                                    backgroundColor: '#605e5a',
-                                                    borderRadius: '100%',
-                                                    padding: '11px 11px',
-                                                    color: 'white',
-                                                    fontWeight: '800',
-                                                    textTransform: "uppercase"
-                                                }}>
-                                                {ele?.userId?.firstName.charAt(0)}
-                                                {ele?.userId?.lastName.charAt(0)}
-                                            </span>
-                                            <h4 className="pe-1 ps-1">
-                                                {ele?.userId?.firstName} {ele?.userId?.lastName}
-                                            </h4>
-                                            {ele?.userActivity}  {moment(ele?.time).format('LLL')}
-                                        </div>
-                                    </>
-                                ))}
+                                    {getHistory?.map((ele) => (
+                                        <>
+
+                                            <div className="d-flex align-items-center pt-2">
+                                                <span
+                                                    style={{
+                                                        backgroundColor: '#605e5a',
+                                                        borderRadius: '100%',
+                                                        padding: '11px 11px',
+                                                        color: 'white',
+                                                        fontWeight: '800',
+                                                        textTransform: "uppercase"
+                                                    }}>
+                                                    {ele?.userId?.firstName.charAt(0)}
+                                                    {ele?.userId?.lastName.charAt(0)}
+                                                </span>
+                                                <h4 className="pe-1 ps-1">
+                                                    {ele?.userId?.firstName} {ele?.userId?.lastName}
+                                                </h4>
+                                                {ele?.userActivity}  {moment(ele?.time).format('LLL')}
+                                            </div>
+                                        </>
+                                    ))}
                                 </div>
-                               
+
+                            ) : connectComponent === 'Bugs' ? (
+
+                                <div>
+                                  <div className="container-fluid">
+            <div className="row">
+                <div className="col-12 text-end p-2">
+                    <button className='btn btn-secondary fw-bold p-1 py-1' onClick={handleAddBugs}>Add Bugs</button>
+                </div>
+                <div className="col-12">
+                    {showBugForm && (
+                          <div className="row ">
+                          <div className="col-6">
+                                    <label className="form-label" for="exampleForm.ControlTextarea1">
+                                        Summary
+                                        <span className="text-danger">*</span>:
+                                    </label>
+                                    <input
+                                        placeholder="Please Enter Summary"
+                                        type="text"
+                                        id="exampleForm.ControlTextarea1"
+                                        className="form-control"
+                                        {...register('Summary', { required: true })}
+                                    />
+                                    {errors.Summary?.type === 'required' && (
+                                        <span className="text-danger"> This feild is required *</span>
+                                    )}
+                                </div>
+                                <div className=" col-6">
+                                    <label className="form-label" for="exampleForm.ControlTextarea1">
+                                        Decription
+                                        <span className="text-danger">*</span>:
+                                    </label>
+                                    <input
+                                        placeholder="Please Enter Decription"
+                                        type="text"
+                                        id="exampleForm.ControlTextarea1"
+                                        className="form-control"
+                                        {...register('Decription', { required: true })}
+                                    />
+                                    {errors.Decription?.type === 'required' && (
+                                        <span className="text-danger"> This feild is required *</span>
+                                    )}
+                                </div>
+                                <div className="row">
+                                <div className="col-6">
+                                        <label className="form-label" for="exampleForm.ControlInput1">
+                                            Expected Hours <span className="text-danger">*</span>:
+                                        </label>
+                                        <input
+                                            placeholder="Please Expected Hours "
+                                            type="number"
+                                            id="exampleForm.ControlTextarea1"
+                                            className="form-control"
+                                            {...register('expectedHours', { required: true })}
+                                        />
+                                        {errors.expectedHours?.type === 'required' && (
+                                            <span className="text-danger"> This feild is required *</span>
+                                        )}
+                                    </div>
+                                    <div className="col-6">
+                                        <label className="form-label" for="exampleForm.ControlInput1">
+                                            {' '}
+                                            Priority <span className="text-danger">*</span>:
+                                        </label>
+                                        <select
+                                            name="Priority"
+                                            className="form-select"
+                                            id="exampleForm.ControlInput1"
+                                            {...register('priority', { required: true })}>
+                                            <option hidden selected>
+                                                select
+                                            </option>
+                                            <option value="Critical">
+                                                &#128308;
+                                                Critical
+                                            </option>
+                                            <option value="High">
+                                                &#128992;
+                                                High</option>
+                                            <option value="Medium;">
+                                                &#128993;
+                                                Medium</option>
+                                            <option value="Low">
+                                                &#128994;
+                                                Low</option>
+                                        </select>
+
+                                        {errors?.priority?.type === 'required' && (
+                                            <span className="text-danger"> This feild is required *</span>
+                                        )}
+                                    </div>
+                                </div>
+                          </div>
+                    )}
+                </div>
+            </div>
+        </div>
+                                </div>
+
                             ) : (
                                 ''
                             )}
@@ -384,8 +501,8 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0"> Assignee :</h4>
                                     <p className="ms-2 p-0">
-                                    {editData?.assigneeInfo?.firstName}{' '}
-                                                    {editData?.assigneeInfo?.lastName}
+                                        {editData?.assigneeInfo?.firstName}{' '}
+                                        {editData?.assigneeInfo?.lastName}
                                     </p>
                                 </div>
                                 <div className=" d-flex">
@@ -398,10 +515,10 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                         {editData?.priority == "High"
                                             ? 'High'
                                             : '' || editData?.priority == "Medium"
-                                            ? 'Medium'
-                                            : '' || editData?.priority == "Low"
-                                            ? 'Low'
-                                            : ''} 
+                                                ? 'Medium'
+                                                : '' || editData?.priority == "Low"
+                                                    ? 'Low'
+                                                    : ''}
                                     </p>
                                 </div>
                                 <div className=" d-flex">
@@ -410,12 +527,12 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                         {editData?.status == 1
                                             ? 'To-Do'
                                             : '' || editData?.status == 2
-                                            ? 'In-Progress'
-                                            : '' || editData?.status == 3
-                                            ? 'Hold'
-                                            : '' || editData?.status == 4
-                                            ? 'Done'
-                                            : ''}
+                                                ? 'In-Progress'
+                                                : '' || editData?.status == 3
+                                                    ? 'Hold'
+                                                    : '' || editData?.status == 4
+                                                        ? 'Done'
+                                                        : ''}
                                     </p>
                                 </div>
                                 {editData?.attachment !== '' ? (
