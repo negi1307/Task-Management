@@ -71,7 +71,6 @@ export default function RightBar(props) {
         body.append('attachment', selectedFile ? selectedFile : '');
         if (projectId !== '' && mileStoneId !== '' && sprintId !== '') {
             dispatch(createTask(body));
-            // console.log(body, 'ddddddddddddddddd************************tttttttttttttttttt*****************')
         } else {
             alert('plsease select project');
         }

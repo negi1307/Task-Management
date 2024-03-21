@@ -24,12 +24,15 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     const dispatch = useDispatch();
     const [connectComponent, setConnectComponent] = useState('All');
     const [buttonChange, setButtonChange] = useState(true);
+    const [showBugForm, setShowBugForm] = useState(false)
     const [commentId, setCommentId] = useState();
     const [commentTextUpdate, setCommentTextUpdate] = useState(false);
     const [subtaskName, setSubtaskName] = useState('');
     const [subtaskButtonClicked, setSubtaskButtonClicked] = useState(false);
     const getCommentData = store?.getComment?.data?.response;
     const getHistory = store?.getHistoryReducer?.data?.response;
+    // const getBugs = store?.getBugsReducer?.data?.response;
+    // console.log(getBugs, '0000000000000000000000000000000000000000000000000000000000p')
     const historyLoader = store?.getHistoryReducer
     // console.log(editData, 'pankaj singh pundir')
     const connectComponentCheck = (type) => {
@@ -164,6 +167,9 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         closeModal()
         setValue('comment', "");
         setButtonChange(true);
+    }
+    const handleAddBugs = () => {
+        setShowBugForm(true)
     }
     return (
         <>

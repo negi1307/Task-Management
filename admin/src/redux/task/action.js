@@ -71,3 +71,7 @@ export const getHistoryAction = (data): AuthAction => ({
     type: TASK_TYPES.GET_HISTORY,
     payload: data
 })
+// export const getBugsAction = (data): AuthAction => ({
+//     type: TASK_TYPES.GET_BUGS,
+//     payload: data
+// })
