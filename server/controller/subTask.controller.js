@@ -6,8 +6,13 @@ const { userHistory } = require('../controller/history.controller');
 const addSubTask = async (req, res) => {
     try {
         const { taskId, summary, description, priority, expectedHours, startDate, dueDate, assigneeId, parentId, reporterId, type } = req.body;
-        const lastTask = await subTaskModel.countDocuments();
-        const createSubTask = await subTaskModel.create({ taskMannualId: lastTask + 1, taskId, summary, description, priority, expectedHours, startDate, dueDate, parentId, reporterId, assigneeId, type });
+        const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : req.body.attachment;
+        const fileExtension = req.file ? req.file.mimetype : undefined;
+        const createSubTask = await subTaskModel.create({
+            taskId, summary, description, priority, expectedHours, startDate, dueDate, parentId, reporterId, assigneeId, type,
+            attachment: attachmentPath,
+            attachmentType: fileExtension,
+        });
 
         if (type === "Bug") {
             await userHistory(req, `Bug Created`);
@@ -17,7 +22,6 @@ const addSubTask = async (req, res) => {
             await userHistory(req, `Sub Task Created `);
             return res.status(200).json({ status: 200, message: "Sub task added successfully", response: createSubTask })
         }
-
     } catch (error) {
         return res.status(500).json({ status: 500, message: error.message });
     }
@@ -28,7 +32,13 @@ const addSubTask = async (req, res) => {
 const updateSubTask = async (req, res) => {
     try {
         const { subTaskId, summary, description, priority, expectedHours, startDate, dueDate, status, assigneeId, reporterId, type } = req.body;
-        const obj = { summary, description, priority, expectedHours, startDate, dueDate, status, type, assigneeId, reporterId };
+        const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : attachment;
+        const fileExtension = req.file ? req.file.mimetype : undefined;
+        const obj = {
+            summary, description, priority, expectedHours, startDate, dueDate, status, type, assigneeId, reporterId,
+            attachment: attachmentPath,
+            attachmentType: fileExtension,
+        };
 
         const existingSubTask = await subTaskModel.findById(subTaskId);
         if (existingSubTask.assigneeId !== assigneeId) {
@@ -54,11 +64,25 @@ const updateSubTask = async (req, res) => {
 // get sub Task list or bug list
 const getSubTask = async (req, res) => {
     try {
-        const { type, page, limit } = req.query;
+        const { taskId, subTaskId, type, page, limit } = req.query;
         const pageNumber = parseInt(page) || 1;
         const limitNumber = parseInt(limit) || 10;
 
-        const query = type && { type };
+        // const query = type && { type };
+        let query = {};
+        if (type === "SubTask" && taskId) {
+            query = {
+                type: "SubTask",
+                taskId: taskId
+            };
+        } else if (type === "Bug" && taskId) {
+            query = {
+                type: "Bug",
+                taskId: taskId
+            };
+        } else {
+            return res.status(400).json({ status: 400, message: "Invalid request. Please provide valid type and taskId." });
+        }
 
         const totalCount = await subTaskModel.countDocuments(query);
         const totalPages = Math.ceil(totalCount / limitNumber);
