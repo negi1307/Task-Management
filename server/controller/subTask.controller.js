@@ -37,7 +37,7 @@ const updateSubTask = async (req, res) => {
         }
         if (existingSubTask.reporterId !== reporterId) {
             const reporter = await subTaskModel.findById(subTaskId);
-            await userHistory(req, `Reporter ID changed`);
+            await userHistory(req, `Reporter ID changed`, reporter);
         }
         const subTask = await subTaskModel.findById(subTaskId);
         await userHistory(req, subTask);

@@ -4,6 +4,7 @@ const subTask = mongoose.model(
     'subTask', mongoose.Schema({
         taskId: {
             type: mongoose.Types.ObjectId,
+            required: true,
             ref: "Task"
         },
         summary: {
