@@ -67,7 +67,6 @@ const Boards = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.getAllTaskReducer;
-    console.log('successHandle', successHandle);
     const statushandle = store?.updateTaskStatus;
     const deletehandel = store?.deleteTask;
     const updatehandel = store?.UpdateTaskReducer;
@@ -78,7 +77,6 @@ const Boards = () => {
     const [projectNameHeading, setProjectName] = useState('Select Project Name');
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
-    console.log('columns', columns);
     const sprintId = store?.getSprintId?.data;
     const taskId = store?.getTaskId?.data;
     const CreateCommenthandel = store?.AddCommentReducer;
@@ -120,7 +118,6 @@ const Boards = () => {
                 },
             });
             
-            console.log(result, 'result')
            
             handelupdatetask(result);
 
@@ -179,7 +176,6 @@ const Boards = () => {
                 },
             });
         }
-        console.log(columns,'8888888888888888888888888888888888888888888888888888888')
     }, [successHandle]);
 
     const handelupdatetask = (ele) => {

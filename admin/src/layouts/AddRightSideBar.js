@@ -14,7 +14,6 @@ export default function RightBar(props) {
     const [endDate, setEndDate] = useState();
     // disable previous date
     const today = new Date();
-    console.log(today, 'today');
     // end date
     const handleStartDate = (date) => {
         setStartDate(date);
@@ -71,7 +70,6 @@ export default function RightBar(props) {
         body.append('attachment', selectedFile ? selectedFile : '');
         if (projectId !== '' && mileStoneId !== '' && sprintId !== '') {
             dispatch(createTask(body));
-            console.log(body,'ddddddddddddddddd************************tttttttttttttttttt*****************')
         } else {
             alert('plsease select project');
         }
