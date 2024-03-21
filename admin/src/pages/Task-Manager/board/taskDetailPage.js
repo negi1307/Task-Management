@@ -357,14 +357,15 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
 
                             ) : connectComponent === 'Bugs' ? (
 
-                                <div>
+                                <div className='bg-white'>
                                   <div className="container-fluid">
-            <div className="row">
+            <div className="row ">
                 <div className="col-12 text-end p-2">
                     <button className='btn btn-secondary fw-bold p-1 py-1' onClick={handleAddBugs}>Add Bugs</button>
                 </div>
-                <div className="col-12">
-                    {showBugForm && (
+                {showBugForm && (
+
+                <div className="col-12 ">
                           <div className="row ">
                           <div className="col-6">
                                     <label className="form-label" for="exampleForm.ControlTextarea1">
@@ -398,8 +399,10 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                         <span className="text-danger"> This feild is required *</span>
                                     )}
                                 </div>
-                                <div className="row">
-                                <div className="col-6">
+                          </div>
+                          <div className="row">
+                          <div className="col-lg-6">
+                                    <div className="mb-2">
                                         <label className="form-label" for="exampleForm.ControlInput1">
                                             Expected Hours <span className="text-danger">*</span>:
                                         </label>
@@ -414,7 +417,9 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                             <span className="text-danger"> This feild is required *</span>
                                         )}
                                     </div>
-                                    <div className="col-6">
+                                </div>
+                            <div className="col-6">
+                                  <div className="mb-1">
                                         <label className="form-label" for="exampleForm.ControlInput1">
                                             {' '}
                                             Priority <span className="text-danger">*</span>:
@@ -446,10 +451,14 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                             <span className="text-danger"> This feild is required *</span>
                                         )}
                                     </div>
-                                </div>
+                            </div>
                           </div>
-                    )}
+                                
+                               
+                          
                 </div>
+                )}
+
             </div>
         </div>
                                 </div>
