@@ -78,6 +78,7 @@ function* createTaskFunction({ payload }) {
         });
     }
 }
+
 function* getSingleSprintTaskFunction({ payload }) {
     try {
         yield put({
@@ -581,6 +582,8 @@ export function* createTaskSaga(): any {
 export function* createSubTaskSaga(): any {
     yield takeEvery(TASK_TYPES.CREATE_SUBTASK, createSubTaskFunction);
 }
+
+
 export function* getSingleSprintTaskSaga(): any {
     yield takeEvery(TASK_TYPES.GET_SINGLE_SPRINT_TASK, getSingleSprintTaskFunction);
 }

@@ -39,6 +39,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         setButtonChange(true);
         if (type === 'History') {
             dispatch(getHistoryAction(editData?.id));
+            // dispatch(getSubtasks())
         }
     };
     // console.log(taskId, '122222222222222222222222222222222222222222222222@@@@@@@@@@@@@@@@@##################')
@@ -68,50 +69,49 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         formState: { errors },
     } = useForm();
 
-    const handleSubtaskButtonClick = () => {
-        setSubtaskButtonClicked(true);
-    };
-
-    const handleSubtaskInputChange = (e) => {
-        setSubtaskName(e.target.value);
-    };
-
-    const handleSubmitSubtask = () => {
-        // Here you can dispatch an action to add/update the subtask
-        // For example:
-        // dispatch(addSubtask(subtaskName));
-        // or
-        // dispatch(updateSubtask(subtaskName, subtaskId));
-        // depending on your implementation
-        setSubtaskName('');
-        setSubtaskButtonClicked(false);
-    };
-
-
 
     const subtasksSubmit = (e) => {
+        console.error(editData._id, 'this is the task id');
+        if (!taskId) {
+            console.error('taskId is missing');
+            return;
+        }
+
         let subtask_body = new FormData();
         subtask_body.append('taskId', taskId);
         subtask_body.append('summary', e.summary);
         subtask_body.append('description', e.description);
         subtask_body.append('priority', e.priority);
+        subtask_body.append('expectedHours', e.expectedHours);
         subtask_body.append('startDate', startDate);
         subtask_body.append('dueDate', endDate);
-        subtask_body.append('priority', e.priority);
+        subtask_body.append('type', e.type);
 
-        // subtask_body.append('status', 1);
-        subtask_body.append('expectedHours', e.expectedHours);
+
+
+        // Access the file input field
+        const fileInput = document.querySelector('input[type="file"]');
+        // Check if a file was selected
+        if (fileInput.files.length > 0) {
+            // Append the file to the form data
+            subtask_body.append('attachment', fileInput.files[0]);
+        }
+
         if (taskId !== '') {
             dispatch(createSubTask(subtask_body));
         }
+
         setValue('Summary', '');
         setValue('priority', '');
         setValue('start_date', '');
         setValue('last_date', '');
         setValue('description', '');
         setStartDate("");
-        setEndDate("")
+        setEndDate("");
     }
+
+
+
     const onSubmit = (val) => {
         if (buttonChange) {
             let body = {
@@ -322,7 +322,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                             ) : connectComponent === 'Subtasks' ? (
                                 <form onSubmit={handleSubmit(subtasksSubmit)}>
                                     <Row className="mt-2">
-                                        <Col>
+                                        <Col sm={6}>
                                             <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                 <Form.Label className='mb-0'>
                                                     Summary<span className='text-danger'>*</span>
@@ -373,7 +373,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     <option value="High">
                                                         &#128992;
                                                         High</option>
-                                                    <option value="Medium;">
+                                                    <option value="Medium">
                                                         &#128993;
                                                         Medium</option>
                                                     <option value="Low">
@@ -433,13 +433,13 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 />
                                             </Form.Group>
                                         </Col>
-                                        <Col>
+                                        <Col sm={6}>
                                             <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                 <Form.Label className='mb-0'>
                                                     Subtask Type<span className='text-danger'>*</span>
                                                 </Form.Label>
                                                 <select
-                                                    name="priority"
+                                                    name="type"
                                                     className="form-select"
                                                     {...register('type', { required: true })}>
                                                     <option hidden selected>
@@ -456,6 +456,18 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 {errors?.type?.type === 'required' && (
                                                     <span className="text-danger"> This field is required *</span>
                                                 )}
+                                            </Form.Group>
+                                        </Col>
+                                        <Col sm={6}>
+                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                <Form.Label className='mb-0'>
+                                                    Attachment
+                                                </Form.Label>
+                                                <Form.Control
+                                                    type='file'
+                                                    {...register('uploadfile')}
+                                                />
+
                                             </Form.Group>
                                         </Col>
                                         <Row>

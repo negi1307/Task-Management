@@ -36,7 +36,7 @@ const Update = ({ modal, CloseModal, editData }) => {
             startDate: data?.startDate,
             endDate: data?.endDate,
         };
-        console.log('editsprit', body);
+        // console.log('editsprit', body);
         dispatch(updateSprint(body));
     };
     //editor state
@@ -52,7 +52,7 @@ const Update = ({ modal, CloseModal, editData }) => {
             endDate: handleDate(editData?.endDate),
         });
     }, [modal]);
-    console.log(editData, 'pppppp');
+    // console.log(editData, 'pppppp');
     const handleDate = (data) => {
         let date = new Date(data);
         let year = date.toLocaleString('default', { year: 'numeric' });
@@ -115,7 +115,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                             <Form.Label>
                                                 Description <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <dvi className="">
+                                            <div className="">
                                                 <Editor
                                                     // {...register('Description', { required: true })}
                                                     editorState={editorState}
@@ -124,15 +124,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         textEditorOnchange(e);
                                                     }}
                                                 />
-                                            </dvi>
-                                            {/* <Form.Control
-                                                type="text"
-                                                placeholder="Please Enter Description Name"
-                                                {...register('Description', { required: true })}
-                                            />
-                                            {errors.Description?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )} */}
+                                            </div>
                                         </Form.Group>
                                     </Col>
 
