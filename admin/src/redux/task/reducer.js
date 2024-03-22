@@ -1,82 +1,83 @@
 
 import TASK_TYPES from "./constant";
 const INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const GET_SINGLE_SPRINTTASK_INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const GET_All_TASK_INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const UPDATE_TASK_INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const UPDATE_STATUS_TASK_INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const DELETE_TASK_INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const STATUS_TASK_INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const GET_TASK_SUMMARY_INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const ADD_COMMENT__INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const GET_COMMENT__INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const DELETE_COMMENT__INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const UPDATE_COMMENT__INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const ASSIGN_USER_INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 
 const REPORTER_INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 
 const GET_HISTORY_INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
+
 export const createTaskReducer = (state = INITIAL_STATE, action) => {
     // console.log(action ,"bbbbbbbbbbbbbbbbbbbbbbbb")
     switch (action.type) {
@@ -98,7 +99,7 @@ export const createTaskReducer = (state = INITIAL_STATE, action) => {
         case TASK_TYPES.CREATE_TASK_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -107,6 +108,39 @@ export const createTaskReducer = (state = INITIAL_STATE, action) => {
 
     }
 };
+export const createSubTaskReducer = (state = INITIAL_STATE, action) => {
+    // console.log(action ,"bbbbbbbbbbbbbbbbbbbbbbbb")
+    switch (action.type) {
+        case TASK_TYPES.CREATE_SUBTASK_LOADING:
+            return {
+                data: INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.CREATE_SUBTASK_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+        case TASK_TYPES.CREATE_SUBTASK_RESET:
+            return {
+                data: INITIAL_STATE.data,
+                loading: false,
+            };
+        case TASK_TYPES.CREATE_SUBTASK_ERROR:
+            return {
+                data: [],
+                status: !200,
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+
+
+
 export const getSigleSprintTask = (state = GET_SINGLE_SPRINTTASK_INITIAL_STATE, action) => {
     switch (action.type) {
         case TASK_TYPES.GET_SINGLE_SPRINT_TASK_LOADING:
@@ -124,7 +158,7 @@ export const getSigleSprintTask = (state = GET_SINGLE_SPRINTTASK_INITIAL_STATE, 
         case TASK_TYPES.GET_SINGLE_SPRINT_TASK_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -152,7 +186,7 @@ export const getAllTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) =>
         case TASK_TYPES.GET_ALL_TASK_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -174,16 +208,16 @@ export const UpdateTaskReducer = (state = UPDATE_TASK_INITIAL_STATE, action) => 
                 data: action?.payload,
                 loading: false,
             };
-            case TASK_TYPES.UPDATE_TASK_RESET:
-                return {
-                    data: UPDATE_TASK_INITIAL_STATE.data,
-                    loading: false
-                }
+        case TASK_TYPES.UPDATE_TASK_RESET:
+            return {
+                data: UPDATE_TASK_INITIAL_STATE.data,
+                loading: false
+            }
 
         case TASK_TYPES.UPDATE_TASK_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -213,7 +247,7 @@ export const deleteTask = (state = DELETE_TASK_INITIAL_STATE, action) => {
         case TASK_TYPES.DELETE_TASK_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -244,7 +278,7 @@ export const updateTaskStatus = (state = UPDATE_STATUS_TASK_INITIAL_STATE, actio
         case TASK_TYPES.UPDATE_TASK_STATU_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -253,7 +287,7 @@ export const updateTaskStatus = (state = UPDATE_STATUS_TASK_INITIAL_STATE, actio
 
     }
 };
-export const TaskStatusReducer= (state = STATUS_TASK_INITIAL_STATE, action) => {
+export const TaskStatusReducer = (state = STATUS_TASK_INITIAL_STATE, action) => {
     switch (action.type) {
         case TASK_TYPES.TASK_STATUS_LOADING:
             return {
@@ -261,7 +295,7 @@ export const TaskStatusReducer= (state = STATUS_TASK_INITIAL_STATE, action) => {
                 loading: true,
             };
         case TASK_TYPES.TASK_STATUS_SUCCESS:
-            console.log(action.payload,'reducer')
+            console.log(action.payload, 'reducer')
             return {
                 data: action?.payload,
                 loading: false,
@@ -275,7 +309,7 @@ export const TaskStatusReducer= (state = STATUS_TASK_INITIAL_STATE, action) => {
         case TASK_TYPES.TASK_STATUS_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -304,7 +338,7 @@ export const AddCommentReducer = (state = ADD_COMMENT__INITIAL_STATE, action) =>
         case TASK_TYPES.ADD_COMMENT_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -334,7 +368,7 @@ export const getComment = (state = GET_COMMENT__INITIAL_STATE, action) => {
         case TASK_TYPES.GET_COMMENT_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -364,7 +398,7 @@ export const deleteCommentReducer = (state = DELETE_COMMENT__INITIAL_STATE, acti
         case TASK_TYPES.DELETE_COMMENT_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -394,7 +428,7 @@ export const updateCommentReducer = (state = UPDATE_COMMENT__INITIAL_STATE, acti
         case TASK_TYPES.UPDATE_COMMENT_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -403,14 +437,14 @@ export const updateCommentReducer = (state = UPDATE_COMMENT__INITIAL_STATE, acti
 
     }
 };
-export const getTaskId = (state = {data:""}, action) => {
+export const getTaskId = (state = { data: "" }, action) => {
     switch (action.type) {
         case "taskid":
             return {
                 data: action.payload,
-                
+
             };
-      
+
         default:
             return { ...state };
 
@@ -429,15 +463,15 @@ export const getAssignUserReducer = (state = ASSIGN_USER_INITIAL_STATE, action) 
                 loading: false,
             };
 
-            // case TASK_TYPES.GET_ASSIGN_USER_RESET:
-            //     return {
-            //         data: ASSIGN_USER_INITIAL_STATE.data,
-            //         loading: false
-            //     }
+        // case TASK_TYPES.GET_ASSIGN_USER_RESET:
+        //     return {
+        //         data: ASSIGN_USER_INITIAL_STATE.data,
+        //         loading: false
+        //     }
         case TASK_TYPES.GET_ASSIGN_USER_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -460,15 +494,15 @@ export const getReporterReducer = (state = REPORTER_INITIAL_STATE, action) => {
                 loading: false,
             };
 
-            // case TASK_TYPES.GET_ASSIGN_USER_RESET:
-            //     return {
-            //         data: REPORTER_INITIAL_STATE.data,
-            //         loading: false
-            //     }
+        // case TASK_TYPES.GET_ASSIGN_USER_RESET:
+        //     return {
+        //         data: REPORTER_INITIAL_STATE.data,
+        //         loading: false
+        //     }
         case TASK_TYPES.GET_ALL_REPORTER_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -490,15 +524,15 @@ export const getHistoryReducer = (state = GET_HISTORY_INITIAL_STATE, action) => 
                 loading: false,
             };
 
-            // case TASK_TYPES.GET_HISTORY_RESET:
-            //     return {
-            //         data: GET_HISTORY_INITIAL_STATE.data,
-            //         loading: false
-            //     }
+        // case TASK_TYPES.GET_HISTORY_RESET:
+        //     return {
+        //         data: GET_HISTORY_INITIAL_STATE.data,
+        //         loading: false
+        //     }
         case TASK_TYPES.GET_HISTORY_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
