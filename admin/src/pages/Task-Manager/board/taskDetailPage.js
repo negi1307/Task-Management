@@ -10,9 +10,10 @@ import {
     deleteComment,
     getComment,
     getHistoryAction,
+    getBugs
 } from '../../../redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
-import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
+import { Row, Col, Card, Button, Alert, CloseButton, Table } from 'react-bootstrap';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 import noimage from '../../../assets/images/noimage.png';
 const TaskDetailPage = ({ modal, editData, closeModal }) => {
@@ -20,11 +21,12 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
     const dispatch = useDispatch();
     const [connectComponent, setConnectComponent] = useState('All');
     const [buttonChange, setButtonChange] = useState(true);
-    const [showBugForm,setShowBugForm] = useState(false)
     const [commentId, setCommentId] = useState();
     const [commentTextUpdate, setCommentTextUpdate] = useState(false);
     const getCommentData = store?.getComment?.data?.response;
     const getHistory = store?.getHistoryReducer?.data?.response;
+    const getBugs = store?.getBugs?.data?.response;
+    console.log(getBugs,getCommentData,'bugs')
     // const getBugs = store?.getBugsReducer?.data?.response;
     // console.log(getBugs, '0000000000000000000000000000000000000000000000000000000000p')
     const historyLoader = store?.getHistoryReducer
@@ -101,12 +103,10 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
         setValue('comment', "");
         setButtonChange(true);
     }
-    const handleAddBugs = () =>{
-        setShowBugForm(true)
-    }
+  
     return (
         <>
-            <Modal show={modal} onHide={closeModal} size={'lg'}>
+            <Modal show={modal} onHide={closeModal} size={'xl'}>
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
@@ -360,104 +360,63 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                 <div className='bg-white'>
                                   <div className="container-fluid">
             <div className="row ">
-                <div className="col-12 text-end p-2">
-                    <button className='btn btn-secondary fw-bold p-1 py-1' onClick={handleAddBugs}>Add Bugs</button>
-                </div>
-                {showBugForm && (
-
-                <div className="col-12 ">
-                          <div className="row ">
-                          <div className="col-6">
-                                    <label className="form-label" for="exampleForm.ControlTextarea1">
-                                        Summary
-                                        <span className="text-danger">*</span>:
-                                    </label>
-                                    <input
-                                        placeholder="Please Enter Summary"
-                                        type="text"
-                                        id="exampleForm.ControlTextarea1"
-                                        className="form-control"
-                                        {...register('Summary', { required: true })}
-                                    />
-                                    {errors.Summary?.type === 'required' && (
-                                        <span className="text-danger"> This feild is required *</span>
-                                    )}
-                                </div>
-                                <div className=" col-6">
-                                    <label className="form-label" for="exampleForm.ControlTextarea1">
-                                        Decription
-                                        <span className="text-danger">*</span>:
-                                    </label>
-                                    <input
-                                        placeholder="Please Enter Decription"
-                                        type="text"
-                                        id="exampleForm.ControlTextarea1"
-                                        className="form-control"
-                                        {...register('Decription', { required: true })}
-                                    />
-                                    {errors.Decription?.type === 'required' && (
-                                        <span className="text-danger"> This feild is required *</span>
-                                    )}
-                                </div>
-                          </div>
-                          <div className="row">
-                          <div className="col-lg-6">
-                                    <div className="mb-2">
-                                        <label className="form-label" for="exampleForm.ControlInput1">
-                                            Expected Hours <span className="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            placeholder="Please Expected Hours "
-                                            type="number"
-                                            id="exampleForm.ControlTextarea1"
-                                            className="form-control"
-                                            {...register('expectedHours', { required: true })}
-                                        />
-                                        {errors.expectedHours?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
-                                    </div>
-                                </div>
-                            <div className="col-6">
-                                  <div className="mb-1">
-                                        <label className="form-label" for="exampleForm.ControlInput1">
-                                            {' '}
-                                            Priority <span className="text-danger">*</span>:
-                                        </label>
-                                        <select
-                                            name="Priority"
-                                            className="form-select"
-                                            id="exampleForm.ControlInput1"
-                                            {...register('priority', { required: true })}>
-                                            <option hidden selected>
-                                                select
-                                            </option>
-                                            <option value="Critical">
-                                                &#128308;
-                                                Critical
-                                            </option>
-                                            <option value="High">
-                                                &#128992;
-                                                High</option>
-                                            <option value="Medium;">
-                                                &#128993;
-                                                Medium</option>
-                                            <option value="Low">
-                                                &#128994;
-                                                Low</option>
-                                        </select>
-
-                                        {errors?.priority?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
-                                    </div>
-                            </div>
-                          </div>
-                                
-                               
-                          
-                </div>
-                )}
+                <div className="col-12 p-1">
+                    <Table className="mb-0 add_Color_font" striped>
+                      <thead>
+                      <tr>
+                        <th className='fw-bold'>#</th>
+                            <th className='fw-bold'>Summary</th>
+                            <th className='fw-bold'>Decription</th>
+                            <th className='fw-bold'>Assignee</th>
+                            <th className='fw-bold'>Priority</th>
+                            <th className='fw-bold'>Start Date</th>
+                            <th className='fw-bold'>End Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                                    {getBugs?.map((ele, ind) => {
+                                        return (
+                                            <tr className="align-middle">
+                                                <th scope="row">{(skip - 1) * 10 + ind + 1}</th>
+                                               <td>
+                                                <span>
+                                                    {ele.summary}
+                                                </span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {ele.description}
+                                                </span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {ele.expectedHours}
+                                                </span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {ele.priority}pankaj
+                                                </span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {ele.startDate}
+                                                </span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {ele.dueDate}
+                                                </span>
+                                               </td>
+                                              
+                                               
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                    </Table>
+                   
+</div>
 
             </div>
         </div>

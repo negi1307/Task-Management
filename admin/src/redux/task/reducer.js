@@ -5,6 +5,7 @@ const INITIAL_STATE = {
     loading:false,
     message:""
 }
+
 const GET_SINGLE_SPRINTTASK_INITIAL_STATE = {
     data:[],
     loading:false,
@@ -46,6 +47,11 @@ const ADD_COMMENT__INITIAL_STATE = {
     message:""
 }
 const GET_COMMENT__INITIAL_STATE = {
+    data:[],
+    loading:false,
+    message:""
+}
+const GET_BUGS_INITIAL_STATE = {
     data:[],
     loading:false,
     message:""
@@ -107,6 +113,7 @@ export const createTaskReducer = (state = INITIAL_STATE, action) => {
 
     }
 };
+
 export const getSigleSprintTask = (state = GET_SINGLE_SPRINTTASK_INITIAL_STATE, action) => {
     switch (action.type) {
         case TASK_TYPES.GET_SINGLE_SPRINT_TASK_LOADING:
@@ -343,6 +350,36 @@ export const getComment = (state = GET_COMMENT__INITIAL_STATE, action) => {
 
     }
 };
+export const getBugs = (state = GET_BUGS_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case TASK_TYPES.GET_BUGS_LOADING:
+            return {
+                data: GET_BUGS_INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.GET_BUGS_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+            case TASK_TYPES.GET_BUGS_RESET:
+            return {
+                data: GET_BUGS_INITIAL_STATE.data,
+                loading: false,
+            };
+        case TASK_TYPES.GET_BUGS_ERROR:
+            return {
+                data: [],
+                status:!200,
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
 export const deleteCommentReducer = (state = DELETE_COMMENT__INITIAL_STATE, action) => {
     switch (action.type) {
         case TASK_TYPES.DELETE_COMMENT_LOADING:
@@ -507,33 +544,3 @@ export const getHistoryReducer = (state = GET_HISTORY_INITIAL_STATE, action) => 
 
     }
 };
-// export const getBugsReducer = (state = GET_BUGS_INITIAL_STATE, action) => {
-//     switch (action.type) {
-//         case TASK_TYPES.GET_BUGS_LOADING:
-//             return {
-//                 data: GET_BUGS_INITIAL_STATE.data,
-//                 loading: true,
-//             };
-//         case TASK_TYPES.GET_BUGS_SUCCESS:
-//             return {
-//                 data: action?.payload,
-//                 loading: false,
-//             };
-
-//             // case TASK_TYPES.GET_HISTORY_RESET:
-//             //     return {
-//             //         data: GET_HISTORY_INITIAL_STATE.data,
-//             //         loading: false
-//             //     }
-//         case TASK_TYPES.GET_BUGS_ERROR:
-//             return {
-//                 data: [],
-//                 status:!200,
-//                 loading: false,
-//                 message: action?.payload,
-//             };
-//         default:
-//             return { ...state };
-
-//     }
-// };

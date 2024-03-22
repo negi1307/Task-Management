@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import TASK_TYPES from './constant';
-import { AddCommentApi, GetAssignUserApi,getReporterListApi, GetHistoryApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi,updateTaskStatusApi } from './api';
+import { AddCommentApi, GetAssignUserApi,getReporterListApi, GetHistoryApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi,updateTaskStatusApi, getBugsApi } from './api';
 
 function* createTaskFunction({ payload }) {
     try {
@@ -40,6 +40,7 @@ function* createTaskFunction({ payload }) {
         });
     }
 }
+
 function* getSingleSprintTaskFunction({ payload }) {
     try {
         yield put({
@@ -513,10 +514,10 @@ function* getHistoryFunction({ payload }) {
                 type: TASK_TYPES.GET_HISTORY_SUCCESS,
                 payload: { ...response.data },
             });
-            // yield put({
-            //     type: TASK_TYPES.GET_HISTORY_RESET,
-            //     payload: {},
-            // });
+            yield put({
+                type: TASK_TYPES.GET_HISTORY_RESET,
+                payload: {},
+            });
         }
         else {
             yield put({
@@ -537,42 +538,43 @@ function* getHistoryFunction({ payload }) {
 
     }
 }
-// function* getBugsFunction({ payload }) {
-//     try {
-//         yield put({
-//             type: TASK_TYPES.GET_BUGS_LOADING,
-//             payload: {}
-//         })
-//         const response = yield call(GetBugsApi, { payload });
-//         if (response.data.status) {
-//             yield put({
-//                 type: TASK_TYPES.GET_BUGS_SUCCESS,
-//                 payload: { ...response.data },
-//             });
-//             // yield put({
-//             //     type: TASK_TYPES.GET_HISTORY_RESET,
-//             //     payload: {},
-//             // });
-//         }
-//         else {
-//             yield put({
-//                 type: TASK_TYPES.GET_BUGS_ERROR,
-//                 payload: { ...response.data }
-//             });
-//         }
+function* getBugsFunction({ payload }) {
+    try {
+        yield put({
+            type: TASK_TYPES.GET_BUGS_LOADING,
+            payload: {}
+        })
+        const response = yield call(getBugsApi, { payload });
+        if (response.data.status) {
+            yield put({
+                type: TASK_TYPES.GET_BUGS_SUCCESS,
+                payload: { ...response.data },
+            });
+            // yield put({
+            //     type: TASK_TYPES.GET_BUGS_RESET,
+            //     payload: {...response.data},
+            // });
+        }
+        else {
+            yield put({
+                type: TASK_TYPES.GET_BUGS_ERROR,
+                payload: { ...response.data }
+            });
+        }
 
-//     } catch (error) {
-//         yield put({
-//             type: TASK_TYPES.GET_BUGS_ERROR,
-//             payload: { error }
-//         });
-//         yield put({
-//             type: TASK_TYPES.GET_BUGS_RESET,
-//             payload: {},
-//         });
+    } catch (error) {
+        yield put({
+            type: TASK_TYPES.GET_BUGS_ERROR,
+            payload: { error }
+        });
+        yield put({
+            type: TASK_TYPES.GET_BUGS_RESET,
+            payload: {},
+        });
 
-//     }
-// }
+    }
+}
+
 export function* createTaskSaga(): any {
     yield takeEvery(TASK_TYPES.CREATE_TASK, createTaskFunction);
 }
@@ -613,9 +615,9 @@ export function* getAssignUserSaga(): any {
 export function* getHistorySaga(): any {
     yield takeEvery(TASK_TYPES. GET_HISTORY, getHistoryFunction);
 }
-// export function* getBugsSaga(): any {
-//     yield takeEvery(TASK_TYPES. GET_BUGS, getBugsFunction);
-// }
+export function* getBugsSaga(): any {
+    yield takeEvery(TASK_TYPES. GET_BUGS, getBugsFunction);
+}
 function* AllTaskSaga(): any {
     yield all([
         fork(createTaskSaga),
@@ -631,7 +633,7 @@ function* AllTaskSaga(): any {
         fork(updateCommentSaga),
         fork(getAssignUserSaga),
         fork (getHistorySaga),
-        // fork (getBugsSaga)
+        fork (getBugsSaga)
     ])
 }
 export default AllTaskSaga;

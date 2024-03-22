@@ -6,6 +6,10 @@ export const createTask = (data): AuthAction => ({
     type: TASK_TYPES.CREATE_TASK,
     payload: data
 })
+export const getBugs = (data): AuthAction => ({
+    type: TASK_TYPES.GET_BUGS,
+    payload: data
+})
 export const getsingleSprintTask = (data): AuthAction => ({
     type: TASK_TYPES.GET_SINGLE_SPRINT_TASK,
     payload: data
@@ -65,7 +69,3 @@ export const getHistoryAction = (data): AuthAction => ({
     type: TASK_TYPES.GET_HISTORY,
     payload: data
 })
-// export const getBugsAction = (data): AuthAction => ({
-//     type: TASK_TYPES.GET_BUGS,
-//     payload: data
-// })

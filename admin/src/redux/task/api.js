@@ -3,8 +3,7 @@ import { APICore } from '../../helpers/api/apiCore';
 const api = new APICore();
 
 export function createTaskApi(data): any {
-    return api.create(URL.CREATE_TASK, data?.payload),
-    console.log(data,'daaaaaaaaaaaaaaaatttttttttttttttaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*****************')
+    return api.create(URL.CREATE_TASK, data?.payload);
 }
 export function getSingleSprintTaskApi(data): any {
     return api.get(`${URL.SingleSprintTask}${data.payload.id}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}&status=${data.payload.taskStatus}&milestoneId=${data.payload.milestoneId}&projectId=${data.payload.projectId}`);
@@ -20,7 +19,6 @@ export function deleteTaskApi(data): any {
 }
 
 export function updateTaskStatusApi(data): any {
-    console.log(data,'apiiiiiiiii')
     return api.update(URL.UpdateTaskStatus, data.payload);
 }
 export function TaskStatusApi(data): any {
@@ -48,6 +46,7 @@ export function getReporterListApi(data): any {
 export function GetHistoryApi(data): any {
     return api.get(URL.getHistory + data?.payload);
 }
-// export function GetBugsApi(data): any {
-//     return api.get(URL.getBugs + data?.payload);
-// }
+export function getBugsApi(data): any {
+    return api.get(URL.getBugs = data?.payload),
+    console.log(data,'data')
+}
