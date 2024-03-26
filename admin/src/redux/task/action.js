@@ -9,7 +9,7 @@ export const createTask = (data): AuthAction => ({
 export const getBugs = (data): AuthAction => ({
     type: TASK_TYPES.GET_BUGS,
     payload: data
-})
+});
 export const getsingleSprintTask = (data): AuthAction => ({
     type: TASK_TYPES.GET_SINGLE_SPRINT_TASK,
     payload: data

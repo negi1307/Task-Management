@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import styled from '@emotion/styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteTask, getComment, gettaskId } from '../../../redux/task/action';
+import { deleteTask, getComment, gettaskId,getBugs } from '../../../redux/task/action';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
 import ToastHandle from '../../../constants/toaster/toaster';
@@ -88,6 +88,7 @@ const TaskCard = ({ item, index, closeModal }) => {
         setOpenDetailPage(true);
         setDetailData(data);
         dispatch(getComment({ taskId: data?.id }));
+        dispatch(getBugs({ taskId: data?.id , type:"Bug" }));
         dispatch(gettaskId(data?.id));
     };
     const closeDetailPage = () => {

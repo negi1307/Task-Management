@@ -516,7 +516,7 @@ function* getHistoryFunction({ payload }) {
             });
             yield put({
                 type: TASK_TYPES.GET_HISTORY_RESET,
-                payload: {},
+                payload: {...response.data},
             });
         }
         else {
@@ -539,12 +539,15 @@ function* getHistoryFunction({ payload }) {
     }
 }
 function* getBugsFunction({ payload }) {
+  
+
     try {
         yield put({
             type: TASK_TYPES.GET_BUGS_LOADING,
             payload: {}
         })
         const response = yield call(getBugsApi, { payload });
+        console.log(response,'3333333333333333333333333333333333333333333333333333333333')
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_BUGS_SUCCESS,
@@ -552,7 +555,7 @@ function* getBugsFunction({ payload }) {
             });
             // yield put({
             //     type: TASK_TYPES.GET_BUGS_RESET,
-            //     payload: {...response.data},
+            //     payload: {},
             // });
         }
         else {
@@ -574,6 +577,7 @@ function* getBugsFunction({ payload }) {
 
     }
 }
+
 
 export function* createTaskSaga(): any {
     yield takeEvery(TASK_TYPES.CREATE_TASK, createTaskFunction);
@@ -615,8 +619,8 @@ export function* getAssignUserSaga(): any {
 export function* getHistorySaga(): any {
     yield takeEvery(TASK_TYPES. GET_HISTORY, getHistoryFunction);
 }
-export function* getBugsSaga(): any {
-    yield takeEvery(TASK_TYPES. GET_BUGS, getBugsFunction);
+export function* getBugsSaga() {
+    yield takeEvery(TASK_TYPES.GET_BUGS, getBugsFunction);
 }
 function* AllTaskSaga(): any {
     yield all([

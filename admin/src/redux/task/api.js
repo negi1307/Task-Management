@@ -47,6 +47,7 @@ export function GetHistoryApi(data): any {
     return api.get(URL.getHistory + data?.payload);
 }
 export function getBugsApi(data): any {
-    return api.get(URL.getBugs = data?.payload),
-    console.log(data,'data')
+    const{taskId,type}=data?.payload
+    console.log(data,'apiiii')
+    return api.get(`${URL.getBugs}&type=${type}&taskId=${taskId}`);
 }

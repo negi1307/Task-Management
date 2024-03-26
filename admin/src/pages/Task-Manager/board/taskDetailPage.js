@@ -8,15 +8,14 @@ import {
     AddComment,
     UpdateCommentAction,
     deleteComment,
-    getComment,
     getHistoryAction,
-    getBugs
 } from '../../../redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
 import { Row, Col, Card, Button, Alert, CloseButton, Table } from 'react-bootstrap';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 import noimage from '../../../assets/images/noimage.png';
 const TaskDetailPage = ({ modal, editData, closeModal }) => {
+    console.log(editData)
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [connectComponent, setConnectComponent] = useState('All');
@@ -25,10 +24,26 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
     const [commentTextUpdate, setCommentTextUpdate] = useState(false);
     const getCommentData = store?.getComment?.data?.response;
     const getHistory = store?.getHistoryReducer?.data?.response;
-    const getBugs = store?.getBugs?.data?.response;
-    console.log(getBugs,getCommentData,'bugs')
-    // const getBugs = store?.getBugsReducer?.data?.response;
-    // console.log(getBugs, '0000000000000000000000000000000000000000000000000000000000p')
+    
+    
+
+    // const filteredBugs = store?.getBugsReducer?.data?.response?.filter(Bug => Bug?.taskId === taskId);
+    // console.log(store?.getBugsReducer, 'Bugs..............................');
+
+
+    // useEffect(() => {
+    //     const taskId = editData?._id;
+    //     if (taskId) {
+    //         const type = 'Bug';
+    //         // dispatch(getBugs({ taskId: taskId, type }));
+    //         // setBugs(filteredBugs);
+    //         // console.log(filteredBugs, 'Filtered Bugs');
+    //     }
+
+    // }, [editData, dispatch, store?.getBugs?.data?.response]);
+
+
+
     const historyLoader = store?.getHistoryReducer
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
@@ -38,6 +53,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
             dispatch(getHistoryAction(editData?.id));
         }
     };
+
 
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
     const [inputForUpdate, setInputForUpdate] = useState('');
@@ -103,7 +119,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
         setValue('comment', "");
         setButtonChange(true);
     }
-  
+
     return (
         <>
             <Modal show={modal} onHide={closeModal} size={'xl'}>
@@ -124,7 +140,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                 <hr />
                 <Modal.Body>
                     <Row>
-                        <Col lg={7}>
+                        <Col lg={9}>
                             <h4>Activity</h4>
                             <Row>
                                 <Col lg={12}>
@@ -358,54 +374,55 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                             ) : connectComponent === 'Bugs' ? (
 
                                 <div className='bg-white'>
-                                  <div className="container-fluid">
-            <div className="row ">
-                <div className="col-12 p-1">
-                    <Table className="mb-0 add_Color_font" striped>
-                      <thead>
-                      <tr>
-                        <th className='fw-bold'>#</th>
-                            <th className='fw-bold'>Summary</th>
-                            <th className='fw-bold'>Decription</th>
-                            <th className='fw-bold'>Assignee</th>
-                            <th className='fw-bold'>Priority</th>
-                            <th className='fw-bold'>Start Date</th>
-                            <th className='fw-bold'>End Date</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                                    {getBugs?.map((ele, ind) => {
+                                    <div className="container-fluid">
+                                        <div className="row ">
+                                            <div className="col-12 p-1">
+                                                <Table className="mb-0 add_Color_font" >
+                                                    <thead>
+                                                        <tr>
+                                                            <th className='fw-bold'>#</th>
+                                                            <th className='fw-bold'>Summary</th>
+                                                            <th className='fw-bold'>Decription</th>
+                                                            <th className='fw-bold'>ExpectedHours</th>
+                                                            <th className='fw-bold'>Priority</th>
+                                                            <th className='fw-bold'>Start Date</th>
+                                                            <th className='fw-bold'>End Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                
+                                                    <tbody>
+
+                                                    {store?.getBugsReducer?.data?.response?.map((bug, ind) => {
                                         return (
                                             <tr className="align-middle">
-                                                <th scope="row">{(skip - 1) * 10 + ind + 1}</th>
+                                               <th>{ind + 1}</th>
+
+                                               <td>
+                                                <span title={bug?.summary}>
+                                                    {bug?.summary.slice(0,8)} 
+                                                </span>
+                                               </td>
+                                               <td>
+                                               <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
+                                               </td>
                                                <td>
                                                 <span>
-                                                    {ele.summary}
+                                                    {bug?.expectedHours}
                                                 </span>
                                                </td>
                                                <td>
                                                 <span>
-                                                    {ele.description}
+                                                    {bug?.priority}
                                                 </span>
                                                </td>
                                                <td>
                                                 <span>
-                                                    {ele.expectedHours}
+                                                    {bug?.startDate.slice(0,10)}
                                                 </span>
                                                </td>
                                                <td>
                                                 <span>
-                                                    {ele.priority}pankaj
-                                                </span>
-                                               </td>
-                                               <td>
-                                                <span>
-                                                    {ele.startDate}
-                                                </span>
-                                               </td>
-                                               <td>
-                                                <span>
-                                                    {ele.dueDate}
+                                                    {bug?.dueDate.slice(0,10)}
                                                 </span>
                                                </td>
                                               
@@ -413,20 +430,21 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                             </tr>
                                         );
                                     })}
-                                </tbody>
-                    </Table>
-                   
-</div>
+                                                    </tbody>
+                                               
+                                                </Table>
 
-            </div>
-        </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
 
                             ) : (
                                 ''
                             )}
                         </Col>
-                        <Col lg={5}>
+                        <Col lg={3}>
                             <div className="p-2">
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Project Name :</h4>
