@@ -426,10 +426,10 @@ const getTasksAccToStatus = async (req, res) => {
           testing.push(task);
           break;
         case 4:
-          hold.push(task);
+          done.push(task);
           break;
         case 5:
-          done.push(task);
+          hold.push(task);
           break;
 
         default:
