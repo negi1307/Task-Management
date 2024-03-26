@@ -27,7 +27,6 @@ export function deleteTaskApi(data): any {
 }
 
 export function updateTaskStatusApi(data): any {
-    console.log(data, 'apiiiiiiiii')
     return api.update(URL.UpdateTaskStatus, data.payload);
 }
 export function TaskStatusApi(data): any {
@@ -55,6 +54,13 @@ export function getReporterListApi(data): any {
 export function GetHistoryApi(data): any {
     return api.get(URL.getHistory + data?.payload);
 }
-// export function GetBugsApi(data): any {
-//     return api.get(URL.getBugs + data?.payload);
-// }
+export function getBugsApi(data): any {
+    const{taskId,type}=data?.payload
+    console.log(data,'apiiii')
+    return api.get(`${URL.getBugs}&type=${type}&taskId=${taskId}`);
+}
+export function getSubTaskApi(data): any {
+    const{taskId,type}=data?.payload
+    console.log(data,'apiiii')
+    return api.get(`${URL.getSubTask}&type=${type}&taskId=${taskId}`);
+}

@@ -21,7 +21,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const [endDate, setEndDate] = useState();
     // disable previous date
     const today = new Date();
-    console.log(today, 'today');
+    // console.log(today, 'today');
     // end date
     const handleStartDate = (date) => {
         setStartDate(date);
@@ -29,7 +29,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const handleEndDate = (date) => {
         setEndDate(date);
     };
-    console.log(editData, 'update');
+    // console.log(editData, 'update');
     const [data, setData] = useState({
         image: '',
     });
@@ -66,10 +66,12 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
 
         console.log('editsprit', body);
         dispatch(updateTask(body));
+        closeModal();
+        ToastHandle('success', "Task updated successfully")
     };
 
     useEffect(() => {
-        console.log(editData, "lalalalalaalalalalalalalala")
+        // console.log(editData, "lalalalalaalalalalalalalala")
         reset({
             projectname: editData?.projectInfo?._id,
             Milestone: editData?.milestoneInfo?._id,
@@ -345,10 +347,11 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
                                                     <Form.Select {...register('status', { required: true })}>
                                                         <option hidden selected>-------select----</option>
-                                                        <option value="1">todo</option>
+                                                        <option value="1" >todo</option>
                                                         <option value="2">inProgress</option>
-                                                        <option value="3">Hold</option>
-                                                        <option value="4">Done</option>
+                                                        <option value="3">Testing</option>
+                                                        <option value="4">Hold</option>
+                                                        <option value="5">Done</option>
                                                     </Form.Select>
                                                     {errors.status?.type === 'required' && (
                                                         <span className="text-danger"> This field is required *</span>

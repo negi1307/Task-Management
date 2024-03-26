@@ -8,10 +8,13 @@ import pdfImage from '../../src/assets/images/pdf.png';
 import DatePicker from 'react-datepicker';
 import '../../node_modules/react-datepicker/dist/react-datepicker.css';
 import { getReporterAction } from '../redux/actions';
+import ToastHandle from '../constants/toaster/toaster';
+import { useParams } from 'react-router';
 export default function RightBar(props) {
     //
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
+    const [taskdata, setTaskData] = useState();
     // disable previous date
     const today = new Date();
     // console.log(today, 'today');
@@ -32,6 +35,9 @@ export default function RightBar(props) {
         formState: { errors },
     } = useForm();
     const { showModal, setShowModal, content, projectId, mileStoneId, sprintId } = props;
+    // console.log(projectId, 'projj')
+    // console.log(mileStoneId, 'projj')
+    // console.log(sprintId, 'projj')
     const [selectedFile, setSelectedFile] = useState('');
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
@@ -48,6 +54,7 @@ export default function RightBar(props) {
         document.getElementById('fileInput').click();
     };
     const store = useSelector((state) => state);
+    // console.log(store, ';store')
     // const projectId = store?.getProjectId?.data;
     // const milestoneId = store?.getMilestoneId?.data;
     // const sprintid = store?.getSprintId?.data;
@@ -71,9 +78,9 @@ export default function RightBar(props) {
         body.append('attachment', selectedFile ? selectedFile : '');
         if (projectId !== '' && mileStoneId !== '' && sprintId !== '') {
             dispatch(createTask(body));
-
+            ToastHandle('success', 'Task created successfully');
         } else {
-            alert('plsease select project');
+            alert('Please Select Project');
         }
         setValue('Summary', '');
         setValue('Assignee', '');
@@ -102,7 +109,6 @@ export default function RightBar(props) {
     };
     useEffect(() => {
         reset({ projectname: projectId, Milestone: mileStoneId, Sprint: sprintId });
-
     }, [showModal]);
 
     useEffect(() => {
@@ -151,8 +157,8 @@ export default function RightBar(props) {
                                                         <option value={ele?._id}> {ele?.projectName} </option>
                                                     ))}
                                                 </Form.Select>
-                                                {errors.projectname?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
+                                                {errors.projectName?.type === 'required' && (
+                                                    <span className="text-danger"> This field is required *</span>
                                                 )}
                                             </Form.Group>
                                         </Col>
@@ -171,7 +177,7 @@ export default function RightBar(props) {
                                                     ))}
                                                 </Form.Select>
                                                 {errors.Milestone?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
+                                                    <span className="text-danger"> This field is required *</span>
                                                 )}
                                             </Form.Group>
                                         </Col>
@@ -195,7 +201,7 @@ export default function RightBar(props) {
                                             ))}
                                         </Form.Select>
                                         {errors.Sprint?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
+                                            <span className="text-danger"> This field is required *</span>
                                         )}
                                     </Form.Group>
                                 </Col>
@@ -212,7 +218,7 @@ export default function RightBar(props) {
                                         {...register('Summary', { required: true })}
                                     />
                                     {errors.Summary?.type === 'required' && (
-                                        <span className="text-danger"> This feild is required *</span>
+                                        <span className="text-danger"> This field is required *</span>
                                     )}
                                 </div>
                             </div>
@@ -220,7 +226,7 @@ export default function RightBar(props) {
                                 <div className="col-lg-12">
                                     <div className="mb-2">
                                         <label className="form-label" for="exampleForm.ControlInput1">
-                                            Description <span className="text-danger">*</span>:
+                                            Description:
                                         </label>
 
                                         <Form.Control
@@ -228,10 +234,10 @@ export default function RightBar(props) {
                                             placeholder="Please Enter Description"
                                             rows={3}
                                             type="text"
-                                            {...register('description', { required: true })}
+                                            {...register('description')}
                                         />
                                         {errors.description?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
+                                            <span className="text-danger"> This field is required *</span>
                                         )}
                                     </div>
                                 </div>
@@ -261,7 +267,7 @@ export default function RightBar(props) {
                                             ))}
                                         </select>
                                         {errors.Assignee?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
+                                            <span className="text-danger"> This field is required *</span>
                                         )}
                                     </div>
                                 </div>
@@ -288,7 +294,7 @@ export default function RightBar(props) {
                                             ))}
                                         </select>
                                         {errors.Reporter?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
+                                            <span className="text-danger"> This field is required *</span>
                                         )}
                                     </div>
                                 </div>
@@ -307,7 +313,7 @@ export default function RightBar(props) {
                                             {...register('expectedHours', { required: true })}
                                         />
                                         {errors.expectedHours?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
+                                            <span className="text-danger"> This field is required *</span>
                                         )}
                                     </div>
                                 </div>
@@ -376,7 +382,7 @@ export default function RightBar(props) {
                                         </select>
 
                                         {errors?.priority?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
+                                            <span className="text-danger"> This field is required *</span>
                                         )}
                                     </div>
                                 </div>
