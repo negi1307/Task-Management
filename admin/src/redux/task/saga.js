@@ -576,6 +576,8 @@ function* getHistoryFunction({ payload }) {
 
     }
 }
+
+
 // function* getBugsFunction({ payload }) {
 //     try {
 //         yield put({
@@ -660,6 +662,9 @@ export function* getHistorySaga(): any {
 // export function* getBugsSaga(): any {
 //     yield takeEvery(TASK_TYPES. GET_BUGS, getBugsFunction);
 // }
+
+
+
 function* AllTaskSaga(): any {
     yield all([
         fork(createTaskSaga),
@@ -675,7 +680,7 @@ function* AllTaskSaga(): any {
         fork(deleteCommentSaga),
         fork(updateCommentSaga),
         fork(getAssignUserSaga),
-        fork(getHistorySaga)
+        fork(getHistorySaga),
     ])
 }
 export default AllTaskSaga;

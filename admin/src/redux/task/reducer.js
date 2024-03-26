@@ -78,6 +78,7 @@ const GET_HISTORY_INITIAL_STATE = {
     message: ""
 }
 
+
 export const createTaskReducer = (state = INITIAL_STATE, action) => {
     // console.log(action ,"bbbbbbbbbbbbbbbbbbbbbbbb")
     switch (action.type) {
@@ -541,7 +542,7 @@ export const getHistoryReducer = (state = GET_HISTORY_INITIAL_STATE, action) => 
 
     }
 };
-// export const getBugsReducer = (state = GET_BUGS_INITIAL_STATE, action) => {
+// export const getBugsReducer = (state = GET_SUBTASK_INITIAL_STATE, action) => {
 //     switch (action.type) {
 //         case TASK_TYPES.GET_BUGS_LOADING:
 //             return {

@@ -97,7 +97,7 @@ const Boards = () => {
         if (!result.destination) return;
         const { source, destination } = result;
 
-        
+
 
         if (source.droppableId !== destination.droppableId) {
             const sourceColumn = columns[source.droppableId];
@@ -117,8 +117,8 @@ const Boards = () => {
                     items: destItems,
                 },
             });
-            
-           
+
+
             handelupdatetask(result);
 
 
@@ -147,6 +147,20 @@ const Boards = () => {
 
     }, [render]);
 
+    // const handleRightBarClose = () => {
+    //     dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
+    //     dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
+    //     dispatch(getAllRoles())
+    //     setColumns(columns)
+    // };
+
+    // useEffect(() => {
+    //     // Check if the modal is closed (showModal is false)
+    //     if (!showModal) {
+    //         // Call the function to handle actions when the RightBar closes
+    //         handleRightBarClose();
+    //     }
+    // }, [showModal]);
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
             setColumns({
@@ -180,7 +194,7 @@ const Boards = () => {
 
     const handelupdatetask = (ele) => {
         let body = {
-            taskId: ele?.draggableId ,
+            taskId: ele?.draggableId,
             status: ele?.destination?.droppableId
         };
         dispatch(updateTaskStatus(body));
@@ -367,7 +381,7 @@ const Boards = () => {
                             type="button"
                             className="mybutton btn p-1 fw-bold py-1  web_button"
                             onClick={() => {
-                                console.log('button click');
+                                // console.log('button click');
                                 setShowModal(!showModal);
                             }}>
                             Add Task

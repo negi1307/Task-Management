@@ -10,15 +10,17 @@ import {
     AddComment,
     UpdateCommentAction,
     deleteComment,
+    getSubtask,
     getComment,
     getHistoryAction,
-    createSubTask
+    createSubTask,
 } from '../../../redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
-import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Alert, CloseButton, Dropdown } from 'react-bootstrap';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 import noimage from '../../../assets/images/noimage.png';
-const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
+import { toast } from 'react-toastify';
+const TaskDetailPage = ({ modal, editData, closeModal }) => {
     // console.log(editData, 'editdataaaaaaaaaaa');
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
@@ -45,6 +47,9 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
             // dispatch(getSubtasks())
         }
     };
+
+
+
     // console.log(taskId, '122222222222222222222222222222222222222222222222@@@@@@@@@@@@@@@@@##################')
 
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
@@ -74,14 +79,14 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
 
 
     const subtasksSubmit = (e) => {
-        console.error(editData._id, 'this is the task id');
-        if (!taskId) {
+        if (!editData._id) {
             console.error('taskId is missing');
             return;
         }
 
+        // dispatch(getSubtasks())
         let subtask_body = new FormData();
-        subtask_body.append('taskId', taskId);
+        subtask_body.append('taskId', editData._id);
         subtask_body.append('summary', e.summary);
         subtask_body.append('description', e.description);
         subtask_body.append('priority', e.priority);
@@ -100,17 +105,14 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
             subtask_body.append('attachment', fileInput.files[0]);
         }
 
-        if (taskId !== '') {
+        if (editData._id !== '') {
             dispatch(createSubTask(subtask_body));
+            ToastHandle('success', 'Sub-task created successfully');
         }
 
-        setValue('Summary', '');
-        setValue('priority', '');
-        setValue('start_date', '');
-        setValue('last_date', '');
-        setValue('description', '');
         setStartDate("");
         setEndDate("");
+        reset();
     }
 
 
@@ -191,10 +193,10 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                 <hr />
                 <Modal.Body>
                     <Row>
-                        <Col lg={7}>
+                        <Col lg={8} className='px-3'>
                             <h4>Activity</h4>
                             <Row>
-                                <Col lg={12}>
+                                <Col lg={12} className='d-flex align-items-center'>
                                     <Button
                                         onClick={() => {
                                             connectComponentCheck('All');
@@ -250,6 +252,8 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         className="ms-2">
                                         Sub-tasks
                                     </Button>
+
+
                                 </Col>
                             </Row>
                             {connectComponent === 'All' ? (
@@ -328,7 +332,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                             ) : connectComponent === 'Subtasks' ? (
                                 <form onSubmit={handleSubmit(subtasksSubmit)}>
                                     <Row className="mt-2">
-                                        <Col sm={6}>
+                                        <Col>
                                             <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                 <Form.Label className='mb-0'>
                                                     Summary<span className='text-danger'>*</span>
@@ -337,6 +341,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     type="text"
                                                     placeholder="Enter Subtask Name"
                                                     {...register('summary', { required: true })}
+                                                    style={{ border: '1px solid #a6b3c3' }}
                                                 />
                                                 {errors.summary?.type === 'required' && (
                                                     <span className="text-danger"> This field is required *</span>
@@ -354,6 +359,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     rows={5}
                                                     placeholder="Enter Subtask Description"
                                                     {...register('description', { required: true })}
+                                                    style={{ border: '1px solid #a6b3c3' }}
                                                 />
                                                 {errors.description?.type === 'required' && (
                                                     <span className="text-danger"> This field is required *</span>
@@ -368,6 +374,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 <select
                                                     name="priority"
                                                     className="form-select"
+                                                    style={{ border: '1px solid #a6b3c3' }}
                                                     {...register('priority', { required: true })}>
                                                     <option hidden selected>
                                                         Select
@@ -399,6 +406,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 </Form.Label>
                                                 <Form.Control
                                                     type="number"
+                                                    style={{ border: '1px solid #a6b3c3' }}
                                                     placeholder="Expected Hours"
                                                     {...register('expectedHours')}
                                                 />
@@ -408,7 +416,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
 
                                         <Col sm={6}>
                                             <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                                <Form.Label className="w-100">
+                                                <Form.Label className="w-100 mb-0">
                                                     Start Date<span className="text-danger">*</span>:
                                                 </Form.Label>
 
@@ -424,7 +432,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         </Col>
                                         <Col sm={6}>
                                             <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                                <Form.Label className="w-100">
+                                                <Form.Label className="w-100 mb-0">
                                                     End Date<span className="text-danger">*</span>:
                                                 </Form.Label>
 
@@ -445,6 +453,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     Subtask Type<span className='text-danger'>*</span>
                                                 </Form.Label>
                                                 <select
+                                                    style={{ border: '1px solid #a6b3c3' }}
                                                     name="type"
                                                     className="form-select"
                                                     {...register('type', { required: true })}>
@@ -470,6 +479,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     Attachment
                                                 </Form.Label>
                                                 <Form.Control
+                                                    style={{ border: '1px solid #a6b3c3' }}
                                                     type='file'
                                                     {...register('uploadfile')}
                                                 />
@@ -478,7 +488,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         </Col>
                                         <Row>
                                             <Col className='text-center'>
-                                                <Button type="submit">{buttonChange ? 'Add' : 'Update'}</Button>
+                                                <Button type="submit" className='bg-black border-0 my-1'>{buttonChange ? 'Add' : 'Update'}</Button>
                                             </Col>
                                         </Row>
                                     </Row>
@@ -500,7 +510,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 </Form.Group>
                                             </Col>
                                             <Col className="m-0 p-0" lg={2}>
-                                                <Button type="submit">{buttonChange ? 'Add' : 'Update'}</Button>
+                                                <Button type="submit" className='bg-black border-0'>{buttonChange ? 'Add' : 'Update'}</Button>
                                             </Col>
                                         </Row>
                                     </form>
@@ -587,7 +597,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 ''
                             )}
                         </Col>
-                        <Col lg={5}>
+                        <Col lg={4}>
                             <div className="p-2">
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Project Name :</h4>
@@ -636,7 +646,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 </div>
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Reporter :</h4>
-                                    <p className="ms-2 p-0">{editData?.reporterInfo?.firstName}{''}{editData?.reporterInfo?.lastName}</p>
+                                    <p className="ms-2 p-0">{editData?.reporterInfo?.firstName}{' '}{editData?.reporterInfo?.lastName}</p>
                                 </div>
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Priority :</h4>
@@ -647,7 +657,9 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 ? 'Medium'
                                                 : '' || editData?.priority == "Low"
                                                     ? 'Low'
-                                                    : ''}
+                                                    : '' || editData?.priority == "Critical"
+                                                        ? 'Critical'
+                                                        : ''}
                                     </p>
                                 </div>
                                 <div className=" d-flex">

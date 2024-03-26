@@ -11,7 +11,6 @@ export const createSubTask = (data): AuthAction => ({
     payload: data
 })
 
-
 export const getsingleSprintTask = (data): AuthAction => ({
     type: TASK_TYPES.GET_SINGLE_SPRINT_TASK,
     payload: data
