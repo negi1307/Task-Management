@@ -5,6 +5,7 @@ const projectModel = require("../models/project.model");
 const milestoneModel = require("../models/milestone.model");
 const sprintModel = require("../models/sprint.model");
 const userModel = require("../models/users.model");
+const subTaskModel = require("../models/subTask.model")
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -422,14 +423,15 @@ const getTasksAccToStatus = async (req, res) => {
           inProgress.push(task);
           break;
         case 3:
-          hold.push(task);
-          break;
-        case 4:
-          done.push(task);
-          break;
-        case 5:
           testing.push(task);
           break;
+        case 4:
+          hold.push(task);
+          break;
+        case 5:
+          done.push(task);
+          break;
+
         default:
           break;
       }

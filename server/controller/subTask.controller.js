@@ -6,7 +6,7 @@ const { userHistory } = require('../controller/history.controller');
 const addSubTask = async (req, res) => {
     try {
         const { taskId, summary, description, priority, expectedHours, startDate, dueDate, assigneeId, parentId, reporterId, type } = req.body;
-        const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : req.body.attachment;
+        const attachmentPath = req.file ? `${req.file.originalname}` : req.body.attachment;
         const fileExtension = req.file ? req.file.mimetype : undefined;
         const createSubTask = await subTaskModel.create({
             taskId, summary, description, priority, expectedHours, startDate, dueDate, parentId, reporterId, assigneeId, type,
@@ -32,7 +32,7 @@ const addSubTask = async (req, res) => {
 const updateSubTask = async (req, res) => {
     try {
         const { subTaskId, summary, description, priority, expectedHours, startDate, dueDate, status, assigneeId, reporterId, type } = req.body;
-        const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : attachment;
+        const attachmentPath = req.file ? `${req.file.originalname}` : attachment;
         const fileExtension = req.file ? req.file.mimetype : undefined;
         const obj = {
             summary, description, priority, expectedHours, startDate, dueDate, status, type, assigneeId, reporterId,
