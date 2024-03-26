@@ -28,7 +28,7 @@ const subTask = mongoose.model(
         },
         status: {
             type: Number,
-            default: 1 // 1=,todo, 2=inProgress, 3=hold, 4=done 
+            default: 1 // 1=,todo, 2=inProgress,3=testing,4=hold, 5=done 
         },
         inProgressDate: {
             type: Date
