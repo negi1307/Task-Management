@@ -83,6 +83,7 @@ const Boards = () => {
     const deleteCommenthandel = store?.deleteCommentReducer;
     const [loader, setloader] = useState(false);
     const [search, setSearch] = useState('');
+    console.log(columns,'col')
 
     const {
         register,

@@ -9,13 +9,12 @@ import moment from 'moment';
 import {
     AddComment,
     UpdateCommentAction,
+    createSubTask,
     deleteComment,
-    getComment,
     getHistoryAction,
-    createSubTask
 } from '../../../redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
-import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
+import { Row, Col, Card, Button, Alert, CloseButton, Table } from 'react-bootstrap';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 import noimage from '../../../assets/images/noimage.png';
 const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
@@ -31,10 +30,11 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     const [subtaskButtonClicked, setSubtaskButtonClicked] = useState(false);
     const getCommentData = store?.getComment?.data?.response;
     const getHistory = store?.getHistoryReducer?.data?.response;
-    // const getBugs = store?.getBugsReducer?.data?.response;
-    // console.log(getBugs, '0000000000000000000000000000000000000000000000000000000000p')
+    const bugs = store?.getBugsReducer?.data?.response;
+    console.log(bugs,'nisll')
+    
+  
     const historyLoader = store?.getHistoryReducer
-    // console.log(editData, 'pankaj singh pundir')
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
         setValue('comment', "");
@@ -42,19 +42,15 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         setButtonChange(true);
         if (type === 'History') {
             dispatch(getHistoryAction(editData?.id));
-            // dispatch(getSubtasks())
         }
     };
-    // console.log(taskId, '122222222222222222222222222222222222222222222222@@@@@@@@@@@@@@@@@##################')
+
 
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
     const [inputForUpdate, setInputForUpdate] = useState('');
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
-    // disable previous date
     const today = new Date();
-    // console.log(today, 'today');
-    // end date
     const handleStartDate = (date) => {
         setStartDate(date);
     };
@@ -92,11 +88,8 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
 
 
 
-        // Access the file input field
         const fileInput = document.querySelector('input[type="file"]');
-        // Check if a file was selected
         if (fileInput.files.length > 0) {
-            // Append the file to the form data
             subtask_body.append('attachment', fileInput.files[0]);
         }
 
@@ -130,29 +123,23 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
             dispatch(UpdateCommentAction(body));
             setButtonChange(true);
         }
-        // dispatch(getComment({ taskId: editData?.id }));
         setValue('comment', '');
     };
     const handeldelete = (data) => {
         dispatch(deleteComment({ taskId: data?._id }));
     };
     const handelUpdate = (data) => {
-        // console.log(data);
         setCommentId(data?._id);
         setValue('comment', data?.comment);
         setButtonChange(false);
     };
     const handelUpdateAll = (data, indx) => {
-        // console.log(indx);
         setAllCommetUpdateId(data?._id);
-        // console.log(data?._id, 'in my id');
         reset({
             updated_comment: data?.comment,
         });
         setInputForUpdate(indx);
-        // console.log(data, allCommetUpdateId);
-
-        // console.log(body);
+      
     };
     const submitUpdateComment = (data) => {
         let body = {
@@ -161,16 +148,13 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         };
         dispatch(UpdateCommentAction(body));
         setInputForUpdate(false);
-        // console.log(data, allCommetUpdateId);
     };
     const closeModalHandle = () => {
         closeModal()
         setValue('comment', "");
         setButtonChange(true);
     }
-    const handleAddBugs = () => {
-        setShowBugForm(true)
-    }
+ 
     return (
         <>
             <Modal show={modal} onHide={closeModal} size={'xl'}>
@@ -191,7 +175,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                 <hr />
                 <Modal.Body>
                     <Row>
-                        <Col lg={7}>
+                        <Col lg={9}>
                             <h4>Activity</h4>
                             <Row>
                                 <Col lg={12}>
@@ -248,7 +232,33 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             boxShadow: 'none',
                                         }}
                                         className="ms-2">
-                                        Sub-tasks
+                                       Add Sub-tasks
+                                    </Button>
+                                    <Button
+                                        onClick={() => {
+                                            connectComponentCheck('Bugs');
+                                        }}
+                                        style={{
+                                            backgroundColor: '#f3f3f3',
+                                            borderColor: '#f3f3f3',
+                                            color: 'black',
+                                            boxShadow: 'none',
+                                        }}
+                                        className="ms-2">
+                                        Bugs
+                                    </Button>
+                                    <Button
+                                        onClick={() => {
+                                            connectComponentCheck('view_Subtask');
+                                        }}
+                                        style={{
+                                            backgroundColor: '#f3f3f3',
+                                            borderColor: '#f3f3f3',
+                                            color: 'black',
+                                            boxShadow: 'none',
+                                        }}
+                                        className="ms-2">
+                                        SubTask
                                     </Button>
                                 </Col>
                             </Row>
@@ -583,11 +593,137 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                     ))}
                                 </div>
 
+                            ) : connectComponent === 'Bugs' ? (
+
+                                <div className='bg-white'>
+                                    <div className="container-fluid">
+                                        <div className="row ">
+                                            <div className="col-12 p-1">
+                                                <Table className="mb-0 add_Color_font" >
+                                                    <thead>
+                                                        <tr>
+                                                            <th className='fw-bold'>#</th>
+                                                            <th className='fw-bold'>Summary</th>
+                                                            <th className='fw-bold'>Decription</th>
+                                                            <th className='fw-bold'>ExpectedHours</th>
+                                                            <th className='fw-bold'>Priority</th>
+                                                            <th className='fw-bold'>Start Date</th>
+                                                            <th className='fw-bold'>End Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                
+                                                    <tbody>
+
+                                                    {store?.getBugsReducer?.data?.response?.map((bug, ind) => {
+                                        return (
+                                            <tr className="align-middle">
+                                               <th>{ind + 1}</th>
+
+                                               <td>
+                                                <span title={bug?.summary}>
+                                                    {bug?.summary.slice(0,8)} 
+                                                </span>
+                                               </td>
+                                               <td>
+                                               <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {bug?.expectedHours}
+                                                </span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {bug?.priority}
+                                                </span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {bug?.startDate.slice(0,10)}
+                                                </span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {bug?.dueDate.slice(0,10)}
+                                                </span>
+                                               </td>
+                                              
+                                               
+                                            </tr>
+                                        );
+                                    })}
+                                                    </tbody>
+                                               
+                                                </Table>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            ) :  connectComponent === 'view_Subtask' ? (
+
+                                <Table className="mb-0 add_Color_font" striped>
+                                    <thead>
+                                        <tr>
+                                            <th className='fw-bold'>#</th>
+                                            <th className='fw-bold'>Summary</th>
+                                            <th className='fw-bold'>Decription</th>
+                                            <th className='fw-bold'>Assignee</th>
+                                            <th className='fw-bold'>Priority</th>
+                                            <th className='fw-bold'>Start Date</th>
+                                            <th className='fw-bold'>End Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {store?.getSubTaskReducer?.data?.response?.map((bug, ind) => {
+                                        return (
+                                            <tr className="align-middle">
+                                               <th>{ind + 1}</th>
+
+                                               <td>
+                                                <span title={bug?.summary}>
+                                                    {bug?.summary.slice(0,8)} 
+                                                </span>
+                                               </td>
+                                               <td>
+                                               <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {bug?.expectedHours}
+                                                </span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {bug?.priority}
+                                                </span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {bug?.startDate.slice(0,10)}
+                                                </span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {bug?.dueDate.slice(0,10)}
+                                                </span>
+                                               </td>
+                                              
+                                               
+                                            </tr>
+                                        );
+                                    })}
+
+                                    </tbody>
+                                </Table>
                             ) : (
                                 ''
                             )}
                         </Col>
-                        <Col lg={5}>
+                        <Col lg={3}>
                             <div className="p-2">
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Project Name :</h4>
