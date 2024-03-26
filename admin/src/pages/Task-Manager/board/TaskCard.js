@@ -59,7 +59,6 @@ const TaskCard = ({ item, index, closeModal }) => {
     const [openModal, setOpenModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const store = useSelector((state) => state);
-    console.log(detailData,'pankaj')
 
 
     const dispatch = useDispatch();
