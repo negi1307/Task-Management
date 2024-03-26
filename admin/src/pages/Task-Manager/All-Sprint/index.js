@@ -80,10 +80,10 @@ const AllSprint = () => {
                                     <tr>
                                         <th>#</th>
                                         <th>Milestone Name</th>
-                                        <th> Sprint Name</th>
+                                        <th>Sprint Name</th>
                                         <th>Description</th>
-                                        <th> Start Date</th>
-                                        <th>  End Date</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>

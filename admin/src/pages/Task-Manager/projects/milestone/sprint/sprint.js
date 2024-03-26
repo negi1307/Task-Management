@@ -16,7 +16,7 @@ import getAllSingleSprints from '../../../../../constants/endpoint';
 
 const Sprint = () => {
     const { projectId, milestoneId } = useParams();
-    console.log({ projectId, milestoneId });
+    // console.log({ projectId, milestoneId });
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
@@ -208,15 +208,15 @@ const Sprint = () => {
                                 <Col className="" lg={12}>
                                     <Table striped>
                                         <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Sprint Name</th>
-                                                <th>Sprint Description</th>
-                                                <th>Sprint Start Date</th>
-                                                <th>Days Left</th>
+                                            <tr >
+                                                <th className='fw-bold'>#</th>
+                                                <th className='fw-bold'>Sprint Name</th>
+                                                <th className='fw-bold'>Sprint Description</th>
+                                                <th className='fw-bold'>Sprint Start Date</th>
+                                                <th className='fw-bold'>Days Left</th>
                                                 {/* <th>Sprint End Date</th> */}
-                                                <th>Status</th>
-                                                <th>Action</th>
+                                                <th className='fw-bold'>Status</th>
+                                                <th className='fw-bold'>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>

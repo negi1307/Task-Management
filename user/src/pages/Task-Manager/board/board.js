@@ -169,7 +169,7 @@ const Boards = (props) => {
         }
     };
 
-  
+
 
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
@@ -217,8 +217,8 @@ const Boards = (props) => {
     const showTaskDetailMOdel = (item) => {
         setshowTaskModel(true);
         setCommentData(item);
-       dispatch(getComment(item?.taskId));
-       dispatch(getHistory(item?.taskId));
+        dispatch(getComment(item?.taskId));
+        dispatch(getHistory(item?.taskId));
     };
 
     const closeTaskDetailMOdel = () => {

@@ -102,6 +102,7 @@ export default function RightBar(props) {
     };
     useEffect(() => {
         reset({ projectname: projectId, Milestone: mileStoneId, Sprint: sprintId });
+
     }, [showModal]);
 
     useEffect(() => {

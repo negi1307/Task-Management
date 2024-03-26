@@ -36,6 +36,11 @@ const Sprint = () => {
         setEditData(data);
         setOpenEditModal(true);
     };
+
+    // useEffect(() => {
+    //     dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
+    //     dispatch(getAllProjects());
+    // })
     const closeupdatemodal = (val) => {
         if (val == 'render') {
             setRender(!render);
