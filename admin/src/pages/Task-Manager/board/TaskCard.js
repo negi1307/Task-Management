@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import styled from '@emotion/styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteTask, getComment, gettaskId } from '../../../redux/task/action';
+import { deleteTask, getComment, gettaskId,getBugs,getSubTask } from '../../../redux/task/action';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
 import ToastHandle from '../../../constants/toaster/toaster';
@@ -61,6 +61,7 @@ const TaskCard = ({ item, index, closeModal }) => {
     const store = useSelector((state) => state);
     console.log(detailData,'pankaj')
 
+
     const dispatch = useDispatch();
 
     const closeOpenModal = () => {
@@ -88,6 +89,8 @@ const TaskCard = ({ item, index, closeModal }) => {
         setOpenDetailPage(true);
         setDetailData(data);
         dispatch(getComment({ taskId: data?.id }));
+        dispatch(getBugs({ taskId: data?.id , type:"Bug" }));
+        dispatch(getSubTask({ taskId: data?.id , type:"SubTask" }));
         dispatch(gettaskId(data?.id));
     };
     const closeDetailPage = () => {
@@ -228,7 +231,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                                             <div className="secondary-details d-flex align-items-center">
                                                 <p className="m-0 p-0">
                                                     <span>
-                                                        {item?.startDate ? moment(item?.startDate).format("DD/MM/YYYY"): ''}
+                                                        {item?.startDate ? moment(item?.startDate).format("DD/MM/YYYY") : ''}
                                                     </span>
                                                 </p>
                                             </div>
@@ -250,7 +253,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                                                                 backgroundColor: '#605e5a',
                                                                 borderRadius: '50%',
                                                                 padding: '5px 6px',
-                                                              
+
                                                                 color: 'white',
                                                                 fontWeight: '800',
                                                             }}>
@@ -290,7 +293,7 @@ const TaskCard = ({ item, index, closeModal }) => {
             </Modal>
 
             <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
-            <TaskDetailPage modal={openDetailPage} editData={detailData} closeModal={closeDetailPage} />
+            <TaskDetailPage modal={openDetailPage} editData={detailData} closeModal={closeDetailPage} taskId={item._id} />
         </>
     );
 };

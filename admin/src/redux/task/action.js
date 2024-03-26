@@ -6,15 +6,29 @@ export const createTask = (data): AuthAction => ({
     type: TASK_TYPES.CREATE_TASK,
     payload: data
 })
+export const getBugs = (data): AuthAction => ({
+    type: TASK_TYPES.GET_BUGS,
+    payload: data
+});
+export const getSubTask = (data): AuthAction => ({
+    type: TASK_TYPES.GET_BUGS,
+    payload: data
+});
+export const createSubTask = (data): AuthAction => ({
+    type: TASK_TYPES.CREATE_SUBTASK,
+    payload: data
+})
+
+
 export const getsingleSprintTask = (data): AuthAction => ({
     type: TASK_TYPES.GET_SINGLE_SPRINT_TASK,
     payload: data
 })
-export const getAllTask= (data): AuthAction => ({
+export const getAllTask = (data): AuthAction => ({
     type: TASK_TYPES.GET_ALL_TASK,
     payload: data
 })
-export const updateTask= (data): AuthAction => ({
+export const updateTask = (data): AuthAction => ({
     type: TASK_TYPES.UPDATE_TASK,
     payload: data
 })
@@ -31,41 +45,37 @@ export const TaskStatusAction = (data): AuthAction => ({
     type: TASK_TYPES.TASK_STATUS,
     payload: data
 })
-export const AddComment= (data): AuthAction => ({
+export const AddComment = (data): AuthAction => ({
     type: TASK_TYPES.ADD_COMMENT,
     payload: data
 })
-export const getComment= (data): AuthAction => ({
+export const getComment = (data): AuthAction => ({
     type: TASK_TYPES.GET_COMMENT,
     payload: data
 })
-export const deleteComment= (data): AuthAction => ({
+export const deleteComment = (data): AuthAction => ({
     type: TASK_TYPES.DELETE_COMMENT,
     payload: data
 })
-export const UpdateCommentAction= (data): AuthAction => ({
+export const UpdateCommentAction = (data): AuthAction => ({
     type: TASK_TYPES.UPDATE_COMMENT,
     payload: data
 })
-export const gettaskId= (data): AuthAction => ({
+export const gettaskId = (data): AuthAction => ({
     type: "taskid",
     payload: data
 })
-export const getAssignUserAction= (data): AuthAction => ({
+export const getAssignUserAction = (data): AuthAction => ({
     type: TASK_TYPES.GET_ASSIGN_USER,
     payload: data
 })
 
-export const getReporterAction= (): AuthAction => ({
+export const getReporterAction = (): AuthAction => ({
     type: TASK_TYPES.GET_ALL_REPORTER,
-    
+
 })
 
 export const getHistoryAction = (data): AuthAction => ({
     type: TASK_TYPES.GET_HISTORY,
     payload: data
 })
-// export const getBugsAction = (data): AuthAction => ({
-//     type: TASK_TYPES.GET_BUGS,
-//     payload: data
-// })

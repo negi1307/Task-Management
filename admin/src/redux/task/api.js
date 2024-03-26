@@ -3,8 +3,13 @@ import { APICore } from '../../helpers/api/apiCore';
 const api = new APICore();
 
 export function createTaskApi(data): any {
-    return api.create(URL.CREATE_TASK, data?.payload),
-    console.log(data,'daaaaaaaaaaaaaaaatttttttttttttttaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*****************')
+    return api.create(URL.CREATE_TASK, data?.payload);
+    // console.log(data, 'daaaaaaaaaaaaaaaatttttttttttttttaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*****************')
+}
+
+export function createSubtaskApi(data): any {
+    return api.create(URL.Create_subtask, data?.payload);
+    // console.log(data, 'daaaaaaaaaaaaaaaatttttttttttttttaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*****************')
 }
 export function getSingleSprintTaskApi(data): any {
     return api.get(`${URL.SingleSprintTask}${data.payload.id}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}&status=${data.payload.taskStatus}&milestoneId=${data.payload.milestoneId}&projectId=${data.payload.projectId}`);
@@ -16,11 +21,10 @@ export function UpdateTaskApi(data): any {
     return api.update(URL.UpdateTask, data.payload);
 }
 export function deleteTaskApi(data): any {
-    return api.delete(URL.DeleteTask  + data?.payload?.taskId);
+    return api.delete(URL.DeleteTask + data?.payload?.taskId);
 }
 
 export function updateTaskStatusApi(data): any {
-    console.log(data,'apiiiiiiiii')
     return api.update(URL.UpdateTaskStatus, data.payload);
 }
 export function TaskStatusApi(data): any {
@@ -30,10 +34,10 @@ export function AddCommentApi(data): any {
     return api.create(URL.ADDCOMMENT, data.payload);
 }
 export function getCommentApi(data): any {
-    return api.get(URL.GetComment  + data?.payload?.taskId);
+    return api.get(URL.GetComment + data?.payload?.taskId);
 }
 export function deleteCommentApi(data): any {
-    return api.delete(URL.deleteComment  + data?.payload?.taskId);
+    return api.delete(URL.deleteComment + data?.payload?.taskId);
 }
 export function UpdateCommentApi(data): any {
     return api.update(URL.updateComment, data.payload);
@@ -48,6 +52,13 @@ export function getReporterListApi(data): any {
 export function GetHistoryApi(data): any {
     return api.get(URL.getHistory + data?.payload);
 }
-// export function GetBugsApi(data): any {
-//     return api.get(URL.getBugs + data?.payload);
-// }
+export function getBugsApi(data): any {
+    const{taskId,type}=data?.payload
+    console.log(data,'apiiii')
+    return api.get(`${URL.getBugs}&type=${type}&taskId=${taskId}`);
+}
+export function getSubTaskApi(data): any {
+    const{taskId,type}=data?.payload
+    console.log(data,'apiiii')
+    return api.get(`${URL.getSubTask}&type=${type}&taskId=${taskId}`);
+}
