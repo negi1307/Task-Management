@@ -56,6 +56,11 @@ const GET_BUGS_INITIAL_STATE = {
     loading: false,
     message: ""
 };
+const GET_SUBTASK_INITIAL_STATE = {
+    data: [],
+    loading: false,
+    message: ""
+};
 const DELETE_COMMENT__INITIAL_STATE = {
     data: [],
     loading: false,
@@ -83,6 +88,7 @@ const GET_HISTORY_INITIAL_STATE = {
     loading: false,
     message: ""
 }
+
 export const createTaskReducer = (state = INITIAL_STATE, action) => {
     // console.log(action ,"bbbbbbbbbbbbbbbbbbbbbbbb")
     switch (action.type) {
@@ -113,6 +119,38 @@ export const createTaskReducer = (state = INITIAL_STATE, action) => {
 
     }
 };
+export const createSubTaskReducer = (state = INITIAL_STATE, action) => {
+    // console.log(action ,"bbbbbbbbbbbbbbbbbbbbbbbb")
+    switch (action.type) {
+        case TASK_TYPES.CREATE_SUBTASK_LOADING:
+            return {
+                data: INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.CREATE_SUBTASK_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+        case TASK_TYPES.CREATE_SUBTASK_RESET:
+            return {
+                data: INITIAL_STATE.data,
+                loading: false,
+            };
+        case TASK_TYPES.CREATE_SUBTASK_ERROR:
+            return {
+                data: [],
+                status: !200,
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+
+
 
 export const getSigleSprintTask = (state = GET_SINGLE_SPRINTTASK_INITIAL_STATE, action) => {
     switch (action.type) {
@@ -369,6 +407,35 @@ export const getBugsReducer = (state = GET_BUGS_INITIAL_STATE, action) => {
                 loading: false
             };
         case TASK_TYPES.GET_BUGS_ERROR:
+            return {
+                data: [],
+                status: !200,
+                loading: false,
+                message: action?.payload,
+            };;
+        default:
+            return { ...state };
+    }
+};
+export const getSubTaskReducer = (state = GET_SUBTASK_INITIAL_STATE, action) => {
+    console.log(GET_SUBTASK_INITIAL_STATE,"GET_SUBTASK_INITIAL_STATE");
+    switch (action.type) {
+        case TASK_TYPES.GET_SUBTASK_LOADING:
+            return {
+                data: GET_SUBTASK_INITIAL_STATE.data,
+                loading: true
+            };
+        case TASK_TYPES.GET_SUBTASK_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false
+            };
+        case TASK_TYPES.GET_SUBTASK_RESET:
+            return {
+                data: GET_BUGS_INITIAL_STATE,
+                loading: false
+            };
+        case TASK_TYPES.GET_SUBTASK_ERROR:
             return {
                 data: [],
                 status: !200,

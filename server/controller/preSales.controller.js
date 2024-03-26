@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const preSalesModel = require("../models/preSales.model")
 const projectModel = require("../models/project.model");
+const { userHistory } = require('../controller/history.controller');
 
 // create PreSales
 const createPreSales = async (req, res) => {
@@ -11,6 +12,7 @@ const createPreSales = async (req, res) => {
             return res.status(200).json({ status: "400", message: "ProjectName already exists" });
         } else {
             const result = await preSalesModel.create({ clientName, projectName, description, stage, type, status });
+            await userHistory(req, "Create Pre Sales");
             return res.status(200).json({ status: "200", message: "Pre Sale added successfully", response: result });
         }
     } catch (error) {
@@ -165,8 +167,11 @@ const updatePreSalesData = async (req, res) => {
             const { projectName, clientName, description } = preSaleUpdate;
             const projectData = { projectName, clientName, technology, startDate, endDate, projectDesc: description, projectStatus, projectType, preSalesId };
             const addProject = await projectModel.create(projectData);
+            await userHistory(req, "Create Project");
             return res.status(200).json({ status: 200, message: "Project converted successfully", response: addProject })
         }
+        const preSalesData = await preSalesModel.findById(preSalesId)
+        await userHistory(req, preSalesData);
         return res.status(200).json({ status: 200, message: "PreSales data updated successfully", response: preSaleUpdate });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -177,6 +182,9 @@ const updatePreSalesData = async (req, res) => {
 // delete a preSale
 const deletePreSaleData = async (req, res) => {
     try {
+        const preSalesId = req.query.preSalesId;
+        const preSale = await preSalesModel.findById(preSalesId);
+        await userHistory(req, {preSale} );
         await preSalesModel.findByIdAndDelete({ _id: req.query.preSalesId });
         return res.status(200).json({ status: "200", message: "Pre Sale deleted Successfully" })
     } catch (error) {

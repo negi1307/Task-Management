@@ -12,13 +12,16 @@ const preSalesModel = mongoose.model(
             type: String,
         },
         stage: {
-            type: Number // 1:Hot, 2:Medium, 3:Cold
+            type: String,
+            enum: ['Hot', 'Medium', 'Cold']
         },
         type: {
-            type: [String] // Mobile,Web
+            type: [String],
+            enum: ['Mobile', 'Web']
         },
         status: {
-            type: Number // 0:Not Converted , 1:Converted
+            type: String,
+            enum: ['Not Converted', 'Converted']
         }
     },
         {

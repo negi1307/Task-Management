@@ -25,7 +25,8 @@ const tasks = mongoose.model(
             type: String
         },
         priority: {
-            type: Number,// 1=high, 2=medium, 3=low
+            type: String,
+            enum: ['High', 'Medium', 'Low', 'Critical']
         },
         expectedHours: {
             type: Number
@@ -38,7 +39,7 @@ const tasks = mongoose.model(
         },
         status: {
             type: Number,
-            default: 1 // 1=,todo, 2=inProgress, 3=hold, 4=done 
+            default: 1 // 1=,todo, 2=inProgress, 3=hold, 4=done, 5=testing
         },
         inProgressDate: {
             type: Date
@@ -75,7 +76,11 @@ const tasks = mongoose.model(
         },
         reporterId: {
             type: mongoose.Types.ObjectId,
-            ref: 'roles'
+            ref: 'User'
+        },
+        lastUpdaterId: {
+            type: mongoose.Types.ObjectId,
+            ref: 'User'
         }
     },
         {

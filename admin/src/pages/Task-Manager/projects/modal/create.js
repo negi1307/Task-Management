@@ -9,6 +9,7 @@ import ToastHandle from '../../../../constants/toaster/toaster';
 import MainLoader from '../../../../constants/Loader/loader';
 //import Multiselect from 'multiselect-react-dropdown';
 import { getAllTechnology } from '../../../../redux/technology/action';
+import { getAllProjects } from '../../../../redux/projects/action';
 import Multiselect from 'multiselect-react-dropdown';
 import DatePicker from 'react-datepicker';
 import '../../../../../node_modules/react-datepicker/dist/react-datepicker.css';
@@ -24,11 +25,11 @@ const Create = ({ modal, closeModal }) => {
     const [addValue, setAddValue] = useState('');
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
-    console.log(startDate, 'hiiiiiiiiiiiiiiiiiiiiiiiiiiii');
+    // console.log(startDate, 'hiiiiiiiiiiiiiiiiiiiiiiiiiiii');
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     // disable previous date
     const today = new Date();
-    console.log(today, 'today');
+    // console.log(today, 'today');
     // end date
     const handleStartDate = (date) => {
         setStartDate(date);
@@ -44,6 +45,7 @@ const Create = ({ modal, closeModal }) => {
         control,
         watch,
         reset,
+        setValue,
         formState: { errors },
     } = useForm();
     const onSubmit = (data) => {
@@ -53,16 +55,16 @@ const Create = ({ modal, closeModal }) => {
             startDate: startDate,
             endDate: endDate,
             projectType: data?.project_type,
-            projectStatus: 1,
+            projectStatus: 'Ongoing',
             technology: addValue,
         };
-        dispatch(addProject(body));
+        dispatch(addProject(body))
     };
     useEffect(() => {
         if (errorhandel?.data?.status == 200) {
             ToastHandle('success', 'Successfully added');
             closeModal('render');
-            console.log(addValue)
+            // console.log(addValue)
         } else if (errorhandel?.data?.status == 400) {
             ToastHandle('error', errorhandel?.data?.message);
         } else if (errorhandel?.data?.status == 500) {
@@ -74,7 +76,7 @@ const Create = ({ modal, closeModal }) => {
         setStartDate('');
         setEndDate('');
         setAddValue('')
-        console.log(addValue)
+        // console.log(addValue)
     }, [modal]);
     const removehandle = (selectedList, removedItem) => {
         const remove = getTechnology.filter((ele, ind) => {
@@ -84,7 +86,7 @@ const Create = ({ modal, closeModal }) => {
         if (index !== -1) {
             addValue.splice(index, 1);
             setAddValue(addValue);
-            console.log('remove', addValue);
+            // console.log('remove', addValue);
         } else {
             setAddValue(null);
         }
@@ -143,7 +145,7 @@ const Create = ({ modal, closeModal }) => {
                                                 {...register('projectName', { required: true })}
                                             />
                                             {errors.projectName?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -158,7 +160,7 @@ const Create = ({ modal, closeModal }) => {
                                                 {...register('clientName', { required: true })}
                                             />
                                             {errors.clientName?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -170,19 +172,21 @@ const Create = ({ modal, closeModal }) => {
                                             <Form.Label>
                                                 Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Select {...register('project_type', { required: true })}>
-                                                <option hidden selected>
-                                                    Choose an Project Type{' '}
-                                                </option>
+                                            <Form.Select
+                                                {...register('project_type', { required: true })}
+                                                onChange={(e) => e.target.value && setValue('project_type', e.target.value, { shouldValidate: true })}
+                                            >
+                                                <option hidden value="">Choose a Project Type</option>
                                                 <option value="T&M">T&M</option>
                                                 <option value="FC">FC</option>
-                                                <option value=" HR">HR</option>
+                                                <option value="HR">HR</option>
                                                 <option value="DT">DT</option>
                                             </Form.Select>
-                                            {errors.project_type?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                            {errors.project_type && (
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
+
                                     </Col>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
@@ -211,13 +215,15 @@ const Create = ({ modal, closeModal }) => {
 
                                             <DatePicker
                                                 selected={startDate}
-                                                // onChange={(date) => setStartDate(date)}
                                                 onChange={(date) => handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
                                                 minDate={today}
                                                 className="add_width_input"
                                             />
+
                                         </Form.Group>
+
+
                                     </Col>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">

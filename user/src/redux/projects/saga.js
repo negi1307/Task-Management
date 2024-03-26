@@ -45,7 +45,7 @@ function* getProjectFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getProjectApi, { payload });
-        console.log(response,"bbbvvv")
+        console.log(response, "bbbvvv")
         if (response.data.status) {
             yield put({
                 type: ProjectTypes.GET_PROJECT_SUCCESS,
@@ -153,7 +153,7 @@ function* getProjectByIdFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getProjectByIdApi, { payload });
-        console.log(response,"bbbvvv")
+        console.log(response, "bbbvvv")
         if (response.data.status) {
             yield put({
                 type: ProjectTypes.GET_PROJECT_BY_ID_SUCCESS,
@@ -199,7 +199,7 @@ function* AllProjectSaga(): any {
         fork(addProjectSaga),
         fork(getProjectSaga),
         fork(updateProjectSaga),
-        fork (deleteProjectSaga),
+        fork(deleteProjectSaga),
         fork(getProjectByIdSaga)
     ])
 }

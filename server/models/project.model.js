@@ -25,7 +25,8 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
                 default: true
             },
             projectStatus: {
-                type: String // Ongoing, Support, Delivered
+                type: String,
+                enum: ['Ongoing', 'Support', 'Delivered']
             },
             projectType: {
                 type: String

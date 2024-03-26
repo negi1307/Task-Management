@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
+import DatePicker from 'react-datepicker';
+import '../../../../node_modules/react-datepicker/dist/react-datepicker.css';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import moment from 'moment';
 import {
     AddComment,
     UpdateCommentAction,
+    createSubTask,
     deleteComment,
     getHistoryAction,
 } from '../../../redux/task/action';
@@ -14,40 +17,28 @@ import ToastHandle from '../../../constants/toaster/toaster';
 import { Row, Col, Card, Button, Alert, CloseButton, Table } from 'react-bootstrap';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 import noimage from '../../../assets/images/noimage.png';
-const TaskDetailPage = ({ modal, editData, closeModal }) => {
-    console.log(editData)
+const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
+    // console.log(editData, 'editdataaaaaaaaaaa');
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [connectComponent, setConnectComponent] = useState('All');
     const [buttonChange, setButtonChange] = useState(true);
+    const [showBugForm, setShowBugForm] = useState(false)
     const [commentId, setCommentId] = useState();
     const [commentTextUpdate, setCommentTextUpdate] = useState(false);
+    const [subtaskName, setSubtaskName] = useState('');
+    const [subtaskButtonClicked, setSubtaskButtonClicked] = useState(false);
     const getCommentData = store?.getComment?.data?.response;
     const getHistory = store?.getHistoryReducer?.data?.response;
+    const bugs = store?.getBugsReducer?.data?.response;
+    console.log(bugs,'nisll')
     
-    
-
-    // const filteredBugs = store?.getBugsReducer?.data?.response?.filter(Bug => Bug?.taskId === taskId);
-    // console.log(store?.getBugsReducer, 'Bugs..............................');
-
-
-    // useEffect(() => {
-    //     const taskId = editData?._id;
-    //     if (taskId) {
-    //         const type = 'Bug';
-    //         // dispatch(getBugs({ taskId: taskId, type }));
-    //         // setBugs(filteredBugs);
-    //         // console.log(filteredBugs, 'Filtered Bugs');
-    //     }
-
-    // }, [editData, dispatch, store?.getBugs?.data?.response]);
-
-
-
+  
     const historyLoader = store?.getHistoryReducer
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
         setValue('comment', "");
+        setValue('subtasks', "");
         setButtonChange(true);
         if (type === 'History') {
             dispatch(getHistoryAction(editData?.id));
@@ -57,6 +48,16 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
 
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
     const [inputForUpdate, setInputForUpdate] = useState('');
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+    const today = new Date();
+    const handleStartDate = (date) => {
+        setStartDate(date);
+    };
+    const handleEndDate = (date) => {
+        setEndDate(date);
+
+    };
     const {
         register,
         handleSubmit,
@@ -66,6 +67,47 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
         reset,
         formState: { errors },
     } = useForm();
+
+
+    const subtasksSubmit = (e) => {
+        console.error(editData._id, 'this is the task id');
+        if (!taskId) {
+            console.error('taskId is missing');
+            return;
+        }
+
+        let subtask_body = new FormData();
+        subtask_body.append('taskId', taskId);
+        subtask_body.append('summary', e.summary);
+        subtask_body.append('description', e.description);
+        subtask_body.append('priority', e.priority);
+        subtask_body.append('expectedHours', e.expectedHours);
+        subtask_body.append('startDate', startDate);
+        subtask_body.append('dueDate', endDate);
+        subtask_body.append('type', e.type);
+
+
+
+        const fileInput = document.querySelector('input[type="file"]');
+        if (fileInput.files.length > 0) {
+            subtask_body.append('attachment', fileInput.files[0]);
+        }
+
+        if (taskId !== '') {
+            dispatch(createSubTask(subtask_body));
+        }
+
+        setValue('Summary', '');
+        setValue('priority', '');
+        setValue('start_date', '');
+        setValue('last_date', '');
+        setValue('description', '');
+        setStartDate("");
+        setEndDate("");
+    }
+
+
+
     const onSubmit = (val) => {
         if (buttonChange) {
             let body = {
@@ -81,29 +123,23 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
             dispatch(UpdateCommentAction(body));
             setButtonChange(true);
         }
-        // dispatch(getComment({ taskId: editData?.id }));
         setValue('comment', '');
     };
     const handeldelete = (data) => {
         dispatch(deleteComment({ taskId: data?._id }));
     };
     const handelUpdate = (data) => {
-        console.log(data);
         setCommentId(data?._id);
         setValue('comment', data?.comment);
         setButtonChange(false);
     };
     const handelUpdateAll = (data, indx) => {
-        console.log(indx);
         setAllCommetUpdateId(data?._id);
-        console.log(data?._id, 'in my id');
         reset({
             updated_comment: data?.comment,
         });
         setInputForUpdate(indx);
-        console.log(data, allCommetUpdateId);
-
-        // console.log(body);
+      
     };
     const submitUpdateComment = (data) => {
         let body = {
@@ -112,14 +148,13 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
         };
         dispatch(UpdateCommentAction(body));
         setInputForUpdate(false);
-        console.log(data, allCommetUpdateId);
     };
     const closeModalHandle = () => {
         closeModal()
         setValue('comment', "");
         setButtonChange(true);
     }
-
+ 
     return (
         <>
             <Modal show={modal} onHide={closeModal} size={'xl'}>
@@ -183,6 +218,22 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                         History
                                     </Button>
 
+                                    {/* Add Sub-tasks button */}
+                                    <Button
+                                        onClick={() => {
+                                            connectComponentCheck('Subtasks');
+                                        }
+
+                                        }
+                                        style={{
+                                            backgroundColor: '#f3f3f3',
+                                            borderColor: '#f3f3f3',
+                                            color: 'black',
+                                            boxShadow: 'none',
+                                        }}
+                                        className="ms-2">
+                                       Add Sub-tasks
+                                    </Button>
                                     <Button
                                         onClick={() => {
                                             connectComponentCheck('Bugs');
@@ -195,6 +246,19 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                         }}
                                         className="ms-2">
                                         Bugs
+                                    </Button>
+                                    <Button
+                                        onClick={() => {
+                                            connectComponentCheck('view_Subtask');
+                                        }}
+                                        style={{
+                                            backgroundColor: '#f3f3f3',
+                                            borderColor: '#f3f3f3',
+                                            color: 'black',
+                                            boxShadow: 'none',
+                                        }}
+                                        className="ms-2">
+                                        SubTask
                                     </Button>
                                 </Col>
                             </Row>
@@ -271,6 +335,164 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                         </ul>
                                     ))}
                                 </Row>
+                            ) : connectComponent === 'Subtasks' ? (
+                                <form onSubmit={handleSubmit(subtasksSubmit)}>
+                                    <Row className="mt-2">
+                                        <Col sm={6}>
+                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                <Form.Label className='mb-0'>
+                                                    Summary<span className='text-danger'>*</span>
+                                                </Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="Enter Subtask Name"
+                                                    {...register('summary', { required: true })}
+                                                />
+                                                {errors.summary?.type === 'required' && (
+                                                    <span className="text-danger"> This field is required *</span>
+                                                )}
+                                            </Form.Group>
+                                        </Col>
+
+                                        <Col sm={12}>
+                                            <Form.Group className="mb-1">
+                                                <Form.Label className='mb-0'>
+                                                    Description<span className='text-danger'>*</span>
+                                                </Form.Label>
+                                                <Form.Control
+                                                    as="textarea"
+                                                    rows={5}
+                                                    placeholder="Enter Subtask Description"
+                                                    {...register('description', { required: true })}
+                                                />
+                                                {errors.description?.type === 'required' && (
+                                                    <span className="text-danger"> This field is required *</span>
+                                                )}
+                                            </Form.Group>
+                                        </Col>
+                                        <Col sm={6}>
+                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                <Form.Label className='mb-0'>
+                                                    Priority<span className='text-danger'>*</span>
+                                                </Form.Label>
+                                                <select
+                                                    name="priority"
+                                                    className="form-select"
+                                                    {...register('priority', { required: true })}>
+                                                    <option hidden selected>
+                                                        Select
+                                                    </option>
+                                                    <option value="Critical">
+                                                        &#128308;
+                                                        Critical
+                                                    </option>
+                                                    <option value="High">
+                                                        &#128992;
+                                                        High</option>
+                                                    <option value="Medium">
+                                                        &#128993;
+                                                        Medium</option>
+                                                    <option value="Low">
+                                                        &#128994;
+                                                        Low</option>
+                                                </select>
+
+                                                {errors?.priority?.type === 'required' && (
+                                                    <span className="text-danger"> This field is required *</span>
+                                                )}
+                                            </Form.Group>
+                                        </Col>
+                                        <Col sm={6}>
+                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                <Form.Label className='mb-0'>
+                                                    Expected Hours<span className='text-danger'>*</span>
+                                                </Form.Label>
+                                                <Form.Control
+                                                    type="number"
+                                                    placeholder="Expected Hours"
+                                                    {...register('expectedHours')}
+                                                />
+
+                                            </Form.Group>
+                                        </Col>
+
+                                        <Col sm={6}>
+                                            <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                                <Form.Label className="w-100">
+                                                    Start Date<span className="text-danger">*</span>:
+                                                </Form.Label>
+
+                                                <DatePicker
+                                                    selected={startDate}
+                                                    // onChange={(date) => setStartDate(date)}
+                                                    onChange={(date) => handleStartDate(date)}
+                                                    placeholderText="mm-dd-yyyy"
+                                                    minDate={today}
+                                                    className="add_width_input"
+                                                />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col sm={6}>
+                                            <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                                <Form.Label className="w-100">
+                                                    End Date<span className="text-danger">*</span>:
+                                                </Form.Label>
+
+                                                <DatePicker
+                                                    selected={endDate}
+                                                    disabled={startDate == '' || startDate == undefined}
+                                                    // onChange={(date) => setEndDate(date)}
+                                                    onChange={(date) => handleEndDate(date)}
+                                                    placeholderText="mm-dd-yyyy"
+                                                    minDate={startDate}
+                                                    className="add_width_input"
+                                                />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col sm={6}>
+                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                <Form.Label className='mb-0'>
+                                                    Subtask Type<span className='text-danger'>*</span>
+                                                </Form.Label>
+                                                <select
+                                                    name="type"
+                                                    className="form-select"
+                                                    {...register('type', { required: true })}>
+                                                    <option hidden selected>
+                                                        Select
+                                                    </option>
+                                                    <option value="SubTask">
+                                                        SubTask
+                                                    </option>
+                                                    <option value="Bug">
+                                                        Bug
+                                                    </option>
+                                                </select>
+
+                                                {errors?.type?.type === 'required' && (
+                                                    <span className="text-danger"> This field is required *</span>
+                                                )}
+                                            </Form.Group>
+                                        </Col>
+                                        <Col sm={6}>
+                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                <Form.Label className='mb-0'>
+                                                    Attachment
+                                                </Form.Label>
+                                                <Form.Control
+                                                    type='file'
+                                                    {...register('uploadfile')}
+                                                />
+
+                                            </Form.Group>
+                                        </Col>
+                                        <Row>
+                                            <Col className='text-center'>
+                                                <Button type="submit">{buttonChange ? 'Add' : 'Update'}</Button>
+                                            </Col>
+                                        </Row>
+                                    </Row>
+                                </form>
                             ) : connectComponent === 'Comments' ? (
                                 <>
                                     <form onSubmit={handleSubmit(onSubmit)}>
@@ -283,7 +505,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                                         {...register('comment', { required: true })}
                                                     />
                                                     {/* {errors.comment?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )} */}
                                                 </Form.Group>
                                             </Col>
@@ -440,6 +662,63 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                     </div>
                                 </div>
 
+                            ) :  connectComponent === 'view_Subtask' ? (
+
+                                <Table className="mb-0 add_Color_font" striped>
+                                    <thead>
+                                        <tr>
+                                            <th className='fw-bold'>#</th>
+                                            <th className='fw-bold'>Summary</th>
+                                            <th className='fw-bold'>Decription</th>
+                                            <th className='fw-bold'>Assignee</th>
+                                            <th className='fw-bold'>Priority</th>
+                                            <th className='fw-bold'>Start Date</th>
+                                            <th className='fw-bold'>End Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {store?.getSubTaskReducer?.data?.response?.map((bug, ind) => {
+                                        return (
+                                            <tr className="align-middle">
+                                               <th>{ind + 1}</th>
+
+                                               <td>
+                                                <span title={bug?.summary}>
+                                                    {bug?.summary.slice(0,8)} 
+                                                </span>
+                                               </td>
+                                               <td>
+                                               <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {bug?.expectedHours}
+                                                </span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {bug?.priority}
+                                                </span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {bug?.startDate.slice(0,10)}
+                                                </span>
+                                               </td>
+                                               <td>
+                                                <span>
+                                                    {bug?.dueDate.slice(0,10)}
+                                                </span>
+                                               </td>
+                                              
+                                               
+                                            </tr>
+                                        );
+                                    })}
+
+                                    </tbody>
+                                </Table>
                             ) : (
                                 ''
                             )}
@@ -549,8 +828,8 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                             </div>
                         </Col>
                     </Row>
-                </Modal.Body>
-            </Modal>
+                </Modal.Body >
+            </Modal >
         </>
     );
 };
