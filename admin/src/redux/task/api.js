@@ -11,6 +11,8 @@ export function createSubtaskApi(data): any {
     return api.create(URL.Create_subtask, data?.payload);
     // console.log(data, 'daaaaaaaaaaaaaaaatttttttttttttttaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*****************')
 }
+
+
 export function getSingleSprintTaskApi(data): any {
     return api.get(`${URL.SingleSprintTask}${data.payload.id}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}&status=${data.payload.taskStatus}&milestoneId=${data.payload.milestoneId}&projectId=${data.payload.projectId}`);
 }

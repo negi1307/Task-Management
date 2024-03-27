@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import TASK_TYPES from './constant';
-import { AddCommentApi, GetAssignUserApi,getReporterListApi, GetHistoryApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi,updateTaskStatusApi, getBugsApi,createSubtaskApi, getSubTaskApi } from './api';
+import { AddCommentApi, GetAssignUserApi, getReporterListApi, GetHistoryApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi, updateTaskStatusApi, getBugsApi, createSubtaskApi, getSubTaskApi } from './api';
 // import { AddCommentApi, GetAssignUserApi, createSubtaskApi, getReporterListApi, GetHistoryApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi, updateTaskStatusApi } from './api';
 
 function* createSubTaskFunction({ payload }) {
@@ -555,7 +555,7 @@ function* getHistoryFunction({ payload }) {
             });
             yield put({
                 type: TASK_TYPES.GET_HISTORY_RESET,
-                payload: {...response.data},
+                payload: { ...response.data },
             });
         }
         else {
@@ -578,7 +578,7 @@ function* getHistoryFunction({ payload }) {
     }
 }
 function* getBugsFunction({ payload }) {
-  
+
 
     try {
         yield put({
@@ -586,7 +586,7 @@ function* getBugsFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getBugsApi, { payload });
-        console.log(response,'3333333333333333333333333333333333333333333333333333333333')
+        console.log(response, '3333333333333333333333333333333333333333333333333333333333')
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_BUGS_SUCCESS,
@@ -618,7 +618,7 @@ function* getBugsFunction({ payload }) {
 }
 
 function* getSubTaskFunction({ payload }) {
-  
+
 
     try {
         yield put({
@@ -626,16 +626,13 @@ function* getSubTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getSubTaskApi, { payload });
-        console.log(response,'3333333333333333333333333333333333333333333333333333333333')
+        // console.log(response, '3333333333333333333333333333333333333333333333333333333333')
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_SUBTASK_SUCCESS,
                 payload: { ...response.data },
             });
-            // yield put({
-            //     type: TASK_TYPES.GET_BUGS_RESET,
-            //     payload: {},
-            // });
+
         }
         else {
             yield put({
@@ -724,9 +721,9 @@ function* AllTaskSaga(): any {
         fork(deleteCommentSaga),
         fork(updateCommentSaga),
         fork(getAssignUserSaga),
-        fork (getHistorySaga),
-        fork (getBugsSaga),
-        fork (getSubTaskSaga)
+        fork(getHistorySaga),
+        fork(getBugsSaga),
+        fork(getSubTaskSaga)
     ])
 }
 export default AllTaskSaga;

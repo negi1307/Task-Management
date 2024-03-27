@@ -16,12 +16,12 @@ import noimage from '../../../assets/images/noimage.png';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 import { parseISO } from 'date-fns';
 const UpdateTask = ({ modal, closeModal, editData }) => {
-    
+
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     // disable previous date
     const today = new Date();
-    console.log(today, 'today');
+    // console.log(today, 'today');
     // end date
     const handleStartDate = (date) => {
         setStartDate(date);
@@ -29,7 +29,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const handleEndDate = (date) => {
         setEndDate(date);
     };
-    console.log(editData, 'update');
+    // console.log(editData, 'update');
     const [data, setData] = useState({
         image: '',
     });
@@ -38,7 +38,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const store = useSelector((state) => state);
 
     const loaderhandel = store?.UpdateTaskReducer;
-   
+
     const {
         register,
         handleSubmit,
@@ -66,10 +66,12 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
 
         console.log('editsprit', body);
         dispatch(updateTask(body));
+        closeModal();
+        ToastHandle('success', "Task updated successfully")
     };
 
     useEffect(() => {
-        console.log(editData, "lalalalalaalalalalalalalala")
+        // console.log(editData, "lalalalalaalalalalalalalala")
         reset({
             projectname: editData?.projectInfo?._id,
             Milestone: editData?.milestoneInfo?._id,
@@ -80,11 +82,11 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
             priority: editData?.priority,
             status: editData?.status,
             description: editData?.description,
-            expectedHours : editData?.expectedHours
+            expectedHours: editData?.expectedHours
         });
         setData({ image: editData?.attachment });
         if (editData?.startDate || editData?.dueDate) {
-            const parsedDate = parseISO(editData?.startDate) 
+            const parsedDate = parseISO(editData?.startDate)
             const endate = parseISO(editData?.dueDate)
             if (parsedDate || endate) {
                 setStartDate(parsedDate);
@@ -94,7 +96,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
             }
         }
     }, [modal]);
-    
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         setData({ ...data, image: e.target.files[0] });
@@ -155,7 +157,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         ))}
                                                     </Form.Select>
                                                     {errors.projectname?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -174,7 +176,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         ))}
                                                     </Form.Select>
                                                     {errors.Milestone?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -196,7 +198,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         ))}
                                                     </Form.Select>
                                                     {errors.Sprint?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -212,7 +214,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         {...register('summary', { required: true })}
                                                     />{' '}
                                                     {errors.summary?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -233,7 +235,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         {...register('description', { required: true })}
                                                     />
                                                     {errors.description?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -254,7 +256,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         ))}
                                                     </Form.Select>
                                                     {errors.Assignee?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -275,7 +277,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         ))}
                                                     </Form.Select>
                                                     {errors.Reporter?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -292,7 +294,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         <option value="3">Low</option>
                                                     </Form.Select>
                                                     {errors.priority?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -300,39 +302,39 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                     </Col>
                                     <Col lg={12}>
                                         <Row>
-                                        <Col lg={6}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label className="w-100">
-                                                Start Date<span className="text-danger">*</span>:
-                                            </Form.Label>
+                                            <Col lg={6}>
+                                                <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                                    <Form.Label className="w-100">
+                                                        Start Date<span className="text-danger">*</span>:
+                                                    </Form.Label>
 
-                                            <DatePicker
-                                                selected={startDate}
-                                                // onChange={(date) => setStartDate(date)}
-                                                onChange={(date) => handleStartDate(date)}
-                                                placeholderText="mm-dd-yyyy"
-                                                minDate={today}
-                                                className="add_width_input"
-                                            />
-                                        </Form.Group>
-                                    </Col>
-                                    <Col lg={6}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label className="w-100">
-                                                End Date<span className="text-danger">*</span>:
-                                            </Form.Label>
+                                                    <DatePicker
+                                                        selected={startDate}
+                                                        // onChange={(date) => setStartDate(date)}
+                                                        onChange={(date) => handleStartDate(date)}
+                                                        placeholderText="mm-dd-yyyy"
+                                                        minDate={today}
+                                                        className="add_width_input"
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col lg={6}>
+                                                <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                                    <Form.Label className="w-100">
+                                                        End Date<span className="text-danger">*</span>:
+                                                    </Form.Label>
 
-                                            <DatePicker
-                                                selected={endDate}
-                                                disabled={startDate == '' || startDate == undefined}
-                                                // onChange={(date) => setEndDate(date)}
-                                                onChange={(date) => handleEndDate(date)}
-                                                placeholderText="mm-dd-yyyy"
-                                                minDate={startDate}
-                                                className="add_width_input"
-                                            />
-                                        </Form.Group>
-                                    </Col>
+                                                    <DatePicker
+                                                        selected={endDate}
+                                                        disabled={startDate == '' || startDate == undefined}
+                                                        // onChange={(date) => setEndDate(date)}
+                                                        onChange={(date) => handleEndDate(date)}
+                                                        placeholderText="mm-dd-yyyy"
+                                                        minDate={startDate}
+                                                        className="add_width_input"
+                                                    />
+                                                </Form.Group>
+                                            </Col>
                                         </Row>
                                     </Col>
                                     <Col lg={12}>
@@ -345,104 +347,105 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
                                                     <Form.Select {...register('status', { required: true })}>
                                                         <option hidden selected>-------select----</option>
-                                                        <option value="1">todo</option>
+                                                        <option value="1" >todo</option>
                                                         <option value="2">inProgress</option>
-                                                        <option value="3">Hold</option>
-                                                        <option value="4">Done</option>
+                                                        <option value="3">Testing</option>
+                                                        <option value="4">Hold</option>
+                                                        <option value="5">Done</option>
                                                     </Form.Select>
                                                     {errors.status?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
                                             <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlInput1">
-                                            Expected Hours <span class="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            placeholder="Please Expected Hours "
-                                            type="text"
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('expectedHours', { required: true })}
-                                        />
-                                         {errors.expectedHours?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                <div class="mb-2">
+                                                    <label class="form-label" for="exampleForm.ControlInput1">
+                                                        Expected Hours <span class="text-danger">*</span>:
+                                                    </label>
+                                                    <input
+                                                        placeholder="Please Expected Hours "
+                                                        type="text"
+                                                        id="exampleForm.ControlTextarea1"
+                                                        class="form-control"
+                                                        {...register('expectedHours', { required: true })}
+                                                    />
+                                                    {errors.expectedHours?.type === 'required' && (
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
-                                    </div>
-                                </div>
-                                <Row>
-                                <Col>
-                                                <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                                    <Form.Label>
-                                                        Attachment <span className="text-danger">*</span>
-                                                    </Form.Label>
-                                                    <a
-                                                        href={editData?.attachment}
-                                                        download
-                                                        target="_blank"
-                                                        className="align_icon_dowl">
-                                                        <i className="dripicons-download download_color"></i>
-                                                    </a>
-                                                    {imageShow ? (
-                                                        <>
-                                                            {editData?.attachment?.length ? (
-                                                                <Col className="d-flex justify-content-center">
-                                                                    <div style={{ width: '50%', position: 'relative' }}>
-                                                                        <div className="img_div">
-                                                                            {/* <img
+                                                </div>
+                                            </div>
+                                            <Row>
+                                                <Col>
+                                                    <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                                        <Form.Label>
+                                                            Attachment <span className="text-danger">*</span>
+                                                        </Form.Label>
+                                                        <a
+                                                            href={editData?.attachment}
+                                                            download
+                                                            target="_blank"
+                                                            className="align_icon_dowl">
+                                                            <i className="dripicons-download download_color"></i>
+                                                        </a>
+                                                        {imageShow ? (
+                                                            <>
+                                                                {editData?.attachment?.length ? (
+                                                                    <Col className="d-flex justify-content-center">
+                                                                        <div style={{ width: '50%', position: 'relative' }}>
+                                                                            <div className="img_div">
+                                                                                {/* <img
                                                                         className=" all_logo_img w-100"
                                                                         src={editData?.attachment}
                                                                     /> */}
-                                                                            <img
-                                                                                className=" all_logo_img w-100"
-                                                                                src={
-                                                                                    editData?.attachmentType !==
-                                                                                    'application/pdf'
-                                                                                        ? editData?.attachment
-                                                                                        : pdfImage
-                                                                                }
-                                                                            />
+                                                                                <img
+                                                                                    className=" all_logo_img w-100"
+                                                                                    src={
+                                                                                        editData?.attachmentType !==
+                                                                                            'application/pdf'
+                                                                                            ? editData?.attachment
+                                                                                            : pdfImage
+                                                                                    }
+                                                                                />
+                                                                            </div>
+                                                                            <div
+                                                                                className="cross_div"
+                                                                                style={{
+                                                                                    position: 'absolute',
+                                                                                    rigth: '0',
+                                                                                }}>
+                                                                                <i
+                                                                                    onClick={handelimageclose}
+                                                                                    className=" dripicons-cross"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                ) : (
+                                                                    <div style={{ width: '15%', position: 'relative' }}>
+                                                                        <div className="img_div">
+                                                                            <img className="all_logo_img" src={noimage} />
                                                                         </div>
                                                                         <div
                                                                             className="cross_div"
-                                                                            style={{
-                                                                                position: 'absolute',
-                                                                                rigth: '0',
-                                                                            }}>
+                                                                            style={{ position: 'absolute', rigth: '0' }}>
                                                                             <i
                                                                                 onClick={handelimageclose}
                                                                                 className=" dripicons-cross"></i>
                                                                         </div>
                                                                     </div>
-                                                                </Col>
-                                                            ) : (
-                                                                <div style={{ width: '15%', position: 'relative' }}>
-                                                                    <div className="img_div">
-                                                                        <img className="all_logo_img" src={noimage} />
-                                                                    </div>
-                                                                    <div
-                                                                        className="cross_div"
-                                                                        style={{ position: 'absolute', rigth: '0' }}>
-                                                                        <i
-                                                                            onClick={handelimageclose}
-                                                                            className=" dripicons-cross"></i>
-                                                                    </div>
-                                                                </div>
-                                                            )}
-                                                        </>
-                                                    ) : (
-                                                        <Form.Control
-                                                            type="file"
-                                                            // accept="image/png, image/gif, image/jpeg"
-                                                            onChange={(e) => {
-                                                                handleImageChange(e);
-                                                            }}
-                                                        />
-                                                    )}
-                                                </Form.Group>
-                                            </Col>
+                                                                )}
+                                                            </>
+                                                        ) : (
+                                                            <Form.Control
+                                                                type="file"
+                                                                // accept="image/png, image/gif, image/jpeg"
+                                                                onChange={(e) => {
+                                                                    handleImageChange(e);
+                                                                }}
+                                                            />
+                                                        )}
+                                                    </Form.Group>
+                                                </Col>
                                             </Row>
                                         </Row>
                                     </Col>
