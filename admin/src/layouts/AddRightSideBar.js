@@ -3,13 +3,13 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { createTask, getAllRoles, getAllTask, getAssignUserAction, getAllUsers, getSingleSprint } from '../redux/actions';
 import Form from 'react-bootstrap/Form';
-import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
+import { Row, Col, Button, CloseButton, Card, FormControl } from 'react-bootstrap';
 import pdfImage from '../../src/assets/images/pdf.png';
 import DatePicker from 'react-datepicker';
 import '../../node_modules/react-datepicker/dist/react-datepicker.css';
 import { getReporterAction } from '../redux/actions';
 import ToastHandle from '../constants/toaster/toaster';
-import { useParams } from 'react-router';
+// import { useParams } from 'react-router';
 export default function RightBar(props) {
     //
     const [startDate, setStartDate] = useState();
@@ -34,10 +34,7 @@ export default function RightBar(props) {
         watch,
         formState: { errors },
     } = useForm();
-    const { showModal, setShowModal, content, projectId, mileStoneId, sprintId } = props;
-    // console.log(projectId, 'projj')
-    // console.log(mileStoneId, 'projj')
-    // console.log(sprintId, 'projj')
+    const { showModal, setShowModal, columns, content, projectId, mileStoneId, sprintId, onFormSubmit } = props;
     const [selectedFile, setSelectedFile] = useState('');
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
@@ -50,16 +47,15 @@ export default function RightBar(props) {
         }
     };
 
+    //For the values in the disabled fields
+    const allDetails = columns?.[1]?.items[0];
+    // console.log(allDetails, 'kjbf')
+    //////////////////////////
+
     const openFileInput = () => {
         document.getElementById('fileInput').click();
     };
     const store = useSelector((state) => state);
-    // console.log(store, ';store')
-    // const projectId = store?.getProjectId?.data;
-    // const milestoneId = store?.getMilestoneId?.data;
-    // const sprintid = store?.getSprintId?.data;
-    // const sucesshandel =store?.createTaskReducer?.data
-
     const dispatch = useDispatch();
     const onSubmit = (e) => {
         let body = new FormData();
@@ -79,6 +75,7 @@ export default function RightBar(props) {
         if (projectId !== '' && mileStoneId !== '' && sprintId !== '') {
             dispatch(createTask(body));
             ToastHandle('success', 'Task created successfully');
+            onFormSubmit();
         } else {
             alert('Please Select Project');
         }
@@ -147,15 +144,14 @@ export default function RightBar(props) {
                                             <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                 <Form.Label>
                                                     {' '}
+
                                                     Project<span className="text-danger">*</span>:
                                                 </Form.Label>
-
                                                 <Form.Select
                                                     {...register('projectname', { required: true, disabled: true })}>
-                                                    {/* <option value={''}>--Select--</option> */}
-                                                    {store?.getProject?.data?.response?.map((ele, ind) => (
-                                                        <option value={ele?._id}> {ele?.projectName} </option>
-                                                    ))}
+                                                    {allDetails && allDetails.projects && (
+                                                        <option value={allDetails?.projects?._id} defaultValue>{allDetails?.projects?.projectName}</option>
+                                                    )}
                                                 </Form.Select>
                                                 {errors.projectName?.type === 'required' && (
                                                     <span className="text-danger"> This field is required *</span>
@@ -168,13 +164,11 @@ export default function RightBar(props) {
                                                     {' '}
                                                     Milestone<span className="text-danger">*</span>:
                                                 </Form.Label>
-
                                                 <Form.Select
                                                     {...register('Milestone', { required: true, disabled: true })}>
-                                                    {/* <option value={''}>--Select--</option> */}
-                                                    {store?.getSigleMileStone?.data?.response?.map((ele, ind) => (
-                                                        <option value={ele?._id}> {ele?.title} </option>
-                                                    ))}
+                                                    {allDetails && allDetails.milestones && (
+                                                        <option value={allDetails?.milestones?._id} defaultValue>{allDetails?.milestones?.title}</option>
+                                                    )}
                                                 </Form.Select>
                                                 {errors.Milestone?.type === 'required' && (
                                                     <span className="text-danger"> This field is required *</span>
@@ -191,14 +185,11 @@ export default function RightBar(props) {
                                         <Form.Label>
                                             Sprint <span className="text-danger">*</span>:
                                         </Form.Label>
-
-
                                         <Form.Select
                                             {...register('Sprint', { required: true, disabled: true })}>
-                                            {/* <option value={''}>--Select--</option> */}
-                                            {store?.getAllSingleSprints?.data?.response?.map((ele, ind) => (
-                                                <option value={ele?._id}> {ele?.sprintName} </option>
-                                            ))}
+                                            {allDetails && allDetails.sprints && (
+                                                <option value={allDetails?.sprints?._id} defaultValue>{allDetails?.sprints?.sprintName}</option>
+                                            )}
                                         </Form.Select>
                                         {errors.Sprint?.type === 'required' && (
                                             <span className="text-danger"> This field is required *</span>
@@ -258,6 +249,7 @@ export default function RightBar(props) {
                                             {...register('Assignee', { required: true })}>
                                             <option value={''} hidden selected>
                                                 Select
+
                                             </option>
                                             {store?.getAllUsers?.data?.response?.map((ele, ind) => (
                                                 <option value={ele?._id}>
