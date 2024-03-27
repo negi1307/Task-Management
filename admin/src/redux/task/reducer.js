@@ -89,6 +89,7 @@ const GET_HISTORY = {
     message: ""
 }
 
+
 export const createTaskReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case TASK_TYPES.CREATE_TASK_LOADING:
@@ -413,6 +414,7 @@ export const getBugsReducer = (state = GET_BUGS_INITIAL_STATE, action) => {
     }
 };
 export const getSubTaskReducer = (state = GET_SUBTASK, action) => {
+    console.log(GET_SUBTASK,'GETSUBTASK')
     switch (action.type) {
         case TASK_TYPES.GET_SUBTASK_LOADING:
             return {

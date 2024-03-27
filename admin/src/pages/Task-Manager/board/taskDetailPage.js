@@ -71,8 +71,9 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
             return;
         }
 
+        // dispatch(getSubtasks())
         let subtask_body = new FormData();
-        subtask_body.append('taskId', taskId);
+        subtask_body.append('taskId', editData._id);
         subtask_body.append('summary', e.summary);
         subtask_body.append('description', e.description);
         subtask_body.append('priority', e.priority);
@@ -81,24 +82,19 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         subtask_body.append('dueDate', endDate);
         subtask_body.append('type', e.type);
 
-
-
         const fileInput = document.querySelector('input[type="file"]');
         if (fileInput.files.length > 0) {
             subtask_body.append('attachment', fileInput.files[0]);
         }
 
-        if (taskId !== '') {
+        if (editData._id !== '') {
             dispatch(createSubTask(subtask_body));
+            ToastHandle('success', 'Sub-task created successfully');
         }
 
-        setValue('Summary', '');
-        setValue('priority', '');
-        setValue('start_date', '');
-        setValue('last_date', '');
-        setValue('description', '');
         setStartDate("");
         setEndDate("");
+        reset();
     }
 
 
@@ -134,7 +130,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
             updated_comment: data?.comment,
         });
         setInputForUpdate(indx);
-      
+
     };
     const submitUpdateComment = (data) => {
         let body = {
@@ -149,7 +145,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         setValue('comment', "");
         setButtonChange(true);
     }
- 
+
     return (
         <>
             <Modal show={modal} onHide={closeModal} size={'xl'}>
@@ -173,7 +169,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                         <Col lg={9}>
                             <h4>Activity</h4>
                             <Row>
-                                <Col lg={12}>
+                                <Col lg={12} className='d-flex align-items-center'>
                                     <Button
                                         onClick={() => {
                                             connectComponentCheck('All');
@@ -228,7 +224,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             boxShadow: 'none',
                                         }}
                                         className="ms-2">
-                                       Add Sub-tasks
+                                        Add Sub-tasks
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -256,6 +252,8 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         className="ms-2">
                                         SubTask
                                     </Button>
+
+
                                 </Col>
                             </Row>
                             {connectComponent === 'All' ? (
@@ -334,7 +332,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                             ) : connectComponent === 'AddSubtask' ? (
                                 <form onSubmit={handleSubmit(subtasksSubmit)}>
                                     <Row className="mt-2">
-                                        <Col sm={6}>
+                                        <Col>
                                             <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                 <Form.Label className='mb-0'>
                                                     Summary<span className='text-danger'>*</span>
@@ -343,6 +341,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     type="text"
                                                     placeholder="Enter Subtask Name"
                                                     {...register('summary', { required: true })}
+                                                    style={{ border: '1px solid #a6b3c3' }}
                                                 />
                                                 {errors.summary?.type === 'required' && (
                                                     <span className="text-danger"> This field is required *</span>
@@ -360,6 +359,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     rows={5}
                                                     placeholder="Enter Subtask Description"
                                                     {...register('description', { required: true })}
+                                                    style={{ border: '1px solid #a6b3c3' }}
                                                 />
                                                 {errors.description?.type === 'required' && (
                                                     <span className="text-danger"> This field is required *</span>
@@ -374,6 +374,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 <select
                                                     name="priority"
                                                     className="form-select"
+                                                    style={{ border: '1px solid #a6b3c3' }}
                                                     {...register('priority', { required: true })}>
                                                     <option hidden selected>
                                                         Select
@@ -405,6 +406,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 </Form.Label>
                                                 <Form.Control
                                                     type="number"
+                                                    style={{ border: '1px solid #a6b3c3' }}
                                                     placeholder="Expected Hours"
                                                     {...register('expectedHours')}
                                                 />
@@ -414,7 +416,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
 
                                         <Col sm={6}>
                                             <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                                <Form.Label className="w-100">
+                                                <Form.Label className="w-100 mb-0">
                                                     Start Date<span className="text-danger">*</span>:
                                                 </Form.Label>
 
@@ -430,7 +432,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         </Col>
                                         <Col sm={6}>
                                             <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                                <Form.Label className="w-100">
+                                                <Form.Label className="w-100 mb-0">
                                                     End Date<span className="text-danger">*</span>:
                                                 </Form.Label>
 
@@ -451,6 +453,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     Subtask Type<span className='text-danger'>*</span>
                                                 </Form.Label>
                                                 <select
+                                                    style={{ border: '1px solid #a6b3c3' }}
                                                     name="type"
                                                     className="form-select"
                                                     {...register('type', { required: true })}>
@@ -476,6 +479,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     Attachment
                                                 </Form.Label>
                                                 <Form.Control
+                                                    style={{ border: '1px solid #a6b3c3' }}
                                                     type='file'
                                                     {...register('uploadfile')}
                                                 />
@@ -484,7 +488,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         </Col>
                                         <Row>
                                             <Col className='text-center'>
-                                                <Button type="submit">{buttonChange ? 'Add' : 'Update'}</Button>
+                                                <Button type="submit" className='bg-black border-0 my-1'>{buttonChange ? 'Add' : 'Update'}</Button>
                                             </Col>
                                         </Row>
                                     </Row>
@@ -506,7 +510,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 </Form.Group>
                                             </Col>
                                             <Col className="m-0 p-0" lg={2}>
-                                                <Button type="submit">{buttonChange ? 'Add' : 'Update'}</Button>
+                                                <Button type="submit" className='bg-black border-0'>{buttonChange ? 'Add' : 'Update'}</Button>
                                             </Col>
                                         </Row>
                                     </form>
@@ -563,31 +567,33 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 </>
                             ) : connectComponent === 'History' ? (
 
-                                <div>
-                                    {store?.getHistoryReducer?.data?.response?.map((ele) => (
-                                        <>
+                                // <div>
+                                //     {store?.getHistoryReducer?.data?.response?.map((ele) => (
+                                //         <>
 
-                                            <div className="d-flex align-items-center pt-2">
-                                                <span
-                                                    style={{
-                                                        backgroundColor: '#605e5a',
-                                                        borderRadius: '100%',
-                                                        padding: '11px 11px',
-                                                        color: 'white',
-                                                        fontWeight: '800',
-                                                        textTransform: "uppercase"
-                                                    }}>
-                                                    {ele?.userId?.firstName.charAt(0)}
-                                                    {ele?.userId?.lastName.charAt(0)}
-                                                </span>
-                                                <h4 className="pe-1 ps-1">
-                                                    {ele?.userId?.firstName} {ele?.userId?.lastName}
-                                                </h4>
-                                                {ele?.userActivity}  {moment(ele?.time).format('LLL')}
-                                            </div>
-                                        </>
-                                    ))}
-                                </div>
+                                //             <div className="d-flex align-items-center pt-2">
+                                //                 <span
+                                //                     style={{
+                                //                         backgroundColor: '#605e5a',
+                                //                         borderRadius: '100%',
+                                //                         padding: '11px 11px',
+                                //                         color: 'white',
+                                //                         fontWeight: '800',
+                                //                         textTransform: "uppercase"
+                                //                     }}>
+                                //                     {ele.userId.firstName?.charAt(0)}
+                                //                     {ele.userId.lastName?.charAt(0)}
+                                //                 </span>
+                                //             )}
+                                //             <h4 className="pe-1 ps-1">
+                                //                 {ele.userId?.firstName} {ele.userId?.lastName}
+                                //             </h4>
+                                //             {ele.userActivity} {ele.time && moment(ele.time).format('LLL')}
+                                //         </div>
+                                //     ))}
+                                // </div>
+                                ''
+
 
                             ) : connectComponent === 'Bugs' ? (
 
@@ -595,19 +601,18 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                     <div className="container-fluid">
                                         <div className="row ">
                                             <div className="col-12 p-1">
-                                                <Table className="mb-0 add_Color_font" >
+                                                <Table className="mb-0 add_Color_font">
                                                     <thead>
                                                         <tr className=''>
                                                             <th className='fw-bold'>#</th>
                                                             <th className='fw-bold'>Summary</th>
-                                                            <th className='fw-bold'>Decription</th>
-                                                            <th className='fw-bold'>ExpectedHours</th>
+                                                            <th className='fw-bold'>Description</th>
+                                                            <th className='fw-bold'>Expected Hours</th>
                                                             <th className='fw-bold'>Priority</th>
                                                             <th className='fw-bold'>Start Date</th>
                                                             <th className='fw-bold'>End Date</th>
                                                         </tr>
                                                     </thead>
-                                                
                                                     <tbody>
 
                                                     {store?.getBugsReducer?.data?.response?.map((bug, ind) => {
@@ -649,8 +654,8 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         );
                                     })}
                                                     </tbody>
-                                               
                                                 </Table>
+
 
                                             </div>
 
@@ -674,44 +679,44 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                     </thead>
                                     <tbody>
 
-                                    {store?.getSubTaskReducer?.data?.response?.map((sub, ind) => {
-                                        return (
-                                            <tr className="align-middle">
-                                               <th>{ind + 1}</th>
+                                        {store?.getSubTaskReducer?.data?.response?.map((bug, ind) => {
+                                            return (
+                                                <tr className="align-middle">
+                                                    <th>{ind + 1}</th>
 
-                                               <td>
-                                                <span title={sub?.summary}>
-                                                    {sub?.summary.slice(0,8)} 
-                                                </span>
-                                               </td>
-                                               <td>
-                                               <span title={sub?.description}>{sub?.description.slice(0, 10)}</span>
-                                               </td>
-                                               <td>
-                                                <span>
-                                                    {sub?.expectedHours}
-                                                </span>
-                                               </td>
-                                               <td>
-                                                <span>
-                                                    {sub?.priority}
-                                                </span>
-                                               </td>
-                                               <td>
-                                                <span>
-                                                    {sub?.startDate.slice(0,10)}
-                                                </span>
-                                               </td>
-                                               <td>
-                                                <span>
-                                                    {sub?.dueDate.slice(0,10)}
-                                                </span>
-                                               </td>
-                                              
-                                               
-                                            </tr>
-                                        );
-                                    })}
+                                                    <td>
+                                                        <span title={bug?.summary}>
+                                                            {bug?.summary.slice(0, 8)}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            {bug?.expectedHours}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            {bug?.priority}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            {bug?.startDate.slice(0, 10)}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            {bug?.dueDate.slice(0, 10)}
+                                                        </span>
+                                                    </td>
+
+
+                                                </tr>
+                                            );
+                                        })}
 
                                     </tbody>
                                 </Table>
@@ -768,7 +773,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 </div>
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Reporter :</h4>
-                                    <p className="ms-2 p-0">{editData?.reporterInfo?.firstName}{''}{editData?.reporterInfo?.lastName}</p>
+                                    <p className="ms-2 p-0">{editData?.reporterInfo?.firstName}{' '}{editData?.reporterInfo?.lastName}</p>
                                 </div>
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Priority :</h4>
@@ -779,7 +784,9 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 ? 'Medium'
                                                 : '' || editData?.priority == "Low"
                                                     ? 'Low'
-                                                    : ''}
+                                                    : '' || editData?.priority == "Critical"
+                                                        ? 'Critical'
+                                                        : ''}
                                     </p>
                                 </div>
                                 <div className=" d-flex">

@@ -80,10 +80,10 @@ const Boards = () => {
     const sprintId = store?.getSprintId?.data;
     const taskId = store?.getTaskId?.data;
     const CreateCommenthandel = store?.AddCommentReducer;
+    const [pp, setpp] = useState();
     const deleteCommenthandel = store?.deleteCommentReducer;
     const [loader, setloader] = useState(false);
     const [search, setSearch] = useState('');
-    console.log(columns,'col')
 
     const {
         register,
@@ -98,13 +98,12 @@ const Boards = () => {
         if (!result.destination) return;
         const { source, destination } = result;
 
-        
 
         if (source.droppableId !== destination.droppableId) {
             const sourceColumn = columns[source.droppableId];
             const destColumn = columns[destination.droppableId];
-            const sourceItems = sourceColumn.items?.slice(); // Create a shallow copy
-            const destItems = destColumn.items?.slice(); // Create a shallow copy
+            const sourceItems = sourceColumn.items?.slice();
+            const destItems = destColumn.items?.slice();
             const [removed] = sourceItems?.splice(source.index, 1);
             destItems?.splice(destination.index, 0, removed);
             setColumns({
@@ -118,11 +117,7 @@ const Boards = () => {
                     items: destItems,
                 },
             });
-            
-           
             handelupdatetask(result);
-
-
         } else {
             const column = columns[source.droppableId];
             const copiedItems = [...column.items];
@@ -140,14 +135,33 @@ const Boards = () => {
         }
     };
 
+
     useEffect(() => {
         dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
         dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
         dispatch(getAllRoles())
-        setColumns(columns)
-
+        setColumns(columns);
     }, [render]);
 
+    const closeaddModal = () => {
+        // dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
+        // dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
+        // dispatch(getAllRoles());
+    }
+    // const handleRightBarClose = () => {
+    //     dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
+    //     dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
+    //     dispatch(getAllRoles())
+    //     setColumns(columns)
+    // };
+
+    // useEffect(() => {
+    //     // Check if the modal is closed (showModal is false)
+    //     if (!showModal) {
+    //         // Call the function to handle actions when the RightBar closes
+    //         handleRightBarClose();
+    //     }
+    // }, [showModal]);
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
             setColumns({
@@ -164,6 +178,12 @@ const Boards = () => {
                     }),
                 },
                 [3]: {
+                    title: 'Testing',
+                    items: successHandle?.data?.Response?.testing.map((ele) => {
+                        return { ...ele, id: ele._id };
+                    }),
+                },
+                [5]: {
                     title: 'Hold',
                     items: successHandle?.data?.Response?.hold.map((ele) => {
                         return { ...ele, id: ele._id };
@@ -181,7 +201,7 @@ const Boards = () => {
 
     const handelupdatetask = (ele) => {
         let body = {
-            taskId: ele?.draggableId ,
+            taskId: ele?.draggableId,
             status: ele?.destination?.droppableId
         };
         dispatch(updateTaskStatus(body));
@@ -192,6 +212,9 @@ const Boards = () => {
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
+            // dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
+            // dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
+            // dispatch(getAllRoles());
         }
     };
 
@@ -220,6 +243,15 @@ const Boards = () => {
         );
     };
 
+    // const handleModalClose = () => {
+    //     dispatch(
+    //         getAllTask({
+    //             projectId: projectId,
+    //             milestoneId: milestoneId,
+    //             sprintId: spriteId,
+    //         })
+    //     );
+    // }
     // const handleSearch=()=>{
     //     dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId ,searchString : search}));
     //     setSkip(1)
@@ -267,6 +299,16 @@ const Boards = () => {
                             In-Progress :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
                                 {successHandle?.data?.Response?.inProgressCount}
+                            </Badge>
+                        </h4>{' '}
+                    </div>
+                    <div className="ms-3">
+                        {' '}
+                        <h4 className="page-title bg-black text-white rounded-2 p-2 py-1">
+                            {' '}
+                            Testing :
+                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
+                                {successHandle?.data?.Response?.testingCount}
                             </Badge>
                         </h4>{' '}
                     </div>
@@ -369,8 +411,10 @@ const Boards = () => {
                             type="button"
                             className="mybutton btn p-1 fw-bold py-1  web_button"
                             onClick={() => {
-                                console.log('button click');
+                                // console.log('button click');
                                 setShowModal(!showModal);
+                                // dispatch(getAllTask({ projectId: projectId, mileStoneId: milestoneId, sprintId: spriteId }))
+
                             }}>
                             Add Task
                         </button>
@@ -380,6 +424,7 @@ const Boards = () => {
                             mileStoneId={milestoneId}
                             sprintId={spriteId}
                             showModal={showModal}
+                            closeModal={closeaddModal}
                             setShowModal={setShowModal}
                         />
                     </div>

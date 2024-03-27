@@ -25,13 +25,13 @@ const verifyAdmin = async (req, res, next) => {
     try {
         const headerToken = req.headers['authorization'];
         if (!headerToken || headerToken === undefined) {
-            return res.status(401).json({ message: 'JWT token is required' });
+            return res.status(201).json({ message: 'JWT token is required' });
         }
         const bearerToken = headerToken.split(' ');
         const token = bearerToken[1];
         jwt.verify(token, process.env.SECRET_ACCESS_TOKEN, async (err, decoded) => {
             if (err) {
-                return res.status(401).json({ message: 'JWT token is expired or invalid' });
+                return res.status(201).json({ message: 'JWT token is expired or invalid' });
             }
             const { _id, role } = decoded;
             req.user = { _id, role };
@@ -52,13 +52,13 @@ const verifyEmployee = async (req, res, next) => {
     try {
         const headerToken = req.headers['authorization'];
         if (!headerToken || headerToken === undefined) {
-            return res.status(401).json({ message: 'JWT token is required' });
+            return res.status(201).json({ message: 'JWT token is required' });
         }
         const bearerToken = headerToken.split(' ');
         const token = bearerToken[1];
         jwt.verify(token, process.env.SECRET_ACCESS_TOKEN, async (err, decoded) => {
             if (err) {
-                return res.status(401).json({ message: 'JWT token is expired or invalid' });
+                return res.status(201).json({ message: 'JWT token is expired or invalid' });
             }
             const { _id, role } = decoded;
             req.user = { _id, role, };
@@ -79,13 +79,13 @@ const verifyUser = async (req, res, next) => {
     try {
         const headerToken = req.headers['authorization'];
         if (!headerToken || headerToken === undefined) {
-            return res.status(401).json({ message: 'JWT token is required' });
+            return res.status(201).json({ message: 'JWT token is required' });
         }
         const bearerToken = headerToken.split(' ');
         const token = bearerToken[1];
         jwt.verify(token, process.env.SECRET_ACCESS_TOKEN, async (err, user) => {
             if (err) {
-                return res.status(401).json({ message: 'jwt token is expired' })
+                return res.status(201).json({ message: 'jwt token is expired' })
             }
             const { _id, role } = user;
             req.user = { _id, role, };
@@ -106,13 +106,13 @@ const verifySeniority = async (req, res, next) => {
     try {
         const headerToken = req.headers['authorization'];
         if (!headerToken || headerToken === undefined) {
-            return res.status(401).json({ message: 'JWT token is required' });
+            return res.status(201).json({ message: 'JWT token is required' });
         }
         const bearerToken = headerToken.split(' ');
         const token = bearerToken[1];
         jwt.verify(token, process.env.SECRET_ACCESS_TOKEN, async (err, user) => {
             if (err) {
-                return res.status(401).json({ message: 'jwt token is expired' })
+                return res.status(201).json({ message: 'jwt token is expired' })
             }
             const { _id, role } = user;
             req.user = { _id, role, };

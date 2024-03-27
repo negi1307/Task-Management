@@ -1,39 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { Card, ProgressBar, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import Chart from 'react-apexcharts';
-import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { getPriorityGraphAction, getTaskSummmaryDetail, getTaskWeekCountAction } from '../../../redux/Summary/action';
-import { Last } from 'react-bootstrap/esm/PageItem';
+import Chart from 'react-apexcharts';
+import { ProgressBar } from 'react-bootstrap';
+
 const Summary = () => {
     const { projectId, milestoneId, spriteId } = useParams();
-    console.log(projectId, 'projectIdddddddddddddddddddddddddddd');
+    console.log(projectId, milestoneId, spriteId); // Check if URL parameters are correct
+
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    console.log(store); // Check store to see if data is being fetched
+
     const successHandle = store?.getTaskSummaryReducer;
     const BarGraphHandel = store?.getPriorityGraphReducer;
     const lastWeekCount = store?.getTaskWeekCountReducer?.data?.response;
+
     const [data, setData] = useState([]);
     const [barGraphData, setBarGraphData] = useState([]);
-    // Pie chart
+
     useEffect(() => {
-        if (successHandle?.data?.status == 200) {
+        if (successHandle?.data?.status === 200) {
             setData(successHandle?.data?.response);
         }
     }, [successHandle]);
+
     useEffect(() => {
-        if (BarGraphHandel?.data?.status == 200) {
+        if (BarGraphHandel?.data?.status === 200) {
             setBarGraphData(BarGraphHandel?.data?.response);
         }
     }, [BarGraphHandel]);
+
     useEffect(() => {
         dispatch(getTaskSummmaryDetail());
         dispatch(getPriorityGraphAction());
         dispatch(getTaskWeekCountAction());
     }, []);
 
-    const apexDonutOpts = {
+    console.log(data, barGraphData, lastWeekCount);    const apexDonutOpts = {
         chart: {
             height: 340,
             type: 'donut',
@@ -192,6 +197,10 @@ const Summary = () => {
                                             <li>
                                                 <span className="color" style={{ backgroundColor: '#0acf97' }} /> In
                                                 Progress
+                                            </li>
+                                            <li>
+                                                <span className="color" style={{ backgroundColor: '#FF00FF' }} />
+                                                Testing
                                             </li>
                                             <li>
                                                 <span className="color" style={{ backgroundColor: '#fa5c7c' }} />
@@ -443,18 +452,18 @@ const Summary = () => {
                                         <div className="col">
                                             <p className="text-secondary">Distribution</p>
                                             <div className="progress-w-percent">
-                                                <span className="progress-value fw-bold">0%</span>
-                                                <ProgressBar now={72} className="progress-sm" />
+                                                <span className="progress-value fw-bold">90%</span>
+                                                <ProgressBar now={90} className="progress-sm" />
                                             </div>
                                             <div className="progress-w-percent">
-                                                <span className="progress-value fw-bold">0%</span>
+                                                <span className="progress-value fw-bold">72%</span>
                                                 <ProgressBar now={72} className="progress-sm" />
                                             </div>
                                         </div>
                                         <div className="col ">
                                             <p className="text-secondary">Count</p>
-                                            <p className="text-primary  mx-4 mb-4">0</p>
-                                            <p className="text-primary mx-4 mb-4 pt-3">0</p>
+                                            <p className="text-primary  mx-4 mb-4">10</p>
+                                            <p className="text-primary mx-4 mb-4 pt-3">8</p>
                                         </div>
                                     </div>
                                 </div>

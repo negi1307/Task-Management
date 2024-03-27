@@ -248,7 +248,7 @@ const Milestone = () => {
                                                                             </Link>
                                                                         </p>
                                                                         <p className="action-icon m-0 p-0  ">
-                                                                            {console.log(item, 'itemmmmmmmm')}
+                                                                            {/* {console.log(item, 'itemmmmmmmm')} */}
                                                                             <i
                                                                                 onClick={() => {
                                                                                     handelUpdate(item);
