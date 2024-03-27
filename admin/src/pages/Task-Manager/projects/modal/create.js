@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
+import { Row, Col, Card, Button, Alert, CloseButton, FormControl } from 'react-bootstrap';
 import { addProject } from '../../../../redux/projects/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import MainLoader from '../../../../constants/Loader/loader';

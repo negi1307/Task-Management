@@ -75,20 +75,28 @@ const Projects = () => {
         }
         setStatusModal(false);
     };
-    const handleStatusChange = (e, data) => {
-        const isChecked = e.target.checked;
-        const projectId = data._id;
+    const handleStatusChange = async (e, data) => {
+        try {
+            const isChecked = e.target.checked;
+            const projectId = data._id;
 
-        const updatedStatus = isChecked ? true : false;
-        const body = {
-            projectId: projectId,
-            activeStatus: updatedStatus,
-        };
-        dispatch(updateProject(body));
-
-        dispatch(getAllProjects({ status: status, skip: skip, projectStatus: projectStatus }));
-
-        setRender(!render);
+            const updatedStatus = isChecked ? true : false;
+            const body = {
+                projectId: projectId,
+                activeStatus: updatedStatus,
+            };
+            await dispatch(updateProject(body));
+            await dispatch(getAllProjects({ status: status, skip: skip, projectStatus: projectStatus }));
+            setRender(!render);
+            if (isChecked) {
+                ToastHandle('success', 'Project Activated Successfully');
+            } else {
+                ToastHandle('success', 'Project Deactivated Successfully');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            ToastHandle('error', 'An error occurred. Please try again.');
+        }
     };
 
     const handleActive = (val) => {

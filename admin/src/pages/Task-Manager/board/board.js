@@ -44,7 +44,6 @@ const TaskColumnStyles = styled.div`
     display: flex;
     width: 100%;
     overflow: auto;
-
     /* Bootstrap grid classes */
     .task-list-col {
         flex: 0 0 25%; 
@@ -80,10 +79,18 @@ const Boards = () => {
     const sprintId = store?.getSprintId?.data;
     const taskId = store?.getTaskId?.data;
     const CreateCommenthandel = store?.AddCommentReducer;
-    const [pp, setpp] = useState();
     const deleteCommenthandel = store?.deleteCommentReducer;
     const [loader, setloader] = useState(false);
     const [search, setSearch] = useState('');
+    const [formSubmitted, setFormSubmitted] = useState(false);
+    // Callback function to be called when form is submitted successfully
+    const handleFormSubmit = () => {
+
+        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
+        dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
+        dispatch(getAllRoles())
+        setFormSubmitted(true);
+    };
 
     const {
         register,
@@ -93,10 +100,11 @@ const Boards = () => {
         reset,
         formState: { errors },
     } = useForm();
-
     const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return;
         const { source, destination } = result;
+
+
 
 
         if (source.droppableId !== destination.droppableId) {
@@ -135,18 +143,20 @@ const Boards = () => {
         }
     };
 
-
     useEffect(() => {
         dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
         dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
         dispatch(getAllRoles())
         setColumns(columns);
+        // console.log(columns, '////')
     }, [render]);
-
     const closeaddModal = () => {
+        getalltasks();
+    }
+    const getalltasks = () => {
         // dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
         // dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
-        // dispatch(getAllRoles());
+        // dispatch(getAllRoles())
     }
     // const handleRightBarClose = () => {
     //     dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
@@ -209,12 +219,11 @@ const Boards = () => {
 
     };
 
+
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
-            // dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
-            // dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
-            // dispatch(getAllRoles());
+
         }
     };
 
@@ -422,7 +431,9 @@ const Boards = () => {
                             projectId={projectId}
                             mileStoneId={milestoneId}
                             sprintId={spriteId}
+                            onFormSubmit={handleFormSubmit}
                             showModal={showModal}
+                            columns={columns}
                             closeModal={closeaddModal}
                             setShowModal={setShowModal}
                         />
