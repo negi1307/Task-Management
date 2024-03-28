@@ -8,7 +8,7 @@ import { getPriorityGraphAction, getTaskSummmaryDetail, getTaskWeekCountAction }
 import { Last } from 'react-bootstrap/esm/PageItem';
 const Summary = () => {
     const { projectId, milestoneId, spriteId } = useParams();
-    console.log(projectId, 'projectIdddddddddddddddddddddddddddd');
+    // console.log(projectId, 'projectIdddddddddddddddddddddddddddd');
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.getTaskSummaryReducer;

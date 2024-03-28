@@ -51,6 +51,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
         closeModal();
     };
 
+    console.log(store, '..')
     const onSubmit = (val) => {
         let body = new FormData();
         body.append('taskId', editData?._id);
