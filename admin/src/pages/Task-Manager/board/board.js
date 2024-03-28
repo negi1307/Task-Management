@@ -281,6 +281,7 @@ const Boards = () => {
                             {' '}
                             <Link to="/taskList">List</Link>{' '}
                         </li>
+
                         <li>
                             {' '}
                             <Link   to={`/dashboard/boards/projectId=/${projectId}&milestoneId=/${milestoneId}&spriteId=/${spriteId}`}>Board</Link>{' '}
@@ -462,6 +463,10 @@ const Boards = () => {
                                                             key={item.id}
                                                             item={item}
                                                             index={index}
+                                                            columns={columns}
+                                                            projectId={projectId}
+                                                            mileStoneId={milestoneId}
+                                                            sprintId={spriteId}
                                                             closeModal={closeModal}
                                                         />
                                                     ))}

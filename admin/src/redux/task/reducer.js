@@ -56,7 +56,7 @@ const GET_BUGS_INITIAL_STATE = {
     loading: false,
     message: ""
 };
-const GET_SUBTASK_INITIAL_STATE = {
+const GET_SUBTASK = {
     data: [],
     loading: false,
     message: ""
@@ -83,7 +83,7 @@ const REPORTER_INITIAL_STATE = {
     message: ""
 }
 
-const GET_HISTORY_INITIAL_STATE = {
+const GET_HISTORY = {
     data: [],
     loading: false,
     message: ""
@@ -91,7 +91,6 @@ const GET_HISTORY_INITIAL_STATE = {
 
 
 export const createTaskReducer = (state = INITIAL_STATE, action) => {
-    // console.log(action ,"bbbbbbbbbbbbbbbbbbbbbbbb")
     switch (action.type) {
         case TASK_TYPES.CREATE_TASK_LOADING:
             return {
@@ -121,7 +120,6 @@ export const createTaskReducer = (state = INITIAL_STATE, action) => {
     }
 };
 export const createSubTaskReducer = (state = INITIAL_STATE, action) => {
-    // console.log(action ,"bbbbbbbbbbbbbbbbbbbbbbbb")
     switch (action.type) {
         case TASK_TYPES.CREATE_SUBTASK_LOADING:
             return {
@@ -181,7 +179,6 @@ export const getSigleSprintTask = (state = GET_SINGLE_SPRINTTASK_INITIAL_STATE, 
 };
 
 export const getAllTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) => {
-    console.log(action, "actionnnn")
     switch (action.type) {
         case TASK_TYPES.GET_ALL_TASK_LOADING:
             return {
@@ -307,7 +304,6 @@ export const TaskStatusReducer = (state = STATUS_TASK_INITIAL_STATE, action) => 
                 loading: true,
             };
         case TASK_TYPES.TASK_STATUS_SUCCESS:
-            console.log(action.payload, 'reducer')
             return {
                 data: action?.payload,
                 loading: false,
@@ -390,7 +386,6 @@ export const getComment = (state = GET_COMMENT__INITIAL_STATE, action) => {
     }
 };
 export const getBugsReducer = (state = GET_BUGS_INITIAL_STATE, action) => {
-    console.log(GET_BUGS_INITIAL_STATE, "GET_BUGS_INITIAL_STATE");
     switch (action.type) {
         case TASK_TYPES.GET_BUGS_LOADING:
             return {
@@ -418,12 +413,12 @@ export const getBugsReducer = (state = GET_BUGS_INITIAL_STATE, action) => {
             return { ...state };
     }
 };
-export const getSubTaskReducer = (state = GET_SUBTASK_INITIAL_STATE, action) => {
-    console.log(GET_SUBTASK_INITIAL_STATE, "GET_SUBTASK_INITIAL_STATE");
+export const getSubTaskReducer = (state = GET_SUBTASK, action) => {
+    console.log(GET_SUBTASK,'GETSUBTASK')
     switch (action.type) {
         case TASK_TYPES.GET_SUBTASK_LOADING:
             return {
-                data: GET_SUBTASK_INITIAL_STATE.data,
+                data: GET_SUBTASK.data,
                 loading: true
             };
         case TASK_TYPES.GET_SUBTASK_SUCCESS:
@@ -433,7 +428,7 @@ export const getSubTaskReducer = (state = GET_SUBTASK_INITIAL_STATE, action) => 
             };
         case TASK_TYPES.GET_SUBTASK_RESET:
             return {
-                data: GET_BUGS_INITIAL_STATE,
+                data: GET_SUBTASK,
                 loading: false
             };
         case TASK_TYPES.GET_SUBTASK_ERROR:
@@ -582,33 +577,33 @@ export const getReporterReducer = (state = REPORTER_INITIAL_STATE, action) => {
 
     }
 };
-export const getHistoryReducer = (state = GET_HISTORY_INITIAL_STATE, action) => {
+
+export const getHistoryReducer = (state = GET_HISTORY, action) => {
+    console.log(GET_HISTORY,'get')
     switch (action.type) {
         case TASK_TYPES.GET_HISTORY_LOADING:
             return {
-                data: GET_HISTORY_INITIAL_STATE.data,
-                loading: true,
+                data: GET_HISTORY.data,
+                loading: true
             };
         case TASK_TYPES.GET_HISTORY_SUCCESS:
             return {
                 data: action?.payload,
-                loading: false,
+                loading: false
             };
-
-        // case TASK_TYPES.GET_HISTORY_RESET:
-        //     return {
-        //         data: GET_HISTORY_INITIAL_STATE.data,
-        //         loading: false
-        //     }
+        case TASK_TYPES.GET_HISTORY_RESET:
+            return {
+                data: GET_HISTORY,
+                loading: false
+            };
         case TASK_TYPES.GET_HISTORY_ERROR:
             return {
                 data: [],
                 status: !200,
                 loading: false,
                 message: action?.payload,
-            };
+            };;
         default:
             return { ...state };
-
     }
 };

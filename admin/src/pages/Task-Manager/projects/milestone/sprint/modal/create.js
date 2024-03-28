@@ -111,11 +111,11 @@ const Create = ({ modal, CloseModal, projectId, milestoneId, }) => {
                                                 rows={3}
                                                 type="text"
                                                 placeholder="Please Enter Description"
-                                                {...register('description', { required: true })}
+                                                {...register('description', )}
                                             />
-                                            {errors.description?.type === 'required' && (
+                                            {/* {errors.description?.type === 'required' && (
                                                 <span className="text-danger"> This field is required *</span>
-                                            )}
+                                            )} */}
                                         </Form.Group>
                                     </Col>
                                     <Col lg={12}>
@@ -128,7 +128,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId, }) => {
                                                 selected={startDate}
                                                 onChange={(date) => handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
-                                                minDate={today}
+                                                // minDate={today}
                                                 className="add_width_input"
                                             />
                                         </Form.Group>

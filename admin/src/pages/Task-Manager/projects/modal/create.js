@@ -217,7 +217,7 @@ const Create = ({ modal, closeModal }) => {
                                                 selected={startDate}
                                                 onChange={(date) => handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
-                                                minDate={today}
+                                                // minDate={today}
                                                 className="add_width_input"
                                             />
 

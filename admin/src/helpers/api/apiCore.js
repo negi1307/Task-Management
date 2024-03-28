@@ -14,13 +14,6 @@ axios.interceptors.response.use(
         return response;
     },
     (error) => {
-        const navigate = useNavigate();
-        const logoutUser = () => {
-            // Clear session and token from local storage
-            localStorage.removeItem(AUTH_SESSION_KEY);
-            // Redirect to logout page or perform any other necessary actions
-            navigate('/account/logout');
-        };
         // Any status codes that falls outside the range of 2xx cause this function to trigger
         let message;
 
@@ -34,7 +27,7 @@ axios.interceptors.response.use(
         }
         else if (error && error.response && error.response.status === 401) {
             // Handle 401 error (token unauthorized or expired)
-            logoutUser(); // Call logout function when token is unauthorized or expired
+            localStorage.removeItem("hyper_user");
         }
         else {
             switch (error.response.status) {
