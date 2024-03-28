@@ -597,71 +597,64 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
 
                             ) : connectComponent === 'Bugs' ? (
 
-                                <div className='bg-white'>
-                                    <div className="container-fluid">
-                                        <div className="row ">
-                                            <div className="col-12 p-1">
-                                                <Table className="mb-0 add_Color_font">
-                                                    <thead>
-                                                        <tr className=''>
-                                                            <th className='fw-bold'>#</th>
-                                                            <th className='fw-bold'>Summary</th>
-                                                            <th className='fw-bold'>Description</th>
-                                                            <th className='fw-bold'>Expected Hours</th>
-                                                            <th className='fw-bold'>Priority</th>
-                                                            <th className='fw-bold'>Start Date</th>
-                                                            <th className='fw-bold'>End Date</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
+                                <Table className="mb-0 add_Color_font" striped>
+                                <thead>
+                                    <tr>
+                                        <th className='fw-bold'>#</th>
+                                        <th className='fw-bold'>Summary</th>
+                                        <th className='fw-bold'>Decription</th>
+                                        <th className='fw-bold'>Assignee</th>
+                                        <th className='fw-bold'>Priority</th>
+                                        <th className='fw-bold'>Start Date</th>
+                                        <th className='fw-bold'>End Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                                                    {store?.getBugsReducer?.data?.response?.map((bug, ind) => {
+                                    {store?.getBugsReducer?.data?.response?.map((bug, ind) => {
                                         return (
                                             <tr className="align-middle">
-                                            <th>{ind + 1}</th>
+                                                <th>{ind + 1}</th>
 
-                                            <td>
-                                             <span title={bug?.summary}>
-                                                 {bug?.summary.slice(0,8)} 
-                                             </span>
-                                            </td>
-                                            <td>
-                                            <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
-                                            </td>
-                                            <td>
-                                             <span>
-                                                 {bug?.expectedHours}
-                                             </span>
-                                            </td>
-                                            <td>
-                                             <span>
-                                                 {bug?.priority}
-                                             </span>
-                                            </td>
-                                            <td>
-                                             <span>
-                                                 {bug?.startDate.slice(0,10)}
-                                             </span>
-                                            </td>
-                                            <td>
-                                             <span>
-                                                 {bug?.dueDate.slice(0,10)}
-                                             </span>
-                                            </td>
-                                           
-                                            
-                                         </tr>
+                                                <td>
+                                                    <span title={bug?.summary}>
+                                                        {bug?.summary.slice(0, 8)}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.expectedHours}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.priority}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.startDate.slice(0, 10)}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.dueDate.slice(0, 10)}
+                                                    </span>
+                                                </td>
+
+
+                                            </tr>
                                         );
                                     })}
-                                                    </tbody>
-                                                </Table>
+
+                                </tbody>
+                            </Table>
 
 
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
+                                          
 
                             ) :  connectComponent === 'Subtask' ? (
 

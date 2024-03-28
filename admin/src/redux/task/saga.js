@@ -82,6 +82,7 @@ function* getSingleSprintTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getSingleSprintTaskApi, { payload });
+        // console.log(response, "bbbvvv")
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_SINGLE_SPRINT_TASK_SUCCESS,

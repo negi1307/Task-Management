@@ -15,7 +15,7 @@ import '../../../../node_modules/react-datepicker/dist/react-datepicker.css';
 import noimage from '../../../assets/images/noimage.png';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 import { parseISO } from 'date-fns';
-const UpdateTask = ({ modal, closeModal, editData }) => {
+const UpdateTask = ({ modal, closeModal, editData ,projectId,milestoneId,columns,speintId}) => {
 
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
@@ -38,6 +38,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const store = useSelector((state) => state);
 
     const loaderhandel = store?.UpdateTaskReducer;
+    const allDetails = columns?.[1]?.items[0];
 
     const {
         register,
@@ -152,9 +153,9 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                             disabled: true,
                                                         })}>
                                                         {/* <option value={''}>--Select--</option> */}
-                                                        {store?.getProject?.data?.response?.map((ele, ind) => (
-                                                            <option value={ele?._id}> {ele?.projectName} </option>
-                                                        ))}
+                                                        {allDetails && allDetails.projects && (
+                                                        <option value={allDetails?.projects?._id} defaultValue>{allDetails?.projects?.projectName}</option>
+                                                    )}
                                                     </Form.Select>
                                                     {errors.projectname?.type === 'required' && (
                                                         <span className="text-danger"> This field is required *</span>
@@ -170,10 +171,10 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
 
                                                     <Form.Select
                                                         {...register('Milestone', { required: true, disabled: true })}>
-                                                        <option value={''}>--Select--</option>
-                                                        {store?.getSigleMileStone?.data?.response?.map((ele, ind) => (
-                                                            <option value={ele?._id}> {ele?.title} </option>
-                                                        ))}
+                                                        {/* <option value={''}>--Select--</option> */}
+                                                        {allDetails && allDetails.milestones && (
+                                                        <option value={allDetails?.milestones?._id} defaultValue>{allDetails?.milestones?.title}</option>
+                                                    )}
                                                     </Form.Select>
                                                     {errors.Milestone?.type === 'required' && (
                                                         <span className="text-danger"> This field is required *</span>
@@ -192,10 +193,10 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
 
                                                     <Form.Select
                                                         {...register('Sprint', { required: true, disabled: true })}>
-                                                        <option value={''}>--Select--</option>
-                                                        {store?.getAllSingleSprints?.data?.response?.map((ele, ind) => (
-                                                            <option value={ele?._id}> {ele?.sprintName} </option>
-                                                        ))}
+                                                        {/* <option value={''}>--Select--</option> */}
+                                                        {allDetails && allDetails.sprints && (
+                                                <option value={allDetails?.sprints?._id} defaultValue>{allDetails?.sprints?.sprintName}</option>
+                                            )}
                                                     </Form.Select>
                                                     {errors.Sprint?.type === 'required' && (
                                                         <span className="text-danger"> This field is required *</span>
