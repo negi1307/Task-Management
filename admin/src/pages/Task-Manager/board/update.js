@@ -288,10 +288,19 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                         Priority <span className="text-danger">*</span>:
                                                     </Form.Label>
                                                     <Form.Select {...register('priority', { required: true })}>
-                                                        <option hidden selected>-------select----</option>
-                                                        <option value="1">High</option>
-                                                        <option value="2">Medium</option>
-                                                        <option value="3">Low</option>
+                                                        <option value="Critical">
+                                                            &#128308;
+                                                            Critical
+                                                        </option>
+                                                        <option value="High">
+                                                            &#128992;
+                                                            High</option>
+                                                        <option value="Medium">
+                                                            &#128993;
+                                                            Medium</option>
+                                                        <option value="Low">
+                                                            &#128994;
+                                                            Low</option>
                                                     </Form.Select>
                                                     {errors.priority?.type === 'required' && (
                                                         <span className="text-danger"> This field is required *</span>
