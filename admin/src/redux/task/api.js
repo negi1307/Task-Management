@@ -4,12 +4,10 @@ const api = new APICore();
 
 export function createTaskApi(data): any {
     return api.create(URL.CREATE_TASK, data?.payload);
-    // console.log(data, 'daaaaaaaaaaaaaaaatttttttttttttttaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*****************')
 }
 
 export function createSubtaskApi(data): any {
     return api.create(URL.Create_subtask, data?.payload);
-    // console.log(data, 'daaaaaaaaaaaaaaaatttttttttttttttaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*****************')
 }
 
 
@@ -51,16 +49,15 @@ export function getReporterListApi(data): any {
     return api.get(`${URL.GET_REPORTER}`);
 }
 
-export function GetHistoryApi(data): any {
-    return api.get(URL.getHistory + data?.payload);
+export function getHistoryApi(data): any {
+    return api.get(URL.getHistory, data?.payload);
 }
 export function getBugsApi(data): any {
-    const{taskId,type}=data?.payload
-    console.log(data,'apiiii')
+    const { taskId, type } = data?.payload;
     return api.get(`${URL.getBugs}&type=${type}&taskId=${taskId}`);
 }
 export function getSubTaskApi(data): any {
-    const{taskId,type}=data?.payload
-    console.log(data,'apiiii')
-    return api.get(`${URL.getSubTask}&type=${type}&taskId=${taskId}`);
+    const { taskId } = data?.payload;
+    console.log(data, 'apiiiiiii')
+    return api.get(`${URL.getSubTask}&type=${'SubTask'}&taskId=${taskId}`);
 }

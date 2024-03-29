@@ -17,9 +17,7 @@ import ToastHandle from '../../../constants/toaster/toaster';
 import { Row, Col, Card, Button, Alert, CloseButton, Table } from 'react-bootstrap';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 import noimage from '../../../assets/images/noimage.png';
-import { toast } from 'react-toastify';
-const TaskDetailPage = ({ modal, editData, closeModal }) => {
-    // console.log(editData, 'editdataaaaaaaaaaa');
+const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [connectComponent, setConnectComponent] = useState('All');
@@ -31,10 +29,8 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
     const [subtaskButtonClicked, setSubtaskButtonClicked] = useState(false);
     const getCommentData = store?.getComment?.data?.response;
     const getHistory = store?.getHistoryReducer?.data?.response;
-    const bugs = store?.getBugsReducer?.data?.response;
-    // console.log(bugs, 'nisll')
-
-
+    
+  
     const historyLoader = store?.getHistoryReducer
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
@@ -71,8 +67,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
 
 
     const subtasksSubmit = (e) => {
-        if (!editData._id) {
-            console.error('taskId is missing');
+        if (!taskId) {
             return;
         }
 
@@ -184,6 +179,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                             borderColor: '#f3f3f3',
                                             color: 'black',
                                             boxShadow: 'none',
+                                            
                                         }}>
                                         All
                                     </Button>
@@ -217,7 +213,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                     {/* Add Sub-tasks button */}
                                     <Button
                                         onClick={() => {
-                                            connectComponentCheck('Subtasks');
+                                            connectComponentCheck('AddSubtask');
                                         }
 
                                         }
@@ -245,7 +241,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                     </Button>
                                     <Button
                                         onClick={() => {
-                                            connectComponentCheck('view_Subtask');
+                                            connectComponentCheck('Subtask');
                                         }}
                                         style={{
                                             backgroundColor: '#f3f3f3',
@@ -333,7 +329,7 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                         </ul>
                                     ))}
                                 </Row>
-                            ) : connectComponent === 'Subtasks' ? (
+                            ) : connectComponent === 'AddSubtask' ? (
                                 <form onSubmit={handleSubmit(subtasksSubmit)}>
                                     <Row className="mt-2">
                                         <Col>
@@ -571,89 +567,96 @@ const TaskDetailPage = ({ modal, editData, closeModal }) => {
                                 </>
                             ) : connectComponent === 'History' ? (
 
-                                <div>
-                                    {getHistory?.map((ele) => (
-                                        <div key={ele.id} className="d-flex align-items-center pt-2">
-                                            {ele.userId && (
-                                                <span
-                                                    style={{
-                                                        backgroundColor: '#605e5a',
-                                                        borderRadius: '100%',
-                                                        padding: '11px 11px',
-                                                        color: 'white',
-                                                        fontWeight: '800',
-                                                        textTransform: "uppercase"
-                                                    }}>
-                                                    {ele.userId.firstName?.charAt(0)}
-                                                    {ele.userId.lastName?.charAt(0)}
-                                                </span>
-                                            )}
-                                            <h4 className="pe-1 ps-1">
-                                                {ele.userId?.firstName} {ele.userId?.lastName}
-                                            </h4>
-                                            {ele.userActivity} {ele.time && moment(ele.time).format('LLL')}
-                                        </div>
-                                    ))}
-                                </div>
+                                // <div>
+                                //     {store?.getHistoryReducer?.data?.response?.map((ele) => (
+                                //         <>
+
+                                //             <div className="d-flex align-items-center pt-2">
+                                //                 <span
+                                //                     style={{
+                                //                         backgroundColor: '#605e5a',
+                                //                         borderRadius: '100%',
+                                //                         padding: '11px 11px',
+                                //                         color: 'white',
+                                //                         fontWeight: '800',
+                                //                         textTransform: "uppercase"
+                                //                     }}>
+                                //                     {ele.userId.firstName?.charAt(0)}
+                                //                     {ele.userId.lastName?.charAt(0)}
+                                //                 </span>
+                                //             )}
+                                //             <h4 className="pe-1 ps-1">
+                                //                 {ele.userId?.firstName} {ele.userId?.lastName}
+                                //             </h4>
+                                //             {ele.userActivity} {ele.time && moment(ele.time).format('LLL')}
+                                //         </div>
+                                //     ))}
+                                // </div>
+                                ''
 
 
                             ) : connectComponent === 'Bugs' ? (
 
-                                <div className='bg-white'>
-                                    <div className="container-fluid">
-                                        <div className="row ">
-                                            <div className="col-12 p-1">
-                                                <Table className="mb-0 add_Color_font">
-                                                    <thead>
-                                                        <tr>
-                                                            <th className='fw-bold'>#</th>
-                                                            <th className='fw-bold'>Summary</th>
-                                                            <th className='fw-bold'>Description</th>
-                                                            <th className='fw-bold'>Expected Hours</th>
-                                                            <th className='fw-bold'>Priority</th>
-                                                            <th className='fw-bold'>Start Date</th>
-                                                            <th className='fw-bold'>End Date</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {store?.getBugsReducer?.data?.response?.map((bug, ind) => {
-                                                            return (
-                                                                <tr key={bug.id} className="align-middle">
-                                                                    <th>{ind + 1}</th>
-                                                                    <td>
-                                                                        <span title={bug?.summary}>
-                                                                            {bug?.summary.slice(0, 8)}
-                                                                        </span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{bug?.expectedHours}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{bug?.priority}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{bug?.startDate.slice(0, 10)}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{bug?.dueDate.slice(0, 10)}</span>
-                                                                    </td>
-                                                                </tr>
-                                                            );
-                                                        })}
-                                                    </tbody>
-                                                </Table>
+                                <Table className="mb-0 add_Color_font" striped>
+                                <thead>
+                                    <tr>
+                                        <th className='fw-bold'>#</th>
+                                        <th className='fw-bold'>Summary</th>
+                                        <th className='fw-bold'>Decription</th>
+                                        <th className='fw-bold'>Assignee</th>
+                                        <th className='fw-bold'>Priority</th>
+                                        <th className='fw-bold'>Start Date</th>
+                                        <th className='fw-bold'>End Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    {store?.getBugsReducer?.data?.response?.map((bug, ind) => {
+                                        return (
+                                            <tr className="align-middle">
+                                                <th>{ind + 1}</th>
+
+                                                <td>
+                                                    <span title={bug?.summary}>
+                                                        {bug?.summary.slice(0, 8)}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.expectedHours}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.priority}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.startDate.slice(0, 10)}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.dueDate.slice(0, 10)}
+                                                    </span>
+                                                </td>
 
 
-                                            </div>
+                                            </tr>
+                                        );
+                                    })}
 
-                                        </div>
-                                    </div>
-                                </div>
+                                </tbody>
+                            </Table>
 
-                            ) : connectComponent === 'view_Subtask' ? (
+
+                                          
+
+                            ) :  connectComponent === 'Subtask' ? (
 
                                 <Table className="mb-0 add_Color_font" striped>
                                     <thead>

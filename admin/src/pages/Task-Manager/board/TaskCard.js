@@ -49,7 +49,7 @@ const TaskInformation = styled.div`
     /* } */
 `;
 
-const TaskCard = ({ item, index, closeModal }) => {
+const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sprintId }) => {
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState();
     const [editData, setEditData] = useState();
@@ -294,7 +294,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                 </Modal.Footer>
             </Modal>
 
-            <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
+            <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} columns={columns} projectId={projectId} mileStoneId={mileStoneId} sprintId={sprintId} />
             <TaskDetailPage modal={openDetailPage} editData={detailData} closeModal={closeDetailPage} taskId={item._id} />
         </>
     );

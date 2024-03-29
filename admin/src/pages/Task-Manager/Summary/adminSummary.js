@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getPriorityGraphAction, getTaskSummmaryDetail, getTaskWeekCountAction } from '../../../redux/Summary/action';
+import { getHistoryAction } from '../../../redux/task/action'
 import Chart from 'react-apexcharts';
 import { ProgressBar } from 'react-bootstrap';
-import { Bar } from 'react-chartjs-2';
+import HeaderMain from '../header/HeaderMain';
 
 
-const Summary = () => {
+const AdminDashboard = () => {
     const { projectId, milestoneId, spriteId } = useParams();
     // console.log(projectId, milestoneId, spriteId); // Check if URL parameters are correct
 
@@ -30,14 +31,17 @@ const Summary = () => {
     }, [successHandle]);
 
     const priorityData = store?.getPriorityGraphReducer?.data?.response;
+    const userName =
+        useEffect(() => {
+            dispatch(getTaskSummmaryDetail());
+            dispatch(getPriorityGraphAction());
+            dispatch(getTaskWeekCountAction());
+            dispatch(getHistoryAction());
 
-    useEffect(() => {
-        dispatch(getTaskSummmaryDetail());
-        dispatch(getPriorityGraphAction());
-        dispatch(getTaskWeekCountAction());
-    }, [dispatch]);
+        }, [dispatch]);
 
 
+    // const changeCreator =
     // useEffect(() => {
     //     if (store?.getPriorityGraphReducer?.data) {
     //         const priorityData = store?.getPriorityGraphReducer?.data?.response;
@@ -45,7 +49,7 @@ const Summary = () => {
     //     }
     // }, [store?.getPriorityGraphReducer?.data]);
 
-    console.log(priorityData, 'join');
+    // console.log(priorityData, 'join');
     // const firstThreeNames = priorityData.slice(0, 3).map(item => item.name).join(', ');
     // console.log(firstThreeNames);
 
@@ -94,7 +98,7 @@ const Summary = () => {
         xaxis: {
             categories: priorityData?.map((ele, ind) => ele?.name),
         },
-        colors: ['#727cf5', '#0acf97', '#fa5c7c'],
+        colors: ['#727cf5', '#0acf97', '#fa5c7c', '#fff'],
     };
 
     const series = [
@@ -109,23 +113,26 @@ const Summary = () => {
 
     return (
         <>
-            <div className="all_bg add_height_task">
+            <div className="bg-white pt-4">
                 <div className="container">
                     <div className="row">
+                        <div className='col-12 mb-2'>
+                            <HeaderMain />
+                        </div>
                         <div className="col  border_clr  m-2 rounded-4 bg-white">
                             <div className="d-flex  p-4  px-4 align-items-center jusstify-content-center">
                                 <div className="bg_clr  p-3 rounded-circle text-center ">
                                     <i className="bi bi-check-lg w-size" />
                                 </div>
                                 <div className="mx-3 ">
-                                    <b>
+                                    <strong>
                                         <h5 className="mb-0 mt-1 text-secondary">
                                             {lastWeekCount?.doneCount ? lastWeekCount?.doneCount : '0'} task done
                                         </h5>
-                                    </b>
-                                    <b>
+                                    </strong>
+                                    <strong>
                                         <p className="m-0 text-secondary">in the last 7 days</p>
-                                    </b>
+                                    </strong>
                                 </div>
                             </div>
                         </div>
@@ -204,23 +211,23 @@ const Summary = () => {
 
                                         <ul className="legend mx-4">
                                             <li className='fs-6 fw-bold text-black'>
-                                                <span className="color rounded-pill" style={{ backgroundColor: '#727cf5' }} />
+                                                <span className="color rounded-5" style={{ backgroundColor: '#727cf5' }} />
                                                 To Do
                                             </li>
                                             <li className='fs-6 fw-bold text-black'>
-                                                <span className="color rounded-pill" style={{ backgroundColor: '#0acf97' }} /> In
+                                                <span className="color rounded-5" style={{ backgroundColor: '#0acf97' }} /> In
                                                 Progress
                                             </li>
                                             <li className='fs-6 fw-bold text-black'>
-                                                <span className="color rounded-pill" style={{ backgroundColor: '#FF00FF' }} />
+                                                <span className="color rounded-5" style={{ backgroundColor: '#FF00FF' }} />
                                                 Testing
                                             </li>
                                             <li className='fs-6 fw-bold text-black'>
-                                                <span className="color rounded-pill" style={{ backgroundColor: '#fa5c7c' }} />
+                                                <span className="color rounded-5" style={{ backgroundColor: '#fa5c7c' }} />
                                                 Hold
                                             </li>
                                             <li className='fs-6 fw-bold text-black'>
-                                                <span className="color rounded-pill" style={{ backgroundColor: '#ffbc00' }} />
+                                                <span className="color rounded-5" style={{ backgroundColor: '#ffbc00' }} />
                                                 Done
                                             </li>
                                         </ul>
@@ -490,4 +497,4 @@ const Summary = () => {
     );
 };
 
-export default Summary;
+export default AdminDashboard;

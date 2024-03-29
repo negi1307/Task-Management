@@ -1,7 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import TASK_TYPES from './constant';
-import { AddCommentApi, GetAssignUserApi, getReporterListApi, GetHistoryApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi, updateTaskStatusApi, getBugsApi, createSubtaskApi, getSubTaskApi } from './api';
-// import { AddCommentApi, GetAssignUserApi, createSubtaskApi, getReporterListApi, GetHistoryApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi, updateTaskStatusApi } from './api';
+import { AddCommentApi, GetAssignUserApi,getReporterListApi, GetHistoryApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi,updateTaskStatusApi, getBugsApi,createSubtaskApi, getSubTaskApi, getHistoryApi } from './api';
 
 function* createSubTaskFunction({ payload }) {
     try {
@@ -11,7 +10,6 @@ function* createSubTaskFunction({ payload }) {
         })
 
         const response = yield call(createSubtaskApi, { payload });
-        // console.log(response, "hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.CREATE_SUBTASK_SUCCESS,
@@ -30,7 +28,6 @@ function* createSubTaskFunction({ payload }) {
         }
 
     } catch (error) {
-        //    console.log(error,"mmmmmmmmmmmmmmmmmmmmmm")
         yield put({
             type: TASK_TYPES.CREATE_SUBTASK_ERROR,
             payload: { error }
@@ -49,7 +46,6 @@ function* createTaskFunction({ payload }) {
         })
 
         const response = yield call(createTaskApi, { payload });
-        // console.log(response, "hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.CREATE_TASK_SUCCESS,
@@ -68,7 +64,6 @@ function* createTaskFunction({ payload }) {
         }
 
     } catch (error) {
-        //    console.log(error,"mmmmmmmmmmmmmmmmmmmmmm")
         yield put({
             type: TASK_TYPES.CREATE_TASK_ERROR,
             payload: { error }
@@ -123,7 +118,6 @@ function* getAllTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getAllTaskApi, { payload });
-        console.log(response, "bbbvvv")
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_ALL_TASK_SUCCESS,
@@ -160,7 +154,6 @@ function* updateTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(UpdateTaskApi, { payload });
-        console.log(response, "bbbvvv")
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.UPDATE_TASK_SUCCESS,
@@ -228,14 +221,12 @@ function* deleteTaskFunction({ payload }) {
     }
 }
 function* updateTaskStatusFunction({ payload }) {
-    console.log(payload, 'saga')
     try {
         yield put({
             type: TASK_TYPES.UPDATE_TASK_STATU_LOADING,
             payload: {}
         })
         const response = yield call(updateTaskStatusApi, { payload });
-        console.log("dssfksf", payload)
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.UPDATE_TASK_STATU_SUCCESS,
@@ -273,7 +264,6 @@ function* TaskStatusFunction({ payload }) {
             payload: {}
         })
         const response = yield call(TaskStatusApi, { payload });
-        console.log("dssfksf", payload)
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.TASK_STATUS_SUCCESS,
@@ -541,18 +531,25 @@ function* getReporterFunction({ payload }) {
     }
 }
 
+
 function* getHistoryFunction({ payload }) {
+  
+
     try {
         yield put({
             type: TASK_TYPES.GET_HISTORY_LOADING,
             payload: {}
         })
-        const response = yield call(GetHistoryApi, { payload });
+        const response = yield call(getHistoryApi, { payload });
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_HISTORY_SUCCESS,
                 payload: { ...response.data },
             });
+            // yield put({
+            //     type: TASK_TYPES.GET_BUGS_RESET,
+            //     payload: {},
+            // });
             yield put({
                 type: TASK_TYPES.GET_HISTORY_RESET,
                 payload: { ...response.data },
@@ -586,7 +583,7 @@ function* getBugsFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getBugsApi, { payload });
-        console.log(response, '3333333333333333333333333333333333333333333333333333333333')
+        // console.log(response, '3333333333333333333333333333333333333333333333333333333333')
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_BUGS_SUCCESS,
@@ -626,7 +623,7 @@ function* getSubTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getSubTaskApi, { payload });
-        // console.log(response, '3333333333333333333333333333333333333333333333333333333333')
+        console.log(response, '3333333333333333333333333333333333333333333333333333333333')
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_SUBTASK_SUCCESS,
