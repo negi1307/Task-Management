@@ -31,7 +31,7 @@ const TaskList = () => {
     const getSingleSprintTask = store?.getSigleSprintTask?.data?.response;
     const deletehandle = store?.TaskStatusReducer?.data;
     const loaderhandel = store?.getSigleSprintTask;
-    console.log(getSingleSprintTask,'11111111111111111111111111111111111111111111111111111111111111111111111111')
+    console.log(getSingleSprintTask, '11111111111111111111111111111111111111111111111111111111111111111111111111')
     const handleCreate = () => {
         SetOpenModal(true);
     };
@@ -165,18 +165,19 @@ const TaskList = () => {
                     </div>
 
                     <div className={`col-auto  cp ${taskStatus == 3 ? 'Active_data' : 'InActive_data'}`}>
-                        <p className="p-0 m-0 p-1 cp" onClick={() => handleTaskStatus('3')}>
-                            Hold
+                        <p className=" p-0 m-0 p-1 cp" onClick={() => handleTaskStatus('3')}>
+                            Testing
                         </p>
                     </div>
+
                     <div className={`col-auto  cp ${taskStatus == 4 ? 'Active_data' : 'InActive_data'}`}>
                         <p className=" p-0 m-0 p-1 cp" onClick={() => handleTaskStatus('4')}>
                             Done
                         </p>
                     </div>
                     <div className={`col-auto  cp ${taskStatus == 5 ? 'Active_data' : 'InActive_data'}`}>
-                        <p className=" p-0 m-0 p-1 cp" onClick={() => handleTaskStatus('5')}>
-                            Testing
+                        <p className="p-0 m-0 p-1 cp" onClick={() => handleTaskStatus('5')}>
+                            Hold
                         </p>
                     </div>
                 </div>
@@ -218,8 +219,8 @@ const TaskList = () => {
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th> Description</th>
-                                            <th> Summary</th>
+                                            <th>Description</th>
+                                            <th>Summary</th>
                                             <th>Assignee</th>
                                             <th>Reporter</th>
                                             <th>Priority</th>
@@ -230,7 +231,7 @@ const TaskList = () => {
                                     </thead>
                                     <tbody>
                                         {getSingleSprintTask?.map((item, index) => (
-                                            
+
                                             <tr>
                                                 <td>{(skip - 1) * 10 + index + 1}</td>
                                                 <td >{item?.summary}</td>
@@ -256,10 +257,10 @@ const TaskList = () => {
                                                         : '' || item?.priority == 'High'
                                                             ? 'High'
                                                             : '' || item?.priority == 'Medium'
-                                                            ? 'Medium'
-                                                            : '' || item?.priority == 'Low'
-                                                                ? 'Low'
-                                                                : ''} 
+                                                                ? 'Medium'
+                                                                : '' || item?.priority == 'Low'
+                                                                    ? 'Low'
+                                                                    : ''}
                                                 </td>
                                                 <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
                                                 <td>{moment(item?.dueDate).format("DD/MM/YYYY")}</td>

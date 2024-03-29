@@ -11,14 +11,13 @@ export const getBugs = (data): AuthAction => ({
     payload: data
 });
 export const getSubTask = (data): AuthAction => ({
-    type: TASK_TYPES.GET_BUGS,
+    type: TASK_TYPES.GET_SUBTASK,
     payload: data
 });
 export const createSubTask = (data): AuthAction => ({
     type: TASK_TYPES.CREATE_SUBTASK,
     payload: data
 })
-
 
 export const getsingleSprintTask = (data): AuthAction => ({
     type: TASK_TYPES.GET_SINGLE_SPRINT_TASK,

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import styled from '@emotion/styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteTask, getComment, gettaskId,getBugs,getSubTask } from '../../../redux/task/action';
+import { deleteTask, getComment, gettaskId, getBugs, getSubTask } from '../../../redux/task/action';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
 import ToastHandle from '../../../constants/toaster/toaster';
@@ -49,7 +49,7 @@ const TaskInformation = styled.div`
     /* } */
 `;
 
-const TaskCard = ({ item, index, closeModal }) => {
+const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sprintId }) => {
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState();
     const [editData, setEditData] = useState();
@@ -59,7 +59,7 @@ const TaskCard = ({ item, index, closeModal }) => {
     const [openModal, setOpenModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const store = useSelector((state) => state);
-    console.log(detailData,'pankaj')
+    // console.log(detailData,'pankaj')
 
 
     const dispatch = useDispatch();
@@ -75,6 +75,7 @@ const TaskCard = ({ item, index, closeModal }) => {
     const handleYes = () => {
         dispatch(deleteTask({ taskId: deleteId }));
         setDeleteModal(false);
+
     };
     const handelUpdate = (data) => {
         setEditData(data);
@@ -89,8 +90,8 @@ const TaskCard = ({ item, index, closeModal }) => {
         setOpenDetailPage(true);
         setDetailData(data);
         dispatch(getComment({ taskId: data?.id }));
-        dispatch(getBugs({ taskId: data?.id , type:"Bug" }));
-        dispatch(getSubTask({ taskId: data?.id , type:"SubTask" }));
+        dispatch(getBugs({ taskId: data?.id, type: "Bug" }));
+        dispatch(getSubTask({ taskId: data?.id, type: "SubTask" }));
         dispatch(gettaskId(data?.id));
     };
     const closeDetailPage = () => {
@@ -109,7 +110,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                                 <div className="col-12">
                                     <div className="row">
                                         <div className="col-9 d-flex align-items-center">
-                                            <a className='text-dark'
+                                            <a className='text-dark text-truncate'
                                                 href="#"
                                                 onClick={() => {
                                                     handleDetailPage(item);
@@ -292,7 +293,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                 </Modal.Footer>
             </Modal>
 
-            <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
+            <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} columns={columns} projectId={projectId} mileStoneId={mileStoneId} sprintId={sprintId} />
             <TaskDetailPage modal={openDetailPage} editData={detailData} closeModal={closeDetailPage} taskId={item._id} />
         </>
     );

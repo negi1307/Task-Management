@@ -44,8 +44,9 @@ const DropZone = styled.div`
 
 const ScrollContainer = styled.div`
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: scroll;
   max-height: ${600}px;
+
 `;
 
 /* stylelint-disable block-no-empty */
@@ -108,13 +109,13 @@ export default function QuoteList(props) {
       renderClone={
         useClone
           ? (provided, snapshot, descriptor) => (
-              <QuoteItem
-                quote={quotes[descriptor.source.index]}
-                provided={provided}
-                isDragging={snapshot.isDragging}
-                isClone
-              />
-            )
+            <QuoteItem
+              quote={quotes[descriptor.source.index]}
+              provided={provided}
+              isDragging={snapshot.isDragging}
+              isClone
+            />
+          )
           : null
       }
     >

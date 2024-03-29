@@ -108,22 +108,23 @@ const Update = ({ modal, closeModal, editData }) => {
         };
         // console.log('fsadsadsadsa', addValue);
         dispatch(updateProject(body));
+        ToastHandle('success', "Project Updated Successfully");
     };
     const selectedValues = editData?.technology?.map((item) => {
         return item.techName;
     });
     // console.log(selected, 'aadadasa');
-    useEffect(() => {
-        // console.log('llllllllll');
-        if (sucesshandel?.data?.status == 200) {
-            ToastHandle('success', 'Project Updated Successfully');
-            closeModal('render');
-        } else if (sucesshandel?.data?.status == 400) {
-            ToastHandle('error', sucesshandel?.data?.message);
-        } else if (sucesshandel?.data?.status == 500) {
-            ToastHandle('error', sucesshandel?.data?.message);
-        }
-    }, [sucesshandel?.data?.status]);
+    // useEffect(() => {
+    //     // console.log('llllllllll');
+    //     if (sucesshandel?.data?.status == 200) {
+    //         ToastHandle('success', 'Project Updated Successfully');
+    //         closeModal('render');
+    //     } else if (sucesshandel?.data?.status == 400) {
+    //         ToastHandle('error', sucesshandel?.data?.message);
+    //     } else if (sucesshandel?.data?.status == 500) {
+    //         ToastHandle('error', sucesshandel?.data?.message);
+    //     }
+    // }, [sucesshandel?.data?.status]);
 
     useEffect(() => {
         const getTechnologyname = [];
