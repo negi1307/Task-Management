@@ -8,44 +8,44 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             type: Schema.Types.Mixed
         },
         userId: {
-            type: Schema.Types.Mixed,
-            // ref: 'User'
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
         },
         taskId: {
-            type: Schema.Types.Mixed,
-            // ref: 'Task'
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Task'
         },
         commentId: {
-            type: Schema.Types.Mixed,
-            // ref: "Comment"
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Comment"
         },
         reporterId: {
-            type: Schema.Types.Mixed,
-            // ref: 'roles',
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'roles',
         },
         projectId: {
-            type: Schema.Types.Mixed,
-            // ref: 'projects'
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'projects'
         },
         milestoneId: {
-            type: Schema.Types.Mixed,
-            // ref: 'milestone'
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'milestone'
         },
         sprintId: {
-            type: Schema.Types.Mixed,
-            // ref: 'sprint'
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'sprint'
         },
         subTaskId: {
-            type: Schema.Types.Mixed,
-            // ref: 'subTask'
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'subTask'
         },
         bugId: {
-            type: Schema.Types.Mixed,
-            // ref: 'subTask'
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'subTask'
         },
         assigneeId: {
-            type: Schema.Types.Mixed,
-            // ref: 'User'
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
         }
     },
         {

@@ -21,7 +21,7 @@ const addSprint = async (req, res) => {
                 startDate,
                 endDate
             });
-            await userHistory(req, "Sprint Created");
+            await userHistory(req, "Created Sprint");
             return res.status(200).json({ status: '200', message: 'Sprint Added Successfully', response: result });
         }
     } catch (error) {
