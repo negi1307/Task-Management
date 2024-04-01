@@ -39,7 +39,7 @@ const createtask = async (req, res) => {
         assigneeId,
         lastUpdaterId: req.user._id
       });
-      await userHistory(req, "Task created");
+      await userHistory(req, "Created Task");
       return res.status(200).json({ status: "200", message: "Task created successfully", response: task });
     }
   } catch (error) {
@@ -273,7 +273,8 @@ const updateTaskStatus = async (req, res) => {
             }
           }
         }
-        await userHistory(req, "Tasks updated");
+       
+        await userHistory(req, "Updated Task");
         return res.status(200).json({ status: "200", message: "Tasks updated successfully" });
       }
       return res.status(200).json({ status: "200", message: "No tasks found" });
