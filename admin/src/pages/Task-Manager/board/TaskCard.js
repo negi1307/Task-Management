@@ -100,6 +100,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
     function toggle() {
         setOpenModal(true);
     }
+
     return (
         <>
             <Draggable key={item.id} draggableId={item?.id} index={index}>
@@ -123,7 +124,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                 <div className="col-6 border-end add_padding_box ">
                                                     <button type="button " className="m-0 p-0 border-0 bg-transparent">
                                                         <i
-                                                            class="uil-edit-alt m-0 p-0 me-2 del_edit"
+                                                            className="uil-edit-alt m-0 p-0 me-2 del_edit"
                                                             onClick={() => {
                                                                 handelUpdate(item);
                                                             }}></i>
@@ -134,7 +135,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                         type="button"
                                                         className="m-0 p-0 border-0 bg-transparent"
                                                         onClick={() => deleteData(item?.id)}>
-                                                        <i class="mdi mdi-delete m-0 p-0 me-2 del_edit"></i>
+                                                        <i className="mdi mdi-delete m-0 p-0 me-2 del_edit"></i>
                                                     </button>
                                                 </div>
                                             </div>
@@ -144,7 +145,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                 <div className="col-12 d-flex align-items-center justify-content-end">
                                                     <i
                                                         onClick={toggle}
-                                                        class="fa fa-ellipsis-h cp bg-light p-2 rounded-3"
+                                                        className="fa fa-ellipsis-h cp bg-light p-2 rounded-3"
                                                         aria-hidden="true"></i>
                                                 </div>
                                                 <Modal
@@ -163,7 +164,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                                             type="button "
                                                                             className="m-0 p-0 border-0 bg-transparent">
                                                                             <i
-                                                                                class="uil-edit-alt m-0 p-0 me-2"
+                                                                                className="uil-edit-alt m-0 p-0 me-2"
                                                                                 onClick={() => {
                                                                                     handelUpdate(item);
                                                                                 }}></i>
@@ -175,7 +176,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                                             type="button"
                                                                             className="m-0 p-0 border-0 bg-transparent"
                                                                             onClick={() => deleteData(item?.id)}>
-                                                                            <i class="mdi mdi-delete m-0 p-0 me-2"></i>
+                                                                            <i className="mdi mdi-delete m-0 p-0 me-2"></i>
                                                                             Delete
                                                                         </button>
                                                                     </div>
@@ -194,7 +195,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                                 <div className="col-12 pb-2 d-flex align-items-center justify-content-start">
                                                                     <button type="button " className="m-0 p-0">
                                                                         <i
-                                                                            class="uil-edit-alt m-0 p-0 me-2"
+                                                                            className="uil-edit-alt m-0 p-0 me-2"
                                                                             onClick={() => {
                                                                                 handelUpdate(item);
                                                                             }}></i>
@@ -206,7 +207,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                                         type="button"
                                                                         className="m-0 p-0"
                                                                         onClick={() => deleteData(item?.id)}>
-                                                                        <i class="mdi mdi-delete m-0 p-0 me-2"></i>
+                                                                        <i className="mdi mdi-delete m-0 p-0 me-2"></i>
                                                                         Delete
                                                                     </button>
                                                                 </div>

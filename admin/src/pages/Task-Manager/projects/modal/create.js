@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import { Controller } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
+// import * as yup from 'yup';
+
 import { Row, Col, Card, Button, Alert, CloseButton, FormControl } from 'react-bootstrap';
 import { addProject } from '../../../../redux/projects/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
@@ -39,6 +42,17 @@ const Create = ({ modal, closeModal }) => {
     };
 
     //
+    // const validationSchema = yup.object().shape({
+    //     projectName: yup.string().required('Project Name is required'),
+    //     clientName: yup.string().required('Client Name is required'),
+    //     project_type: yup.string().required('Project Type is required'),
+    //     technology: yup.array().min(1, 'At least one technology is required').required('Technology is required'),
+    //     startDate: yup.date().required('Start Date is required'),
+    //     endDate: yup.date().when('startDate', {
+    //         is: (startDate) => startDate,
+    //         then: yup.date().min(yup.ref('startDate'), 'End Date should be after Start Date').required('End Date is required'),
+    //     }),
+    // });
     const {
         register,
         handleSubmit,
@@ -97,6 +111,7 @@ const Create = ({ modal, closeModal }) => {
             return ele?.techName == selectItem;
         });
         setAddValue([...addValue, add[0]._id]);
+        // reset();
     };
 
     useEffect(() => {
@@ -186,14 +201,12 @@ const Create = ({ modal, closeModal }) => {
                                                 <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
-
                                     </Col>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
                                                 Select Your Technology <span className="text-danger">*</span>:
                                             </Form.Label>
-
                                             <Multiselect
                                                 onRemove={removehandle}
                                                 onSelect={addhandle}
@@ -201,8 +214,11 @@ const Create = ({ modal, closeModal }) => {
                                                 options={selected}
                                                 showCheckbox
                                                 placeholder="Select Technology"
+                                                {...register('technology')}
                                             />
+
                                         </Form.Group>
+                                        {/* {errors.technology && (<span className='text-danger'>This field is required *</span>)} */}
                                     </Col>
                                 </Row>
 
@@ -214,6 +230,7 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
 
                                             <DatePicker
+                                                // {...register('pickdate', { required: true })}
                                                 selected={startDate}
                                                 onChange={(date) => handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
@@ -221,6 +238,7 @@ const Create = ({ modal, closeModal }) => {
                                                 className="add_width_input"
                                             />
 
+                                            {/* {errors.pickdate && (<span className='text-danger'>This field is required *</span>)} */}
                                         </Form.Group>
 
 
@@ -230,7 +248,6 @@ const Create = ({ modal, closeModal }) => {
                                             <Form.Label className="w-100">
                                                 End Date<span className="text-danger">*</span>:
                                             </Form.Label>
-
                                             <DatePicker
                                                 selected={endDate}
                                                 disabled={startDate == '' || startDate == undefined}
@@ -239,7 +256,10 @@ const Create = ({ modal, closeModal }) => {
                                                 placeholderText="mm-dd-yyyy"
                                                 minDate={startDate}
                                                 className="add_width_input"
+                                            // {...register('end_date', { required: true })}
                                             />
+                                            {/* {errors.end_date && (<span className='text-danger'>This field is required *</span>)} */}
+
                                         </Form.Group>
                                     </Col>
                                 </Row>

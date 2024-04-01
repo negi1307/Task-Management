@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import SUMMARY_TYPES from './constant';
-import { GetPriorityGraphApi, GetTaskSummaryApi, GetTaskWeekCountApi } from './api';
+import { GetPriorityGraphApi, getAllTaskCountsApi, GetTaskSummaryApi, GetTaskWeekCountApi } from './api';
 
 
 function* TaskSummaryFunction({ payload }) {
@@ -10,7 +10,7 @@ function* TaskSummaryFunction({ payload }) {
             payload: {}
         })
         const response = yield call(GetTaskSummaryApi, { payload });
-        console.log("dssfksf",payload)
+        // console.log("dssfksf",payload)
         if (response.data.status) {
             yield put({
                 type: SUMMARY_TYPES.GET_TASK_SUMMARY_SUCCESS,
@@ -47,7 +47,7 @@ function* PriorityGraphFunction({ payload }) {
             payload: {}
         })
         const response = yield call(GetPriorityGraphApi, { payload });
-        console.log("dssfksf",payload)
+        console.log("dssfksf", payload)
         if (response.data.status) {
             yield put({
                 type: SUMMARY_TYPES.GET_PRIORITY_GRAPH_SUCCESS,
@@ -84,7 +84,7 @@ function* TaskWeekCountFunction({ payload }) {
             payload: {}
         })
         const response = yield call(GetTaskWeekCountApi, { payload });
-        console.log("dssfksf",payload)
+        // console.log("dssfksf", payload)
         if (response.data.status) {
             yield put({
                 type: SUMMARY_TYPES.GET_TASK_WEEK_COUNT_SUCCESS,
@@ -114,6 +114,42 @@ function* TaskWeekCountFunction({ payload }) {
 
     }
 }
+///////////////////////////////////////////////////////////
+function* AllTaskCountfunction({ payload }) {
+    try {
+        yield put({
+            type: SUMMARY_TYPES.GET_ALL_TASK_COUNT_LOADING,
+            payload: {}
+        })
+        const response = yield call(getAllTaskCountsApi, { payload });
+        // console.log("dssfksf", payload)
+        if (response.data.status) {
+            yield put({
+                type: SUMMARY_TYPES.GET_ALL_TASK_COUNT_SUCCESS,
+                payload: { ...response.data },
+            });
+        }
+        else {
+            yield put({
+                type: SUMMARY_TYPES.GET_ALL_TASK_COUNT_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: SUMMARY_TYPES.GET_ALL_TASK_COUNT_ERROR,
+            payload: { message: error?.message }
+        });
+        yield put({
+            type: SUMMARY_TYPES.GET_ALL_TASK_COUNT_RESET,
+            payload: {},
+        });
+
+    }
+}
+//////////////////////////////////
+
 export function* TaskSummarySaga(): any {
     yield takeEvery(SUMMARY_TYPES.GET_TASK_SUMMARY, TaskSummaryFunction);
 }
@@ -123,11 +159,16 @@ export function* PriorityGraphSaga(): any {
 export function* TaskWeekSaga(): any {
     yield takeEvery(SUMMARY_TYPES.GET_TASK_WEEK_COUNT, TaskWeekCountFunction);
 }
+
+export function* getAllTasksCountSaga(): any {
+    yield takeEvery(SUMMARY_TYPES.GET_ALL_TASK_COUNT, AllTaskCountfunction);
+}
 function* AllSummarySaga(): any {
     yield all([
         fork(TaskSummarySaga),
         fork(PriorityGraphSaga),
-        fork(TaskWeekSaga)
+        fork(TaskWeekSaga),
+        fork(getAllTasksCountSaga)
     ])
 }
 export default AllSummarySaga;
