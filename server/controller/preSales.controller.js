@@ -184,7 +184,7 @@ const deletePreSaleData = async (req, res) => {
     try {
         const preSalesId = req.query.preSalesId;
         const preSale = await preSalesModel.findById(preSalesId);
-        await userHistory(req, {preSale} );
+        await userHistory(req, preSale);
         await preSalesModel.findByIdAndDelete({ _id: req.query.preSalesId });
         return res.status(200).json({ status: "200", message: "Pre Sale deleted Successfully" })
     } catch (error) {

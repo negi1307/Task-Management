@@ -15,11 +15,11 @@ const addSubTask = async (req, res) => {
         });
 
         if (type === "Bug") {
-            await userHistory(req, `Bug Created`);
+            await userHistory(req, `Created Bug`);
             return res.status(200).json({ status: 200, message: "Bug added successfully", response: createSubTask })
         }
         else {
-            await userHistory(req, `Sub Task Created `);
+            await userHistory(req, `Created Sub Task`);
             return res.status(200).json({ status: 200, message: "Sub task added successfully", response: createSubTask })
         }
     } catch (error) {
@@ -184,7 +184,7 @@ const updateSubTaskStatus = async (req, res) => {
                         }
                     }
                 }
-                await userHistory(req, "Tasks updated");
+                await userHistory(req, "Updated Task");
                 return res.status(200).json({ status: "200", message: "Sub tasks updated successfully" });
             }
             return res.status(200).json({ status: "200", message: "No tasks found" });

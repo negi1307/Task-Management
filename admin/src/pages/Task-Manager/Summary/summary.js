@@ -4,41 +4,52 @@ import { useParams } from 'react-router-dom';
 import { getPriorityGraphAction, getTaskSummmaryDetail, getTaskWeekCountAction } from '../../../redux/Summary/action';
 import Chart from 'react-apexcharts';
 import { ProgressBar } from 'react-bootstrap';
+import { Bar } from 'react-chartjs-2';
+
 
 const Summary = () => {
     const { projectId, milestoneId, spriteId } = useParams();
-    console.log(projectId, milestoneId, spriteId); // Check if URL parameters are correct
+    // console.log(projectId, milestoneId, spriteId); // Check if URL parameters are correct
 
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    console.log(store); // Check store to see if data is being fetched
+    // console.log(store); // Check store to see if data is being fetched
 
     const successHandle = store?.getTaskSummaryReducer;
     const BarGraphHandel = store?.getPriorityGraphReducer;
     const lastWeekCount = store?.getTaskWeekCountReducer?.data?.response;
 
-    const [data, setData] = useState([]);
-    const [barGraphData, setBarGraphData] = useState([]);
 
+    // console.log(lastWeekCount); // Check if data is being fetched
+    const [data, setData] = useState([]);
+    // const [barGraphData, setBarGraphData] = useState();
     useEffect(() => {
         if (successHandle?.data?.status === 200) {
             setData(successHandle?.data?.response);
         }
     }, [successHandle]);
 
-    useEffect(() => {
-        if (BarGraphHandel?.data?.status === 200) {
-            setBarGraphData(BarGraphHandel?.data?.response);
-        }
-    }, [BarGraphHandel]);
+    const priorityData = store?.getPriorityGraphReducer?.data?.response;
 
     useEffect(() => {
         dispatch(getTaskSummmaryDetail());
         dispatch(getPriorityGraphAction());
         dispatch(getTaskWeekCountAction());
-    }, []);
+    }, [dispatch]);
 
-    console.log(data, barGraphData, lastWeekCount);    const apexDonutOpts = {
+
+    // useEffect(() => {
+    //     if (store?.getPriorityGraphReducer?.data) {
+    //         const priorityData = store?.getPriorityGraphReducer?.data?.response;
+    //         setBarGraphData(priorityData)
+    //     }
+    // }, [store?.getPriorityGraphReducer?.data]);
+
+    console.log(priorityData, 'join');
+    // const firstThreeNames = priorityData.slice(0, 3).map(item => item.name).join(', ');
+    // console.log(firstThreeNames);
+
+    const apexDonutOpts = {
         chart: {
             height: 340,
             type: 'donut',
@@ -77,22 +88,24 @@ const Summary = () => {
                 endingShape: 'rounded',
             },
         },
-        // colors: ['#FF5733', '#FFC300', '#DAF7A6', '#5DADE2', '#AF7AC5'], // Specify different colors for each bar
         dataLabels: {
             enabled: false,
         },
         xaxis: {
-            categories: barGraphData?.map((ele, ind) => ele?.name),
+            categories: priorityData?.map((ele, ind) => ele?.name),
         },
         colors: ['#727cf5', '#0acf97', '#fa5c7c'],
     };
 
     const series = [
         {
-            name: 'Series 1',
-            data: barGraphData?.map((ele, ind) => ele?.count),
+            name: 'Count',
+            data: priorityData?.map((ele, ind) => ele?.count),
         },
     ];
+
+
+
 
     return (
         <>
@@ -190,24 +203,24 @@ const Summary = () => {
                                         />
 
                                         <ul className="legend mx-4">
-                                            <li>
-                                                <span className="color" style={{ backgroundColor: '#727cf5' }} />
+                                            <li className='fs-6 fw-bold text-black'>
+                                                <span className="color rounded-pill" style={{ backgroundColor: '#727cf5' }} />
                                                 To Do
                                             </li>
-                                            <li>
-                                                <span className="color" style={{ backgroundColor: '#0acf97' }} /> In
+                                            <li className='fs-6 fw-bold text-black'>
+                                                <span className="color rounded-pill" style={{ backgroundColor: '#0acf97' }} /> In
                                                 Progress
                                             </li>
-                                            <li>
-                                                <span className="color" style={{ backgroundColor: '#FF00FF' }} />
+                                            <li className='fs-6 fw-bold text-black'>
+                                                <span className="color rounded-pill" style={{ backgroundColor: '#FF00FF' }} />
                                                 Testing
                                             </li>
-                                            <li>
-                                                <span className="color" style={{ backgroundColor: '#fa5c7c' }} />
+                                            <li className='fs-6 fw-bold text-black'>
+                                                <span className="color rounded-pill" style={{ backgroundColor: '#fa5c7c' }} />
                                                 Hold
                                             </li>
-                                            <li>
-                                                <span className="color" style={{ backgroundColor: '#ffbc00' }} />
+                                            <li className='fs-6 fw-bold text-black'>
+                                                <span className="color rounded-pill" style={{ backgroundColor: '#ffbc00' }} />
                                                 Done
                                             </li>
                                         </ul>
@@ -409,8 +422,9 @@ const Summary = () => {
                                     <h5 className="mb-3">
                                         <b>Priority breakdown</b>
                                     </h5>
-
                                     <Chart options={options} series={series} type="bar" height={350} />
+                                    {/* <Bar data={chartData} options={chartOptions} /> */}
+
                                 </div>
                             </div>
                         </div>
@@ -423,7 +437,7 @@ const Summary = () => {
                                 </div>
                                 <div className="p-4">
                                     <div className="row ">
-                                        <div className="col">
+                                        <div className="col-5">
                                             <p className="text-secondary">Type</p>
                                             <div className="d-flex mb-4">
                                                 <i
@@ -446,10 +460,10 @@ const Summary = () => {
                                                     className="rounded-2 mx-2">
                                                     <i className="bi bi-gear-wide mx-1" />
                                                 </div>
-                                                <p className="mb-0">Manage types</p>
+                                                <p className="mb-0 text-nowrap">Manage types</p>
                                             </div>
                                         </div>
-                                        <div className="col">
+                                        <div className="col-4">
                                             <p className="text-secondary">Distribution</p>
                                             <div className="progress-w-percent">
                                                 <span className="progress-value fw-bold">90%</span>
@@ -460,7 +474,7 @@ const Summary = () => {
                                                 <ProgressBar now={72} className="progress-sm" />
                                             </div>
                                         </div>
-                                        <div className="col ">
+                                        <div className="col-3">
                                             <p className="text-secondary">Count</p>
                                             <p className="text-primary  mx-4 mb-4">10</p>
                                             <p className="text-primary mx-4 mb-4 pt-3">8</p>

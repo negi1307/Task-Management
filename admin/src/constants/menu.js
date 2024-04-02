@@ -1,5 +1,11 @@
- const MENU_ITEMS = [
+const MENU_ITEMS = [
     { key: 'navigation', label: 'Navigation', isTitle: true },
+    {
+        key: 'dashboard',
+        label: 'Dashboard',
+        url: 'dashboard/adminsummary',
+        icon: 'uil-window-grid',
+    },
     {
         key: 'projectsss',
         label: 'Projects',
@@ -27,19 +33,19 @@
     {
         key: 'TechnologyCategory',
         label: 'Technology Category',
-        
+
         icon: 'uil-technology',
-        children:[
+        children: [
             {
                 label: 'Category',
                 url: 'dashboard/technologyCategory',
-                
+
             }
-            ,{
+            , {
                 label: 'Technology',
                 parentKey: 'TechnologyCategory',
                 url: 'dashboard/technology',
-                
+
             },
         ]
     },
@@ -67,10 +73,10 @@
         label: 'Time Tracker',
         url: 'dashboard/timeTracker',
         icon: 'bi-clock',
-    }
+    },
 
-    
-  
+
+
 ];
 
 

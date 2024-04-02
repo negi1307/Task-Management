@@ -68,3 +68,5 @@ export const getBugs = "/subTask/getSubTask?"
 export const getSubTask = "/subTask/getSubTask?"
 export const Create_subtask = "/subTask/addSubTask"
 
+export const getAllTaskCount = '/task/getTasksCount'
+

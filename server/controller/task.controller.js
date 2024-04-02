@@ -7,6 +7,7 @@ const sprintModel = require("../models/sprint.model");
 const userModel = require("../models/users.model");
 const subTaskModel = require("../models/subTask.model")
 
+
 // Create or add tasks
 const createtask = async (req, res) => {
   try {
@@ -38,7 +39,7 @@ const createtask = async (req, res) => {
         assigneeId,
         lastUpdaterId: req.user._id
       });
-      await userHistory(req, "Task created");
+      await userHistory(req, "Created Task");
       return res.status(200).json({ status: "200", message: "Task created successfully", response: task });
     }
   } catch (error) {
@@ -272,7 +273,8 @@ const updateTaskStatus = async (req, res) => {
             }
           }
         }
-        await userHistory(req, "Tasks updated");
+       
+        await userHistory(req, "Updated Task");
         return res.status(200).json({ status: "200", message: "Tasks updated successfully" });
       }
       return res.status(200).json({ status: "200", message: "No tasks found" });
@@ -451,23 +453,31 @@ const getTasksAccToStatus = async (req, res) => {
 // Priority breakdown of Tasks for a User as well as For admin
 const getPriorityTasks = async (req, res) => {
   try {
+    let taskQuery = { activeStatus: true };
+    const sprintId = req.query.sprintId;
+
+    if (sprintId) {
+      taskQuery.sprintId = sprintId;
+    }
+
+
     if (req.user.role === 'Admin') {
-      const firstPriority = await taskModel.countDocuments({ priority: "High" });
-      const secondPriority = await taskModel.countDocuments({ priority: "Medium" });
-      const thirdPriority = await taskModel.countDocuments({ priority: "Low" });
-      const fourthPriority = await taskModel.countDocuments({ priority: "Critical" })
+      const firstPriority = await taskModel.countDocuments({ ...taskQuery, priority: "High" });
+      const secondPriority = await taskModel.countDocuments({ ...taskQuery, priority: "Medium" });
+      const thirdPriority = await taskModel.countDocuments({ ...taskQuery, priority: "Low" });
+      const fourthPriority = await taskModel.countDocuments({ ...taskQuery, priority: "Critical" })
       const taskPriorityCount = [
         { name: "High", count: firstPriority },
         { name: "Medium", count: secondPriority },
         { name: "Low", count: thirdPriority },
-        { nameL: "Critical", count: fourthPriority }
+        { name: "Critical", count: fourthPriority }
       ];
       return res.status(200).json({ status: "200", message: "Prioity wise tasks for Admin fetched successfully", response: taskPriorityCount });
     } else {
-      const firstPriority = await taskModel.countDocuments({ assigneeId: req.user._id, priority: "High" });
-      const secondPriority = await taskModel.countDocuments({ assigneeId: req.user._id, priority: "Medium" });
-      const thirdPriority = await taskModel.countDocuments({ assigneeId: req.user._id, priority: "LOw" });
-      const fourthPriority = await taskModel.countDocuments({ assigneeId: req.user._id, priority: "Critical" })
+      const firstPriority = await taskModel.countDocuments({ ...taskQuery, assigneeId: req.user._id, priority: "High" });
+      const secondPriority = await taskModel.countDocuments({ ...taskQuery, assigneeId: req.user._id, priority: "Medium" });
+      const thirdPriority = await taskModel.countDocuments({ ...taskQuery, assigneeId: req.user._id, priority: "Low" });
+      const fourthPriority = await taskModel.countDocuments({ ...taskQuery, assigneeId: req.user._id, priority: "Critical" })
       const taskPriorityCount = [
         { name: "High", count: firstPriority },
         { name: "Medium", count: secondPriority },
@@ -486,50 +496,63 @@ const getTasksStatusCount = async (req, res) => {
   try {
     const now = new Date();
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // Calculate the date 7 days ago
+
+    const sprintId = req.query.sprintId;
+    const taskQuery = { sprintId: sprintId, activeStatus: true };
+    const subTaskQuery = { sprintId: sprintId, activeStatus: true };
+
     if (req.user.role === 'Admin') {
-      const todoCount = await taskModel.countDocuments({ status: 1, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const inProgressCount = await taskModel.countDocuments({ status: 2, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const holdCount = await taskModel.countDocuments({ status: 3, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const doneCount = await taskModel.countDocuments({ status: 4, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const todoCount = await taskModel.countDocuments({ ...taskQuery, status: 1, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const inProgressCount = await taskModel.countDocuments({ ...taskQuery, status: 2, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const testingCount = await taskModel.countDocuments({ ...taskQuery, status: 3, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const doneCount = await taskModel.countDocuments({ ...taskQuery, status: 4, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const holdCount = await taskModel.countDocuments({ ...taskQuery, status: 5, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
 
-      const todoBugCount = await subTaskModel.countDocuments({ status: 1, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const inProgressBugCount = await subTaskModel.countDocuments({ type: "bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const holdBugCount = await subTaskModel.countDocuments({ type: "bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const doneBugCount = await subTaskModel.countDocuments({ type: "bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const todoBugCount = await subTaskModel.countDocuments({ ...subTaskQuery, status: 1, type: "Bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const inProgressBugCount = await subTaskModel.countDocuments({ ...subTaskQuery, status: 2, type: "Bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const testingBugCount = await subTaskModel.countDocuments({ ...subTaskQuery, status: 3, type: "Bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const doneBugCount = await subTaskModel.countDocuments({ ...subTaskQuery, status: 4, type: "Bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const holdBugCount = await subTaskModel.countDocuments({ ...subTaskQuery, status: 5, type: "Bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
 
-      const todoSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const inProgressSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const holdSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const doneSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const todoSubTaskCount = await subTaskModel.countDocuments({ ...subTaskQuery, status: 1, type: "SubTask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const inProgressSubTaskCount = await subTaskModel.countDocuments({ ...subTaskQuery, status: 2, type: "SubTask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const testingSubTaskCount = await subTaskModel.countDocuments({ ...subTaskQuery, status: 3, type: "SubTask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const doneSubTaskCount = await subTaskModel.countDocuments({ ...subTaskQuery, status: 4, type: "SubTask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const holdSubTaskCount = await subTaskModel.countDocuments({ ...subTaskQuery, status: 5, type: "SubTask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
 
       const taskStatusCount = [
         { name: "todo", taskCount: todoCount, bugCount: todoBugCount, subTaskCount: todoSubTaskCount },
         { name: "inProgress", taskCount: inProgressCount, bugCount: inProgressBugCount, subTaskCount: inProgressSubTaskCount },
+        { name: "testing", taskCount: testingCount, bugCount: testingBugCount, subTaskCount: testingSubTaskCount },
         { name: "hold", taskCount: holdCount, bugCount: holdBugCount, subTaskCount: holdSubTaskCount },
-        { name: "Done", taskCount: doneCount, bugCount: doneBugCount, subTaskCount: doneSubTaskCount },
+        { name: "done", taskCount: doneCount, bugCount: doneBugCount, subTaskCount: doneSubTaskCount },
       ];
       return res.status(200).json({ status: "200", message: "Tasks, Bugs and SubTasks count for Admin fetched successfully", response: taskStatusCount });
     } else {
-      const todoCount = await taskModel.countDocuments({ assigneeId: req.user._id, status: 1, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const inProgressCount = await taskModel.countDocuments({ assigneeId: req.user._id, status: 2, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const holdCount = await taskModel.countDocuments({ assigneeId: req.user._id, status: 3, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const doneCount = await taskModel.countDocuments({ assigneeId: req.user._id, status: 4, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const todoCount = await taskModel.countDocuments({ ...taskQuery, assigneeId: req.user._id, status: 1, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const inProgressCount = await taskModel.countDocuments({ ...taskQuery, assigneeId: req.user._id, status: 2, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const testingCount = await taskModel.countDocuments({ ...taskQuery, assigneeId: req.user._id, status: 3, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const holdCount = await taskModel.countDocuments({ ...taskQuery, assigneeId: req.user._id, status: 5, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const doneCount = await taskModel.countDocuments({ ...taskQuery, assigneeId: req.user._id, status: 4, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
 
-      const todoBugCount = await subTaskModel.countDocuments({ status: 1, createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const inProgressBugCount = await subTaskModel.countDocuments({ type: "bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const holdBugCount = await subTaskModel.countDocuments({ type: "bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const doneBugCount = await subTaskModel.countDocuments({ type: "bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const todoBugCount = await subTaskModel.countDocuments({ ...subTaskQuery, assigneeId: req.user._id, status: 1, type: "Bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const inProgressBugCount = await subTaskModel.countDocuments({ ...subTaskQuery, assigneeId: req.user._id, status: 2, type: "Bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const testingBugCount = await subTaskModel.countDocuments({ ...subTaskQuery, assigneeId: req.user._id, status: 3, type: "Bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const holdBugCount = await subTaskModel.countDocuments({ ...subTaskQuery, assigneeId: req.user._id, status: 5, type: "Bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const doneBugCount = await subTaskModel.countDocuments({ ...subTaskQuery, assigneeId: req.user._id, status: 4, type: "Bug", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
 
-      const todoSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const inProgressSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const holdSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
-      const doneSubTaskCount = await subTaskModel.countDocuments({ type: "subtask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const todoSubTaskCount = await subTaskModel.countDocuments({ ...subTaskQuery, assigneeId: req.user._id, status: 1, type: "SubTask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const inProgressSubTaskCount = await subTaskModel.countDocuments({ ...subTaskQuery, assigneeId: req.user._id, status: 2, type: "SubTask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const testingSubTaskCount = await subTaskModel.countDocuments({ ...subTaskQuery, assigneeId: req.user._id, status: 3, type: "SubTask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const holdSubTaskCount = await subTaskModel.countDocuments({ ...subTaskQuery, assigneeId: req.user._id, status: 5, type: "SubTask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
+      const doneSubTaskCount = await subTaskModel.countDocuments({ ...subTaskQuery, assigneeId: req.user._id, status: 4, type: "SubTask", createdAt: { $gte: sevenDaysAgo }, activeStatus: true });
 
       const taskStatusCount = [
         { name: "todo", taskCount: todoCount, bugCount: todoBugCount, subTaskCount: todoSubTaskCount },
         { name: "inProgress", taskCount: inProgressCount, bugCount: inProgressBugCount, subTaskCount: inProgressSubTaskCount },
+        { name: "testing", taskCount: testingCount, bugCount: testingBugCount, subTaskCount: testingSubTaskCount },
         { name: "hold", taskCount: holdCount, bugCount: holdBugCount, subTaskCount: holdSubTaskCount },
-        { name: "Done", taskCount: doneCount, bugCount: doneBugCount, subTaskCount: doneSubTaskCount },
+        { name: "done", taskCount: doneCount, bugCount: doneBugCount, subTaskCount: doneSubTaskCount },
       ];
       return res.status(200).json({ status: "200", message: "Tasks count for User fetched successfully", response: taskStatusCount });
     }
@@ -537,6 +560,8 @@ const getTasksStatusCount = async (req, res) => {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 };
+
+
 
 // Get count of all tasks
 const getTasksCount = async (req, res) => {
@@ -556,13 +581,22 @@ const getTasksCount = async (req, res) => {
 // Get count of Done, updated, Created, and dueTasks of last 7 days
 const getTasksWeekCount = async (req, res) => {
   try {
+    let taskQuery = { activeStatus: true };
+    const sprintId = req.query.sprintId;
+
+    if (sprintId) {
+      taskQuery.sprintId = sprintId;
+    }
+
     const now = new Date();
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // Calculate the date 7 days ago
+
     if (req.user.role === 'Admin') {
-      const doneCount = await taskModel.countDocuments({ status: 4, createdAt: { $gte: sevenDaysAgo } });
+      const doneCount = await taskModel.countDocuments({ ...taskQuery, status: 4, createdAt: { $gte: sevenDaysAgo } });
       const updatedCount = await taskModel.aggregate([
         {
           $match: {
+            ...taskQuery,
             updatedAt: { $gte: sevenDaysAgo },
           },
         },
@@ -583,14 +617,15 @@ const getTasksWeekCount = async (req, res) => {
         },
       ]);
       const result = updatedCount.length > 0 ? updatedCount[0].updatedCount : 0;
-      const createdCount = await taskModel.countDocuments({ createdAt: { $gte: sevenDaysAgo } });
-      const dueCount = await taskModel.countDocuments({ status: { $ne: 4 }, dueDate: { $lte: now, $gte: sevenDaysAgo } });
+      const createdCount = await taskModel.countDocuments({ ...taskQuery, createdAt: { $gte: sevenDaysAgo } });
+      const dueCount = await taskModel.countDocuments({ ...taskQuery, status: { $ne: 4 }, dueDate: { $lte: now, $gte: sevenDaysAgo } });
       return res.status(200).json({ status: "200", message: "Tasks count fetched successfully", response: { doneCount, updatedCount: result, createdCount, dueCount } });
     } else {
-      const doneCount = await taskModel.countDocuments({ assigneeId: req.user._id, status: 4, createdAt: { $gte: sevenDaysAgo } });
+      const doneCount = await taskModel.countDocuments({ ...taskQuery, assigneeId: req.user._id, status: 4, createdAt: { $gte: sevenDaysAgo } });
       const updatedCount = await taskModel.aggregate([
         {
           $match: {
+            ...taskQuery,
             assigneeId: new mongoose.Types.ObjectId(req.user._id),
             updatedAt: { $gte: sevenDaysAgo },
           },
@@ -612,14 +647,17 @@ const getTasksWeekCount = async (req, res) => {
         },
       ]);
       const result = updatedCount.length > 0 ? updatedCount[0].updatedCount : 0;
-      const createdCount = await taskModel.countDocuments({ assigneeId: req.user._id, createdAt: { $gte: sevenDaysAgo } });
-      const dueCount = await taskModel.countDocuments({ assigneeId: req.user._id, status: { $ne: 4 }, dueDate: { $lte: now, $gte: sevenDaysAgo } });
+      const createdCount = await taskModel.countDocuments({ ...taskQuery, assigneeId: req.user._id, createdAt: { $gte: sevenDaysAgo } });
+      const dueCount = await taskModel.countDocuments({ ...taskQuery, assigneeId: req.user._id, status: { $ne: 4 }, dueDate: { $lte: now, $gte: sevenDaysAgo } });
       return res.status(200).json({ status: "200", message: "Tasks count fetched successfully", response: { doneCount, updatedCount: result, createdCount, dueCount } });
     }
   } catch (error) {
     return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
 };
+
+
+
 
 // Get User Assignments- Projects, milestones, and sprints
 const getUserAssignments = async (req, res) => {
