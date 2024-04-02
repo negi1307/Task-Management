@@ -3,7 +3,8 @@ import { APICore } from "../../helpers/api/apiCore"
 const api = new APICore()
 
 export function addProjectApi(data): any {
-    return api.create(URL.AddProject, data.payload)
+    return api.create(URL.AddProject, data.payload),
+    console.log(data,'dta')
 }
 export function getProjectApi(data): any {
 

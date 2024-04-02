@@ -291,18 +291,15 @@ const AllRoutes = () => {
                             path: 'projects',
                             element: <LoadComponent component={Projects} />,
                         },
-                        {
-                            path: 'projects/:id',
-                            element: <LoadComponent component={MileStone} />,
-                        },
-                        {
-                            path: 'milestone/:id',
-                            element: <LoadComponent component={SingleMilestoneDetail} />,
-                        },
-                        {
-                            path: 'sprint/:id',
-                            element: <LoadComponent component={SingleSprintDetail} />,
-                        },
+                        { path: "projects/:id" ,
+                        element: <LoadComponent component={MileStone} />
+                     },
+                        { path: "milestone/:id" ,
+                        element: <LoadComponent component={SingleMilestoneDetail} />
+                    },
+                        { path: "sprint/:id" ,
+                        element: <LoadComponent component={SingleSprintDetail} />
+                    },
                     
                         {
                             path: 'allmillstones',

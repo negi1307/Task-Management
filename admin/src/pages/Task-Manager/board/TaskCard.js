@@ -105,7 +105,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
             <Draggable key={item.id} draggableId={item?.id} index={index}>
                 {(provided) => (
                     <div ref={provided?.innerRef} {...provided?.draggableProps} {...provided?.dragHandleProps}>
-                        <TaskInformation className="py-2 pe-0">
+                        <TaskInformation className="py-2 pe-0 ">
                             <div className="row w-100">
                                 <div className="col-12">
                                     <div className="row">

@@ -238,7 +238,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -248,7 +248,7 @@ const Summary = () => {
                                                 changed the status to Done on{' '}
                                                 <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
                                                 <a href className="text-decoration-none">
-                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                    TAS-1 - No text only demo;
                                                 </a>
                                                 <p className="text-secondary">8 days ago</p>
                                             </div>
@@ -256,7 +256,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -266,7 +266,7 @@ const Summary = () => {
                                                 changed the status to Done on{' '}
                                                 <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
                                                 <a href className="text-decoration-none">
-                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                    TAS-1 - No text only demo;
                                                 </a>
                                                 <p className="text-secondary">8 days ago</p>
                                             </div>
@@ -274,7 +274,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -284,7 +284,7 @@ const Summary = () => {
                                                 changed the status to Done on{' '}
                                                 <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
                                                 <a href className="text-decoration-none">
-                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                    TAS-1 - No text only demo;
                                                 </a>
                                                 <p className="text-secondary">8 days ago</p>
                                             </div>
@@ -292,7 +292,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -302,7 +302,7 @@ const Summary = () => {
                                                 changed the status to Done on{' '}
                                                 <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
                                                 <a href className="text-decoration-none">
-                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                    TAS-1 - No text only demo;
                                                 </a>
                                                 <p className="text-secondary">8 days ago</p>
                                             </div>
@@ -310,7 +310,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -320,7 +320,7 @@ const Summary = () => {
                                                 changed the status to Done on{' '}
                                                 <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
                                                 <a href className="text-decoration-none">
-                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                    TAS-1 - No text only demo;
                                                 </a>
                                                 <p className="text-secondary">8 days ago</p>
                                             </div>
@@ -328,7 +328,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -338,7 +338,7 @@ const Summary = () => {
                                                 changed the status to Done on{' '}
                                                 <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
                                                 <a href className="text-decoration-none">
-                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                    TAS-1 - No text only demo;
                                                 </a>
                                                 <p className="text-secondary">8 days ago</p>
                                             </div>
@@ -346,7 +346,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -356,7 +356,7 @@ const Summary = () => {
                                                 changed the status to Done on{' '}
                                                 <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
                                                 <a href className="text-decoration-none">
-                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                    TAS-1 - No text only demo;
                                                 </a>
                                                 <p className="text-secondary">8 days ago</p>
                                             </div>
@@ -364,7 +364,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -374,7 +374,7 @@ const Summary = () => {
                                                 changed the status to Done on{' '}
                                                 <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
                                                 <a href className="text-decoration-none">
-                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                    TAS-1 - No text only demo;
                                                 </a>
                                                 <p className="text-secondary">8 days ago</p>
                                             </div>
@@ -382,7 +382,7 @@ const Summary = () => {
                                         <div className="row">
                                             <div className="col-2">
                                                 <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">NN</h6>
+                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
                                                 </div>
                                             </div>
                                             <div className="col-10">
@@ -392,7 +392,7 @@ const Summary = () => {
                                                 changed the status to Done on{' '}
                                                 <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
                                                 <a href className="text-decoration-none">
-                                                    TAS-1 - ertyuiopiuygfdghjkl;
+                                                    TAS-1 - No text only demo;
                                                 </a>
                                                 <p className="text-secondary">8 days ago</p>
                                             </div>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { ListGroup, Container, Row, Col, Card, Table, Form, Button } from 'react-bootstrap';
+import { ListGroup, Container, Row, Col, Card, Table, Form, Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import moment from 'moment';
 import { Modal } from 'react-bootstrap';
 import Create from './modal/create';
-import { getSingleSprint, deleteSprint } from '../../../../../redux/sprint/action';
+import { getSingleSprint, updateSprint } from '../../../../../redux/sprint/action';
 import ToastHandle from '../../../../../constants/toaster/toaster';
 import Update from './modal/update';
 import { Link } from 'react-router-dom';
@@ -13,14 +13,16 @@ import MainLoader from '../../../../../constants/Loader/loader';
 import { getAllProjects } from '../../../../../redux/projects/action';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import { getAllTask } from '../../../../../redux/task/action';
 const Sprint = () => {
     const { projectId, milestoneId } = useParams();
-    // console.log(projectId, 'bvcxcvbnbvcxcvbnmnbvcxn');
+
+    console.log(projectId, milestoneId, 'projectId');
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
     const [data, setData] = useState();
-    const [checkedStatus, setCheckedStatus] = useState();
+    const [checkedStatus, setCheckedStatus] = useState([]);
     const [statusModal, setStatusModal] = useState(false);
     const [checkedData, setCheckedData] = useState();
     const [status, setStatus] = useState(1);
@@ -28,7 +30,6 @@ const Sprint = () => {
     const [openModal, SetOpenModal] = useState(false);
     const [editData, setEditData] = useState();
     const GetAllSingleSprintData = store?.getProject?.data?.response;
-    // console.log(GetAllSingleSprintData, 'jjkkjkkyawsdfghjnmk');
     const deletehandle = store?.deleteSprint?.data;
     const loaderhandel = store?.getAllSingleSprints;
     const [skip, setSkip] = useState(1);
@@ -58,20 +59,27 @@ const Sprint = () => {
     };
     const handleActive = (val) => {
         if (val) {
-            setStatus(1);
+            setStatus(true);
+            setSkip(1);
             let data = {
                 id: milestoneId,
-                status: 1,
+                activeStatus: true,
+                skip: 1,
             };
             dispatch(getSingleSprint(data));
         } else {
-            setStatus(0);
+            setStatus(false);
+            setSkip(1);
+
             let data = {
                 id: milestoneId,
-                status: 0,
+                activeStatus: false,
+                skip: 1,
             };
             dispatch(getSingleSprint(data));
         }
+        // console.log('9999999999999999999999999********************//////////////////')
+
     };
     const handleStatusChange = (e, data) => {
         if (e.target.checked) {
@@ -80,21 +88,24 @@ const Sprint = () => {
             setCheckedStatus(false);
         }
         setCheckedData(data);
+
+        console.log(data, 'iddata')
         setStatusModal(true);
     };
     const handleYes = () => {
         if (checkedStatus) {
             let body = {
-                id: checkedData._id,
-                status: true,
+                sprintId: checkedData._id,
+                activeStatus: true,
             };
-            dispatch(deleteSprint(body));
+            dispatch(updateSprint(body));
         } else {
             let body = {
-                id: checkedData._id,
-                status: false,
+                sprintId: checkedData._id,
+                activeStatus: false,
             };
-            dispatch(deleteSprint(body));
+            dispatch(updateSprint(body));
+            // console.log(checkedData, '2222222222222222222222222222222222222222222222222222222222222222222')
         }
         setStatusModal(false);
     };
@@ -108,84 +119,155 @@ const Sprint = () => {
             ToastHandle('error', deletehandle?.message);
         }
     }, [deletehandle]);
-    // useEffect(() => {
-    //     dispatch(getSingleSprint({status:status ,id:milestoneId}));
-    // }, [render]);
+    useEffect(() => {
+        dispatch(getSingleSprint({status:status ,id:milestoneId}));
+    }, [render]);
 
-
+    const sprintId = '660a549b60051a914094c6b2';
     useEffect(() => {
         let body = {
             flag: 'sprint',
-            projectId: projectId,
+            projectId: "65f18df95ef48c554ef88526",
             milestoneId: milestoneId,
-            sprintId: '',
+            sprintId: sprintId,
             skip: 1,
+            activeStatus: true,
+            status: 1
         };
+
 
         dispatch(getAllProjects(body));
     }, []);
+
+
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
         let body = {
             flag: 'sprint',
-            projectId: projectId,
+            projectId: "65f18df95ef48c554ef88526",
             milestoneId: milestoneId,
-            sprintId: '',
+            sprintId: '65f915d0e5a9aa48cfb11834',
             skip: 1,
         };
         dispatch(getAllProjects(body));
     };
+    const truncateDescription = (description, maxLength = 30) => {
+        if (description.length > maxLength) {
+            return description.substring(0, maxLength) + '...';
+        }
+        return description;
+    };
     return (
         <>
-            <div className='title'><h3>SPRINTS</h3></div>
             <Card>
                 <Card.Body>
                     <Col className="mx-auto" lg={12}>
                         <Row>
-
-
+                            <div className="row mx-auto mt-2">
+                                <div className="d-flex col-4">
+                                    <div className="row d-flex align-items-center">
+                                        <div
+                                            className={`col-auto  cp ${status == true ? 'Active_data' : 'InActive_data'}`}>
+                                            <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
+                                                Active
+                                            </p>
+                                        </div>
+                                        <div
+                                            className={`col-auto  cp ${status == false ? 'Active_data' : 'InActive_data'}`}>
+                                            <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
+                                                Inactive
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-4 d-flex align-items-center justify-content-center">
+                                    <h4 className="header-title heading_data"> Sprints</h4>
+                                </div>
+                                {status == 1 ? (
+                                    <div className="col-4 d-flex align-items-center justify-content-end pe-0">
+                                        <Button
+                                            variant="info"
+                                            onClick={handleCreate}
+                                            className="btn fs-5  text-white p-1   web_button">
+                                            Add Sprint
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    ''
+                                )}
+                            </div>
                             {loaderhandel.loading ? (
                                 <MainLoader />
                             ) : (
                                 <Col className="" lg={12}>
                                     <Table striped>
                                         <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Sprint Name</th>
-                                                <th>Sprint Description</th>
-                                                <th>Sprint Start Date</th>
-                                                <th>Due Days</th>
-                                                <th>Action</th>
+                                            <tr >
+                                                <th className='fw-bold'>#</th>
+                                                <th className='fw-bold'>Sprint Name</th>
+                                                <th className='fw-bold'>Sprint Description</th>
+                                                <th className='fw-bold'>Sprint Start Date</th>
+                                                <th className='fw-bold'>Days Left</th>
+                                                <th className='fw-bold'>Sprint End Date</th>
+                                                <th className='fw-bold'>Status</th>
+                                                <th className='fw-bold'>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {GetAllSingleSprintData?.map((item, index) => (
-                                                <tr>
-                                                    <td>{index + 1}</td>
-                                                    <td>{item?.sprintId?.sprintName}</td>
+                                                <tr >
+                                                    <td>{(skip - 1) * 10 + index + 1}</td>
                                                     <td>
-                                                        <div
-                                                            dangerouslySetInnerHTML={{
-                                                                __html: item?.sprintId?.sprintDesc,
-                                                            }}
-                                                        />
+                                                        <Link
+                                                            className='text-secondary'
+                                                            to={`/dashboard/taskBord/projectId=${projectId}&milestoneId=${item?._id}&spriteId=${sprintId}`}>
+                                                            {item?.sprintName}
+                                                        </Link>
+
                                                     </td>
 
-                                                    <td> {moment(item?.sprintId?.startDate).format('DD/MM/YYYY')}</td>
-                                                    <td> {item?.sprintId?.daysLeft}</td>
 
+                                                    <td>
+                                                        <td className='d-flex justify-content-center'>
+                                                            <OverlayTrigger
+                                                                placement="top"
+                                                                overlay={<Tooltip>{truncateDescription(item?.sprintDesc)}</Tooltip>}
+                                                            >
+                                                                <div>
+                                                                    {/* Show only a part of the description */}
+                                                                    <div>{truncateDescription(item?.sprintDesc)}</div>
+                                                                </div>
+                                                            </OverlayTrigger>
+                                                        </td>
+
+                                                    </td>
+                                                    <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
+                                                    <td>{item?.daysLeft}</td>
+                                                    <td>{moment(item?.endDate).format('L')}</td>
+                                                    <td>
+                                                        <Form.Check
+                                                            type="switch"
+                                                            checked={item?.activeStatus}
+                                                            onChange={(e) => handleStatusChange(e, item)}
+                                                        />
+                                                    </td>
                                                     <td>
                                                         {' '}
                                                         <Row>
                                                             <Col>
                                                                 <p className="action-icon m-0 p-0 ">
                                                                     <Link
-                                                                        to={`/dashboard/taskboard/projectId=/${item?.sprintId?.projectId}&milestoneId=/${item?.sprintId?.milestoneId}&spriteId=/${item?.sprintId?._id}`}>
+                                                                        to={`/dashboard/taskBord/projectId=${projectId}&milestoneId=${item?._id}&spriteId=${sprintId}`}>
                                                                         <i className="mdi mdi-eye m-0 p-0"></i>
                                                                     </Link>
                                                                 </p>
-
+                                                                <p className="action-icon m-0 p-0  ">
+                                                                    <i
+                                                                        onClick={() => {
+                                                                            handelUpdate(item);
+                                                                        }}
+                                                                        className="uil-edit-alt m-0 p-0"></i>
+                                                                </p>
                                                             </Col>
                                                         </Row>
                                                     </td>
@@ -199,11 +281,11 @@ const Sprint = () => {
                     </Col>
                     <Row>
                         <Col lg={12} className="d-flex justify-content-end my-3 pe-4 position-absolute bottom-0">
-                            {store?.getProject?.data?.totalPages > 0 && (
+                            {store?.getAllSingleSprints?.data?.totalPages > 0 && (
                                 <Stack spacing={2}>
                                     <Pagination
                                         defaultPage={skip}
-                                        count={store?.getProject?.data?.totalPages}
+                                        count={store?.getAllSingleSprints?.data?.totalPages}
                                         color="primary"
                                         variant="outlined"
                                         onChange={handlePaginationChange}

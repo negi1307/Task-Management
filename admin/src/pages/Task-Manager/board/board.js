@@ -177,30 +177,35 @@ const Boards = () => {
             setColumns({
                 [1]: {
                     title: 'To-do',
+                    bgColor: 'red',
                     items: successHandle?.data?.Response?.todo?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
                 [2]: {
                     title: 'In Progress',
+                    bgColor: 'green',
                     items: successHandle?.data?.Response?.inProgress.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
                 [3]: {
                     title: 'Testing',
+                    bgColor: 'yellow',
                     items: successHandle?.data?.Response?.testing.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
                 [5]: {
                     title: 'Hold',
+                    bgColor: 'lime',
                     items: successHandle?.data?.Response?.hold.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
                 [4]: {
                     title: 'Done',
+                    bgColor: 'blue',
                     items: successHandle?.data?.Response?.done.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
@@ -293,7 +298,7 @@ const Boards = () => {
                 <div className="col-lg-8 d-flex  align -items-center">
                     <div>
                         {' '}
-                        <h4 className="page-title bg-black  text-white rounded-2 p-2 py-1" >
+                        <h4 className="page-title fw-bold text-dark rounded-2 p-2 py-1" style={{backgroundColor:'red'}} >
                             {' '}
                             To-Do :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
@@ -303,7 +308,7 @@ const Boards = () => {
                     </div>
                     <div className="ms-3">
                         {' '}
-                        <h4 className="page-title bg-black text-white rounded-2 p-2 py-1">
+                        <h4 className="page-title fw-bold text-black rounded-2 p-2 py-1"  style={{backgroundColor:'green'}}>
                             {' '}
                             In-Progress :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
@@ -313,7 +318,7 @@ const Boards = () => {
                     </div>
                     <div className="ms-3">
                         {' '}
-                        <h4 className="page-title bg-black text-white rounded-2 p-2 py-1">
+                        <h4 className="page-title fw-bold text-dark rounded-2 p-2 py-1" style={{backgroundColor:'yellow'}}>
                             {' '}
                             Testing :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
@@ -323,7 +328,7 @@ const Boards = () => {
                     </div>
                     <div className="ms-3">
                         {' '}
-                        <h4 className="page-title bg-black text-white rounded-2 p-2 py-1">
+                        <h4 className="page-title fw-bold  text-dark rounded-2 p-2 py-1" style={{backgroundColor:'lime'}}>
                             {' '}
                             Hold :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
@@ -333,7 +338,7 @@ const Boards = () => {
                     </div>
                     <div className="ms-3">
                         {' '}
-                        <h4 className="page-title  bg-black text-white rounded-2 p-2 py-1">
+                        <h4 className="page-title  fw-bold  text-dark rounded-2 p-2 py-1"  style={{backgroundColor:'blue'}}>
                             {' '}
                             Done :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
@@ -343,7 +348,7 @@ const Boards = () => {
                     </div>
                     <div className="ms-3 me-2">
                         {' '}
-                        <h4 className="page-title bg-black text-white rounded-2 p-2 py-1">
+                        <h4 className="page-title fw-bold bg-black text-white rounded-2 p-2 py-1">
                             {' '}
                             Due Task:
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
@@ -451,32 +456,35 @@ const Boards = () => {
                 ) : (
                     <Container>
                         <TaskColumnStyles>
-                            {Object?.entries(columns)?.map(([columnId, column]) => {
-                                return (
-                                    <Droppable key={columnId} droppableId={columnId}>
-                                        {(provided, snapshot) => (
-                                            <div className="task-list-col">
-                                                <TaskList ref={provided?.innerRef} {...provided?.droppableProps}>
-                                                    <Title>{column?.title}</Title>
-                                                    {column?.items?.map((item, index) => (
-                                                        <TaskCard
-                                                            key={item.id}
-                                                            item={item}
-                                                            index={index}
-                                                            columns={columns}
-                                                            projectId={projectId}
-                                                            mileStoneId={milestoneId}
-                                                            sprintId={spriteId}
-                                                            closeModal={closeModal}
-                                                        />
-                                                    ))}
-                                                    {provided?.placeholder}
-                                                </TaskList>
-                                            </div>
-                                        )}
-                                    </Droppable>
-                                );
-                            })}
+                        {Object.entries(columns).map(([columnId, column]) => (
+                <Droppable key={columnId} droppableId={columnId}>
+                    {(provided, snapshot) => (
+                        <div
+                            className="task-list-col"
+                            ref={provided?.innerRef}
+                            {...provided?.droppableProps}
+                        
+                        >
+                            <TaskList>
+                            <Title className='text-dark fw-bold' style={{ backgroundColor: column.bgColor || 'transparent' }}>{column.title}</Title>
+                                {column.items?.map((item, index) => (
+                                    <TaskCard
+                                        key={item.id}
+                                        item={item}
+                                        index={index}
+                                        columns={columns}
+                                        projectId={projectId}
+                                        mileStoneId={milestoneId}
+                                        sprintId={spriteId}
+                                        closeModal={closeModal}
+                                    />
+                                ))} 
+                                {provided?.placeholder}
+                            </TaskList>
+                        </div>
+                    )}
+                </Droppable>
+            ))}
                         </TaskColumnStyles>
                     </Container>
                 )}

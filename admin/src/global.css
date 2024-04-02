@@ -520,7 +520,7 @@ table.table-striped tbody tr:nth-of-type(odd)>* {
 }
 
 .page-title {
-    background: #37216c !important;
+    /* background: #37216c !important; */
     font-size: 13px  !important;
     margin-top: 13px !important;
 }
