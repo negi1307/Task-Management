@@ -101,6 +101,31 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
         setOpenModal(true);
     }
 
+    let priorityWithLetter;
+    let backgroundColorClass;
+
+    switch (item?.priority) {
+        case 'Critical':
+            priorityWithLetter = 'Critical';
+            backgroundColorClass = 'critical-background';
+            break;
+        case 'High':
+            priorityWithLetter = 'High';
+            backgroundColorClass = 'high-background';
+            break;
+        case 'Medium':
+            priorityWithLetter = 'Medium';
+            backgroundColorClass = 'medium-background';
+            break;
+        case 'Low':
+            priorityWithLetter = 'Low';
+            backgroundColorClass = 'low-background';
+            break;
+        default:
+            priorityWithLetter = item?.priority;
+            backgroundColorClass = '';
+    }
+
     return (
         <>
             <Draggable key={item.id} draggableId={item?.id} index={index}>
@@ -124,7 +149,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                 <div className="col-6 border-end add_padding_box ">
                                                     <button type="button " className="m-0 p-0 border-0 bg-transparent">
                                                         <i
-                                                            className="uil-edit-alt m-0 p-0 me-2 del_edit"
+                                                            className="uil-edit-alt fw-bold text-black m-0 p-0 me-2 del_edit"
                                                             onClick={() => {
                                                                 handelUpdate(item);
                                                             }}></i>
@@ -135,88 +160,11 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                         type="button"
                                                         className="m-0 p-0 border-0 bg-transparent"
                                                         onClick={() => deleteData(item?.id)}>
-                                                        <i className="mdi mdi-delete m-0 p-0 me-2 del_edit"></i>
+                                                        <i className="mdi text-black mdi-delete m-0 p-0 me-2 del_edit"></i>
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
-                                        {/* <div className="col-6 pe-0">
-                                            <div className="action_icon position-relative">
-                                                <div className="col-12 d-flex align-items-center justify-content-end">
-                                                    <i
-                                                        onClick={toggle}
-                                                        className="fa fa-ellipsis-h cp bg-light p-2 rounded-3"
-                                                        aria-hidden="true"></i>
-                                                </div>
-                                                <Modal
-                                                    show={openModal}
-                                                    onHide={closeOpenModal}
-                                                    className="bg_trans_modal">
-                                                    <Modal.Body className="p-0">
-                                                        <div className="row position-absolute add_position ">
-                                                            <div className="col-4 border p-2 bg-white add_position_modal_edit">
-                                                                <div className="row">
-                                                                    <div className="col-12 pb-2 d-flex align-items-center justify-content-start">
-                                                                        <h4 className="m-0 p-0">Action</h4>
-                                                                    </div>
-                                                                    <div className="col-12 pb-2 d-flex align-items-center justify-content-start">
-                                                                        <button
-                                                                            type="button "
-                                                                            className="m-0 p-0 border-0 bg-transparent">
-                                                                            <i
-                                                                                className="uil-edit-alt m-0 p-0 me-2"
-                                                                                onClick={() => {
-                                                                                    handelUpdate(item);
-                                                                                }}></i>
-                                                                            Edit
-                                                                        </button>
-                                                                    </div>
-                                                                    <div className="col-12 d-flex align-items-center justify-content-start">
-                                                                        <button
-                                                                            type="button"
-                                                                            className="m-0 p-0 border-0 bg-transparent"
-                                                                            onClick={() => deleteData(item?.id)}>
-                                                                            <i className="mdi mdi-delete m-0 p-0 me-2"></i>
-                                                                            Delete
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </Modal.Body>
-                                                </Modal>
-                                                {isOpen && (
-                                                    <div className="row position-absolute add_position ">
-                                                        <div className="col-12 border p-2 bg-white">
-                                                            <div className="row">
-                                                                <div className="col-12 pb-2 d-flex align-items-center justify-content-start">
-                                                                    <h4 className="m-0 p-0">Action</h4>
-                                                                </div>
-                                                                <div className="col-12 pb-2 d-flex align-items-center justify-content-start">
-                                                                    <button type="button " className="m-0 p-0">
-                                                                        <i
-                                                                            className="uil-edit-alt m-0 p-0 me-2"
-                                                                            onClick={() => {
-                                                                                handelUpdate(item);
-                                                                            }}></i>
-                                                                        Edit
-                                                                    </button>
-                                                                </div>
-                                                                <div className="col-12 d-flex align-items-center justify-content-start">
-                                                                    <button
-                                                                        type="button"
-                                                                        className="m-0 p-0"
-                                                                        onClick={() => deleteData(item?.id)}>
-                                                                        <i className="mdi mdi-delete m-0 p-0 me-2"></i>
-                                                                        Delete
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div> */}
                                     </div>
                                 </div>
                                 <div className="col-12 py-2">
@@ -225,6 +173,11 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                             dangerouslySetInnerHTML={{
                                                 __html: item?.description,
                                             }}></div>
+                                    </p>
+                                </div>
+                                <div className='col-4'>
+                                    <p className={`fw-bold ${backgroundColorClass}`}>
+                                        {priorityWithLetter}
                                     </p>
                                 </div>
                                 <div className="col-12">
@@ -240,7 +193,6 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                         </div>
                                         <div className="col-6 d-flex align-items-center justify-content-end pe-0">
                                             <div className=" d-flex">
-                                                {/* <h5 className="m-0 p-0"> Assignee :</h5> */}
                                                 <OverlayTrigger
                                                     placement="top"
                                                     overlay={

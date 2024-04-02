@@ -16,10 +16,19 @@ export default function RightBar(props) {
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const [taskdata, setTaskData] = useState();
-    // disable previous date
+    const [filePreview, setFilePreview] = useState(null);
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFilePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
     const today = new Date();
-    // console.log(today, 'today');
-    // end date
     const handleStartDate = (date) => {
         setStartDate(date);
     };
@@ -48,10 +57,7 @@ export default function RightBar(props) {
         }
     };
 
-    //For the values in the disabled fields
     const allDetails = columns?.[1]?.items[0];
-    // console.log(allDetails, 'kjbf')
-    //////////////////////////
 
     const openFileInput = () => {
         document.getElementById('fileInput').click();
@@ -72,7 +78,11 @@ export default function RightBar(props) {
         body.append('dueDate', endDate);
         body.append('status', 1);
         body.append('expectedHours', e.expectedHours);
-        body.append('attachment', selectedFile ? selectedFile : '');
+        // body.append('attachment', selectedFile ? selectedFile : '');
+        const fileInput = document.querySelector('input[type="file"]');
+        if (fileInput.files.length > 0) {
+            body.append('attachment', fileInput.files[0]);
+        }
         if (projectId !== '' && mileStoneId !== '' && sprintId !== '') {
             dispatch(createTask(body));
             ToastHandle('success', 'Task created successfully');
@@ -378,6 +388,22 @@ export default function RightBar(props) {
                                             <span className="text-danger"> This field is required *</span>
                                         )}
                                     </div>
+                                </div>
+                                <div className='col-12'>
+                                    <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                        <Form.Label className='mb-0'>Attachment</Form.Label>
+                                        <Form.Control
+                                            style={{ border: '1px solid #a6b3c3' }}
+                                            type='file'
+                                            onChange={handleFileChange}
+                                        />
+                                    </Form.Group>
+                                    {filePreview && (
+                                        <div>
+                                            <p>Preview:</p>
+                                            <img src={filePreview} alt="File Preview" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             {/* <div className="row">

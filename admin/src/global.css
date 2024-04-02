@@ -521,9 +521,10 @@ table.table-striped tbody tr:nth-of-type(odd)>* {
 
 .page-title {
     background: #37216c !important;
-    font-size: 13px  !important;
+    font-size: 13px !important;
     margin-top: 13px !important;
 }
+
 .css-1xb58ew {
     margin: 0px !important;
 }
@@ -620,4 +621,28 @@ input.add_width_input {
 
 .del_edit {
     color: white;
+}
+
+.critical-background {
+    /* background-color: #F8312F; */
+    color: #F8312F;
+}
+
+.low-background {
+    /* background-color: #00D26A; */
+    color: #00D26A;
+}
+
+.medium-background {
+    /* background-color: #FCD53F; */
+    color: #FCD53F;
+}
+
+.high-background {
+    /* background-color: #FF6723; */
+    color: #FF6723;
+}
+
+.list_select:focus {
+    outline: none !important;
 }

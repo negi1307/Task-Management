@@ -29,8 +29,8 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     const [subtaskButtonClicked, setSubtaskButtonClicked] = useState(false);
     const getCommentData = store?.getComment?.data?.response;
     const getHistory = store?.getHistoryReducer?.data?.response;
-    
-  
+
+
     const historyLoader = store?.getHistoryReducer
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
@@ -146,6 +146,31 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         setButtonChange(true);
     }
 
+    let priorityWithLetter;
+    let backgroundColorClass;
+
+    switch (editData?.priority) {
+        case 'Critical':
+            priorityWithLetter = 'Critical';
+            backgroundColorClass = 'critical-background';
+            break;
+        case 'High':
+            priorityWithLetter = 'High';
+            backgroundColorClass = 'high-background';
+            break;
+        case 'Medium':
+            priorityWithLetter = 'Medium';
+            backgroundColorClass = 'medium-background';
+            break;
+        case 'Low':
+            priorityWithLetter = 'Low';
+            backgroundColorClass = 'low-background';
+            break;
+        default:
+            priorityWithLetter = editData?.priority;
+            backgroundColorClass = '';
+    }
+
     return (
         <>
             <Modal show={modal} onHide={closeModal} size={'xl'}>
@@ -179,7 +204,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             borderColor: '#f3f3f3',
                                             color: 'black',
                                             boxShadow: 'none',
-                                            
+
                                         }}>
                                         All
                                     </Button>
@@ -598,65 +623,65 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                             ) : connectComponent === 'Bugs' ? (
 
                                 <Table className="mb-0 add_Color_font" striped>
-                                <thead>
-                                    <tr>
-                                        <th className='fw-bold'>#</th>
-                                        <th className='fw-bold'>Summary</th>
-                                        <th className='fw-bold'>Decription</th>
-                                        <th className='fw-bold'>Assignee</th>
-                                        <th className='fw-bold'>Priority</th>
-                                        <th className='fw-bold'>Start Date</th>
-                                        <th className='fw-bold'>End Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                    <thead>
+                                        <tr>
+                                            <th className='fw-bold'>#</th>
+                                            <th className='fw-bold'>Summary</th>
+                                            <th className='fw-bold'>Decription</th>
+                                            <th className='fw-bold'>Assignee</th>
+                                            <th className='fw-bold'>Priority</th>
+                                            <th className='fw-bold'>Start Date</th>
+                                            <th className='fw-bold'>End Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                                    {store?.getBugsReducer?.data?.response?.map((bug, ind) => {
-                                        return (
-                                            <tr className="align-middle">
-                                                <th>{ind + 1}</th>
+                                        {store?.getBugsReducer?.data?.response?.map((bug, ind) => {
+                                            return (
+                                                <tr className="align-middle">
+                                                    <th>{ind + 1}</th>
 
-                                                <td>
-                                                    <span title={bug?.summary}>
-                                                        {bug?.summary.slice(0, 8)}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
-                                                </td>
-                                                <td>
-                                                    <span>
-                                                        {bug?.expectedHours}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span>
-                                                        {bug?.priority}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span>
-                                                        {bug?.startDate.slice(0, 10)}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span>
-                                                        {bug?.dueDate.slice(0, 10)}
-                                                    </span>
-                                                </td>
-
-
-                                            </tr>
-                                        );
-                                    })}
-
-                                </tbody>
-                            </Table>
+                                                    <td>
+                                                        <span title={bug?.summary}>
+                                                            {bug?.summary.slice(0, 8)}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            {bug?.expectedHours}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            {bug?.priority}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            {bug?.startDate.slice(0, 10)}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            {bug?.dueDate.slice(0, 10)}
+                                                        </span>
+                                                    </td>
 
 
-                                          
+                                                </tr>
+                                            );
+                                        })}
 
-                            ) :  connectComponent === 'Subtask' ? (
+                                    </tbody>
+                                </Table>
+
+
+
+
+                            ) : connectComponent === 'Subtask' ? (
 
                                 <Table className="mb-0 add_Color_font" striped>
                                     <thead>
@@ -770,16 +795,8 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 </div>
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Priority :</h4>
-                                    <p className="ms-2 p-0">
-                                        {editData?.priority == "High"
-                                            ? 'High'
-                                            : '' || editData?.priority == "Medium"
-                                                ? 'Medium'
-                                                : '' || editData?.priority == "Low"
-                                                    ? 'Low'
-                                                    : '' || editData?.priority == "Critical"
-                                                        ? 'Critical'
-                                                        : ''}
+                                    <p className={`ms-2 ${backgroundColorClass} fw-bold p-0`}>
+                                        {priorityWithLetter}
                                     </p>
                                 </div>
                                 <div className=" d-flex">

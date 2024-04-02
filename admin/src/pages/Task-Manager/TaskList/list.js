@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { ListGroup, Container, Row, Col, Table, Button, Form, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import DatePicker from 'react-datepicker';
 import { TaskStatusAction, deleteTask, getsingleSprintTask, updateTask } from '../../../redux/task/action';
 import MainLoader from '../../../constants/Loader/loader';
 import Pagination from '@mui/material/Pagination';
@@ -31,7 +32,29 @@ const TaskList = () => {
     const getSingleSprintTask = store?.getSigleSprintTask?.data?.response;
     const deletehandle = store?.TaskStatusReducer?.data;
     const loaderhandel = store?.getSigleSprintTask;
-    console.log(getSingleSprintTask, '11111111111111111111111111111111111111111111111111111111111111111111111111')
+    // console.log(getSingleSprintTask, '11111111111111111111111111111111111111111111111111111111111111111111111111')
+    const [assigneeFilter, setAssigneeFilter] = useState('');
+    const filterAssignee = (item) => {
+        if (!assigneeFilter) return true;
+        return item.assigneeInfo?._id === assigneeFilter;
+    };
+    const [startDateFilter, setStartDateFilter] = useState(null);
+
+    // Handler function for updating start date filter
+    const handleStartDateFilterChange = (date) => {
+        setStartDateFilter(date);
+    };
+
+    // Filter function for tasks based on start date
+    const filterStartDate = (item) => {
+        if (!startDateFilter) return true;
+        return moment(item.startDate).isSame(startDateFilter, 'day');
+    };
+
+    const handleAssigneeFilterChange = (e) => {
+        setAssigneeFilter(e.target.value);
+    };
+
     const handleCreate = () => {
         SetOpenModal(true);
     };
@@ -149,6 +172,16 @@ const TaskList = () => {
             dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 5, projectId: projectId, milestoneId: milestoneId }));
         }
     };
+    function truncateAfterTwoWords(text) {
+        const words = text.split(' ');
+        const truncatedText = words.slice(0, 2).join(' ');
+        return truncatedText.length < text.length ? truncatedText + '...' : truncatedText;
+    }
+    function getTextFromHTML(html) {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body.textContent || "";
+    }
+
     return (
         <>
             <div className="row mx-auto">
@@ -218,61 +251,78 @@ const TaskList = () => {
                                 <Table striped>
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Description</th>
-                                            <th>Summary</th>
-                                            <th>Assignee</th>
-                                            <th>Reporter</th>
-                                            <th>Priority</th>
-                                            <th> Start Date</th>
-                                            <th> End Date</th>
-                                            <th>Status</th>
+                                            <th className='text-start'>#</th>
+                                            <th className='text-start'>Description</th>
+                                            <th className='text-start'>Summary</th>
+                                            <th className='border-0 text-start '>
+                                                <select
+                                                    name="assigneeFilter"
+                                                    className="custom-select list_select p-0 w-75 border-0"
+                                                    style={{ outline: 'none !important' }}
+                                                    value={assigneeFilter}
+                                                    onChange={handleAssigneeFilterChange}
+                                                >
+                                                    <option value="">Assignees</option>
+                                                    {store?.getAllUsers?.data?.response?.map((ele, ind) => (
+                                                        <option key={ind} value={ele?._id}>
+                                                            {ele?.firstName} {ele?.lastName}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </th>
+                                            <th className='text-start'>Reporter</th>
+                                            <th className='text-start'>Priority</th>
+                                            <th className='border-0 text-start'>
+                                                <DatePicker
+                                                    selected={startDateFilter} // Pass selected date as prop
+                                                    onChange={handleStartDateFilterChange} // Handle date change
+                                                    dateFormat="dd/MM/yyyy" // Date format
+                                                    className="w-50 add_width_input p-0 border-0  mb-0"
+                                                    placeholderText='Start date'
+                                                />
+                                            </th>
+                                            <th className='text-start'> End Date</th>
+                                            <th className='text-start'>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {getSingleSprintTask?.map((item, index) => (
+                                        {getSingleSprintTask?.filter(filterStartDate)?.filter(filterAssignee)?.length > 0 ? (
+                                            getSingleSprintTask?.filter(filterStartDate)?.filter(filterAssignee)?.map((item, index) => (
+                                                <tr>
+                                                    <td className='text-start'>{(skip - 1) * 10 + index + 1}</td>
+                                                    <td className='text-start text-nowrap '>{truncateAfterTwoWords(item?.summary)}</td>
+                                                    <td className="text-start text-truncate" dangerouslySetInnerHTML={{ __html: truncateAfterTwoWords(getTextFromHTML(item?.description)) }} />
 
-                                            <tr>
-                                                <td>{(skip - 1) * 10 + index + 1}</td>
-                                                <td >{item?.summary}</td>
-                                                <td>
-                                                    {' '}
-                                                    <div
-                                                        dangerouslySetInnerHTML={{
-                                                            __html: item?.description,
-                                                        }}
-                                                    />
-                                                </td>
-
-                                                <td>
-                                                    {item?.assigneeInfo?.firstName}{' '}
-                                                    {item?.assigneeInfo?.lastName}
-                                                </td>
-                                                <td>{item?.reporterInfo?.firstName} {''}
-                                                    {item?.reporterInfo?.lastName}
-                                                </td>
-                                                <td>
-                                                    {item?.priority == 'Critical'
-                                                        ? 'Critical'
-                                                        : '' || item?.priority == 'High'
-                                                            ? 'High'
-                                                            : '' || item?.priority == 'Medium'
-                                                                ? 'Medium'
-                                                                : '' || item?.priority == 'Low'
-                                                                    ? 'Low'
-                                                                    : ''}
-                                                </td>
-                                                <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
-                                                <td>{moment(item?.dueDate).format("DD/MM/YYYY")}</td>
-                                                <td>
-                                                    <Form.Check
-                                                        type="switch"
-                                                        checked={item?.activeStatus}
-                                                        onChange={(e) => handleStatusChange(e, item)}
-                                                    />
-                                                </td>
-                                                <td>
-                                                    {/* <Row>
+                                                    <td className='text-nowrap text-start'>
+                                                        {item?.assigneeInfo?.firstName}{' '}
+                                                        {item?.assigneeInfo?.lastName}
+                                                    </td>
+                                                    <td className='text-nowrap text-start'>
+                                                        {item?.reporterInfo?.firstName} {''}
+                                                        {item?.reporterInfo?.lastName}
+                                                    </td>
+                                                    <td className='text-start'>
+                                                        {item?.priority == 'Critical'
+                                                            ? 'Critical'
+                                                            : '' || item?.priority == 'High'
+                                                                ? 'High'
+                                                                : '' || item?.priority == 'Medium'
+                                                                    ? 'Medium'
+                                                                    : '' || item?.priority == 'Low'
+                                                                        ? 'Low'
+                                                                        : ''}
+                                                    </td>
+                                                    <td className='text-start'> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
+                                                    <td className='text-start'>{moment(item?.dueDate).format("DD/MM/YYYY")}</td>
+                                                    <td className='text-start'>
+                                                        <Form.Check
+                                                            type="switch"
+                                                            checked={item?.activeStatus}
+                                                            onChange={(e) => handleStatusChange(e, item)}
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        {/* <Row>
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0  ">
                                                                         <i
@@ -283,9 +333,18 @@ const TaskList = () => {
                                                                     </p>
                                                                 </Col>
                                                             </Row> */}
+                                                    </td>
+                                                </tr>
+
+                                            ))
+                                        ) : (
+
+                                            <tr className='w-100 text-center'>
+                                                <td colSpan={12}>
+                                                    <p className='text-black fs-3 fw-bolder py-5'>No Data Found</p>
                                                 </td>
                                             </tr>
-                                        ))}
+                                        )}
                                     </tbody>
                                 </Table>
                             </Col>
