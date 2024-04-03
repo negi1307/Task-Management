@@ -623,26 +623,6 @@ input.add_width_input {
     color: white;
 }
 
-.critical-background {
-    /* background-color: #F8312F; */
-    color: #F8312F;
-}
-
-.low-background {
-    /* background-color: #00D26A; */
-    color: #00D26A;
-}
-
-.medium-background {
-    /* background-color: #FCD53F; */
-    color: #FCD53F;
-}
-
-.high-background {
-    /* background-color: #FF6723; */
-    color: #FF6723;
-}
-
-.list_select:focus {
+.list-table-filter:focus {
     outline: none !important;
 }

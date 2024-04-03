@@ -146,30 +146,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         setButtonChange(true);
     }
 
-    let priorityWithLetter;
-    let backgroundColorClass;
-
-    switch (editData?.priority) {
-        case 'Critical':
-            priorityWithLetter = 'Critical';
-            backgroundColorClass = 'critical-background';
-            break;
-        case 'High':
-            priorityWithLetter = 'High';
-            backgroundColorClass = 'high-background';
-            break;
-        case 'Medium':
-            priorityWithLetter = 'Medium';
-            backgroundColorClass = 'medium-background';
-            break;
-        case 'Low':
-            priorityWithLetter = 'Low';
-            backgroundColorClass = 'low-background';
-            break;
-        default:
-            priorityWithLetter = editData?.priority;
-            backgroundColorClass = '';
-    }
 
     return (
         <>
@@ -795,8 +771,8 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 </div>
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Priority :</h4>
-                                    <p className={`ms-2 ${backgroundColorClass} fw-bold p-0`}>
-                                        {priorityWithLetter}
+                                    <p className={`ms-2 fw-bold p-0`}>
+                                        {editData?.priority}
                                     </p>
                                 </div>
                                 <div className=" d-flex">

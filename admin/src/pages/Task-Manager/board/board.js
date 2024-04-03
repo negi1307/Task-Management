@@ -414,6 +414,7 @@ const Boards = () => {
                             columns={columns}
                             closeModal={closeaddModal}
                             setShowModal={setShowModal}
+                            centered
                         />
                     </div>
                 </div>
