@@ -29,7 +29,7 @@ const Container = styled.div`
 `;
 
 const TaskList = styled.div`
-    height: 98vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     background: #f3f3f3;
@@ -180,20 +180,23 @@ const Boards = () => {
                     items: successHandle?.data?.Response?.todo?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
+                    count : successHandle?.data?.Response?.todoCount
                 },
                 [2]: {
                     title: 'In Progress',
-                    bgColor: 'green',
+                    bgColor: 'lightblue',
                     items: successHandle?.data?.Response?.inProgress.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
+                    count : successHandle?.data?.Response?.inProgressCount
                 },
                 [3]: {
                     title: 'Testing',
-                    bgColor: 'yellow',
+                    bgColor: 'chocolate',
                     items: successHandle?.data?.Response?.testing.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
+                    count : successHandle?.data?.Response?.testingCount
                 },
                 [5]: {
                     title: 'Hold',
@@ -201,13 +204,15 @@ const Boards = () => {
                     items: successHandle?.data?.Response?.hold.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
+                    count : successHandle?.data?.Response?.holdCount
                 },
                 [4]: {
                     title: 'Done',
-                    bgColor: 'blue',
+                    bgColor: 'green',
                     items: successHandle?.data?.Response?.done.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
+                    count: successHandle?.data?.Response?.doneCount,
                 },
             });
         }
@@ -295,7 +300,7 @@ const Boards = () => {
                 </div> */}
             <div className="add_task row d-flex pb-2 pt-1">
                 <div className="col-lg-8 d-flex  align -items-center">
-                    <div>
+                    {/* <div>
                         {' '}
                         <h4 className="page-title fw-bold text-dark rounded-2 p-2 py-1" style={{backgroundColor:'red'}} >
                             {' '}
@@ -307,7 +312,7 @@ const Boards = () => {
                     </div>
                     <div className="ms-3">
                         {' '}
-                        <h4 className="page-title fw-bold text-black rounded-2 p-2 py-1"  style={{backgroundColor:'green'}}>
+                        <h4 className="page-title fw-bold text-black rounded-2 p-2 py-1"  style={{backgroundColor:'lightblue'}}>
                             {' '}
                             In-Progress :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
@@ -317,7 +322,7 @@ const Boards = () => {
                     </div>
                     <div className="ms-3">
                         {' '}
-                        <h4 className="page-title fw-bold text-dark rounded-2 p-2 py-1" style={{backgroundColor:'yellow'}}>
+                        <h4 className="page-title fw-bold text-dark rounded-2 p-2 py-1" style={{backgroundColor:'chocolate'}}>
                             {' '}
                             Testing :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
@@ -337,7 +342,7 @@ const Boards = () => {
                     </div>
                     <div className="ms-3">
                         {' '}
-                        <h4 className="page-title  fw-bold  text-dark rounded-2 p-2 py-1"  style={{backgroundColor:'blue'}}>
+                        <h4 className="page-title  fw-bold  text-dark rounded-2 p-2 py-1"  style={{backgroundColor:'green'}}>
                             {' '}
                             Done :
                             <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
@@ -354,7 +359,7 @@ const Boards = () => {
                                 {successHandle?.data?.Response?.dueTasksCount}
                             </Badge>
                         </h4>{' '}
-                    </div>
+                    </div> */}
                     {AssignUserName?.map((ele, ind) => (
                         <>
                             <OverlayTrigger
@@ -465,7 +470,7 @@ const Boards = () => {
                         
                         >
                             <TaskList>
-                            <Title className='text-dark fw-bold' style={{ backgroundColor: column.bgColor || 'transparent' }}>{column.title}</Title>
+                            <Title className='text-dark fw-bold' >{column.title}   <soan className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</soan></Title>
                                 {column.items?.map((item, index) => (
                                     <TaskCard
                                         key={item.id}
