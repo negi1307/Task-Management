@@ -520,8 +520,8 @@ table.table-striped tbody tr:nth-of-type(odd)>* {
 }
 
 .page-title {
-    background: #37216c !important;
-    font-size: 13px  !important;
+    /* background: #37216c !important; */
+    font-size: 11px  !important;
     margin-top: 13px !important;
 }
 .css-1xb58ew {
@@ -531,7 +531,19 @@ table.table-striped tbody tr:nth-of-type(odd)>* {
 .css-1com30x {
     min-width: 347px !important;
 }
+.small-width {
+    width: 10px !important;
+    /* background-color: red !important; */
+}
+.task-title{
+    /* background-color: red; */
+    padding: 7px 30px;
+    color: rgb(88, 88, 226);
+    font-size: 11px !important;
+    /* font-family: ' sans-serif'; */
+    font-weight: bold !important;
 
+}
 /* .css-1xb58ew {
     overflow: hidden !important;
 } */
