@@ -50,15 +50,23 @@ const createtask = async (req, res) => {
 // Get All tasks Of a Sprint with filters
 const getTasks = async (req, res) => {
   try {
-    const { sprintId, status, activeStatus, skip } = req.query;
+    const { sprintId, status, activeStatus, skip, assigneeId } = req.query;
     const pageSize = 10;
     const now = new Date()
-    const totalCount = await taskModel.countDocuments({ sprintId: sprintId, status: status, activeStatus: activeStatus })
+    const conditionMatch = {
+      sprintId: new mongoose.Types.ObjectId(sprintId), status: parseInt(status), activeStatus: JSON.parse(activeStatus),
+    }
+    if (assigneeId) {
+      conditionMatch.assigneeId = new mongoose.Types.ObjectId(assigneeId)
+    }
+    const totalCount = await taskModel.countDocuments(conditionMatch)
     const tasks = await taskModel.aggregate([
       {
-        $match: {
-          sprintId: new mongoose.Types.ObjectId(sprintId), status: parseInt(status), activeStatus: JSON.parse(activeStatus)
-        }
+        $match: conditionMatch
+        // $match: {
+        //   sprintId: new mongoose.Types.ObjectId(sprintId), status: parseInt(status), activeStatus: JSON.parse(activeStatus),
+        //   assigneeId: new mongoose.Types.ObjectId(assigneeId)
+        // }
       },
       {
         $lookup: {
@@ -273,7 +281,7 @@ const updateTaskStatus = async (req, res) => {
             }
           }
         }
-       
+
         await userHistory(req, "Updated Task");
         return res.status(200).json({ status: "200", message: "Tasks updated successfully" });
       }
@@ -811,6 +819,8 @@ const projectUserList = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
   createtask,
   getTasks,
@@ -823,5 +833,5 @@ module.exports = {
   getTasksCount,
   getTasksWeekCount,
   getUserAssignments,
-  projectUserList
+  projectUserList,
 };
