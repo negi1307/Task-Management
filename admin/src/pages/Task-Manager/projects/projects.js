@@ -168,7 +168,7 @@ const Projects = () => {
             <div>
                 <Card>
                     <Card.Body>
-                        <HeaderMain />
+                        {/* <HeaderMain /> */}
                         <div className="row mx-auto">
                             <div className="row d-flex align-items-center">
                                 <div className={`col-auto  cp ${projectStatus == 'Ongoing' ? 'Active_data' : 'InActive_data'}`}>

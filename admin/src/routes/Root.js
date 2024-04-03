@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 const Root = () => {
 
     const getRootUrl = () => {
-        return "dashboard/projects"
+        return "dashboard/adminsummary"
     }
     const url = getRootUrl();
     return <Navigate to={`/${url}`} />;

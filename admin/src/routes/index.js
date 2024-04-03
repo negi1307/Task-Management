@@ -30,6 +30,7 @@ const ForgetPassword2 = React.lazy(() => import('../pages/account2/ForgetPasswor
 const LockScreen2 = React.lazy(() => import('../pages/account2/LockScreen2'));
 const UserNotFound = React.lazy(() => import('../components/UserNotFound'));
 // dashboard
+const AdminDashboard = React.lazy(() => import('../pages/Task-Manager/Summary/adminSummary'));
 const Projects = React.lazy(() => import('../pages/Task-Manager/projects/projects'));
 const AnalyticsDashboard = React.lazy(() => import('../pages/dashboard/Analytics'));
 const EcommerceDashboard = React.lazy(() => import('../pages/dashboard/Ecommerce'));
@@ -288,6 +289,14 @@ const AllRoutes = () => {
                             path: 'e-wallet',
                             element: <LoadComponent component={EWalletDashboard} />,
                         },
+
+                        //////////ADMIN DASHBOARD//////////////////////
+                        {
+                            path: 'adminsummary',
+                            element: <LoadComponent component={AdminDashboard} />,
+                        },
+
+                        /////////////////////////////////
                         {
                             path: 'projects',
                             element: <LoadComponent component={Projects} />,

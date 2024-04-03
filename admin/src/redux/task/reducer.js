@@ -414,7 +414,7 @@ export const getBugsReducer = (state = GET_BUGS_INITIAL_STATE, action) => {
     }
 };
 export const getSubTaskReducer = (state = GET_SUBTASK, action) => {
-    console.log(GET_SUBTASK,'GETSUBTASK')
+    // console.log(GET_SUBTASK,'GETSUBTASK')
     switch (action.type) {
         case TASK_TYPES.GET_SUBTASK_LOADING:
             return {
@@ -437,7 +437,7 @@ export const getSubTaskReducer = (state = GET_SUBTASK, action) => {
                 status: !200,
                 loading: false,
                 message: action?.payload,
-            };;
+            };
         default:
             return { ...state };
     }
@@ -579,7 +579,7 @@ export const getReporterReducer = (state = REPORTER_INITIAL_STATE, action) => {
 };
 
 export const getHistoryReducer = (state = GET_HISTORY, action) => {
-    console.log(GET_HISTORY,'get')
+    // console.log(GET_HISTORY,'get')
     switch (action.type) {
         case TASK_TYPES.GET_HISTORY_LOADING:
             return {
