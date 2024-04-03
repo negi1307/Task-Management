@@ -59,7 +59,7 @@ const getTasks = async (req, res) => {
     if (assigneeId) {
       conditionMatch.assigneeId = new mongoose.Types.ObjectId(assigneeId)
     }
-    const totalCount = await taskModel.countDocuments({ sprintId: sprintId, status: status, activeStatus: activeStatus, assigneeId: assigneeId })
+    const totalCount = await taskModel.countDocuments(conditionMatch)
     const tasks = await taskModel.aggregate([
       {
         $match: conditionMatch
