@@ -135,20 +135,20 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
             <Draggable key={item.id} draggableId={item?.id} index={index}>
                 {(provided) => (
                     <div ref={provided?.innerRef} {...provided?.draggableProps} {...provided?.dragHandleProps}>
-                        <TaskInformation className="py-2 pe-0 shadow-lg p-3  rounded-4 ">
+                        <TaskInformation className="py-2 mt-2 m-0 pe-1 shadow-lg p-3 h-75  rounded-4 ">
                             <div className="row ">
-                                <div className="col-12 ">
+                                <div className="col-12 m-0  ">
                                     <div className="row">
-                                        <div className="col-9 d-flex align-items-center">
-                                            <a className='fw-bold py-1 fw-bold text-truncate rounded-pill   task-title' style={{ backgroundColor: 'lightblue', color: 'oceanblue' }}
+                                        <div className="col-9 mt-1 m-0 d-flex align-items-center">
+                                            <a className='fw-bold py-1 m-0 fw-bold text-truncate rounded-pill   task-title' style={{ backgroundColor: 'lightblue', color: 'oceanblue' }}
                                                 href="#"
                                                 onClick={() => {
                                                     handleDetailPage(item);
-                                                }}>
-                                                {item.summary}
+                                                }}title={item?.summary}>
+                                                {item?.summary ? item.summary.slice(0, 10) : ''}
                                             </a>
                                         </div>
-                                        <div className="col-3 text-center p-1">
+                                        <div className="col-3 text-center p-1 mt-1">
                                             <div className="dropdown">
                                                 <button className="btn btn-white btn-outline-white" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                                     <i className="bi bi-three-dots-vertical fs-5 fw-bold text-dark"></i>
@@ -247,19 +247,20 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                         </div> */}
                                     </div>
                                 </div>
-                                <div className="col-12 py-2 m-0">
-                                    <p className="m-0 p-0 d-flex " >
-                                        <div className='task-title text-dark p-0' title={item?.description}
-                                        >Decription : {item?.description}</div>
+                                <div className="col-12">
+    <p className="m-0 py-1 p-0 d-flex">
+        <div className='task-title text-dark p-0' title={item?.description}>
+            Description: {item?.description ? item.description.slice(0, 13) : ''}
+        </div>
+    </p>
+</div>
 
-                                    </p>
-                                </div>
                                 <div className='col-12 m-0'>
-                                    <p className={`task-title text-dark p-0 ${backgroundColorClass}`}>
+                                    <p className={`task-title text-dark p-0 m-0 ${backgroundColorClass}`}>
                                         Priority : {priorityWithLetter}
                                     </p>
                                 </div>
-                                <div className="col-12 m-0">
+                                <div className="col-12  ">
                                     <div className="row mb-1">
                                         <div className="col-6 d-flex align-items-center">
                                             <div className="secondary-details d-flex align-items-center">
