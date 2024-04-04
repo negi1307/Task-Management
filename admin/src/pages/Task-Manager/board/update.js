@@ -19,10 +19,19 @@ const UpdateTask = ({ modal, closeModal, editData, projectId, milestoneId, colum
 
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
-    // disable previous date
+    const [filePreview, setFilePreview] = useState(null);
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFilePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
     const today = new Date();
-    // console.log(today, 'today');
-    // end date
     const handleStartDate = (date) => {
         setStartDate(date);
     };
@@ -398,63 +407,18 @@ const UpdateTask = ({ modal, closeModal, editData, projectId, milestoneId, colum
                                                             className="align_icon_dowl">
                                                             <i className="dripicons-download download_color"></i>
                                                         </a>
-                                                        {imageShow ? (
-                                                            <>
-                                                                {editData?.attachment?.length ? (
-                                                                    <Col className="d-flex justify-content-center">
-                                                                        <div style={{ width: '50%', position: 'relative' }}>
-                                                                            <div className="img_div">
-                                                                                {/* <img
-                                                                        className=" all_logo_img w-100"
-                                                                        src={editData?.attachment}
-                                                                    /> */}
-                                                                                <img
-                                                                                    className=" all_logo_img w-100"
-                                                                                    src={
-                                                                                        editData?.attachmentType !==
-                                                                                            'application/pdf'
-                                                                                            ? editData?.attachment
-                                                                                            : pdfImage
-                                                                                    }
-                                                                                />
-                                                                            </div>
-                                                                            <div
-                                                                                className="cross_div"
-                                                                                style={{
-                                                                                    position: 'absolute',
-                                                                                    rigth: '0',
-                                                                                }}>
-                                                                                <i
-                                                                                    onClick={handelimageclose}
-                                                                                    className=" dripicons-cross"></i>
-                                                                            </div>
-                                                                        </div>
-                                                                    </Col>
-                                                                ) : (
-                                                                    <div style={{ width: '15%', position: 'relative' }}>
-                                                                        <div className="img_div">
-                                                                            <img className="all_logo_img" src={noimage} />
-                                                                        </div>
-                                                                        <div
-                                                                            className="cross_div"
-                                                                            style={{ position: 'absolute', rigth: '0' }}>
-                                                                            <i
-                                                                                onClick={handelimageclose}
-                                                                                className=" dripicons-cross"></i>
-                                                                        </div>
-                                                                    </div>
-                                                                )}
-                                                            </>
-                                                        ) : (
-                                                            <Form.Control
-                                                                type="file"
-                                                                // accept="image/png, image/gif, image/jpeg"
-                                                                onChange={(e) => {
-                                                                    handleImageChange(e);
-                                                                }}
-                                                            />
-                                                        )}
+                                                        <Form.Control
+                                                            style={{ border: '1px solid #a6b3c3' }}
+                                                            type='file'
+                                                            onChange={handleFileChange}
+                                                        />
                                                     </Form.Group>
+                                                    {filePreview && (
+                                                        <div>
+                                                            <p>Preview:</p>
+                                                            <img src={filePreview} alt="File Preview" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+                                                        </div>
+                                                    )}
                                                 </Col>
                                             </Row>
                                         </Row>

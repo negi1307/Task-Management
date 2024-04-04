@@ -2,15 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getPriorityGraphAction, getTaskSummmaryDetail, getTaskWeekCountAction } from '../../../redux/Summary/action';
+import { getHistoryAction } from '../../../redux/task/action';
+
 import Chart from 'react-apexcharts';
 import { ProgressBar } from 'react-bootstrap';
 import { Bar } from 'react-chartjs-2';
+import { PieChart } from '@mui/x-charts/PieChart';
 
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const Summary = () => {
     const { projectId, milestoneId, spriteId } = useParams();
     // console.log(projectId, milestoneId, spriteId); // Check if URL parameters are correct
-
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     // console.log(store); // Check store to see if data is being fetched
@@ -18,7 +21,8 @@ const Summary = () => {
     const successHandle = store?.getTaskSummaryReducer;
     const BarGraphHandel = store?.getPriorityGraphReducer;
     const lastWeekCount = store?.getTaskWeekCountReducer?.data?.response;
-
+    const [taskCount, setTaskCount] = useState(null);
+    const [historyResponse, setHistoryResponse] = useState(null);
 
     // console.log(lastWeekCount); // Check if data is being fetched
     const [data, setData] = useState([]);
@@ -28,26 +32,31 @@ const Summary = () => {
             setData(successHandle?.data?.response);
         }
     }, [successHandle]);
+    useEffect(() => {
+        const taskTotalCount = store?.getTaskSummaryReducer?.data.response;
+        if (taskTotalCount) {
+            setTaskCount(taskTotalCount);
+        }
+    }, [store?.getTaskSummaryReducer?.data.response]);
+
+
+    useEffect(() => {
+        const historyData = store?.getHistoryReducer?.data?.response;
+        if (historyData) {
+            setHistoryResponse(historyData);
+        }
+    }, [store?.getHistoryReducer?.data?.response]);
 
     const priorityData = store?.getPriorityGraphReducer?.data?.response;
 
+
     useEffect(() => {
-        dispatch(getTaskSummmaryDetail());
-        dispatch(getPriorityGraphAction());
-        dispatch(getTaskWeekCountAction());
+        dispatch(getTaskWeekCountAction({ sprintId: spriteId }));
+        dispatch(getTaskSummmaryDetail({ sprintId: spriteId }));
+        dispatch(getHistoryAction({ sprintId: spriteId }));
+        dispatch(getPriorityGraphAction({ sprintId: spriteId }));
+        // dispatch(getAllTaskCountAction());
     }, [dispatch]);
-
-
-    // useEffect(() => {
-    //     if (store?.getPriorityGraphReducer?.data) {
-    //         const priorityData = store?.getPriorityGraphReducer?.data?.response;
-    //         setBarGraphData(priorityData)
-    //     }
-    // }, [store?.getPriorityGraphReducer?.data]);
-
-    console.log(priorityData, 'join');
-    // const firstThreeNames = priorityData.slice(0, 3).map(item => item.name).join(', ');
-    // console.log(firstThreeNames);
 
     const apexDonutOpts = {
         chart: {
@@ -109,307 +118,150 @@ const Summary = () => {
 
     return (
         <>
-            <div className="all_bg add_height_task">
-                <div className="container">
-                    <div className="row">
-                        <div className="col  border_clr  m-2 rounded-4 bg-white">
-                            <div className="d-flex  p-4  px-4 align-items-center jusstify-content-center">
-                                <div className="bg_clr  p-3 rounded-circle text-center ">
-                                    <i className="bi bi-check-lg w-size" />
-                                </div>
-                                <div className="mx-3 ">
-                                    <b>
-                                        <h5 className="mb-0 mt-1 text-secondary">
-                                            {lastWeekCount?.doneCount ? lastWeekCount?.doneCount : '0'} task done
-                                        </h5>
-                                    </b>
-                                    <b>
-                                        <p className="m-0 text-secondary">in the last 7 days</p>
-                                    </b>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col  border_clr  m-2 rounded-4 bg-white">
-                            <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
-                                <div className="bg_clr  p-3 rounded-circle text-center ">
-                                    <i className="bi bi-pencil-fill w-size" />
-                                </div>
-                                <div className="mx-3 ">
-                                    <b>
-                                        <h5 className="mb-0 mt-1 text-secondary">
-                                            {lastWeekCount?.updatedCount ? lastWeekCount?.updatedCount : '0'} task
-                                            updated
-                                        </h5>
-                                    </b>
-                                    <b>
-                                        <p className="m-0 text-secondary">in the last 7 days</p>
-                                    </b>
+            <div className="pt-2">
+                <div className="all_bg add_height_task">
+                    <div className="container-fluid">
+                        <div className="row">
+                            <div className="col  border_clr  m-2 rounded-4 bg-white">
+                                <div className="d-flex  p-4  px-4 align-items-center jusstify-content-center">
+                                    <div className="bg_clr  p-3 rounded-circle text-center ">
+                                        <i className="bi bi-check-lg w-size" />
+                                    </div>
+                                    <div className="mx-3 ">
+                                        <b>
+                                            <h5 className="mb-0 mt-1 text-secondary">
+                                                {lastWeekCount?.doneCount ? lastWeekCount?.doneCount : '0'} task done
+                                            </h5>
+                                        </b>
+                                        <b>
+                                            <p className="m-0 text-secondary">in the last 7 days</p>
+                                        </b>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="col  border_clr  m-2 rounded-4 bg-white">
-                            <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
-                                <div className="bg_clr  p-3 rounded-circle text-center ">
-                                    <i className="bi bi-plus-lg w-size " />
-                                </div>
-                                <div className="mx-3 ">
-                                    <b>
-                                        <h5 className="mb-0 mt-1 text-secondary">
-                                            {lastWeekCount?.createdCount ? lastWeekCount?.createdCount : '0'} task Add
-                                        </h5>
-                                    </b>
-                                    <b>
-                                        <p className="m-0 text-secondary">in the last 7 days</p>
-                                    </b>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col  border_clr  m-2 rounded-4 bg-white">
-                            <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
-                                <div className="bg_clr  p-3 rounded-circle text-center ">
-                                    <i className="bi bi-calendar-week w-size" />
-                                </div>
-                                <div className="mx-3 ">
-                                    <b>
-                                        <h5 className="mb-0 mt-1 text-secondary">
-                                            {lastWeekCount?.dueCount ? lastWeekCount?.dueCount : '0'} task due
-                                        </h5>
-                                    </b>
-                                    <b>
-                                        <p className="m-0 text-secondary">in the last 7 days</p>
-                                    </b>
+                            <div className="col  border_clr  m-2 rounded-4 bg-white">
+                                <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
+                                    <div className="bg_clr  p-3 rounded-circle text-center ">
+                                        <i className="bi bi-pencil-fill w-size" />
+                                    </div>
+                                    <div className="mx-3 ">
+                                        <b>
+                                            <h5 className="mb-0 mt-1 text-secondary">
+                                                {lastWeekCount?.updatedCount ? lastWeekCount?.updatedCount : '0'} task
+                                                updated
+                                            </h5>
+                                        </b>
+                                        <b>
+                                            <p className="m-0 text-secondary">in the last 7 days</p>
+                                        </b>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col border_clr  m-2 rounded-4 bg-white">
-                            <div className="p-4 ">
-                                <div className="col-10">
-                                    <h5 className="mb-3">
-                                        <b>States overview</b>
-                                    </h5>
+                            <div className="col  border_clr  m-2 rounded-4 bg-white">
+                                <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
+                                    <div className="bg_clr  p-3 rounded-circle text-center ">
+                                        <i className="bi bi-plus-lg w-size " />
+                                    </div>
+                                    <div className="mx-3 ">
+                                        <b>
+                                            <h5 className="mb-0 mt-1 text-secondary">
+                                                {lastWeekCount?.createdCount ? lastWeekCount?.createdCount : '0'} task Add
+                                            </h5>
+                                        </b>
+                                        <b>
+                                            <p className="m-0 text-secondary">in the last 7 days</p>
+                                        </b>
+                                    </div>
                                 </div>
-                                <div className="chart_div ">
-                                    <div className="donut-chart">
-                                        <Chart
-                                            options={apexDonutOpts}
-                                            series={data?.map((ele, i) => {
-                                                return ele.count;
-                                            })}
-                                            type="donut"
-                                            height={222}
-                                            className="apex-charts mb-4 mt-4"
-                                        />
-
-                                        <ul className="legend mx-4">
-                                            <li className='fs-6 fw-bold text-black'>
-                                                <span className="color rounded-pill" style={{ backgroundColor: '#727cf5' }} />
-                                                To Do
-                                            </li>
-                                            <li className='fs-6 fw-bold text-black'>
-                                                <span className="color rounded-pill" style={{ backgroundColor: '#0acf97' }} /> In
-                                                Progress
-                                            </li>
-                                            <li className='fs-6 fw-bold text-black'>
-                                                <span className="color rounded-pill" style={{ backgroundColor: '#FF00FF' }} />
-                                                Testing
-                                            </li>
-                                            <li className='fs-6 fw-bold text-black'>
-                                                <span className="color rounded-pill" style={{ backgroundColor: '#fa5c7c' }} />
-                                                Hold
-                                            </li>
-                                            <li className='fs-6 fw-bold text-black'>
-                                                <span className="color rounded-pill" style={{ backgroundColor: '#ffbc00' }} />
-                                                Done
-                                            </li>
-                                        </ul>
-                                        <ul>
-                                            {data?.map((ele, i) => {
-                                                return <li className="mb-2">{ele.count}</li>;
-                                            })}
-                                        </ul>
+                            </div>
+                            <div className="col  border_clr  m-2 rounded-4 bg-white">
+                                <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
+                                    <div className="bg_clr  p-3 rounded-circle text-center ">
+                                        <i className="bi bi-calendar-week w-size" />
+                                    </div>
+                                    <div className="mx-3 ">
+                                        <b>
+                                            <h5 className="mb-0 mt-1 text-secondary">
+                                                {lastWeekCount?.dueCount ? lastWeekCount?.dueCount : '0'} task due
+                                            </h5>
+                                        </b>
+                                        <b>
+                                            <p className="m-0 text-secondary">in the last 7 days</p>
+                                        </b>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="col border_clr  m-2 rounded-4 bg-white">
-                            <div className="p-4 ">
-                                <div className="col-10">
-                                    <h5 className="mb-3">
-                                        <b>Recent activity</b>
-                                    </h5>
-                                    <h6>Stay up to date with what"s happening across the project.</h6>
+                        {/* <div className="row"> */}
+                        <div className='row p-1'>
+                            <div className='col-6 my-2 px-2'>
+                                <div className='row border_clr  px-2  bg-white rounded-4 h-100'>
+                                    <div className='col-12'>
+                                        <h5 className="mb-3">
+                                            <b>States overview</b>
+                                        </h5>
+                                    </div>
+                                    <div className='col-12'>
+                                        {taskCount !== null && (
+                                            <PieChart
+                                                series={[
+                                                    {
+                                                        data: taskCount.map((item, index) => ({
+                                                            id: index,
+                                                            value: item.taskCount,
+                                                            label: item.name,
+                                                        })),
+                                                    },
+                                                ]}
+                                                width={500}
+                                                height={300}
+                                                colors={['#727cf5', '#0acf97', '#ff00ff', '#fa5c7c', '#ffbc00']}
+                                            />
+                                        )}
+
+                                    </div>
                                 </div>
-                                <div className="scrollable-content">
-                                    <div className="col-10 mt-4">
-                                        <div className="sticky-top bg-white">
-                                            <p className="text-secondary day_date ">
-                                                <b> WEDNESDAY,11 OCTOBER 2023 </b>
-                                            </p>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
-                                                </div>
+                            </div>
+                            {/* </div> */}
+                            <div div className="col-6  my-2 px-2">
+                                <div className="p-4 bg-white border_clr rounded-4">
+                                    <div className="col-10">
+                                        <h5 className="mb-3">
+                                            <b>Recent activity</b>
+                                        </h5>
+                                        <h6>Stay up to date with what"s happening across the project.</h6>
+                                    </div>
+                                    <div className="scrollable-content">
+
+                                        {historyResponse && historyResponse.map((item, index) => (
+                                            <div key={index} className='d-flex gap-2 align-items-center lh-lg'>
+                                                <OverlayTrigger
+                                                    placement="top"
+                                                    overlay={
+                                                        <Tooltip id="tooltip1">
+                                                            {item?.userId?.firstName}
+                                                            {item?.userId?.lastName}
+                                                        </Tooltip>
+                                                    }>
+                                                    <div className="mt-1 cp">
+                                                        <span
+                                                            style={{
+                                                                backgroundColor: '#605e5a',
+                                                                borderRadius: '100%',
+                                                                padding: '5px 6px',
+
+                                                                color: 'white',
+                                                                fontWeight: '700',
+                                                            }}>
+                                                            {item?.userId?.firstName.charAt(0).toUpperCase()}
+                                                            {item?.userId?.lastName.charAt(0).toUpperCase()}
+                                                        </span>
+                                                    </div>
+                                                </OverlayTrigger>
+                                                <span>{item?.userId?.firstName + ' ' + item?.userId?.lastName + ' ' + item?.userActivity + ' on ' + item?.createdAt}</span>
+
                                             </div>
-                                            <div className="col-10">
-                                                <a href className="text-decoration-none mx-1">
-                                                    Nisha Negi
-                                                </a>
-                                                changed the status to Done on{' '}
-                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                                <a href className="text-decoration-none">
-                                                    TAS-1 - No text only demo;
-                                                </a>
-                                                <p className="text-secondary">8 days ago</p>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
-                                                </div>
-                                            </div>
-                                            <div className="col-10">
-                                                <a href className="text-decoration-none mx-1">
-                                                    Nisha Negi
-                                                </a>
-                                                changed the status to Done on{' '}
-                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                                <a href className="text-decoration-none">
-                                                    TAS-1 - No text only demo;
-                                                </a>
-                                                <p className="text-secondary">8 days ago</p>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
-                                                </div>
-                                            </div>
-                                            <div className="col-10">
-                                                <a href className="text-decoration-none mx-1">
-                                                    Nisha Negi
-                                                </a>
-                                                changed the status to Done on{' '}
-                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                                <a href className="text-decoration-none">
-                                                    TAS-1 - No text only demo;
-                                                </a>
-                                                <p className="text-secondary">8 days ago</p>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
-                                                </div>
-                                            </div>
-                                            <div className="col-10">
-                                                <a href className="text-decoration-none mx-1">
-                                                    Nisha Negi
-                                                </a>
-                                                changed the status to Done on{' '}
-                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                                <a href className="text-decoration-none">
-                                                    TAS-1 - No text only demo;
-                                                </a>
-                                                <p className="text-secondary">8 days ago</p>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
-                                                </div>
-                                            </div>
-                                            <div className="col-10">
-                                                <a href className="text-decoration-none mx-1">
-                                                    Nisha Negi
-                                                </a>
-                                                changed the status to Done on{' '}
-                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                                <a href className="text-decoration-none">
-                                                    TAS-1 - No text only demo;
-                                                </a>
-                                                <p className="text-secondary">8 days ago</p>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
-                                                </div>
-                                            </div>
-                                            <div className="col-10">
-                                                <a href className="text-decoration-none mx-1">
-                                                    Nisha Negi
-                                                </a>
-                                                changed the status to Done on{' '}
-                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                                <a href className="text-decoration-none">
-                                                    TAS-1 - No text only demo;
-                                                </a>
-                                                <p className="text-secondary">8 days ago</p>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
-                                                </div>
-                                            </div>
-                                            <div className="col-10">
-                                                <a href className="text-decoration-none mx-1">
-                                                    Nisha Negi
-                                                </a>
-                                                changed the status to Done on{' '}
-                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                                <a href className="text-decoration-none">
-                                                    TAS-1 - No text only demo;
-                                                </a>
-                                                <p className="text-secondary">8 days ago</p>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
-                                                </div>
-                                            </div>
-                                            <div className="col-10">
-                                                <a href className="text-decoration-none mx-1">
-                                                    Nisha Negi
-                                                </a>
-                                                changed the status to Done on{' '}
-                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                                <a href className="text-decoration-none">
-                                                    TAS-1 - No text only demo;
-                                                </a>
-                                                <p className="text-secondary">8 days ago</p>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-2">
-                                                <div className="bg-dark rounded-circle text-center ">
-                                                    <h6 className="text-white mb-0 p-2 py-3">PP</h6>
-                                                </div>
-                                            </div>
-                                            <div className="col-10">
-                                                <a href className="text-decoration-none mx-1">
-                                                    Nisha Negi
-                                                </a>
-                                                changed the status to Done on{' '}
-                                                <i className="bi bi-check-square-fill" style={{ color: '#59d3ec' }} />{' '}
-                                                <a href className="text-decoration-none">
-                                                    TAS-1 - No text only demo;
-                                                </a>
-                                                <p className="text-secondary">8 days ago</p>
-                                            </div>
-                                        </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
@@ -484,8 +336,8 @@ const Summary = () => {
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </div >
+            </div >
         </>
     );
 };

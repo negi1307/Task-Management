@@ -28,13 +28,26 @@ const TaskList = () => {
     const [statusModal, setStatusModal] = useState(false);
     const [activeStatus, setActiveStatus] = useState(true);
     const [taskStatus, settaskStatus] = useState(1);
+    const [assigneeFilter, setAssigneeFilter] = useState(); //
     const getSingleSprintTask = store?.getSigleSprintTask?.data?.response;
     const deletehandle = store?.TaskStatusReducer?.data;
     const loaderhandel = store?.getSigleSprintTask;
-    console.log(getSingleSprintTask, '11111111111111111111111111111111111111111111111111111111111111111111111111')
+    // console.log(getSingleSprintTask, '11111111111111111111111111111111111111111111111111111111111111111111111111')
     const handleCreate = () => {
         SetOpenModal(true);
     };
+    const handleAssigneeFilterChange = (e) => {
+        const selectedAssigneeId = e.target.value;
+        dispatch(getsingleSprintTask({
+            id: spriteId,
+            activeStatus: true,
+            skip: 1,
+            taskStatus: getSingleSprintTask[0]?.status,
+            projectId: projectId,
+            milestoneId: milestoneId,
+            assigneeId: selectedAssigneeId,
+        }));
+    }
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
         dispatch(getsingleSprintTask({ id: spriteId, taskStatus: taskStatus, activeStatus: true, skip: skip, projectId: projectId, milestoneId: milestoneId }));
@@ -56,7 +69,7 @@ const TaskList = () => {
                 skip: 1,
                 taskStatus: taskStatus,
                 projectId: projectId,
-                milestoneId: milestoneId
+                milestoneId: milestoneId,
 
             };
             dispatch(getsingleSprintTask(data));
@@ -149,6 +162,7 @@ const TaskList = () => {
             dispatch(getsingleSprintTask({ id: spriteId, activeStatus: true, skip: 1, taskStatus: 5, projectId: projectId, milestoneId: milestoneId }));
         }
     };
+
     return (
         <>
             <div className="row mx-auto">
@@ -216,42 +230,54 @@ const TaskList = () => {
                         <Row>
                             <Col className="" lg={12}>
                                 <Table striped>
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Description</th>
-                                            <th>Summary</th>
-                                            <th>Assignee</th>
-                                            <th>Reporter</th>
-                                            <th>Priority</th>
-                                            <th> Start Date</th>
-                                            <th> End Date</th>
-                                            <th>Status</th>
+                                    <thead style={{ fontSize: '12px' }}>
+                                        <tr className='text-nowrap'>
+                                            <th className='text-start fw-bold'>#</th>
+                                            <th className='text-start fw-bold'>Description</th>
+                                            <th className='text-start fw-bold'>Summary</th>
+                                            <th className='text-start'>
+                                                <select
+                                                    name="assigneeFilter"
+                                                    className="form-select list-table-filter border-0 p-0 text-black fw-bold w-75"
+                                                    onChange={handleAssigneeFilterChange}
+                                                    style={{ fontSize: '12px' }}
+                                                >
+                                                    <option value="">Assignee</option>
+                                                    {store?.getAllUsers?.data?.response?.map((ele, ind) => (
+                                                        <option key={ind} value={ele?._id}>
+                                                            {ele?.firstName} {ele?.lastName}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </th>
+                                            <th className='text-start fw-bold'>Reporter</th>
+                                            <th className='text-start fw-bold'>Priority</th>
+                                            <th className='d-flex text-black fw-bold justify-content-center'>
+                                                Start Date
+                                            </th>
+                                            <th className='text-start fw-bold'> End Date</th>
+                                            <th className='text-start fw-bold'>Status</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody className='fw-medium' style={{ fontSize: '12px' }}>
                                         {getSingleSprintTask?.map((item, index) => (
 
-                                            <tr>
-                                                <td>{(skip - 1) * 10 + index + 1}</td>
-                                                <td >{item?.summary}</td>
-                                                <td>
-                                                    {' '}
-                                                    <div
-                                                        dangerouslySetInnerHTML={{
-                                                            __html: item?.description,
-                                                        }}
-                                                    />
+                                            <tr className='text-nowrap'>
+                                                <td className='text-start'>{(skip - 1) * 10 + index + 1}</td>
+                                                <td className='text-start'>{item?.summary.split(' ').slice(0, 2).join(' ')}{item?.summary.split(' ').length > 2 ? ' ...' : ''}</td>
+                                                <td className='text-start' style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                    {item?.description.split(' ').slice(0, 2).join(' ')}{item?.description.split(' ').length > 2 ? ' ...' : ''}
                                                 </td>
 
-                                                <td>
+
+                                                <td className='text-start'>
                                                     {item?.assigneeInfo?.firstName}{' '}
                                                     {item?.assigneeInfo?.lastName}
                                                 </td>
-                                                <td>{item?.reporterInfo?.firstName} {''}
+                                                <td className='text-start'>{item?.reporterInfo?.firstName} {''}
                                                     {item?.reporterInfo?.lastName}
                                                 </td>
-                                                <td>
+                                                <td className='text-start'>
                                                     {item?.priority == 'Critical'
                                                         ? 'Critical'
                                                         : '' || item?.priority == 'High'
@@ -262,16 +288,16 @@ const TaskList = () => {
                                                                     ? 'Low'
                                                                     : ''}
                                                 </td>
-                                                <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
-                                                <td>{moment(item?.dueDate).format("DD/MM/YYYY")}</td>
-                                                <td>
+                                                <td className='text-center'> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
+                                                <td className='text-start'>{moment(item?.dueDate).format("DD/MM/YYYY")}</td>
+                                                <td className='text-start'>
                                                     <Form.Check
                                                         type="switch"
                                                         checked={item?.activeStatus}
                                                         onChange={(e) => handleStatusChange(e, item)}
                                                     />
                                                 </td>
-                                                <td>
+                                                <td className='text-start'>
                                                     {/* <Row>
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0  ">
@@ -310,8 +336,6 @@ const TaskList = () => {
             )}
 
             <Create modal={openModal} CloseModal={CloseModal} />
-            {/* {/ <Update modal={editopenModal} CloseModal={CloseUpdateModal} editData={editData} /> /}
-            {/ delete modal /} */}
             <Modal show={statusModal} onHide={() => setStatusModal(false)}>
                 <Modal.Body>
                     Are you sure you want to {!checkedStatus ? 'Inactivate' : 'activate'} this Task ?

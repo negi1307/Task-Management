@@ -130,6 +130,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
         setIsPlaying(prevState => !prevState);
     };
 
+
     return (
         <>
             <Draggable key={item.id} draggableId={item?.id} index={index}>
@@ -316,13 +317,13 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </TaskInformation>
+                            </div >
+                        </TaskInformation >
                     </div >
                 )}
             </Draggable >
             {/* delete modal */}
-            <Modal show={deleteModal} onHide={() => setDeleteModal(false)}>
+            <Modal Modal show={deleteModal} onHide={() => setDeleteModal(false)}>
                 <Modal.Body>Are you sure you want to delete this Task ?</Modal.Body>
                 <Modal.Footer>
                     <Button
@@ -336,7 +337,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                         Yes
                     </Button>
                 </Modal.Footer>
-            </Modal >
+            </Modal>
 
             <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} columns={columns} projectId={projectId} mileStoneId={mileStoneId} sprintId={sprintId} />
             <TaskDetailPage modal={openDetailPage} editData={detailData} closeModal={closeDetailPage} taskId={item._id} />

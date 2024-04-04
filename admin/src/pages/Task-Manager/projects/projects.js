@@ -12,6 +12,9 @@ import moment from 'moment';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import HeaderMain from '../header/HeaderMain';
+import Pagesaddtask from '../../../layouts/AllPagesRightbar';
+import { getAssignUserAction } from '../../../redux/task/action';
+import { getAllTask, getAllRoles } from '../../../redux/actions'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Projects = () => {
@@ -31,6 +34,21 @@ const Projects = () => {
     const [checkedData, setCheckedData] = useState();
     const [checkedStatus, setCheckedStatus] = useState();
     const [statusModal, setStatusModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [formSubmitted, setFormSubmitted] = useState(false);
+
+
+    // const handleFormSubmit = () => {
+    //     dispatch(getAllTask());
+    //     dispatch(getAssignUserAction());
+    //     dispatch(getAllRoles())
+    //     setFormSubmitted(true);
+    // };
+
+    const closeaddModal = () => {
+        // getalltasks();
+    }
+
     const handeldelete = (ele) => {
         setdeleteId(ele?._id);
         setDeleteModal(true);
@@ -163,6 +181,11 @@ const Projects = () => {
         }
     };
 
+    // const handeladdtask = () => {
+    //     setShowModal(!showModal);
+    //     dispatch(getAllProjects({ status: 1, skip: 1, projectStatus: 'Ongoing' }));
+    // }
+
     return (
         <>
             <div>
@@ -211,7 +234,7 @@ const Projects = () => {
                                 <h4 className="header-title heading_data"> Projects</h4>
                             </div>
                             {status == 1 ? (
-                                <div className="col-4 d-flex align-items-center justify-content-end pe-0">
+                                <div className="col-4 d-flex align-items-center justify-content-end gap-3 pe-0">
                                     <Button
                                         className="web_button"
                                         variant="info"
@@ -220,6 +243,27 @@ const Projects = () => {
                                         }}>
                                         Add Projects
                                     </Button>
+                                    <button
+                                        type="button"
+                                        className="mybutton btn p-1 fw-bold py-1  web_button"
+                                        onClick={() => {
+                                            // console.log('button click');
+                                            // handeladdtask()
+                                            setShowModal(!showModal);
+                                            // dispatchActions();
+                                            // dispatch(getAllTask({ projectId: projectId, mileStoneId: milestoneId, sprintId: spriteId }))
+
+                                        }}>
+                                        Add Task
+                                    </button>
+                                    <Pagesaddtask
+                                        className="d-none"
+                                        // onFormSubmit={handleFormSubmit}
+                                        showModal={showModal}
+                                        // columns={columns}
+                                        closeModal={closeaddModal}
+                                        setShowModal={setShowModal}
+                                    />
                                 </div>
                             ) : (
                                 ''

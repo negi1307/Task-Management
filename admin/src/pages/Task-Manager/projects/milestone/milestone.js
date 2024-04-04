@@ -34,7 +34,7 @@ const Milestone = () => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [editData, setEditData] = useState();
     const deletehandle = store?.deleteMileStone?.data;
-    console.log(GetSinglemilstonesData, "GetSinglemilstonesDataGetSinglemilstonesDataGetSinglemilstonesData")
+    // console.log(GetSinglemilstonesData, "GetSinglemilstonesDataGetSinglemilstonesDataGetSinglemilstonesData")
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);

@@ -276,28 +276,6 @@ const Boards = () => {
     // }
     return (
         <>
-            {/* <div className="project_detail"> */}
-            {/* <div className="project_name"> */}
-            {/* <h3>{projectNameHeading}</h3> */}
-            {/* </div> */}
-            {/* <div className="taskinfo">
-                    <ul>
-                    <li>
-                            {' '}
-                            <Link to="/summary">Summary</Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="/taskList">List</Link>{' '}
-                        </li>
-
-                        <li>
-                            {' '}
-                            <Link   to={`/dashboard/boards/projectId=/${projectId}&milestoneId=/${milestoneId}&spriteId=/${spriteId}`}>Board</Link>{' '}
-                        </li>
-                       
-                    </ul>
-                </div> */}
             <div className="add_task row d-flex pb-2 pt-1">
                 <div className="col-lg-8 d-flex  align -items-center">
                     {/* <div>
@@ -446,6 +424,7 @@ const Boards = () => {
                             columns={columns}
                             closeModal={closeaddModal}
                             setShowModal={setShowModal}
+                            centered
                         />
                     </div>
                 </div>
