@@ -26,13 +26,11 @@ const TaskList = () => {
     const [editData, setEditData] = useState();
     const [render, setRender] = useState(false);
     const [statusModal, setStatusModal] = useState(false);
-    const [activeStatus, setActiveStatus] = useState(true);
     const [taskStatus, settaskStatus] = useState(1);
     const [assigneeFilter, setAssigneeFilter] = useState(); //
     const getSingleSprintTask = store?.getSigleSprintTask?.data?.response;
     const deletehandle = store?.TaskStatusReducer?.data;
     const loaderhandel = store?.getSigleSprintTask;
-    // console.log(getSingleSprintTask, '11111111111111111111111111111111111111111111111111111111111111111111111111')
     const handleCreate = () => {
         SetOpenModal(true);
     };
@@ -42,7 +40,7 @@ const TaskList = () => {
             id: spriteId,
             activeStatus: true,
             skip: 1,
-            taskStatus: getSingleSprintTask[0]?.status,
+            taskStatus: taskStatus,
             projectId: projectId,
             milestoneId: milestoneId,
             assigneeId: selectedAssigneeId,

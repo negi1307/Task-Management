@@ -236,7 +236,7 @@ const Projects = () => {
                             {status == 1 ? (
                                 <div className="col-4 d-flex align-items-center justify-content-end gap-3 pe-0">
                                     <Button
-                                        className="web_button"
+                                        className="mybutton btn p-1 fw-bold py-1  web_button"
                                         variant="info"
                                         onClick={() => {
                                             handelCreate();

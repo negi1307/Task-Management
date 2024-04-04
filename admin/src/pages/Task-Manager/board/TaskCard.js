@@ -141,7 +141,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                 <div className="col-12 ">
                                     <div className="row">
                                         <div className="col-9 d-flex align-items-center">
-                                            <a className='fw-bold py-1 fw-bold text-truncate rounded-pill   task-title' style={{ backgroundColor: 'lightblue', color: 'oceanblue' }}
+                                            <a className='fw-bold py-1 fw-bold text-truncate rounded-pill task-title' style={{ backgroundColor: 'lightblue', color: 'oceanblue' }}
                                                 href="#"
                                                 onClick={() => {
                                                     handleDetailPage(item);
@@ -151,7 +151,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                         </div>
                                         <div className="col-3 text-center p-1">
                                             <div className="dropdown">
-                                                <button className="btn btn-white btn-outline-white" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                                                <button className="border-0 bg-white icon_buttons" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                                     <i className="bi bi-three-dots-vertical fs-5 fw-bold text-dark"></i>
                                                 </button>
                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start small-width bg-transparent border-0" aria-labelledby="dropdownMenuButton1">
