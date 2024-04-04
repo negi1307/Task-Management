@@ -12,7 +12,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-
+import Pagesaddtask from '../../../layouts/AllPagesRightbar';
 const AdminDashboard = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -28,6 +28,8 @@ const AdminDashboard = () => {
 
     const [taskCount, setTaskCount] = useState(null);
     const [data, setData] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+
     // const [skip, setSkip] = useState(0);
     // const [count, setCount] = useState();
     useEffect(() => {
@@ -64,7 +66,9 @@ const AdminDashboard = () => {
     // if (taskCount !== null) {
     //     console.log(taskCount, '///task');
     // }
-
+    const closeaddModal = () => {
+        // getalltasks();
+    }
     useEffect(() => {
         dispatch(getTaskWeekCountAction());
         dispatch(getTaskSummmaryDetail());
@@ -121,6 +125,30 @@ const AdminDashboard = () => {
                             <HeaderMain />
                         </div>
                         <hr />
+                        <div className='row'>
+                            <div className='col-12 d-flex justify-content-end'>
+                                <button
+                                    type="button"
+                                    className="mybutton btn p-1 fw-bold py-1  web_button"
+                                    onClick={() => {
+                                        // console.log('button click');
+                                        // handeladdtask()
+                                        setShowModal(!showModal);
+                                        // dispatchActions();
+                                        // dispatch(getAllTask({ projectId: projectId, mileStoneId: milestoneId, sprintId: spriteId }))
+
+                                    }}>
+                                    Add Task
+                                </button>
+                                <Pagesaddtask
+                                    className="d-none"
+                                    // onFormSubmit={handleFormSubmit}
+                                    showModal={showModal}
+                                    closeModal={closeaddModal}
+                                    setShowModal={setShowModal}
+                                />
+                            </div>
+                        </div>
                         <div className="col all_bg  border_clr m-2 rounded-4 bg-white">
                             <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
                                 <div className="bg_clr p-3 rounded-circle text-center ">
