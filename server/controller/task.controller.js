@@ -321,12 +321,17 @@ const getTasksAccToStatus = async (req, res) => {
     let done = [];
     let testing = [];
     const now = new Date();
+    const matchCondition = {
+      sprintId: new mongoose.Types.ObjectId(sprintId), summary: { $regex: new RegExp(searchString, "i") }
+    }
+    if (assigneeId) {
+      matchCondition.assigneeId = new mongoose.Types.ObjectId(assigneeId)
+    }
 
     const tasks = await taskModel.aggregate([
       {
-        $match: {
-          sprintId: new mongoose.Types.ObjectId(sprintId), summary: { $regex: new RegExp(searchString, "i") }, assigneeId: new mongoose.Types.ObjectId(assigneeId),
-        }
+        $match: matchCondition
+
       },
       {
         $lookup: {
