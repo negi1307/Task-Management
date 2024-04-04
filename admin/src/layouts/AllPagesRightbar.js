@@ -88,7 +88,7 @@ export default function Pagesaddtask(props) {
         if (projectSelected !== '' && milestoneSelected !== '' && sprintSelected !== '') {
             dispatch(createTask(body));
             ToastHandle('success', 'Task created successfully');
-            onFormSubmit();
+            // onFormSubmit();
             handelClose();
         } else {
             alert('Please Select Project');
