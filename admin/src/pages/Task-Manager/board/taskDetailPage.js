@@ -178,13 +178,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             connectComponentCheck('All');
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'All' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
-                                    // style={{
-                                    //     backgroundColor: '#f3f3f3',
-                                    //     borderColor: '#f3f3f3',
-                                    //     color: 'black',
-                                    //     boxShadow: 'none',
-
-                                    // }}
                                     >
                                         All
                                     </Button>
@@ -193,12 +186,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             connectComponentCheck('Comments');
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Comments' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
-                                    // style={{
-                                    //     backgroundColor: '#f3f3f3',
-                                    //     borderColor: '#f3f3f3',
-                                    //     color: 'black',
-                                    //     boxShadow: 'none',
-                                    // }}
                                     >
                                         Comments
                                     </Button>
@@ -207,12 +194,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             connectComponentCheck('History');
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'History' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
-                                    // style={{
-                                    //     backgroundColor: '#f3f3f3',
-                                    //     borderColor: '#f3f3f3',
-                                    //     color: 'black',
-                                    //     boxShadow: 'none',
-                                    // }}
                                     >
                                         History
                                     </Button>
@@ -224,12 +205,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }
                                         }
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'AddSubtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
-                                    // style={{
-                                    //     backgroundColor: '#f3f3f3',
-                                    //     borderColor: '#f3f3f3',
-                                    //     color: 'black',
-                                    //     boxShadow: 'none',
-                                    // }}
                                     >
                                         Add Sub-tasks
                                     </Button>
@@ -238,12 +213,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             connectComponentCheck('Bugs');
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Bugs' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
-                                    // style={{
-                                    //     backgroundColor: '#f3f3f3',
-                                    //     borderColor: '#f3f3f3',
-                                    //     color: 'black',
-                                    //     boxShadow: 'none',
-                                    // }}
                                     >
                                         Bugs
                                     </Button>
@@ -251,12 +220,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         onClick={() => {
                                             connectComponentCheck('Subtask');
                                         }}
-                                        // style={{
-                                        //     backgroundColor: '#f3f3f3',
-                                        //     borderColor: '#f3f3f3',
-                                        //     color: 'black',
-                                        //     boxShadow: 'none',
-                                        // }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Subtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
                                         SubTask
@@ -290,9 +253,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                             <h4 className="ps-1 m-0 p-0"> {ele?.userId?.lastName}</h4>
                                                             <p className="ps-1 m-0 p-0">
                                                                 {moment(ele?.createdAt).fromNow()}
-                                                                {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
                                                             </p>
-                                                            {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
                                                         </div>
                                                         {inputForUpdate === ind ? (
                                                             <form onSubmit={handleSubmit(submitUpdateComment)}>

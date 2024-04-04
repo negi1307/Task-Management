@@ -16,7 +16,7 @@ export function deleteSprintApi(data): any {
 
 export function getAllSingleSprintApi(data): any {
     // return api.get(URL.getAllSingleSprint + data?.payload)
-    console.log(data, 'api')
+    // console.log(data, 'api')
     return api.get(`${URL.getAllSingleSprint}milestoneId=${data?.payload.id}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}`)
 }
 export function updateSprintApi(data): any {

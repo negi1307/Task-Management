@@ -314,19 +314,24 @@ const updateTaskStatus = async (req, res) => {
 // Get tasks according to status
 const getTasksAccToStatus = async (req, res) => {
   try {
-    let { sprintId, searchString } = req.query;
+    let { sprintId, searchString, assigneeId } = req.query;
     let todo = [];
     let inProgress = [];
     let hold = [];
     let done = [];
     let testing = [];
     const now = new Date();
+    const matchCondition = {
+      sprintId: new mongoose.Types.ObjectId(sprintId), summary: { $regex: new RegExp(searchString, "i") }
+    }
+    if (assigneeId) {
+      matchCondition.assigneeId = new mongoose.Types.ObjectId(assigneeId)
+    }
 
     const tasks = await taskModel.aggregate([
       {
-        $match: {
-          sprintId: new mongoose.Types.ObjectId(sprintId), summary: { $regex: new RegExp(searchString, "i") }
-        }
+        $match: matchCondition
+
       },
       {
         $lookup: {
