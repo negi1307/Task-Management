@@ -6,7 +6,7 @@ const milestoneModel = require("../models/milestone.model");
 const sprintModel = require("../models/sprint.model");
 const userModel = require("../models/users.model");
 const subTaskModel = require("../models/subTask.model")
-
+const breakTimeModel = require("../models/userLogin.model")
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -231,27 +231,43 @@ const updateTaskStatus = async (req, res) => {
 
       let query = { status };
       if (status === 2) {
-        if (status <= currentStatus && req.user.role !== 'Testing') {
+        const currentStatus = await taskModel.findById(taskId).select('status');
+        if (status <= currentStatus.status && req.user.role !== 'Testing') {
           return res.status(403).json({ status: "403", message: "You are not authorized to update the task status backwards." });
         }
         query.inProgressDate = new Date();
       }
 
-      if (status === 4) {
-        if (req.user.role === 'Testing') {
-          query.doneDate = new Date();
-          if (task && task.inProgressDate) {
-            let timeDifference = (query.doneDate.getTime() - task.inProgressDate.getTime());
-            query.timeTracker = timeDifference
+      if (status === 4 || status === 5) {
+        // if (req.user.role === 'Testing') {
+        query.doneDate = new Date();
+        if (task && task.inProgressDate) {
+          let timeDifference = (query.doneDate.getTime() - task.inProgressDate.getTime()) / 1000;
+
+          const breakRecords = await breakTimeModel.find({ userId: req.user._id, taskId: taskId });
+          let totalBreakTime = 0;
+          for (const breakRecord of breakRecords) {
+            totalBreakTime += breakRecord.break;
           }
-          if (task && task.logInTime && task.timeTracker) {
-            let timeDifference = (query.doneDate.getTime() - task.logInTime.getTime());
-            query.timeTracker = task.timeTracker + timeDifference
-          }
+
+          timeDifference -= totalBreakTime;
+
+          const hours = Math.floor(timeDifference / 3600);
+          const minutes = Math.floor((timeDifference % 3600) / 60);
+          const seconds = Math.floor(timeDifference % 60);
+
+          query.timeTracker = `${hours} hours ${minutes} minutes ${seconds} seconds`;
+
+          // query.timeTracker = timeDifference
         }
-        else {
-          return res.status(200).json({ status: "200", message: "You are not authorised to do so." });
+        if (task && task.logInTime && task.timeTracker) {
+          let timeDifference = (query.doneDate.getTime() - task.logInTime.getTime());
+          query.timeTracker = task.timeTracker + timeDifference
         }
+        // }
+        // else {
+        //   return res.status(200).json({ status: "200", message: "You are not authorised to do so." });
+        // }
       }
       const result = await taskModel.findByIdAndUpdate({ _id: taskId }, query, { new: true });
       const taskStatus = await taskModel.findById(taskId)
@@ -818,6 +834,22 @@ const projectUserList = async (req, res) => {
     return res.status(500).json({ status: "400", message: "Fill all the required fields", error: error.message });
   }
 };
+
+
+// Start stop time recode when the task is in the inProgress stage
+const startStopTime = async (req, res) => {
+  try {
+    const taskId = req.body.taskId
+    const today = new Date();
+    const existingRecord = await taskModel.findOne({ taskId: taskId, pauseTime: today });
+    const response = { status: 200, message: "Login time recorded successfully", loginTime: loginRecord.loginTime }
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({ status: 500, message: "Server error" });
+  }
+}
+
+
 
 
 

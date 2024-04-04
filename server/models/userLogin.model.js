@@ -1,25 +1,27 @@
 const mongoose = require('mongoose');
 
 const userLogin = mongoose.model(
-    'userLogin', mongoose.Schema({
+    'breakTime', mongoose.Schema({
         userId: {
             type: mongoose.Types.ObjectId,
             ref: 'User'
         },
-        loginTime: {
+        taskId: {
+            type: mongoose.Types.ObjectId,
+            ref: "Task"
+        },
+        startTime: {
             type: Date
         },
-        logoutTime: {
+        stopTime: {
             type: Date,
         },
-        leaveMessageId: {
-            type: mongoose.Types.ObjectId,
-            ref: "leaveMessage"
+        break: {
+            type: Number
         }
-    },
-        {
-            timestamps: true
-        }
+    }, {
+        versionKey: false
+    }
     )
 )
 module.exports = userLogin;
