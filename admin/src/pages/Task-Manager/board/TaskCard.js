@@ -130,6 +130,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
         setIsPlaying(prevState => !prevState);
     };
 
+
     return (
         <>
             <Draggable key={item.id} draggableId={item?.id} index={index}>
@@ -150,7 +151,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                         </div>
                                         <div className="col-3 text-center p-1 mt-1">
                                             <div className="dropdown">
-                                                <button className="btn btn-white btn-outline-white" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                                                <button className="border-0 bg-white icon_buttons" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                                     <i className="bi bi-three-dots-vertical fs-5 fw-bold text-dark"></i>
                                                 </button>
                                                 <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start small-width bg-transparent border-0" aria-labelledby="dropdownMenuButton1">
@@ -317,13 +318,13 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </TaskInformation>
+                            </div >
+                        </TaskInformation >
                     </div >
                 )}
             </Draggable >
             {/* delete modal */}
-            <Modal show={deleteModal} onHide={() => setDeleteModal(false)}>
+            <Modal Modal show={deleteModal} onHide={() => setDeleteModal(false)}>
                 <Modal.Body>Are you sure you want to delete this Task ?</Modal.Body>
                 <Modal.Footer>
                     <Button
@@ -337,7 +338,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                         Yes
                     </Button>
                 </Modal.Footer>
-            </Modal >
+            </Modal>
 
             <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} columns={columns} projectId={projectId} mileStoneId={mileStoneId} sprintId={sprintId} />
             <TaskDetailPage modal={openDetailPage} editData={detailData} closeModal={closeDetailPage} taskId={item._id} />

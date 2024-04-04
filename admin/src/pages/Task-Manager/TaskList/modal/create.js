@@ -9,7 +9,7 @@ import { createTask } from '../../../../redux/task/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { getSingleSprint, getsingleMileStone ,getReporterAction} from '../../../../redux/actions';
+import { getSingleSprint, getsingleMileStone, getReporterAction } from '../../../../redux/actions';
 import moment from 'moment';
 import pdfImage from '../../../../../src/assets/images/pdf.png';
 import DatePicker from 'react-datepicker';
@@ -21,7 +21,7 @@ const Create = ({ modal, CloseModal }) => {
     const [endDate, setEndDate] = useState();
     // disable previous date
     const today = new Date();
-    console.log(today, 'today');
+    // console.log(today, 'today');
     // end date
     const handleStartDate = (date) => {
         setStartDate(date);
@@ -33,14 +33,14 @@ const Create = ({ modal, CloseModal }) => {
     const {
         register,
         handleSubmit,
-        watch,setValue,
+        watch, setValue,
         formState: { errors },
     } = useForm();
     const store = useSelector((state) => state);
 
     const [description, setDescription] = useState('');
-    const [milestoneDisable,setMilestoneDisable]=useState(true)
-    const [sprintDisable,setsprintDisable]=useState(true)
+    const [milestoneDisable, setMilestoneDisable] = useState(true)
+    const [sprintDisable, setsprintDisable] = useState(true)
     // const projectId = store?.getProjectId?.data;
     // const milestoneId = store?.getMilestoneId?.data;
     // const sprintid = store?.getSprintId?.data;
@@ -48,15 +48,15 @@ const Create = ({ modal, CloseModal }) => {
     const [selectedFile, setSelectedFile] = useState('');
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
-        if(file){
+        if (file) {
             setSelectedFile(file);
             alert('File selected');
         }
-     else {
-        alert('File Not selected');
-        setSelectedFile("");
-     }   
-       
+        else {
+            alert('File Not selected');
+            setSelectedFile("");
+        }
+
     };
 
     const openFileInput = () => {
@@ -80,22 +80,22 @@ const Create = ({ modal, CloseModal }) => {
         body.append('dueDate', endDate);
         body.append('status', 1);
         body.append('attachment', selectedFile);
-        
-            dispatch(createTask(body));
-            console.log('project',projectId,'mile',milestoneId,'sprint',spriteId,'suummary',e.summary,'descrip',e.description,'reporterId',e.Reporter,'assign',e.Assignee,'prior',e.Priority,)
-            setValue('projectname', '');
-            setValue('Milestone', '');
-            setsprintDisable(true)
-            setMilestoneDisable(true)
-            setValue('description', '');
-            setValue('Sprint', '');
-            setValue('summary', '');
-            setValue('Assignee', '');
-            setValue('Reporter', '');
-            setValue('Priority', '');
-            setSelectedFile("")
-            setEndDate("")
-            setStartDate("")
+
+        dispatch(createTask(body));
+        // console.log('project', projectId, 'mile', milestoneId, 'sprint', spriteId, 'suummary', e.summary, 'descrip', e.description, 'reporterId', e.Reporter, 'assign', e.Assignee, 'prior', e.Priority,)
+        setValue('projectname', '');
+        setValue('Milestone', '');
+        setsprintDisable(true)
+        setMilestoneDisable(true)
+        setValue('description', '');
+        setValue('Sprint', '');
+        setValue('summary', '');
+        setValue('Assignee', '');
+        setValue('Reporter', '');
+        setValue('Priority', '');
+        setSelectedFile("")
+        setEndDate("")
+        setStartDate("")
         // setShowModal(false);
     };
 
@@ -116,7 +116,7 @@ const Create = ({ modal, CloseModal }) => {
         CloseModal();
     };
     useEffect(() => {
-        console.log(Createhandel?.data?.status, '////////');
+        // console.log(Createhandel?.data?.status, '////////');
         if (Createhandel?.data?.status == 200) {
             CloseModal('render');
             ToastHandle('success', Createhandel?.data?.message);
@@ -126,18 +126,18 @@ const Create = ({ modal, CloseModal }) => {
             ToastHandle('error', Createhandel?.data?.message);
         }
     }, [Createhandel]);
-    const handelProject=(e)=>{
-        dispatch(getsingleMileStone({ id: e.target.value, activeStatus: 1 ,skip:0, mileStoneId:""  }));
+    const handelProject = (e) => {
+        dispatch(getsingleMileStone({ id: e.target.value, activeStatus: 1, skip: 0, mileStoneId: "" }));
         setMilestoneDisable(false)
     }
-    const handelmilestone=(e)=>{
-        dispatch(getSingleSprint({ activeStatus: 1, id: e.target.value , skip:0}));
+    const handelmilestone = (e) => {
+        dispatch(getSingleSprint({ activeStatus: 1, id: e.target.value, skip: 0 }));
         setsprintDisable(false)
     }
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(getReporterAction())
-    },[])
-    const reporter=store?.getReporterReducer?.data?.reporterList
+    }, [])
+    const reporter = store?.getReporterReducer?.data?.reporterList
     return (
         <Modal show={modal} onHide={handleClose} size="lg">
             <Row className="m-0 p-0">
@@ -149,7 +149,9 @@ const Create = ({ modal, CloseModal }) => {
                             </Modal.Title>
                         </Col>
                         <Col lg={5} className="text-end pt-2">
-                            <CloseButton onClick={handleClose} />
+                            <button type="button" className="close bg-black text-white" onClick={handleClose} aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </Col>
                     </Row>
                 </Col>
@@ -200,8 +202,8 @@ const Create = ({ modal, CloseModal }) => {
                                 </Row>
                             </Col> */}
                             <Col lg={12}>
-                                    <Row>
-                                        {/* <Col lg={6}>
+                                <Row>
+                                    {/* <Col lg={6}>
                                             <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                 <Form.Label>
                                                     Sprint <span className="text-danger">*</span>:
@@ -218,7 +220,7 @@ const Create = ({ modal, CloseModal }) => {
                                                 )}
                                             </Form.Group>
                                         </Col> */}
-                                        <Col lg={6}>
+                                    <Col lg={6}>
                                         <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
                                                 {' '}
@@ -255,9 +257,9 @@ const Create = ({ modal, CloseModal }) => {
                                             )}
                                         </Form.Group>
                                     </Col>
-                                    </Row>
-                                </Col>
-                        
+                                </Row>
+                            </Col>
+
                             <Col lg={12}>
                                 <Row>
                                     <Col lg={6}>
@@ -303,7 +305,7 @@ const Create = ({ modal, CloseModal }) => {
                             </Col>
                             <Col lg={12}>
                                 <Row>
-                                  
+
                                     <Col lg={6}>
                                         <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
@@ -312,20 +314,20 @@ const Create = ({ modal, CloseModal }) => {
                                             </Form.Label>
                                             <Form.Select {...register('Priority', { required: true })}>
                                                 <option>-------select----</option>
-                                              
-                                            <option value="Critical">
-                                                &#128308;
-                                                Critical
-                                            </option>
-                                            <option value="High">
-                                                &#128992;
-                                                High</option>
-                                            <option value="Medium;">
-                                                &#128993;
-                                                Medium</option>
-                                            <option value="Low">
-                                                &#128994;
-                                                Low</option>
+
+                                                <option value="Critical">
+                                                    &#128308;
+                                                    Critical
+                                                </option>
+                                                <option value="High">
+                                                    &#128992;
+                                                    High</option>
+                                                <option value="Medium;">
+                                                    &#128993;
+                                                    Medium</option>
+                                                <option value="Low">
+                                                    &#128994;
+                                                    Low</option>
                                             </Form.Select>
                                             {errors.Priority?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
@@ -348,12 +350,12 @@ const Create = ({ modal, CloseModal }) => {
                                             />
                                         </Form.Group>
                                     </Col>
-                                  
+
                                 </Row>
                             </Col>
                             <Col lg={12}>
                                 <Row>
-                              
+
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
                                             <Form.Label className="w-100">
@@ -375,43 +377,43 @@ const Create = ({ modal, CloseModal }) => {
                             </Col>
                             <Col lg={12}>
                                 <Row>
-                                 
+
                                     <Col lg={6}>
-                                   
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            Attachment :
-                                        </label>
-                                        <div onClick={openFileInput}>
-                                            <i className="mdi mdi-attachment m-0 p-0 font-20 cp"></i>
-                                        </div>
-                                        <input
-                                            type="file"
-                                            accept="application/pdf,image/png,image/jpeg,image/jpg"
-                                            id="fileInput"
-                                            className="file-input"
-                                            onChange={handleFileSelect}
-                                            style={{ display: 'none' }}
+
+                                        <div class="mb-2">
+                                            <label class="form-label" for="exampleForm.ControlTextarea1">
+                                                Attachment :
+                                            </label>
+                                            <div onClick={openFileInput}>
+                                                <i className="mdi mdi-attachment m-0 p-0 font-20 cp"></i>
+                                            </div>
+                                            <input
+                                                type="file"
+                                                accept="application/pdf,image/png,image/jpeg,image/jpg"
+                                                id="fileInput"
+                                                className="file-input"
+                                                onChange={handleFileSelect}
+                                                style={{ display: 'none' }}
                                             // {...register('Attachment', { required: true })}
-                                        />{' '}
-                                        {selectedFile ? (
-                                            <img
-                                                src={
-                                                    selectedFile?.type == 'image/png' ||
-                                                    selectedFile?.type == 'image/jpg' ||
-                                                    selectedFile?.type === 'image/jpeg'
-                                                        ?  URL.createObjectURL( selectedFile)
-                                                        : pdfImage
-                                                }
-                                                className="add_upload_icon_load me-2 h-auto w-25 cp"
-                                                alt=""
-                                            />
-                                        ) : (
-                                            ''
-                                        )}
-                                       
-                                    </div>
-                                
+                                            />{' '}
+                                            {selectedFile ? (
+                                                <img
+                                                    src={
+                                                        selectedFile?.type == 'image/png' ||
+                                                            selectedFile?.type == 'image/jpg' ||
+                                                            selectedFile?.type === 'image/jpeg'
+                                                            ? URL.createObjectURL(selectedFile)
+                                                            : pdfImage
+                                                    }
+                                                    className="add_upload_icon_load me-2 h-auto w-25 cp"
+                                                    alt=""
+                                                />
+                                            ) : (
+                                                ''
+                                            )}
+
+                                        </div>
+
                                     </Col>
                                 </Row>
                             </Col>
