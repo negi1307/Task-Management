@@ -284,7 +284,29 @@ const Boards = () => {
 
     return (
         <>
-            <div className="add_task row d-flex pb-2 pt-1">
+            {/* <div className="project_detail"> */}
+            {/* <div className="project_name"> */}
+            {/* <h3>{projectNameHeading}</h3> */}
+            {/* </div> */}
+            {/* <div className="taskinfo">
+                    <ul>
+                    <li>
+                            {' '}
+                            <Link to="/summary">Summary</Link>{' '}
+                        </li>
+                        <li>
+                            {' '}
+                            <Link to="/taskList">List</Link>{' '}
+                        </li>
+
+                        <li>
+                            {' '}
+                            <Link   to={`/dashboard/boards/projectId=/${projectId}&milestoneId=/${milestoneId}&spriteId=/${spriteId}`}>Board</Link>{' '}
+                        </li>
+                       
+                    </ul>
+                </div> */}
+            <div className="add_task row d-flex  m-0 ">
                 <div className="col-lg-8 d-flex  align -items-center">
                     <div className=''>
                         <select
@@ -415,7 +437,7 @@ const Boards = () => {
                                             onChange={(e) => {
                                                 handleSearchChange(e);
                                             }}
-                                            className="form-control  py-1  "
+                                            className="form-control  py-0 m-0  "
                                             placeholder="Search "
                                         />
                                         <span className="mdi mdi-magnify search-icon"></span>
@@ -429,10 +451,10 @@ const Boards = () => {
                                     <i className="mdi mdi-magnify search-icon"></i>
                                  </Button> */}
                     </div>
-                    <div className="ms-2">
+                    <div className="ms-2 ">
                         <button
                             type="button"
-                            className="mybutton btn p-1 fw-bold py-1  web_button"
+                            className="mybutton btn p-1 fw-bold py-0 m-0  web_button"
                             onClick={() => {
                                 // console.log('button click');
                                 setShowModal(!showModal);

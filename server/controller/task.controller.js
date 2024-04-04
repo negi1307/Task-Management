@@ -54,9 +54,11 @@ const getTasks = async (req, res) => {
     const pageSize = 10;
     const now = new Date()
     const conditionMatch = {
-      sprintId: new mongoose.Types.ObjectId(sprintId), status: parseInt(status), activeStatus: JSON.parse(activeStatus),
+      sprintId: new mongoose.Types.ObjectId(sprintId), activeStatus: JSON.parse(activeStatus),
     }
-    if (assigneeId) {
+    if (status) {
+      conditionMatch.status = parseInt(status)
+    } if (assigneeId) {
       conditionMatch.assigneeId = new mongoose.Types.ObjectId(assigneeId)
     }
     const totalCount = await taskModel.countDocuments(conditionMatch)
