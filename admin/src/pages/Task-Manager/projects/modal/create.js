@@ -135,7 +135,9 @@ const Create = ({ modal, closeModal }) => {
                                 </Modal.Title>
                             </Col>
                             <Col lg={5} className="text-end pt-2">
-                                <CloseButton onClick={closeModal} />
+                                <button type="button" className="close bg-black text-white" onClick={closeModal} aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </Col>
                         </Row>
                     </Col>

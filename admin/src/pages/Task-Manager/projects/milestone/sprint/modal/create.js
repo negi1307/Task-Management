@@ -74,7 +74,9 @@ const Create = ({ modal, CloseModal, projectId, milestoneId, }) => {
                                 </Modal.Title>
                             </Col>
                             <Col lg={5} className="text-end pt-2">
-                                <CloseButton onClick={handleClose} />
+                                <button type="button" className="close bg-black text-white" onClick={handleClose} aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </Col>
                         </Row>
                     </Col>
@@ -111,7 +113,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId, }) => {
                                                 rows={3}
                                                 type="text"
                                                 placeholder="Please Enter Description"
-                                                {...register('description', )}
+                                                {...register('description',)}
                                             />
                                             {/* {errors.description?.type === 'required' && (
                                                 <span className="text-danger"> This field is required *</span>

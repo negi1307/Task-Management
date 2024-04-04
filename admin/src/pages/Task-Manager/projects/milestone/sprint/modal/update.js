@@ -21,7 +21,7 @@ const Update = ({ modal, closeModal, editData }) => {
     const [endDate, setEndDate] = useState();
     // disable previous date
     const today = new Date();
-    console.log(today, 'today');
+    // console.log(today, 'today');
     // end date
     const handleStartDate = (date) => {
         setStartDate(date);
@@ -57,7 +57,7 @@ const Update = ({ modal, closeModal, editData }) => {
             description: editData?.sprintDesc,
         });
         if (editData?.startDate || editData?.endDate) {
-            const parsedDate = parseISO(editData?.startDate) 
+            const parsedDate = parseISO(editData?.startDate)
             const endate = parseISO(editData?.endDate)
             if (parsedDate || endate) {
                 setStartDate(parsedDate);
@@ -67,8 +67,8 @@ const Update = ({ modal, closeModal, editData }) => {
             }
         }
     }, [modal]);
-    console.log(editData, 'pppppp');
-   
+    // console.log(editData, 'pppppp');
+
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
             ToastHandle('success', 'Updated Successfully');
@@ -91,7 +91,9 @@ const Update = ({ modal, closeModal, editData }) => {
                                 </Modal.Title>
                             </Col>
                             <Col lg={4} className="text-end pt-2">
-                                <CloseButton onClick={CloseModaal} />
+                                <button type="button" className="close bg-black text-white" onClick={CloseModaal} aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </Col>
                         </Row>
                     </Col>

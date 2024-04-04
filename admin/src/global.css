@@ -652,3 +652,13 @@ input.add_width_input {
     bottom: 0;
     left: 0;
 }
+
+.active-button-tdp {
+    background-color: black !important;
+    color: #F9A004 !important;
+}
+
+.inactive-button-tdp {
+    background-color: #C9C8C8 !important;
+    color: white !important;
+}

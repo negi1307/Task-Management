@@ -616,8 +616,6 @@ export default function Pagesaddtask(props) {
     // console.log({ projectName })
     return (
         <div className={props.showModal ? 'modal d-block blur-background' : 'modal d-none'} tabIndex="-1" role="dialog"  >
-            {/* <div className={props.showModal ? 'modal-backdrop fade show blur-background' : 'modal-backdrop fade'}></div> */}
-
             <div className="modal-dialog blur-modal-background modal-lg modal-dialog-centered" role="document">
                 <div className="modal-content">
                     <div className="modal-header">

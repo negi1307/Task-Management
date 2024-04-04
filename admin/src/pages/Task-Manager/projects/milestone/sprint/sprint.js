@@ -132,7 +132,7 @@ const Sprint = () => {
     };
 
     const fetchSprintData = () => {
-        console.log(status, milestoneId, skip);
+        // console.log(status, milestoneId, skip);
         dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
     };
 
@@ -194,7 +194,7 @@ const Sprint = () => {
                                         <Button
                                             variant="info"
                                             onClick={handleCreate}
-                                            className="btn fs-5  text-white p-1   web_button">
+                                            className="mybutton btn p-1 fw-bold py-1  web_button">
                                             Add Sprint
                                         </Button>
                                     </div>

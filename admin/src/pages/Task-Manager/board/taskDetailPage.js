@@ -159,7 +159,9 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 </Modal.Title>
                             </Col>
                             <Col lg={5} className="text-end pt-2">
-                                <CloseButton onClick={closeModalHandle} />
+                                <button type="button" className="close bg-black text-white" onClick={closeModalHandle} aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </Col>
                         </Row>
                     </Col>
@@ -170,44 +172,48 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                         <Col lg={9}>
                             <h4>Activity</h4>
                             <Row>
-                                <Col lg={12} className='d-flex align-items-center'>
+                                <Col lg={12} className='d-flex align-items-center gap-1'>
                                     <Button
                                         onClick={() => {
                                             connectComponentCheck('All');
                                         }}
-                                        style={{
-                                            backgroundColor: '#f3f3f3',
-                                            borderColor: '#f3f3f3',
-                                            color: 'black',
-                                            boxShadow: 'none',
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'All' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    // style={{
+                                    //     backgroundColor: '#f3f3f3',
+                                    //     borderColor: '#f3f3f3',
+                                    //     color: 'black',
+                                    //     boxShadow: 'none',
 
-                                        }}>
+                                    // }}
+                                    >
                                         All
                                     </Button>
                                     <Button
                                         onClick={() => {
                                             connectComponentCheck('Comments');
                                         }}
-                                        style={{
-                                            backgroundColor: '#f3f3f3',
-                                            borderColor: '#f3f3f3',
-                                            color: 'black',
-                                            boxShadow: 'none',
-                                        }}
-                                        className="ms-2">
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Comments' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    // style={{
+                                    //     backgroundColor: '#f3f3f3',
+                                    //     borderColor: '#f3f3f3',
+                                    //     color: 'black',
+                                    //     boxShadow: 'none',
+                                    // }}
+                                    >
                                         Comments
                                     </Button>
                                     <Button
                                         onClick={() => {
                                             connectComponentCheck('History');
                                         }}
-                                        style={{
-                                            backgroundColor: '#f3f3f3',
-                                            borderColor: '#f3f3f3',
-                                            color: 'black',
-                                            boxShadow: 'none',
-                                        }}
-                                        className="ms-2">
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'History' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    // style={{
+                                    //     backgroundColor: '#f3f3f3',
+                                    //     borderColor: '#f3f3f3',
+                                    //     color: 'black',
+                                    //     boxShadow: 'none',
+                                    // }}
+                                    >
                                         History
                                     </Button>
 
@@ -216,41 +222,43 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         onClick={() => {
                                             connectComponentCheck('AddSubtask');
                                         }
-
                                         }
-                                        style={{
-                                            backgroundColor: '#f3f3f3',
-                                            borderColor: '#f3f3f3',
-                                            color: 'black',
-                                            boxShadow: 'none',
-                                        }}
-                                        className="ms-2">
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'AddSubtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    // style={{
+                                    //     backgroundColor: '#f3f3f3',
+                                    //     borderColor: '#f3f3f3',
+                                    //     color: 'black',
+                                    //     boxShadow: 'none',
+                                    // }}
+                                    >
                                         Add Sub-tasks
                                     </Button>
                                     <Button
                                         onClick={() => {
                                             connectComponentCheck('Bugs');
                                         }}
-                                        style={{
-                                            backgroundColor: '#f3f3f3',
-                                            borderColor: '#f3f3f3',
-                                            color: 'black',
-                                            boxShadow: 'none',
-                                        }}
-                                        className="ms-2">
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Bugs' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    // style={{
+                                    //     backgroundColor: '#f3f3f3',
+                                    //     borderColor: '#f3f3f3',
+                                    //     color: 'black',
+                                    //     boxShadow: 'none',
+                                    // }}
+                                    >
                                         Bugs
                                     </Button>
                                     <Button
                                         onClick={() => {
                                             connectComponentCheck('Subtask');
                                         }}
-                                        style={{
-                                            backgroundColor: '#f3f3f3',
-                                            borderColor: '#f3f3f3',
-                                            color: 'black',
-                                            boxShadow: 'none',
-                                        }}
-                                        className="ms-2">
+                                        // style={{
+                                        //     backgroundColor: '#f3f3f3',
+                                        //     borderColor: '#f3f3f3',
+                                        //     color: 'black',
+                                        //     boxShadow: 'none',
+                                        // }}
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Subtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    >
                                         SubTask
                                     </Button>
 
