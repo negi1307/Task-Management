@@ -134,6 +134,8 @@ const updateSubTaskStatus = async (req, res) => {
 
             let query = { status };
             if (status === 2) {
+                const currentStatus = await subTaskModel.findById(taskId).select('status');
+
                 if (status <= currentStatus && req.user.role !== 'Testing') {
                     return res.status(403).json({ status: "403", message: "You are not authorized to update the sub task status backwards." });
                 }
@@ -146,6 +148,7 @@ const updateSubTaskStatus = async (req, res) => {
                     if (subTask && subTask.inProgressDate) {
                         let timeDifference = (query.doneDate.getTime() - subTask.inProgressDate.getTime());
                         query.timeTracker = timeDifference
+                        
                     }
                     if (subTask && subTask.logInTime && subTask.timeTracker) {
                         let timeDifference = (query.doneDate.getTime() - subTask.logInTime.getTime());
