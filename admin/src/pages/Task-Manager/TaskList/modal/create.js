@@ -345,7 +345,7 @@ const Create = ({ modal, CloseModal }) => {
                                                 // onChange={(date) => setStartDate(date)}
                                                 onChange={(date) => handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
-                                                minDate={today}
+                                                // minDate={today}
                                                 className="add_width_input"
                                             />
                                         </Form.Group>
