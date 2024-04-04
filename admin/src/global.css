@@ -520,16 +520,32 @@ table.table-striped tbody tr:nth-of-type(odd)>* {
 }
 
 .page-title {
-    background: #37216c !important;
-    font-size: 13px  !important;
+    /* background: #37216c !important; */
+    font-size: 11px !important;
     margin-top: 13px !important;
 }
+
 .css-1xb58ew {
     margin: 0px !important;
 }
 
 .css-1com30x {
     min-width: 347px !important;
+}
+
+.small-width {
+    width: 10px !important;
+    /* background-color: red !important; */
+}
+
+.task-title {
+    /* background-color: red; */
+    padding: 7px 30px;
+    color: rgb(88, 88, 226);
+    font-size: 11px !important;
+    /* font-family: ' sans-serif'; */
+    font-weight: bold !important;
+
 }
 
 /* .css-1xb58ew {
@@ -620,4 +636,29 @@ input.add_width_input {
 
 .del_edit {
     color: white;
+}
+
+.list-table-filter:focus {
+    outline: none !important;
+}
+
+.blur-background {
+    backdrop-filter: blur(2px);
+    background-color: #6e757d47;
+    /* Adjust the blur intensity as needed */
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.active-button-tdp {
+    background-color: black !important;
+    color: #F9A004 !important;
+}
+
+.inactive-button-tdp {
+    background-color: #C9C8C8 !important;
+    color: white !important;
 }

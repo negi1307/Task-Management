@@ -34,7 +34,7 @@ const Milestone = () => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [editData, setEditData] = useState();
     const deletehandle = store?.deleteMileStone?.data;
-    console.log(GetSinglemilstonesData, "GetSinglemilstonesDataGetSinglemilstonesDataGetSinglemilstonesData")
+    // console.log(GetSinglemilstonesData, "GetSinglemilstonesDataGetSinglemilstonesDataGetSinglemilstonesData")
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -186,7 +186,7 @@ const Milestone = () => {
                                                     }}
                                                     variant="info"
                                                     type="submit"
-                                                    className="btn fs-5  text-white p-1   web_button">
+                                                    className="mybutton btn p-1 fw-bold py-1  web_button">
                                                     Add Milestone
                                                 </Button>
                                             </div>

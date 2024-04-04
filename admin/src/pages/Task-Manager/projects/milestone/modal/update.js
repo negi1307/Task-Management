@@ -20,7 +20,7 @@ const Update = ({ modal, closeModal, editData }) => {
     const [endDate, setEndDate] = useState();
     // disable previous date
     const today = new Date();
-    console.log(today, 'today');
+    // console.log(today, 'today');
     // end date
     const handleStartDate = (date) => {
         setStartDate(date);
@@ -38,7 +38,7 @@ const Update = ({ modal, closeModal, editData }) => {
         // setStartDate(handleDate(editData?.startDate))
         // setEndDate(handleDate(editData?.completionDate))
         if (editData?.startDate || editData?.completionDate) {
-            const parsedDate = parseISO(editData?.startDate) 
+            const parsedDate = parseISO(editData?.startDate)
             const endate = parseISO(editData?.completionDate)
             if (parsedDate || endate) {
                 setStartDate(parsedDate);
@@ -48,7 +48,7 @@ const Update = ({ modal, closeModal, editData }) => {
             }
         }
     }, [modal]);
-   
+
     const onSubmit = (data) => {
         let body = {
             milestoneId: editData?._id,
@@ -95,7 +95,9 @@ const Update = ({ modal, closeModal, editData }) => {
                                 </Modal.Title>
                             </Col>
                             <Col lg={3} className="text-end pt-2">
-                                <CloseButton onClick={CloseModal} />
+                                <button type="button" className="close bg-black text-white" onClick={closeModal} aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </Col>
                         </Row>
                     </Col>
@@ -138,38 +140,38 @@ const Update = ({ modal, closeModal, editData }) => {
                                     </Form.Group>
                                 </Col>
                                 <Col lg={12}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label className="w-100">
-                                                Start Date<span className="text-danger">*</span>:
-                                            </Form.Label>
+                                    <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                        <Form.Label className="w-100">
+                                            Start Date<span className="text-danger">*</span>:
+                                        </Form.Label>
 
-                                            <DatePicker
-                                                selected={startDate}
-                                                // onChange={(date) => setStartDate(date)}
-                                                onChange={(date) => handleStartDate(date)}
-                                                placeholderText="mm-dd-yyyy"
-                                                minDate={today}
-                                                className="add_width_input"
-                                            />
-                                        </Form.Group>
-                                    </Col>
-                                    <Col lg={12}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label className="w-100">
-                                                End Date<span className="text-danger">*</span>:
-                                            </Form.Label>
+                                        <DatePicker
+                                            selected={startDate}
+                                            // onChange={(date) => setStartDate(date)}
+                                            onChange={(date) => handleStartDate(date)}
+                                            placeholderText="mm-dd-yyyy"
+                                            minDate={today}
+                                            className="add_width_input"
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col lg={12}>
+                                    <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                        <Form.Label className="w-100">
+                                            End Date<span className="text-danger">*</span>:
+                                        </Form.Label>
 
-                                            <DatePicker
-                                                selected={endDate}
-                                                disabled={startDate == '' || startDate == undefined}
-                                                // onChange={(date) => setEndDate(date)}
-                                                onChange={(date) => handleEndDate(date)}
-                                                placeholderText="mm-dd-yyyy"
-                                                minDate={startDate}
-                                                className="add_width_input"
-                                            />
-                                        </Form.Group>
-                                    </Col>
+                                        <DatePicker
+                                            selected={endDate}
+                                            disabled={startDate == '' || startDate == undefined}
+                                            // onChange={(date) => setEndDate(date)}
+                                            onChange={(date) => handleEndDate(date)}
+                                            placeholderText="mm-dd-yyyy"
+                                            minDate={startDate}
+                                            className="add_width_input"
+                                        />
+                                    </Form.Group>
+                                </Col>
                             </Row>
                             <Row>
                                 <Col className="text-start d-flex align-items-center justify-content-center">

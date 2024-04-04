@@ -22,7 +22,8 @@ export function getAllMilstoneSprints(data): any {
 //==================================================================================
 export function getAllSingleSprintApi(data): any {
     // return api.get(URL.getAllSingleSprint + data?.payload)
-    return api.get(`${URL.getAllSingleSprint}${data?.payload?.id}&status=${data.payload.status}`)
+    console.log(data, 'api')
+    return api.get(`${URL.getAllSingleSprint}milestoneId=${data?.payload?.milestoneId}&activeStatus=${data?.payload?.activeStatus}&skip=${data?.payload?.skip}`)
 }
 export function updateSprintApi(data): any {
     return api.update(URL.UpdateSprint, data.payload)

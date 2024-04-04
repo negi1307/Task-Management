@@ -20,7 +20,7 @@ const Create = ({ modal, closeModal }) => {
     const [endDate, setEndDate] = useState();
     // disable previous date
     const today = new Date();
-    console.log(today, 'today');
+    // console.log(today, 'today');
     // end date
     const handleStartDate = (date) => {
         setStartDate(date);
@@ -66,7 +66,7 @@ const Create = ({ modal, closeModal }) => {
             ToastHandle('error', sucesshandel?.data?.message);
         }
     }, [sucesshandel]);
-    console.log(sucesshandel, '====')
+    // console.log(sucesshandel, '====')
 
     return (
         <>
@@ -80,7 +80,9 @@ const Create = ({ modal, closeModal }) => {
                                 </Modal.Title>
                             </Col>
                             <Col lg={5} className="text-end pt-2">
-                                <CloseButton onClick={closeModal} />
+                                <button type="button" className="close bg-black text-white" onClick={closeModal} aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </Col>
                         </Row>
                     </Col>
@@ -121,7 +123,7 @@ const Create = ({ modal, closeModal }) => {
                                                 rows={3}
                                                 type="text"
                                                 placeholder="Please Enter Description"
-                                                {...register('description', )}
+                                                {...register('description',)}
                                             />
                                             {/* {errors.description?.type === 'required' && (
                                                 <span className="text-danger"> This field is required *</span>

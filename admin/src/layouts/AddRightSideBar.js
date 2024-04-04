@@ -321,7 +321,7 @@ export default function RightBar(props) {
                                             // onChange={(date) => setStartDate(date)}
                                             onChange={(date) => handleStartDate(date)}
                                             placeholderText="mm-dd-yyyy"
-                                            minDate={today}
+                                            // minDate={today}
                                             className="add_width_input"
                                         />
                                     </Form.Group>

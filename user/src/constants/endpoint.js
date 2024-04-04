@@ -15,7 +15,7 @@ export const AddSprint = '/sprint/add';
 export const GetAllSprints = '/sprint?';
 export const DeleteSprint = '/sprint/updateStatus';
 export const ParticularSprintDetail = ' /sprint/getAMilestoneAllSprints?id=';
-export const getAllSingleSprint = '/sprint/getAMilestoneAllSprints?id=';
+export const getAllSingleSprint = "/task/getUserAssignments?"
 
 export const getAllMilstoneSprint = '/sprint/getAMilestoneAllSprints';
 // create task
@@ -29,7 +29,7 @@ export const SingleMilestone = '/milestone/getMilestones?';
 //==============================================================================
 
 export const SingleSprintTask = '/task/getSprintTasks?sprintId=';
-export const GetAllTask = '/assignUser/getUserTasks?flag=';
+export const GetAllTask = "/task/getTasks?";
 
 export const UpdateTask = '/task/updateTask';
 export const DeleteTask = '/task/deletetask?';

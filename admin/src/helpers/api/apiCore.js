@@ -1,6 +1,5 @@
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
-
 import config from '../../config';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,14 +8,66 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.baseURL = config.API_URL;
 
 // intercepting to capture errors
+// axios.interceptors.response.use(
+//     (response) => {
+//         const navigate = useNavigate();
+//         if (response?.status === 201) {
+//             localStorage.clear();
+//             sessionStorage.clear();
+//             navigate('/logout2')
+//             return response;
+//         }
+//         return response;
+//     },
+//     (error) => {
+//         // Any status codes that falls outside the range of 2xx cause this function to trigger
+//         let message;
+//         if (error && error.response && error.response.status === 404) {
+//             // window.location.href = '/not-found';
+//         }
+
+//         else if (error && error.response && error.response.status === 403) {
+//             // alert(error)
+//             // window.location.href = '/access-denied';
+//         }
+//         else if (error && error.response && error.response.status === 401) {
+//             // Handle 401 error (token unauthorized or expired)
+//             localStorage.removeItem('hyper_user');
+//         }
+//         else {
+//             switch (error.response.status) {
+//                 case 401:
+//                     message = 'Invalid credentials';
+//                     break;
+//                 case 403:
+//                     message = 'Access Forbidden';
+//                     break;
+//                 case 404:
+//                     message = 'Sorry! the data you are looking for could not be found';
+//                     break;
+//                 default: {
+//                     message =
+//                         error.response && error.response.data ? error.response.data['message'] : error.message || error;
+//                 }
+//             }
+//             return Promise.reject(message);
+//         }
+//     }
+// );
+
 axios.interceptors.response.use(
     (response) => {
+        if (response?.status === 201) {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = '/account/login '; // Navigate using window.location
+            return response;
+        }
         return response;
     },
     (error) => {
-        // Any status codes that falls outside the range of 2xx cause this function to trigger
+        // Handle errors here
         let message;
-
         if (error && error.response && error.response.status === 404) {
             // window.location.href = '/not-found';
         }
@@ -27,7 +78,7 @@ axios.interceptors.response.use(
         }
         else if (error && error.response && error.response.status === 401) {
             // Handle 401 error (token unauthorized or expired)
-            localStorage.removeItem("hyper_user");
+            localStorage.removeItem('hyper_user');
         }
         else {
             switch (error.response.status) {
@@ -49,6 +100,7 @@ axios.interceptors.response.use(
         }
     }
 );
+
 
 
 const AUTH_SESSION_KEY = 'hyper_user';
@@ -78,7 +130,6 @@ const setAuthorization = (token) => {
         localStorage.removeItem(AUTH_SESSION_KEY); // Remove token from local storage if not available
     }
 };
-
 const getUserFromSession = () => {
     const token = localStorage.getItem(AUTH_SESSION_KEY); // Retrieve token from local storage
     if (token) {
@@ -225,6 +276,7 @@ class APICore {
         //     return true;
         // }
     };
+
 
     setLoggedInUser = (session) => {
         if (session) sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session));

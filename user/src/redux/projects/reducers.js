@@ -26,6 +26,7 @@ const GET_PROJECT_BY_ID_INITIAL_STATE = {
     loading: false,
 };
 export const addProject = (state = ADD_PROJECT_INITIAL_STATE, action) => {
+    console.log(ADD_PROJECT_INITIAL_STATE,'ADD_PROJECT_INITIAL_STATE')
     switch (action.type) {
         case ProjectTypes.ADD_PROJECT_LOADING:
             return {

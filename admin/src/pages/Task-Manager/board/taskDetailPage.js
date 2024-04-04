@@ -29,8 +29,8 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     const [subtaskButtonClicked, setSubtaskButtonClicked] = useState(false);
     const getCommentData = store?.getComment?.data?.response;
     const getHistory = store?.getHistoryReducer?.data?.response;
-    
-  
+
+
     const historyLoader = store?.getHistoryReducer
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
@@ -146,6 +146,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         setButtonChange(true);
     }
 
+
     return (
         <>
             <Modal show={modal} onHide={closeModal} size={'xl'}>
@@ -158,7 +159,9 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 </Modal.Title>
                             </Col>
                             <Col lg={5} className="text-end pt-2">
-                                <CloseButton onClick={closeModalHandle} />
+                                <button type="button" className="close bg-black text-white" onClick={closeModalHandle} aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </Col>
                         </Row>
                     </Col>
@@ -169,44 +172,48 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                         <Col lg={9}>
                             <h4>Activity</h4>
                             <Row>
-                                <Col lg={12} className='d-flex align-items-center'>
+                                <Col lg={12} className='d-flex align-items-center gap-1'>
                                     <Button
                                         onClick={() => {
                                             connectComponentCheck('All');
                                         }}
-                                        style={{
-                                            backgroundColor: '#f3f3f3',
-                                            borderColor: '#f3f3f3',
-                                            color: 'black',
-                                            boxShadow: 'none',
-                                            
-                                        }}>
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'All' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    // style={{
+                                    //     backgroundColor: '#f3f3f3',
+                                    //     borderColor: '#f3f3f3',
+                                    //     color: 'black',
+                                    //     boxShadow: 'none',
+
+                                    // }}
+                                    >
                                         All
                                     </Button>
                                     <Button
                                         onClick={() => {
                                             connectComponentCheck('Comments');
                                         }}
-                                        style={{
-                                            backgroundColor: '#f3f3f3',
-                                            borderColor: '#f3f3f3',
-                                            color: 'black',
-                                            boxShadow: 'none',
-                                        }}
-                                        className="ms-2">
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Comments' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    // style={{
+                                    //     backgroundColor: '#f3f3f3',
+                                    //     borderColor: '#f3f3f3',
+                                    //     color: 'black',
+                                    //     boxShadow: 'none',
+                                    // }}
+                                    >
                                         Comments
                                     </Button>
                                     <Button
                                         onClick={() => {
                                             connectComponentCheck('History');
                                         }}
-                                        style={{
-                                            backgroundColor: '#f3f3f3',
-                                            borderColor: '#f3f3f3',
-                                            color: 'black',
-                                            boxShadow: 'none',
-                                        }}
-                                        className="ms-2">
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'History' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    // style={{
+                                    //     backgroundColor: '#f3f3f3',
+                                    //     borderColor: '#f3f3f3',
+                                    //     color: 'black',
+                                    //     boxShadow: 'none',
+                                    // }}
+                                    >
                                         History
                                     </Button>
 
@@ -215,41 +222,43 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         onClick={() => {
                                             connectComponentCheck('AddSubtask');
                                         }
-
                                         }
-                                        style={{
-                                            backgroundColor: '#f3f3f3',
-                                            borderColor: '#f3f3f3',
-                                            color: 'black',
-                                            boxShadow: 'none',
-                                        }}
-                                        className="ms-2">
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'AddSubtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    // style={{
+                                    //     backgroundColor: '#f3f3f3',
+                                    //     borderColor: '#f3f3f3',
+                                    //     color: 'black',
+                                    //     boxShadow: 'none',
+                                    // }}
+                                    >
                                         Add Sub-tasks
                                     </Button>
                                     <Button
                                         onClick={() => {
                                             connectComponentCheck('Bugs');
                                         }}
-                                        style={{
-                                            backgroundColor: '#f3f3f3',
-                                            borderColor: '#f3f3f3',
-                                            color: 'black',
-                                            boxShadow: 'none',
-                                        }}
-                                        className="ms-2">
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Bugs' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    // style={{
+                                    //     backgroundColor: '#f3f3f3',
+                                    //     borderColor: '#f3f3f3',
+                                    //     color: 'black',
+                                    //     boxShadow: 'none',
+                                    // }}
+                                    >
                                         Bugs
                                     </Button>
                                     <Button
                                         onClick={() => {
                                             connectComponentCheck('Subtask');
                                         }}
-                                        style={{
-                                            backgroundColor: '#f3f3f3',
-                                            borderColor: '#f3f3f3',
-                                            color: 'black',
-                                            boxShadow: 'none',
-                                        }}
-                                        className="ms-2">
+                                        // style={{
+                                        //     backgroundColor: '#f3f3f3',
+                                        //     borderColor: '#f3f3f3',
+                                        //     color: 'black',
+                                        //     boxShadow: 'none',
+                                        // }}
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Subtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    >
                                         SubTask
                                     </Button>
 
@@ -598,65 +607,65 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                             ) : connectComponent === 'Bugs' ? (
 
                                 <Table className="mb-0 add_Color_font" striped>
-                                <thead>
-                                    <tr>
-                                        <th className='fw-bold'>#</th>
-                                        <th className='fw-bold'>Summary</th>
-                                        <th className='fw-bold'>Decription</th>
-                                        <th className='fw-bold'>Assignee</th>
-                                        <th className='fw-bold'>Priority</th>
-                                        <th className='fw-bold'>Start Date</th>
-                                        <th className='fw-bold'>End Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                    <thead>
+                                        <tr>
+                                            <th className='fw-bold'>#</th>
+                                            <th className='fw-bold'>Summary</th>
+                                            <th className='fw-bold'>Decription</th>
+                                            <th className='fw-bold'>Assignee</th>
+                                            <th className='fw-bold'>Priority</th>
+                                            <th className='fw-bold'>Start Date</th>
+                                            <th className='fw-bold'>End Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                                    {store?.getBugsReducer?.data?.response?.map((bug, ind) => {
-                                        return (
-                                            <tr className="align-middle">
-                                                <th>{ind + 1}</th>
+                                        {store?.getBugsReducer?.data?.response?.map((bug, ind) => {
+                                            return (
+                                                <tr className="align-middle">
+                                                    <th>{ind + 1}</th>
 
-                                                <td>
-                                                    <span title={bug?.summary}>
-                                                        {bug?.summary.slice(0, 8)}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
-                                                </td>
-                                                <td>
-                                                    <span>
-                                                        {bug?.expectedHours}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span>
-                                                        {bug?.priority}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span>
-                                                        {bug?.startDate.slice(0, 10)}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span>
-                                                        {bug?.dueDate.slice(0, 10)}
-                                                    </span>
-                                                </td>
-
-
-                                            </tr>
-                                        );
-                                    })}
-
-                                </tbody>
-                            </Table>
+                                                    <td>
+                                                        <span title={bug?.summary}>
+                                                            {bug?.summary.slice(0, 8)}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            {bug?.expectedHours}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            {bug?.priority}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            {bug?.startDate.slice(0, 10)}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            {bug?.dueDate.slice(0, 10)}
+                                                        </span>
+                                                    </td>
 
 
-                                          
+                                                </tr>
+                                            );
+                                        })}
 
-                            ) :  connectComponent === 'Subtask' ? (
+                                    </tbody>
+                                </Table>
+
+
+
+
+                            ) : connectComponent === 'Subtask' ? (
 
                                 <Table className="mb-0 add_Color_font" striped>
                                     <thead>
@@ -770,16 +779,8 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 </div>
                                 <div className=" d-flex">
                                     <h4 className="m-0 p-0">Priority :</h4>
-                                    <p className="ms-2 p-0">
-                                        {editData?.priority == "High"
-                                            ? 'High'
-                                            : '' || editData?.priority == "Medium"
-                                                ? 'Medium'
-                                                : '' || editData?.priority == "Low"
-                                                    ? 'Low'
-                                                    : '' || editData?.priority == "Critical"
-                                                        ? 'Critical'
-                                                        : ''}
+                                    <p className={`ms-2 fw-bold p-0`}>
+                                        {editData?.priority}
                                     </p>
                                 </div>
                                 <div className=" d-flex">

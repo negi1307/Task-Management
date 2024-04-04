@@ -101,7 +101,7 @@ const Projects = () => {
     useEffect(() => {
         let body = {
             flag: "project",
-            projectId: '',
+            projectId: '66026a37b110e4325bc045fc',
             milestoneId: '',
             sprintId: '',
             projectStatus: 1,
@@ -123,7 +123,7 @@ const Projects = () => {
     const statusInfo = (status) => {
         let body = {
             flag: 'project',
-            projectId: '',
+            projectId: '66026a37b110e4325bc045fc',
             milestoneId: '',
             skip: 1,
         };
@@ -133,7 +133,7 @@ const Projects = () => {
         setSkip(value);
         let body = {
             flag: 'project',
-            projectId: '',
+            projectId: '66026a37b110e4325bc045fc',
             milestoneId: '',
             skip: value,
         };
