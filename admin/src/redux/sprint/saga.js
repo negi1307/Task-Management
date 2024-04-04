@@ -116,6 +116,7 @@ function* getAllSingleSprintFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getAllSingleSprintApi, { payload });
+        console.log(response,'response')
         if (response.data.status) {
             yield put({
                 type: SprintTypes.GET_ALL_SINGLE_SPRINT_SUCCESS,

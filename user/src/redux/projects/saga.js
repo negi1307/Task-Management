@@ -9,6 +9,7 @@ function* addProjectFunction({ payload }) {
             payload: {}
         })
         const response = yield call(addProjectApi, { payload });
+        console.log(response,'response')
         if (response.data.status) {
             yield put({
                 type: ProjectTypes.ADD_PROJECT_SUCCESS,

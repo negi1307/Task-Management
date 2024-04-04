@@ -17,102 +17,85 @@ import { getAllProjects } from '../../../../redux/projects/action';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 // import ToastHandle from '../../../constants/toaster/toaster';
+
 const Milestone = () => {
     const { id } = useParams();
-    // console.log(id, 'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
     const store = useSelector((state) => state);
-
     const dispatch = useDispatch();
+
     const [openModel, setOpenModel] = useState(false);
     const [render, setRender] = useState(false);
     const [status, setStatus] = useState(1);
-
-    const GetDataById = store?.getProjectById?.data?.project;
-    // const GetSinglemilstonesData = store?.getSigleMileStone?.data?.Response;
-    const getMileStoneData = store?.getProject?.data?.response;
-    console.log('getMileStoneData%%%%%%%%%%%%%%%%%%%%%%%%%%%', getMileStoneData);
-    const loaderhandel = store?.getSigleMileStone;
     const [checkedStatus, setCheckedStatus] = useState();
     const [statusModal, setStatusModal] = useState(false);
     const [checkedData, setCheckedData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const [editData, setEditData] = useState();
     const [skip, setSkip] = useState(1);
+
+    const GetDataById = store?.getProjectById?.data?.project;
+    const getMileStoneData = store?.getProject?.data?.response;
+    const loaderhandel = store?.getSigleMileStone;
     const deletehandle = store?.deleteMileStone?.data;
+
     const closeModal = (val) => {
-        if (val == 'render') {
+        if (val === 'render') {
             setRender(!render);
         }
         setOpenModel(false);
     };
+
     const handleActive = (val) => {
-        if (val) {
-            setStatus(1);
-            let data = {
-                id: id,
-                status: 1,
-            };
-            dispatch(getsingleMileStone(data));
-        } else {
-            setStatus(0);
-            let data = {
-                id: id,
-                status: 0,
-            };
-            dispatch(getsingleMileStone(data));
-        }
+        const newStatus = val ? 1 : 0;
+        setStatus(newStatus);
+        dispatch(getsingleMileStone({ id: id, status: newStatus }));
     };
+
     const handleStatusChange = (e, data) => {
-        if (e.target.checked) {
-            setCheckedStatus(true);
-        } else {
-            setCheckedStatus(false);
-        }
+        const newCheckedStatus = e.target.checked;
+        setCheckedStatus(newCheckedStatus);
         setCheckedData(data);
         setStatusModal(true);
     };
+
     const handleYes = () => {
-        if (checkedStatus) {
-            let body = {
-                id: checkedData._id,
-                status: true,
-            };
-            dispatch(deleteMileStone(body));
-        } else {
-            let body = {
-                id: checkedData._id,
-                status: false,
-            };
-            dispatch(deleteMileStone(body));
-        }
+        const newStatus = checkedStatus ? true : false;
+        const body = {
+            id: checkedData._id,
+            status: newStatus,
+        };
+        dispatch(deleteMileStone(body));
         setStatusModal(false);
     };
+
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
     };
+
     const closeupdatemodal = (val) => {
-        if (val == 'render') {
+        if (val === 'render') {
             setRender(!render);
         }
         setOpenEditModal(false);
     };
+
     useEffect(() => {
-        if (deletehandle?.status == 200) {
+        if (deletehandle?.status === 200) {
             ToastHandle('success', deletehandle?.message);
             closeModal('render');
-        } else if (deletehandle?.status == 400) {
-            ToastHandle('error', deletehandle?.message);
-        } else if (deletehandle?.status == 500) {
+        } else if (deletehandle?.status === 400 || deletehandle?.status === 500) {
             ToastHandle('error', deletehandle?.message);
         }
     }, [deletehandle]);
+
     useEffect(() => {
         dispatch(getProjectsById(id));
         dispatch(getsingleMileStone({ id: id, status: status }));
     }, [render]);
+
     useEffect(() => {
-        let body = {
+        const body = {
             flag: 'milestone',
             projectId: id,
             milestoneId: '',
@@ -121,9 +104,10 @@ const Milestone = () => {
         };
         dispatch(getAllProjects(body));
     }, []);
-    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+
+    const handlePaginationChange = (event, value) => {
         setSkip(value);
-        let body = {
+        const body = {
             flag: 'milestone',
             projectId: id,
             milestoneId: '',
@@ -134,81 +118,15 @@ const Milestone = () => {
 
     return (
         <>
-            {/* {/ <h1>{id}</h1> /} */}
-
-            {/* <Row>
-                    <Col className="text-end" lg={12}>
-                        <Button
-                            onClick={() => {
-                                setOpenModel(true);
-                            }}
-
-                            variant="info"
-                            type="submit"
-                            className="btn fs-5  text-white p-1   web_button">
-                            Add Milestone
-                        </Button>
-                    </Col>
-                </Row> */}
             <div className='title'><h3>MILESTONES</h3></div>
             {loaderhandel.loading ? (
                 <MainLoader />
             ) : (
                 <>
-                    {/* <Row>
-                            <Col lg={12}>
-                                <Row>
-                                    <Col className="text-center" lg={12}>
-                                        <h4> Project</h4>
-                                    </Col>
-                                    <Row>
-                                        <Col lg={12} className='d-flex justify-content-between'>
-                                            <div className='d-flex'><h5 className='p-0 m-0'>Project Name :</h5>
-                                                <p className='p-0 m-0'>{GetDataById?.projectName}</p></div>
-                                            <div className='d-flex '><h5 className='p-0 m-0'>Client Name :</h5>
-                                                <p className='p-0 m-0'>{GetDataById?.clientName}</p></div>
-                                            <div className='d-flex '><h5 className='p-0 m-0'>Project Type :</h5>
-                                                <p className='p-0 m-0'>{GetDataById?.projectType}</p></div>
-                                            <div className='d-flex '><h5 className='p-0 m-0'>Project Start Date :</h5>
-                                                <p className='p-0 m-0'> {moment(GetDataById?.startDate).format('L')}</p></div>
-                                            <div className='d-flex '><h5 className='p-0 m-0'>Project End Date :</h5>
-                                                <p className='p-0 m-0'> {moment(GetDataById?.endDate).format('L')}</p></div>
-                                        </Col>
-                                    </Row>
-
-
-
-
-                                </Row>
-                            </Col>
-
-
-                        </Row> */}
                     <Card className="mt-3">
                         <Card.Body>
                             <Col className="mx-auto" lg={12}>
                                 <Row>
-                                    {/* <div className="row mx-auto mt-2">
-                                            <div className="d-flex col-4">
-                                                <div className="row d-flex align-items-center">
-                                                    <div
-                                                        className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
-                                                        <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
-                                                            Active
-                                                        </p>
-                                                    </div>
-                                                    <div
-                                                        className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
-                                                        <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
-                                                            Deactive
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-4 d-flex align-items-center justify-content-center">
-                                                <h4 className="header-title heading_data"> Milestones</h4>
-                                            </div>
-                                        </div> */}
                                     <Col className="" lg={12}>
                                         <Table striped>
                                             <thead>
@@ -223,37 +141,25 @@ const Milestone = () => {
                                             </thead>
                                             <tbody>
                                                 {getMileStoneData?.map((item, index) => (
-                                                    <tr>
+                                                    <tr key={item._id}>
                                                         <td>{index + 1}</td>
                                                         <td>
                                                             <Link
                                                                 className='text-secondary'
-                                                                to={`/dashboard/singleMilestonesprint/projectId=/${item?.milestoneId?.projectId}&milestoneId=/${item?.milestoneId?._id}`}>
+                                                                to={`/dashboard/singleMilestonesprint/projectId=/${item?.milestoneId}&milestoneId=/${item?._id}`}>
                                                                 {item.title}
                                                             </Link>
                                                         </td>
                                                         <td>
-                                                            {' '}
                                                             <div
                                                                 dangerouslySetInnerHTML={{
                                                                     __html: item.description,
                                                                 }}
                                                             />
                                                         </td>
-
                                                         <td> {moment(item.start_date).format('DD/MM/YYYY')}</td>
+                                                        <td>{item.daysLeft}</td>
                                                         <td>
-                                                            {item.daysLeft}
-
-                                                            {/* {moment(item?.milestoneId?.completion_date).format('L')} */}
-                                                        </td>
-                                                        {/* <td> <Form.Check
-                                                                type="switch"
-                                                                checked={item?.status}
-                                                                onChange={(e) => handleStatusChange(e, item)}
-                                                            /></td> */}
-                                                        <td>
-                                                            {' '}
                                                             <Row>
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0 ">
@@ -262,14 +168,6 @@ const Milestone = () => {
                                                                             <i className="mdi mdi-eye m-0 p-0"></i>
                                                                         </Link>
                                                                     </p>
-                                                                    {/* <p className="action-icon m-0 p-0  ">
-                                                                        <i
-                                                                            onClick={() => {
-                                                                                handelUpdate(item);
-                                                                            }}
-                                                                            className="uil-edit-alt m-0 p-0"
-                                                                        ></i>
-                                                                    </p> */}
                                                                 </Col>
                                                             </Row>
                                                         </td>
@@ -302,7 +200,7 @@ const Milestone = () => {
 
             <Create modal={openModel} closeModal={closeModal} />
             <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
-            {/* delete modal */}
+            
             <Modal show={statusModal} onHide={() => setStatusModal(false)}>
                 <Modal.Body>
                     Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this MileStone?
@@ -315,7 +213,7 @@ const Milestone = () => {
                         }}>
                         No
                     </Button>
-                    <Button className=" web_button " variant="primary" onClick={() => handleYes()}>
+                    <Button className=" web_button " variant="primary" onClick={handleYes}>
                         Yes
                     </Button>
                 </Modal.Footer>

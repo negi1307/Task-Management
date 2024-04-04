@@ -100,7 +100,6 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
     function toggle() {
         setOpenModal(true);
     }
-
     let priorityWithLetter;
     let backgroundColorClass;
 
@@ -125,18 +124,24 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
             priorityWithLetter = item?.priority;
             backgroundColorClass = '';
     }
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    const handleClick = () => {
+        setIsPlaying(prevState => !prevState);
+    };
+
 
     return (
         <>
             <Draggable key={item.id} draggableId={item?.id} index={index}>
                 {(provided) => (
                     <div ref={provided?.innerRef} {...provided?.draggableProps} {...provided?.dragHandleProps}>
-                        <TaskInformation className="py-2 pe-0">
-                            <div className="row w-100">
-                                <div className="col-12">
+                        <TaskInformation className="py-2 pe-0 shadow-lg p-3  rounded-4 ">
+                            <div className="row ">
+                                <div className="col-12 ">
                                     <div className="row">
                                         <div className="col-9 d-flex align-items-center">
-                                            <a className='text-dark text-truncate'
+                                            <a className='fw-bold py-1 fw-bold text-truncate rounded-pill   task-title' style={{ backgroundColor: 'lightblue', color: 'oceanblue' }}
                                                 href="#"
                                                 onClick={() => {
                                                     handleDetailPage(item);
@@ -144,55 +149,143 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                 {item.summary}
                                             </a>
                                         </div>
-                                        <div className="col-3 px-0">
-                                            <div className="row mx-auto border">
-                                                <div className="col-6 border-end add_padding_box ">
-                                                    <button type="button " className="m-0 p-0 border-0 bg-transparent">
-                                                        <i
-                                                            className="uil-edit-alt fw-bold text-black m-0 p-0 me-2 del_edit"
-                                                            onClick={() => {
-                                                                handelUpdate(item);
-                                                            }}></i>
-                                                    </button>
-                                                </div>
-                                                <div className="col-6 add_padding_box">
-                                                    <button
-                                                        type="button"
-                                                        className="m-0 p-0 border-0 bg-transparent"
-                                                        onClick={() => deleteData(item?.id)}>
-                                                        <i className="mdi text-black mdi-delete m-0 p-0 me-2 del_edit"></i>
-                                                    </button>
-                                                </div>
+                                        <div className="col-3 text-center p-1">
+                                            <div className="dropdown">
+                                                <button className="btn btn-white btn-outline-white" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                                                    <i className="bi bi-three-dots-vertical fs-5 fw-bold text-dark"></i>
+                                                </button>
+                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start small-width bg-transparent border-0" aria-labelledby="dropdownMenuButton1">
+                                                    <li className='d-flex flex-column align-items-start small-width'>
+                                                        <button type="button" className="dropdown-item m-0 p-0 border-0 bg-transparent" onClick={() => deleteData(item?.id)}>
+                                                            <i className="mdi mdi-delete text-dark m-0 p-0 me-2 del_edit"></i>
+                                                        </button>
+                                                        <button type="button" className="dropdown-item m-0 p-0 border-0 bg-transparent">
+                                                            <i className="uil-edit-alt m-0 p-0 me-2 text-dark del_edit" onClick={() => { handelUpdate(item); }}></i>
+                                                        </button>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
+
+
+
+                                        {/* <div className="col-6 pe-0">
+                                            <div className="action_icon position-relative">
+                                                <div className="col-12 d-flex align-items-center justify-content-end">
+                                                    <i
+                                                        onClick={toggle}
+                                                        className="fa fa-ellipsis-h cp bg-light p-2 rounded-3"
+                                                        aria-hidden="true"></i>
+                                                </div>
+                                                <Modal
+                                                    show={openModal}
+                                                    onHide={closeOpenModal}
+                                                    className="bg_trans_modal">
+                                                    <Modal.Body className="p-0">
+                                                        <div className="row position-absolute add_position ">
+                                                            <div className="col-4 border p-2 bg-white add_position_modal_edit">
+                                                                <div className="row">
+                                                                    <div className="col-12 pb-2 d-flex align-items-center justify-content-start">
+                                                                        <h4 className="m-0 p-0">Action</h4>
+                                                                    </div>
+                                                                    <div className="col-12 pb-2 d-flex align-items-center justify-content-start">
+                                                                        <button
+                                                                            type="button "
+                                                                            className="m-0 p-0 border-0 bg-transparent">
+                                                                            <i
+                                                                                className="uil-edit-alt m-0 p-0 me-2"
+                                                                                onClick={() => {
+                                                                                    handelUpdate(item);
+                                                                                }}></i>
+                                                                            Edit
+                                                                        </button>
+                                                                    </div>
+                                                                    <div className="col-12 d-flex align-items-center justify-content-start">
+                                                                        <button
+                                                                            type="button"
+                                                                            className="m-0 p-0 border-0 bg-transparent"
+                                                                            onClick={() => deleteData(item?.id)}>
+                                                                            <i className="mdi mdi-delete m-0 p-0 me-2"></i>
+                                                                            Delete
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </Modal.Body>
+                                                </Modal>
+                                                {isOpen && (
+                                                    <div className="row position-absolute add_position ">
+                                                        <div className="col-12 border p-2 bg-white">
+                                                            <div className="row">
+                                                                <div className="col-12 pb-2 d-flex align-items-center justify-content-start">
+                                                                    <h4 className="m-0 p-0">Action</h4>
+                                                                </div>
+                                                                <div className="col-12 pb-2 d-flex align-items-center justify-content-start">
+                                                                    <button type="button " className="m-0 p-0">
+                                                                        <i
+                                                                            className="uil-edit-alt m-0 p-0 me-2"
+                                                                            onClick={() => {
+                                                                                handelUpdate(item);
+                                                                            }}></i>
+                                                                        Edit
+                                                                    </button>
+                                                                </div>
+                                                                <div className="col-12 d-flex align-items-center justify-content-start">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="m-0 p-0"
+                                                                        onClick={() => deleteData(item?.id)}>
+                                                                        <i className="mdi mdi-delete m-0 p-0 me-2"></i>
+                                                                        Delete
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div> */}
                                     </div>
                                 </div>
-                                <div className="col-12 py-2">
-                                    <p className="m-0 p-0">
-                                        <div
-                                            dangerouslySetInnerHTML={{
-                                                __html: item?.description,
-                                            }}></div>
+                                <div className="col-12 py-2 m-0">
+                                    <p className="m-0 p-0 d-flex " >
+                                        <div className='task-title text-dark p-0' title={item?.description}
+                                        >Decription : {item?.description}</div>
+
                                     </p>
                                 </div>
-                                <div className='col-4'>
-                                    <p className={`fw-bold ${backgroundColorClass}`}>
-                                        {priorityWithLetter}
+                                <div className='col-12 m-0'>
+                                    <p className={`task-title text-dark p-0 ${backgroundColorClass}`}>
+                                        Priority : {priorityWithLetter}
                                     </p>
                                 </div>
-                                <div className="col-12">
+                                <div className="col-12 m-0">
                                     <div className="row mb-1">
                                         <div className="col-6 d-flex align-items-center">
                                             <div className="secondary-details d-flex align-items-center">
                                                 <p className="m-0 p-0">
-                                                    <span>
+                                                    <span className='task-title text-dark p-0'>
                                                         {item?.startDate ? moment(item?.startDate).format("DD/MM/YYYY") : ''}
                                                     </span>
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="col-6 d-flex align-items-center justify-content-end pe-0">
-                                            <div className=" d-flex">
+
+                                        <div className="col-3 text-end">
+                                            <div className="secondary-details d-flex align-items-end justify-content-end">
+                                                <p className=" mt-1 m-0 ">
+                                                    <span className='task-title text-dark text-end p-0'>
+                                                        <i className={`bi fs-3 mt-2 ${isPlaying ? 'bi-pause-circle-fill' : 'bi-play-circle-fill'}`}
+                                                            title={isPlaying ? 'Pause' : 'Play'}
+                                                            onClick={handleClick} style={{ cursor: 'pointer' }} />
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="col-3 text-center d-flex align-items-center justify-content-center  ">
+                                            <div className=" d-flex text-end">
+                                                {/* <h5 className="m-0 p-0"> Assignee :</h5> */}
                                                 <OverlayTrigger
                                                     placement="top"
                                                     overlay={
@@ -201,13 +294,13 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                             {item?.assignees?.assigneeInfo?.lastName}
                                                         </Tooltip>
                                                     }>
-                                                    <div className="mt-1 cp">
+                                                    <div className=" cp">
                                                         <span
                                                             style={{
                                                                 backgroundColor: '#605e5a',
                                                                 borderRadius: '50%',
                                                                 padding: '5px 6px',
-
+                                                                fontSize: '11px',
                                                                 color: 'white',
                                                                 fontWeight: '800',
                                                             }}>
@@ -224,13 +317,13 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </TaskInformation>
-                    </div>
+                            </div >
+                        </TaskInformation >
+                    </div >
                 )}
-            </Draggable>
+            </Draggable >
             {/* delete modal */}
-            <Modal show={deleteModal} onHide={() => setDeleteModal(false)}>
+            <Modal Modal show={deleteModal} onHide={() => setDeleteModal(false)}>
                 <Modal.Body>Are you sure you want to delete this Task ?</Modal.Body>
                 <Modal.Footer>
                     <Button

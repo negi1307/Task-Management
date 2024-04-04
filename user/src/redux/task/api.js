@@ -9,7 +9,8 @@ export function getSingleSprintTaskApi(data): any {
     return api.get(`${URL.SingleSprintTask}${data.payload.id}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}`);
 }
 export function getAllTaskApi(data): any {
-    return api.get(URL.GetAllTask+data.payload.flag+"&projectId="+data.payload.projectId+"&milestoneId="+data.payload.milestoneId+"&sprintId="+data.payload.sprintId+"&status="+data.payload.status+"&activeStatus="+data.payload.activeStatus+"&searchString="+data.payload.searchString+"&skip="+data.payload.skip);
+    // console.log(data,'88888888888888888888888888888888')
+    return api.get(URL.GetAllTask+data?.payload?.flag+"&sprintId="+data?.payload?.sprintId+"&status="+data?.payload?.status+"&activeStatus="+data?.payload?.activeStatus+"&searchString="+data?.payload?.searchString+"&skip="+data?.payload?.skip);
 }
 
 export function getAllAssigneeNamesApi(data): any {

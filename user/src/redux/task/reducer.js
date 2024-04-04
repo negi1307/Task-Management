@@ -87,6 +87,7 @@ export const getSigleSprintTask = (state = GET_SINGLE_SPRINTTASK_INITIAL_STATE, 
 };
 
 export const getAllTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) => {
+    console.log(GET_All_TASK_INITIAL_STATE,'GET_All_TASK_INITIAL_STATE')
     switch (action.type) {
         case TASK_TYPES.GET_ALL_TASK_LOADING:
             return {

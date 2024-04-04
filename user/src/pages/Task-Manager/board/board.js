@@ -55,8 +55,10 @@ const Title = styled.span`
     align-self: flex-start;
 `;
 
+
 const Boards = (props) => {
-    const { projectId, milestoneId, spriteId } = useParams();
+    const { projectId, milestoneId, sprintId } = useParams();
+    console.log( sprintId,'ssssssssssssssssssssssssssssssssssssss')
 
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
@@ -78,16 +80,16 @@ const Boards = (props) => {
             searchString: '',
             projectId: projectId,
             milestoneId: milestoneId,
-            sprintId: spriteId,
+            sprintId: sprintId,
             skip: 1,
-            activeStatus: '',
+            activeStatus: true,
         };
 
         dispatch(getAllTask(body));
     }, []);
 
     useEffect(() => {
-        dispatch(listProjectAssignee({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
+        dispatch(listProjectAssignee({ projectId: projectId, milestoneId: milestoneId, sprintId: sprintId }));
         dispatch(getTaskStatusCount());
     }, []);
 
@@ -148,9 +150,9 @@ const Boards = (props) => {
                     searchString: '',
                     projectId: projectId,
                     milestoneId: milestoneId,
-                    sprintId: spriteId,
+                    sprintId: sprintId,
                     skip: 1,
-                    activeStatus: '',
+                    activeStatus: true,
                 };
                 dispatch(getAllTask(body));
             }, 30);
@@ -241,7 +243,7 @@ const Boards = (props) => {
             searchString: '',
             projectId: projectId,
             milestoneId: milestoneId,
-            sprintId: spriteId,
+            sprintId: sprintId,
             skip: 1,
             activeStatus: '',
         };
@@ -266,7 +268,7 @@ const Boards = (props) => {
                     searchString: e.target.value,
                     projectId: projectId,
                     milestoneId: milestoneId,
-                    sprintId: spriteId,
+                    sprintId: sprintId,
                     skip: 1,
                     activeStatus: '',
                 };
