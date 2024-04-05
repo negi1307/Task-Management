@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
+import { FaFilter } from "react-icons/fa";
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
 import { getAssignUserAction, getsingleSprintTask, getComment, getHistoryAction, updateTaskStatus } from '../../../../src/redux/task/action';
@@ -23,6 +24,7 @@ import { getSingleSprint } from '../../../redux/sprint/action';
 import { getSprintId } from '../../../redux/sprint/reducres';
 import { getMilestoneId, getMilestonetId } from '../../../redux/milestone/reducer';
 import { getProjectId } from '../../../redux/projects/reducers';
+import { TiPlus } from "react-icons/ti";
 
 const Container = styled.div`
     display: flex;
@@ -274,13 +276,16 @@ const Boards = () => {
         <>
             <div className="add_task row d-flex  m-0 ">
                 <div className="col-lg-8 d-flex  align -items-center">
-                    <div className=''>
+                    <div className='position-relative'>
+                        <FaFilter className='position-absolute fs-6' style={{ left: '4%', top: '30%', fontWeight: '900' }} />
                         <select
                             name="Assignee"
-                            className="form-select"
+                            role='button'
+                            className="form-select ps-3 border-0 fw-medium"
                             id="exampleForm.ControlInput1"
                             {...register('Assignee', { required: true })}
                             onChange={handleAssigneefilter}
+                            style={{ backgroundColor: '#F1F3FA' }}
                         >
                             <option value={''} hidden selected>
                                 Assignee
@@ -361,14 +366,14 @@ const Boards = () => {
                     <div className="ms-2 ">
                         <button
                             type="button"
-                            className="mybutton btn p-1 fw-bold py-0 m-0  web_button"
+                            className="mybutton btn p-1 fw-bold py-0 px-2 m-0  web_button"
                             onClick={() => {
                                 // console.log('button click');
                                 setShowModal(!showModal);
                                 // dispatch(getAllTask({ projectId: projectId, mileStoneId: milestoneId, sprintId: spriteId }))
 
                             }}>
-                            Add Task
+                            <TiPlus />
                         </button>
                         <RightBar
                             className="d-none"

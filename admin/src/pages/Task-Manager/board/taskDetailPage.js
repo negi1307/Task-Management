@@ -146,7 +146,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         setButtonChange(true);
     }
 
-
     return (
         <>
             <Modal show={modal} onHide={closeModal} size={'xl'}>
@@ -154,7 +153,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                     <Col lg={12}>
                         <Row>
                             <Col lg={7} className="text-end">
-                                <Modal.Title id="" className="mx-auto">
+                                <Modal.Title id="" className="mx-auto modal_titles">
                                     Task Detail
                                 </Modal.Title>
                             </Col>
@@ -169,8 +168,8 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                 <hr />
                 <Modal.Body>
                     <Row>
-                        <Col lg={9}>
-                            <h4>Activity</h4>
+                        <Col lg={7}>
+                            <h4 className='modal_titles'>Activity</h4>
                             <Row>
                                 <Col lg={12} className='d-flex align-items-center gap-1'>
                                     <Button
@@ -458,7 +457,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         </Col>
                                         <Row>
                                             <Col className='text-center'>
-                                                <Button type="submit" className='bg-black border-0 my-1'>{buttonChange ? 'Add' : 'Update'}</Button>
+                                                <Button type="submit" className='mybutton btn px-2 fw-bold py-1 mt-2 web_button'>{buttonChange ? 'Add' : 'Update'}</Button>
                                             </Col>
                                         </Row>
                                     </Row>
@@ -687,103 +686,78 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 ''
                             )}
                         </Col>
-                        <Col lg={3}>
-                            <div className="p-2">
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0">Project Name :</h4>
-                                    <p className="ms-2 p-0">{editData?.projects?.projectName}</p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0">Milestone Name :</h4>
-                                    <p className="ms-2 p-0">{editData?.milestones?.title}</p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0">Sprint Name :</h4>
-                                    <p className="ms-2 p-0">{editData?.sprints?.sprintName} </p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0">Summary :</h4>
-                                    <p className="ms-2 p-0">{editData?.summary}</p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0"> Description :</h4>
-                                    <p className="ms-2 p-0">
-                                        <div
-                                            dangerouslySetInnerHTML={{
-                                                __html: editData?.description,
-                                            }}
-                                        />
-                                    </p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0"> Start Date :</h4>
-                                    <p className="ms-2 p-0">
-                                        {editData?.startDate ? moment(editData?.startDate).format('DD/MM/YYYY') : ''}
-                                    </p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0"> End Date :</h4>
-                                    <p className="ms-2 p-0">
-                                        {editData?.dueDate ? moment(editData?.dueDate).format('DD/MM/YYYY') : ''}
-                                    </p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0"> Assignee :</h4>
-                                    <p className="ms-2 p-0">
-                                        {editData?.assigneeInfo?.firstName}{' '}
-                                        {editData?.assigneeInfo?.lastName}
-                                    </p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0">Reporter :</h4>
-                                    <p className="ms-2 p-0">{editData?.reporterInfo?.firstName}{' '}{editData?.reporterInfo?.lastName}</p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0">Priority :</h4>
-                                    <p className={`ms-2 fw-bold p-0`}>
-                                        {editData?.priority}
-                                    </p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0">Status :</h4>
-                                    <p className="ms-2 p-0">
-                                        {editData?.status == 1
-                                            ? 'To-Do'
-                                            : '' || editData?.status == 2
-                                                ? 'In-Progress'
-                                                : '' || editData?.status == 3
-                                                    ? 'Hold'
-                                                    : '' || editData?.status == 4
-                                                        ? 'Done'
-                                                        : ''}
-                                    </p>
-                                </div>
-                                {editData?.attachment !== '' ? (
-                                    <div className=" d-flex">
-                                        <h4 className="m-0 p-0 me-2">Attachment:</h4>
-                                        <a
-                                            href={editData?.attachment}
-                                            download
-                                            target="_blank"
-                                            className="align_icon_dowl">
-                                            <i className="dripicons-download download_color"></i>
-                                        </a>
-                                        <img
-                                            style={{ width: '10rem', height: '10rem' }}
-                                            className="img_style ps-1"
-                                            src={
-                                                editData?.attachmentType !== 'application/pdf'
-                                                    ? editData?.attachment
-                                                    : pdfImage
-                                            }
-                                        />
-
-                                        {/* <img src={editData?.attachment} /> */}
-                                    </div>
-                                ) : (
-                                    ''
-                                )}
+                        <Col lg={5}>
+                            <div class="table-responsive">
+                                <table class="table lh-sm table-borderless text-nowrap" style={{ fontSize: '14px' }} >
+                                    <tbody className='text-start'>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Project Name :</th>
+                                            <td>{editData?.projects?.projectName}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Milestone Name :</th>
+                                            <td>{editData?.milestones?.title}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Sprint Name :</th>
+                                            <td>{editData?.sprints?.sprintName}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Summary :</th>
+                                            <td>{editData?.summary}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Description :</th>
+                                            <td>
+                                                <div dangerouslySetInnerHTML={{ __html: editData?.description }} />
+                                            </td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Start Date :</th>
+                                            <td>{editData?.startDate ? moment(editData?.startDate).format('DD/MM/YYYY') : ''}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold' style={{ width: 'fit-content', }}>End Date :</th>
+                                            <td>{editData?.dueDate ? moment(editData?.dueDate).format('DD/MM/YYYY') : ''}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Assignee :</th>
+                                            <td>{editData?.assigneeInfo?.firstName} {editData?.assigneeInfo?.lastName}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Reporter :</th>
+                                            <td>{editData?.reporterInfo?.firstName} {editData?.reporterInfo?.lastName}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Priority :</th>
+                                            <td class="fw-bold">{editData?.priority}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Status :</th>
+                                            <td>
+                                                {editData?.status == 1 ? 'To-Do' : ''}
+                                                {editData?.status == 2 ? 'In-Progress' : ''}
+                                                {editData?.status == 3 ? 'Hold' : ''}
+                                                {editData?.status == 4 ? 'Done' : ''}
+                                            </td>
+                                        </tr>
+                                        {editData?.attachment !== '' ? (
+                                            <tr className='text-start'>
+                                                <th className='fw-bold' style={{ width: 'fit-content', }}>Attachment:</th>
+                                                <td>
+                                                    <a href={editData?.attachment} download target="_blank">
+                                                        <i class="dripicons-download download_color"></i>
+                                                    </a>
+                                                    <img style="width: 10rem; height: 10rem;" class="img_style ps-1" src={editData?.attachmentType !== 'application/pdf' ? editData?.attachment : pdfImage} />
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            ''
+                                        )}
+                                    </tbody>
+                                </table>
                             </div>
+
                         </Col>
                     </Row>
                 </Modal.Body >

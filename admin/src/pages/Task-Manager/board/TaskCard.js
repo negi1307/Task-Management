@@ -137,29 +137,30 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                 {(provided) => (
                     <div ref={provided?.innerRef} {...provided?.draggableProps} {...provided?.dragHandleProps}>
                         <TaskInformation className="py-2 mt-2 m-0 pe-1 shadow-lg p-3 h-75  rounded-4 ">
-                            <div className="row ">
+                            <div className="row">
                                 <div className="col-12 m-0  ">
                                     <div className="row">
                                         <div className="col-9 mt-1 m-0 d-flex align-items-center">
-                                            <a className='fw-bold py-1 m-0 fw-bold text-truncate rounded-pill   task-title' style={{ backgroundColor: 'lightblue', color: 'oceanblue' }}
+                                            <a className='fw-bold py-1 mt-1 m-0 text-truncate rounded-pill task-title' style={{ backgroundColor: 'lightblue', color: 'oceanblue', }}
                                                 href="#"
                                                 onClick={() => {
                                                     handleDetailPage(item);
-                                                }}title={item?.summary}>
+                                                }} title={item?.summary}>
                                                 {item?.summary ? item.summary.slice(0, 10) : ''}
                                             </a>
                                         </div>
                                         <div className="col-3 text-center p-1 mt-1">
                                             <div className="dropdown">
-                                                <button className="border-0 bg-white icon_buttons" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                                                <button className="border-0 bg-white icon_buttons" type="button" id="dropdownMenuButton1"
+                                                    data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                                     <i className="bi bi-three-dots-vertical fs-5 fw-bold text-dark"></i>
                                                 </button>
-                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start small-width bg-transparent border-0" aria-labelledby="dropdownMenuButton1">
+                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start small-width  border-0" aria-labelledby="dropdownMenuButton1">
                                                     <li className='d-flex flex-column align-items-start small-width'>
-                                                        <button type="button" className="dropdown-item m-0 p-0 border-0 bg-transparent" onClick={() => deleteData(item?.id)}>
+                                                        <button className="dropdown-item m-0 p-0 border-0 bg-transparent" onClick={() => deleteData(item?.id)}>
                                                             <i className="mdi mdi-delete text-dark m-0 p-0 me-2 del_edit"></i>
                                                         </button>
-                                                        <button type="button" className="dropdown-item m-0 p-0 border-0 bg-transparent">
+                                                        <button className="dropdown-item m-0 p-0 border-0 bg-transparent">
                                                             <i className="uil-edit-alt m-0 p-0 me-2 text-dark del_edit" onClick={() => { handelUpdate(item); }}></i>
                                                         </button>
                                                     </li>
@@ -249,14 +250,20 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                     </div>
                                 </div>
                                 <div className="col-12">
-    <p className="m-0 py-1 p-0 d-flex">
-        <div className='task-title text-dark p-0' title={item?.description}>
-            Description: {item?.description ? item.description.slice(0, 13) : ''}
-        </div>
-    </p>
-</div>
+                                    <p className="m-0 py-1 p-0 d-flex"
+                                        onClick={() => {
+                                            handleDetailPage(item);
+                                        }}>
+                                        <div className='task-title text-dark p-0' title={item?.description}>
+                                            Description: {item?.description ? item.description.slice(0, 13) : ''}
+                                        </div>
+                                    </p>
+                                </div>
 
-                                <div className='col-12 m-0'>
+                                <div className='col-12 m-0'
+                                    onClick={() => {
+                                        handleDetailPage(item);
+                                    }}>
                                     <p className={`task-title text-dark p-0 m-0 ${backgroundColorClass}`}>
                                         Priority : {priorityWithLetter}
                                     </p>
@@ -295,7 +302,10 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                             {item?.assignees?.assigneeInfo?.lastName}
                                                         </Tooltip>
                                                     }>
-                                                    <div className=" cp">
+                                                    <div className=" cp"
+                                                        onClick={() => {
+                                                            handleDetailPage(item);
+                                                        }}>
                                                         <span
                                                             style={{
                                                                 backgroundColor: '#605e5a',

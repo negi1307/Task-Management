@@ -68,15 +68,15 @@ const Create = ({ modal, CloseModal, projectId, milestoneId, }) => {
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
-                            <Col lg={7} className="text-end">
-                                <Modal.Title id="" className="mx-auto">
-                                    Add Sprint
-                                </Modal.Title>
-                            </Col>
-                            <Col lg={5} className="text-end pt-2">
-                                <button type="button" className="close bg-black text-white" onClick={handleClose} aria-label="Close">
+                            <Col lg={12} className="text-end pt-2">
+                                <button type="button" className="close border-0 bg-black text-white" onClick={handleClose} aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
+                            </Col>
+                            <Col lg={12} className="text-center">
+                                <Modal.Title id="" className="mx-auto modal_titles">
+                                    Add Sprint
+                                </Modal.Title>
                             </Col>
                         </Row>
                     </Col>
