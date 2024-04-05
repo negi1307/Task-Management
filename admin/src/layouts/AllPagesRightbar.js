@@ -156,7 +156,7 @@ export default function Pagesaddtask(props) {
             <div className="modal-dialog blur-modal-background modal-lg modal-dialog-centered" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h3 className="modal-title">Add Task</h3>
+                        <h3 className="modal_titles">Add Task</h3>
                         <button type="button" className="close" onClick={handelClose} aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

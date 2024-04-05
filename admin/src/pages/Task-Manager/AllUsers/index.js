@@ -22,7 +22,7 @@ const AllUsers = () => {
     const deletehandle = store?.deleteUser;
     const [deletemodal, setDeleteModal] = useState(false);
     const [csvdownload, setcsvdownload] = useState([]);
-    const [csvName ,setCsvName]=useState();
+    const [csvName, setCsvName] = useState();
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const csvdownloaddata = store?.getCsvDataReducer;
@@ -58,7 +58,7 @@ const AllUsers = () => {
         }
     }, [deletehandle]);
     const handelCsvDownload = (ele) => {
-        setCsvName(ele?.firstName + ele?.lastName +".csv")
+        setCsvName(ele?.firstName + ele?.lastName + ".csv")
         dispatch(getCSVdata(ele?._id));
     };
     useEffect(() => {
@@ -92,24 +92,25 @@ const AllUsers = () => {
             <Card>
                 <Card.Body>
                     <div className="row mx-auto">
-                        <HeaderMain />
-
-                        <div className="col-6 d-flex align-items-end justify-content-end">
-                            <h4 className="header-title heading_data"> All Users</h4>
+                        <div className='col-12'>
+                            <HeaderMain />
+                        </div>
+                        <div className="col-12 mt-2 text-center">
+                            <h4 className="header-title heading_data page_headings"> All Users</h4>
                         </div>
                     </div>
                     {getUsers?.loading ? (
                         <MainLoader />
                     ) : (
-                        <Table className="mb-0 add_Color_font" striped>
+                        <Table className="mb-0 mt-2 add_Color_font" striped style={{ fontSize: '13px' }}>
                             <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Email</th>
-                                    <th>Create Date</th>
-                                    <th>Action</th>
+                                <tr className='text-start'>
+                                    <th className='fw-bold'>#</th>
+                                    <th className='fw-bold'>First Name</th>
+                                    <th className='fw-bold'>Last Name</th>
+                                    <th className='fw-bold'>Email</th>
+                                    <th className='fw-bold'>Create Date</th>
+                                    <th className='fw-bold'>Action</th>
                                 </tr>
                             </thead>
 
@@ -117,7 +118,7 @@ const AllUsers = () => {
                                 <>
                                     {data?.map((ele, ind) => {
                                         return (
-                                            <tr className="align-middle">
+                                            <tr className="align-middle text-start">
                                                 <th scope="row">{ind + 1}</th>
                                                 <td className="cp">
                                                     <span className="namelink"> {ele?.firstName} </span>

@@ -170,7 +170,7 @@ const Sprint = () => {
                     <Col className="mx-auto" lg={12}>
                         <Row>
                             <div className="row mx-auto mt-2">
-                                <div className="d-flex col-4">
+                                <div className="d-flex col-6">
                                     <div className="row d-flex align-items-center">
                                         <div
                                             className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
@@ -186,11 +186,8 @@ const Sprint = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-4 d-flex align-items-center justify-content-center">
-                                    <h4 className="header-title heading_data"> Sprints</h4>
-                                </div>
                                 {status == 1 ? (
-                                    <div className="col-4 d-flex align-items-center justify-content-end pe-0">
+                                    <div className="col-6 d-flex align-items-center justify-content-end pe-0">
                                         <Button
                                             variant="info"
                                             onClick={handleCreate}
@@ -201,29 +198,32 @@ const Sprint = () => {
                                 ) : (
                                     ''
                                 )}
+                                <div className="col-12 d-flex align-items-center justify-content-center">
+                                    <h4 className="header-title page_headings heading_data py-1"> Sprints</h4>
+                                </div>
                             </div>
                             {loaderhandel.loading ? (
                                 <MainLoader />
                             ) : (
                                 <Col className="" lg={12}>
-                                    <Table striped>
+                                    <Table striped style={{ fontSize: '13px!important' }}>
                                         <thead>
                                             <tr >
-                                                <th className='fw-bold'>#</th>
-                                                <th className='fw-bold'>Sprint Name</th>
-                                                <th className='fw-bold'>Sprint Description</th>
-                                                <th className='fw-bold'>Sprint Start Date</th>
-                                                <th className='fw-bold'>Days Left</th>
-                                                {/* <th>Sprint End Date</th> */}
-                                                <th className='fw-bold'>Status</th>
-                                                <th className='fw-bold'>Action</th>
+                                                <th className='fw-bold text-start'>#</th>
+                                                <th className='fw-bold text-start'>Sprint Name</th>
+                                                <th className='fw-bold text-start'>Sprint Description</th>
+                                                <th className='fw-bold text-start'>Sprint Start Date</th>
+                                                <th className='fw-bold text-start'>Sprint End Date</th>
+                                                <th className='fw-bold text-start'>Days Left</th>
+                                                <th className='fw-bold text-start'>Status</th>
+                                                <th className='fw-bold text-start'>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {GetAllSingleSprintData?.map((item, index) => (
                                                 <tr>
-                                                    <td>{(skip - 1) * 10 + index + 1}</td>
-                                                    <td>
+                                                    <td className='text-start'>{(skip - 1) * 10 + index + 1}</td>
+                                                    <td className='text-start'>
                                                         <Link
                                                             className='text-secondary'
                                                             to={`/dashboard/taskBord/projectId=/${item?.project?._id}&milestoneId=/${item?.milestone?._id}&spriteId=/${item?._id}`}>
@@ -232,8 +232,8 @@ const Sprint = () => {
                                                     </td>
 
 
-                                                    <td>
-                                                        <td className='d-flex justify-content-center'>
+                                                    <td className='text-start'>
+                                                        <td className='text-start'>
                                                             <OverlayTrigger
                                                                 placement="top"
                                                                 overlay={<Tooltip>{truncateDescription(item?.sprintDesc)}</Tooltip>}
@@ -246,17 +246,17 @@ const Sprint = () => {
                                                         </td>
 
                                                     </td>
-                                                    <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
-                                                    <td>{item?.daysLeft}</td>
-                                                    <td>{moment(item?.endDate).format('L')}</td>
-                                                    <td>
+                                                    <td className='text-start'> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
+                                                    <td className='text-start'>{moment(item?.endDate).format('L')}</td>
+                                                    <td className='text-start'>{item?.daysLeft}</td>
+                                                    <td className='text-start'>
                                                         <Form.Check
                                                             type="switch"
                                                             checked={item?.activeStatus}
                                                             onChange={(e) => handleStatusChange(e, item)}
                                                         />
                                                     </td>
-                                                    <td>
+                                                    <td className='text-start'>
                                                         {' '}
                                                         <Row>
                                                             <Col>

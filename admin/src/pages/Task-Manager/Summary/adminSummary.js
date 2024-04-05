@@ -12,6 +12,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import FilterModal from './modal/filter';
 import Pagesaddtask from '../../../layouts/AllPagesRightbar';
 const AdminDashboard = () => {
     const dispatch = useDispatch();
@@ -29,21 +30,27 @@ const AdminDashboard = () => {
     const [taskCount, setTaskCount] = useState(null);
     const [data, setData] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [filterModal, setFilterModal] = useState(false);
 
+    // console.log({ taskCount })
     // const [skip, setSkip] = useState(0);
     // const [count, setCount] = useState();
     useEffect(() => {
         if (successHandle?.data?.status === 200) {
             setData(successHandle?.data?.response);
         }
-    }, [successHandle]);
-
-    useEffect(() => {
         const historyData = store?.getHistoryReducer?.data?.response;
         if (historyData) {
             setHistoryResponse(historyData);
         }
-    }, [store?.getHistoryReducer?.data?.response]);
+    }, [successHandle, store?.getHistoryReducer?.data?.response]);
+
+    // useEffect(() => {
+    //     const historyData = store?.getHistoryReducer?.data?.response;
+    //     if (historyData) {
+    //         setHistoryResponse(historyData);
+    //     }
+    // }, [store?.getHistoryReducer?.data?.response]);
     // useEffect(() => {
     //     const historyPageCount = store?.getHistoryReducer?.data?.totalPage;
     //     if (historyPageCount) {
@@ -68,6 +75,9 @@ const AdminDashboard = () => {
     // }
     const closeaddModal = () => {
         // getalltasks();
+    }
+    const closefilterModal = () => {
+        setFilterModal(false);
     }
     useEffect(() => {
         dispatch(getTaskWeekCountAction());
@@ -126,7 +136,16 @@ const AdminDashboard = () => {
                         </div>
                         <hr />
                         <div className='row'>
-                            <div className='col-12 d-flex justify-content-end'>
+                            <div className='col-12 d-flex gap-2 justify-content-end'>
+                                <button className='mybutton btn p-1 fw-bold py-1 web_button'
+                                    onClick={() => setFilterModal(true)}>
+                                    Filter
+                                </button>
+                                <FilterModal
+                                    className='d-none'
+                                    showFilter={filterModal}
+                                    closeFilter={closefilterModal}
+                                    setfilterModal={setFilterModal} />
                                 <button
                                     type="button"
                                     className="mybutton btn p-1 fw-bold py-1  web_button"
@@ -148,6 +167,8 @@ const AdminDashboard = () => {
                                     setShowModal={setShowModal}
                                 />
                             </div>
+                            {/* {filterModal && <FilterModal closeModal={() => setFilterModal(false)} />} */}
+
                         </div>
                         <div className="col all_bg  border_clr m-2 rounded-4 bg-white">
                             <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
