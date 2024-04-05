@@ -277,10 +277,11 @@ const Boards = () => {
                     <div className=''>
                         <select
                             name="Assignee"
-                            className="form-select"
+                            className="form-select border-0 fw-medium"
                             id="exampleForm.ControlInput1"
                             {...register('Assignee', { required: true })}
                             onChange={handleAssigneefilter}
+                            style={{ backgroundColor: '#F1F3FA' }}
                         >
                             <option value={''} hidden selected>
                                 Assignee
