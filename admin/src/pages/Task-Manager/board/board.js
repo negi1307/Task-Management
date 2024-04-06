@@ -11,7 +11,7 @@ import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
-import { getAssignUserAction, getComment, getHistoryAction, updateTaskStatus } from '../../../../src/redux/task/action';
+import { getAssignUserAction, getsingleSprintTask, getComment, getHistoryAction, updateTaskStatus } from '../../../../src/redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
@@ -83,6 +83,7 @@ const Boards = () => {
     const [loader, setloader] = useState(false);
     const [search, setSearch] = useState('');
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const [assigneeFilter, setassigneeFilter] = useState(null);
     // Callback function to be called when form is submitted successfully
     const handleFormSubmit = () => {
         dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
@@ -180,7 +181,7 @@ const Boards = () => {
                     items: successHandle?.data?.Response?.todo?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
-                    count : successHandle?.data?.Response?.todoCount
+                    count: successHandle?.data?.Response?.todoCount
                 },
                 [2]: {
                     title: 'In Progress',
@@ -188,7 +189,7 @@ const Boards = () => {
                     items: successHandle?.data?.Response?.inProgress.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
-                    count : successHandle?.data?.Response?.inProgressCount
+                    count: successHandle?.data?.Response?.inProgressCount
                 },
                 [3]: {
                     title: 'Testing',
@@ -196,7 +197,7 @@ const Boards = () => {
                     items: successHandle?.data?.Response?.testing.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
-                    count : successHandle?.data?.Response?.testingCount
+                    count: successHandle?.data?.Response?.testingCount
                 },
                 [5]: {
                     title: 'Hold',
@@ -204,7 +205,7 @@ const Boards = () => {
                     items: successHandle?.data?.Response?.hold.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
-                    count : successHandle?.data?.Response?.holdCount
+                    count: successHandle?.data?.Response?.holdCount
                 },
                 [4]: {
                     title: 'Done',
@@ -261,19 +262,26 @@ const Boards = () => {
         );
     };
 
-    // const handleModalClose = () => {
-    //     dispatch(
-    //         getAllTask({
-    //             projectId: projectId,
-    //             milestoneId: milestoneId,
-    //             sprintId: spriteId,
-    //         })
-    //     );
-    // }
-    // const handleSearch=()=>{
-    //     dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId ,searchString : search}));
-    //     setSkip(1)
-    // }
+    // const taskssss = store?.getAllTaskReducer?.data?.Response;
+    // console.log({ taskssss })
+    const handleAssigneefilter = (e) => {
+        const assigneeId = e.target.value;
+        // setassigneeFilter(assigneeName);
+
+        dispatch(getsingleSprintTask({
+            id: spriteId,
+            activeStatus: true,
+            skip: 1,
+            projectId: projectId,
+            milestoneId: milestoneId,
+            assigneeId: assigneeId,
+        }));
+        setColumns(columns);
+
+        console.log(store?.getAllUsers?.data?.response, '.nish')
+
+    };
+
     return (
         <>
             {/* <div className="project_detail"> */}
@@ -300,6 +308,25 @@ const Boards = () => {
                 </div> */}
             <div className="add_task row d-flex  m-0 ">
                 <div className="col-lg-8 d-flex  align -items-center">
+                    <div className=''>
+                        <select
+                            name="Assignee"
+                            className="form-select"
+                            id="exampleForm.ControlInput1"
+                            {...register('Assignee', { required: true })}
+                            onChange={handleAssigneefilter}
+                        >
+                            <option value={''} hidden selected>
+                                Assignee
+                            </option>
+                            {store?.getAllUsers?.data?.response?.map((ele, ind) => (
+                                <option value={ele?._id}>
+                                    {' '}
+                                    {ele?.firstName} {ele?.lastName}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                     {/* <div>
                         {' '}
                         <h4 className="page-title fw-bold text-dark rounded-2 p-2 py-1" style={{backgroundColor:'red'}} >
@@ -450,7 +477,7 @@ const Boards = () => {
                         />
                     </div>
                 </div>
-            </div>
+            </div >
 
             <DragDropContext
                 onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
@@ -461,35 +488,35 @@ const Boards = () => {
                 ) : (
                     <Container>
                         <TaskColumnStyles>
-                        {Object.entries(columns).map(([columnId, column]) => (
-                <Droppable key={columnId} droppableId={columnId}>
-                    {(provided, snapshot) => (
-                        <div
-                            className="task-list-col"
-                            ref={provided?.innerRef}
-                            {...provided?.droppableProps}
-                        
-                        >
-                            <TaskList>
-                            <Title className='text-dark fw-bold' >{column.title}   <soan className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</soan></Title>
-                                {column.items?.map((item, index) => (
-                                    <TaskCard
-                                        key={item.id}
-                                        item={item}
-                                        index={index}
-                                        columns={columns}
-                                        projectId={projectId}
-                                        mileStoneId={milestoneId}
-                                        sprintId={spriteId}
-                                        closeModal={closeModal}
-                                    />
-                                ))} 
-                                {provided?.placeholder}
-                            </TaskList>
-                        </div>
-                    )}
-                </Droppable>
-            ))}
+                            {Object.entries(columns).map(([columnId, column]) => (
+                                <Droppable key={columnId} droppableId={columnId}>
+                                    {(provided, snapshot) => (
+                                        <div
+                                            className="task-list-col "
+                                            ref={provided?.innerRef}
+                                            {...provided?.droppableProps}
+
+                                        >
+                                            <TaskList style={{height:''}}>
+                                                <Title className='text-dark fw-bold' >{column.title}   <soan className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</soan></Title>
+                                                {column.items?.map((item, index) => (
+                                                    <TaskCard
+                                                        key={item.id}
+                                                        item={item}
+                                                        index={index}
+                                                        columns={columns}
+                                                        projectId={projectId}
+                                                        mileStoneId={milestoneId}
+                                                        sprintId={spriteId}
+                                                        closeModal={closeModal}
+                                                    />
+                                                ))}
+                                                {provided?.placeholder}
+                                            </TaskList>
+                                        </div>
+                                    )}
+                                </Droppable>
+                            ))}
                         </TaskColumnStyles>
                     </Container>
                 )}

@@ -260,7 +260,6 @@ const Projects = () => {
                                         className="d-none"
                                         // onFormSubmit={handleFormSubmit}
                                         showModal={showModal}
-                                        // columns={columns}
                                         closeModal={closeaddModal}
                                         setShowModal={setShowModal}
                                     />
