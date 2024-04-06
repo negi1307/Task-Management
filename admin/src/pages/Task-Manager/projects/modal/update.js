@@ -141,15 +141,15 @@ const Update = ({ modal, closeModal, editData }) => {
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
-                            <Col lg={7} className="text-end">
-                                <Modal.Title id="" className="mx-auto">
-                                    Update Project Details
-                                </Modal.Title>
-                            </Col>
-                            <Col lg={5} className="text-end pt-2">
-                                <button type="button" className="close bg-black text-white" onClick={closeModal} aria-label="Close">
+                            <Col lg={12} className="text-end pt-2">
+                                <button type="button" className="close border-0 bg-black text-white" onClick={closeModal} aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
+                            </Col>
+                            <Col lg={12} className="text-center">
+                                <Modal.Title id="" className="modal_titles mx-auto">
+                                    Update Project Details
+                                </Modal.Title>
                             </Col>
                         </Row>
                     </Col>
@@ -160,7 +160,7 @@ const Update = ({ modal, closeModal, editData }) => {
                     </>
                 ) : (
                     <Modal.Body className="py-0">
-                        <div className="p-3">
+                        <div className="p-3 pt-0">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={6}>

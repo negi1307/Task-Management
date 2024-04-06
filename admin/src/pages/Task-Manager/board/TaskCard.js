@@ -153,15 +153,16 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                         </div>
                                         <div className="col-3 text-center p-1 mt-1">
                                             <div className="dropdown">
-                                                <button className="border-0 bg-white icon_buttons" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                                                <button className="border-0 bg-white icon_buttons" type="button" id="dropdownMenuButton1"
+                                                    data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                                     <i className="bi bi-three-dots-vertical fs-5 fw-bold text-dark"></i>
                                                 </button>
-                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start small-width bg-transparent border-0" aria-labelledby="dropdownMenuButton1">
+                                                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start small-width  border-0" aria-labelledby="dropdownMenuButton1">
                                                     <li className='d-flex flex-column align-items-start small-width'>
-                                                        <button type="button" className="dropdown-item m-0 p-0 border-0 bg-transparent" onClick={() => deleteData(item?.id)}>
+                                                        <button className="dropdown-item m-0 p-0 border-0 bg-transparent" onClick={() => deleteData(item?.id)}>
                                                             <i className="mdi mdi-delete text-dark m-0 p-0 me-2 del_edit"></i>
                                                         </button>
-                                                        <button type="button" className="dropdown-item m-0 p-0 border-0 bg-transparent">
+                                                        <button className="dropdown-item m-0 p-0 border-0 bg-transparent">
                                                             <i className="uil-edit-alt m-0 p-0 me-2 text-dark del_edit" onClick={() => { handelUpdate(item); }}></i>
                                                         </button>
                                                     </li>
@@ -297,7 +298,10 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                             {item?.assignees?.assigneeInfo?.lastName}
                                                         </Tooltip>
                                                     }>
-                                                    <div className=" cp">
+                                                    <div className=" cp"
+                                                        onClick={() => {
+                                                            handleDetailPage(item);
+                                                        }}>
                                                         <span
                                                             style={{
                                                                 backgroundColor: '#605e5a',

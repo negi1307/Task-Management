@@ -148,7 +148,7 @@ const Task = () => {
                             </div>
                         </div>
                         <div className="col-4 d-flex align-items-center justify-content-center">
-                            <h4 className="header-title heading_data"> Tasks</h4>
+                            <h4 className="header-title heading_data page_headings">Tasks</h4>
                         </div>
                         {status == 1 ? (
                             <div className="col-4 d-flex align-items-center justify-content-end pe-0">

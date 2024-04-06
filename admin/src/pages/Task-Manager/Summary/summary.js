@@ -49,6 +49,7 @@ const Summary = () => {
 
     const priorityData = store?.getPriorityGraphReducer?.data?.response;
 
+    console.log({ spriteId })
 
     useEffect(() => {
         dispatch(getTaskWeekCountAction({ sprintId: spriteId }));

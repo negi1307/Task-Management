@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
+import { FaFilter } from "react-icons/fa";
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
 import { getAssignUserAction, getsingleSprintTask, getComment, getHistoryAction, updateTaskStatus } from '../../../../src/redux/task/action';
@@ -23,6 +24,7 @@ import { getSingleSprint } from '../../../redux/sprint/action';
 import { getSprintId } from '../../../redux/sprint/reducres';
 import { getMilestoneId, getMilestonetId } from '../../../redux/milestone/reducer';
 import { getProjectId } from '../../../redux/projects/reducers';
+import { TiPlus } from "react-icons/ti";
 
 const Container = styled.div`
     display: flex;
@@ -84,9 +86,19 @@ const Boards = () => {
     const [search, setSearch] = useState('');
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [assigneeFilter, setassigneeFilter] = useState(null);
+    const [assigneeSelected, setassigneeSelected] = useState(false);
+    const [assigneeId, setassigneeId] = useState('');
+
+
     // Callback function to be called when form is submitted successfully
     const handleFormSubmit = () => {
-        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
+        // assigneeId
+        if (assigneeSelected) {
+            dispatch(getAllTask({ sprintId: spriteId, searchString: '', assigneeId: assigneeId }));
+        } else {
+            dispatch(getAllTask({ sprintId: spriteId, searchString: '' }));
+        }
+
         dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
         dispatch(getAllRoles())
         setFormSubmitted(true);
@@ -100,11 +112,10 @@ const Boards = () => {
         reset,
         formState: { errors },
     } = useForm();
+
     const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return;
         const { source, destination } = result;
-
-
 
 
         if (source.droppableId !== destination.droppableId) {
@@ -144,11 +155,14 @@ const Boards = () => {
     };
 
     useEffect(() => {
-        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
+        if (assigneeSelected) {
+            dispatch(getAllTask({ sprintId: spriteId, searchString: '', assigneeId: assigneeId }));
+        } else {
+            dispatch(getAllTask({ sprintId: spriteId, searchString: '' }));
+        }
         dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
         dispatch(getAllRoles())
         setColumns(columns);
-        // console.log(columns, '////')
     }, [render]);
     const closeaddModal = () => {
         getalltasks();
@@ -158,20 +172,7 @@ const Boards = () => {
         // dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
         // dispatch(getAllRoles())
     }
-    // const handleRightBarClose = () => {
-    //     dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
-    //     dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
-    //     dispatch(getAllRoles())
-    //     setColumns(columns)
-    // };
 
-    // useEffect(() => {
-    //     // Check if the modal is closed (showModal is false)
-    //     if (!showModal) {
-    //         // Call the function to handle actions when the RightBar closes
-    //         handleRightBarClose();
-    //     }
-    // }, [showModal]);
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
             setColumns({
@@ -247,8 +248,6 @@ const Boards = () => {
         }
     }, [statushandle]);
 
-    // Other useEffects for handling various Redux actions
-
     const handleSearchChange = (e) => {
         e.preventDefault();
         setSearch(e.target.value);
@@ -262,59 +261,31 @@ const Boards = () => {
         );
     };
 
-    // const taskssss = store?.getAllTaskReducer?.data?.Response;
-    // console.log({ taskssss })
     const handleAssigneefilter = (e) => {
         const assigneeId = e.target.value;
-        // setassigneeFilter(assigneeName);
-
-        dispatch(getsingleSprintTask({
-            id: spriteId,
-            activeStatus: true,
-            skip: 1,
-            projectId: projectId,
-            milestoneId: milestoneId,
+        setassigneeId(assigneeId);
+        dispatch(getAllTask({
+            sprintId: spriteId,
             assigneeId: assigneeId,
+            searchString: ''
         }));
-        setColumns(columns);
-
-        console.log(store?.getAllUsers?.data?.response, '.nish')
-
+        setassigneeSelected(true);
     };
 
     return (
         <>
-            {/* <div className="project_detail"> */}
-            {/* <div className="project_name"> */}
-            {/* <h3>{projectNameHeading}</h3> */}
-            {/* </div> */}
-            {/* <div className="taskinfo">
-                    <ul>
-                    <li>
-                            {' '}
-                            <Link to="/summary">Summary</Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="/taskList">List</Link>{' '}
-                        </li>
-
-                        <li>
-                            {' '}
-                            <Link   to={`/dashboard/boards/projectId=/${projectId}&milestoneId=/${milestoneId}&spriteId=/${spriteId}`}>Board</Link>{' '}
-                        </li>
-                       
-                    </ul>
-                </div> */}
             <div className="add_task row d-flex  m-0 ">
                 <div className="col-lg-8 d-flex  align -items-center">
-                    <div className=''>
+                    <div className='position-relative'>
+                        <FaFilter className='position-absolute fs-6' style={{ left: '4%', top: '30%', fontWeight: '900' }} />
                         <select
                             name="Assignee"
-                            className="form-select"
+                            role='button'
+                            className="form-select ps-3 border-0 fw-medium"
                             id="exampleForm.ControlInput1"
                             {...register('Assignee', { required: true })}
                             onChange={handleAssigneefilter}
+                            style={{ backgroundColor: '#F1F3FA' }}
                         >
                             <option value={''} hidden selected>
                                 Assignee
@@ -327,66 +298,7 @@ const Boards = () => {
                             ))}
                         </select>
                     </div>
-                    {/* <div>
-                        {' '}
-                        <h4 className="page-title fw-bold text-dark rounded-2 p-2 py-1" style={{backgroundColor:'red'}} >
-                            {' '}
-                            To-Do :
-                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.Response?.todoCount}
-                            </Badge>
-                        </h4>{' '}
-                    </div>
-                    <div className="ms-3">
-                        {' '}
-                        <h4 className="page-title fw-bold text-black rounded-2 p-2 py-1"  style={{backgroundColor:'lightblue'}}>
-                            {' '}
-                            In-Progress :
-                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.Response?.inProgressCount}
-                            </Badge>
-                        </h4>{' '}
-                    </div>
-                    <div className="ms-3">
-                        {' '}
-                        <h4 className="page-title fw-bold text-dark rounded-2 p-2 py-1" style={{backgroundColor:'chocolate'}}>
-                            {' '}
-                            Testing :
-                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.Response?.testingCount}
-                            </Badge>
-                        </h4>{' '}
-                    </div>
-                    <div className="ms-3">
-                        {' '}
-                        <h4 className="page-title fw-bold  text-dark rounded-2 p-2 py-1" style={{backgroundColor:'lime'}}>
-                            {' '}
-                            Hold :
-                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.Response?.holdCount}
-                            </Badge>
-                        </h4>{' '}
-                    </div>
-                    <div className="ms-3">
-                        {' '}
-                        <h4 className="page-title  fw-bold  text-dark rounded-2 p-2 py-1"  style={{backgroundColor:'green'}}>
-                            {' '}
-                            Done :
-                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.Response?.doneCount}
-                            </Badge>
-                        </h4>{' '}
-                    </div>
-                    <div className="ms-3 me-2">
-                        {' '}
-                        <h4 className="page-title fw-bold bg-black text-white rounded-2 p-2 py-1">
-                            {' '}
-                            Due Task:
-                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.Response?.dueTasksCount}
-                            </Badge>
-                        </h4>{' '}
-                    </div> */}
+
                     {AssignUserName?.map((ele, ind) => (
                         <>
                             <OverlayTrigger
@@ -454,14 +366,14 @@ const Boards = () => {
                     <div className="ms-2 ">
                         <button
                             type="button"
-                            className="mybutton btn p-1 fw-bold py-0 m-0  web_button"
+                            className="mybutton btn p-1 fw-bold py-0 px-2 m-0  web_button"
                             onClick={() => {
                                 // console.log('button click');
                                 setShowModal(!showModal);
                                 // dispatch(getAllTask({ projectId: projectId, mileStoneId: milestoneId, sprintId: spriteId }))
 
                             }}>
-                            Add Task
+                            <TiPlus />
                         </button>
                         <RightBar
                             className="d-none"
