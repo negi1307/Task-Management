@@ -62,7 +62,7 @@ export const addSprint = (state = ADD_SPRINT_INITIAL_STATE, action) => {
 };
 // get single sprint--------------------------------
 export const getAllSingleSprints = (state = GET_SINGLE_SPRINT_INITIAL_STATE, action) => {
-    console.log(GET_SINGLE_SPRINT_INITIAL_STATE,'GET_SINGLE_SPRINT_INITIAL_STATE')
+    // console.log(GET_SINGLE_SPRINT_INITIAL_STATE, 'GET_SINGLE_SPRINT_INITIAL_STATE')
 
     switch (action.type) {
         case SprintTypes.GET_ALL_SINGLE_SPRINT_LOADING:
@@ -91,7 +91,7 @@ export const getAllSingleSprints = (state = GET_SINGLE_SPRINT_INITIAL_STATE, act
 // end single sprint-------------------------------
 
 // get single sprint--------------------------------
-export const getAllMilestoneSprints = (state =GET_MILESTONE_SPRINT_INITIAL_STATE, action) => {
+export const getAllMilestoneSprints = (state = GET_MILESTONE_SPRINT_INITIAL_STATE, action) => {
     switch (action.type) {
         case SprintTypes.GET_ALL_MILESTONE_SPRINT_LOADING:
             return {
@@ -120,7 +120,7 @@ export const getAllMilestoneSprints = (state =GET_MILESTONE_SPRINT_INITIAL_STATE
 
 
 export const getAllSprints = (state = GET_ALL_SPRINT_INITIAL_STATE, action) => {
-    console.log(GET_ALL_SPRINT_INITIAL_STATE,'GET_ALL_SPRINT_INITIAL_STATE')
+    console.log(GET_ALL_SPRINT_INITIAL_STATE, 'GET_ALL_SPRINT_INITIAL_STATE')
     switch (action.type) {
         case SprintTypes.GET_ALL_SPRINT_LOADING:
             return {
@@ -231,14 +231,14 @@ export const updateSprint = (state = UPDATE_SPRINT_INITIAL_STATE, action) => {
     }
 };
 
-export const getSprintId = (state = {data:""}, action) => {
+export const getSprintId = (state = { data: "" }, action) => {
     switch (action.type) {
         case "SprintId":
             return {
                 data: action.payload,
-                
+
             };
-      
+
         default:
             return { ...state };
 

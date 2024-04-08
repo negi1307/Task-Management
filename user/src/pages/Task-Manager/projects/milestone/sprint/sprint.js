@@ -17,7 +17,7 @@ import { getAllTask } from '../../../../../redux/task/action';
 const Sprint = () => {
     const { projectId, milestoneId } = useParams();
 
-    console.log(projectId, milestoneId, 'projectId');
+    // console.log(projectId, milestoneId, 'projectId');
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
@@ -25,7 +25,7 @@ const Sprint = () => {
     const [checkedStatus, setCheckedStatus] = useState([]);
     const [statusModal, setStatusModal] = useState(false);
     const [checkedData, setCheckedData] = useState();
-    const [status, setStatus] = useState(1);
+    const [status, setStatus] = useState(true);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openModal, SetOpenModal] = useState(false);
     const [editData, setEditData] = useState();
@@ -37,6 +37,29 @@ const Sprint = () => {
         setEditData(data);
         setOpenEditModal(true);
     };
+    useEffect(() => {
+        let body = {
+            flag: 'sprint',
+            projectId: projectId,
+            milestoneId: milestoneId,
+            skip: 1,
+            activeStatus: status,
+            // status: 1
+        };
+        dispatch(getAllProjects(body));
+    }, []);
+    useEffect(() => {
+        if (deletehandle?.status == 200) {
+            ToastHandle('success', deletehandle?.message);
+            CloseModal('render');
+        } else if (deletehandle?.status == 400) {
+            ToastHandle('error', deletehandle?.message);
+        } else if (deletehandle?.status == 500) {
+            ToastHandle('error', deletehandle?.message);
+        }
+        // dispatch(getSingleSprint({ status: status, milestoneId: milestoneId, flag: 'sprint' }));
+    }, [deletehandle]);
+
 
     // useEffect(() => {
     //     dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
@@ -58,29 +81,18 @@ const Sprint = () => {
         SetOpenModal(true);
     };
     const handleActive = (val) => {
-        if (val) {
-            setStatus(true);
-            setSkip(1);
-            let data = {
-                id: milestoneId,
-                activeStatus: true,
-                skip: 1,
-            };
-            dispatch(getSingleSprint(data));
-        } else {
-            setStatus(false);
-            setSkip(1);
-
-            let data = {
-                id: milestoneId,
-                activeStatus: false,
-                skip: 1,
-            };
-            dispatch(getSingleSprint(data));
-        }
-        // console.log('9999999999999999999999999********************//////////////////')
-
+        setStatus(val); // Set the status based on the button clicked
+        setSkip(1); // Reset pagination
+        let data = {
+            flag: 'sprint',
+            projectId: projectId,
+            milestoneId: milestoneId,
+            activeStatus: val, // Pass the correct active status
+            skip: 1,
+        };
+        dispatch(getAllProjects(data)); // Fetch data based on active status
     };
+
     const handleStatusChange = (e, data) => {
         if (e.target.checked) {
             setCheckedStatus(true);
@@ -89,7 +101,7 @@ const Sprint = () => {
         }
         setCheckedData(data);
 
-        console.log(data, 'iddata')
+        // console.log(data, 'iddata')
         setStatusModal(true);
     };
     const handleYes = () => {
@@ -109,44 +121,17 @@ const Sprint = () => {
         }
         setStatusModal(false);
     };
-    useEffect(() => {
-        if (deletehandle?.status == 200) {
-            ToastHandle('success', deletehandle?.message);
-            CloseModal('render');
-        } else if (deletehandle?.status == 400) {
-            ToastHandle('error', deletehandle?.message);
-        } else if (deletehandle?.status == 500) {
-            ToastHandle('error', deletehandle?.message);
-        }
-    }, [deletehandle]);
-    useEffect(() => {
-        dispatch(getSingleSprint({status:status ,id:milestoneId}));
-    }, [render]);
 
-    const sprintId = '660a549b60051a914094c6b2';
-    useEffect(() => {
-        let body = {
-            flag: 'sprint',
-            projectId: "65f18df95ef48c554ef88526",
-            milestoneId: milestoneId,
-            sprintId: sprintId,
-            skip: 1,
-            activeStatus: true,
-            status: 1
-        };
+    // const sprintId = '660a549b60051a914094c6b2';
 
-
-        dispatch(getAllProjects(body));
-    }, []);
 
 
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
         let body = {
             flag: 'sprint',
-            projectId: "65f18df95ef48c554ef88526",
+            projectId: projectId,
             milestoneId: milestoneId,
-            sprintId: '65f915d0e5a9aa48cfb11834',
             skip: 1,
         };
         dispatch(getAllProjects(body));
@@ -183,7 +168,7 @@ const Sprint = () => {
                                 <div className="col-4 d-flex align-items-center justify-content-center">
                                     <h4 className="header-title heading_data"> Sprints</h4>
                                 </div>
-                                {status == 1 ? (
+                                {/* {status == 1 ? (
                                     <div className="col-4 d-flex align-items-center justify-content-end pe-0">
                                         <Button
                                             variant="info"
@@ -194,7 +179,7 @@ const Sprint = () => {
                                     </div>
                                 ) : (
                                     ''
-                                )}
+                                )} */}
                             </div>
                             {loaderhandel.loading ? (
                                 <MainLoader />
@@ -202,7 +187,7 @@ const Sprint = () => {
                                 <Col className="" lg={12}>
                                     <Table striped>
                                         <thead>
-                                            <tr >
+                                            <tr className='text-start'>
                                                 <th className='fw-bold'>#</th>
                                                 <th className='fw-bold'>Sprint Name</th>
                                                 <th className='fw-bold'>Sprint Description</th>
@@ -215,20 +200,20 @@ const Sprint = () => {
                                         </thead>
                                         <tbody>
                                             {GetAllSingleSprintData?.map((item, index) => (
-                                                <tr >
+                                                <tr className='text-start'>
                                                     <td>{(skip - 1) * 10 + index + 1}</td>
                                                     <td>
                                                         <Link
                                                             className='text-secondary'
-                                                            to={`/dashboard/taskBord/projectId=${projectId}&milestoneId=${item?._id}&spriteId=${sprintId}`}>
+                                                            to={`/dashboard/taskBord/projectId=${projectId}&milestoneId=${milestoneId}&spriteId=${item?._id}`}>
                                                             {item?.sprintName}
                                                         </Link>
 
                                                     </td>
 
 
-                                                    <td>
-                                                        <td className='d-flex justify-content-center'>
+                                                    <td className='text-start'>
+                                                        <td>
                                                             <OverlayTrigger
                                                                 placement="top"
                                                                 overlay={<Tooltip>{truncateDescription(item?.sprintDesc)}</Tooltip>}
@@ -257,17 +242,17 @@ const Sprint = () => {
                                                             <Col>
                                                                 <p className="action-icon m-0 p-0 ">
                                                                     <Link
-                                                                        to={`/dashboard/taskBord/projectId=${projectId}&milestoneId=${item?._id}&spriteId=${sprintId}`}>
+                                                                        to={`/dashboard/taskBord/projectId=${projectId}&milestoneId=${milestoneId}&spriteId=${item?._id}`}>
                                                                         <i className="mdi mdi-eye m-0 p-0"></i>
                                                                     </Link>
                                                                 </p>
-                                                                <p className="action-icon m-0 p-0  ">
+                                                                {/* <p className="action-icon m-0 p-0  ">
                                                                     <i
                                                                         onClick={() => {
                                                                             handelUpdate(item);
                                                                         }}
                                                                         className="uil-edit-alt m-0 p-0"></i>
-                                                                </p>
+                                                                </p> */}
                                                             </Col>
                                                         </Row>
                                                     </td>
