@@ -205,7 +205,7 @@ const Sprint = () => {
                                                     <td>
                                                         <Link
                                                             className='text-secondary'
-                                                            to={`/dashboard/taskBord/projectId=${projectId}&milestoneId=${milestoneId}&spriteId=${item?._id}`}>
+                                                            to={`/dashboard/taskBoard/projectId=/${projectId}&milestoneId=/${milestoneId}&spriteId=/${item?._id}`}>
                                                             {item?.sprintName}
                                                         </Link>
 
@@ -242,7 +242,7 @@ const Sprint = () => {
                                                             <Col>
                                                                 <p className="action-icon m-0 p-0 ">
                                                                     <Link
-                                                                        to={`/dashboard/taskBord/projectId=${projectId}&milestoneId=${milestoneId}&spriteId=${item?._id}`}>
+                                                                        to={`/dashboard/taskBoard/projectId=/${projectId}&milestoneId=/${milestoneId}&spriteId=/${item?._id}`}>
                                                                         <i className="mdi mdi-eye m-0 p-0"></i>
                                                                     </Link>
                                                                 </p>
