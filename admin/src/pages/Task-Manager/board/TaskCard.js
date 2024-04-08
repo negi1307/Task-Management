@@ -106,19 +106,19 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
     switch (item?.priority) {
         case 'Critical':
             priorityWithLetter = 'Critical';
-            backgroundColorClass = 'critical-background';
+            backgroundColorClass = '🛑';
             break;
         case 'High':
             priorityWithLetter = 'High';
-            backgroundColorClass = 'high-background';
+            backgroundColorClass = '🔴';
             break;
         case 'Medium':
             priorityWithLetter = 'Medium';
-            backgroundColorClass = 'medium-background';
+            backgroundColorClass = '🟡';
             break;
         case 'Low':
             priorityWithLetter = 'Low';
-            backgroundColorClass = 'low-background';
+            backgroundColorClass = '🟢';
             break;
         default:
             priorityWithLetter = item?.priority;
@@ -133,21 +133,23 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
 
     return (
         <>
-            <Draggable key={item.id} draggableId={item?.id} index={index}>
+            <Draggable key={item.id} draggableId={item?.id} index={index} style={{ width: '260px', }}>
                 {(provided) => (
-                    <div ref={provided?.innerRef} {...provided?.draggableProps} {...provided?.dragHandleProps}>
-                        <TaskInformation className="py-2 mt-2 m-0 pe-1 shadow-lg p-3 h-75  rounded-4 ">
-                            <div className="row">
-                                <div className="col-12 m-0  ">
+                    <div ref={provided?.innerRef} {...provided?.draggableProps} {...provided?.dragHandleProps} >
+                        <TaskInformation className=" mt-2  pe-1 shadow-lg p-3 mx-auto    rounded-4 " style={{ width: '250px', height: '160px' }}>
+                            <div className="row ">
+                                <div className="col-12 m-0   ">
                                     <div className="row">
-                                        <div className="col-9 mt-1 m-0 d-flex align-items-center">
-                                            <a className='fw-bold py-1 mt-1 m-0 text-truncate rounded-pill task-title' style={{ backgroundColor: 'lightblue', color: 'oceanblue', }}
+                                        <div className="col-9   m-0 ">
+                                            <a className='fw-bold   m-0 fw-bold text-truncate rounded-pill'
                                                 href="#"
                                                 onClick={() => {
                                                     handleDetailPage(item);
-                                                }} title={item?.summary}>
-                                                {item?.summary ? item.summary.slice(0, 10) : ''}
+                                                }}
+                                                title={item?.summary}>
+                                                {item?.summary ? item.summary.slice(0, 10).charAt(0).toUpperCase() + item.summary.slice(1, 10) : ''}
                                             </a>
+
                                         </div>
                                         <div className="col-3 text-center p-1 mt-1">
                                             <div className="dropdown">
@@ -250,28 +252,22 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                     </div>
                                 </div>
                                 <div className="col-12">
-                                    <p className="m-0 py-1 p-0 d-flex"
-                                        onClick={() => {
-                                            handleDetailPage(item);
-                                        }}>
+                                    <p className="">
                                         <div className='task-title text-dark p-0' title={item?.description}>
-                                            Description: {item?.description ? item.description.slice(0, 13) : ''}
+                                            {item?.description ? item.description.slice(0, 40) : ''}
                                         </div>
                                     </p>
                                 </div>
 
-                                <div className='col-12 m-0'
-                                    onClick={() => {
-                                        handleDetailPage(item);
-                                    }}>
-                                    <p className={`task-title text-dark p-0 m-0 ${backgroundColorClass}`}>
-                                        Priority : {priorityWithLetter}
+                                <div className='col-12 m-0 mb-1 '>
+                                    <p className={`task-title text-dark p-0 m-0 `}>
+                                        {backgroundColorClass}
                                     </p>
                                 </div>
                                 <div className="col-12  ">
-                                    <div className="row mb-1">
-                                        <div className="col-6 d-flex align-items-center">
-                                            <div className="secondary-details d-flex align-items-center">
+                                    <div className="row ">
+                                        <div className="col-9 d-flex align-items-center">
+                                            <div className="secondary-details ">
                                                 <p className="m-0 p-0">
                                                     <span className='task-title text-dark p-0'>
                                                         {item?.startDate ? moment(item?.startDate).format("DD/MM/YYYY") : ''}
@@ -280,7 +276,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                             </div>
                                         </div>
 
-                                        <div className="col-3 text-end">
+                                        {/* <div className="col-3 text-end">
                                             <div className="secondary-details d-flex align-items-end justify-content-end">
                                                 <p className=" mt-1 m-0 ">
                                                     <span className='task-title text-dark text-end p-0'>
@@ -290,7 +286,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                     </span>
                                                 </p>
                                             </div>
-                                        </div>
+                                        </div> */}
                                         <div className="col-3 text-center d-flex align-items-center justify-content-center  ">
                                             <div className=" d-flex text-end">
                                                 {/* <h5 className="m-0 p-0"> Assignee :</h5> */}

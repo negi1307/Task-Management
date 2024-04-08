@@ -359,17 +359,17 @@ export default function RightBar(props) {
                                             <option hidden selected>
                                                 select
                                             </option>
-                                            <option value="Critical">
+                                            <option value="Critical &#128308;">
                                                 &#128308;
                                                 Critical
                                             </option>
-                                            <option value="High">
+                                            <option value="High  &#128992;">
                                                 &#128992;
                                                 High</option>
-                                            <option value="Medium">
+                                            <option value="Medium &#128993;">
                                                 &#128993;
                                                 Medium</option>
-                                            <option value="Low">
+                                            <option value="Low &#128994;">
                                                 &#128994;
                                                 Low</option>
                                         </select>

@@ -404,12 +404,12 @@ const Boards = () => {
                                 <Droppable key={columnId} droppableId={columnId}>
                                     {(provided, snapshot) => (
                                         <div
-                                            className="task-list-col"
+                                            className="task-list-col "
                                             ref={provided?.innerRef}
                                             {...provided?.droppableProps}
 
                                         >
-                                            <TaskList>
+                                            <TaskList style={{height:''}}>
                                                 <Title className='text-dark fw-bold' >{column.title}   <soan className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</soan></Title>
                                                 {column.items?.map((item, index) => (
                                                     <TaskCard
