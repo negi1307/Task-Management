@@ -12,6 +12,7 @@ export const getAllSprint = (data): AuthAction => ({
 })
 //start single springt------------------
 export const getSingleSprint = (data): AuthAction => ({
+    // console.log(getSingleSprint)
     type: SprintTypes.GET_ALL_SINGLE_SPRINT,
     payload: data
 })
@@ -38,6 +39,6 @@ export const updateSprint = (data): AuthAction => ({
 })
 
 export const getSprintId = (data): AuthAction => ({
-    type:'SprintId',
+    type: 'SprintId',
     payload: data
 })
