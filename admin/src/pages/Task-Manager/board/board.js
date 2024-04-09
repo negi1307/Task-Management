@@ -28,10 +28,11 @@ import { TiPlus } from "react-icons/ti";
 
 const Container = styled.div`
     display: flex;
+        flex: 1;
 `;
-
 const TaskList = styled.div`
-    height: 100vh;
+    height: 100%;
+    overflow: scroll;
     display: flex;
     flex-direction: column;
     background: #f3f3f3;
@@ -39,7 +40,27 @@ const TaskList = styled.div`
     border-radius: 5px;
     padding: 15px 15px;
     margin-right: 45px;
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(128, 128, 128, 0.669);
+        // border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: gray;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(128, 128, 128, 0.065);
+        // border-radius: 10px;
+    }
 `;
+
 
 const TaskColumnStyles = styled.div`
     margin: 8px;
@@ -399,7 +420,7 @@ const Boards = () => {
                     <MainLoader />
                 ) : (
                     <Container>
-                        <TaskColumnStyles>
+                        <TaskColumnStyles className='task-page-columns'>
                             {Object.entries(columns).map(([columnId, column]) => (
                                 <Droppable key={columnId} droppableId={columnId}>
                                     {(provided, snapshot) => (
@@ -409,8 +430,8 @@ const Boards = () => {
                                             {...provided?.droppableProps}
 
                                         >
-                                            <TaskList style={{height:''}}>
-                                                <Title className='text-dark fw-bold' >{column.title}   <soan className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</soan></Title>
+                                            <TaskList style={{ height: '' }}>
+                                                <Title className='text-dark fw-bold' >{column.title}   <span className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</span></Title>
                                                 {column.items?.map((item, index) => (
                                                     <TaskCard
                                                         key={item.id}
