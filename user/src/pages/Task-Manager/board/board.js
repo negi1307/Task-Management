@@ -1,31 +1,19 @@
 import { React, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
-import { Row, Col, Breadcrumb, Badge } from 'react-bootstrap';
-
 import { columnsFromBackend } from './data';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
 import { getAllTask, updateTask } from '../../../redux/actions';
-console.log(getAllTask,'task')
-import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
-import RightBar from '../../../layouts/AddRightSideBar';
-import { updateTaskStatus } from '../../../../src/redux/task/action';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import { getsingleMileStone } from '../../../redux/milestone/action';
-import { getAllMilstoneSprints } from '../../../redux/sprint/action';
-import { getAllProjects } from '../../../redux/projects/action';
 import { getHistory } from '../../../redux/addcomment/actions';
 import { getTaskStatusCount } from '../../../redux/Summary/action';
-import { addComment, getComment, deleteComment, getCommentId } from '../../../redux/addcomment/actions';
+import { getComment } from '../../../redux/addcomment/actions';
 import Taskdetail from './taskdetail';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import ToastHandle from '../../../constants/toaster/toaster';
 import { listProjectAssignee } from '../../../redux/task/action';
-console.log(listProjectAssignee,'list')
 
 const Container = styled.div`
     display: flex;
@@ -60,20 +48,22 @@ const Title = styled.span`
 
 const Boards = (props) => {
     const { projectId, milestoneId, sprintId } = useParams();
-    // console.log(sprintId, 'ssssssssssssssssssssssssssssssssssssss')
-
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
     const store = useSelector((state) => state);
     const { register, setValue } = useForm();
     const taskId = store?.getTaskId?.data;
-    // console.log('store', store);
     const taskStatusCount = store?.getTaskStatusCount?.data?.response;
     const taskStatusCountdata = store?.getAllTaskReducer?.data;
     const updateComment = store?.updateComment;
     const successHandle = store?.getAllTaskReducer;
     const statushandle = store?.updateTaskStatus;
     const assigneeName = store?.getAllAssigneeName?.data?.response;
+    const [showModal, setShowModal] = useState(false);
+    const [columns, setColumns] = useState(columnsFromBackend);
+    const [commentdata, setCommentData] = useState([]);
+    const [showTaskModel, setshowTaskModel] = useState(false);
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
         let body = {
@@ -94,11 +84,7 @@ const Boards = (props) => {
         dispatch(listProjectAssignee({ projectId: projectId, milestoneId: milestoneId, sprintId: '66026a52b110e4325bc04618' }));
         dispatch(getTaskStatusCount());
     }, []);
-
-    const [showModal, setShowModal] = useState(false);
-    const [columns, setColumns] = useState(columnsFromBackend);
-    console.log(columns,'1111111111111111111111111111111111')
-
+  
     const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return;
         const { source, destination } = result;
@@ -191,8 +177,7 @@ const Boards = (props) => {
 
     // const [body,setBody] = useState({});
 
-    const [commentdata, setCommentData] = useState([]);
-    const [showTaskModel, setshowTaskModel] = useState(false);
+    
     const historyData = store?.getHistoryData?.data?.response;
     const userId = store?.Auth?.user?.userId;
 
@@ -238,7 +223,7 @@ const Boards = (props) => {
             setRender(!render);
         }
     };
-    const [show, setShow] = useState(false);
+
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
