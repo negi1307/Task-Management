@@ -108,7 +108,7 @@ const Boards = (props) => {
                     items: destItems,
                 },
             });
-            handelupdatetask(result);
+            // handelupdatetask(result);
         } else {
             const column = columns[source.droppableId];
             const copiedItems = [...column.items];
@@ -121,7 +121,7 @@ const Boards = (props) => {
                     items: copiedItems,
                 },
             });
-            handelupdatetask(result);
+            // handelupdatetask(result);
 
         }
     };
