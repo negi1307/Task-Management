@@ -158,7 +158,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 </Modal.Title>
                             </Col>
                             <Col lg={5} className="text-end pt-2">
-                                <button type="button" className="close bg-black text-white" onClick={closeModalHandle} aria-label="Close">
+                                <button type="button" className="close border-0 bg-black text-white" onClick={closeModalHandle} aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </Col>
@@ -687,53 +687,47 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                             )}
                         </Col>
                         <Col lg={5}>
-                            <div class="table-responsive">
-                                <table class="table lh-sm table-borderless text-nowrap" style={{ fontSize: '14px' }} >
+                            <div className="table-responsive">
+                                <table className="table lh-sm table-borderless" style={{ fontSize: '14px' }} >
                                     <tbody className='text-start'>
                                         <tr className='text-start'>
-                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Project Name :</th>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Project Name :</th>
                                             <td>{editData?.projects?.projectName}</td>
                                         </tr>
                                         <tr className='text-start'>
-                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Milestone Name :</th>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Milestone Name :</th>
                                             <td>{editData?.milestones?.title}</td>
                                         </tr>
                                         <tr className='text-start'>
-                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Sprint Name :</th>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Sprint Name :</th>
                                             <td>{editData?.sprints?.sprintName}</td>
                                         </tr>
                                         <tr className='text-start'>
-                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Summary :</th>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Summary :</th>
                                             <td>{editData?.summary}</td>
                                         </tr>
                                         <tr className='text-start'>
-                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Description :</th>
-                                            <td>
-                                                <div dangerouslySetInnerHTML={{ __html: editData?.description }} />
-                                            </td>
-                                        </tr>
-                                        <tr className='text-start'>
-                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Start Date :</th>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Start Date :</th>
                                             <td>{editData?.startDate ? moment(editData?.startDate).format('DD/MM/YYYY') : ''}</td>
                                         </tr>
                                         <tr className='text-start'>
-                                            <th className='fw-bold' style={{ width: 'fit-content', }}>End Date :</th>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>End Date :</th>
                                             <td>{editData?.dueDate ? moment(editData?.dueDate).format('DD/MM/YYYY') : ''}</td>
                                         </tr>
                                         <tr className='text-start'>
-                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Assignee :</th>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Assignee :</th>
                                             <td>{editData?.assigneeInfo?.firstName} {editData?.assigneeInfo?.lastName}</td>
                                         </tr>
                                         <tr className='text-start'>
-                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Reporter :</th>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Reporter :</th>
                                             <td>{editData?.reporterInfo?.firstName} {editData?.reporterInfo?.lastName}</td>
                                         </tr>
                                         <tr className='text-start'>
-                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Priority :</th>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Priority :</th>
                                             <td class="fw-bold">{editData?.priority}</td>
                                         </tr>
                                         <tr className='text-start'>
-                                            <th className='fw-bold' style={{ width: 'fit-content', }}>Status :</th>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Status :</th>
                                             <td>
                                                 {editData?.status == 1 ? 'To-Do' : ''}
                                                 {editData?.status == 2 ? 'In-Progress' : ''}
@@ -741,6 +735,19 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 {editData?.status == 4 ? 'Done' : ''}
                                             </td>
                                         </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold'>Description:</th>
+                                            <div style={{ maxHeight: '7rem', overflowY: 'scroll' }}>
+                                                <td>
+
+                                                    {editData?.description}
+                                                    {/* </span> */}
+                                                </td>
+                                            </div>
+                                        </tr>
+
+
+
                                         {editData?.attachment !== '' ? (
                                             <tr className='text-start'>
                                                 <th className='fw-bold' style={{ width: 'fit-content', }}>Attachment:</th>

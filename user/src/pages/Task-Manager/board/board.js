@@ -60,14 +60,14 @@ const Title = styled.span`
 
 const Boards = (props) => {
     const { projectId, milestoneId, sprintId } = useParams();
-    console.log( sprintId,'ssssssssssssssssssssssssssssssssssssss')
+    // console.log(sprintId, 'ssssssssssssssssssssssssssssssssssssss')
 
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
     const store = useSelector((state) => state);
     const { register, setValue } = useForm();
     const taskId = store?.getTaskId?.data;
-    console.log('store', store);
+    // console.log('store', store);
     const taskStatusCount = store?.getTaskStatusCount?.data?.response;
     const taskStatusCountdata = store?.getAllTaskReducer?.data;
     const updateComment = store?.updateComment;
@@ -274,8 +274,8 @@ const Boards = (props) => {
                                 {taskStatusCountdata?.response?.TodoCount}
                             </Badge>
                         </h4>{' '}
-                    </div>
-                    <div className="ms-3">
+                    </div> */}
+                {/* <div className="ms-3">
                         {' '}
                         <h4 className="page-title bg-black text-white rounded-2 p-2 py-1">
                             {' '}
@@ -314,9 +314,9 @@ const Boards = (props) => {
                                 {taskStatusCountdata?.response?.DueTasksCount}
                             </Badge>
                         </h4>{' '}
-                    </div>
+                    </div> */}
 
-                    <li className="info_cls">
+                {/* <li className="info_cls">
                         {assigneeName?.map((item, index) => (
                             <div className=" d-flex align-items-center cp">
                                 <span
@@ -352,7 +352,7 @@ const Boards = (props) => {
                         onKeyUp={selectTask}
                         {...register('textSearch')}
                     />
-                    <div className="add_task">
+                    {/* <div className="add_task">
                         <button
                             type="button"
                             className="mybutton btn btn-info web_button"
@@ -362,7 +362,7 @@ const Boards = (props) => {
                             }}>
                             Add Task
                         </button>
-                        <RightBar
+                         <RightBar
                             callAlltaskData={callAlltaskData}
                             className="d-none"
                             projectId={props.projectId}
@@ -370,8 +370,8 @@ const Boards = (props) => {
                             sprintId={props.sprintId}
                             showModal={showModal}
                             setShowModal={setShowModal}
-                        />
-                    </div>
+                        /> 
+                    </div> */}
                 </div>
             </div>
 
