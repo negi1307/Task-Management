@@ -33,10 +33,7 @@ const Sprint = () => {
     const deletehandle = store?.deleteSprint?.data;
     const loaderhandel = store?.getAllSingleSprints;
     const [skip, setSkip] = useState(1);
-    const handelUpdate = (data) => {
-        setEditData(data);
-        setOpenEditModal(true);
-    };
+
     useEffect(() => {
         let body = {
             flag: 'sprint',
@@ -47,7 +44,7 @@ const Sprint = () => {
             // status: 1
         };
         dispatch(getAllProjects(body));
-    }, []);
+    }, [projectId, milestoneId, status]);
     useEffect(() => {
         if (deletehandle?.status == 200) {
             ToastHandle('success', deletehandle?.message);
@@ -136,12 +133,23 @@ const Sprint = () => {
         };
         dispatch(getAllProjects(body));
     };
+    // const truncateDescription = (description, maxLength = 30) => {
+    //     if (description.length > maxLength) {
+    //         return description.substring(0, maxLength) + '...';
+    //     }
+    //     return description;
+    // };
     const truncateDescription = (description, maxLength = 30) => {
+        if (!description) {
+            return ''; // or any other default value
+        }
+
         if (description.length > maxLength) {
             return description.substring(0, maxLength) + '...';
         }
         return description;
     };
+
     return (
         <>
             <Card>
@@ -200,7 +208,7 @@ const Sprint = () => {
                                         </thead>
                                         <tbody>
                                             {GetAllSingleSprintData?.map((item, index) => (
-                                                <tr className='text-start'>
+                                                <tr key={item?._id || index} className='text-start'>
                                                     <td>{(skip - 1) * 10 + index + 1}</td>
                                                     <td>
                                                         <Link
@@ -208,25 +216,18 @@ const Sprint = () => {
                                                             to={`/dashboard/taskBoard/projectId=/${projectId}&milestoneId=/${milestoneId}&spriteId=/${item?._id}`}>
                                                             {item?.sprintName}
                                                         </Link>
-
                                                     </td>
-
-
                                                     <td className='text-start'>
-                                                        <td>
-                                                            <OverlayTrigger
-                                                                placement="top"
-                                                                overlay={<Tooltip>{truncateDescription(item?.sprintDesc)}</Tooltip>}
-                                                            >
-                                                                <div>
-                                                                    {/* Show only a part of the description */}
-                                                                    <div>{truncateDescription(item?.sprintDesc)}</div>
-                                                                </div>
-                                                            </OverlayTrigger>
-                                                        </td>
-
+                                                        <OverlayTrigger
+                                                            placement="top"
+                                                            overlay={<Tooltip>{truncateDescription(item?.sprintDesc)}</Tooltip>}>
+                                                            <div>
+                                                                {/* Show only a part of the description */}
+                                                                <div>{truncateDescription(item?.sprintDesc)}</div>
+                                                            </div>
+                                                        </OverlayTrigger>
                                                     </td>
-                                                    <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
+                                                    <td>{moment(item?.startDate).format("DD/MM/YYYY")}</td>
                                                     <td>{item?.daysLeft}</td>
                                                     <td>{moment(item?.endDate).format('L')}</td>
                                                     <td>
@@ -237,7 +238,6 @@ const Sprint = () => {
                                                         />
                                                     </td>
                                                     <td>
-                                                        {' '}
                                                         <Row>
                                                             <Col>
                                                                 <p className="action-icon m-0 p-0 ">
@@ -246,13 +246,14 @@ const Sprint = () => {
                                                                         <i className="mdi mdi-eye m-0 p-0"></i>
                                                                     </Link>
                                                                 </p>
+                                                                {/* Uncomment the following lines when needed */}
                                                                 {/* <p className="action-icon m-0 p-0  ">
-                                                                    <i
-                                                                        onClick={() => {
-                                                                            handelUpdate(item);
-                                                                        }}
-                                                                        className="uil-edit-alt m-0 p-0"></i>
-                                                                </p> */}
+                                                                <i
+                                                                    onClick={() => {
+                                                                        handelUpdate(item);
+                                                                    }}
+                                                                    className="uil-edit-alt m-0 p-0"></i>
+                                                            </p> */}
                                                             </Col>
                                                         </Row>
                                                     </td>
