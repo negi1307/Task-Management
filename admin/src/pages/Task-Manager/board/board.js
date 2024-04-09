@@ -430,7 +430,11 @@ const Boards = () => {
                                             {...provided?.droppableProps}
 
                                         >
+<<<<<<< HEAD
+                                            <TaskList style={{height:''}}>
+=======
                                             <TaskList style={{ height: '' }}>
+>>>>>>> b0db240ee96c5eb640bd156bc58e4896dc3bd948
                                                 <Title className='text-dark fw-bold' >{column.title}   <span className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</span></Title>
                                                 {column.items?.map((item, index) => (
                                                     <TaskCard

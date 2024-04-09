@@ -124,11 +124,9 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
             priorityWithLetter = item?.priority;
             backgroundColorClass = '';
     }
-    const [isPlaying, setIsPlaying] = useState(false);
+ 
 
-    const handleClick = () => {
-        setIsPlaying(prevState => !prevState);
-    };
+ 
 
 
     return (
