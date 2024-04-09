@@ -10,7 +10,7 @@ import Attachments from './../../apps/Tasks/Details/Attachments';
 
 const Taskdetail = (props) => {
     const { item } = props;
-    console.log(item,'333333333333333333333333333')
+    console.log(item,'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [inputForUpdate, setInputForUpdate] = useState('');
@@ -427,19 +427,19 @@ const Taskdetail = (props) => {
                             <li>
                                 <label>Project Name:</label>
 
-                                {props.item.projectName}
+                                <td>{props?.item?.projects?.projectName}</td>
                             </li>
                             <li>
                                 <label>Milestone Name:</label>
-                                {props.item.milestoneInfo?.title}
+                                <td>{props?.item?.milestones?.title}</td>
                             </li>
                             <li>
                                 <label>Sprint Name:</label>
-                                {props.item.sprintName}
+                                <td>{props?.item?.sprints?.sprintName}</td>
                             </li>
                             <li>
                                 <label>Summary:</label>
-                                {props.item?.summary}
+                                {props?.item?.summary}
                             </li>
                             <li>
                                 <label>Description:</label>

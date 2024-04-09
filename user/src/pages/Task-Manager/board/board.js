@@ -389,7 +389,7 @@ const Boards = (props) => {
                                                 class="three"
                                                 ref={provided.innerRef}
                                                 {...provided.droppableProps}>
-                                                <Title className='text-dark fw-bold' >{column.title}   <span className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</span></Title>
+                                                <Title className='text-dark fw-bold' >{column?.title}   <span className='py-0 p-1  rounded-circle text-dark bg-white'>{column?.count}</span></Title>
 
                                                 {column?.items?.map((item, index) => (
                                                     <TaskCard

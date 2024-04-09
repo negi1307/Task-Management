@@ -135,6 +135,29 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
                                     </a>
 
                                 </div>
+                                <div className="col-3 text-center">
+                                            <div className="dropdown">
+                                                <button className="border-0 bg-white icon_buttons" type="button" id="dropdownMenuButton1"
+                                                    data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                                                    <i className="bi bi-three-dots-vertical fs-5 fw-bold text-dark"></i>
+                                                </button>
+                                                <ul className="dropdown-menu py-0 dropdown-style dropdown-menu-end ps-1 dropdown-menu-lg-start border-0" aria-labelledby="dropdownMenuButton1">
+                                                    <div className='d-flex w-50'>
+                                                        <li className='w-50 ps-2 border-dark border-end border-1 py-0'>
+                                                            <button className="dropdown-item m-0 p-0 border-0 bg-transparent">
+                                                                <i className="uil-edit-alt m-0 p-0  text-dark del_edit" onClick={() => { handelUpdate(item); }}></i>
+                                                            </button>
+                                                        </li>
+                                                        <li className='w-50 ps-2'>
+
+                                                            <button className="dropdown-item m-0 p-0 border-0 bg-transparent" onClick={() => deleteData(item?.id)}>
+                                                                <i className="mdi mdi-delete text-dark m-0 p-0  del_edit"></i>
+                                                            </button>
+                                                        </li>
+                                                    </div>
+                                                </ul>
+                                            </div>
+                                        </div>
 
                                 <div className='col-12' title={item?.description}>{item?.description ? item.description.slice(0, 40) : ''}</div>
                                 <div className='col-12 m-0 mb-1 '>
