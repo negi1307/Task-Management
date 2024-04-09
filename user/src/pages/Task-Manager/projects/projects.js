@@ -101,7 +101,7 @@ const Projects = () => {
     useEffect(() => {
         let body = {
             flag: "project",
-            projectId: '66026a37b110e4325bc045fc',
+            // projectId: '66026a37b110e4325bc045fc',
             milestoneId: '',
             sprintId: '',
             projectStatus: 1,
@@ -123,7 +123,7 @@ const Projects = () => {
     const statusInfo = (status) => {
         let body = {
             flag: 'project',
-            projectId: '66026a37b110e4325bc045fc',
+            // projectId: '66026a37b110e4325bc045fc',
             milestoneId: '',
             skip: 1,
         };
@@ -133,13 +133,13 @@ const Projects = () => {
         setSkip(value);
         let body = {
             flag: 'project',
-            projectId: '66026a37b110e4325bc045fc',
+            // projectId: '66026a37b110e4325bc045fc',
             milestoneId: '',
             skip: value,
         };
         dispatch(getAllProjects(body));
     };
-    console.log(getProjectList, '11111111111111111111111111111112222222222222222222222')
+    // console.log(getProjectList, '11111111111111111111111111111112222222222222222222222')
     return (
         <>
             <div>
@@ -253,7 +253,7 @@ const Projects = () => {
                         ) : (
                             <Table className="mb-0 add_Color_font" striped>
                                 <thead>
-                                    <tr>
+                                    <tr className='text-start'>
                                         <th>#</th>
                                         <th>Project Name</th>
                                         <th>Client Name</th>
@@ -266,7 +266,7 @@ const Projects = () => {
                                 <tbody>
                                     {projectDataInfo?.map((ele, ind) => {
                                         return (
-                                            <tr key={ind} className="align-middle">
+                                            <tr key={ind} className="text-start">
                                                 <td scope="row">{ind + 1}</td>
                                                 <td className="cp">
                                                     <Link to={`/dashboard/projects/${ele._id}`}>

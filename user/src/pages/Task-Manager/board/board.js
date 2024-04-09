@@ -7,6 +7,7 @@ import { columnsFromBackend } from './data';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
 import { getAllTask, updateTask } from '../../../redux/actions';
+console.log(getAllTask,'task')
 import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
@@ -24,6 +25,7 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import ToastHandle from '../../../constants/toaster/toaster';
 import { listProjectAssignee } from '../../../redux/task/action';
+console.log(listProjectAssignee,'list')
 
 const Container = styled.div`
     display: flex;

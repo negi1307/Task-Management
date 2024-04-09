@@ -470,7 +470,7 @@ span.logo-lg {
 }
 
 .form-switch .form-check-input:checked[type='checkbox']:after {
-    background-color: black !important;
+    background-color: #fff !important;
     width: 1rem !important;
     height: 1rem !important;
     /* background-color: #3b71ca; */
@@ -480,7 +480,7 @@ span.logo-lg {
 
 .form-check-input[type='checkbox']:checked {
     /* background-image: none; */
-    background-color: black !important;
+    background-color: #727CF5 !important;
 }
 
 table.table-striped tbody tr:nth-of-type(odd)>* {

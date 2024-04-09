@@ -36,6 +36,7 @@ const Sprint = () => {
         setEditData(data);
         setOpenEditModal(true);
     };
+    // console.log({ GetAllSingleSprintData });
 
     // for getting the sprints on update and after adding new sprints
     const getUpdatedSprints = () => {
