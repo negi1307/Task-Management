@@ -82,7 +82,7 @@ const Boards = (props) => {
             searchString: '',
             projectId: projectId,
             milestoneId: milestoneId,
-            sprintId: sprintId,
+            sprintId: '66026a52b110e4325bc04618',
             skip: 1,
             activeStatus: true,
         };
@@ -91,24 +91,26 @@ const Boards = (props) => {
     }, []);
 
     useEffect(() => {
-        dispatch(listProjectAssignee({ projectId: projectId, milestoneId: milestoneId, sprintId: sprintId }));
+        dispatch(listProjectAssignee({ projectId: projectId, milestoneId: milestoneId, sprintId: '66026a52b110e4325bc04618' }));
         dispatch(getTaskStatusCount());
     }, []);
 
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
+    console.log(columns,'1111111111111111111111111111111111')
 
     const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return;
         const { source, destination } = result;
 
+
         if (source.droppableId !== destination.droppableId) {
             const sourceColumn = columns[source.droppableId];
             const destColumn = columns[destination.droppableId];
-            const sourceItems = [...sourceColumn.items];
-            const destItems = [...destColumn.items];
-            const [removed] = sourceItems.splice(source.index, 1);
-            destItems.splice(destination.index, 0, removed);
+            const sourceItems = sourceColumn.items?.slice();
+            const destItems = destColumn.items?.slice();
+            const [removed] = sourceItems?.splice(source.index, 1);
+            destItems?.splice(destination.index, 0, removed);
             setColumns({
                 ...columns,
                 [source.droppableId]: {
@@ -120,44 +122,7 @@ const Boards = (props) => {
                     items: destItems,
                 },
             });
-            if (destColumn.title == 'In Progress') {
-                let body = {
-                    taskId: result?.draggableId,
-                    status: 2,
-                };
-                dispatch(updateTaskStatus(body));
-            } else if (destColumn.title == 'Hold') {
-                let body = {
-                    taskId: result?.draggableId,
-                    status: 3,
-                };
-                dispatch(updateTaskStatus(body));
-            } else if (destColumn.title == 'Done') {
-                let body = {
-                    taskId: result?.draggableId,
-                    status: 4,
-                };
-                dispatch(updateTaskStatus(body));
-            } else if (destColumn.title == 'To-do') {
-                let body = {
-                    taskId: result?.draggableId,
-                    status: 1,
-                };
-                dispatch(updateTaskStatus(body));
-            }
-            setTimeout(() => {
-                let body = {
-                    flag: 1,
-                    status: true,
-                    searchString: '',
-                    projectId: projectId,
-                    milestoneId: milestoneId,
-                    sprintId: sprintId,
-                    skip: 1,
-                    activeStatus: true,
-                };
-                dispatch(getAllTask(body));
-            }, 30);
+            handelupdatetask(result);
         } else {
             const column = columns[source.droppableId];
             const copiedItems = [...column.items];
@@ -170,6 +135,8 @@ const Boards = (props) => {
                     items: copiedItems,
                 },
             });
+            handelupdatetask(result);
+
         }
     };
 
@@ -178,30 +145,45 @@ const Boards = (props) => {
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
             setColumns({
-                [uuidv4()]: {
+                [1]: {
                     title: 'To-do',
-                    items: successHandle?.data?.response?.Todo?.map((ele) => {
+                    bgColor: 'red',
+                    items: successHandle?.data?.Response?.todo?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
+                    count: successHandle?.data?.Response?.todoCount
                 },
-                [uuidv4()]: {
+                [2]: {
                     title: 'In Progress',
-                    items: successHandle?.data?.response?.Inprogress?.map((ele) => {
+                    bgColor: 'lightblue',
+                    items: successHandle?.data?.Response?.inProgress.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
+                    count: successHandle?.data?.Response?.inProgressCount
                 },
-
-                [uuidv4()]: {
+                [3]: {
+                    title: 'Testing',
+                    bgColor: 'chocolate',
+                    items: successHandle?.data?.Response?.testing.map((ele) => {
+                        return { ...ele, id: ele._id };
+                    }),
+                    count: successHandle?.data?.Response?.testingCount
+                },
+                [5]: {
                     title: 'Hold',
-                    items: successHandle?.data?.response?.Hold?.map((ele) => {
+                    bgColor: 'lime',
+                    items: successHandle?.data?.Response?.hold.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
+                    count: successHandle?.data?.Response?.holdCount
                 },
-                [uuidv4()]: {
+                [4]: {
                     title: 'Done',
-                    items: successHandle?.data?.response?.Done?.map((ele) => {
+                    bgColor: 'green',
+                    items: successHandle?.data?.Response?.done.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
+                    count: successHandle?.data?.Response?.doneCount,
                 },
             });
         }
@@ -245,7 +227,7 @@ const Boards = (props) => {
             searchString: '',
             projectId: projectId,
             milestoneId: milestoneId,
-            sprintId: sprintId,
+            sprintId: '66026a52b110e4325bc04618',
             skip: 1,
             activeStatus: '',
         };
@@ -270,7 +252,7 @@ const Boards = (props) => {
                     searchString: e.target.value,
                     projectId: projectId,
                     milestoneId: milestoneId,
-                    sprintId: sprintId,
+                    sprintId: '66026a52b110e4325bc04618',
                     skip: 1,
                     activeStatus: '',
                 };
@@ -281,7 +263,7 @@ const Boards = (props) => {
     return (
         <>
             <div class="status">
-                <ul>
+                {/* <ul>
                     <li>Task Status Count</li>
                     <div>
                         {' '}
@@ -361,8 +343,8 @@ const Boards = (props) => {
                             </div>
                         ))}
                     </li>
-                </ul>
-                <div className="search_info">
+                </ul> */}
+                <div className="search_info ms-auto">
                     <input
                         type="search"
                         placeholder="Search here..."
@@ -407,7 +389,7 @@ const Boards = (props) => {
                                                 class="three"
                                                 ref={provided.innerRef}
                                                 {...provided.droppableProps}>
-                                                <Title class="">{column.title}</Title>
+                                                <Title className='text-dark fw-bold' >{column.title}   <span className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</span></Title>
 
                                                 {column?.items?.map((item, index) => (
                                                     <TaskCard
@@ -415,6 +397,9 @@ const Boards = (props) => {
                                                         key={item}
                                                         item={item}
                                                         index={index}
+                                                        projectId={projectId}
+                                                        mileStoneId={milestoneId}
+                                                        sprintId={sprintId}
                                                         closeModal={closeModal}
                                                     />
                                                 ))}
