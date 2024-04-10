@@ -20,20 +20,41 @@ const Container = styled.div`
 `;
 
 const TaskList = styled.div`
-    min-height: 100px;
+    max-height: 90vh;
     display: flex;
     flex-direction: column;
     background: #f3f3f3;
+    overflow: scroll;
     min-width: 341px;
     border-radius: 5px;
     padding: 15px 15px;
     margin-right: 45px;
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: transparent;
+        // border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: gray;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+        // border-radius: 10px;
+    }
 `;
 
 const TaskColumnStyles = styled.div`
     margin: 8px;
     display: flex;
     width: 100%;
+    overflow:auto;
     min-height: 80vh;
 `;
 
@@ -64,74 +85,39 @@ const Boards = (props) => {
     const [commentdata, setCommentData] = useState([]);
     const [showTaskModel, setshowTaskModel] = useState(false);
     const [show, setShow] = useState(false);
+    const [search, setSearch] = useState('');
 
 
     const assigneeId = localStorage.getItem('userId')
     // console.log({ assigneeId })
-
     useEffect(() => {
-        let body = {
-            flag: 1,
-            status: true,
-            searchString: '',
-            // projectId: projectId,
-            // milestoneId: milestoneId,
-            sprintId: spriteId,
-            skip: 1,
-            activeStatus: true,
-            assigneeId: assigneeId
-        };
+        // let body = {
+        //     flag: 1,
+        //     status: true,
+        //     searchString: '',
+        //     // projectId: projectId,
+        //     // milestoneId: milestoneId,
+        //     sprintId: spriteId,
+        //     skip: 1,
+        //     activeStatus: true,
+        //     assigneeId: assigneeId
+        // };
 
-        dispatch(getAllTask(body));
+        // dispatch(getAllTask(body));
+        dispatch(getAllTask({ sprintId: spriteId, searchString: '', assigneeId: assigneeId }));
+
     }, []);
 
-    // useEffect(() => {
-    //     dispatch(listProjectAssignee({ projectId: projectId, milestoneId: milestoneId, sprintId: '66026a52b110e4325bc04618' }));
-    //     dispatch(getTaskStatusCount());
-    // }, []);
-
-    const onDragEnd = (result, columns, setColumns) => {
-        if (!result.destination) return;
-        const { source, destination } = result;
-
-
-        if (source.droppableId !== destination.droppableId) {
-            const sourceColumn = columns[source.droppableId];
-            const destColumn = columns[destination.droppableId];
-            const sourceItems = sourceColumn.items?.slice();
-            const destItems = destColumn.items?.slice();
-            const [removed] = sourceItems?.splice(source.index, 1);
-            destItems?.splice(destination.index, 0, removed);
-            setColumns({
-                ...columns,
-                [source.droppableId]: {
-                    ...sourceColumn,
-                    items: sourceItems,
-                },
-                [destination.droppableId]: {
-                    ...destColumn,
-                    items: destItems,
-                },
-            });
-            // handelupdatetask(result);
-        } else {
-            const column = columns[source.droppableId];
-            const copiedItems = [...column.items];
-            const [removed] = copiedItems.splice(source.index, 1);
-            copiedItems.splice(destination.index, 0, removed);
-            setColumns({
-                ...columns,
-                [source.droppableId]: {
-                    ...column,
-                    items: copiedItems,
-                },
-            });
-            // handelupdatetask(result);
-
+    useEffect(() => {
+        if (updateComment?.data?.status == 200) {
+            ToastHandle('success', updateComment?.data?.message);
+            dispatch(getComment({ taskId: commentdata?.taskInfo?._id }));
+        } else if (updateComment?.data?.status == 400) {
+            ToastHandle('error', updateComment?.data?.message);
+        } else if (updateComment?.data?.status == 500) {
+            ToastHandle('error', updateComment?.data?.message);
         }
-    };
-
-
+    }, [updateComment]);
 
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
@@ -180,15 +166,48 @@ const Boards = (props) => {
         }
     }, [successHandle]);
 
-    // const [body,setBody] = useState({});
+    const onDragEnd = (result, columns, setColumns) => {
+        if (!result.destination) return;
+        const { source, destination } = result;
 
+
+        if (source.droppableId !== destination.droppableId) {
+            const sourceColumn = columns[source.droppableId];
+            const destColumn = columns[destination.droppableId];
+            const sourceItems = sourceColumn.items?.slice();
+            const destItems = destColumn.items?.slice();
+            const [removed] = sourceItems?.splice(source.index, 1);
+            destItems?.splice(destination.index, 0, removed);
+            setColumns({
+                ...columns,
+                [source.droppableId]: {
+                    ...sourceColumn,
+                    items: sourceItems,
+                },
+                [destination.droppableId]: {
+                    ...destColumn,
+                    items: destItems,
+                },
+            });
+        } else {
+            const column = columns[source.droppableId];
+            const copiedItems = [...column.items];
+            const [removed] = copiedItems.splice(source.index, 1);
+            copiedItems.splice(destination.index, 0, removed);
+            setColumns({
+                ...columns,
+                [source.droppableId]: {
+                    ...column,
+                    items: copiedItems,
+                },
+            });
+        }
+    };
 
     const historyData = store?.getHistoryData?.data?.response;
     const userId = store?.Auth?.user?.userId;
 
     const selectUserTask = store?.getAllTaskReducer?.data?.done?.tasks?.taskInfo;
-
-    // console.log('selectUserTask', selectUserTask);
 
     const showTaskDetailMOdel = (item) => {
         setshowTaskModel(true);
@@ -200,16 +219,22 @@ const Boards = (props) => {
     const closeTaskDetailMOdel = () => {
         setshowTaskModel(false);
     };
-    useEffect(() => {
-        if (updateComment?.data?.status == 200) {
-            ToastHandle('success', updateComment?.data?.message);
-            dispatch(getComment({ taskId: commentdata?.taskInfo?._id }));
-        } else if (updateComment?.data?.status == 400) {
-            ToastHandle('error', updateComment?.data?.message);
-        } else if (updateComment?.data?.status == 500) {
-            ToastHandle('error', updateComment?.data?.message);
-        }
-    }, [updateComment]);
+
+    const handleSearchChange = (e) => {
+        e.preventDefault();
+        setSearch(e.target.value);
+        dispatch(
+            getAllTask({
+                projectId: projectId,
+                milestoneId: milestoneId,
+                sprintId: spriteId,
+                assigneeId: assigneeId,
+                searchString: e.target.value,
+            })
+        );
+    };
+
+
     // const callAlltaskData = () => {
     //     let body = {
     //         flag: 1,
@@ -337,10 +362,13 @@ const Boards = (props) => {
                 <div className="search_info ms-auto">
                     <input
                         type="search"
+                        value={search}
+                        onChange={(e) => {
+                            handleSearchChange(e);
+                        }}
                         placeholder="Search here..."
                         className="border-0 rounded-2"
-                        // onKeyUp={selectTask}
-                        {...register('textSearch')}
+                    // onKeyUp={selectTask}
                     />
                     {/* <div className="add_task">
                         <button
@@ -369,8 +397,8 @@ const Boards = (props) => {
                 {successHandle.loading ? (
                     <MainLoader />
                 ) : (
-                    <Container>
-                        <TaskColumnStyles>
+                    <Container className='overflow-scroll'>
+                        <TaskColumnStyles style={{ height: '90vh !important' }}>
                             {Object.entries(columns)?.map(([columnId, column], index) => {
                                 return (
                                     <Droppable key={columnId} droppableId={columnId}>

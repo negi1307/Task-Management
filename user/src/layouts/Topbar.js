@@ -347,13 +347,13 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                         </div>
 
                         <ul className="list-unstyled topbar-menu float-end mb-0 topbarr">
-                            <li className="notification-list">
+                            {/* <li className="notification-list">
                                 <button
                                     className="nav-link dropdown-toggle end-bar-toggle arrow-none btn btn-link shadow-none"
                                     onClick={handleRightSideBar}>
                                     <i className="dripicons-gear noti-icon"></i>
                                 </button>
-                            </li>
+                            </li> */}
                             <li className="dropdown notification-list listlist">
                                 <ProfileDropdown
                                     profilePic={profilePic}

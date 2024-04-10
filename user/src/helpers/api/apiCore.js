@@ -212,6 +212,7 @@ class APICore {
 
         // Store the full session in sessionStorage
         sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session));
+        localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session));
     };
 
     /**

@@ -32,7 +32,7 @@ const Milestone = () => {
     useEffect(() => {
         dispatch(getProjectsById(id));
         dispatch(getsingleMileStone({ id: id, status: 1 }));
-        dispatch(getAllProjects({ flag: 'milestone', projectId: id, milestoneId: '', skip: 1 }));
+        dispatch(getAllProjects({ flag: 'milestone', projectId: id, milestoneId: '', skip: 1, activeStatus: true }));
     }, [id]);
 
     useEffect(() => {
@@ -67,7 +67,7 @@ const Milestone = () => {
 
     const handlePaginationChange = (event, value) => {
         setSkip(value);
-        dispatch(getAllProjects({ flag: 'milestone', projectId: id, milestoneId: '', skip: value }));
+        dispatch(getAllProjects({ flag: 'milestone', projectId: id, milestoneId: '', skip: value, activeStatus: true }));
     };
 
     return (

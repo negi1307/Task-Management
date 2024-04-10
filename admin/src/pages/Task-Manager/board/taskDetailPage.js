@@ -185,7 +185,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                             </Col>
                             <Col lg={5} className="text-end pt-2">
                                 <button type="button" className="close border-0 bg-black text-white" onClick={closeModalHandle} aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+                                    <span aria-hidden="true" >&times;</span>
                                 </button>
                             </Col>
                         </Row>
@@ -229,7 +229,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             connectComponentCheck('AddSubtask');
                                         }
                                         }
-                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'AddSubtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                        className={`btn px-2 fw-bold py-1  web_button ${connectComponent === 'AddSubtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
                                         Add Sub-tasks
                                     </Button>
