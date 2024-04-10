@@ -44,7 +44,7 @@ const TaskInformation = styled.div`
 `;
 
 const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
-    console.log("itmmmem")
+    console.log(item, "itmmmem")
     const store = useSelector(state => state)
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
@@ -94,56 +94,101 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
     const DeleteData = (id) => {
         dispatch(deleteComment({ commentId: id }));
     }
+    let priorityWithLetter;
+    let backgroundColorClass;
+
+    switch (item?.priority) {
+        case 'Critical':
+            priorityWithLetter = 'Critical';
+            backgroundColorClass = '🛑';
+            break;
+        case 'High':
+            priorityWithLetter = 'High';
+            backgroundColorClass = '🔴';
+            break;
+        case 'Medium':
+            priorityWithLetter = 'Medium';
+            backgroundColorClass = '🟡';
+            break;
+        case 'Low':
+            priorityWithLetter = 'Low';
+            backgroundColorClass = '🟢';
+            break;
+        default:
+            priorityWithLetter = item?.priority;
+            backgroundColorClass = '';
+    }
     // console.log(item ,"item")
     return (
         <>
             <Draggable key={item?.taskInfo?._id} draggableId={item?.taskInfo?._id} index={index}>
                 {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                        <TaskInformation onClick={() => showTaskDetailMOdel(item)}>
-                            {/* <div className="action_icon">
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        handelUpdate(item);
-                                    }}>
-                                    <i class="uil-edit-alt m-0 p-0"></i>
-                                </button>
-                                <button type="button" onClick={() => deleteData(item.id)}>
-                                    <i class="mdi mdi-delete m-0 p-0"></i>
-                                </button>
-                            </div> */}
-                            <div >
+                        <TaskInformation onClick={() => showTaskDetailMOdel(item)} className=" mt-2  pe-1 shadow-lg p-3 mx-auto    rounded-4 " style={{ width: '250px', height: '160px' }}>
+                            <div className="row ">
+                                <div className="col-9   m-0 ">
+                                    <a className='fw-bold   m-0 fw-bold text-truncate rounded-pill'
+                                        href="#"
+                                       
+                                        title={item?.summary}>
+                                        {item?.summary ? item.summary.slice(0, 10).charAt(0).toUpperCase() + item.summary.slice(1, 10) : ''}
+                                    </a>
 
-                                <p>{item?.taskInfo?.summary}</p>
+                                </div>
+                                <div className="col-3 text-center">
+                                            <div className="dropdown">
+                                                <button className="border-0 bg-white icon_buttons" type="button" id="dropdownMenuButton1"
+                                                    data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                                                    <i className="bi bi-three-dots-vertical fs-5 fw-bold text-dark"></i>
+                                                </button>
+                                                <ul className="dropdown-menu py-0 dropdown-style dropdown-menu-end ps-1 dropdown-menu-lg-start border-0" aria-labelledby="dropdownMenuButton1">
+                                                    <div className='d-flex w-50'>
+                                                        <li className='w-50 ps-2 border-dark border-end border-1 py-0'>
+                                                            <button className="dropdown-item m-0 p-0 border-0 bg-transparent">
+                                                                <i className="uil-edit-alt m-0 p-0  text-dark del_edit" onClick={() => { handelUpdate(item); }}></i>
+                                                            </button>
+                                                        </li>
+                                                        <li className='w-50 ps-2'>
 
-                                <div
-                                    dangerouslySetInnerHTML={{
-                                        __html: item?.taskInfo?.description,
-                                    }}></div>
+                                                            <button className="dropdown-item m-0 p-0 border-0 bg-transparent" onClick={() => deleteData(item?.id)}>
+                                                                <i className="mdi mdi-delete text-dark m-0 p-0  del_edit"></i>
+                                                            </button>
+                                                        </li>
+                                                    </div>
+                                                </ul>
+                                            </div>
+                                        </div>
 
-                                <div className="secondary-details">
-                                    <p>
-                                        <span>{item?.taskInfo?.startDate ? moment(item?.taskInfo?.startDate).format('ll') : ''}</span>
+                                <div className='col-12' title={item?.description}>{item?.description ? item.description.slice(0, 40) : ''}</div>
+                                <div className='col-12 m-0 mb-1 '>
+                                    <p className={`task-title text-dark p-0 m-0 `}>
+                                        {backgroundColorClass}
                                     </p>
                                 </div>
-                            </div>
-                            <div className='username_info'>
-                                <ul>
-                                    <li>
-                                        {item?.reporterInfo?.role.charAt(0)}
-                                    </li>
-                                    <li>
-                                        {item?.assigneeInfo?.firstName.charAt(0)}{item?.assigneeInfo?.lastName.charAt(0)}
-                                    </li>
-                                </ul>
+                                <div className="secondary-detail col-12 d-flex justify-content-between">
+                                    <div>
+                                        <span className='task-title text-dark p-0'>
+                                            {item?.startDate ? moment(item?.startDate).format("DD/MM/YYYY") : ''}
+                                        </span>
+                                    </div>
+                                    <div className='username_info'>
+                                        <ul>
+
+                                            <span style={{
+                                                backgroundColor: '#605e5a',
+                                                borderRadius: '50%',
+                                                padding: '5px 6px',
+                                                fontSize: '11px',
+                                                color: 'white',
+                                                fontWeight: '800',
+                                            }}>
+                                                {item?.assigneeInfo?.firstName.charAt(0)}{item?.assigneeInfo?.lastName.charAt(0)}
+                                            </span>
+                                        </ul>
+                                    </div>
+                                </div>
 
                             </div>
-
-
-
-
-
 
                         </TaskInformation>
                     </div>
