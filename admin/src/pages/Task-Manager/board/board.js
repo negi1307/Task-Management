@@ -119,7 +119,7 @@ const Boards = () => {
         } else {
             dispatch(getAllTask({ sprintId: spriteId, searchString: '' }));
         }
-
+        dispatch(getAllTask({ sprintId: spriteId, searchString: '' }));
         dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
         dispatch(getAllRoles())
         setFormSubmitted(true);
@@ -188,6 +188,9 @@ const Boards = () => {
     const closeaddModal = () => {
         getalltasks();
     }
+    const deleteTask = () => {
+
+    }
     const getalltasks = () => {
         // dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
         // dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
@@ -255,7 +258,6 @@ const Boards = () => {
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
-
         }
     };
 

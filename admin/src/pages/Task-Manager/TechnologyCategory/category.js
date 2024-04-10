@@ -102,33 +102,29 @@ const Category = () => {
                     <Card>
                         <Card.Body>
                             <div className="row mx-auto mt-2">
-                                <div className="d-flex col-4">
+                                <div className="d-flex col-6">
                                     <div className="row d-flex align-items-center">
                                         <div
-                                            className={`col-auto  cp ${
-                                                status == true ? 'Active_data' : 'InActive_data'
-                                            }`}>
+                                            className={`col-auto  cp ${status == true ? 'Active_data' : 'InActive_data'
+                                                }`}>
                                             <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
                                                 Active
                                             </p>
                                         </div>
                                         <div
-                                            className={`col-auto  cp ${
-                                                status == false ? 'Active_data' : 'InActive_data'
-                                            }`}>
+                                            className={`col-auto  cp ${status == false ? 'Active_data' : 'InActive_data'
+                                                }`}>
                                             <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
                                                 Deactive
                                             </p>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-4 d-flex align-items-center justify-content-center">
-                                    <h4 className="header-title heading_data"> Category</h4>
-                                </div>
+
                                 {status == 1 ? (
-                                    <div className="col-4 d-flex align-items-center justify-content-end pe-0">
+                                    <div className="col-6 d-flex align-items-center justify-content-end pe-0">
                                         <Button
-                                            className="web_button"
+                                            className="btn btn-sm  text-white pt-1 pb-1  web_button  btn btn-info"
                                             variant="info"
                                             onClick={() => {
                                                 handelCreate();
@@ -140,22 +136,25 @@ const Category = () => {
                                     ''
                                 )}
                             </div>
+                            <div className="col-12 my-1  d-flex align-items-center justify-content-center">
+                                <h4 className="header-title py-1 heading_data page_headings"> Category</h4>
+                            </div>
                             {loader?.loading ? (
                                 <MainLoader />
                             ) : (
-                                <Table className="mb-0 add_Color_font" striped>
+                                <Table className="mb-0 add_Color_font" striped style={{ fontSize: '13px!important' }}>
                                     <thead>
-                                        <tr>
+                                        <tr className='text-start'>
                                             <th>#</th>
-                                            <th> Category Name</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th className='fw-bold'> Category Name</th>
+                                            <th className='fw-bold'>Status</th>
+                                            <th className='fw-bold'>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {store?.getAllTechnologyCategoryReducer?.data?.response?.map((ele, ind) => {
                                             return (
-                                                <tr className="align-middle">
+                                                <tr className="text-start">
                                                     <th scope="row">{ind + 1}</th>
                                                     <td className="cp">
                                                         <span className="namelink"> {ele?.name} </span>

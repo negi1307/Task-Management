@@ -105,17 +105,15 @@ const Technology = () => {
                                 <div className="d-flex col-4">
                                     <div className="row d-flex align-items-center">
                                         <div
-                                            className={`col-auto  cp ${
-                                                status == true ? 'Active_data' : 'InActive_data'
-                                            }`}>
+                                            className={`col-auto  cp ${status == true ? 'Active_data' : 'InActive_data'
+                                                }`}>
                                             <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
                                                 Active
                                             </p>
                                         </div>
                                         <div
-                                            className={`col-auto  cp ${
-                                                status == false ? 'Active_data' : 'InActive_data'
-                                            }`}>
+                                            className={`col-auto  cp ${status == false ? 'Active_data' : 'InActive_data'
+                                                }`}>
                                             <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
                                                 Deactive
                                             </p>
@@ -143,20 +141,20 @@ const Technology = () => {
                             {loaderhandle?.loading ? (
                                 <MainLoader />
                             ) : (
-                                <Table className="mb-0 add_Color_font" striped>
+                                <Table className="mb-0 add_Color_font" striped style={{ fontSize: '13px!important' }}>
                                     <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Category Name</th>
-                                            <th> Technology Name</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold'>#</th>
+                                            <th className='fw-bold'>Category Name</th>
+                                            <th className='fw-bold'> Technology Name</th>
+                                            <th className='fw-bold'>Status</th>
+                                            <th className='fw-bold'>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {store?.getAllTechnologyReducer?.data?.response?.map((ele, ind) => {
                                             return (
-                                                <tr className="align-middle">
+                                                <tr className="text-start">
                                                     <th scope="row">{ind + 1}</th>
                                                     <td>
                                                         <span className="namelink"> {ele?.techCategory_id?.name} </span>

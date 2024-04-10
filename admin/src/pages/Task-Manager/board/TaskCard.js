@@ -136,7 +136,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
             <Draggable key={item.id} draggableId={item?.id} index={index} style={{ width: '260px', }}>
                 {(provided) => (
                     <div ref={provided?.innerRef} {...provided?.draggableProps} {...provided?.dragHandleProps} >
-                        <TaskInformation className="mt-2 shadow-lg mx-auto rounded-4 " style={{ width: '250px' }}>
+                        <TaskInformation className="mt-2 shadow-lg mx-auto rounded-4 " style={{ width: '250px', marginTop: '1px' }}>
                             <div className="row py-2">
                                 <div className="col-12 pb-1">
                                     <div className="row d-flex align-items-center">
@@ -177,9 +177,6 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                 </ul>
                                             </div>
                                         </div>
-
-
-
                                         {/* <div className="col-6 pe-0">
                                             <div className="action_icon position-relative">
                                                 <div className="col-12 d-flex align-items-center justify-content-end">
@@ -265,7 +262,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                     <p>
                                         <div className='task-title text-dark p-0' title={item?.description}>
                                             {item?.description ?
-                                                (item.description.length > 32 ? item.description.slice(0, 32) + '...' : item.description)
+                                                (item.description.length > 25 ? item.description.slice(0, 25) + '...' : item.description)
                                                 : ''}
                                         </div>
                                     </p>

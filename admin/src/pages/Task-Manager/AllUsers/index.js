@@ -96,7 +96,7 @@ const AllUsers = () => {
                             <HeaderMain />
                         </div>
                         <div className="col-12 mt-2 text-center">
-                            <h4 className="header-title heading_data page_headings"> All Users</h4>
+                            <h4 className="header-title py-1 heading_data page_headings">All Users</h4>
                         </div>
                     </div>
                     {getUsers?.loading ? (
