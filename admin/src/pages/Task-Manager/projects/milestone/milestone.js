@@ -154,7 +154,7 @@ const Milestone = () => {
                                 <Col className="mx-0" lg={12}>
                                     <Row>
                                         <div className="row   ">
-                                            <div className="d-flex col-4">
+                                            <div className="d-flex col-6">
                                                 <div className="row d-flex align-items-center">
                                                     <div
                                                         className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'
@@ -176,10 +176,7 @@ const Milestone = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="col-4 d-flex align-items-center justify-content-center">
-                                                <h4 className="header-title heading_data"> Milestones</h4>
-                                            </div>
-                                            <div className="col-4 d-flex align-items-center justify-content-end">
+                                            <div className="col-6 d-flex align-items-center justify-content-end">
                                                 <Button
                                                     onClick={() => {
                                                         setOpenModel(true);
@@ -190,33 +187,36 @@ const Milestone = () => {
                                                     Add Milestone
                                                 </Button>
                                             </div>
+                                            <div className="col-12 d-flex align-items-center justify-content-center">
+                                                <h4 className="header-title heading_data page_headings py-1"> Milestones</h4>
+                                            </div>
                                         </div>
                                         <Col className="" lg={12}>
-                                            <Table striped>
+                                            <Table striped style={{ fontSize: '13px!important' }}>
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
-                                                        <th> Milestone Name</th>
-                                                        <th> Description</th>
-                                                        <th> Start Date</th>
-                                                        <th>Days Left</th>
-                                                        <th> End Date</th>
-                                                        <th>Status</th>
-                                                        <th>Action</th>
+                                                        <th className='fw-bold text-start'>#</th>
+                                                        <th className='fw-bold text-start'>Milestone Name</th>
+                                                        <th className='fw-bold text-start'>Milestone Description</th>
+                                                        <th className='fw-bold text-start'>Milestone Start Date</th>
+                                                        <th className='fw-bold text-start'>Milestone End Date</th>
+                                                        <th className='fw-bold text-start'>Days Left</th>
+                                                        <th className='fw-bold text-start'>Status</th>
+                                                        <th className='fw-bold text-start'>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {GetSinglemilstonesData?.map((item, index) => (
                                                         <tr>
-                                                            <td>{(skip - 1) * 10 + index + 1}</td>
-                                                            <td>
+                                                            <td className='text-start fw-bold'>{(skip - 1) * 10 + index + 1}</td>
+                                                            <td className='text-start'>
                                                                 <Link
                                                                     to={`/dashboard/singleMilestonesprint/${item?.projectId}/${item?._id}`}>
                                                                     <span className="namelink text-secondary"> {item?.title} </span>
 
                                                                 </Link>
                                                             </td>
-                                                            <td>
+                                                            <td className='text-start'>
                                                                 <OverlayTrigger
                                                                     placement="top"
                                                                     overlay={<Tooltip id={`tooltip-${index}`}>{item?.description}</Tooltip>}
@@ -226,10 +226,10 @@ const Milestone = () => {
                                                             </td>
 
 
-                                                            <td> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
-                                                            <td>{item?.daysLeft}</td>
-                                                            <td>{moment(item?.completionDate).format('L')}</td>
-                                                            <td>
+                                                            <td className='text-start'> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
+                                                            <td className='text-start'>{moment(item?.completionDate).format('L')}</td>
+                                                            <td className='text-start'>{item?.daysLeft}</td>
+                                                            <td className='text-start'>
                                                                 {' '}
                                                                 <Form.Check
                                                                     type="switch"
@@ -237,7 +237,7 @@ const Milestone = () => {
                                                                     onChange={(e) => handleStatusChange(e, item)}
                                                                 />
                                                             </td>
-                                                            <td>
+                                                            <td className='text-start'>
                                                                 {' '}
                                                                 <Row>
                                                                     <Col>

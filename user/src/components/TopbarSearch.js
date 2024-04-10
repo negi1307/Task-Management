@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Select, { components } from 'react-select';
+import { components } from 'react-select';
 import classNames from 'classnames';
 
 // utils

@@ -216,7 +216,7 @@ const Projects = () => {
                                     </p>
                                 </div> */}
                             </div>
-                            <div className="d-flex col-4 mt-3">
+                            <div className="d-flex col-6 mt-3">
                                 <div className="row d-flex align-items-center">
                                     <div className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
                                         <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
@@ -230,11 +230,8 @@ const Projects = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-4 d-flex align-items-center justify-content-center">
-                                <h4 className="header-title heading_data"> Projects</h4>
-                            </div>
                             {status == 1 ? (
-                                <div className="col-4 d-flex align-items-center justify-content-end gap-3 pe-0">
+                                <div className="col-6 d-flex align-items-center justify-content-end gap-3 pe-0">
                                     <Button
                                         className="mybutton btn p-1 fw-bold py-1  web_button"
                                         variant="info"
@@ -260,72 +257,76 @@ const Projects = () => {
                                         className="d-none"
                                         // onFormSubmit={handleFormSubmit}
                                         showModal={showModal}
-                                        // columns={columns}
                                         closeModal={closeaddModal}
                                         setShowModal={setShowModal}
                                     />
                                 </div>
+
                             ) : (
                                 ''
                             )}
+                            <div className="col-12 d-flex align-items-center justify-content-center">
+                                <h4 className="header-title py-1 heading_data page_headings">Projects</h4>
+                            </div>
                         </div>
+
 
                         {getProjectList?.loading ? (
                             <>
                                 <MainLoader />
                             </>
                         ) : (
-                            <Table className="mb-0 add_Color_font" striped>
+                            <Table className="mb-0 add_Color_font" striped style={{ fontSize: '13px!important' }}>
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th> Project Name</th>
-                                        <th>Client Name</th>
-                                        <th>Project Type</th>
-                                        <th>Project Start Date</th>
-                                        <th>Days Left</th>
-                                        <th>Project End Date</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th className='fw-bold text-start'>#</th>
+                                        <th className='fw-bold text-start'> Project Name</th>
+                                        <th className='fw-bold text-start'>Client Name</th>
+                                        <th className='fw-bold text-start'>Project Type</th>
+                                        <th className='fw-bold text-start'>Project Start Date</th>
+                                        <th className='fw-bold text-start'>Days Left</th>
+                                        <th className='fw-bold text-start'>Project End Date</th>
+                                        <th className='fw-bold text-start'>Status</th>
+                                        <th className='fw-bold text-start'>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {store?.getProject?.data?.response?.map((ele, ind) => {
                                         return (
                                             <tr className="align-middle">
-                                                <th scope="row">{(skip - 1) * 10 + ind + 1}</th>
-                                                <td className="cp">
+                                                <th scope="row" className='text-start'>{(skip - 1) * 10 + ind + 1}</th>
+                                                <td className="cp text-start">
 
                                                     <Link to={`/dashboard/projects/${ele?._id}`}>
                                                         <span className="namelink text-secondary"> {ele?.projectName} </span>
                                                     </Link>
                                                 </td>
-                                                <td className="w-20">
+                                                <td className="text-start w-20">
                                                     <span className="namelink"> {ele?.clientName}</span>
                                                 </td>
-                                                <td>
-                                                    <span className="namelink"> {ele?.projectType}</span>
+                                                <td className='text-start'>
+                                                    <span className="text-start namelink"> {ele?.projectType}</span>
                                                 </td>
-                                                <td>
+                                                <td className='text-start'>
                                                     <span className="namelink">
                                                         {moment(ele?.startDate).format("DD/MM/YYYY")}
                                                     </span>
                                                 </td>
-                                                <td>{ele?.daysLeft}</td>
-                                                <td>
+                                                <td className='text-start'>{ele?.daysLeft}</td>
+                                                <td className='text-start'>
                                                     <span className="namelink">
                                                         {' '}
                                                         {moment(ele?.endDate).format('L')}
                                                     </span>
                                                 </td>
-                                                <td>
+                                                <td className='text-start'>
                                                     <Form.Check
                                                         type="switch"
                                                         checked={ele?.activeStatus}
                                                         onChange={(e) => handleStatusChange(e, ele)}
                                                     />
                                                 </td>
-                                                <td>
+                                                <td className='text-start'>
                                                     <Row>
                                                         <Col>
                                                             <p className="action-icon m-0 p-0 ">

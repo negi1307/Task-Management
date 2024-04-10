@@ -28,8 +28,8 @@ export const UpdateSprint = '/sprint/update';
 export const SingleMilestone = '/milestone/getMilestones?';
 //==============================================================================
 
-export const SingleSprintTask = '/task/getSprintTasks?sprintId=';
-export const GetAllTask = "/task/getTasks?";
+export const SingleSprintTask = '/task/getSprintTasks?';
+export const GetAllTask = "/task/getTasksAccToStatus?";
 
 export const UpdateTask = '/task/updateTask';
 export const DeleteTask = '/task/deletetask?';

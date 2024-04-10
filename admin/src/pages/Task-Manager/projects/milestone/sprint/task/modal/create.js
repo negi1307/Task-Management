@@ -12,12 +12,12 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
     const dispatch = useDispatch();
     const [description, setDescription] = useState('');
-    console.log(description,"descriptionnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
+    // console.log(description,"descriptionnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
     const store = useSelector((state) => state);
     const errorhandel = store?.createTaskReducer;
-      // disable previous date
-      const today = new Date().toISOString().split('T')[0];
-      //
+    // disable previous date
+    const today = new Date().toISOString().split('T')[0];
+    //
     const {
         register,
         handleSubmit,
@@ -33,14 +33,14 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
         body.append("milestoneId", milestoneid)
         body.append("sprintId", sprintid)
         body.append("summary", val?.summary)
-        body.append("description",description)
-        body.append("assigneeId",val?.Assignee)
-        body.append("reporterId",val?.Reporter)
+        body.append("description", description)
+        body.append("assigneeId", val?.Assignee)
+        body.append("reporterId", val?.Reporter)
         body.append("priority", val?.Priority)
         body.append("startDate", val?.startdate)
         body.append("dueDate", val?.dueDate)
-        body.append("status",1)
-        body.append("attachment",val?.attachment[0])
+        body.append("status", 1)
+        body.append("attachment", val?.attachment[0])
         dispatch(createTask(body));
     };
     const handleClose = () => {
@@ -97,7 +97,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     Project<span className="text-danger">*</span>:
                                                 </Form.Label>
 
-                                                <Form.Select {...register('projectname', { required: true ,disabled:true })}>
+                                                <Form.Select {...register('projectname', { required: true, disabled: true })}>
                                                     {/* <option value={''}>--Select--</option> */}
                                                     {store?.getProject?.data?.response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.projectName} </option>
@@ -115,7 +115,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     Milestone<span className="text-danger">*</span>:
                                                 </Form.Label>
 
-                                                <Form.Select {...register('Milestone', { required: true, disabled:true })}>
+                                                <Form.Select {...register('Milestone', { required: true, disabled: true })}>
                                                     {/* <option value={''}>--Select--</option> */}
                                                     {store?.getSigleMileStone?.data?.response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.title} </option>
@@ -136,7 +136,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     Sprint <span className="text-danger">*</span>:
                                                 </Form.Label>
 
-                                                <Form.Select {...register('Sprint', { required: true,disabled:true })}>
+                                                <Form.Select {...register('Sprint', { required: true, disabled: true })}>
                                                     {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.sprintName} </option>
                                                     ))}
@@ -173,19 +173,19 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     Description<span className="text-danger">*</span>:
                                                 </Form.Label>
                                                 <CKEditor
-                                                editor={ClassicEditor}
-                                                config={{
-                                                    ckfinder: {
-                                                        uploadUrl:
-                                                            'https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
-                                                    },
-                                                }}
-                                                data=""
-                                                onChange={(event, editor) => {
-                                                    const data = editor.getData();
-                                                    setDescription(data);
-                                                }}
-                                            />
+                                                    editor={ClassicEditor}
+                                                    config={{
+                                                        ckfinder: {
+                                                            uploadUrl:
+                                                                'https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
+                                                        },
+                                                    }}
+                                                    data=""
+                                                    onChange={(event, editor) => {
+                                                        const data = editor.getData();
+                                                        setDescription(data);
+                                                    }}
+                                                />
                                             </Form.Group>
                                         </Col>
                                         <Col lg={6}>
@@ -272,8 +272,8 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                 </Form.Label>
                                                 <Form.Control
                                                     type="date"
-                                                    disabled={watch("startdate")== ""|| watch("startdate")== undefined }
-                                                min={watch("startdate")} 
+                                                    disabled={watch("startdate") == "" || watch("startdate") == undefined}
+                                                    min={watch("startdate")}
                                                     {...register('dueDate', { required: true })}
                                                 />{' '}
                                                 {errors.dueDate?.type === 'required' && (
@@ -294,7 +294,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                 <Form.Control
                                                     type="text"
                                                     placeholder="To-Do"
-                                                    {...register('status', { required: true ,disabled: true})}
+                                                    {...register('status', { required: true, disabled: true })}
                                                 />
                                                 {errors.status?.type === 'required' && (
                                                     <span className="text-danger"> This feild is required *</span>
@@ -309,7 +309,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                 </Form.Label>
                                                 <Form.Control
                                                     type="file"
-                                                    
+
                                                     {...register('attachment', { required: true })}
                                                 />
                                                 {errors.attachment?.type === 'required' && (

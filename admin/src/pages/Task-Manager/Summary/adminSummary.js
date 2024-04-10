@@ -10,38 +10,54 @@ import HeaderMain from '../header/HeaderMain';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-
+import FilterModal from './modal/filter';
+import Pagesaddtask from '../../../layouts/AllPagesRightbar';
 const AdminDashboard = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [historyResponse, setHistoryResponse] = useState(null);
-
-    // const [skip, setSkip] = useState(1);
-
-
     const successHandle = store?.getTaskSummaryReducer;
     const BarGraphHandel = store?.getPriorityGraphReducer;
     const lastWeekCount = store?.getTaskWeekCountReducer?.data?.response;
-
-
     const [taskCount, setTaskCount] = useState(null);
     const [data, setData] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [filterModal, setFilterModal] = useState(false);
+    // const taskCountData = useSelector(state => state?.getTaskCountReducer?.data?.Response);
+    // console.log({ taskCountData })
+    // const taskCountfe = store?.getTaskCountReducer?.data
+    // console.log({ taskCountfe })
+    // const totalTaskCount = useSelector(state => state.totalTaskCount);
+    // console.log({ totalTaskCount })
+
+    // console.log({ taskCount })
     // const [skip, setSkip] = useState(0);
     // const [count, setCount] = useState();
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm();
     useEffect(() => {
         if (successHandle?.data?.status === 200) {
             setData(successHandle?.data?.response);
         }
-    }, [successHandle]);
-
-    useEffect(() => {
         const historyData = store?.getHistoryReducer?.data?.response;
         if (historyData) {
             setHistoryResponse(historyData);
         }
-    }, [store?.getHistoryReducer?.data?.response]);
+    }, [successHandle, store?.getHistoryReducer?.data?.response]);
+
+    // useEffect(() => {
+    //     const historyData = store?.getHistoryReducer?.data?.response;
+    //     if (historyData) {
+    //         setHistoryResponse(historyData);
+    //     }
+    // }, [store?.getHistoryReducer?.data?.response]);
     // useEffect(() => {
     //     const historyPageCount = store?.getHistoryReducer?.data?.totalPage;
     //     if (historyPageCount) {
@@ -64,7 +80,12 @@ const AdminDashboard = () => {
     // if (taskCount !== null) {
     //     console.log(taskCount, '///task');
     // }
-
+    const closeaddModal = () => {
+        // getalltasks();
+    }
+    const closefilterModal = () => {
+        setFilterModal(false);
+    }
     useEffect(() => {
         dispatch(getTaskWeekCountAction());
         dispatch(getTaskSummmaryDetail());
@@ -121,6 +142,41 @@ const AdminDashboard = () => {
                             <HeaderMain />
                         </div>
                         <hr />
+                        <div className='row'>
+                            <div className='col-12 d-flex gap-2 justify-content-end'>
+                                <button className='mybutton btn p-1 fw-bold py-1 web_button'
+                                    onClick={() => setFilterModal(true)}>
+                                    Filter
+                                </button>
+                                <FilterModal
+                                    className='d-none'
+                                    showFilter={filterModal}
+                                    closeFilter={closefilterModal}
+                                    setfilterModal={setFilterModal} />
+                                <button
+                                    type="button"
+                                    className="mybutton btn p-1 fw-bold py-1  web_button"
+                                    onClick={() => {
+                                        // console.log('button click');
+                                        // handeladdtask()
+                                        setShowModal(!showModal);
+                                        // dispatchActions();
+                                        // dispatch(getAllTask({ projectId: projectId, mileStoneId: milestoneId, sprintId: spriteId }))
+
+                                    }}>
+                                    Add Task
+                                </button>
+                                <Pagesaddtask
+                                    className="d-none"
+                                    // onFormSubmit={handleFormSubmit}
+                                    showModal={showModal}
+                                    closeModal={closeaddModal}
+                                    setShowModal={setShowModal}
+                                />
+                            </div>
+                            {/* {filterModal && <FilterModal closeModal={() => setFilterModal(false)} />} */}
+
+                        </div>
                         <div className="col all_bg  border_clr m-2 rounded-4 bg-white">
                             <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
                                 <div className="bg_clr p-3 rounded-circle text-center ">

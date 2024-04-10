@@ -7,7 +7,7 @@
 input[data-switch] {
     display: none;
 
-    + label {
+    +label {
         width: 56px;
         height: 24px;
         background-color: #{map-get($grays, "100")};
@@ -36,6 +36,7 @@ input[data-switch] {
             overflow: hidden;
             transition: all 0.1s ease-in-out;
         }
+
         &:after {
             content: '';
             position: absolute;
@@ -49,15 +50,18 @@ input[data-switch] {
             transition: all 0.1s ease-in-out;
         }
     }
+
     &:checked {
         +label {
             background-color: $primary;
+
             &:before {
                 color: $white;
                 content: attr(data-on-label);
                 right: auto;
                 left: 4px;
             }
+
             &:after {
                 left: 34px;
                 background-color: #{map-get($grays, "100")};
@@ -67,13 +71,13 @@ input[data-switch] {
 }
 
 input[data-switch="bool"] {
-    + label {
+    +label {
         background-color: $danger;
     }
 }
 
 input:disabled {
-    + label {
+    +label {
         opacity: 0.5;
         cursor: default;
     }
@@ -88,7 +92,7 @@ input[data-switch="bool"]+label:after {
     background-color: #{map-get($grays, "100")};
 }
 
-@each $color,$value in $theme-colors {
+@each $color, $value in $theme-colors {
     input[data-switch="#{$color}"]:checked+label {
         background-color: #{$value};
     }
@@ -99,18 +103,21 @@ input[data-switch="bool"]+label:after {
 body[data-layout-color="dark"] {
     input[data-switch] {
         &[data-switch="none"] {
-            + label {
+            +label {
                 background-color: #{map-get($dark-grays, "100")};
-            }    
+            }
         }
-        + label {
+
+        +label {
             &:before {
                 color: #{map-get($dark-grays, "900")};
             }
+
             &:after {
                 background-color: #{map-get($dark-grays, "500")};
             }
         }
+
         &:checked {
             +label {
                 &:after {
@@ -119,14 +126,15 @@ body[data-layout-color="dark"] {
             }
         }
     }
+
     input[data-switch="bool"]+label:after {
         background-color: #{map-get($dark-grays, "100")};
     }
 
-    @each $color,$value in $dark-theme-colors {
+    @each $color, $value in $dark-theme-colors {
         input[data-switch="#{$color}"]:checked+label {
             background-color: #{$value};
         }
     }
-    
+
 }

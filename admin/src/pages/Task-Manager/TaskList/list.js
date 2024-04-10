@@ -212,7 +212,7 @@ const TaskList = () => {
                 </div>
                 {status == 1 && taskStatus == 1 ? (
                     <div className="col-4 d-flex align-items-center justify-content-end pe-0">
-                        <Button className="web_button" variant="info" onClick={handleCreate}>
+                        <Button className="mybutton btn px-2 fw-bold py-1  web_button" variant="info" onClick={handleCreate}>
                             Create Task
                         </Button>
                     </div>
@@ -228,7 +228,7 @@ const TaskList = () => {
                         <Row>
                             <Col className="" lg={12}>
                                 <Table striped>
-                                    <thead style={{ fontSize: '12px' }}>
+                                    <thead style={{ fontSize: '13px!important' }}>
                                         <tr className='text-nowrap'>
                                             <th className='text-start fw-bold'>#</th>
                                             <th className='text-start fw-bold'>Description</th>
@@ -291,6 +291,7 @@ const TaskList = () => {
                                                 <td className='text-start'>
                                                     <Form.Check
                                                         type="switch"
+                                                        className='text-start'
                                                         checked={item?.activeStatus}
                                                         onChange={(e) => handleStatusChange(e, item)}
                                                     />

@@ -1,34 +1,34 @@
 
 import TASK_TYPES from "./constant";
 const INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const GET_SINGLE_SPRINTTASK_INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const GET_All_TASK_INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const GET_All_ASSIGNEE_INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const UPDATE_STATUS_TASK_INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 const UPDATE_STATUS_TASK_TIME_INITIAL_STATE = {
-    data:[],
-    loading:false,
-    message:""
+    data: [],
+    loading: false,
+    message: ""
 }
 
 
@@ -151,11 +151,11 @@ export const UpdateTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) =>
                 data: action?.payload,
                 loading: false,
             };
-            case TASK_TYPES.UPDATE_TASK_RESET:
-                return {
-                    data: GET_All_TASK_INITIAL_STATE.data,
-                    loading: false
-                }
+        case TASK_TYPES.UPDATE_TASK_RESET:
+            return {
+                data: GET_All_TASK_INITIAL_STATE.data,
+                loading: false
+            }
 
         case TASK_TYPES.UPDATE_TASK_ERROR:
             return {
@@ -181,11 +181,11 @@ export const UpdateTaskStatusTime = (state = UPDATE_STATUS_TASK_TIME_INITIAL_STA
                 data: action?.payload,
                 loading: false,
             };
-            case TASK_TYPES.UPDATE_TASK_RESET_STATUS_TIME:
-                return {
-                    data: UPDATE_STATUS_TASK_TIME_INITIAL_STATE.data,
-                    loading: false
-                }
+        case TASK_TYPES.UPDATE_TASK_RESET_STATUS_TIME:
+            return {
+                data: UPDATE_STATUS_TASK_TIME_INITIAL_STATE.data,
+                loading: false
+            }
 
         case TASK_TYPES.UPDATE_TASK_ERROR_STATUS_TIME:
             return {

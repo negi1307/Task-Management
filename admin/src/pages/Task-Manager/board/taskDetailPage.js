@@ -5,6 +5,8 @@ import DatePicker from 'react-datepicker';
 import '../../../../node_modules/react-datepicker/dist/react-datepicker.css';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import {
     AddComment,
@@ -29,6 +31,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     const [subtaskButtonClicked, setSubtaskButtonClicked] = useState(false);
     const getCommentData = store?.getComment?.data?.response;
     const getHistory = store?.getHistoryReducer?.data?.response;
+    const [historyResponse, setHistoryResponse] = useState(null);
 
 
     const historyLoader = store?.getHistoryReducer
@@ -96,6 +99,16 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         setEndDate("");
         reset();
     }
+    useEffect(() => {
+        // if (successHandle?.data?.status === 200) {
+        //     setData(successHandle?.data?.response);
+        // }
+        const historyData = store?.getHistoryReducer?.data?.response;
+        if (historyData) {
+            setHistoryResponse(historyData);
+        }
+    }, [store?.getHistoryReducer?.data?.response]);
+
 
 
 
@@ -145,8 +158,20 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         setValue('comment', "");
         setButtonChange(true);
     }
-
-
+    function generateLink(userActivity, item) {
+        switch (userActivity) {
+            case "Created milestone":
+                return `/dashboard/projects/${item?.sprintId?.projectId}`;
+            case "Created Sprint":
+                return `/dashboard/singleMilestonesprint/${item?.sprintId?.projectId}/${item?.milestoneId?._id}`;
+            case "Created Task":
+                return `/dashboard/taskBord/projectId=${item?.sprintId?.projectId}&milestoneId=${item?.milestoneId?._id}&spriteId=${item?.sprintId?._id}`;
+            case "Create Project":
+                return "/dashboard/projects";
+            default:
+                return "/dashboard/adminsummary";
+        }
+    }
     return (
         <>
             <Modal show={modal} onHide={closeModal} size={'xl'}>
@@ -154,12 +179,12 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                     <Col lg={12}>
                         <Row>
                             <Col lg={7} className="text-end">
-                                <Modal.Title id="" className="mx-auto">
+                                <Modal.Title id="" className="mx-auto modal_titles">
                                     Task Detail
                                 </Modal.Title>
                             </Col>
                             <Col lg={5} className="text-end pt-2">
-                                <button type="button" className="close bg-black text-white" onClick={closeModalHandle} aria-label="Close">
+                                <button type="button" className="close border-0 bg-black text-white" onClick={closeModalHandle} aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </Col>
@@ -169,8 +194,8 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                 <hr />
                 <Modal.Body>
                     <Row>
-                        <Col lg={9}>
-                            <h4>Activity</h4>
+                        <Col lg={7}>
+                            <h4 className='modal_titles'>Activity</h4>
                             <Row>
                                 <Col lg={12} className='d-flex align-items-center gap-1'>
                                     <Button
@@ -178,13 +203,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             connectComponentCheck('All');
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'All' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
-                                    // style={{
-                                    //     backgroundColor: '#f3f3f3',
-                                    //     borderColor: '#f3f3f3',
-                                    //     color: 'black',
-                                    //     boxShadow: 'none',
-
-                                    // }}
                                     >
                                         All
                                     </Button>
@@ -193,12 +211,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             connectComponentCheck('Comments');
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Comments' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
-                                    // style={{
-                                    //     backgroundColor: '#f3f3f3',
-                                    //     borderColor: '#f3f3f3',
-                                    //     color: 'black',
-                                    //     boxShadow: 'none',
-                                    // }}
                                     >
                                         Comments
                                     </Button>
@@ -207,12 +219,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             connectComponentCheck('History');
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'History' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
-                                    // style={{
-                                    //     backgroundColor: '#f3f3f3',
-                                    //     borderColor: '#f3f3f3',
-                                    //     color: 'black',
-                                    //     boxShadow: 'none',
-                                    // }}
                                     >
                                         History
                                     </Button>
@@ -224,12 +230,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }
                                         }
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'AddSubtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
-                                    // style={{
-                                    //     backgroundColor: '#f3f3f3',
-                                    //     borderColor: '#f3f3f3',
-                                    //     color: 'black',
-                                    //     boxShadow: 'none',
-                                    // }}
                                     >
                                         Add Sub-tasks
                                     </Button>
@@ -238,12 +238,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             connectComponentCheck('Bugs');
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Bugs' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
-                                    // style={{
-                                    //     backgroundColor: '#f3f3f3',
-                                    //     borderColor: '#f3f3f3',
-                                    //     color: 'black',
-                                    //     boxShadow: 'none',
-                                    // }}
                                     >
                                         Bugs
                                     </Button>
@@ -251,12 +245,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         onClick={() => {
                                             connectComponentCheck('Subtask');
                                         }}
-                                        // style={{
-                                        //     backgroundColor: '#f3f3f3',
-                                        //     borderColor: '#f3f3f3',
-                                        //     color: 'black',
-                                        //     boxShadow: 'none',
-                                        // }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Subtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
                                         SubTask
@@ -290,9 +278,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                             <h4 className="ps-1 m-0 p-0"> {ele?.userId?.lastName}</h4>
                                                             <p className="ps-1 m-0 p-0">
                                                                 {moment(ele?.createdAt).fromNow()}
-                                                                {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
                                                             </p>
-                                                            {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
                                                         </div>
                                                         {inputForUpdate === ind ? (
                                                             <form onSubmit={handleSubmit(submitUpdateComment)}>
@@ -497,7 +483,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         </Col>
                                         <Row>
                                             <Col className='text-center'>
-                                                <Button type="submit" className='bg-black border-0 my-1'>{buttonChange ? 'Add' : 'Update'}</Button>
+                                                <Button type="submit" className='mybutton btn px-2 fw-bold py-1 mt-2 web_button'>{buttonChange ? 'Add' : 'Update'}</Button>
                                             </Col>
                                         </Row>
                                     </Row>
@@ -601,7 +587,48 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 //         </div>
                                 //     ))}
                                 // </div>
-                                ''
+                                <div className="d-flex flex-column justify-content-center my-2">
+                                    {historyResponse && historyResponse.map((item, index) => (
+                                        <div key={index} className='d-flex gap-2 align-items-center lh-lg'>
+                                            <OverlayTrigger
+                                                placement="top"
+                                                overlay={
+                                                    <Tooltip id="tooltip1">
+                                                        {item?.userId?.firstName}
+                                                        {item?.userId?.lastName}
+                                                    </Tooltip>
+                                                }>
+                                                <div className="mt-1 cp">
+                                                    <span
+                                                        style={{
+                                                            backgroundColor: '#605e5a',
+                                                            borderRadius: '100%',
+                                                            padding: '5px 6px',
+
+                                                            color: 'white',
+                                                            fontWeight: '700',
+                                                        }}>
+                                                        {item?.userId?.firstName.charAt(0).toUpperCase()}
+                                                        {item?.userId?.lastName.charAt(0).toUpperCase()}
+                                                    </span>
+                                                </div>
+                                            </OverlayTrigger>
+                                            <Link to={generateLink(item.userActivity, item)}
+                                                className='text-dark'>
+                                                <span>
+                                                    {item?.userId?.firstName} {item?.userId?.lastName}
+                                                    {item.userActivity === "Created milestone" && <span> created milestone</span>}
+                                                    {item.userActivity === "Created Sprint" && <span> created sprint</span>}
+                                                    {item.userActivity === "Create Project" && <span> create project</span>}
+                                                    {item.userActivity === "Created Task" && <span> created task</span>}
+                                                    {' on ' + item?.createdAt}
+                                                </span>
+                                            </Link>
+
+                                        </div>
+                                    ))}
+                                </div>
+
 
 
                             ) : connectComponent === 'Bugs' ? (
@@ -726,103 +753,85 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 ''
                             )}
                         </Col>
-                        <Col lg={3}>
-                            <div className="p-2">
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0">Project Name :</h4>
-                                    <p className="ms-2 p-0">{editData?.projects?.projectName}</p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0">Milestone Name :</h4>
-                                    <p className="ms-2 p-0">{editData?.milestones?.title}</p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0">Sprint Name :</h4>
-                                    <p className="ms-2 p-0">{editData?.sprints?.sprintName} </p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0">Summary :</h4>
-                                    <p className="ms-2 p-0">{editData?.summary}</p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0"> Description :</h4>
-                                    <p className="ms-2 p-0">
-                                        <div
-                                            dangerouslySetInnerHTML={{
-                                                __html: editData?.description,
-                                            }}
-                                        />
-                                    </p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0"> Start Date :</h4>
-                                    <p className="ms-2 p-0">
-                                        {editData?.startDate ? moment(editData?.startDate).format('DD/MM/YYYY') : ''}
-                                    </p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0"> End Date :</h4>
-                                    <p className="ms-2 p-0">
-                                        {editData?.dueDate ? moment(editData?.dueDate).format('DD/MM/YYYY') : ''}
-                                    </p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0"> Assignee :</h4>
-                                    <p className="ms-2 p-0">
-                                        {editData?.assigneeInfo?.firstName}{' '}
-                                        {editData?.assigneeInfo?.lastName}
-                                    </p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0">Reporter :</h4>
-                                    <p className="ms-2 p-0">{editData?.reporterInfo?.firstName}{' '}{editData?.reporterInfo?.lastName}</p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0">Priority :</h4>
-                                    <p className={`ms-2 fw-bold p-0`}>
-                                        {editData?.priority}
-                                    </p>
-                                </div>
-                                <div className=" d-flex">
-                                    <h4 className="m-0 p-0">Status :</h4>
-                                    <p className="ms-2 p-0">
-                                        {editData?.status == 1
-                                            ? 'To-Do'
-                                            : '' || editData?.status == 2
-                                                ? 'In-Progress'
-                                                : '' || editData?.status == 3
-                                                    ? 'Hold'
-                                                    : '' || editData?.status == 4
-                                                        ? 'Done'
-                                                        : ''}
-                                    </p>
-                                </div>
-                                {editData?.attachment !== '' ? (
-                                    <div className=" d-flex">
-                                        <h4 className="m-0 p-0 me-2">Attachment:</h4>
-                                        <a
-                                            href={editData?.attachment}
-                                            download
-                                            target="_blank"
-                                            className="align_icon_dowl">
-                                            <i className="dripicons-download download_color"></i>
-                                        </a>
-                                        <img
-                                            style={{ width: '10rem', height: '10rem' }}
-                                            className="img_style ps-1"
-                                            src={
-                                                editData?.attachmentType !== 'application/pdf'
-                                                    ? editData?.attachment
-                                                    : pdfImage
-                                            }
-                                        />
+                        <Col lg={5}>
+                            <div className="table-responsive">
+                                <table className="table lh-sm table-borderless" style={{ fontSize: '14px' }} >
+                                    <tbody className='text-start'>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Project Name :</th>
+                                            <td>{editData?.projects?.projectName}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Milestone Name :</th>
+                                            <td>{editData?.milestones?.title}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Sprint Name :</th>
+                                            <td>{editData?.sprints?.sprintName}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Summary :</th>
+                                            <td>{editData?.summary}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Start Date :</th>
+                                            <td>{editData?.startDate ? moment(editData?.startDate).format('DD/MM/YYYY') : ''}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>End Date :</th>
+                                            <td>{editData?.dueDate ? moment(editData?.dueDate).format('DD/MM/YYYY') : ''}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Assignee :</th>
+                                            <td>{editData?.assigneeInfo?.firstName} {editData?.assigneeInfo?.lastName}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Reporter :</th>
+                                            <td>{editData?.reporterInfo?.firstName} {editData?.reporterInfo?.lastName}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Priority :</th>
+                                            <td class="fw-bold">{editData?.priority}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Status :</th>
+                                            <td>
+                                                {editData?.status == 1 ? 'To-Do' : ''}
+                                                {editData?.status == 2 ? 'In-Progress' : ''}
+                                                {editData?.status == 3 ? 'Hold' : ''}
+                                                {editData?.status == 4 ? 'Done' : ''}
+                                            </td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold'>Description:</th>
+                                            <div style={{ maxHeight: '7rem', overflowY: 'scroll' }}>
+                                                <td>
 
-                                        {/* <img src={editData?.attachment} /> */}
-                                    </div>
-                                ) : (
-                                    ''
-                                )}
+                                                    {editData?.description}
+                                                    {/* </span> */}
+                                                </td>
+                                            </div>
+                                        </tr>
+
+
+
+                                        {editData?.attachment !== '' ? (
+                                            <tr className='text-start'>
+                                                <th className='fw-bold' style={{ width: 'fit-content', }}>Attachment:</th>
+                                                <td>
+                                                    <a href={editData?.attachment} download target="_blank">
+                                                        <i class="dripicons-download download_color"></i>
+                                                    </a>
+                                                    <img style="width: 10rem; height: 10rem;" class="img_style ps-1" src={editData?.attachmentType !== 'application/pdf' ? editData?.attachment : pdfImage} />
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            ''
+                                        )}
+                                    </tbody>
+                                </table>
                             </div>
+
                         </Col>
                     </Row>
                 </Modal.Body >

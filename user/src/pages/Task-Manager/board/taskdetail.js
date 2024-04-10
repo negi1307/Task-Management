@@ -10,6 +10,7 @@ import Attachments from './../../apps/Tasks/Details/Attachments';
 
 const Taskdetail = (props) => {
     const { item } = props;
+    console.log(item,'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [inputForUpdate, setInputForUpdate] = useState('');
@@ -426,48 +427,44 @@ const Taskdetail = (props) => {
                             <li>
                                 <label>Project Name:</label>
 
-                                {props.item.projectInfo?.projectName}
+                                <td>{props?.item?.projects?.projectName}</td>
                             </li>
                             <li>
                                 <label>Milestone Name:</label>
-                                {props.item.milestoneInfo?.title}
+                                <td>{props?.item?.milestones?.title}</td>
                             </li>
                             <li>
                                 <label>Sprint Name:</label>
-                                {props.item.sprintInfo?.sprintName}
+                                <td>{props?.item?.sprints?.sprintName}</td>
                             </li>
                             <li>
                                 <label>Summary:</label>
-                                {props.item?.taskInfo?.summary}
+                                {props?.item?.summary}
                             </li>
                             <li>
                                 <label>Description:</label>
 
-                                <div
-                                    className="description"
-                                    dangerouslySetInnerHTML={{
-                                        __html: props.item?.taskInfo?.description,
-                                    }}></div>
+                                <div className='col-12' title={item?.description}>{item?.description ? item.description.slice(0, 40) : ''}</div>
                             </li>
 
                             <li>
                                 <label>Start Date:</label>
 
-                                {props.item?.taskInfo?.startDate
-                                    ? moment(props.item?.taskInfo?.startDate).format('ll')
+                                {props.item?.startDate
+                                    ? moment(props.item?.startDate).format('ll')
                                     : ''}
                             </li>
 
                             <li>
                                 <label> Priority:</label>
 
-                                {props.item.taskInfo?.priority ? 'medium' : ''}
+                                {props.item?.priority ? 'medium' : ''}
                             </li>
 
                             <li>
                                 <label>End Date: </label>
 
-                                {props.item?.taskInfo?.dueDate ? moment(props.item?.dueDate).format('ll') : ''}
+                                {props.item?.dueDate ? moment(props.item?.dueDate).format('ll') : ''}
                             </li>
 
                             <li>

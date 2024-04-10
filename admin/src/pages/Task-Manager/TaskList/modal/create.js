@@ -143,15 +143,15 @@ const Create = ({ modal, CloseModal }) => {
             <Row className="m-0 p-0">
                 <Col lg={12}>
                     <Row>
-                        <Col lg={7} className="text-end">
-                            <Modal.Title id="" className="mx-auto">
-                                Add Task
-                            </Modal.Title>
-                        </Col>
-                        <Col lg={5} className="text-end pt-2">
-                            <button type="button" className="close bg-black text-white" onClick={handleClose} aria-label="Close">
+                        <Col lg={12} className="text-end pt-2">
+                            <button type="button" className="close bg-black border-0 text-white" onClick={handleClose} aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
+                        </Col>
+                        <Col lg={12} className="text-end">
+                            <Modal.Title id="" className="mx-auto modal_titles text-center">
+                                Add Task
+                            </Modal.Title>
                         </Col>
                     </Row>
                 </Col>
@@ -345,7 +345,7 @@ const Create = ({ modal, CloseModal }) => {
                                                 // onChange={(date) => setStartDate(date)}
                                                 onChange={(date) => handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
-                                                minDate={today}
+                                                // minDate={today}
                                                 className="add_width_input"
                                             />
                                         </Form.Group>

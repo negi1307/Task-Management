@@ -9,9 +9,10 @@ import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
+import { FaFilter } from "react-icons/fa";
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
-import { getAssignUserAction, getComment, getHistoryAction, updateTaskStatus } from '../../../../src/redux/task/action';
+import { getAssignUserAction, getsingleSprintTask, getComment, getHistoryAction, updateTaskStatus } from '../../../../src/redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
@@ -23,13 +24,15 @@ import { getSingleSprint } from '../../../redux/sprint/action';
 import { getSprintId } from '../../../redux/sprint/reducres';
 import { getMilestoneId, getMilestonetId } from '../../../redux/milestone/reducer';
 import { getProjectId } from '../../../redux/projects/reducers';
+import { TiPlus } from "react-icons/ti";
 
 const Container = styled.div`
     display: flex;
+        flex: 1;
 `;
-
 const TaskList = styled.div`
-    height: 100vh;
+    height: 100%;
+    overflow: scroll;
     display: flex;
     flex-direction: column;
     background: #f3f3f3;
@@ -37,7 +40,27 @@ const TaskList = styled.div`
     border-radius: 5px;
     padding: 15px 15px;
     margin-right: 45px;
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(128, 128, 128, 0.669);
+        // border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: gray;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(128, 128, 128, 0.065);
+        // border-radius: 10px;
+    }
 `;
+
 
 const TaskColumnStyles = styled.div`
     margin: 8px;
@@ -83,9 +106,20 @@ const Boards = () => {
     const [loader, setloader] = useState(false);
     const [search, setSearch] = useState('');
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const [assigneeFilter, setassigneeFilter] = useState(null);
+    const [assigneeSelected, setassigneeSelected] = useState(false);
+    const [assigneeId, setassigneeId] = useState('');
+
+
     // Callback function to be called when form is submitted successfully
     const handleFormSubmit = () => {
-        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
+        // assigneeId
+        if (assigneeSelected) {
+            dispatch(getAllTask({ sprintId: spriteId, searchString: '', assigneeId: assigneeId }));
+        } else {
+            dispatch(getAllTask({ sprintId: spriteId, searchString: '' }));
+        }
+        dispatch(getAllTask({ sprintId: spriteId, searchString: '' }));
         dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
         dispatch(getAllRoles())
         setFormSubmitted(true);
@@ -99,11 +133,10 @@ const Boards = () => {
         reset,
         formState: { errors },
     } = useForm();
+
     const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return;
         const { source, destination } = result;
-
-
 
 
         if (source.droppableId !== destination.droppableId) {
@@ -143,34 +176,27 @@ const Boards = () => {
     };
 
     useEffect(() => {
-        dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
+        if (assigneeSelected) {
+            dispatch(getAllTask({ sprintId: spriteId, searchString: '', assigneeId: assigneeId }));
+        } else {
+            dispatch(getAllTask({ sprintId: spriteId, searchString: '' }));
+        }
         dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
         dispatch(getAllRoles())
         setColumns(columns);
-        // console.log(columns, '////')
     }, [render]);
     const closeaddModal = () => {
         getalltasks();
+    }
+    const deleteTask = () => {
+
     }
     const getalltasks = () => {
         // dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
         // dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
         // dispatch(getAllRoles())
     }
-    // const handleRightBarClose = () => {
-    //     dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
-    //     dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
-    //     dispatch(getAllRoles())
-    //     setColumns(columns)
-    // };
 
-    // useEffect(() => {
-    //     // Check if the modal is closed (showModal is false)
-    //     if (!showModal) {
-    //         // Call the function to handle actions when the RightBar closes
-    //         handleRightBarClose();
-    //     }
-    // }, [showModal]);
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
             setColumns({
@@ -180,7 +206,7 @@ const Boards = () => {
                     items: successHandle?.data?.Response?.todo?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
-                    count : successHandle?.data?.Response?.todoCount
+                    count: successHandle?.data?.Response?.todoCount
                 },
                 [2]: {
                     title: 'In Progress',
@@ -188,7 +214,7 @@ const Boards = () => {
                     items: successHandle?.data?.Response?.inProgress.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
-                    count : successHandle?.data?.Response?.inProgressCount
+                    count: successHandle?.data?.Response?.inProgressCount
                 },
                 [3]: {
                     title: 'Testing',
@@ -196,7 +222,7 @@ const Boards = () => {
                     items: successHandle?.data?.Response?.testing.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
-                    count : successHandle?.data?.Response?.testingCount
+                    count: successHandle?.data?.Response?.testingCount
                 },
                 [5]: {
                     title: 'Hold',
@@ -204,7 +230,7 @@ const Boards = () => {
                     items: successHandle?.data?.Response?.hold.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
-                    count : successHandle?.data?.Response?.holdCount
+                    count: successHandle?.data?.Response?.holdCount
                 },
                 [4]: {
                     title: 'Done',
@@ -232,7 +258,6 @@ const Boards = () => {
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
-
         }
     };
 
@@ -245,8 +270,6 @@ const Boards = () => {
             ToastHandle('error', statushandle?.message?.error);
         }
     }, [statushandle]);
-
-    // Other useEffects for handling various Redux actions
 
     const handleSearchChange = (e) => {
         e.preventDefault();
@@ -261,83 +284,44 @@ const Boards = () => {
         );
     };
 
-    // const handleModalClose = () => {
-    //     dispatch(
-    //         getAllTask({
-    //             projectId: projectId,
-    //             milestoneId: milestoneId,
-    //             sprintId: spriteId,
-    //         })
-    //     );
-    // }
-    // const handleSearch=()=>{
-    //     dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId ,searchString : search}));
-    //     setSkip(1)
-    // }
+    const handleAssigneefilter = (e) => {
+        const assigneeId = e.target.value;
+        setassigneeId(assigneeId);
+        dispatch(getAllTask({
+            sprintId: spriteId,
+            assigneeId: assigneeId,
+            searchString: ''
+        }));
+        setassigneeSelected(true);
+    };
+
     return (
         <>
-            <div className="add_task row d-flex pb-2 pt-1">
+            <div className="add_task row d-flex  m-0 ">
                 <div className="col-lg-8 d-flex  align -items-center">
-                    {/* <div>
-                        {' '}
-                        <h4 className="page-title fw-bold text-dark rounded-2 p-2 py-1" style={{backgroundColor:'red'}} >
-                            {' '}
-                            To-Do :
-                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.Response?.todoCount}
-                            </Badge>
-                        </h4>{' '}
+                    <div className='position-relative'>
+                        <FaFilter className='position-absolute fs-6' style={{ left: '4%', top: '30%', fontWeight: '900' }} />
+                        <select
+                            name="Assignee"
+                            role='button'
+                            className="form-select ps-3 border-0 fw-medium"
+                            id="exampleForm.ControlInput1"
+                            {...register('Assignee', { required: true })}
+                            onChange={handleAssigneefilter}
+                            style={{ backgroundColor: '#F1F3FA' }}
+                        >
+                            <option value={''} hidden selected>
+                                Assignee
+                            </option>
+                            {store?.getAllUsers?.data?.response?.map((ele, ind) => (
+                                <option value={ele?._id}>
+                                    {' '}
+                                    {ele?.firstName} {ele?.lastName}
+                                </option>
+                            ))}
+                        </select>
                     </div>
-                    <div className="ms-3">
-                        {' '}
-                        <h4 className="page-title fw-bold text-black rounded-2 p-2 py-1"  style={{backgroundColor:'lightblue'}}>
-                            {' '}
-                            In-Progress :
-                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.Response?.inProgressCount}
-                            </Badge>
-                        </h4>{' '}
-                    </div>
-                    <div className="ms-3">
-                        {' '}
-                        <h4 className="page-title fw-bold text-dark rounded-2 p-2 py-1" style={{backgroundColor:'chocolate'}}>
-                            {' '}
-                            Testing :
-                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.Response?.testingCount}
-                            </Badge>
-                        </h4>{' '}
-                    </div>
-                    <div className="ms-3">
-                        {' '}
-                        <h4 className="page-title fw-bold  text-dark rounded-2 p-2 py-1" style={{backgroundColor:'lime'}}>
-                            {' '}
-                            Hold :
-                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.Response?.holdCount}
-                            </Badge>
-                        </h4>{' '}
-                    </div>
-                    <div className="ms-3">
-                        {' '}
-                        <h4 className="page-title  fw-bold  text-dark rounded-2 p-2 py-1"  style={{backgroundColor:'green'}}>
-                            {' '}
-                            Done :
-                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.Response?.doneCount}
-                            </Badge>
-                        </h4>{' '}
-                    </div>
-                    <div className="ms-3 me-2">
-                        {' '}
-                        <h4 className="page-title fw-bold bg-black text-white rounded-2 p-2 py-1">
-                            {' '}
-                            Due Task:
-                            <Badge className="bg-white text-dark ms-1 align-items-center justify-content-center">
-                                {successHandle?.data?.Response?.dueTasksCount}
-                            </Badge>
-                        </h4>{' '}
-                    </div> */}
+
                     {AssignUserName?.map((ele, ind) => (
                         <>
                             <OverlayTrigger
@@ -388,7 +372,7 @@ const Boards = () => {
                                             onChange={(e) => {
                                                 handleSearchChange(e);
                                             }}
-                                            className="form-control  py-1  "
+                                            className="form-control  py-0 m-0  "
                                             placeholder="Search "
                                         />
                                         <span className="mdi mdi-magnify search-icon"></span>
@@ -402,17 +386,17 @@ const Boards = () => {
                                     <i className="mdi mdi-magnify search-icon"></i>
                                  </Button> */}
                     </div>
-                    <div className="ms-2">
+                    <div className="ms-2 ">
                         <button
                             type="button"
-                            className="mybutton btn p-1 fw-bold py-1  web_button"
+                            className="mybutton btn p-1 fw-bold py-0 px-2 m-0  web_button"
                             onClick={() => {
                                 // console.log('button click');
                                 setShowModal(!showModal);
                                 // dispatch(getAllTask({ projectId: projectId, mileStoneId: milestoneId, sprintId: spriteId }))
 
                             }}>
-                            Add Task
+                            <TiPlus />
                         </button>
                         <RightBar
                             className="d-none"
@@ -428,7 +412,7 @@ const Boards = () => {
                         />
                     </div>
                 </div>
-            </div>
+            </div >
 
             <DragDropContext
                 onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
@@ -438,36 +422,36 @@ const Boards = () => {
                     <MainLoader />
                 ) : (
                     <Container>
-                        <TaskColumnStyles>
-                        {Object.entries(columns).map(([columnId, column]) => (
-                <Droppable key={columnId} droppableId={columnId}>
-                    {(provided, snapshot) => (
-                        <div
-                            className="task-list-col"
-                            ref={provided?.innerRef}
-                            {...provided?.droppableProps}
-                        
-                        >
-                            <TaskList>
-                            <Title className='text-dark fw-bold' >{column.title}   <soan className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</soan></Title>
-                                {column.items?.map((item, index) => (
-                                    <TaskCard
-                                        key={item.id}
-                                        item={item}
-                                        index={index}
-                                        columns={columns}
-                                        projectId={projectId}
-                                        mileStoneId={milestoneId}
-                                        sprintId={spriteId}
-                                        closeModal={closeModal}
-                                    />
-                                ))} 
-                                {provided?.placeholder}
-                            </TaskList>
-                        </div>
-                    )}
-                </Droppable>
-            ))}
+                        <TaskColumnStyles className='task-page-columns'>
+                            {Object.entries(columns).map(([columnId, column]) => (
+                                <Droppable key={columnId} droppableId={columnId}>
+                                    {(provided, snapshot) => (
+                                        <div
+                                            className="task-list-col "
+                                            ref={provided?.innerRef}
+                                            {...provided?.droppableProps}
+
+                                        >
+                                            <TaskList style={{ height: '' }}>
+                                                <Title className='text-dark fw-bold' >{column.title}   <span className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</span></Title>
+                                                {column.items?.map((item, index) => (
+                                                    <TaskCard
+                                                        key={item.id}
+                                                        item={item}
+                                                        index={index}
+                                                        columns={columns}
+                                                        projectId={projectId}
+                                                        mileStoneId={milestoneId}
+                                                        sprintId={spriteId}
+                                                        closeModal={closeModal}
+                                                    />
+                                                ))}
+                                                {provided?.placeholder}
+                                            </TaskList>
+                                        </div>
+                                    )}
+                                </Droppable>
+                            ))}
                         </TaskColumnStyles>
                     </Container>
                 )}

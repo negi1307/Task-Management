@@ -470,7 +470,7 @@ span.logo-lg {
 }
 
 .form-switch .form-check-input:checked[type='checkbox']:after {
-    background-color: black !important;
+    background-color: #fff !important;
     width: 1rem !important;
     height: 1rem !important;
     /* background-color: #3b71ca; */
@@ -480,7 +480,7 @@ span.logo-lg {
 
 .form-check-input[type='checkbox']:checked {
     /* background-image: none; */
-    background-color: black !important;
+    background-color: #727CF5 !important;
 }
 
 table.table-striped tbody tr:nth-of-type(odd)>* {
@@ -542,7 +542,7 @@ table.table-striped tbody tr:nth-of-type(odd)>* {
     /* background-color: red; */
     padding: 7px 30px;
     color: rgb(88, 88, 226);
-    font-size: 11px !important;
+    font-size: 13px !important;
     /* font-family: ' sans-serif'; */
     font-weight: bold !important;
 
@@ -654,11 +654,26 @@ input.add_width_input {
 }
 
 .active-button-tdp {
-    background-color: black !important;
-    color: #F9A004 !important;
+    background-color: lightblue !important;
+    color: #6169D0 !important;
 }
 
 .inactive-button-tdp {
     background-color: #C9C8C8 !important;
     color: white !important;
+}
+
+.modal_titles,
+.page_headings {
+    font-weight: 900 !important;
+    color: black !important;
+    font-size: 18px !important;
+}
+
+.task-page-columns {
+    height: 90vh !important;
+}
+
+.dropdown-style {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22) !important;
 }
