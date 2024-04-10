@@ -5,6 +5,8 @@ import DatePicker from 'react-datepicker';
 import '../../../../node_modules/react-datepicker/dist/react-datepicker.css';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import {
     AddComment,
@@ -29,6 +31,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     const [subtaskButtonClicked, setSubtaskButtonClicked] = useState(false);
     const getCommentData = store?.getComment?.data?.response;
     const getHistory = store?.getHistoryReducer?.data?.response;
+    const [historyResponse, setHistoryResponse] = useState(null);
 
 
     const historyLoader = store?.getHistoryReducer
@@ -96,6 +99,16 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         setEndDate("");
         reset();
     }
+    useEffect(() => {
+        // if (successHandle?.data?.status === 200) {
+        //     setData(successHandle?.data?.response);
+        // }
+        const historyData = store?.getHistoryReducer?.data?.response;
+        if (historyData) {
+            setHistoryResponse(historyData);
+        }
+    }, [store?.getHistoryReducer?.data?.response]);
+
 
 
 
@@ -145,7 +158,20 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         setValue('comment', "");
         setButtonChange(true);
     }
-
+    function generateLink(userActivity, item) {
+        switch (userActivity) {
+            case "Created milestone":
+                return `/dashboard/projects/${item?.sprintId?.projectId}`;
+            case "Created Sprint":
+                return `/dashboard/singleMilestonesprint/${item?.sprintId?.projectId}/${item?.milestoneId?._id}`;
+            case "Created Task":
+                return `/dashboard/taskBord/projectId=${item?.sprintId?.projectId}&milestoneId=${item?.milestoneId?._id}&spriteId=${item?.sprintId?._id}`;
+            case "Create Project":
+                return "/dashboard/projects";
+            default:
+                return "/dashboard/adminsummary";
+        }
+    }
     return (
         <>
             <Modal show={modal} onHide={closeModal} size={'xl'}>
@@ -561,7 +587,48 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 //         </div>
                                 //     ))}
                                 // </div>
-                                ''
+                                <div className="d-flex flex-column justify-content-center my-2">
+                                    {historyResponse && historyResponse.map((item, index) => (
+                                        <div key={index} className='d-flex gap-2 align-items-center lh-lg'>
+                                            <OverlayTrigger
+                                                placement="top"
+                                                overlay={
+                                                    <Tooltip id="tooltip1">
+                                                        {item?.userId?.firstName}
+                                                        {item?.userId?.lastName}
+                                                    </Tooltip>
+                                                }>
+                                                <div className="mt-1 cp">
+                                                    <span
+                                                        style={{
+                                                            backgroundColor: '#605e5a',
+                                                            borderRadius: '100%',
+                                                            padding: '5px 6px',
+
+                                                            color: 'white',
+                                                            fontWeight: '700',
+                                                        }}>
+                                                        {item?.userId?.firstName.charAt(0).toUpperCase()}
+                                                        {item?.userId?.lastName.charAt(0).toUpperCase()}
+                                                    </span>
+                                                </div>
+                                            </OverlayTrigger>
+                                            <Link to={generateLink(item.userActivity, item)}
+                                                className='text-dark'>
+                                                <span>
+                                                    {item?.userId?.firstName} {item?.userId?.lastName}
+                                                    {item.userActivity === "Created milestone" && <span> created milestone</span>}
+                                                    {item.userActivity === "Created Sprint" && <span> created sprint</span>}
+                                                    {item.userActivity === "Create Project" && <span> create project</span>}
+                                                    {item.userActivity === "Created Task" && <span> created task</span>}
+                                                    {' on ' + item?.createdAt}
+                                                </span>
+                                            </Link>
+
+                                        </div>
+                                    ))}
+                                </div>
+
 
 
                             ) : connectComponent === 'Bugs' ? (

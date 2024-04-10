@@ -542,7 +542,7 @@ table.table-striped tbody tr:nth-of-type(odd)>* {
     /* background-color: red; */
     padding: 7px 30px;
     color: rgb(88, 88, 226);
-    font-size: 12px !important;
+    font-size: 13px !important;
     /* font-family: ' sans-serif'; */
     font-weight: bold !important;
 
