@@ -47,7 +47,7 @@ const Title = styled.span`
 
 
 const Boards = (props) => {
-    const { projectId, milestoneId, sprintId } = useParams();
+    const { projectId, milestoneId, spriteId } = useParams();
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
     const store = useSelector((state) => state);
@@ -65,26 +65,31 @@ const Boards = (props) => {
     const [showTaskModel, setshowTaskModel] = useState(false);
     const [show, setShow] = useState(false);
 
+
+    const assigneeId = localStorage.getItem('userId')
+    // console.log({ assigneeId })
+
     useEffect(() => {
         let body = {
             flag: 1,
             status: true,
             searchString: '',
-            projectId: projectId,
-            milestoneId: milestoneId,
-            sprintId: '66026a52b110e4325bc04618',
+            // projectId: projectId,
+            // milestoneId: milestoneId,
+            sprintId: spriteId,
             skip: 1,
             activeStatus: true,
+            assigneeId: assigneeId
         };
 
         dispatch(getAllTask(body));
     }, []);
 
-    useEffect(() => {
-        dispatch(listProjectAssignee({ projectId: projectId, milestoneId: milestoneId, sprintId: '66026a52b110e4325bc04618' }));
-        dispatch(getTaskStatusCount());
-    }, []);
-  
+    // useEffect(() => {
+    //     dispatch(listProjectAssignee({ projectId: projectId, milestoneId: milestoneId, sprintId: '66026a52b110e4325bc04618' }));
+    //     dispatch(getTaskStatusCount());
+    // }, []);
+
     const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return;
         const { source, destination } = result;
@@ -177,13 +182,13 @@ const Boards = (props) => {
 
     // const [body,setBody] = useState({});
 
-    
+
     const historyData = store?.getHistoryData?.data?.response;
     const userId = store?.Auth?.user?.userId;
 
     const selectUserTask = store?.getAllTaskReducer?.data?.done?.tasks?.taskInfo;
 
-    console.log('selectUserTask', selectUserTask);
+    // console.log('selectUserTask', selectUserTask);
 
     const showTaskDetailMOdel = (item) => {
         setshowTaskModel(true);
@@ -205,19 +210,19 @@ const Boards = (props) => {
             ToastHandle('error', updateComment?.data?.message);
         }
     }, [updateComment]);
-    const callAlltaskData = () => {
-        let body = {
-            flag: 1,
-            status: true,
-            searchString: '',
-            projectId: projectId,
-            milestoneId: milestoneId,
-            sprintId: '66026a52b110e4325bc04618',
-            skip: 1,
-            activeStatus: '',
-        };
-        dispatch(getAllTask(body));
-    };
+    // const callAlltaskData = () => {
+    //     let body = {
+    //         flag: 1,
+    //         status: true,
+    //         searchString: '',
+    //         projectId: projectId,
+    //         milestoneId: milestoneId,
+    //         sprintId: '66026a52b110e4325bc04618',
+    //         skip: 1,
+    //         activeStatus: '',
+    //     };
+    //     dispatch(getAllTask(body));
+    // };
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -228,26 +233,26 @@ const Boards = (props) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const selectTask = (e) => {
-        if (e.target.value !== '') {
-            setTimeout(() => {
-                let body = {
-                    flag: 1,
-                    status: true,
-                    searchString: e.target.value,
-                    projectId: projectId,
-                    milestoneId: milestoneId,
-                    sprintId: '66026a52b110e4325bc04618',
-                    skip: 1,
-                    activeStatus: '',
-                };
-                dispatch(getAllTask(body));
-            }, 500);
-        }
-    };
+    // const selectTask = (e) => {
+    //     if (e.target.value !== '') {
+    //         setTimeout(() => {
+    //             let body = {
+    //                 flag: 1,
+    //                 status: true,
+    //                 searchString: e.target.value,
+    //                 projectId: projectId,
+    //                 milestoneId: milestoneId,
+    //                 sprintId: '66026a52b110e4325bc04618',
+    //                 skip: 1,
+    //                 activeStatus: '',
+    //             };
+    //             dispatch(getAllTask(body));
+    //         }, 500);
+    //     }
+    // };
     return (
         <>
-            <div class="status">
+            <div className="status">
                 {/* <ul>
                     <li>Task Status Count</li>
                     <div>
@@ -334,7 +339,7 @@ const Boards = (props) => {
                         type="search"
                         placeholder="Search here..."
                         className="border-0 rounded-2"
-                        onKeyUp={selectTask}
+                        // onKeyUp={selectTask}
                         {...register('textSearch')}
                     />
                     {/* <div className="add_task">
@@ -371,7 +376,7 @@ const Boards = (props) => {
                                     <Droppable key={columnId} droppableId={columnId}>
                                         {(provided, snapshot) => (
                                             <TaskList
-                                                class="three"
+                                                className="three"
                                                 ref={provided.innerRef}
                                                 {...provided.droppableProps}>
                                                 <Title className='text-dark fw-bold' >{column?.title}   <span className='py-0 p-1  rounded-circle text-dark bg-white'>{column?.count}</span></Title>
@@ -384,7 +389,7 @@ const Boards = (props) => {
                                                         index={index}
                                                         projectId={projectId}
                                                         mileStoneId={milestoneId}
-                                                        sprintId={sprintId}
+                                                        sprintId={spriteId}
                                                         closeModal={closeModal}
                                                     />
                                                 ))}
