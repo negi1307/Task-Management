@@ -6,7 +6,8 @@ export function createTaskApi(data): any {
     return api.create(URL.CREATE_TASK, data.payload);
 }
 export function getSingleSprintTaskApi(data): any {
-    return api.get(`${URL.SingleSprintTask}${data.payload.id}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}`);
+    console.log(data,'111111111111111')
+    return api.get(`${URL.SingleSprintTask}&sprintId=${data?.payload?.sprintId}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}}`);
 }
 export function getAllTaskApi(data): any {
     // console.log(data,'88888888888888888888888888888888')
