@@ -30,7 +30,7 @@ const Sprint = () => {
     const [openModal, SetOpenModal] = useState(false);
     const [editData, setEditData] = useState();
     const GetAllSingleSprintData = store?.getProject?.data?.response;
-    console.log(GetAllSingleSprintData,'sprint888')
+    // console.log(GetAllSingleSprintData,'sprint888')
     const deletehandle = store?.deleteSprint?.data;
     const loaderhandel = store?.getAllSingleSprints;
     const [skip, setSkip] = useState(1);
