@@ -16,6 +16,8 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaCirclePlay } from "react-icons/fa6";
 import { FaCirclePause } from "react-icons/fa6";
+import { addLoginTime, addLoginTimeStop } from '../../../redux/user/action'
+import ToastHandle from '../../../constants/toaster/toaster';
 
 // import CustomAvatar from '../TableComponents/CustomAvatar'
 
@@ -46,22 +48,23 @@ const TaskInformation = styled.div`
 `;
 
 const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
-    // console.log(item, "itmmmem")
     const store = useSelector(state => state)
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
-    const [isPlay, setIsPlay] = useState(true); // State to track which icon to display
+    const [isPlay, setIsPlay] = useState(false);
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
     const userId = store?.Auth?.user?.userId;
     const getComments = item?.comments;
     const historyData = store?.getHistoryData?.data?.response;
-
-
-
+    const isInProgressColumn = item?.columnId === 2;
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
     };
+
+    if (isInProgressColumn) {
+        document.getElementById('timestart').style.display = 'none';
+    }
     const {
         register,
         handleSubmit,
@@ -123,9 +126,20 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
             priorityWithLetter = item?.priority;
             backgroundColorClass = '';
     }
-    const toggleIcon = () => {
-        setIsPlay(!isPlay); // Toggle the state on each click
-    }; return (
+    // const toggleIcon = () => {
+    //     setIsPlay(!isPlay);
+    // };
+
+    const startTime = (e) => {
+        dispatch(addLoginTime({ taskId: item?._id }))
+        setIsPlay(true);
+        // ToastHandle('success', 'Task started successfully')
+    }
+    const stopTime = (e) => {
+        dispatch(addLoginTimeStop({ taskId: item?._id }));
+        setIsPlay(false);
+    }
+    return (
         <>
             <Draggable key={item?.taskInfo?._id} draggableId={item?.taskInfo?._id} index={index} style={{ width: '260px' }}>
                 {(provided) => (
@@ -201,11 +215,13 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
                                         <div className="col-4 text-end ">
                                             <div className=" d-flex">
                                                 <div className="cp d-flex align-items-center gap-1">
-                                                    <span
-                                                        onClick={() => {
-                                                            toggleIcon();
-                                                        }}>
-                                                        {isPlay ? <FaCirclePlay style={{ fontSize: '21px' }} /> : <FaCirclePause style={{ fontSize: '21px' }} />}
+                                                    <span id='timestart'>
+                                                        {/* Render play/pause button based on isPlaying state */}
+                                                        {isPlay ? (
+                                                            <FaCirclePause onClick={stopTime} style={{ fontSize: '21px' }} />
+                                                        ) : (
+                                                            <FaCirclePlay onClick={startTime} style={{ fontSize: '21px' }} />
+                                                        )}
                                                     </span>
                                                     <OverlayTrigger
                                                         placement="top"

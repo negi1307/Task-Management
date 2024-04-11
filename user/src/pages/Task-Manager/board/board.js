@@ -166,6 +166,16 @@ const Boards = (props) => {
         }
     }, [successHandle]);
 
+    const handelupdatetask = (ele) => {
+        let body = {
+            taskId: ele?.draggableId,
+            status: ele?.destination?.droppableId
+        };
+        // dispatch(updateTaskStatus(body));
+        // setloader(false);
+
+    };
+
     const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return;
         const { source, destination } = result;
@@ -189,6 +199,7 @@ const Boards = (props) => {
                     items: destItems,
                 },
             });
+            handelupdatetask(result);
         } else {
             const column = columns[source.droppableId];
             const copiedItems = [...column.items];
@@ -201,6 +212,8 @@ const Boards = (props) => {
                     items: copiedItems,
                 },
             });
+            handelupdatetask(result);
+
         }
     };
 
