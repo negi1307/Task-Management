@@ -64,17 +64,17 @@ useEffect(()=>{
                                         <Table striped>
                                             <thead>
                                                 <tr>
-                                                    <th>#</th>
+                                                    <th className='text-start'>#</th>
 
-                                                    <th> Description</th>
-                                                    <th> Summary</th>
+                                                    <th className='text-start'> Description</th>
+                                                    <th className='text-start'> Summary</th>
 
-                                                    <th>Assignee</th>
-                                                    <th>Reporter</th>
-                                                    <th>Priority</th>
-                                                    <th> Start Date</th>
-                                                    <th> End Date</th>
-                                                  
+                                                    <th className='text-start'>Assignee</th>
+                                                    <th className='text-start'>Reporter</th>
+                                                    <th className='text-start'>Priority</th>
+                                                    <th className='text-start'> Start Date</th>
+                                                    <th className='text-start'> End Date</th>
+                                                      
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -82,14 +82,14 @@ useEffect(()=>{
                                                 
                                                 listTaskData?.map((item,index)=>
                                                     <tr>
-                                                    <td>{index=index+1}</td>
-                                                    <td className='' title={item?.description} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                    <td className='text-start'>{index=index+1}</td>
+                                                    <td className='text-start' title={item?.description} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                                     {item?.description.split(' ').slice(0, 2).join(' ')}{item?.description.split(' ').length > 2 ? ' ...' : ''}
                                                 </td>
-                                                    <td>{item?.summary}</td>
-                                                    <td>{item?.assigneeInfo?.firstName} {item?.assigneeInfo?.lastName}</td>
-                                                    <td>{item?.reporterInfo?.role}</td>
-                                                    <td className=''>
+                                                    <td className='text-start'>{item?.summary}</td>
+                                                    <td className='text-start'>{item?.assigneeInfo?.firstName} {item?.assigneeInfo?.lastName}</td>
+                                                    <td className='text-start'>{item?.reporterInfo?.role}</td>
+                                                    <td className='text-start'>
                                                     {item?.priority == 'Critical'
                                                         ? 'Critical'
                                                         : '' || item?.priority == 'High'
@@ -100,8 +100,8 @@ useEffect(()=>{
                                                                     ? 'Low'
                                                                     : ''}
                                                 </td>
-                                                    <td> {moment(item?.startDate).format('L')}</td>
-                                                <td>{moment(item?.dueDate).format('L')}</td>
+                                                    <td className='text-start'> {moment(item?.startDate).format('L')}</td>
+                                                <td className='text-start'>{moment(item?.dueDate).format('L')}</td>
                                                 </tr>
                                                 
                                             )}
