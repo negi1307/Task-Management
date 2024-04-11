@@ -354,7 +354,7 @@ const Taskdetail = (props) => {
                                                     <a href={props?.item?.attachment} download target="_blank">
                                                         <i class="dripicons-download download_color"></i>
                                                     </a>
-                                                    <img style="width: 10rem; height: 10rem;" class="img_style ps-1" src={props?.item?.attachmentType !== 'application/pdf' ? props?.item?.attachment : pdfImage} />
+                                                    {/* <img style="width: 10rem; height: 10rem;" class="img_style ps-1" src={props?.item?.attachmentType !== 'application/pdf' ? props?.item?.attachment : pdfImage} /> */}
                                                 </td>
                                             </tr>
                                         ) : (
