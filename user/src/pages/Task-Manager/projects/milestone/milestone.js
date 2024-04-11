@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Table, Button, Modal, Row, Col, Card } from 'react-bootstrap';
+import { Table, Button, Modal, Row, Col, Card, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import Stack from '@mui/material/Stack';
@@ -32,7 +32,7 @@ const Milestone = () => {
     useEffect(() => {
         dispatch(getProjectsById(id));
         dispatch(getsingleMileStone({ id: id, status: 1 }));
-        dispatch(getAllProjects({ flag: 'milestone', projectId: id, milestoneId: '', skip: 1 }));
+        dispatch(getAllProjects({ flag: 'milestone', projectId: id, milestoneId: '', skip: 1, activeStatus: true }));
     }, [id]);
 
     useEffect(() => {
@@ -67,9 +67,18 @@ const Milestone = () => {
 
     const handlePaginationChange = (event, value) => {
         setSkip(value);
-        dispatch(getAllProjects({ flag: 'milestone', projectId: id, milestoneId: '', skip: value }));
+        dispatch(getAllProjects({ flag: 'milestone', projectId: id, milestoneId: '', skip: value, activeStatus: true }));
     };
+    const truncateDescription = (description, maxLength = 30) => {
+        if (!description) {
+            return ''; // or any other default value
+        }
 
+        if (description.length > maxLength) {
+            return description.substring(0, maxLength) + '...';
+        }
+        return description;
+    };
     return (
         <>
             <div className='title'><h3>MILESTONES</h3></div>
@@ -103,7 +112,17 @@ const Milestone = () => {
                                                                 {item.title}
                                                             </Link>
                                                         </td>
-                                                        <td dangerouslySetInnerHTML={{ __html: item.description }} />
+                                                        <td>
+                                                            <OverlayTrigger
+                                                                placement="top"
+                                                                overlay={<Tooltip>{truncateDescription(item?.description)}</Tooltip>}>
+                                                                <div>
+                                                                    {/* Show only a part of the description */}
+                                                                    <div>{truncateDescription(item?.description)}</div>
+                                                                </div>
+                                                            </OverlayTrigger>
+                                                        </td>
+                                                        {/* <td dangerouslySetInnerHTML={{ __html: item.description }} /> */}
                                                         <td>{moment(item.start_date).format('DD/MM/YYYY')}</td>
                                                         <td>{item.daysLeft}</td>
                                                         <td>

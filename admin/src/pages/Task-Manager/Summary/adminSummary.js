@@ -10,6 +10,7 @@ import HeaderMain from '../header/HeaderMain';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import FilterModal from './modal/filter';
@@ -18,23 +19,29 @@ const AdminDashboard = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [historyResponse, setHistoryResponse] = useState(null);
-
-    // const [skip, setSkip] = useState(1);
-
-
     const successHandle = store?.getTaskSummaryReducer;
     const BarGraphHandel = store?.getPriorityGraphReducer;
     const lastWeekCount = store?.getTaskWeekCountReducer?.data?.response;
-
-
     const [taskCount, setTaskCount] = useState(null);
     const [data, setData] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [filterModal, setFilterModal] = useState(false);
+    // const taskCountData = useSelector(state => state?.getTaskCountReducer?.data?.Response);
+    // console.log({ taskCountData })
+    // const taskCountfe = store?.getTaskCountReducer?.data
+    // console.log({ taskCountfe })
+    // const totalTaskCount = useSelector(state => state.totalTaskCount);
+    // console.log({ totalTaskCount })
 
     // console.log({ taskCount })
     // const [skip, setSkip] = useState(0);
     // const [count, setCount] = useState();
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm();
     useEffect(() => {
         if (successHandle?.data?.status === 200) {
             setData(successHandle?.data?.response);

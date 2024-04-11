@@ -20,7 +20,7 @@ import { changeBodyAttribute } from '../utils';
 // https://blog.logrocket.com/lazy-loading-components-in-react-16-6-6cea535c0b52
 const Topbar = React.lazy(() => import('./Topbar'));
 const LeftSidebar = React.lazy(() => import('./LeftSidebar'));
-const Footer = React.lazy(() => import('./Footer'));
+// const Footer = React.lazy(() => import('./Footer'));
 const RightSidebar = React.lazy(() => import('./RightSidebar'));
 
 const loading = () => <div className=""></div>;
@@ -128,9 +128,9 @@ const FullLayout = ({ children }: VerticalLayoutProps, state: VerticalLayoutStat
                         </Container>
                     </div>
 
-                    <Suspense fallback={loading()}>
+                    {/* <Suspense fallback={loading()}>
                         <Footer />
-                    </Suspense>
+                    </Suspense> */}
                 </div>
             </div>
 

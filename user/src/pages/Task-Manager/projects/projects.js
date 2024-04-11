@@ -87,6 +87,7 @@ const Projects = () => {
             let data = {
                 status: 1,
                 projectstatus: 1,
+                activeStatus: true
             };
             dispatch(getAllProjects(data));
         } else {
@@ -94,6 +95,7 @@ const Projects = () => {
             let data = {
                 status: 1,
                 projectstatus: 1,
+                activeStatus: true
             };
             dispatch(getAllProjects(data));
         }
@@ -106,6 +108,7 @@ const Projects = () => {
             sprintId: '',
             projectStatus: 1,
             skip: 1,
+            activeStatus: true
         };
         dispatch(getAllProjects(body));
     }, [render]);
@@ -126,6 +129,7 @@ const Projects = () => {
             // projectId: '66026a37b110e4325bc045fc',
             milestoneId: '',
             skip: 1,
+            activeStatus: true
         };
         dispatch(getAllProjects(body));
     };
@@ -136,6 +140,7 @@ const Projects = () => {
             // projectId: '66026a37b110e4325bc045fc',
             milestoneId: '',
             skip: value,
+            activeStatus: true
         };
         dispatch(getAllProjects(body));
     };

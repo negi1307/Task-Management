@@ -6,6 +6,7 @@ import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
+import { useForm } from 'react-hook-form';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -39,7 +40,7 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    const [personName, setPersonName] = React.useState([]);
+    const [personName, setPersonName] = useState([]);
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const [assignee, setAssignee] = useState();
@@ -49,6 +50,12 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
     const today = new Date();
     // console.log(today, 'today');
     // end date
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm();
     const handleStartDate = (date) => {
         const threeMonthsAgo = new Date();
         threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
@@ -61,6 +68,8 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
         setStartDate(date);
     };
 
+
+
     const handleEndDate = (date) => {
         const threeMonthsAgo = new Date();
         threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
@@ -71,12 +80,19 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
         }
         setEndDate(date);
     };
-    useEffect(() => {
-        // reset();
+    const onSubmit = () => {
+        reset();
+        alert('Please select a date within the past three months')
+    }
+    const handleClose = () => {
+        setPersonName([]);
         setStartDate('');
         setEndDate('');
-        // setAddValue('')
-    }, []);
+        reset();
+        closeFilter();
+    };
+
+
 
     const handleChange = (event) => {
         const {
@@ -92,10 +108,10 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
 
     const users = store?.getAllUsers?.data?.response
     return (
-        <Modal show={showFilter} onHide={closeFilter} size="lg">
+        <Modal show={showFilter} onHide={handleClose} size="lg">
             <Row>
                 <Col sm={12} className='d-flex justify-content-end pt-2'>
-                    <button type="button" className="close border-0 bg-black text-white" onClick={closeFilter} aria-label="Close">
+                    <button type="button" className="close border-0 bg-black text-white" onClick={handleClose} aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>&nbsp;&nbsp;&nbsp;
                 </Col>
@@ -104,7 +120,7 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
                 </Col>
             </Row>
             <Modal.Body className='pt-1'>
-                <Form>
+                <Form onSubmit={handleSubmit(onSubmit)}>
                     <Row>
                         <Col sm={12}>
                             <FormControl sx={{ m: 1, width: '100%' }}>
@@ -182,7 +198,7 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
                 </Form>
             </Modal.Body>
             <Modal.Footer className='d-flex border-0 justify-content-center'>
-                <Button className='mybutton btn p-1 fw-bold py-1 web_button'>
+                <Button type='submit' className='mybutton btn p-1 fw-bold py-1 web_button'>
                     Get Data
                 </Button>
             </Modal.Footer>

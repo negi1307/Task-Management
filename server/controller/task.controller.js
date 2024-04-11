@@ -65,10 +65,6 @@ const getTasks = async (req, res) => {
     const tasks = await taskModel.aggregate([
       {
         $match: conditionMatch
-        // $match: {
-        //   sprintId: new mongoose.Types.ObjectId(sprintId), status: parseInt(status), activeStatus: JSON.parse(activeStatus),
-        //   assigneeId: new mongoose.Types.ObjectId(assigneeId)
-        // }
       },
       {
         $lookup: {
@@ -260,7 +256,6 @@ const updateTaskStatus = async (req, res) => {
 
           query.timeTracker = `${hours} hours ${minutes} minutes ${seconds} seconds`;
 
-          // query.timeTracker = timeDifference
         }
         if (task && task.logInTime && task.timeTracker) {
           let timeDifference = (query.doneDate.getTime() - task.logInTime.getTime());
@@ -691,17 +686,159 @@ const getTasksWeekCount = async (req, res) => {
 
 
 // Get User Assignments- Projects, milestones, and sprints
+// const getUserAssignments = async (req, res) => {
+//   try {
+//     const { flag, projectId, milestoneId, sprintId, skip,activeStatus } = req.query;
+//     const pageSize = 10;
+//     const now = new Date();
+
+//     if (flag == 'project') {
+//       const projectIds = await taskModel.distinct('projectId', { assigneeId: req.user._id });
+//       const projects = await projectModel.aggregate([
+//         {
+//           $match: { _id: { $in: projectIds } }
+//         },
+//         {
+//           $lookup: {
+//             from: "technologies",
+//             localField: "technology",
+//             foreignField: "_id",
+//             as: "technologies"
+//           }
+//         },
+//         {
+//           $project: {
+//             _id: 1,
+//             projectName: 1,
+//             clientName: 1,
+//             technologies: 1,
+//             startDate: 1,
+//             endDate: 1,
+//             activeStatus: 1,
+//             projectStatus: 1,
+//             projectType: 1,
+//             createdAt: 1,
+//             updatedAt: 1,
+//             daysLeft: {
+//               $toInt: {
+//                 $max: [
+//                   0,
+//                   {
+//                     $divide: [
+//                       { $subtract: ["$endDate", now] },
+//                       1000 * 60 * 60 * 24,
+//                     ]
+//                   }
+//                 ]
+//               }
+//             },
+//           }
+//         },
+//         { $sort: { daysLeft: 1 } },
+//         { $skip: (parseInt(skip) - 1) * pageSize },
+//         { $limit: pageSize }
+//       ]);
+//       const totalCount = projects.length;
+//       const totalPages = Math.ceil(totalCount / pageSize);
+//       return res.status(200).json({ status: "200", message: "Projects Fetched Successfully", response: projects, totalCount, totalPages });
+//     }
+//     if (flag == 'milestone') {
+//       const milestoneIds = await taskModel.distinct('milestoneId', { assigneeId: req.user._id });
+//       const milestones = await milestoneModel.aggregate([
+//         {
+//           $match: { _id: { $in: milestoneIds }, projectId: new mongoose.Types.ObjectId(projectId) }
+//         },
+//         {
+//           $project: {
+//             _id: 1,
+//             title: 1,
+//             description: 1,
+//             startDate: 1,
+//             completionDate: 1,
+//             activeStatus: 1,
+//             createdAt: 1,
+//             updatedAt: 1,
+//             daysLeft: {
+//               $toInt: {
+//                 $max: [
+//                   0,
+//                   {
+//                     $divide: [
+//                       { $subtract: ["$completionDate", now] },
+//                       1000 * 60 * 60 * 24,
+//                     ]
+//                   }
+//                 ]
+//               }
+//             },
+//           }
+//         },
+//         { $sort: { daysLeft: 1 } },
+//         { $skip: (parseInt(skip) - 1) * pageSize },
+//         { $limit: pageSize }
+//       ]);
+//       const totalCount = milestones.length;
+//       const totalPages = Math.ceil(totalCount / pageSize);
+//       return res.status(200).json({ status: '200', message: 'Milestones Fetched Successfully', response: milestones, totalCount, totalPages });
+//     }
+//     if (flag == 'sprint') {
+//       const sprintIds = await taskModel.distinct('sprintId', { assigneeId: req.user._id });
+//       const sprints = await sprintModel.aggregate([
+//         {
+//           $match: { _id: { $in: sprintIds }, milestoneId: mongoose.Types.ObjectId(milestoneId) }
+//         },
+//         {
+//           $project: {
+//             _id: 1,
+//             sprintName: 1,
+//             sprintDesc: 1,
+//             startDate: 1,
+//             endDate: 1,
+//             activeStatus: 1,
+//             createdAt: 1,
+//             updatedAt: 1,
+//             daysLeft: {
+//               $toInt: {
+//                 $max: [
+//                   0,
+//                   {
+//                     $divide: [
+//                       { $subtract: ["$endDate", now] },
+//                       1000 * 60 * 60 * 24,
+//                     ]
+//                   }
+//                 ]
+//               }
+//             }
+//           }
+//         },
+//         { $sort: { daysLeft: 1 } },
+//         { $skip: (parseInt(skip) - 1) * pageSize },
+//         { $limit: pageSize }
+//       ]);
+//       const totalCount = sprints.length;
+//       const totalPages = Math.ceil(totalCount / pageSize);
+//       return res.status(200).json({ status: '200', message: 'Sprint details fetch successfully', response: sprints, totalCount, totalPages })
+//     }
+//   } catch (error) {
+//     return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });
+//   }
+// }
+
 const getUserAssignments = async (req, res) => {
   try {
-    const { flag, projectId, milestoneId, skip } = req.query;
+    const { flag, projectId, milestoneId, sprintId, skip, activeStatus } = req.query;
     const pageSize = 10;
     const now = new Date();
-
-    if (flag == 'project') {
-      const projectIds = await taskModel.distinct('projectId', { assigneeId: req.user._id });
+    let matchQuery = { assigneeId: req.user._id };
+    matchQuery.activeStatus = JSON.parse(req.query.activeStatus);
+    if (flag === 'project') {
+      console.log(matchQuery.activeStatus);
+      const projectIds = await taskModel.distinct('projectId');
+      console.log(projectIds, matchQuery.activeStatus)
       const projects = await projectModel.aggregate([
         {
-          $match: { _id: { $in: projectIds } }
+          $match: { _id: { $in: projectIds }, activeStatus: matchQuery.activeStatus }
         },
         {
           $lookup: {
@@ -743,15 +880,17 @@ const getUserAssignments = async (req, res) => {
         { $skip: (parseInt(skip) - 1) * pageSize },
         { $limit: pageSize }
       ]);
+      console.log(projects)
       const totalCount = projects.length;
       const totalPages = Math.ceil(totalCount / pageSize);
       return res.status(200).json({ status: "200", message: "Projects Fetched Successfully", response: projects, totalCount, totalPages });
     }
-    if (flag == 'milestone') {
-      const milestoneIds = await taskModel.distinct('milestoneId', { assigneeId: req.user._id });
+    if (flag === 'milestone') {
+      const milestoneIds = await taskModel.distinct('milestoneId');
+
       const milestones = await milestoneModel.aggregate([
         {
-          $match: { _id: { $in: milestoneIds }, projectId: new mongoose.Types.ObjectId(projectId) }
+          $match: { _id: { $in: milestoneIds }, projectId: new mongoose.Types.ObjectId(projectId), activeStatus: matchQuery.activeStatus }
         },
         {
           $project: {
@@ -786,11 +925,11 @@ const getUserAssignments = async (req, res) => {
       const totalPages = Math.ceil(totalCount / pageSize);
       return res.status(200).json({ status: '200', message: 'Milestones Fetched Successfully', response: milestones, totalCount, totalPages });
     }
-    if (flag == 'sprint') {
-      const sprintIds = await taskModel.distinct('sprintId', { assigneeId: req.user._id });
+    if (flag === 'sprint') {
+      const sprintIds = await taskModel.distinct('sprintId');
       const sprints = await sprintModel.aggregate([
         {
-          $match: { _id: { $in: sprintIds }, milestoneId: mongoose.Types.ObjectId(milestoneId) }
+          $match: { _id: { $in: sprintIds }, milestoneId: mongoose.Types.ObjectId(milestoneId), activeStatus: matchQuery.activeStatus }
         },
         {
           $project: {
@@ -830,6 +969,9 @@ const getUserAssignments = async (req, res) => {
   }
 }
 
+
+
+
 // All assignees of A project
 const projectUserList = async (req, res) => {
   try {
@@ -843,18 +985,55 @@ const projectUserList = async (req, res) => {
 };
 
 
-// Start stop time recode when the task is in the inProgress stage
-const startStopTime = async (req, res) => {
+// timely task details of User time track
+const userWorkingHours = async (req, res) => {
   try {
-    const taskId = req.body.taskId
-    const today = new Date();
-    const existingRecord = await taskModel.findOne({ taskId: taskId, pauseTime: today });
-    const response = { status: 200, message: "Login time recorded successfully", loginTime: loginRecord.loginTime }
-    return res.status(200).json(response);
+    const { userId, startDate, endDate } = req.query;
+
+    const adjustedEndDate = new Date(endDate);
+    adjustedEndDate.setDate(adjustedEndDate.getDate() + 1);
+
+    let query = {
+      createdAt: { $gte: startDate },
+      updatedAt: { $lte: adjustedEndDate }
+    };
+
+    if (userId) {
+      query.assigneeId = userId;
+    }
+
+    const tasks = await taskModel.find(query).populate('projectId', 'projectName').populate('assigneeId');
+
+    // const tasks = await taskModel.find({ assigneeId: userId, createdAt: { $gte: startDate }, updatedAt: { $lte: adjustedEndDate } })
+    // .populate('projectId', 'projectName');
+
+    let totalHours = 0;
+    let totalMinutes = 0;
+    let totalSeconds = 0;
+
+    tasks.forEach(task => {
+      if (task.timeTracker) {
+        const timeParts = task.timeTracker.split(' ');
+        totalHours += parseInt(timeParts[0]) || 0;
+        totalMinutes += parseInt(timeParts[2]) || 0;
+        totalSeconds += parseInt(timeParts[4]) || 0;
+      }
+    });
+
+    totalMinutes += Math.floor(totalSeconds / 60);
+    totalSeconds %= 60;
+    totalHours += Math.floor(totalMinutes / 60);
+    totalMinutes %= 60;
+
+    const totalTime = `${totalHours} hours ${totalMinutes} minutes ${totalSeconds} seconds`;
+
+    return res.status(200).json({ status: 200, message: "Data fetched successfully", totalTime, data: tasks });
   } catch (error) {
-    return res.status(500).json({ status: 500, message: "Server error" });
+    return res.status(500).json({ status: 500, message: error.message });
   }
-}
+};
+
+
 
 
 
@@ -873,4 +1052,5 @@ module.exports = {
   getTasksWeekCount,
   getUserAssignments,
   projectUserList,
+  userWorkingHours
 };

@@ -10,6 +10,8 @@ import DatePicker from 'react-datepicker';
 import '../../node_modules/react-datepicker/dist/react-datepicker.css';
 import { getReporterAction } from '../redux/actions';
 import ToastHandle from '../constants/toaster/toaster';
+import Accordion from 'react-bootstrap/Accordion';
+
 
 export default function Pagesaddtask(props) {
     const [startDate, setStartDate] = useState();
@@ -17,6 +19,7 @@ export default function Pagesaddtask(props) {
     const [filePreview, setFilePreview] = useState(null);
     const [projectSelected, setprojectSelected] = useState(null);
     const [milestoneSelected, setmilestoneSelected] = useState(null);
+    const [milestoneType, setmilestoneType] = useState(null);
     const [sprintSelected, setsprintSelected] = useState(null);
     const [milestoneData, setmilestoneData] = useState()
     const [selectedProject, setSelectedProject] = useState(null);
@@ -106,13 +109,14 @@ export default function Pagesaddtask(props) {
         setEndDate("")
     };
     const handelClose = () => {
-        setValue('Summary', '');
-        setValue('Assignee', '');
-        setValue('Reporter', '');
-        setValue('priority', '');
-        setValue('start_date', '');
-        setValue('last_date', '');
-        setValue('description', '');
+        reset();
+        // setValue('Summary', '');
+        // setValue('Assignee', '');
+        // setValue('Reporter', '');
+        // setValue('priority', '');
+        // setValue('start_date', '');
+        // setValue('last_date', '');
+        // setValue('description', '');
         setShowModal(false);
         setSelectedFile('');
         setStartDate("");
@@ -124,13 +128,21 @@ export default function Pagesaddtask(props) {
         dispatch(getAllUsers());
         dispatch(getAllProjects({ status: 1, skip: 1, projectStatus: 'Ongoing' }));
         dispatch(getReporterAction())
-        if (projectSelected !== null) {
-            dispatch(getsingleMileStone({ id: projectSelected, activeStatus: true, skip: 1 }));
-        }
+        // if (projectSelected !== null) {
+        //     dispatch(getsingleMileStone({ id: projectSelected, activeStatus: false, skip: 1 }));
+        // }
         if (milestoneSelected !== null) {
             dispatch(getSingleSprint({ activeStatus: true, id: milestoneSelected, skip: 1 }));
         }
     }, [showModal, projectSelected, milestoneSelected, dispatch]);
+
+    useEffect(() => {
+        if (milestoneType !== null && milestoneType === 'active') {
+            dispatch(getsingleMileStone({ id: projectSelected, activeStatus: true, skip: 1 }));
+        } else if (milestoneType === 'inactive') {
+            dispatch(getsingleMileStone({ id: projectSelected, activeStatus: false, skip: 1 }));
+        }
+    }, [milestoneType, projectSelected, dispatch]);
 
 
     const handleProjectChange = (e) => {
@@ -141,6 +153,11 @@ export default function Pagesaddtask(props) {
         const milestoneId = e.target.value;
         setmilestoneSelected(milestoneId);
     }
+    const handleMilestoneType = (e) => {
+        const milestoneTypeselected = e.target.value;
+        setmilestoneType(milestoneTypeselected);
+    }
+    console.log({ milestoneType })
     const handleSprintChange = (e) => {
         const sprintId = e.target.value;
         setsprintSelected(sprintId);
@@ -149,7 +166,9 @@ export default function Pagesaddtask(props) {
 
     const reporter = store?.getReporterReducer?.data?.reporterList
     const projectName = store?.getProject?.data?.response;
-
+    // useEffect(() => {
+    //     console.log("Milestone Data:", store?.getsingleMileStone?.data?.response);
+    // }, [store?.getsingleMileStone?.data?.response]);
     // console.log({ projectName })
     return (
         <div className={props.showModal ? 'modal d-block blur-background' : 'modal d-none'} tabIndex="-1" role="dialog"  >
@@ -167,7 +186,7 @@ export default function Pagesaddtask(props) {
                                 {' '}
                                 <Col lg={12}>
                                     <Row>
-                                        <Col lg={6}>
+                                        <Col lg={12}>
                                             <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                 <Form.Label>
                                                     {' '}
@@ -183,11 +202,63 @@ export default function Pagesaddtask(props) {
                                                         <option key={project?._id} value={project?._id}>{project?.projectName}</option>
                                                     ))}
                                                 </Form.Select>
-                                                {errors.projectName?.type === 'required' && (
+                                                {errors.projectname?.type === 'required' && (
                                                     <span className="text-danger"> This field is required *</span>
                                                 )}
                                             </Form.Group>
                                         </Col>
+
+                                        {/* /////////////////Milestones?/////////////////////// */}
+                                        <Col sm={6}>
+                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                <Form.Label>
+                                                    Milestone Type<span className="text-danger">*</span>:
+                                                </Form.Label>
+                                                <Form.Select
+                                                    {...register('MilestoneType', { disabled: !projectSelected })}
+                                                    onChange={(e) => handleMilestoneType(e)} // Pass the event object directly
+                                                    value={milestoneType || ''}
+                                                >
+
+                                                    <option value=''>Select Milestone Type</option>
+                                                    <option value='active'>Active Milestones</option>
+                                                    <option value='inactive'>Inactive Milestones</option>
+                                                </Form.Select>
+
+                                                {errors.Milestone?.type === 'required' && (
+                                                    <span className="text-danger"> This field is required *</span>
+                                                )}
+                                            </Form.Group>
+                                        </Col>
+                                        {/* <Col lg={6}>
+                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                <Form.Label>
+                                                    {' '}
+                                                    Milestone<span className="text-danger">*</span>:
+                                                </Form.Label>
+                                                <Form.Select
+                                                    {...register('Milestone', { required: true, disabled: !projectSelected })}
+                                                    onChange={(e) => handleMilestoneChange(e)}
+                                                    value={milestoneSelected || ''}
+                                                >
+                                                    <option value=''>Select Milestone</option>
+                                                    {store?.getsingleMileStone?.data?.response?.map(milestone => {
+                                                        // Check if the milestone matches the selected type
+                                                        if (milestone.activeStatus === true) {
+                                                            return (
+                                                                <option key={milestone._id} value={milestone._id}>{milestone.title}</option>
+                                                            );
+                                                        } else {
+                                                            // Handle inactive milestones if needed
+                                                            return null; // Or any logic you need
+                                                        }
+                                                    })}
+                                                </Form.Select>
+                                                {errors.Milestone?.type === 'required' && (
+                                                    <span className="text-danger"> This field is required *</span>
+                                                )}
+                                            </Form.Group>
+                                        </Col> */}
                                         <Col lg={6}>
                                             <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                 <Form.Label>
@@ -494,8 +565,8 @@ export default function Pagesaddtask(props) {
                         </form>
                     </div>
                 </div>
-            </div>
+            </div >
 
-        </div>
+        </div >
     );
 }

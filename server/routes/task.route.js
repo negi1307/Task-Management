@@ -17,5 +17,6 @@ taskRouter.get("/getTasksWeekCount", verifyUser, tasks.getTasksWeekCount);
 
 taskRouter.get('/getUserAssignments', verifyEmployee, tasks.getUserAssignments);
 taskRouter.get('/projectUserList', verifyUser, tasks.projectUserList);
+taskRouter.get('/userWorkingHours', tasks.userWorkingHours);
 
 module.exports = taskRouter;

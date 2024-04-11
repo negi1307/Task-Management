@@ -11,11 +11,12 @@ export function getSingleSprintTaskApi(data): any {
 }
 export function getAllTaskApi(data): any {
     // console.log(data,'88888888888888888888888888888888')
-    return api.get(URL.GetAllTask+data?.payload?.flag+"&sprintId="+data?.payload?.sprintId+"&status="+data?.payload?.status+"&activeStatus="+data?.payload?.activeStatus+"&searchString="+data?.payload?.searchString+"&skip="+data?.payload?.skip);
+    return api.get(URL.GetAllTask + data?.payload?.flag + "&sprintId=" + data?.payload?.sprintId + "&status=" + data?.payload?.status + "&activeStatus=" + data?.payload?.activeStatus + "&searchString=" + data?.payload?.searchString + "&skip=" + data?.payload?.skip + "&assigneeId=" + data?.payload?.assigneeId);
+
 }
 
 export function getAllAssigneeNamesApi(data): any {
-    return api.get(URL.getAllAssigneeName+data.payload.projectId+"&milestoneId="+data.payload.milestoneId+"&sprintId="+data.payload.sprintId);
+    return api.get(URL.getAllAssigneeName + data.payload.projectId + "&milestoneId=" + data.payload.milestoneId + "&sprintId=" + data.payload.sprintId);
 }
 
 // export function getAllTaskApi(data): any {
@@ -29,12 +30,12 @@ export function UpdateTaskApi(data): any {
 export function UpdateTaskStatusTimekApi(data): any {
     return api.update(URL.updateTaskStatusTime, data.payload);
 }
-export function deleteTaskApi(data): any {    
-    return api.delete(URL.DeleteTask+"taskId="+data.payload.taskId);
+export function deleteTaskApi(data): any {
+    return api.delete(URL.DeleteTask + "taskId=" + data.payload.taskId);
 }
 
-export function updateTaskStatusApi(data): any {   
-    console.log("update task status",data)
+export function updateTaskStatusApi(data): any {
+    console.log("update task status", data)
     return api.update(URL.UpdateTaskStatus, data.payload);
 
 }

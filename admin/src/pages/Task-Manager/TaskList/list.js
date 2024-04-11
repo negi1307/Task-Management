@@ -291,6 +291,7 @@ const TaskList = () => {
                                                 <td className='text-start'>
                                                     <Form.Check
                                                         type="switch"
+                                                        className='text-start'
                                                         checked={item?.activeStatus}
                                                         onChange={(e) => handleStatusChange(e, item)}
                                                     />

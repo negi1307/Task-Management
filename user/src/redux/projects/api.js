@@ -4,11 +4,11 @@ const api = new APICore()
 
 export function addProjectApi(data): any {
     return api.create(URL.AddProject, data.payload),
-    console.log(data,'dta')
+        console.log(data, 'dta')
 }
 export function getProjectApi(data): any {
 
-    return api.get(URL.GetAllProject + data.payload.flag + '&projectId=' + data.payload.projectId + "&milestoneId=" + data.payload.milestoneId + "&sprintId=" + data.payload.sprintId + "&skip=" + data.payload.skip)
+    return api.get(URL.GetAllProject + data.payload.flag + '&projectId=' + data.payload.projectId + "&milestoneId=" + data.payload.milestoneId + "&sprintId=" + data.payload.sprintId + "&skip=" + data.payload.skip + "&activeStatus=" + data.payload.activeStatus)
 
 }
 export function updateProjectApi(data): any {

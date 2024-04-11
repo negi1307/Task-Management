@@ -195,6 +195,13 @@ class APICore {
         // }
     };
 
+    // setLoggedInUser = (session) => {
+    //     if (session) sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session));
+    //     else {
+    //         sessionStorage.removeItem(AUTH_SESSION_KEY);
+    //     }
+    // };
+
     setLoggedInUser = (session) => {
         if (session && session.userId) {
             const userId = session.userId;
@@ -205,6 +212,7 @@ class APICore {
 
         // Store the full session in sessionStorage
         sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session));
+        localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session));
     };
 
     /**
