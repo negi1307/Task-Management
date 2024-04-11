@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import {getAllTask} from '../../../redux/task/action'
+import {getAllTask, getsingleSprintTask} from '../../../redux/task/action'
 import { useSelector,useDispatch } from 'react-redux'
 import { ListGroup, Container, Row, Col, Table, Button, Form, Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
@@ -10,10 +10,11 @@ import { getAllProjects } from '../../../redux/projects/action';
 const ListTask=()=>{
     const store=useSelector(state=>state)
     const dispatch=useDispatch()
-    const listTaskData=store?.getAllTaskReducer?.data?.response
+    const listTaskData=store?.getSigleSprintTask?.data?.response
     console.log("listTaskDatalistTaskData",listTaskData)
     const { projectId, milestoneId ,spriteId } = useParams()
-    console.log("projectId",projectId)
+    
+    console.log("projectId",spriteId)
 //   useEffect(() => {
 //     let body={
 //         flag:2,
@@ -32,16 +33,16 @@ useEffect(()=>{
 
   const statusInfo =(status)=>{
     let body = {
-        flag: 2,
-        projectId: projectId,
-        milestoneId:milestoneId,
+        // flag: 2,
+        // projectId: projectId,
+        // milestoneId:milestoneId,
         sprintId:spriteId,
         status:status,
         activeStatus:true,
-        searchString:'',
+        // searchString:'',
         skip: 1,
     };
-    dispatch(getAllTask(body));
+    dispatch(getsingleSprintTask(body));
 
 }
     return(
@@ -79,22 +80,26 @@ useEffect(()=>{
                                             <tbody>
                                             {
                                                 
-                                                listTaskData?.taskInfo?.map((item,index)=>
+                                                listTaskData?.map((item,index)=>
                                                     <tr>
                                                     <td>{index=index+1}</td>
-                                                    <td>{item?.description}</td>
+                                                    <td className='' title={item?.description} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                    {item?.description.split(' ').slice(0, 2).join(' ')}{item?.description.split(' ').length > 2 ? ' ...' : ''}
+                                                </td>
                                                     <td>{item?.summary}</td>
                                                     <td>{item?.assigneeInfo?.firstName} {item?.assigneeInfo?.lastName}</td>
                                                     <td>{item?.reporterInfo?.role}</td>
-                                                    <td>
-                                                    {item?.priority == 1
-                                                        ? 'High'
-                                                        : '' || item?.priority == 2
-                                                        ? 'Medium'
-                                                        : '' || item?.priority == 3
-                                                        ? 'Low'
-                                                        : ''}
-                                                    </td>
+                                                    <td className=''>
+                                                    {item?.priority == 'Critical'
+                                                        ? 'Critical'
+                                                        : '' || item?.priority == 'High'
+                                                            ? 'High'
+                                                            : '' || item?.priority == 'Medium'
+                                                                ? 'Medium'
+                                                                : '' || item?.priority == 'Low'
+                                                                    ? 'Low'
+                                                                    : ''}
+                                                </td>
                                                     <td> {moment(item?.startDate).format('L')}</td>
                                                 <td>{moment(item?.dueDate).format('L')}</td>
                                                 </tr>
