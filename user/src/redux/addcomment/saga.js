@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import Addcomment from '../addcomment/constants';
-import { addTaskCommentApi, deleteTask, updateTask, getHistoryApi, getTaskCommentApi } from '../addcomment/api';
+import { addTaskCommentApi, deleteTask, updateTask, getHistoryApi, getTaskCommentApi, getBugsApi } from '../addcomment/api';
 
 function* addTaskCommentFunction({ payload }) {
     try {
@@ -157,7 +157,44 @@ function* getHistroryFunction({ payload }) {
         });
     }
 }
+function* getBugsFunction({ payload }) {
 
+
+    try {
+        yield put({
+            type: Addcomment.GET_BUGS_LOADING,
+            payload: {}
+        })
+        const response = yield call(getBugsApi, { payload });
+        if (response.data.status) {
+            yield put({
+                type: Addcomment.GET_BUGS_SUCCESS,
+                payload: { ...response.data },
+            });
+            // yield put({
+            //     type: TASK_TYPES.GET_BUGS_RESET,
+            //     payload: {},
+            // });
+        }
+        else {
+            yield put({
+                type: Addcomment.GET_BUGS_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: Addcomment.GET_BUGS_ERROR,
+            payload: { error }
+        });
+        yield put({
+            type: Addcomment.GET_BUGS_RESET,
+            payload: {},
+        });
+
+    }
+}
 export function* addAllTaskCommentsSaga(): any {
     yield takeEvery(Addcomment.ADD_COMMENT, addTaskCommentFunction);
 }
@@ -177,7 +214,9 @@ export function* getHistrorySaga(): any {
 export function* getCommetSaga(): any {
     yield takeEvery(Addcomment.GET_COMMENT, getCommentsFunction);
 }
-
+export function* getBugsSaga() {
+    yield takeEvery(Addcomment.GET_BUGS, getBugsFunction);
+}
 function* Addcommentsaga(): any {
     yield all([
         fork(addAllTaskCommentsSaga),
@@ -185,6 +224,7 @@ function* Addcommentsaga(): any {
         fork(updateTaskCommentsSaga),
         fork(getHistrorySaga),
         fork(getCommetSaga),
+        fork(getBugsSaga),
     ]);
 }
 

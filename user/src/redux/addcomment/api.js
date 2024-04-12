@@ -28,6 +28,8 @@ export function getTaskCommentApi(data): any {
 
     // return api.get(URL.GetComment + data?.payload)
     return api.get(URL.GetComment + data?.payload?.taskId);
-
-
+}
+export function getBugsApi(data): any {
+    const { taskId, type } = data?.payload;
+    return api.get(`${URL.getBugs}&type=${type}&taskId=${taskId}`);
 }

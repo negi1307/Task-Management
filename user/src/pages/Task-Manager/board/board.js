@@ -29,7 +29,7 @@ const TaskList = styled.div`
     border-radius: 5px;
     padding: 15px 15px;
     margin-right: 45px;
-
+    
     /* Custom scrollbar */
     ::-webkit-scrollbar {
         width: 5px;
@@ -165,6 +165,8 @@ const Boards = (props) => {
             });
         }
     }, [successHandle]);
+    // const fajnf = store?.getBugsReducer?.data?.response
+    // console.log({ fajnf })
 
     const handelupdatetask = (ele) => {
         let body = {
@@ -432,6 +434,7 @@ const Boards = (props) => {
                                                         mileStoneId={milestoneId}
                                                         sprintId={spriteId}
                                                         closeModal={closeModal}
+                                                        isInProgressColumn={columnId == '2'}
                                                     />
                                                 ))}
                                                 {provided.placeholder}

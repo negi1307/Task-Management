@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { addComment, getComment, updateComment, deleteComment, getCommentId, getHistory } from '../../../redux/addcomment/actions';
+import { addComment, getComment, updateComment, deleteComment, getBugs, getCommentId, getHistory } from '../../../redux/addcomment/actions';
 import Attachments from './../../apps/Tasks/Details/Attachments';
 
 const Taskdetail = (props) => {
@@ -24,6 +24,8 @@ const Taskdetail = (props) => {
     const [buttonChange, setButtonChange] = useState(true);
 
     const allComments = store?.getAllComment?.data?.response;
+    // const getBUgs = store?.getBugsReducer?.data
+    // console.log({ getBUgs })
     const {
         register,
         handleSubmit,
@@ -78,6 +80,10 @@ const Taskdetail = (props) => {
         setIsUpdate(false);
     }
 
+    // useEffect(() => {
+    //     dispatch(getBugs())
+
+    // })
 
     const editComment = (item) => {
         setValue('comment', item?.comment);
@@ -144,14 +150,12 @@ const Taskdetail = (props) => {
         }
     };
     const handelUpdateAll = (data, indx) => {
-
         setError('');
         setUnchangeComment(data?.comment);
         setAllCommetUpdateId(data?._id);
         setInputForUpdate(indx);
         setUpdatedCommentInitialValue(data?.comment);
     };
-
     return (
         <>
             <Modal
@@ -216,7 +220,7 @@ const Taskdetail = (props) => {
                             </Row>
                             {connectComponent === 'All' ? (
                                 <div className="mt-3">
-                                    ALL
+                                    All
                                 </div>
                             ) : connectComponent === 'Comments' ? (
                                 <div>
@@ -225,63 +229,7 @@ const Taskdetail = (props) => {
                             ) : connectComponent === 'History' ? (
                                 <div>HISTORY</div>
                             ) : connectComponent === 'Subtask' ? (
-                                // <Table className="mb-0 add_Color_font" striped>
-                                //     <thead>
-                                //         <tr>
-                                //             <th className='fw-bold'>#</th>
-                                //             <th className='fw-bold'>Summary</th>
-                                //             <th className='fw-bold'>Decription</th>
-                                //             <th className='fw-bold'>Assignee</th>
-                                //             <th className='fw-bold'>Priority</th>
-                                //             <th className='fw-bold'>Start Date</th>
-                                //             <th className='fw-bold'>End Date</th>
-                                //         </tr>
-                                //     </thead>
-                                //     {/* <tbody>
-
-                                //         {store?.getSubTaskReducer?.data?.response?.map((bug, ind) => {
-                                //             return (
-                                //                 <tr className="align-middle">
-                                //                     <th>{ind + 1}</th>
-
-                                //                     <td>
-                                //                         <span title={bug?.summary}>
-                                //                             {bug?.summary.slice(0, 8)}
-                                //                         </span>
-                                //                     </td>
-                                //                     <td>
-                                //                         <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
-                                //                     </td>
-                                //                     <td>
-                                //                         <span>
-                                //                             {bug?.expectedHours}
-                                //                         </span>
-                                //                     </td>
-                                //                     <td>
-                                //                         <span>
-                                //                             {bug?.priority}
-                                //                         </span>
-                                //                     </td>
-                                //                     <td>
-                                //                         <span>
-                                //                             {bug?.startDate.slice(0, 10)}
-                                //                         </span>
-                                //                     </td>
-                                //                     <td>
-                                //                         <span>
-                                //                             {bug?.dueDate.slice(0, 10)}
-                                //                         </span>
-                                //                     </td>
-
-
-                                //                 </tr>
-                                //             );
-                                //         })}
-
-                                //     </tbody> */}
-                                // </Table>
-                                <div>Subtask</div>
-
+                                <div>Subtasks</div>
                             ) : connectComponent === 'Bugs' ? (
                                 <div>NUGS</div>
                             ) : (

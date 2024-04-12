@@ -18,9 +18,6 @@ import { FaCirclePlay } from "react-icons/fa6";
 import { FaCirclePause } from "react-icons/fa6";
 import { addLoginTime, addLoginTimeStop } from '../../../redux/user/action'
 import ToastHandle from '../../../constants/toaster/toaster';
-
-// import CustomAvatar from '../TableComponents/CustomAvatar'
-
 import moment from 'moment';
 
 const TaskInformation = styled.div`
@@ -47,7 +44,7 @@ const TaskInformation = styled.div`
     }
 `;
 
-const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
+const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressColumn }) => {
     const store = useSelector(state => state)
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
@@ -56,15 +53,10 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
     const userId = store?.Auth?.user?.userId;
     const getComments = item?.comments;
     const historyData = store?.getHistoryData?.data?.response;
-    const isInProgressColumn = item?.columnId === 2;
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
     };
-
-    if (isInProgressColumn) {
-        document.getElementById('timestart').style.display = 'none';
-    }
     const {
         register,
         handleSubmit,
@@ -88,6 +80,31 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
     const [commentId, setCommentId] = useState('');
 
     const [showData, setShowData] = useState(false);
+    const [timeElapsed, setTimeElapsed] = useState(0);
+
+
+    // useEffect(() => {
+    // Fetch data only once when the component mounts
+    // dispatch(getAllTask());
+    // dispatch(getsingleMileStone());
+    // dispatch(getComment());
+    // dispatch(getCommentId(item._id)); // Assuming you need item._id to fetch comments
+    // }, [dispatch]);
+    useEffect(() => {
+        let timer;
+        if (isPlay) {
+            timer = setInterval(() => {
+                setTimeElapsed(prevTime => prevTime + 100); // Increment by 100 milliseconds
+            }, 100); // Update every 100 milliseconds
+        } else {
+            clearInterval(timer);
+        }
+
+        return () => clearInterval(timer);
+
+        const isTaskInProgress = localStorage.getItem(`task_${item._id}_inProgress`);
+        setIsPlay(isTaskInProgress === 'true'); // Update isPlay state based on local storage value
+    }, [isPlay, item._id]);
 
     const handleCloseData = () => setShowData(false);
     const handleShowData = () => {
@@ -108,11 +125,11 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
     switch (item?.priority) {
         case 'Critical':
             priorityWithLetter = 'Critical';
-            backgroundColorClass = '🛑';
+            backgroundColorClass = '🔴';
             break;
         case 'High':
             priorityWithLetter = 'High';
-            backgroundColorClass = '🔴';
+            backgroundColorClass = '🟠';
             break;
         case 'Medium':
             priorityWithLetter = 'Medium';
@@ -126,19 +143,29 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
             priorityWithLetter = item?.priority;
             backgroundColorClass = '';
     }
-    // const toggleIcon = () => {
-    //     setIsPlay(!isPlay);
-    // };
 
     const startTime = (e) => {
         dispatch(addLoginTime({ taskId: item?._id }))
         setIsPlay(true);
-        // ToastHandle('success', 'Task started successfully')
+        localStorage.setItem(`task_${item._id}_inProgress`, 'true');
+
     }
     const stopTime = (e) => {
         dispatch(addLoginTimeStop({ taskId: item?._id }));
         setIsPlay(false);
+        localStorage.removeItem(`task_${item._id}_inProgress`);
+
     }
+
+    const formatTime = (milliseconds) => {
+        const duration = moment.duration(milliseconds, 'milliseconds');
+        const hours = duration.hours().toString().padStart(2, '0');
+        const minutes = duration.minutes().toString().padStart(2, '0');
+        const seconds = duration.seconds().toString().padStart(2, '0');
+        const millis = duration.milliseconds().toString().padStart(3, '0');
+        return `${hours}:${minutes}:${seconds}.${millis}`;
+    };
+
     return (
         <>
             <Draggable key={item?.taskInfo?._id} draggableId={item?.taskInfo?._id} index={index} style={{ width: '260px' }}>
@@ -149,11 +176,13 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
                                 <div className="col-12 pb-1">
                                     <div className="row d-flex align-items-center">
                                         <div className="col-9 m-0">
-                                            <a className='fw-bold text-truncate'
-                                                href="#"
+                                            <p className='fw-bold mb-0 text-primary text-truncate'
+                                                onClick={() => {
+                                                    showTaskDetailMOdel(item)
+                                                }}
                                                 title={item?.summary}>
                                                 {item?.summary ? item.summary.slice(0, 10).charAt(0).toUpperCase() + item.summary.slice(1, 10) : ''}
-                                            </a>
+                                            </p>
 
                                         </div>
                                         <div className="col-3 text-center">
@@ -193,13 +222,17 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
                                         </div>
                                     </p>
                                 </div>
-                                <div className='col-12 px-1 py-0'
+                                <div className='col-12 d-flex justify-content-between pe-2'
                                     onClick={() => {
                                         showTaskDetailMOdel(item);
                                     }}>
-                                    <p className={`task-title text-dark p-0 m-0 `}>
+                                    <div>
                                         {backgroundColorClass}
-                                    </p>
+                                    </div>
+                                    {isInProgressColumn && (
+                                        <p className='fw-bold mb-0 fs-6'>{formatTime(timeElapsed)}</p>
+                                    )}
+
                                 </div>
                                 <div className="col-12">
                                     <div className="row d-flex  align-items-center">
@@ -216,11 +249,16 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
                                             <div className=" d-flex">
                                                 <div className="cp d-flex align-items-center gap-1">
                                                     <span id='timestart'>
-                                                        {/* Render play/pause button based on isPlaying state */}
-                                                        {isPlay ? (
-                                                            <FaCirclePause onClick={stopTime} style={{ fontSize: '21px' }} />
-                                                        ) : (
-                                                            <FaCirclePlay onClick={startTime} style={{ fontSize: '21px' }} />
+                                                        {isInProgressColumn && (
+                                                            <div>
+                                                                <span id='timestart'>
+                                                                    {isPlay ? (
+                                                                        <FaCirclePause onClick={stopTime} style={{ fontSize: '21px' }} />
+                                                                    ) : (
+                                                                        <FaCirclePlay onClick={startTime} style={{ fontSize: '21px' }} />
+                                                                    )}
+                                                                </span>
+                                                            </div>
                                                         )}
                                                     </span>
                                                     <OverlayTrigger
@@ -256,17 +294,8 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel }) => {
                     </div >
                 )}
             </Draggable >
-
-
-
             <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
         </>
     );
 };
-
 export default TaskCard;
-
-// <span className="priority">
-// {item.Priority === 'High' ? (<RedArrow />) : item.Priority === 'Medium' ? (<YellowArrow />) : (<BlueArrow />)}
-// </span>
-// <div><CustomAvatar name={item.Assignee} isTable={false} size={16} /></div>

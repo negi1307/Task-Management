@@ -28,6 +28,11 @@ const GET_ALL_COMMENT_INITAL_STATE = {
     message: '',
     loading: false,
 };
+const GET_BUGS_INITIAL_STATE = {
+    data: [],
+    loading: false,
+    message: ""
+};
 
 export const addComments = (state = ADD_ALL_COMMENT, action) => {
     switch (action.type) {
@@ -167,6 +172,34 @@ export const getTaskId = (state = { data: '' }, action) => {
                 data: action.payload,
             };
 
+        default:
+            return { ...state };
+    }
+};
+export const getBugsReducer = (state = GET_BUGS_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case Addcomment.GET_BUGS_LOADING:
+            return {
+                data: GET_BUGS_INITIAL_STATE.data,
+                loading: true
+            };
+        case Addcomment.GET_BUGS_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false
+            };
+        case Addcomment.GET_BUGS_RESET:
+            return {
+                data: GET_BUGS_INITIAL_STATE,
+                loading: false
+            };
+        case Addcomment.GET_BUGS_ERROR:
+            return {
+                data: [],
+                status: !200,
+                loading: false,
+                message: action?.payload,
+            };;
         default:
             return { ...state };
     }

@@ -71,3 +71,4 @@ export const userLogoutReason = '/reason/getleaveReason';
 export const getAllAssigneeName = '/assignUser/getuserListprojectAssigned?projectId=';
 // get all assigne name on borad page========================
 export const updateTaskStatusTime = '/task/updateTaskStatus'
+export const getBugs = "/subTask/getSubTask?"
