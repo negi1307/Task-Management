@@ -7,12 +7,12 @@ body {
 }
 
 .Active_data {
-    background: #313a46;
+    background: #313a46 !important;
     color: white;
 }
 
 .InActive_data {
-    background: #b5b4b4;
+    background: #b5b4b4 !important;
     color: white;
 }
 
