@@ -162,12 +162,12 @@ const ListTask = () => {
                                                 </td>
                                                 <td> {moment(item?.startDate).format('L')}</td>
                                                 <td>{moment(item?.dueDate).format('L')}</td>
-                                            </tr>
+                                            </tr >
 
                                         )}
-                                </tbody>
+                                </tbody >
 
-                            </Table>
+                            </Table >
                             <Row>
                                 <Col lg={12} className="d-flex justify-content-end my-3  pe-4 bottom-0">
                                     {store?.getSigleSprintTask?.data?.totalPages > 0 && (
@@ -183,10 +183,10 @@ const ListTask = () => {
                                     )}
                                 </Col>
                             </Row>
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
+                        </Col >
+                    </Row >
+                </Col >
+            </Row >
         </>
     )
 }

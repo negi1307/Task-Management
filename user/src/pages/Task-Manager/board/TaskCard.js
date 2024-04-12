@@ -18,7 +18,7 @@ import { FaCirclePlay } from "react-icons/fa6";
 import { FaCirclePause } from "react-icons/fa6";
 import { addLoginTime, addLoginTimeStop } from '../../../redux/user/action'
 import ToastHandle from '../../../constants/toaster/toaster';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 const TaskInformation = styled.div`
     display: flex;
@@ -43,7 +43,6 @@ const TaskInformation = styled.div`
         color: #7d7d7d;
     }
 `;
-
 const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressColumn }) => {
     const store = useSelector(state => state)
     const [editData, setEditData] = useState();
@@ -57,53 +56,32 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
         setEditData(data);
         setOpenEditModal(true);
     };
+    const indianDateTime = moment.tz(new Date(), 'Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss');
     const {
         register,
         handleSubmit,
         setValue,
         formState: { errors },
     } = useForm();
-
     const closeupdatemodal = (val) => {
         closeModal('render');
         setOpenEditModal(false);
     };
     const dispatch = useDispatch();
-
-
     const deleteData = (id) => {
         dispatch(deleteTask({ taskId: id }));
         dispatch(getAllTask());
     };
-
-
     const [commentId, setCommentId] = useState('');
-
     const [showData, setShowData] = useState(false);
     const [timeElapsed, setTimeElapsed] = useState(0);
-
-
-    // useEffect(() => {
-    // Fetch data only once when the component mounts
-    // dispatch(getAllTask());
-    // dispatch(getsingleMileStone());
-    // dispatch(getComment());
-    // dispatch(getCommentId(item._id)); // Assuming you need item._id to fetch comments
-    // }, [dispatch]);
     useEffect(() => {
         let timer;
-        if (isPlay) {
-            timer = setInterval(() => {
-                setTimeElapsed(prevTime => prevTime + 100); // Increment by 100 milliseconds
-            }, 100); // Update every 100 milliseconds
-        } else {
-            clearInterval(timer);
-        }
-
-        return () => clearInterval(timer);
-
         const isTaskInProgress = localStorage.getItem(`task_${item._id}_inProgress`);
         setIsPlay(isTaskInProgress === 'true'); // Update isPlay state based on local storage value
+
+
+        return () => clearInterval(timer);
     }, [isPlay, item._id]);
 
     const handleCloseData = () => setShowData(false);
@@ -147,13 +125,15 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     const startTime = (e) => {
         dispatch(addLoginTime({ taskId: item?._id }))
         setIsPlay(true);
-        localStorage.setItem(`task_${item._id}_inProgress`, 'true');
-
+        localStorage.setItem(`task_${item?._id}_inProgress`, 'true');
+        // console.log('========start', new Date())
     }
     const stopTime = (e) => {
-        dispatch(addLoginTimeStop({ taskId: item?._id }));
+        let stoptask = item?._id;
+        dispatch(addLoginTimeStop(stoptask));
         setIsPlay(false);
-        localStorage.removeItem(`task_${item._id}_inProgress`);
+        localStorage.removeItem(`task_${item?._id}_inProgress`);
+        console.log('=======endtime', new Date())
 
     }
 
@@ -229,9 +209,7 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                     <div>
                                         {backgroundColorClass}
                                     </div>
-                                    {isInProgressColumn && (
-                                        <p className='fw-bold mb-0 fs-6'>{formatTime(timeElapsed)}</p>
-                                    )}
+
 
                                 </div>
                                 <div className="col-12">
@@ -248,19 +226,15 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                         <div className="col-4 text-end ">
                                             <div className=" d-flex">
                                                 <div className="cp d-flex align-items-center gap-1">
-                                                    <span id='timestart'>
-                                                        {isInProgressColumn && (
-                                                            <div>
-                                                                <span id='timestart'>
-                                                                    {isPlay ? (
-                                                                        <FaCirclePause onClick={stopTime} style={{ fontSize: '21px' }} />
-                                                                    ) : (
-                                                                        <FaCirclePlay onClick={startTime} style={{ fontSize: '21px' }} />
-                                                                    )}
-                                                                </span>
-                                                            </div>
-                                                        )}
-                                                    </span>
+                                                    {isInProgressColumn && (
+                                                        <span id='timestart'>
+                                                            {isPlay ? (
+                                                                <FaCirclePause onClick={stopTime} style={{ fontSize: '21px' }} />
+                                                            ) : (
+                                                                <FaCirclePlay onClick={startTime} style={{ fontSize: '21px' }} />
+                                                            )}
+                                                        </span>
+                                                    )}
                                                     <OverlayTrigger
                                                         placement="top"
                                                         overlay={
