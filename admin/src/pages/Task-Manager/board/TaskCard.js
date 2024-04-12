@@ -22,7 +22,7 @@ const TaskInformation = styled.div`
     padding: 0 15px;
     min-height: 106px;
     border-radius: 5px;
-    max-width: 311px;
+    max-width: 311px !important;
     /* background: ${({ isDragging }) => (isDragging ? 'rgba(255, 59, 59, 0.15)' : 'white')}; */
     background: white;
     margin-top: 15px;
@@ -124,9 +124,9 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
             priorityWithLetter = item?.priority;
             backgroundColorClass = '';
     }
- 
 
- 
+
+
 
 
     return (

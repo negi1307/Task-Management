@@ -5,12 +5,13 @@ import moment from 'moment';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { addComment, getComment, updateComment, deleteComment, getCommentId,getHistory } from '../../../redux/addcomment/actions';
+import { addComment, getComment, updateComment, deleteComment, getBugs, getCommentId, getHistory } from '../../../redux/addcomment/actions';
 import Attachments from './../../apps/Tasks/Details/Attachments';
 
 const Taskdetail = (props) => {
     const { item } = props;
-    console.log(item,'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+
+    // console.log(item, 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [inputForUpdate, setInputForUpdate] = useState('');
@@ -19,7 +20,12 @@ const Taskdetail = (props) => {
     const [updatedCommentInitialValue, setUpdatedCommentInitialValue] = useState('');
     const [unchangeComment, setUnchangeComment] = useState('');
     const [error, setError] = useState('');
+    const [connectComponent, setConnectComponent] = useState('All');
+    const [buttonChange, setButtonChange] = useState(true);
+
     const allComments = store?.getAllComment?.data?.response;
+    // const getBUgs = store?.getBugsReducer?.data
+    // console.log({ getBUgs })
     const {
         register,
         handleSubmit,
@@ -28,44 +34,63 @@ const Taskdetail = (props) => {
         reset,
     } = useForm();
 
+    const connectComponentCheck = (type) => {
+        setConnectComponent(type);
+        setValue('comment', "");
+        setValue('subtasks', "");
+        setButtonChange(true);
+        // if (type === 'History') {
+        // dispatch(getHistoryAction(props?.item?.id));
+        // }
+    };
+    useEffect(() => {
+        dispatch(getComment({ taskId: item?._id }))
+    }, [dispatch])
     const onSubmitComment = (e) => {
-        if(e.commentId !== ""){
+        if (e.commentId !== "") {
             updateCommentData(e);
         }
-        else{
+        else {
             const commentData = {
                 userId: props.userId,
                 taskId: item?.taskId,
                 comment: e.comment,
             };
+            const data = {
+                taskId: item?._id
+            }
             dispatch(addComment(commentData));
-            dispatch(getComment(item?.taskId));
-            dispatch(getHistory(item?.taskId))            
+            dispatch(getComment(data));
+            dispatch(getHistory(item?.taskId))
         }
         setValue('comment', '');
     };
-    const[isUpdate,setIsUpdate] = useState(false);
-    const updateCommentData=(e)=>{
-       const commentData = {
-        taskId:item?.taskId,
-        commentId : e.commentId,
-        comment : e.comment
-       }
-       dispatch(updateComment(commentData));
-       setTimeout(() => {
-        dispatch(getComment(item?.taskId));
-       dispatch(getHistory(item?.taskId)); 
-       }, 500);
-       setIsUpdate(false);
+    const [isUpdate, setIsUpdate] = useState(false);
+    const updateCommentData = (e) => {
+        const commentData = {
+            taskId: item?.taskId,
+            commentId: e.commentId,
+            comment: e.comment
+        }
+        dispatch(updateComment(commentData));
+        //     setTimeout(() => {
+        //         dispatch(getComment(item?.taskId));
+        //         dispatch(getHistory(item?.taskId));
+        //     }, 500);
+        setIsUpdate(false);
     }
 
+    // useEffect(() => {
+    //     dispatch(getBugs())
 
-    const editComment =(item)=>{
-        setValue('comment',item?.comment);
-        setValue('commentId',item?._id);
+    // })
+
+    const editComment = (item) => {
+        setValue('comment', item?.comment);
+        setValue('commentId', item?._id);
         setIsUpdate(true);
-      }
-     
+    }
+
     const downloadFile = (file) => {
         fetch(file).then((response) => {
             response.blob().then((blob) => {
@@ -97,24 +122,24 @@ const Taskdetail = (props) => {
     const DeleteData = (id) => {
         console.log(id);
         dispatch(deleteComment({ commentId: id._id }));
-        setTimeout(() => {
-            dispatch(getComment(item?.taskId));
-        }, 500);
+        // setTimeout(() => {
+        //     dispatch(getComment(item?.taskId));
+        // }, 500);
     };
-    console.log(updatedCommentValue, 'data===');
+    // console.log(updatedCommentValue, 'data===');
     const updateHandle = (condition) => {
 
         if (updatedCommentInitialValue !== '') {
             if (condition === 'updateComment') {
                 let body = {
-                    taskId:item?.taskId,
+                    taskId: item?.taskId,
                     commentId: allCommetUpdateId,
                     comment: updatedCommentInitialValue,
                 };
                 dispatch(updateComment(body));
-                setTimeout(() => {
-                    dispatch(getComment(item?.taskId));
-                }, 500);
+                // setTimeout(() => {
+                //     dispatch(getComment(item?.taskId));
+                // }, 500);
                 setInputForUpdate(false);
             } else {
                 setInputForUpdate(false);
@@ -125,377 +150,174 @@ const Taskdetail = (props) => {
         }
     };
     const handelUpdateAll = (data, indx) => {
-
         setError('');
         setUnchangeComment(data?.comment);
         setAllCommetUpdateId(data?._id);
         setInputForUpdate(indx);
         setUpdatedCommentInitialValue(data?.comment);
     };
-  
     return (
         <>
             <Modal
                 show={props.show}
-                size={'sm'}
+                size={'xl'}
                 onHide={props.closeTaskDetailMOdel}
-                backdrop="static"
-                className="modal_details">
+            >
                 <Modal.Header onClick={() => updateHandle('closeModal')} closeButton>
                     <Modal.Title>Task Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="cardinfo">
-                    <div className="comments">
-                        <h4>Activity</h4>
-                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button
-                                    class="nav-link active"
-                                    id="pills-home-tab"
-                                    data-bs-toggle="pill"
-                                    data-bs-target="#pills-home"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="pills-home"
-                                    aria-selected="true">
+                    <div className="row w-100">
+                        <div className="col-7">
+                            <h4 className='modal_titles'>Activity</h4>
+                            <Row>
+                                <Col lg={12} className='d-flex align-items-center gap-1'>
+                                    <Button
+                                        onClick={() => {
+                                            connectComponentCheck('All');
+                                        }}
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'All' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    >
+                                        All
+                                    </Button>
+                                    <Button
+                                        onClick={() => {
+                                            connectComponentCheck('Comments');
+                                        }}
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Comments' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    >
+                                        Comments
+                                    </Button>
+                                    <Button
+                                        onClick={() => {
+                                            connectComponentCheck('History');
+                                        }}
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'History' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    >
+                                        History
+                                    </Button>
+
+
+                                    <Button
+                                        onClick={() => {
+                                            connectComponentCheck('Bugs');
+                                        }}
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Bugs' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    >
+                                        Bugs
+                                    </Button>
+                                    <Button
+                                        onClick={() => {
+                                            connectComponentCheck('Subtask');
+                                        }}
+                                        className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Subtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
+                                    >
+                                        SubTask
+                                    </Button>
+
+
+                                </Col>
+                            </Row>
+                            {connectComponent === 'All' ? (
+                                <div className="mt-3">
                                     All
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button
-                                    class="nav-link"
-                                    id="pills-profile-tab"
-                                    data-bs-toggle="pill"
-                                    data-bs-target="#pills-profile"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="pills-profile"
-                                    aria-selected="false">
-                                    Comments
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button
-                                    class="nav-link"
-                                    id="pills-contact-tab"
-                                    data-bs-toggle="pill"
-                                    data-bs-target="#pills-contact"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="pills-contact"
-                                    aria-selected="false">
-                                    History
-                                </button>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="pills-tabContent">
-                            <div
-                                class="tab-pane fade show active"
-                                id="pills-home"
-                                role="tabpanel"
-                                aria-labelledby="pills-home-tab"
-                                tabindex="0">
-                                <div className="taskcardinfo">
-                                    <Row className="mt-3">
-                                        {allComments?.map((comm, ind) =>
-
-                                        (
-                                            <ul style={{ listStyle: 'none' }}>
-                                                {/* <h6>{comm}</h6> */}
-                                                <Row>
-                                                    <Col lg={12} className="d-flex">
-                                                        <Col lg={2} className="pt-1">
-                                                            <span
-                                                                style={{
-                                                                    backgroundColor: '#605e5a',
-                                                                    borderRadius: '100%',
-                                                                    padding: '9px',
-                                                                    color: 'white',
-                                                                    fontWeight: '800',
-                                                                }}>
-                                                                {comm?.userId?.firstName.charAt(0)}
-                                                                {comm?.userId?.lastName.charAt(0)}
-                                                            </span>
-                                                        </Col>
-                                                        <Col lg={10} className="m-0 p-0">
-                                                            <div className="d-flex">
-                                                                <h4 className="m-0 p-0"> {comm?.userId?.firstName}</h4>
-                                                                <h4 className="ps-1 m-0 p-0">
-                                                                    {' '}
-                                                                    {comm?.userId?.lastName}
-                                                                </h4>
-                                                                <p className="ps-1 m-0 p-0">
-                                                                    {moment(comm?.createdAt).fromNow()}{' '}
-
-                                                                </p>
-
-                                                            </div>
-                                                            {inputForUpdate === ind ? (
-                                                                <form>
-                                                                    <Row className="mt-2">
-                                                                        <Col lg={10}>
-                                                                            <Form.Group
-                                                                                className="mb-1"
-                                                                                controlId="exampleForm.ControlInput1">
-                                                                                <Form.Control
-                                                                                    type="text"
-                                                                                    placeholder="Update Comment"
-                                                                                    defaultValue={
-                                                                                        updatedCommentInitialValue
-                                                                                    }
-                                                                                    onChange={(e) =>
-                                                                                        setUpdatedCommentInitialValue(
-                                                                                            e.target.value
-                                                                                        )
-                                                                                    }
-                                                                                />
-                                                                                {error ? (
-                                                                                    <div>
-                                                                                        {error}
-                                                                                        <label className="text-danger">
-                                                                                            {' '}
-                                                                                            *
-                                                                                        </label>
-                                                                                    </div>
-                                                                                ) : null}
-                                                                            </Form.Group>
-                                                                        </Col>
-                                                                        <Col className="m-0 p-0" lg={2}>
-                                                                            <Button
-                                                                                onClick={() =>
-                                                                                    updateHandle('updateComment')
-                                                                                }>
-                                                                                Update
-                                                                            </Button>
-                                                                        </Col>
-                                                                    </Row>
-                                                                </form>
-                                                            ) : (
-                                                                <>
-                                                                    <div className="m-0 p-0">
-                                                                        <li className="font-18  comment_info">{comm?.comment}</li>
-                                                                    </div>
-                                                                    <div className="d-flex m-0 p-0">
-                                                                        <p
-                                                                            className=" p-0"
-                                                                            onClick={() => handelUpdateAll(comm, ind)}>
-                                                                            Edit
-                                                                        </p>
-
-                                                                    </div>
-                                                                </>
-                                                            )}
-                                                        </Col>
-                                                    </Col>
-                                                </Row>
-                                            </ul>
-                                        ))}
-                                    </Row>
-
                                 </div>
-                            </div>
-                            <div
-                                class="tab-pane fade"
-                                id="pills-profile"
-                                role="tabpanel"
-                                aria-labelledby="pills-profile-tab"
-                                tabindex="0">
-                                <div className="addcommentname">
-                                    <div className="edit_delte">
-                                        <div className="taskcardinfo">
-                                            <form onSubmit={handleSubmit(onSubmitComment)}>
-                                               
-                                                <Row className="mt-2">
-                                                    <Col lg={10}>
-                                                    
-                                                        <Form.Group
-                                                            className="mb-1"
-                                                            controlId="exampleForm.ControlInput1">
-                                                            <Form.Control
-                                                                type="text"
-                                                                placeholder="Add comment"
-                                                                {...register('comment', { required: true })}
-                                                            />
-                                                        <input {...register('commentId')} type='hidden'></input>
-                                                        </Form.Group>
-                                                    </Col>
-                                                    <Col className="m-0 p-0" lg={2}>
-                                                       
-                                                        <Button type="submit">{isUpdate ? "Update":"Add"}</Button>
-                                                    </Col>
-                                                </Row>
-                                            </form>
-                                            <table>
-                                                {allComments?.reverse()?.map((comm, ind) => (
-                                                    <>
-                                                        <Row>
-                                                            <Col lg={12} className="d-flex">
-                                                                <Col lg={2} className="pt-1">
-                                                                    <span
-                                                                        style={{
-                                                                            backgroundColor: '#605e5a',
-                                                                            borderRadius: '100%',
-                                                                            padding: '9px',
-                                                                            color: 'white',
-                                                                            fontWeight: '800',
-                                                                        }}>
-                                                                        {comm?.userId?.firstName.charAt(0)}
-                                                                        {comm?.userId?.lastName.charAt(0)}
-                                                                    </span>
-                                                                </Col>
-                                                                <Col lg={10} className="m-0 p-0">
-                                                                    <div className="d-flex">
-                                                                        <h4 className="m-0 p-0">
-                                                                            {' '}
-                                                                            {comm?.userId?.firstName}
-                                                                        </h4>
-                                                                        <h4 className="ps-1 m-0 p-0">
-                                                                            {' '}
-                                                                            {comm?.userId?.lastName}
-                                                                        </h4>
-                                                                        <p className="ps-1 m-0 p-0">
-                                                                            {moment(comm?.createdAt).fromNow()}{' '}
-                                                                            {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
-                                                                        </p>
-                                                                        {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
-                                                                    </div>
-                                                                    <div className="m-0 p-0">
-                                                                        <li
-                                                                            style={{ listStyle: 'none' }}
-                                                                            className="font-18  ">
-                                                                            {comm?.comment}
-                                                                        </li>
-                                                                    </div>
-
-                                                                    <div className="d-flex m-0 p-0">
-                                                                        <a  className=" p-0" onClick={() => editComment(comm)}>Edit</a>
-                                                                    </div>
-                                                                </Col>
-                                                            </Col>
-                                                        </Row>
-                                                    </>
-                                                ))}
-                                            </table>
-
-                                        </div>
-                                    </div>
+                            ) : connectComponent === 'Comments' ? (
+                                <div>
+                                    COMMENTS
                                 </div>
-                            </div>
-                            <div
-                                class="tab-pane fade"
-                                id="pills-contact"
-                                role="tabpanel"
-                                aria-labelledby="pills-contact-tab"
-                                tabindex="0">
-                                <div className="history">
-                                    <div className="history_data_info">
-                                        {props.historyData?.reverse()?.map((datainfo, index) => (
-                                            <>
-                                                <ul>
-                                                    
-                                                    <li>
-                                                    <p class="username">{datainfo.userId?.firstName.charAt(0)}{datainfo.userId?.lastName.charAt(0)}</p> <span>{datainfo.userId?.firstName} {datainfo.userId?.lastName}</span>  {datainfo.userActivity} {moment(datainfo?.createdAt).fromNow()}
-                                                    </li>
-                                                    
-                                                </ul>
+                            ) : connectComponent === 'History' ? (
+                                <div>HISTORY</div>
+                            ) : connectComponent === 'Subtask' ? (
+                                <div>Subtasks</div>
+                            ) : connectComponent === 'Bugs' ? (
+                                <div>NUGS</div>
+                            ) : (
+                                ''
+                            )}
+                        </div>
+                        <div className='col-5'>
+                            <div className="table-responsive">
+                                <table className="table lh-sm table-borderless" style={{ fontSize: '14px' }} >
+                                    <tbody className='text-start'>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Project Name :</th>
+                                            <td>{props?.item?.projects?.projectName}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Milestone Name :</th>
+                                            <td>{props?.item?.milestones?.title}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Sprint Name :</th>
+                                            <td>{props?.item?.sprints?.sprintName}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Summary :</th>
+                                            <td>{props?.item?.summary}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Start Date :</th>
+                                            <td>{props?.item?.startDate ? moment(props?.item?.startDate).format('DD/MM/YYYY') : ''}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>End Date :</th>
+                                            <td>{props?.item?.dueDate ? moment(props?.item?.dueDate).format('DD/MM/YYYY') : ''}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Assignee :</th>
+                                            <td>{props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Reporter :</th>
+                                            <td>{props?.item?.reporterInfo?.firstName} {props?.item?.reporterInfo?.lastName}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Priority :</th>
+                                            <td class="fw-bold">{props?.item?.priority}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Status :</th>
+                                            <td>
+                                                {props?.item?.status == 1 ? 'To-Do' : ''}
+                                                {props?.item?.status == 2 ? 'In-Progress' : ''}
+                                                {props?.item?.status == 3 ? 'Hold' : ''}
+                                                {props?.item?.status == 4 ? 'Done' : ''}
+                                            </td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold'>Description:</th>
+                                            <div style={{ maxHeight: '7rem', overflowY: 'scroll' }}>
+                                                <td>
 
-                                            </>
-
-                                        ))}
-                                    </div>
-                                    <div className="history_data_info">
-                                        {props.historyData?.map((datainfo, index) => (
-                                            <p>{datainfo?.taskId?.time}</p>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="tab-pane fade"
-                                id="pills-disabled"
-                                role="tabpanel"
-                                aria-labelledby="pills-disabled-tab"
-                                tabindex="0">
-                                ...
+                                                    {props?.item?.description}
+                                                    {/* </span> */}
+                                                </td>
+                                            </div>
+                                        </tr>
+                                        {props?.item?.attachment !== '' ? (
+                                            <tr className='text-start'>
+                                                <th className='fw-bold' style={{ width: 'fit-content', }}>Attachment:</th>
+                                                <td>
+                                                    <a href={props?.item?.attachment} download target="_blank">
+                                                        <i class="dripicons-download download_color"></i>
+                                                    </a>
+                                                    {/* <img style="width: 10rem; height: 10rem;" class="img_style ps-1" src={props?.item?.attachmentType !== 'application/pdf' ? props?.item?.attachment : pdfImage} /> */}
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            ''
+                                        )}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
 
-                    <div class="card_detail">
-                        <h4>Details</h4>
-                        <ul style={{ listStyle: 'none' }}>
-                            <li>
-                                <label>Project Name:</label>
 
-                                <td>{props?.item?.projects?.projectName}</td>
-                            </li>
-                            <li>
-                                <label>Milestone Name:</label>
-                                <td>{props?.item?.milestones?.title}</td>
-                            </li>
-                            <li>
-                                <label>Sprint Name:</label>
-                                <td>{props?.item?.sprints?.sprintName}</td>
-                            </li>
-                            <li>
-                                <label>Summary:</label>
-                                {props?.item?.summary}
-                            </li>
-                            <li>
-                                <label>Description:</label>
 
-                                <div className='col-12' title={item?.description}>{item?.description ? item.description.slice(0, 40) : ''}</div>
-                            </li>
-
-                            <li>
-                                <label>Start Date:</label>
-
-                                {props.item?.startDate
-                                    ? moment(props.item?.startDate).format('ll')
-                                    : ''}
-                            </li>
-
-                            <li>
-                                <label> Priority:</label>
-
-                                {props.item?.priority ? 'medium' : ''}
-                            </li>
-
-                            <li>
-                                <label>End Date: </label>
-
-                                {props.item?.dueDate ? moment(props.item?.dueDate).format('ll') : ''}
-                            </li>
-
-                            <li>
-                                <label> Assignee Name:</label>
-
-                                {props.item?.assigneeInfo?.firstName}
-                            </li>
-
-                            <li>
-                                <label> Reporter:</label>
-
-                                {props.item.reporterInfo?.role}
-                            </li>
-                         
-                               {props?.item?.taskInfo?.attachment !== "null"  && props?.item?.taskInfo?.attachment !== "" ? (<li class="card_img">
-                                <label>Attachment:</label>
-                                <img
-                                    src={props.item?.taskInfo?.attachment}
-                                    width={150}
-                                    height={150}
-                                />
-                                <button type="button" onClick={() => downloadFile(props.item?.taskInfo?.attachment)}>
-                                    <i class="dripicons-download download_color"></i>
-                                </button>
-
-                            </li>):('')}
-
-                        </ul>
-                    </div>
-                </Modal.Body>
-            </Modal>
+                </Modal.Body >
+            </Modal >
         </>
     );
 };

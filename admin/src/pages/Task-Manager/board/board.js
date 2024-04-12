@@ -47,7 +47,7 @@ const TaskList = styled.div`
     }
 
     ::-webkit-scrollbar-thumb {
-        background-color: rgba(128, 128, 128, 0.669);
+        background-color: transparent;
         // border-radius: 6px;
     }
 
@@ -56,7 +56,7 @@ const TaskList = styled.div`
     }
 
     ::-webkit-scrollbar-track {
-        background: rgba(128, 128, 128, 0.065);
+        background: transparent;
         // border-radius: 10px;
     }
 `;
@@ -310,8 +310,8 @@ const Boards = () => {
                             onChange={handleAssigneefilter}
                             style={{ backgroundColor: '#F1F3FA' }}
                         >
-                            <option value={''} hidden selected>
-                                Assignee
+                            <option value={''} selected>
+                                All Tasks
                             </option>
                             {store?.getAllUsers?.data?.response?.map((ele, ind) => (
                                 <option value={ele?._id}>
@@ -367,7 +367,7 @@ const Boards = () => {
                                 <div className="app-search px-0">
                                     <div className=" position-relative ">
                                         <input
-                                            type="text"
+                                            type="search"
                                             value={search}
                                             onChange={(e) => {
                                                 handleSearchChange(e);
@@ -432,7 +432,7 @@ const Boards = () => {
                                             {...provided?.droppableProps}
 
                                         >
-                                            <TaskList style={{ height: '' }}>
+                                            <TaskList>
                                                 <Title className='text-dark fw-bold' >{column.title}   <span className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</span></Title>
                                                 {column.items?.map((item, index) => (
                                                     <TaskCard

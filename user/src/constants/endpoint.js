@@ -28,7 +28,7 @@ export const UpdateSprint = '/sprint/update';
 export const SingleMilestone = '/milestone/getMilestones?';
 //==============================================================================
 
-export const SingleSprintTask = '/task/getSprintTasks?';
+export const SingleSprintTask = '/task/getTasks?';
 export const GetAllTask = "/task/getTasksAccToStatus?";
 
 export const UpdateTask = '/task/updateTask';
@@ -71,3 +71,4 @@ export const userLogoutReason = '/reason/getleaveReason';
 export const getAllAssigneeName = '/assignUser/getuserListprojectAssigned?projectId=';
 // get all assigne name on borad page========================
 export const updateTaskStatusTime = '/task/updateTaskStatus'
+export const getBugs = "/subTask/getSubTask?"

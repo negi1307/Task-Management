@@ -10,7 +10,7 @@ import Features from './Features';
 import Pricing from './Pricing';
 import FAQ from './FAQ';
 import ContactUs from './ContactUs';
-import Footer from './Footer';
+// import Footer from './Footer';
 
 // dummy data
 import { services, layouts, features, plans, rawFaqs } from './Data';
@@ -47,7 +47,7 @@ const Landing = (): React$Element<React$FragmentType> => {
             <ContactUs />
 
             {/* footer */}
-            <Footer />
+            {/* <Footer /> */}
         </>
     );
 };
