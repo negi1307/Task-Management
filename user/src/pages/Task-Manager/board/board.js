@@ -29,7 +29,7 @@ const TaskList = styled.div`
     border-radius: 5px;
     padding: 15px 15px;
     margin-right: 45px;
-
+    
     /* Custom scrollbar */
     ::-webkit-scrollbar {
         width: 5px;
@@ -122,6 +122,7 @@ const Boards = (props) => {
 
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
+            // dispatch(getAllTask({ sprintId: spriteId, searchString: '', assigneeId: assigneeId }));
             setColumns({
                 [1]: {
                     title: 'To-do',
@@ -166,6 +167,8 @@ const Boards = (props) => {
             });
         }
     }, [successHandle]);
+    // const fajnf = store?.getBugsReducer?.data?.response
+    // console.log({ fajnf })
 
     const handelupdatetask = (ele) => {
         let body = {
@@ -219,54 +222,7 @@ const Boards = (props) => {
             handelupdatetask(result);
         }
     };
-    useEffect(() => {
-        if (successHandle?.data?.status == 200) {
-        dispatch(getAllTask({ sprintId: spriteId, searchString: '', assigneeId: assigneeId }));
-
-            setColumns({
-                [1]: {
-                    title: 'To-do',
-                    bgColor: 'red',
-                    items: successHandle?.data?.Response?.todo?.map((ele) => {
-                        return { ...ele, id: ele._id };
-                    }),
-                    count: successHandle?.data?.Response?.todoCount
-                },
-                [2]: {
-                    title: 'In Progress',
-                    bgColor: 'lightblue',
-                    items: successHandle?.data?.Response?.inProgress.map((ele) => {
-                        return { ...ele, id: ele._id };
-                    }),
-                    count: successHandle?.data?.Response?.inProgressCount
-                },
-                [3]: {
-                    title: 'Testing',
-                    bgColor: 'chocolate',
-                    items: successHandle?.data?.Response?.testing.map((ele) => {
-                        return { ...ele, id: ele._id };
-                    }),
-                    count: successHandle?.data?.Response?.testingCount
-                },
-                [5]: {
-                    title: 'Hold',
-                    bgColor: 'lime',
-                    items: successHandle?.data?.Response?.hold.map((ele) => {
-                        return { ...ele, id: ele._id };
-                    }),
-                    count: successHandle?.data?.Response?.holdCount
-                },
-                [4]: {
-                    title: 'Done',
-                    bgColor: 'green',
-                    items: successHandle?.data?.Response?.done.map((ele) => {
-                        return { ...ele, id: ele._id };
-                    }),
-                    count: successHandle?.data?.Response?.doneCount,
-                },
-            });
-        }
-    }, [successHandle]);
+    
     useEffect(() => {
         if (statushandle?.data?.status == 200) {
             closeModal('render');
@@ -403,7 +359,7 @@ const Boards = (props) => {
                                                         mileStoneId={milestoneId}
                                                         sprintId={spriteId}
                                                         closeModal={closeModal}
-                                                        showTaskDetailMOdel={showTaskDetailMOdel}
+                                                        isInProgressColumn={columnId == '2'}
                                                     />
                                                 ))}
                                                 {provided?.placeholder}

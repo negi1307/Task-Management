@@ -17,14 +17,12 @@ const Summary = () => {
     const [StatusCountDonut, setStatusCount] = useState([])
     console.log("PriorityGraphDtaaa", PriorityGraphDta)
     const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(getPriorityTaskBoard())
-        dispatch(getweekTaskBoard())
-        dispatch(getTaskStatusCount())
-        dispatch(getTaskCount())
-
-
-    }, [])
+    // useEffect(() => {
+    // dispatch(getPriorityTaskBoard())
+    // dispatch(getweekTaskBoard())
+    // dispatch(getTaskStatusCount())
+    // dispatch(getTaskCount())
+    // }, [])
     useEffect(() => {
         if (PriorityGraphDta?.data?.status == 200) {
             setPriorityGraph(PriorityGraphDta?.data?.response)
@@ -91,7 +89,7 @@ const Summary = () => {
 
     const apexDonutData = [44, 55, 41, 17];
     return (
-        <div className="all_bg add_height_task">
+        <div className="all_bg add_height_task" style={{ height: '100%' }}>
             <div className="container">
                 <div className="row">
                     <div className="col  border_clr  m-2 rounded-4 bg-white date">

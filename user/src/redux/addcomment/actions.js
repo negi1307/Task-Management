@@ -29,3 +29,8 @@ export const getCommentId = (data) => ({
     type: "getTaskId",
     payload: data
 })
+
+export const getBugs = (data): AuthAction => ({
+    type: Addcomment.GET_BUGS,
+    payload: data
+});
