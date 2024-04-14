@@ -21,7 +21,7 @@ const Create = ({ modal, CloseModal, id, data }) => {
         reset,
         formState: { errors },
     } = useForm();
-    console.log(data, '**************************************************************************');
+    // console.log(data, '**************************************************************************');
     const onSubmit = (val) => {
         let body = {
             project_id: data?._id,

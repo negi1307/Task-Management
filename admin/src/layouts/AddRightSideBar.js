@@ -25,7 +25,6 @@ export default function RightBar(props) {
     };
     const handleEndDate = (date) => {
         setEndDate(date);
-
     };
     const {
         register,
