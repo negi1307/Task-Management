@@ -117,7 +117,7 @@ const verifySeniority = async (req, res, next) => {
             const { _id, role } = user;
             req.user = { _id, role, };
 
-            if (req.user.role === 'Admin' || req.user.role === 'PM' || req.user.role === 'CTO') {
+            if (req.user.role === 'Admin' || req.user.role === 'PM' || req.user.role === 'CTO'|| req.user.role === 'Testing') {
                 next();
             } else {
                 return res.status(403).json({ message: 'Access denied. Only the authenciated users are allowed.' });

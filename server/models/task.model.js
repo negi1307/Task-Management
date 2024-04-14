@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const techCategory = require('./techCategory.model');
 
 const tasks = mongoose.model(
     'Task', mongoose.Schema({
@@ -81,6 +82,10 @@ const tasks = mongoose.model(
         lastUpdaterId: {
             type: mongoose.Types.ObjectId,
             ref: 'User'
+        },
+        label: {
+            type: mongoose.Types.ObjectId,
+            ref:'techCategory'
         }
     },
         {
