@@ -90,23 +90,8 @@ const Boards = (props) => {
 
 
     const assigneeId = localStorage.getItem('userId')
-    // console.log({ assigneeId })
     useEffect(() => {
-        // let body = {
-        //     flag: 1,
-        //     status: true,
-        //     searchString: '',
-        //     // projectId: projectId,
-        //     // milestoneId: milestoneId,
-        //     sprintId: spriteId,
-        //     skip: 1,
-        //     activeStatus: true,
-        //     assigneeId: assigneeId
-        // };
-
-        // dispatch(getAllTask(body));
         dispatch(getAllTask({ sprintId: spriteId, searchString: '', assigneeId: assigneeId }));
-
     }, []);
 
     useEffect(() => {
@@ -122,7 +107,6 @@ const Boards = (props) => {
 
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
-            // dispatch(getAllTask({ sprintId: spriteId, searchString: '', assigneeId: assigneeId }));
             setColumns({
                 [1]: {
                     title: 'To-do',
@@ -166,10 +150,7 @@ const Boards = (props) => {
                 },
             });
         }
-    }, [successHandle]);
-    // const fajnf = store?.getBugsReducer?.data?.response
-    // console.log({ fajnf })
-
+    }, [successHandle, dispatch]);
     const handelupdatetask = (ele) => {
         let body = {
             taskId: ele?.draggableId,
@@ -177,11 +158,9 @@ const Boards = (props) => {
         };
         dispatch(updateTaskStatus(body));
         setloader(false);
-        
-
     };
- 
 
+    const [BooleanUpdate, setBooleanUpdate] = useState(false);
     const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return;
         const { source, destination } = result;
@@ -206,6 +185,7 @@ const Boards = (props) => {
                 },
             });
             handelupdatetask(result);
+            setBooleanUpdate(true)
 
         } else {
             const column = columns[source.droppableId];
@@ -220,9 +200,10 @@ const Boards = (props) => {
                 },
             });
             handelupdatetask(result);
+            setBooleanUpdate(true)
         }
     };
-    
+
     useEffect(() => {
         if (statushandle?.data?.status == 200) {
             closeModal('render');
@@ -230,11 +211,20 @@ const Boards = (props) => {
             ToastHandle('error', statushandle?.data?.message);
         } else if (statushandle?.status !== 200) {
             ToastHandle('error', statushandle?.message?.error);
-            
+
         }
 
     }, [statushandle]);
-    
+
+    useEffect(() => {
+        if (BooleanUpdate) {
+            dispatch(getAllTask({ sprintId: spriteId, searchString: '', assigneeId: assigneeId }));
+        } else {
+            dispatch(getAllTask({ sprintId: spriteId, searchString: '', assigneeId: assigneeId }));
+        }
+        setBooleanUpdate(false);
+    }, [BooleanUpdate]);
+
 
     const historyData = store?.getHistoryData?.data?.response;
     const userId = store?.Auth?.user?.userId;
@@ -266,54 +256,15 @@ const Boards = (props) => {
         );
     };
 
-
-    // const callAlltaskData = () => {
-    //     let body = {
-    //         flag: 1,
-    //         status: true,
-    //         searchString: '',
-    //         projectId: projectId,
-    //         milestoneId: milestoneId,
-    //         sprintId: '66026a52b110e4325bc04618',
-    //         skip: 1,
-    //         activeStatus: '',
-    //     };
-    //     dispatch(getAllTask(body));
-    // };
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
         }
     };
 
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
-    // const selectTask = (e) => {
-    //     if (e.target.value !== '') {
-    //         setTimeout(() => {
-    //             let body = {
-    //                 flag: 1,
-    //                 status: true,
-    //                 searchString: e.target.value,
-    //                 projectId: projectId,
-    //                 milestoneId: milestoneId,
-    //                 sprintId: '66026a52b110e4325bc04618',
-    //                 skip: 1,
-    //                 activeStatus: '',
-    //             };
-    //             dispatch(getAllTask(body));
-    //         }, 500);
-    //     }
-    // };
     return (
         <>
             <div className="status">
-              
-               
-
-              
                 <div className="search_info ms-auto">
                     <input
                         type="search"
@@ -325,7 +276,7 @@ const Boards = (props) => {
                         className="border-0 rounded-2"
                     // onKeyUp={selectTask}
                     />
-                 
+
                 </div>
             </div>
 
@@ -348,7 +299,7 @@ const Boards = (props) => {
 
                                         >
                                             <TaskList>
-                                                <Title className='text-dark fw-bold' >{column.title}   <span className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</span></Title>
+                                                <Title className='text-dark fw-bold ' style={{position:'sticky',top:'0',zIndex:'2', backgroundColor:'#F3F3F3'}} >{column.title}   <span className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</span></Title>
                                                 {column.items?.map((item, index) => (
                                                     <TaskCard
                                                         key={item.id}
