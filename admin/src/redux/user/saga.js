@@ -1,7 +1,7 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 
 import USERS_TYPES from './constant';
-import { InviteUserApi, deleteUserApi, getCsvDataApi, getallRolesApi, getallUsersApi } from './api';
+import { InviteUserApi, deleteUserApi, getCsvDataApi, getallCategoryApi, getallRolesApi, getallUsersApi } from './api';
 
 function* getAllUsersFunction({ payload }) {
     try {
@@ -29,6 +29,37 @@ function* getAllUsersFunction({ payload }) {
     } catch (error) {
         yield put({
             type: USERS_TYPES.GET_ALL_USERS_ERROR,
+            payload: { message: error?.message },
+        });
+    }
+}
+function* getAllCategoryFunction({ payload }) {
+    try {
+        yield put({
+            type: USERS_TYPES.GET_ALL_CATEGORY_LOADING,
+            payload: {},
+        });
+        const response = yield call(getallCategoryApi, { payload });
+        console.log(response,'4555')
+
+        if (response.data.status) {
+            yield put({
+                type: USERS_TYPES.GET_ALL_CATEGORY_SUCCESS,
+                payload: { ...response.data },
+            });
+            // yield put({
+            //     type: USERS_TYPES.GET_ALL_USERS_RESET,
+            //     payload: {},
+            // });
+        } else {
+            yield put({
+                type: USERS_TYPES.GET_ALL_CATEGORY_ERROR,
+                payload: { ...response.data },
+            });
+        }
+    } catch (error) {
+        yield put({
+            type: USERS_TYPES.GET_ALL_CATEGORY_ERROR,
             payload: { message: error?.message },
         });
     }
@@ -163,6 +194,9 @@ function* getCsvFunction({ payload }) {
 export function* getAllUsersSaga(): any {
     yield takeEvery(USERS_TYPES.GET_ALL_USERS, getAllUsersFunction);
 }
+export function* getAllCategorySaga(): any {
+    yield takeEvery(USERS_TYPES.GET_ALL_CATEGORY, getAllCategoryFunction);
+}
 export function* deleteUserSaga(): any {
     yield takeEvery(USERS_TYPES.DELETE_USER, deleteUserFunction);
 }
@@ -178,6 +212,7 @@ export function* getCsvSaga(): any {
 function* AllUsersSaga(): any {
     yield all([
         fork(getAllUsersSaga),
+        fork(getAllCategorySaga),
         fork(getAllRolesSaga),
         fork(deleteUserSaga),
         fork(inviteuserSaga),

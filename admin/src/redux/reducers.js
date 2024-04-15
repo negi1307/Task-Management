@@ -43,7 +43,7 @@ import {
     getTaskId,
     updateCommentReducer, getAssignUserReducer, getHistoryReducer, getReporterReducer, getBugsReducer, getSubTaskReducer,
 } from './task/reducer';
-import { getAllUsers, deleteUser, createUser, getAllRoles, getCsvDataReducer } from './user/reducer';
+import { getAllUsers,getAllCategory, deleteUser, createUser, getAllRoles, getCsvDataReducer } from './user/reducer';
 import { getTaskSummaryReducer, getPriorityGraphReducer, getTaskWeekCountReducer } from './Summary/reducer';
 import {
     createTechnologyReducer,
@@ -76,6 +76,7 @@ export default (combineReducers({
     createTaskReducer,
     updateMilestone,
     getAllUsers,
+    getAllCategory,
     deleteUser,
     updateSprint,
     getSigleMileStone,

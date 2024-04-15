@@ -5,6 +5,10 @@ const api = new APICore()
 export function getallUsersApi(data): any {
     return api.get(URL.ALL_USERS, data.payload)
 }
+export function getallCategoryApi(data): any {
+    console.log(data,'pankaj')
+    return api.get(`${URL.ALL_CATEGORY}${data.payload.status}`)
+}
 export function deleteUserApi(data): any {
     return api.delete(`${URL.deleteUsers}?userId=${data.payload}`),
     console.log(data,'*******************************************')
