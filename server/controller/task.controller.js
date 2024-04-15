@@ -40,6 +40,11 @@ const createtask = async (req, res) => {
         lastUpdaterId: req.user._id,
         label
       });
+      // const project = await projectModel.findById(projectId);
+      // if (!project.userId.includes(assigneeId)) {
+      //   project.userId.push(assigneeId);
+      //   await project.save();
+      // }
       await userHistory(req, "Created Task");
       return res.status(200).json({ status: "200", message: "Task created successfully", response: task });
     }
@@ -67,6 +72,16 @@ const getTasks = async (req, res) => {
       {
         $match: conditionMatch
       },
+      {
+        $lookup: {
+          from: "techcategories",
+          localField: "label",
+          foreignField: "_id",
+          as: "technology"
+        }
+      },
+      { $unwind: "$technology" },
+
       {
         $lookup: {
           from: "projects",
@@ -121,15 +136,7 @@ const getTasks = async (req, res) => {
         },
       },
       { $unwind: "$lastUpdaterInfo" },
-      {
-        $lookup: {
-          from: "techcategories",
-          localField: "label",
-          foreignField: "_id",
-          as: "technology"
-        }
-      },
-      { $unwind: "$technology" },
+
       {
         $project: {
           "projects._id": 1,
@@ -404,6 +411,17 @@ const getTasksAccToStatus = async (req, res) => {
         }
       },
       {
+        $lookup: {
+          from: "techcategories",
+          localField: "label",
+          foreignField: "_id",
+          as: "technology"
+        }
+      },
+      {
+        $unwind: "$technology"
+      },
+      {
         $project: {
           "projects._id": 1,
           "projects.projectName": 1,
@@ -425,6 +443,7 @@ const getTasksAccToStatus = async (req, res) => {
           attachmentType: 1,
           createdAt: 1,
           updatedAt: 1,
+          // label: 1,
           daysLeft: {
             $toInt: {
               $max: [
@@ -450,7 +469,9 @@ const getTasksAccToStatus = async (req, res) => {
           "lastUpdaterInfo.firstName": 1,
           "lastUpdaterInfo.lastName": 1,
           "lastUpdaterInfo.role": 1,
-          comments: 1
+          comments: 1,
+          "technology._id": 1,
+          "technology.name": 1,
         }
       },
       { $sort: { createdAt: -1 } },
@@ -628,7 +649,7 @@ const getTasksWeekCount = async (req, res) => {
     }
 
     const now = new Date();
-    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // Calculate the date 7 days ago
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
     if (req.user.role === 'Admin') {
       const doneCount = await taskModel.countDocuments({ ...taskQuery, status: 4, createdAt: { $gte: sevenDaysAgo } });
