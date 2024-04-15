@@ -19,8 +19,12 @@ import ToastHandle from '../../../constants/toaster/toaster';
 import { Row, Col, Card, Button, Alert, CloseButton, Table } from 'react-bootstrap';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 import noimage from '../../../assets/images/noimage.png';
+import { getSingleSprint } from '../../../redux/actions';
 const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
+    console.log(editData,'edit4444')
     const store = useSelector((state) => state);
+    const technology = store?.getSingleSprintTask?.data?.response;
+    console.log(technology,'technology')
     const dispatch = useDispatch();
     const [connectComponent, setConnectComponent] = useState('All');
     const [buttonChange, setButtonChange] = useState(true);
@@ -44,6 +48,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
             dispatch(getHistoryAction(editData?.id));
         }
     };
+ 
 
 
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
@@ -785,6 +790,11 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Assignee :</th>
                                             <td>{editData?.assigneeInfo?.firstName} {editData?.assigneeInfo?.lastName}</td>
                                         </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Technology :</th>
+                                            <td>{editData?.technology?.name} </td>
+                                        </tr>
+                                        
                                         <tr className='text-start'>
                                             <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Reporter :</th>
                                             <td>{editData?.reporterInfo?.firstName} {editData?.reporterInfo?.lastName}</td>
