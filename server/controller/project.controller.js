@@ -161,4 +161,106 @@ const projectTotalTime = async (req, res) => {
   }
 }
 
-module.exports = { addProject, getProjects, updateProject, uploadProject_File, getallProject, allProjectFiles, projectTotalTime };
+
+// users projects record
+// const getUsersProjects = async (req, res) => {
+//   try {
+//     const userIds = await taskModel.distinct("assigneeId");
+//     const userProjects = {};
+//     for (const userId of userIds) {
+//       const userTasks = await taskModel.find({ assigneeId: userId }).populate('assigneeId').populate('projectId');
+
+
+//     console.log(userTasks, "/////////////")
+
+//     const projectIds = Array.from(new Set(userTasks.map(task => task.projectId)));
+//       userProjects[userId] = projectIds;
+//       console.log(projectIds,"=========================")
+//     }
+
+//     return res.status(200).json({ status: 200, message: "Users' projects retrieved successfully", userProjects: userProjects });
+//   } catch (error) {
+//     return res.status(500).json({ status: 500, message: "Something went wrong", error: error.message });
+//   }
+// }
+
+
+
+// const getUsersProjects = async (req, res) => {
+//   try {
+//     const userIds = await taskModel.distinct("assigneeId");
+//     const userProjects = {};
+
+//     for (const userId of userIds) {
+//       const userTasks = await taskModel.aggregate([
+//         { $match: { assigneeId: userId } },
+//         { $lookup: { from: "users", localField: "assigneeId", foreignField: "_id", as: "assigneeInfo" } },
+//         { $unwind: "$assigneeInfo" },
+//         { $lookup: { from: "projects", localField: "projectId", foreignField: "_id", as: "projectInfo" } },
+//         { $unwind: "$projectInfo" },
+//         {
+//           $project: {
+//             "assigneeInfo._id": 1,
+//             "assigneeInfo.firstName": 1,
+//             "assigneeInfo.lastName": 1,
+//             "projectInfo._id": 1,
+//             "projectInfo.name": 1,
+//             "projectInfo.projectStatus": 1,
+//             "projectInfo.projectType": 1
+//           }
+//         }
+//       ]);
+
+//       console.log(userTasks)
+//       const projectIds = Array.from(new Set(userTasks.map(task => task.projectId)));
+//       userProjects[userId] = projectIds;
+//     }
+
+//     return res.status(200).json({ status: 200, message: "Users' projects retrieved successfully", userProjects: userProjects });
+//   } catch (error) {
+//     return res.status(500).json({ status: 500, message: "Something went wrong", error: error.message });
+//   }
+// }
+
+const getUsersProjects = async (req, res) => {
+  try {
+    const userIds = await taskModel.distinct("assigneeId");
+    const userProjects = {};
+
+    for (const userId of userIds) {
+      const userTasks = await taskModel.aggregate([
+        { $match: { assigneeId: userId } },
+        { $lookup: { from: "users", localField: "assigneeId", foreignField: "_id", as: "assigneeInfo" } },
+        { $unwind: "$assigneeInfo" },
+        { $lookup: { from: "projects", localField: "projectId", foreignField: "_id", as: "projectInfo" } },
+        { $unwind: "$projectInfo" },
+        {
+          $group: {
+            _id: "$assigneeId",
+            assigneeFirstName: { $first: "$assigneeInfo.firstName" },
+            assigneeLastName: { $first: "$assigneeInfo.lastName" },
+            projects: {
+              $addToSet: {
+                projectId: "$projectInfo._id",
+                projectName: "$projectInfo.projectName",
+                projectStatus: "$projectInfo.projectStatus",
+                projectType: "$projectInfo.projectType"
+              }
+            }
+          }
+        }
+      ]);
+
+      userProjects[userId] = userTasks.length > 0 ? userTasks[0] : { _id: userId, assigneeFirstName: '', assigneeLastName: '', projects: [] };
+    }
+
+    return res.status(200).json({ status: 200, message: "Users' projects retrieved successfully", userProjects: userProjects });
+  } catch (error) {
+    return res.status(500).json({ status: 500, message: "Something went wrong", error: error.message });
+  }
+}
+
+
+
+
+module.exports = { addProject, getProjects, updateProject, uploadProject_File, getallProject, allProjectFiles, projectTotalTime, getUsersProjects };

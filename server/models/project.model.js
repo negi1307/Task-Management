@@ -34,7 +34,11 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             preSalesId: {
                 type: mongoose.Types.ObjectId,
                 ref: "preSales"
-            }
+            },
+            // userId:[{
+            //     type:mongoose.Schema.Types.ObjectId,
+            //     ref:"users"
+            // }]
         },
         {
             timestamps: true,
