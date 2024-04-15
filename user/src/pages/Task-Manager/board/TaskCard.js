@@ -43,7 +43,7 @@ const TaskInformation = styled.div`
         color: #7d7d7d;
     }
 `;
-const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressColumn }) => {
+const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressColumn, onTaskStart }) => {
     const store = useSelector(state => state)
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
@@ -70,7 +70,7 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     useEffect(() => {
         let timer;
         const isTaskInProgress = localStorage.getItem(`task_${item._id}_inProgress`);
-        setIsPlay(isTaskInProgress === 'true'); // Update isPlay state based on local storage value
+        setIsPlay(isTaskInProgress === 'true');
 
 
         return () => clearInterval(timer);
@@ -118,15 +118,12 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
         dispatch(addLoginTime({ taskId: item?._id }))
         setIsPlay(true);
         localStorage.setItem(`task_${item?._id}_inProgress`, 'true');
-        // console.log('========start', new Date())
     }
     const stopTime = (e) => {
         let stoptask = item?._id;
         dispatch(addLoginTimeStop(stoptask));
         setIsPlay(false);
         localStorage.removeItem(`task_${item?._id}_inProgress`);
-        // console.log('=======endtime', new Date())
-
     }
 
     const formatTime = (milliseconds) => {
@@ -137,10 +134,9 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
         const millis = duration.milliseconds().toString().padStart(3, '0');
         return `${hours}:${minutes}:${seconds}.${millis}`;
     };
-
     return (
         <>
-           <Draggable key={item?.id} draggableId={item?.id} index={index} style={{ width: '260px', }}>
+            <Draggable key={item?.id} draggableId={item?.id} index={index} style={{ width: '260px', }}>
                 {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                         <TaskInformation className=" mt-2 shadow-lg mx-auto rounded-4  " style={{ width: '250px', marginTop: '1px' }}>

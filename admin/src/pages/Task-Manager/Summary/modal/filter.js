@@ -1,56 +1,31 @@
 import * as React from 'react';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { Modal, Row, Col, Button, Form } from 'react-bootstrap';
+import { Modal, Row, Col, Form } from 'react-bootstrap';
 import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import { useForm } from 'react-hook-form';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Chip from '@mui/material/Chip';
+import { useForm } from "react-hook-form";
 import DatePicker from 'react-datepicker';
 import { useState } from 'react';
-import { getAllUsers } from '../../../../redux/actions'
+import { getAllUsers } from '../../../../redux/actions';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import { getUserRecord } from '../../../../redux/timeTracker/action';
 import Multiselect from 'multiselect-react-dropdown';
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
-
-function getStyles(name, personName, theme) {
-    return {
-        fontWeight:
-            personName.indexOf(name) === -1
-                ? theme.typography.fontWeightRegular
-                : theme.typography.fontWeightMedium,
-    };
-}
+import { CSVLink } from "react-csv";
 
 const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    // const [personName, setPersonName] = useState([]);
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
-    // const [assignee, setAssignee] = useState();
     const [selectedValues, setSelectedValues] = useState([]);
-    const [userId, setUserId] = useState(null); // State to store the selected userId
+    const [userId, setUserId] = useState(null);
+    const [filterPayload, setfilterPayload] = useState();
+    const [isSubmitted, setIsSubmitted] = useState(false); // State to track form submission
 
-    const users = store?.getAllUsers?.data?.response
-    const getTechnology = store?.getAllTechnologyReducer?.data?.response;
+    const users = store?.getAllUsers?.data?.response;
+    const successHandle = store?.getUserRecordReducer;
+
     const today = new Date();
     const {
         register,
@@ -58,62 +33,74 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
         reset,
         formState: { errors },
     } = useForm();
+
     const handleStartDate = (date) => {
         const threeMonthsAgo = new Date();
         threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
         if (date < threeMonthsAgo) {
-            ToastHandle('error', 'Only past three months data is available.')
+            ToastHandle('error', 'Only past three months data is available.');
             return;
         }
 
         setStartDate(date);
-        console.log({ startDate });
     };
 
-
+    useEffect(() => {
+        dispatch(getAllUsers());
+    }, [dispatch]);
 
     const handleEndDate = (date) => {
         const threeMonthsAgo = new Date();
         threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
         if (date < threeMonthsAgo) {
-            ToastHandle('error', 'Please select a date within the past three months.')
+            ToastHandle('error', 'Please select a date within the past three months.');
             return;
         }
         setEndDate(date);
     };
+
     const onSubmit = (e) => {
-        let body = new FormData();
-        body.append('startDate', startDate);
-        body.append('dueDate', endDate);
-        body.append('userId', userId);
+        setIsSubmitted(true); // Set form submission state to true
+        let body = {
+            startTime: startDate,
+            endTime: endDate,
+            userId: userId
+        };
         if (startDate !== '' && endDate !== '') {
             dispatch(getUserRecord(body));
-            ToastHandle('success', 'Task created successfully');
         }
-    }
-
+    };
 
     const onSelect = (selectedList, selectedItem) => {
         setUserId(selectedItem.id); // Set the selected userId
     };
-
-    useEffect(() => {
-        dispatch(getAllUsers());
-    }, [dispatch])
-    // console.log(store?.getUserRecordReducer, 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
 
     const options = users?.map(user => ({
         id: user._id,
         name: `${user.firstName} ${user.lastName}`
     }));
 
+    const usersData = store?.getUserRecordReducer?.data?.data;
+
     const handleClose = () => {
         setfilterModal(false);
         closeFilter();
         reset();
     };
+
+    let csvData = [];
+    if (Array.isArray(usersData)) {
+        csvData = usersData.map(data => ({
+            userName: data?.assigneeId?.firstName + ' ' + data?.assigneeId?.lastName,
+            taskMannualId: data?.taskMannualId,
+            Projectname: data?.projectId?.projectName ? data?.projectId?.projectName : '',
+        }));
+    } else {
+        console.error("usersData is not an array or not defined");
+    }
+
     return (
         <Modal show={showFilter} onHide={handleClose} size="lg">
             <Row>
@@ -134,7 +121,6 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
                                 options={options}
                                 selectedValues={selectedValues}
                                 onSelect={onSelect}
-                                // onRemove={onRemove}
                                 displayValue="name"
                             />
                         </Col>
@@ -148,10 +134,8 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
 
                                 <DatePicker
                                     selected={startDate}
-                                    // onChange={(date) => setStartDate(date)}
                                     onChange={(date) => handleStartDate(date)}
                                     placeholderText="mm-dd-yyyy"
-                                    // minDate={today}
                                     className="add_width_input"
                                 />
                             </Form.Group>
@@ -167,7 +151,6 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
                                 <DatePicker
                                     selected={endDate}
                                     disabled={startDate == '' || startDate == undefined}
-                                    // onChange={(date) => setEndDate(date)}
                                     onChange={(date) => handleEndDate(date)}
                                     placeholderText="mm-dd-yyyy"
                                     minDate={startDate}
@@ -177,13 +160,19 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
                         </Col>
                     </Row>
                     <Row>
-                        <Button type='submit' className='mybutton btn p-1 fw-bold py-1 web_button'>
-                            Get Data
-                        </Button>
+                        {/* <CSVLink data={csvData} onClick={onSubmit} className='mybutton btn p-1 fw-bold py-1 web_button'>Download Users Data</CSVLink> */}
+
+                        {isSubmitted ? (
+                            <CSVLink data={csvData} className='mybutton btn p-1 fw-bold py-1 web_button'>Download</CSVLink>
+                        ) : (
+                            <button type="submit" className="mybutton btn p-1 fw-bold py-1 web_button" disabled={isSubmitted}>Export</button>
+                        )}
+
                     </Row>
                 </Form>
             </Modal.Body>
         </Modal>
     );
 };
+
 export default FilterModal;
