@@ -1,5 +1,6 @@
 const projectModel = require("../models/project.model");
 const projectupload = require('../models/projectupload.model');
+const taskModel = require("../models/task.model")
 const { userHistory } = require('../controller/history.controller');
 
 // Add a new Project
@@ -126,10 +127,38 @@ const allProjectFiles = async (req, res) => {
     res.status(200).json({ status: '200', message: 'Project file get Successfully', response: allProjectFiles, totalCount, totalPages })
   } catch (error) {
     return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message })
-
   }
 };
 
 
 
-module.exports = { addProject, getProjects, updateProject, uploadProject_File, getallProject, allProjectFiles };
+// total time in a project
+const projectTotalTime = async (req, res) => {
+  try {
+    const projectId = req.query.projectId;
+    const project = await taskModel.find({ projectId: projectId });
+    let totalHours = 0;
+    let totalMinutes = 0;
+    let totalSeconds = 0;
+    project.forEach(task => {
+      if (task.timeTracker) {
+        const timeParts = task.timeTracker.split(' ');
+        totalHours += parseInt(timeParts[0]) || 0;
+        totalMinutes += parseInt(timeParts[2]) || 0;
+        totalSeconds += parseInt(timeParts[4]) || 0;
+      }
+    });
+
+    totalMinutes += Math.floor(totalSeconds / 60);
+    totalSeconds %= 60;
+    totalHours += Math.floor(totalMinutes / 60);
+    totalMinutes %= 60;
+
+    const totalTime = `${totalHours} hours ${totalMinutes} minutes ${totalSeconds} seconds`;
+    return res.status(200).json({ status: 200, message: "Project total time calculated", totalTime, project })
+  } catch (error) {
+    return res.status(500).json({ status: 500, message: "Something went wrong", error: error.message })
+  }
+}
+
+module.exports = { addProject, getProjects, updateProject, uploadProject_File, getallProject, allProjectFiles, projectTotalTime };

@@ -11,7 +11,7 @@ const breakTimeModel = require("../models/userLogin.model")
 // Create or add tasks
 const createtask = async (req, res) => {
   try {
-    const { projectId, milestoneId, sprintId, summary, description, priority, expectedHours, startDate, dueDate, assigneeId, reporterId } = req.body;
+    const { projectId, milestoneId, sprintId, summary, description, priority, expectedHours, startDate, dueDate, assigneeId, reporterId, label } = req.body;
     const existingTask = await taskModel.findOne({
       summary: new RegExp(`^${summary.replace(/[\s]+/g, '\\s*')}\\s*$`, 'i'),
       sprintId: sprintId
@@ -37,7 +37,8 @@ const createtask = async (req, res) => {
         attachmentType: fileExtension,
         reporterId,
         assigneeId,
-        lastUpdaterId: req.user._id
+        lastUpdaterId: req.user._id,
+        label
       });
       await userHistory(req, "Created Task");
       return res.status(200).json({ status: "200", message: "Task created successfully", response: task });
@@ -121,6 +122,15 @@ const getTasks = async (req, res) => {
       },
       { $unwind: "$lastUpdaterInfo" },
       {
+        $lookup: {
+          from: "techcategories",
+          localField: "label",
+          foreignField: "_id",
+          as: "technology"
+        }
+      },
+      { $unwind: "$technology" },
+      {
         $project: {
           "projects._id": 1,
           "projects.projectName": 1,
@@ -167,6 +177,8 @@ const getTasks = async (req, res) => {
           "lastUpdaterInfo.firstName": 1,
           "lastUpdaterInfo.lastName": 1,
           "lastUpdaterInfo.role": 1,
+          "technology._id": 1,
+          "technology.name": 1,
         }
       },
       { $sort: { createdAt: -1 } },
@@ -183,7 +195,7 @@ const getTasks = async (req, res) => {
 // Update Task
 const updateTask = async (req, res) => {
   try {
-    const { taskId, summary, description, priority, expectedHours, startDate, dueDate, activeStatus, attachment } = req.body;
+    const { taskId, summary, description, priority, expectedHours, startDate, dueDate, activeStatus, attachment, label } = req.body;
     const attachmentPath = req.file ? `http://localhost:8000/upload/${req.file.originalname}` : attachment;
     const fileExtension = req.file ? req.file.mimetype : undefined;
     const obj = {
@@ -196,7 +208,8 @@ const updateTask = async (req, res) => {
       activeStatus,
       attachment: attachmentPath,
       attachmentType: fileExtension,
-      lastUpdaterId: req.user._id
+      lastUpdaterId: req.user._id,
+      label,
     };
     await taskModel.findByIdAndUpdate(taskId, obj, { new: true });
     const task = await taskModel.findById(taskId)
