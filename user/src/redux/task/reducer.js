@@ -142,6 +142,7 @@ export const getAllAssigneeName = (state = GET_All_ASSIGNEE_INITIAL_STATE, actio
 
 export const UpdateTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) => {
     switch (action.type) {
+
         case TASK_TYPES.UPDATE_TASK_LOADING:
             return {
                 data: GET_All_TASK_INITIAL_STATE.data,

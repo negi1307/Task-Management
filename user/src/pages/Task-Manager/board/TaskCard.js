@@ -140,7 +140,7 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
 
     return (
         <>
-            <Draggable key={item?.taskInfo?._id} draggableId={item?.taskInfo?._id} index={index} style={{ width: '260px' }}>
+           <Draggable key={item?.id} draggableId={item?.id} index={index} style={{ width: '260px', }}>
                 {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                         <TaskInformation className=" mt-2 shadow-lg mx-auto rounded-4  " style={{ width: '250px', marginTop: '1px' }}>
