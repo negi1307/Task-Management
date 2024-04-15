@@ -25,6 +25,14 @@ const users = mongoose.model(
     role: {
       type: String,
       enum: ['Admin', 'Employee', 'CTO', 'PM', 'Sales', 'Testing']
+    },
+    designationId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "techcategories"
+    },
+    technologyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "technologies"
     }
   },
     {

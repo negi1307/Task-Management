@@ -9,7 +9,7 @@ const { userHistory } = require('../controller/history.controller');
 // Register a user or invite a user 
 const registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, role } = req.body;
+    const { firstName, lastName, email, password, role,designationId,technologyId } = req.body;
     if ((role === 'CTO' || role === 'PM') && (await userModel.findOne({ role }))) {
       return res.status(200).json({ status: "400", message: `${role} already exists` });
     }
@@ -26,7 +26,9 @@ const registerUser = async (req, res) => {
           email,
           password: hashedPassword,
           plainPassword: password,
-          role
+          role,
+          designationId,
+          technologyId
         });
         if (result) {
           await nodemailer.emailSender(result);
@@ -347,6 +349,9 @@ const trackTime = async (req, res) => {
 //     ],
 //   },
 // },
+
+
+
 
 // list of assignees
 const getAssigneesList = async (req, res) => {

@@ -14,6 +14,7 @@ projectRoute.post("/upload", verifyAdmin, taskAttachmentUpload.single('project')
 projectRoute.get("/getProjectName", verifyAdmin, projectPath.getallProject);
 // projectRoute.get("/download/:filename",projectPath.download);
 projectRoute.get("/files", verifyAdmin, projectPath.allProjectFiles);
-projectRoute.get("/projectTime",projectPath.projectTotalTime);
+projectRoute.get("/projectTime", projectPath.projectTotalTime);
+projectRoute.get("/usersProjects", projectPath.getUsersProjects)
 
 module.exports = projectRoute;
