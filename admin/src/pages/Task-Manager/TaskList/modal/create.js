@@ -9,7 +9,7 @@ import { createTask } from '../../../../redux/task/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { getSingleSprint, getsingleMileStone, getReporterAction } from '../../../../redux/actions';
+import { getSingleSprint, getsingleMileStone, getReporterAction, getAllCategory } from '../../../../redux/actions';
 import moment from 'moment';
 import pdfImage from '../../../../../src/assets/images/pdf.png';
 import DatePicker from 'react-datepicker';
@@ -74,6 +74,7 @@ const Create = ({ modal, CloseModal }) => {
         body.append('summary', e.summary);
         body.append('description', e.description);
         body.append('assigneeId', e.Assignee);
+        body.append('label', e.label);
         body.append('priority', e.Priority);
         body.append('reporterId', e.Reporter);
         body.append('startDate', startDate);
@@ -91,6 +92,7 @@ const Create = ({ modal, CloseModal }) => {
         setValue('Sprint', '');
         setValue('summary', '');
         setValue('Assignee', '');
+        setValue('label', '');
         setValue('Reporter', '');
         setValue('Priority', '');
         setSelectedFile("")
@@ -108,6 +110,7 @@ const Create = ({ modal, CloseModal }) => {
         setValue('Sprint', '');
         setValue('summary', '');
         setValue('Assignee', '');
+        setValue('label', '');
         setValue('Reporter', '');
         setValue('Priority', '');
         setEndDate("")
@@ -136,6 +139,7 @@ const Create = ({ modal, CloseModal }) => {
     }
     useEffect(() => {
         dispatch(getReporterAction())
+        dispatch(getAllCategory({status:true}));
     }, [])
     const reporter = store?.getReporterReducer?.data?.reporterList
     return (
@@ -304,6 +308,28 @@ const Create = ({ modal, CloseModal }) => {
                                 </Row>
                             </Col>
                             <Col lg={12}>
+                                        <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                            <Form.Label>
+                                                {' '}
+                                                label <span className="text-danger">*</span>:
+                                            </Form.Label>
+
+                                            <Form.Select {...register('label', { required: true })}>
+                                                <option value={''}>--Select--</option>
+                                                {store?.getAllCategory?.data?.response?.map((ele, ind) => (
+                                                    <option value={ele?._id}>
+                                                        {' '}
+                                                        {ele?.name}
+                                                    </option>
+                                                ))}
+                                            </Form.Select>
+                                            {errors.label?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
+                                        </Form.Group>
+                                    </Col>
+                               
+                            <Col lg={12}>
                                 <Row>
 
                                     <Col lg={6}>
@@ -368,7 +394,7 @@ const Create = ({ modal, CloseModal }) => {
                                                 // onChange={(date) => setEndDate(date)}
                                                 onChange={(date) => handleEndDate(date)}
                                                 placeholderText="mm-dd-yyyy"
-                                                minDate={startDate}
+                                                // minDate={startDate}
                                                 className="add_width_input"
                                             />
                                         </Form.Group>

@@ -1,11 +1,12 @@
 import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
+import { Row, Col, Card, Button, Alert, CloseButton, Table } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { Col, Row, Form, Button } from 'react-bootstrap';
 import moment from 'moment';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { addComment, getComment, updateComment, deleteComment, getBugs, getCommentId, getHistory } from '../../../redux/addcomment/actions';
+import { addComment, getComment, updateComment, deleteComment,getSubTask, getBugs, getCommentId, getHistory } from '../../../redux/addcomment/actions';
 import Attachments from './../../apps/Tasks/Details/Attachments';
 
 const Taskdetail = (props) => {
@@ -14,6 +15,8 @@ const Taskdetail = (props) => {
     // console.log(item, 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    const bugsdata = store?.getBugsReducer?.data?.response
+    console.log(bugsdata,'bugsdata')
     const [inputForUpdate, setInputForUpdate] = useState('');
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
     const [updatedCommentValue, setUpdatedCommentValue] = useState('');
@@ -44,7 +47,10 @@ const Taskdetail = (props) => {
         // }
     };
     useEffect(() => {
-        dispatch(getComment({ taskId: item?._id }))
+        // dispatch(getComment({ taskId: item?._id }))
+        const taskId = '661cd6a8ef778e3e2610d72b';
+        dispatch(getBugs({ taskId, type: "Bug" }));
+        dispatch(getSubTask({ taskId, type: "SubTask" }));
     }, [dispatch])
     const onSubmitComment = (e) => {
         if (e.commentId !== "") {
@@ -229,9 +235,117 @@ const Taskdetail = (props) => {
                             ) : connectComponent === 'History' ? (
                                 <div>HISTORY</div>
                             ) : connectComponent === 'Subtask' ? (
-                                <div>Subtasks</div>
+                                <Table className="mb-0 add_Color_font" striped>
+                                <thead>
+                                    <tr>
+                                        <th className='fw-bold'>#</th>
+                                        <th className='fw-bold'>Summary</th>
+                                        <th className='fw-bold'>Decription</th>
+                                        <th className='fw-bold'>Assignee</th>
+                                        <th className='fw-bold'>Priority</th>
+                                        <th className='fw-bold'>Start Date</th>
+                                        <th className='fw-bold'>End Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    {store?.getSubTaskReducer?.data?.response?.map((bug, ind) => {
+                                        return (
+                                            <tr className="align-middle">
+                                                <th>{ind + 1}</th>
+
+                                                <td>
+                                                    <span title={bug?.summary}>
+                                                        {bug?.summary.slice(0, 8)}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.expectedHours}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.priority}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.startDate.slice(0, 10)}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.dueDate.slice(0, 10)}
+                                                    </span>
+                                                </td>
+
+
+                                            </tr>
+                                        );
+                                    })}
+
+                                </tbody>
+                            </Table>
                             ) : connectComponent === 'Bugs' ? (
-                                <div>NUGS</div>
+                                <Table className="mb-0 add_Color_font" striped>
+                                <thead>
+                                    <tr>
+                                        <th className='fw-bold'>#</th>
+                                        <th className='fw-bold'>Summary</th>
+                                        <th className='fw-bold'>Decription</th>
+                                        <th className='fw-bold'>Assignee</th>
+                                        <th className='fw-bold'>Priority</th>
+                                        <th className='fw-bold'>Start Date</th>
+                                        <th className='fw-bold'>End Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    {bugsdata?.map((bug, ind) => {
+                                        return (
+                                            <tr className="align-middle">
+                                                <th>{ind + 1}</th>
+
+                                                <td>
+                                                    <span title={bug?.summary}>
+                                                        {bug?.summary.slice(0, 8)}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.expectedHours}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.priority}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.startDate.slice(0, 10)}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.dueDate.slice(0, 10)}
+                                                    </span>
+                                                </td>
+
+
+                                            </tr>
+                                        );
+                                    })}
+
+                                </tbody>
+                            </Table>
                             ) : (
                                 ''
                             )}
@@ -267,6 +381,10 @@ const Taskdetail = (props) => {
                                         <tr className='text-start'>
                                             <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Assignee :</th>
                                             <td>{props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Technology :</th>
+                                            <td>{props?.item?.technology?.name} </td>
                                         </tr>
                                         <tr className='text-start'>
                                             <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Reporter :</th>

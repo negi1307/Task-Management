@@ -146,7 +146,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId, }) => {
                                                 disabled={startDate == '' || startDate == undefined}
                                                 onChange={(date) => handleEndDate(date)}
                                                 placeholderText="mm-dd-yyyy"
-                                                minDate={startDate}
+                                                // minDate={startDate}
                                                 className="add_width_input"
                                             />
                                         </Form.Group>

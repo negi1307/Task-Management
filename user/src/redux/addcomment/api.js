@@ -31,5 +31,11 @@ export function getTaskCommentApi(data): any {
 }
 export function getBugsApi(data): any {
     const { taskId, type } = data?.payload;
+    console.log(data,'33333333333')
     return api.get(`${URL.getBugs}&type=${type}&taskId=${taskId}`);
+}
+export function getSubTaskApi(data): any {
+    const { taskId } = data?.payload;
+    console.log(data, 'apiiiiiii')
+    return api.get(`${URL.getSubTask}&type=${'SubTask'}&taskId=${taskId}`);
 }

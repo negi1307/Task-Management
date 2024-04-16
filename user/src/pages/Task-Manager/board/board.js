@@ -318,6 +318,7 @@ const Boards = (props) => {
                                                         mileStoneId={milestoneId}
                                                         sprintId={spriteId}
                                                         closeModal={closeModal}
+                                                        showTaskDetailMOdel={showTaskDetailMOdel}
                                                         isInProgressColumn={columnId == '2'}
                                                         onTaskStart={handleTaskStart} // Pass the callback function
                                                     />

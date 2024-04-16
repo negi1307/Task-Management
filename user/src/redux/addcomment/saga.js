@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import Addcomment from '../addcomment/constants';
-import { addTaskCommentApi, deleteTask, updateTask, getHistoryApi, getTaskCommentApi, getBugsApi } from '../addcomment/api';
+import { addTaskCommentApi, deleteTask, updateTask, getHistoryApi, getTaskCommentApi, getBugsApi, getSubTaskApi } from '../addcomment/api';
 
 function* addTaskCommentFunction({ payload }) {
     try {
@@ -157,6 +157,42 @@ function* getHistroryFunction({ payload }) {
         });
     }
 }
+function* getSubTaskFunction({ payload }) {
+
+
+    try {
+        yield put({
+            type: Addcomment.GET_SUBTASK_LOADING,
+            payload: {}
+        })
+        const response = yield call(getSubTaskApi, { payload });
+        console.log(response, '3333333333333333333333333333333333333333333333333333333333')
+        if (response.data.status) {
+            yield put({
+                type: Addcomment.GET_SUBTASK_SUCCESS,
+                payload: { ...response.data },
+            });
+
+        }
+        else {
+            yield put({
+                type: Addcomment.GET_SUBTASK_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: Addcomment.GET_SUBTASK_ERROR,
+            payload: { error }
+        });
+        yield put({
+            type: Addcomment.GET_SUBTASK_RESET,
+            payload: {},
+        });
+
+    }
+}
 function* getBugsFunction({ payload }) {
 
 
@@ -166,6 +202,7 @@ function* getBugsFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getBugsApi, { payload });
+        console.log(response,'3333333333333333333333333')
         if (response.data.status) {
             yield put({
                 type: Addcomment.GET_BUGS_SUCCESS,
@@ -217,6 +254,9 @@ export function* getCommetSaga(): any {
 export function* getBugsSaga() {
     yield takeEvery(Addcomment.GET_BUGS, getBugsFunction);
 }
+export function* getSubTaskSaga() {
+    yield takeEvery(Addcomment.GET_BUGS, getSubTaskFunction);
+}
 function* Addcommentsaga(): any {
     yield all([
         fork(addAllTaskCommentsSaga),
@@ -225,6 +265,7 @@ function* Addcommentsaga(): any {
         fork(getHistrorySaga),
         fork(getCommetSaga),
         fork(getBugsSaga),
+        fork(getSubTaskSaga)
     ]);
 }
 
