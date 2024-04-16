@@ -26,6 +26,7 @@ export const getAllSingleSprint = "/sprint/getSprints?"
 export const CREATE_TASK = "/task/createtask";
 export const UPDATE_MILESTONE = "/milestone/update";
 export const ALL_USERS = "/users";
+export const ALL_CATEGORY = "/technology/getTechCategory?status=";
 export const deleteUsers = "/users/deleteUser";
 export const UpdateSprint = "/sprint/update";
 export const SingleMilestone = "/milestone/getMilestones?projectId="
@@ -69,4 +70,5 @@ export const getSubTask = "/subTask/getSubTask?"
 export const Create_subtask = "/subTask/addSubTask"
 
 export const getAllTaskCount = '/task/getTasksCount'
+export const getUserRecord = '/task/userWorkingHours?'
 

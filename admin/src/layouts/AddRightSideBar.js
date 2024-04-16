@@ -1,7 +1,7 @@
 import react, { useEffect, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { createTask, getAllRoles, getAllTask, getAssignUserAction, getAllUsers, getSingleSprint } from '../redux/actions';
+import { createTask, getAllRoles, getAllTask,getAllCategory, getAssignUserAction, getAllUsers, getSingleSprint } from '../redux/actions';
 import Form from 'react-bootstrap/Form';
 import { Row, Col, Button, CloseButton, Card, FormControl } from 'react-bootstrap';
 import pdfImage from '../../src/assets/images/pdf.png';
@@ -25,7 +25,6 @@ export default function RightBar(props) {
     };
     const handleEndDate = (date) => {
         setEndDate(date);
-
     };
     const {
         register,
@@ -57,6 +56,7 @@ export default function RightBar(props) {
         document.getElementById('fileInput').click();
     };
     const store = useSelector((state) => state);
+    const category = store?.getAllCategory?.data?.response;
     const dispatch = useDispatch();
     const onSubmit = (e) => {
         let body = new FormData();
@@ -66,6 +66,7 @@ export default function RightBar(props) {
         body.append('summary', e.Summary);
         body.append('description', e.description);
         body.append('assigneeId', e.Assignee);
+        body.append('label', e.label);
         body.append('reporterId', e.Reporter);
         body.append('priority', e.priority);
         body.append('startDate', startDate);
@@ -81,7 +82,7 @@ export default function RightBar(props) {
             alert('Please Select Project');
         }
         setValue('Summary', '');
-        setValue('Assignee', '');
+        setValue('label', '');
         setValue('Reporter', '');
         setValue('priority', '');
         setValue('start_date', '');
@@ -94,7 +95,7 @@ export default function RightBar(props) {
     };
     const handelClose = () => {
         setValue('Summary', '');
-        setValue('Assignee', '');
+        setValue('label', '');
         setValue('Reporter', '');
         setValue('priority', '');
         setValue('start_date', '');
@@ -112,6 +113,8 @@ export default function RightBar(props) {
     useEffect(() => {
         dispatch(getAllRoles());
         dispatch(getAllUsers());
+        // let status = true
+        dispatch(getAllCategory({status:true}));
     }, []);
     useEffect(() => {
         dispatch(getReporterAction())
@@ -260,6 +263,34 @@ export default function RightBar(props) {
                                             ))}
                                         </select>
                                         {errors.Assignee?.type === 'required' && (
+                                            <span className="text-danger"> This field is required *</span>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="">
+                                    <div className="mb-2">
+                                        <label className="form-label" for="exampleForm.ControlTextarea1">
+                                            label
+                                            <span className="text-danger">*</span>:
+                                        </label>
+
+                                        <select
+                                            name="label"
+                                            className="form-select"
+                                            id="exampleForm.ControlInput1"
+                                            {...register('label', { required: true })}>
+                                            <option value={''} hidden selected>
+                                                Select
+
+                                            </option>
+                                            {category?.map((ele, ind) => (
+                                                <option value={ele?._id}>
+                                                    {' '}
+                                                    {ele?.name} 
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {errors.label?.type === 'required' && (
                                             <span className="text-danger"> This field is required *</span>
                                         )}
                                     </div>

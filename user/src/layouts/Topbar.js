@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import MainLoader from '../constants/Loader/loader';
 import moment from 'moment';
+import Clock from 'react-live-clock';
+
 
 // actions
 import { showRightSidebar, changeSidebarType } from '../redux/actions';
@@ -306,7 +308,14 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                         <i className="mdi mdi-menu" />
                                     </button>
                                 )}
-                            <div class="menuinfo">
+                            <div className="menuinfo">
+                                <Clock
+                                    className='fw-bold text-black fs-5'
+                                    format={'HH:mm:ss'}
+                                    ticking={true}
+                                    timezone={'Asia/Kolkata'} />
+                            </div>
+                            {/* <div class="menuinfo">
                                 <ul>
 
                                     {showButton ? (
@@ -323,37 +332,16 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                         </li>
                                     )}
                                     <li>
-                                        {/* {moment(currTime).format('h:mm:ss')} */}
                                         {localStorage.getItem("hours") +
                                             ':' + localStorage.getItem('minutes') +
                                             ':' + localStorage.getItem('seconds')}
 
                                     </li>
-                                    {/* <li className='leave_data'>
-                                   
-                                        <select id="leave" onChange={onChangeLeave} name="cars" disabled={showButton}>
-                                            <option value="">Select Reason</option>
-                                            {getLeaveDetails?.map((item,index)=>
-                                                <option key={index} value={item?._id} >{item?.leaveReason}</option>
-                                            )}
-                                            
-                                          
-                                           
-                                        </select>
-                                    </li> */}
-                                    {/* {moment(loginTimee).format("LTS")} */}
-                                </ul>
-                            </div>
-                        </div>
 
+                                </ul>
+                            </div> */}
+                        </div>
                         <ul className="list-unstyled topbar-menu float-end mb-0 topbarr">
-                            {/* <li className="notification-list">
-                                <button
-                                    className="nav-link dropdown-toggle end-bar-toggle arrow-none btn btn-link shadow-none"
-                                    onClick={handleRightSideBar}>
-                                    <i className="dripicons-gear noti-icon"></i>
-                                </button>
-                            </li> */}
                             <li className="dropdown notification-list listlist">
                                 <ProfileDropdown
                                     profilePic={profilePic}

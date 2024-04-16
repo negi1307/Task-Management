@@ -43,7 +43,7 @@ const TaskInformation = styled.div`
         color: #7d7d7d;
     }
 `;
-const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressColumn }) => {
+const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressColumn, onTaskStart }) => {
     const store = useSelector(state => state)
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
@@ -52,10 +52,6 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     const userId = store?.Auth?.user?.userId;
     const getComments = item?.comments;
     const historyData = store?.getHistoryData?.data?.response;
-    const handelUpdate = (data) => {
-        setEditData(data);
-        setOpenEditModal(true);
-    };
     const indianDateTime = moment.tz(new Date(), 'Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss');
     const {
         register,
@@ -68,17 +64,13 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
         setOpenEditModal(false);
     };
     const dispatch = useDispatch();
-    const deleteData = (id) => {
-        dispatch(deleteTask({ taskId: id }));
-        dispatch(getAllTask());
-    };
     const [commentId, setCommentId] = useState('');
     const [showData, setShowData] = useState(false);
     const [timeElapsed, setTimeElapsed] = useState(0);
     useEffect(() => {
         let timer;
         const isTaskInProgress = localStorage.getItem(`task_${item._id}_inProgress`);
-        setIsPlay(isTaskInProgress === 'true'); // Update isPlay state based on local storage value
+        setIsPlay(isTaskInProgress === 'true');
 
 
         return () => clearInterval(timer);
@@ -126,15 +118,12 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
         dispatch(addLoginTime({ taskId: item?._id }))
         setIsPlay(true);
         localStorage.setItem(`task_${item?._id}_inProgress`, 'true');
-        // console.log('========start', new Date())
     }
     const stopTime = (e) => {
         let stoptask = item?._id;
         dispatch(addLoginTimeStop(stoptask));
         setIsPlay(false);
         localStorage.removeItem(`task_${item?._id}_inProgress`);
-        console.log('=======endtime', new Date())
-
     }
 
     const formatTime = (milliseconds) => {
@@ -145,10 +134,9 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
         const millis = duration.milliseconds().toString().padStart(3, '0');
         return `${hours}:${minutes}:${seconds}.${millis}`;
     };
-
     return (
         <>
-           <Draggable key={item?.id} draggableId={item?.id} index={index} style={{ width: '260px', }}>
+            <Draggable key={item?.id} draggableId={item?.id} index={index} style={{ width: '260px', }}>
                 {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                         <TaskInformation className=" mt-2 shadow-lg mx-auto rounded-4  " style={{ width: '250px', marginTop: '1px' }}>
@@ -166,27 +154,7 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
 
                                         </div>
                                         <div className="col-3 text-center">
-                                            <div className="dropdown">
-                                                <button className="border-0 bg-white icon_buttons" type="button" id="dropdownMenuButton1"
-                                                    data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-                                                    <BsThreeDotsVertical />
-                                                </button>
-                                                <ul className="dropdown-menu py-0 dropdown-style dropdown-menu-end ps-1 dropdown-menu-lg-start border-0" aria-labelledby="dropdownMenuButton1">
-                                                    <div className='d-flex w-50'>
-                                                        <li className='w-50 ps-2 border-dark border-end border-1 py-0'>
-                                                            <button className="dropdown-item m-0 p-0 border-0 bg-transparent">
-                                                                <i className="uil-edit-alt m-0 p-0  text-dark del_edit" onClick={() => { handelUpdate(item); }}></i>
-                                                            </button>
-                                                        </li>
-                                                        <li className='w-50 ps-2'>
 
-                                                            <button className="dropdown-item m-0 p-0 border-0 bg-transparent" onClick={() => deleteData(item?.id)}>
-                                                                <i className="mdi mdi-delete text-dark m-0 p-0  del_edit"></i>
-                                                            </button>
-                                                        </li>
-                                                    </div>
-                                                </ul>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -223,42 +191,42 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="col-4 text-end ">
-                                            <div className=" d-flex">
-                                                <div className="cp d-flex align-items-center gap-1">
-                                                    {isInProgressColumn && (
-                                                        <span id='timestart'>
-                                                            {isPlay ? (
-                                                                <FaCirclePause onClick={stopTime} style={{ fontSize: '21px' }} />
-                                                            ) : (
-                                                                <FaCirclePlay onClick={startTime} style={{ fontSize: '21px' }} />
-                                                            )}
-                                                        </span>
-                                                    )}
-                                                    <OverlayTrigger
-                                                        placement="top"
-                                                        overlay={
-                                                            <Tooltip id="tooltip1">
-                                                                {item?.assigneeInfo?.firstName}{' '}
-                                                                {item?.assigneeInfo?.lastName}
-                                                            </Tooltip>
-                                                        }>
-                                                        <span
-                                                            style={{
-                                                                backgroundColor: '#605e5a',
-                                                                borderRadius: '50%',
-                                                                padding: '5px 6px',
-                                                                fontSize: '11px',
-                                                                color: 'white',
-                                                                fontWeight: '800',
-                                                            }}>
-                                                            {item?.assigneeInfo?.firstName.charAt(0)}
-                                                            {item?.assigneeInfo?.lastName.charAt(0)}
-                                                        </span>
-                                                    </OverlayTrigger>
-                                                </div>
+                                        {/* <div className="col-4 text-end "> */}
+                                        <div className=" d-flex col-4 text-end justify-content-end">
+                                            <div className="cp d-flex align-items-center gap-1">
+                                                {isInProgressColumn && (
+                                                    <span id='timestart'>
+                                                        {isPlay ? (
+                                                            <FaCirclePause onClick={stopTime} style={{ fontSize: '21px' }} />
+                                                        ) : (
+                                                            <FaCirclePlay onClick={startTime} style={{ fontSize: '21px' }} />
+                                                        )}
+                                                    </span>
+                                                )}
+                                                <OverlayTrigger
+                                                    placement="top"
+                                                    overlay={
+                                                        <Tooltip id="tooltip1">
+                                                            {item?.assigneeInfo?.firstName}{' '}
+                                                            {item?.assigneeInfo?.lastName}
+                                                        </Tooltip>
+                                                    }>
+                                                    <span
+                                                        style={{
+                                                            backgroundColor: '#605e5a',
+                                                            borderRadius: '50%',
+                                                            padding: '5px 6px',
+                                                            fontSize: '11px',
+                                                            color: 'white',
+                                                            fontWeight: '800',
+                                                        }}>
+                                                        {item?.assigneeInfo?.firstName.charAt(0)}
+                                                        {item?.assigneeInfo?.lastName.charAt(0)}
+                                                    </span>
+                                                </OverlayTrigger>
                                             </div>
                                         </div>
+                                        {/* </div> */}
                                     </div>
                                 </div>
 
