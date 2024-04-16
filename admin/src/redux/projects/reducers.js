@@ -163,14 +163,14 @@ export const getProjectById = (state = GET_PROJECT_BY_ID_INITIAL_STATE, action) 
 
     }
 };
-export const getProjectId = (state = {data:""}, action) => {
+export const getProjectId = (state = { data: "" }, action) => {
     switch (action.type) {
         case "projectId":
             return {
                 data: action.payload,
-                
+
             };
-      
+
         default:
             return { ...state };
 
