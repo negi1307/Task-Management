@@ -24,7 +24,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     console.log(editData,'edit4444')
     const store = useSelector((state) => state);
     const technology = store?.getSingleSprintTask?.data?.response;
-    console.log(technology,'technology')
     const dispatch = useDispatch();
     const [connectComponent, setConnectComponent] = useState('All');
     const [buttonChange, setButtonChange] = useState(true);
@@ -425,7 +424,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     // onChange={(date) => setStartDate(date)}
                                                     onChange={(date) => handleStartDate(date)}
                                                     placeholderText="mm-dd-yyyy"
-                                                    minDate={today}
+                                                    // minDate={today}
                                                     className="add_width_input"
                                                 />
                                             </Form.Group>
@@ -442,7 +441,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     // onChange={(date) => setEndDate(date)}
                                                     onChange={(date) => handleEndDate(date)}
                                                     placeholderText="mm-dd-yyyy"
-                                                    minDate={startDate}
+                                                    // minDate={startDate}
                                                     className="add_width_input"
                                                 />
                                             </Form.Group>

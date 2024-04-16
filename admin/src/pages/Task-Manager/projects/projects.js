@@ -313,6 +313,7 @@ const Projects = () => {
                                                     </span>
                                                 </td>
                                                 <td className='text-start'>{ele?.daysLeft}</td>
+
                                                 <td className='text-start'>
                                                     <span className="namelink">
                                                         {' '}

@@ -19,6 +19,7 @@ import { FaCirclePause } from "react-icons/fa6";
 import { addLoginTime, addLoginTimeStop } from '../../../redux/user/action'
 import ToastHandle from '../../../constants/toaster/toaster';
 import moment from 'moment-timezone';
+import Taskdetail from './taskdetail';
 
 const TaskInformation = styled.div`
     display: flex;
@@ -137,14 +138,14 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
 
     }
 
-    const formatTime = (milliseconds) => {
-        const duration = moment.duration(milliseconds, 'milliseconds');
-        const hours = duration.hours().toString().padStart(2, '0');
-        const minutes = duration.minutes().toString().padStart(2, '0');
-        const seconds = duration.seconds().toString().padStart(2, '0');
-        const millis = duration.milliseconds().toString().padStart(3, '0');
-        return `${hours}:${minutes}:${seconds}.${millis}`;
-    };
+    // const formatTime = (milliseconds) => {
+    //     const duration = moment.duration(milliseconds, 'milliseconds');
+    //     const hours = duration.hours().toString().padStart(2, '0');
+    //     const minutes = duration.minutes().toString().padStart(2, '0');
+    //     const seconds = duration.seconds().toString().padStart(2, '0');
+    //     const millis = duration.milliseconds().toString().padStart(3, '0');
+    //     return `${hours}:${minutes}:${seconds}.${millis}`;
+    // };
 
     return (
         <>
@@ -226,15 +227,7 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                         <div className="col-4 text-end ">
                                             <div className=" d-flex">
                                                 <div className="cp d-flex align-items-center gap-1">
-                                                    {isInProgressColumn && (
-                                                        <span id='timestart'>
-                                                            {isPlay ? (
-                                                                <FaCirclePause onClick={stopTime} style={{ fontSize: '21px' }} />
-                                                            ) : (
-                                                                <FaCirclePlay onClick={startTime} style={{ fontSize: '21px' }} />
-                                                            )}
-                                                        </span>
-                                                    )}
+                                                   
                                                     <OverlayTrigger
                                                         placement="top"
                                                         overlay={

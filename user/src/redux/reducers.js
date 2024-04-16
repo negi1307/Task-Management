@@ -49,6 +49,7 @@ import {
     getAllComment,
     getTaskId,
     getBugsReducer,
+    getSubTaskReducer
 } from './addcomment/reducers';
 import { getPriorityTaskBoard, getWeekCountTaskBoard, getTaskStatusCount, getTaskCount } from './Summary/reducer';
 
@@ -107,4 +108,5 @@ export default (combineReducers({
     UpdateTaskStatusTime,
     getUserLogoutReason,
     getBugsReducer,
+    getSubTaskReducer,
 }): any);

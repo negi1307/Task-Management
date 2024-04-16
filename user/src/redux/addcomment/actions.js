@@ -34,3 +34,7 @@ export const getBugs = (data): AuthAction => ({
     type: Addcomment.GET_BUGS,
     payload: data
 });
+export const getSubTask = (data): AuthAction => ({
+    type: Addcomment.GET_SUBTASK,
+    payload: data
+});

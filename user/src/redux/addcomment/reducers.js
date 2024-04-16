@@ -33,6 +33,11 @@ const GET_BUGS_INITIAL_STATE = {
     loading: false,
     message: ""
 };
+const GET_SUBTASK = {
+    data: [],
+    loading: false,
+    message: ""
+};
 
 export const addComments = (state = ADD_ALL_COMMENT, action) => {
     switch (action.type) {
@@ -172,6 +177,35 @@ export const getTaskId = (state = { data: '' }, action) => {
                 data: action.payload,
             };
 
+        default:
+            return { ...state };
+    }
+};
+export const getSubTaskReducer = (state = GET_SUBTASK, action) => {
+    // console.log(GET_SUBTASK,'GETSUBTASK')
+    switch (action.type) {
+        case Addcomment.GET_SUBTASK_LOADING:
+            return {
+                data: GET_SUBTASK.data,
+                loading: true
+            };
+        case Addcomment.GET_SUBTASK_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false
+            };
+        case Addcomment.GET_SUBTASK_RESET:
+            return {
+                data: GET_SUBTASK,
+                loading: false
+            };
+        case Addcomment.GET_SUBTASK_ERROR:
+            return {
+                data: [],
+                status: !200,
+                loading: false,
+                message: action?.payload,
+            };
         default:
             return { ...state };
     }
