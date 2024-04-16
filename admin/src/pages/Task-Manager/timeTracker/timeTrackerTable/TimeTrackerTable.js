@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import HeaderMain from '../../header/HeaderMain';
 import { Card, Table, } from 'react-bootstrap';
-import { getTimeTracterAction } from '../../../../redux/timeTracker/action';
+import { getTimeTracterAction, getUserRecord } from '../../../../redux/timeTracker/action';
 import { useSelector, useDispatch } from 'react-redux';
 import MainLoader from '../../../../constants/Loader/loader';
 const TimeTrackerTable = () => {
@@ -12,7 +12,8 @@ const TimeTrackerTable = () => {
     const timeTrackerLoading = store?.getTimeTrackerReducer?.loading
     useEffect(() => {
         dispatch(getTimeTracterAction())
-    }, [])
+        // dispatch(getUserRecord({ startDate: '2024-03-26', endDate: '2024-04-05' }))
+    }, [dispatch])
 
     return (<>
         <Card>
@@ -21,7 +22,7 @@ const TimeTrackerTable = () => {
                     <HeaderMain />
                 </div>
                 <div className="d-flex align-items-center justify-content-center">
-                    <h4 className="header-title heading_data mb-1">Time Tracker</h4>
+                    <h4 className="header-title heading_data">Time Tracker</h4>
                 </div>
                 {timeTrackerLoading ? <MainLoader /> : <div>
                     <div>
@@ -29,47 +30,33 @@ const TimeTrackerTable = () => {
 
                             <Table className="mb-0 add_Color_font" striped>
                                 <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th> First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Project</th>
-                                        <th> Tracking Time</th>
+                                    <tr className='text-start'>
+                                        <th className='text-dark fw-bold'>#</th>
+                                        <th className='text-dark fw-bold'>Assignee Name</th>
+                                        <th className='text-dark fw-bold'>Project Name</th>
+                                        <th className='text-dark fw-bold'>Milestone Name</th>
+                                        <th className='text-dark fw-bold'>Sprint Name</th>
+                                        <th className='text-dark fw-bold'>Task Name</th>
+                                        <th className='text-dark fw-bold'>Time Taken</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <>{timeTrackerData?.map((item, index) => {
                                         return (
-                                            <tr className="align-middle">
-                                                <th scope="row">
-                                                    {index + 1}
-                                                </th>
-                                                <td className="cp">
-                                                    <span className="namelink">
-                                                        {item?.userName}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span className="namelink">
-                                                        {item?.userLastName}
-                                                    </span>
-                                                </td>
-                                                <td className="cp">
-                                                    <span className="namelink">
-                                                        {item?.project}
-                                                    </span>
-                                                </td>
-                                                <td className="w-20">
-                                                    <span className="namelink">
-                                                        {item?.formattedTrackingTime}
-                                                    </span>
-                                                </td>
+                                            <tr className='text-start'>
+                                                <td>{item?.project_name}</td>
+                                                <td>{item?.project_name}</td>
+                                                <td>{item?.project_name}</td>
+                                                <td>{item?.project_name}</td>
+                                                <td>{item?.project_name}</td>
+                                                <td>{item?.project_name}</td>
+                                                <td>{item?.project_name}</td>
                                             </tr>
                                         )
                                     })}</>
                                 </tbody>
                             </Table>
-                            : <div className='text-danger d-flex justify-content-center  align-items-center' style={{height:'30vh'}}>
+                            : <div className='text-danger d-flex justify-content-center  align-items-center' style={{ height: '30vh' }}>
                                 Data Not Found
                             </div>}
                         {/* <Row>
@@ -95,13 +82,14 @@ const TimeTrackerTable = () => {
                     <h4 className="header-title heading_data mb-1 mt-5">Total Time Tracker</h4>
                 </div>
                 {timeTrackerLoading ? <MainLoader /> : <div>
-                    <div>{timeTrackerTotalTime?.length!==0?<Table className="mb-0 add_Color_font" striped>
+                    <div>{timeTrackerTotalTime?.length !== 0 ?
+                        <Table className="mb-0 add_Color_font" striped>
                             <thead>
-                                <tr>
+                                <tr className='text-start'>
                                     <th>#</th>
-                                    <th> First Name</th>
+                                    <th>First Name</th>
                                     <th>Last Name</th>
-                                    <th> Total Time Tracking </th>
+                                    <th>Total Time Tracking </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -143,10 +131,10 @@ const TimeTrackerTable = () => {
                                 })}
 
                             </tbody>
-                        </Table>:<div className='text-danger d-flex justify-content-center  align-items-center' style={{height:'30vh'}}>
-                                Data Not Found
-                            </div>}
-                        
+                        </Table> : <div className='text-danger d-flex justify-content-center  align-items-center' style={{ height: '30vh' }}>
+                            Data Not Found
+                        </div>}
+
                         {/* <Row>
                                 <Col
                                     lg={12}

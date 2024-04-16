@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import ToastHandle from '../../../constants/toaster/toaster';
 import { listProjectAssignee, updateTaskStatus } from '../../../redux/task/action';
+import { addLoginTime, addLoginTimeStop } from '../../../redux/user/action'
 
 const Container = styled.div`
     display: flex;
@@ -165,6 +166,10 @@ const Boards = (props) => {
         if (!result.destination) return;
         const { source, destination } = result;
 
+        // Check if destination column is "In Progress" and if it already has a task
+        if (destination.droppableId === '2' && columns['2'].items.length > 0) {
+            return;
+        }
 
         if (source.droppableId !== destination.droppableId) {
             const sourceColumn = columns[source.droppableId];
@@ -261,7 +266,10 @@ const Boards = (props) => {
             setRender(!render);
         }
     };
-
+    const handleTaskStart = (taskId) => {
+        // Dispatch action for task start time
+        dispatch(addLoginTime(taskId)); // Replace with your actual action
+    };
     return (
         <>
             <div className="status">
@@ -299,7 +307,7 @@ const Boards = (props) => {
 
                                         >
                                             <TaskList>
-                                                <Title className='text-dark fw-bold ' style={{position:'sticky',top:'0',zIndex:'2', backgroundColor:'#F3F3F3'}} >{column.title}   <span className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</span></Title>
+                                                <Title className='text-dark fw-bold ' style={{ position: 'sticky', top: '0', zIndex: '2', backgroundColor: '#F3F3F3' }} >{column.title}   <span className='py-0 p-1  rounded-circle text-dark bg-white'>{column.count}</span></Title>
                                                 {column.items?.map((item, index) => (
                                                     <TaskCard
                                                         key={item.id}
@@ -312,6 +320,7 @@ const Boards = (props) => {
                                                         closeModal={closeModal}
                                                         showTaskDetailMOdel={showTaskDetailMOdel}
                                                         isInProgressColumn={columnId == '2'}
+                                                        onTaskStart={handleTaskStart} // Pass the callback function
                                                     />
                                                 ))}
                                                 {provided?.placeholder}

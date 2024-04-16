@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import TASK_TYPES from './constant';
-import { UpdateTaskApi, createTaskApi, deleteTaskApi, getAllTaskApi, getSingleSprintTaskApi,updateTaskStatusApi,getAllAssigneeNamesApi,UpdateTaskStatusTimekApi } from './api';
+import { UpdateTaskApi, createTaskApi, deleteTaskApi, getAllTaskApi, getSingleSprintTaskApi, updateTaskStatusApi, getAllAssigneeNamesApi, UpdateTaskStatusTimekApi } from './api';
 
 function* createTaskFunction({ payload }) {
     try {
@@ -8,9 +8,9 @@ function* createTaskFunction({ payload }) {
             type: TASK_TYPES.CREATE_TASK_LOADING,
             payload: {}
         })
-        
+
         const response = yield call(createTaskApi, { payload });
-    //   alert(response)
+        //   alert(response)
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.CREATE_TASK_SUCCESS,
@@ -43,7 +43,7 @@ function* getSingleSprintTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getSingleSprintTaskApi, { payload });
-        console.log(response,"bbbvvv")
+        // console.log(response,"bbbvvv")
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_SINGLE_SPRINT_TASK_SUCCESS,
@@ -76,7 +76,7 @@ function* getAllTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getAllTaskApi, { payload });
-        console.log("get All TAsk Data",response)
+        console.log("get All TAsk Data", response)
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_ALL_TASK_SUCCESS,
@@ -111,7 +111,7 @@ function* getAllAssigneeName({ payload }) {
         })
         const response = yield call(getAllAssigneeNamesApi, { payload });
         console.log(response, "LLLLLLLLLLL")
-        if (response.data.status==200) {
+        if (response.data.status == 200) {
             yield put({
                 type: TASK_TYPES.GET_ALL_ASSIGNEE_NAME_SUCCESS,
                 payload: { ...response.data },
@@ -121,7 +121,7 @@ function* getAllAssigneeName({ payload }) {
             //     payload: {},
             // });
         }
-        else if(response.data.status == 404) {
+        else if (response.data.status == 404) {
             yield put({
                 type: TASK_TYPES.GET_ALL_ASSIGNEE_NAME_RESET,
                 payload: { ...response.data }
@@ -149,7 +149,7 @@ function* updateTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(UpdateTaskApi, { payload });
-        console.log(response,"bbbvvv")
+        console.log(response, "bbbvvv")
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.UPDATE_TASK_SUCCESS,
@@ -183,7 +183,7 @@ function* updateTaskTimeStatusFunction({ payload }) {
             payload: {}
         })
         const response = yield call(UpdateTaskStatusTimekApi, { payload });
-        console.log(response,"bbbvvv")
+        console.log(response, "bbbvvv")
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.UPDATE_TASK_SUCCESS_STATUS_TIME,
@@ -253,7 +253,7 @@ function* updateTaskStatusFunction({ payload }) {
             payload: {}
         })
         const response = yield call(updateTaskStatusApi, { payload });
-        console.log("dssfksf",payload)
+        console.log("dssfksf", payload)
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.UPDATE_TASK_STATU_SUCCESS,
