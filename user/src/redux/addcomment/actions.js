@@ -30,6 +30,7 @@ export const getCommentId = (data) => ({
     payload: data
 })
 
+
 export const getBugs = (data): AuthAction => ({
     type: Addcomment.GET_BUGS,
     payload: data

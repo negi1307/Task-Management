@@ -566,31 +566,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 </>
                             ) : connectComponent === 'History' ? (
 
-                                // <div>
-                                //     {store?.getHistoryReducer?.data?.response?.map((ele) => (
-                                //         <>
-
-                                //             <div className="d-flex align-items-center pt-2">
-                                //                 <span
-                                //                     style={{
-                                //                         backgroundColor: '#605e5a',
-                                //                         borderRadius: '100%',
-                                //                         padding: '11px 11px',
-                                //                         color: 'white',
-                                //                         fontWeight: '800',
-                                //                         textTransform: "uppercase"
-                                //                     }}>
-                                //                     {ele.userId.firstName?.charAt(0)}
-                                //                     {ele.userId.lastName?.charAt(0)}
-                                //                 </span>
-                                //             )}
-                                //             <h4 className="pe-1 ps-1">
-                                //                 {ele.userId?.firstName} {ele.userId?.lastName}
-                                //             </h4>
-                                //             {ele.userActivity} {ele.time && moment(ele.time).format('LLL')}
-                                //         </div>
-                                //     ))}
-                                // </div>
+                         
                                 <div className="d-flex flex-column justify-content-center my-2">
                                     {historyResponse && historyResponse.map((item, index) => (
                                         <div key={index} className='d-flex gap-2 align-items-center lh-lg'>
