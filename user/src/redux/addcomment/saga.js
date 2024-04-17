@@ -135,6 +135,7 @@ function* getHistroryFunction({ payload }) {
             payload: {},
         });
         const response = yield call(getHistoryApi, { payload });
+        console.log(response, '444444444')
         if (response.data.status) {
             yield put({
                 type: Addcomment.GET_HISTORY_SUCCESS,
@@ -166,7 +167,7 @@ function* getSubTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getSubTaskApi, { payload });
-        console.log(response, '3333333333333333333333333333333333333333333333333333333333')
+        
         if (response.data.status) {
             yield put({
                 type: Addcomment.GET_SUBTASK_SUCCESS,

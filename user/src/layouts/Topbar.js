@@ -309,11 +309,11 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                     </button>
                                 )}
                             <div className="menuinfo">
-                                <Clock
+                                {/* <Clock
                                     className='fw-bold text-black fs-5'
                                     format={'HH:mm:ss'}
                                     ticking={true}
-                                    timezone={'Asia/Kolkata'} />
+                                    timezone={'Asia/Kolkata'} /> */}
                             </div>
                             {/* <div class="menuinfo">
                                 <ul>

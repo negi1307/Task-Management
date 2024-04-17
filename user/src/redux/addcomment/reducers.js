@@ -147,6 +147,7 @@ export const updateComment = (state = UPDATE_COMMENT, action) => {
 };
 
 export const getHistoryData = (state = GETHISTORY_INITAL_STATE, action) => {
+    console.log(GETHISTORY_INITAL_STATE)
     switch (action.type) {
         case Addcomment.GET_HISTORY_LOADING:
             return {
