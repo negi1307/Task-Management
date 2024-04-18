@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { createTask, getAllRoles, getAllTask, getAssignUserAction, getAllUsers, getSingleSprint } from '../redux/actions';
+import { createTask, getAllRoles, getAllTask, getAssignUserAction, getAllUsers, getSingleSprint, getAllCategory } from '../redux/actions';
 import { getAllProjects } from '../redux/projects/action';
 import { getsingleMileStone } from '../redux/milestone/action'
 import { Form, Row, Col, Button, Card } from 'react-bootstrap';
@@ -69,12 +69,14 @@ export default function Pagesaddtask(props) {
         document.getElementById('fileInput').click();
     };
     const store = useSelector((state) => state);
+    const category = store?.getAllCategory?.data?.response;
     const onSubmit = (e) => {
         let body = new FormData();
         body.append('projectId', projectSelected);
         body.append('milestoneId', milestoneSelected);
         body.append('sprintId', sprintSelected);
         body.append('summary', e.Summary);
+        body.append('label', e.label);
         body.append('description', e.description);
         body.append('assigneeId', e.Assignee);
         body.append('reporterId', e.Reporter);
@@ -101,6 +103,7 @@ export default function Pagesaddtask(props) {
         setValue('Reporter', '');
         setValue('priority', '');
         setValue('start_date', '');
+        setValue('label', '');
         setValue('last_date', '');
         setValue('description', '');
         setShowModal(false);
@@ -126,6 +129,7 @@ export default function Pagesaddtask(props) {
         // reset({ projectname: projectId, Milestone: mileStoneId, Sprint: sprintId });
         dispatch(getAllRoles());
         dispatch(getAllUsers());
+        dispatch(getAllCategory({status:true}));
         dispatch(getAllProjects({ status: 1, skip: 1, projectStatus: 'Ongoing' }));
         dispatch(getReporterAction())
         // if (projectSelected !== null) {
@@ -373,6 +377,34 @@ export default function Pagesaddtask(props) {
                                 <div className="">
                                     <div className="mb-2">
                                         <label className="form-label" for="exampleForm.ControlTextarea1">
+                                            label
+                                            <span className="text-danger">*</span>:
+                                        </label>
+
+                                        <select
+                                            name="label"
+                                            className="form-select"
+                                            id="exampleForm.ControlInput1"
+                                            {...register('label', { required: true })}>
+                                            <option value={''} hidden selected>
+                                                Select
+
+                                            </option>
+                                            {category?.map((ele, ind) => (
+                                                <option value={ele?._id}>
+                                                    {' '}
+                                                    {ele?.name} 
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {errors.label?.type === 'required' && (
+                                            <span className="text-danger"> This field is required *</span>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="">
+                                    <div className="mb-2">
+                                        <label className="form-label" for="exampleForm.ControlTextarea1">
                                             Reporter
                                             <span className="text-danger">*</span>:
                                         </label>
@@ -445,7 +477,7 @@ export default function Pagesaddtask(props) {
                                             // onChange={(date) => setEndDate(date)}
                                             onChange={(date) => handleEndDate(date)}
                                             placeholderText="mm-dd-yyyy"
-                                            minDate={startDate}
+                                            // minDate={startDate}
                                             className="add_width_input"
                                         />
                                     </Form.Group>

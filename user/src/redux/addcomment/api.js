@@ -20,16 +20,21 @@ export function updateTask(data): any {
 
 
 export function getHistoryApi(data): any {
-    return api.get(URL.getHistory + data.payload);
+    const { taskId,  } = data?.payload;
+    return api.get(`${URL.getHistory}${taskId}`);
 }
 
 
 export function getTaskCommentApi(data): any {
-
-    // return api.get(URL.GetComment + data?.payload)
-    return api.get(URL.GetComment + data?.payload?.taskId);
+    const { taskId, } = data?.payload;
+    return api.get(`${URL.GetComment}${taskId}`);
+    
 }
 export function getBugsApi(data): any {
     const { taskId, type } = data?.payload;
     return api.get(`${URL.getBugs}&type=${type}&taskId=${taskId}`);
+}
+export function getSubTaskApi(data): any {
+    const { taskId } = data?.payload;
+    return api.get(`${URL.getSubTask}&type=${'SubTask'}&taskId=${taskId}`);
 }

@@ -249,6 +249,7 @@ const TaskList = () => {
                                                 </select>
                                             </th>
                                             <th className='text-start fw-bold'>Reporter</th>
+                                            <th className='text-start fw-bold'>Technology</th>
                                             <th className='text-start fw-bold'>Priority</th>
                                             <th className='d-flex text-black fw-bold justify-content-center'>
                                                 Start Date
@@ -274,6 +275,8 @@ const TaskList = () => {
                                                 </td>
                                                 <td className='text-start'>{item?.reporterInfo?.firstName} {''}
                                                     {item?.reporterInfo?.lastName}
+                                                </td>
+                                                <td className='text-start'>{item?.technology?.name} 
                                                 </td>
                                                 <td className='text-start'>
                                                     {item?.priority == 'Critical'

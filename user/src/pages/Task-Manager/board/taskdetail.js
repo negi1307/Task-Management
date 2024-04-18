@@ -1,19 +1,22 @@
 import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
+import { Row, Col, Card, Button, Alert, CloseButton, Table } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { Col, Row, Form, Button } from 'react-bootstrap';
 import moment from 'moment';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { addComment, getComment, updateComment, deleteComment, getBugs, getCommentId, getHistory } from '../../../redux/addcomment/actions';
+import { addComment, getComment, updateComment, deleteComment,getSubTask, getBugs, getCommentId, getHistory } from '../../../redux/addcomment/actions';
 import Attachments from './../../apps/Tasks/Details/Attachments';
 
 const Taskdetail = (props) => {
-    const { item } = props;
+    const { item , commentData} = props;
 
     // console.log(item, 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    const bugsdata = store?.getBugsReducer?.data?.response
+    console.log(bugsdata,'bugsdata')
     const [inputForUpdate, setInputForUpdate] = useState('');
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
     const [updatedCommentValue, setUpdatedCommentValue] = useState('');
@@ -22,10 +25,10 @@ const Taskdetail = (props) => {
     const [error, setError] = useState('');
     const [connectComponent, setConnectComponent] = useState('All');
     const [buttonChange, setButtonChange] = useState(true);
-
-    const allComments = store?.getAllComment?.data?.response;
-    // const getBUgs = store?.getBugsReducer?.data
-    // console.log({ getBUgs })
+    const getCommentData = store?.getAllComment?.data?.response;
+    console.log(getCommentData,'pankaj')
+    
+    
     const {
         register,
         handleSubmit,
@@ -39,52 +42,47 @@ const Taskdetail = (props) => {
         setValue('comment', "");
         setValue('subtasks', "");
         setButtonChange(true);
-        // if (type === 'History') {
-        // dispatch(getHistoryAction(props?.item?.id));
-        // }
+       
     };
     useEffect(() => {
-        dispatch(getComment({ taskId: item?._id }))
+        // dispatch(getComment({ taskId: item?._id }))
+        const taskId = '661cd6a8ef778e3e2610d72b';
+        dispatch(getBugs({ taskId, type: "Bug" }));
+        dispatch(getSubTask({ taskId, type: "SubTask" }));
+        dispatch(getHistory({taskId}))
+        dispatch(getComment({taskId})); // Dispatch action to retrieve comments
+
     }, [dispatch])
-    const onSubmitComment = (e) => {
-        if (e.commentId !== "") {
-            updateCommentData(e);
-        }
-        else {
-            const commentData = {
-                userId: props.userId,
-                taskId: item?.taskId,
-                comment: e.comment,
-            };
-            const data = {
-                taskId: item?._id
-            }
-            dispatch(addComment(commentData));
-            dispatch(getComment(data));
-            dispatch(getHistory(item?.taskId))
-        }
-        setValue('comment', '');
-    };
+
     const [isUpdate, setIsUpdate] = useState(false);
-    const updateCommentData = (e) => {
+    const onSubmit = (e) => {
+        const commentData = {
+            userId: props.userId,
+            taskId: props.item?.id,
+            comment: e.comment,
+        };
+
+        dispatch(addComment(commentData)); // Dispatch action to add comment
+        setValue('comment', ''); // Reset comment input field
+    };
+    useEffect(()=>{
+        const commentData = {
+            taskId: props.item?.id,
+        };
+
+    },[dispatch])
+    
+    const handelUpdate = (e) => {
         const commentData = {
             taskId: item?.taskId,
             commentId: e.commentId,
             comment: e.comment
-        }
-        dispatch(updateComment(commentData));
-        //     setTimeout(() => {
-        //         dispatch(getComment(item?.taskId));
-        //         dispatch(getHistory(item?.taskId));
-        //     }, 500);
-        setIsUpdate(false);
-    }
+        };
+        dispatch(updateComment(commentData)); // Dispatch action to update comment
+        setIsUpdate(false); // Exit update mode
+    };
 
-    // useEffect(() => {
-    //     dispatch(getBugs())
-
-    // })
-
+   
     const editComment = (item) => {
         setValue('comment', item?.comment);
         setValue('commentId', item?._id);
@@ -168,7 +166,7 @@ const Taskdetail = (props) => {
                 </Modal.Header>
                 <Modal.Body className="cardinfo">
                     <div className="row w-100">
-                        <div className="col-7">
+                        <Col lg={7}>
                             <h4 className='modal_titles'>Activity</h4>
                             <Row>
                                 <Col lg={12} className='d-flex align-items-center gap-1'>
@@ -223,20 +221,227 @@ const Taskdetail = (props) => {
                                     All
                                 </div>
                             ) : connectComponent === 'Comments' ? (
-                                <div>
-                                    COMMENTS
-                                </div>
+                                <>
+                                <form onSubmit={handleSubmit(onSubmit)}>
+                                    <Row className="mt-2">
+                                        <Col lg={10}>
+                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="Add comment"
+                                                    {...register('comment', { required: true })}
+                                                />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col className="m-0 p-0" lg={2}>
+                                            <Button type="submit" className='bg-black border-0'>{buttonChange ? 'Add' : 'Update'}</Button>
+                                        </Col>
+                                    </Row>
+                                </form>
+                                <Row>
+                                    {getCommentData?.map((ele, ind) => (
+                                        <ul key={ind} style={{ listStyle: 'none' }}>
+                                            <Row>
+                                                <Col lg={12} className="d-flex pt-2">
+                                                    <Col lg={2} className="pt-2">
+                                                        <span
+                                                            style={{
+                                                                backgroundColor: '#605e5a',
+                                                                borderRadius: '100%',
+                                                                padding: '11px 15px',
+                                                                color: 'white',
+                                                                fontWeight: '800',
+                                                            }}>
+                                                            {ele?.comment}
+                                                            {ele?.userId?.lastName.charAt(0)}
+                                                        </span>
+                                                    </Col>
+                                                    <Col lg={10} className="m-0 p-0">
+                                                        <div className="d-flex">
+                                                            <h4 className="m-0 p-0"> {ele?.userId?.firstName}</h4>
+                                                            <h4 className="ps-1 m-0 p-0">
+                                                                {' '}
+                                                                {ele?.userId?.lastName}
+                                                            </h4>
+                                                            <p className="ps-1 m-0 p-0">
+                                                                {moment(ele?.createdAt).fromNow()}{' '}
+                                                            </p>
+                                                        </div>
+                                                        <div className="m-0 p-0">
+                                                            <li className="font-18  ">{ele?.comment}</li>
+                                                        </div>
+                                                        <div className="d-flex m-0 p-0">
+                                                            <p className=" p-0" onClick={() => setIsUpdate(true)}>
+                                                                Edit
+                                                            </p>
+                                                        </div>
+                                                    </Col>
+                                                </Col>
+                                            </Row>
+                                        </ul>
+                                    ))}
+                                </Row>
+                            </>
                             ) : connectComponent === 'History' ? (
-                                <div>HISTORY</div>
+                                <div className="d-flex flex-column justify-content-center my-2">
+                                {store?.getHistoryData?.data?.response?.map((item, index) => (
+                                    <div key={index} className='d-flex gap-2 align-items-center lh-lg'>
+                                        <OverlayTrigger
+                                            placement="top"
+                                            overlay={
+                                                <Tooltip id="tooltip1">
+                                                    {item?.time}
+                                                    {item?.userId?.firstName}
+                                                    {item?.userId?.lastName}
+                                                </Tooltip>
+                                            }>
+                                            <div className="mt-1 cp">
+                                                <span
+                                                    style={{
+                                                        backgroundColor: '#605e5a',
+                                                        borderRadius: '100%',
+                                                        padding: '5px 6px',
+
+                                                        color: 'white',
+                                                        fontWeight: '700',
+                                                    }}>
+                                                    {item?.userId?.firstName.charAt(0).toUpperCase()}
+                                                    {item?.userId?.lastName.charAt(0).toUpperCase()}
+                                                </span>
+                                            </div>
+                                        </OverlayTrigger>
+                                        <Link to={generateLink(item.userActivity, item)}
+                                            className='text-dark'>
+                                            <span>
+                                                {item?.userId?.firstName} {item?.userId?.lastName}
+                                                {item.userActivity === "Created milestone" && <span> created milestone</span>}
+                                                {item.userActivity === "Created Sprint" && <span> created sprint</span>}
+                                                {item.userActivity === "Create Project" && <span> create project</span>}
+                                                {item.userActivity === "Created Task" && <span> created task</span>}
+                                                {' on ' + item?.createdAt}
+                                            </span>
+                                        </Link>
+
+                                    </div>
+                                ))}
+                            </div>
                             ) : connectComponent === 'Subtask' ? (
-                                <div>Subtasks</div>
+                                <Table className="mb-0 add_Color_font " striped>
+                                <thead className=''>
+                                    <tr>
+                                        <th className='fw-bold'>#</th>
+                                        <th className='fw-bold'>Summary</th>
+                                        <th className='fw-bold'>Decription</th>
+                                        <th className='fw-bold'>Assignee</th>
+                                        <th className='fw-bold'>Priority</th>
+                                        <th className='fw-bold'>Start Date</th>
+                                        <th className='fw-bold'>End Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    {store?.getSubTaskReducer?.data?.response?.map((sub, ind) => {
+                                        return (
+                                            <tr className="align-middle">
+                                                <th>{ind + 1}</th>
+
+                                                <td>
+                                                    <span title={sub?.summary}>
+                                                        {sub?.summary ? sub.summary.slice(0, 7).charAt(0).toUpperCase() + sub.summary.slice(1, 7) : ''}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span title={sub?.description}>{sub?.description.slice(0, 10)}</span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {sub?.expectedHours}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {sub?.priority}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {sub?.startDate.slice(0, 10)}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {sub?.dueDate.slice(0, 10)}
+                                                    </span>
+                                                </td>
+
+
+                                            </tr>
+                                        );
+                                    })}
+
+                                </tbody>
+                            </Table>
                             ) : connectComponent === 'Bugs' ? (
-                                <div>NUGS</div>
+                                <Table className="mb-0 add_Color_font" striped>
+                                <thead>
+                                    <tr>
+                                        <th className='fw-bold'>#</th>
+                                        <th className='fw-bold'>Summary</th>
+                                        <th className='fw-bold'>Decription</th>
+                                        <th className='fw-bold'>Assignee</th>
+                                        <th className='fw-bold'>Priority</th>
+                                        <th className='fw-bold'>Start Date</th>
+                                        <th className='fw-bold'>End Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    {bugsdata?.map((bug, ind) => {
+                                        return (
+                                            <tr className="align-middle">
+                                                <th>{ind + 1}</th>
+
+                                                <td>
+                                                    <span title={bug?.summary}>
+                                                        {bug?.summary ? bug.summary.slice(0, 7).charAt(0).toUpperCase() + bug.summary.slice(1, 7) : ''}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.expectedHours}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.priority}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.startDate.slice(0, 10)}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        {bug?.dueDate.slice(0, 10)}
+                                                    </span>
+                                                </td>
+
+
+                                            </tr>
+                                        );
+                                    })}
+
+                                </tbody>
+                            </Table>
                             ) : (
                                 ''
                             )}
-                        </div>
-                        <div className='col-5'>
+                        </Col>
+                        <Col lg={5} className=' d-flex justify-content-end  align-items-end'>
                             <div className="table-responsive">
                                 <table className="table lh-sm table-borderless" style={{ fontSize: '14px' }} >
                                     <tbody className='text-start'>
@@ -267,6 +472,10 @@ const Taskdetail = (props) => {
                                         <tr className='text-start'>
                                             <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Assignee :</th>
                                             <td>{props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}</td>
+                                        </tr>
+                                        <tr className='text-start'>
+                                            <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Technology :</th>
+                                            <td>{props?.item?.technology?.name} </td>
                                         </tr>
                                         <tr className='text-start'>
                                             <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Reporter :</th>
@@ -311,7 +520,7 @@ const Taskdetail = (props) => {
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
+                        </Col>
                     </div>
 
 

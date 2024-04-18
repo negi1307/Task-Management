@@ -85,6 +85,7 @@ const Boards = (props) => {
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
     const [commentdata, setCommentData] = useState([]);
+    console.log(commentdata,'66666666666666666666666666666666')
     const [showTaskModel, setshowTaskModel] = useState(false);
     const [show, setShow] = useState(false);
     const [search, setSearch] = useState('');
@@ -318,6 +319,7 @@ const Boards = (props) => {
                                                         mileStoneId={milestoneId}
                                                         sprintId={spriteId}
                                                         closeModal={closeModal}
+                                                        showTaskDetailMOdel={showTaskDetailMOdel}
                                                         isInProgressColumn={columnId == '2'}
                                                         onTaskStart={handleTaskStart} // Pass the callback function
                                                     />
@@ -338,6 +340,7 @@ const Boards = (props) => {
                 item={commentdata}
                 historyData={historyData}
                 userId={userId}
+                
             />
         </>
     );

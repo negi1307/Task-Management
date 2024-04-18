@@ -24,7 +24,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     console.log(editData,'edit4444')
     const store = useSelector((state) => state);
     const technology = store?.getSingleSprintTask?.data?.response;
-    console.log(technology,'technology')
     const dispatch = useDispatch();
     const [connectComponent, setConnectComponent] = useState('All');
     const [buttonChange, setButtonChange] = useState(true);
@@ -425,7 +424,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     // onChange={(date) => setStartDate(date)}
                                                     onChange={(date) => handleStartDate(date)}
                                                     placeholderText="mm-dd-yyyy"
-                                                    minDate={today}
+                                                    // minDate={today}
                                                     className="add_width_input"
                                                 />
                                             </Form.Group>
@@ -442,7 +441,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     // onChange={(date) => setEndDate(date)}
                                                     onChange={(date) => handleEndDate(date)}
                                                     placeholderText="mm-dd-yyyy"
-                                                    minDate={startDate}
+                                                    // minDate={startDate}
                                                     className="add_width_input"
                                                 />
                                             </Form.Group>
@@ -567,31 +566,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 </>
                             ) : connectComponent === 'History' ? (
 
-                                // <div>
-                                //     {store?.getHistoryReducer?.data?.response?.map((ele) => (
-                                //         <>
-
-                                //             <div className="d-flex align-items-center pt-2">
-                                //                 <span
-                                //                     style={{
-                                //                         backgroundColor: '#605e5a',
-                                //                         borderRadius: '100%',
-                                //                         padding: '11px 11px',
-                                //                         color: 'white',
-                                //                         fontWeight: '800',
-                                //                         textTransform: "uppercase"
-                                //                     }}>
-                                //                     {ele.userId.firstName?.charAt(0)}
-                                //                     {ele.userId.lastName?.charAt(0)}
-                                //                 </span>
-                                //             )}
-                                //             <h4 className="pe-1 ps-1">
-                                //                 {ele.userId?.firstName} {ele.userId?.lastName}
-                                //             </h4>
-                                //             {ele.userActivity} {ele.time && moment(ele.time).format('LLL')}
-                                //         </div>
-                                //     ))}
-                                // </div>
+                         
                                 <div className="d-flex flex-column justify-content-center my-2">
                                     {historyResponse && historyResponse.map((item, index) => (
                                         <div key={index} className='d-flex gap-2 align-items-center lh-lg'>
