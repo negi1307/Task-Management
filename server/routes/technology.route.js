@@ -12,5 +12,6 @@ technologyRoute.post('/addTechnology', verifyAdmin, technology.addTechnology);
 technologyRoute.get('/getTechnology', verifyAdmin, technology.getTechnology);
 technologyRoute.put('/updateTechnology', verifyAdmin, technology.updateTechnology);
 technologyRoute.get('/getTechCategoryTechnologies', verifyAdmin, technology.getTechCategoryTechnologies);
+technologyRoute.get('/getUsersByTechnology', technology.getUsersByTechnology)
 
 module.exports = technologyRoute;
