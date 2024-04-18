@@ -864,24 +864,29 @@ const getUserAssignments = async (req, res) => {
     const { flag, projectId, milestoneId, sprintId, skip, activeStatus } = req.query;
     const pageSize = 10;
     const now = new Date();
+
     let matchQuery = { assigneeId: req.user._id };
+
     matchQuery.activeStatus = JSON.parse(req.query.activeStatus);
     if (flag === 'project') {
       console.log(matchQuery.activeStatus);
+
       const projectIds = await taskModel.distinct('projectId');
+
       console.log(projectIds, matchQuery.activeStatus)
+
       const projects = await projectModel.aggregate([
         {
           $match: { _id: { $in: projectIds }, activeStatus: matchQuery.activeStatus }
         },
-        {
-          $lookup: {
-            from: "technologies",
-            localField: "technology",
-            foreignField: "_id",
-            as: "technologies"
-          }
-        },
+        // {
+        //   $lookup: {
+        //     from: "technologies",
+        //     localField: "technology",
+        //     foreignField: "_id",
+        //     as: "technologies"
+        //   }
+        // },
         {
           $project: {
             _id: 1,
