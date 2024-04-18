@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import { Row, Col, Card, Button, Alert, CloseButton, Table } from 'react-bootstrap';
+import { Row, Col, Card, Button, Alert, CloseButton, Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import moment from 'moment';
 import { useState, useEffect, useCallback, useRef } from 'react';
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { addComment, getComment, updateComment, deleteComment,getSubTask, getBugs, getCommentId, getHistory } from '../../../redux/addcomment/actions';
 import Attachments from './../../apps/Tasks/Details/Attachments';
+import { Link } from 'react-router-dom';
 
 const Taskdetail = (props) => {
     const { item , commentData} = props;
@@ -25,8 +26,6 @@ const Taskdetail = (props) => {
     const [error, setError] = useState('');
     const [connectComponent, setConnectComponent] = useState('All');
     const [buttonChange, setButtonChange] = useState(true);
-    const getCommentData = store?.getAllComment?.data?.response;
-    console.log(getCommentData,'pankaj')
     
     
     const {
@@ -40,19 +39,17 @@ const Taskdetail = (props) => {
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
         setValue('comment', "");
+setValue('history','')
         setValue('subtasks', "");
         setButtonChange(true);
-       
-    };
-    useEffect(() => {
-        // dispatch(getComment({ taskId: item?._id }))
         const taskId = '661cd6a8ef778e3e2610d72b';
         dispatch(getBugs({ taskId, type: "Bug" }));
         dispatch(getSubTask({ taskId, type: "SubTask" }));
         dispatch(getHistory({taskId}))
-        dispatch(getComment({taskId})); // Dispatch action to retrieve comments
+        dispatch(getComment({taskId}));
+       
+    };
 
-    }, [dispatch])
 
     const [isUpdate, setIsUpdate] = useState(false);
     const onSubmit = (e) => {
@@ -65,12 +62,13 @@ const Taskdetail = (props) => {
         dispatch(addComment(commentData)); // Dispatch action to add comment
         setValue('comment', ''); // Reset comment input field
     };
-    useEffect(()=>{
-        const commentData = {
-            taskId: props.item?.id,
-        };
+ 
 
-    },[dispatch])
+    useEffect(() => {
+        // dispatch(getComment({ taskId: item?._id }))
+        // Dispatch action to retrieve comments
+
+    }, [dispatch,getComment])
     
     const handelUpdate = (e) => {
         const commentData = {
@@ -154,6 +152,20 @@ const Taskdetail = (props) => {
         setInputForUpdate(indx);
         setUpdatedCommentInitialValue(data?.comment);
     };
+    function generateLink(userActivity, item) {
+        switch (userActivity) {
+            case "Created milestone":
+                return `/dashboard/projects/${props?.item?.sprintId?.projectId}`;
+            case "Created Sprint":
+                return `/dashboard/singleMilestonesprint/${props?.item?.sprintId?.projectId}/${props?.item?.milestoneId?._id}`;
+            case "Created Task":
+                return `/dashboard/taskBord/projectId=${props?.item?.sprintId?.projectId}&milestoneId=${props?.item?.milestoneId?._id}&spriteId=${item?.sprintId?._id}`;
+            case "Create Project":
+                return "/dashboard/projects";
+            default:
+                return "/dashboard/adminsummary";
+        }
+    }
     return (
         <>
             <Modal
@@ -217,9 +229,92 @@ const Taskdetail = (props) => {
                                 </Col>
                             </Row>
                             {connectComponent === 'All' ? (
-                                <div className="mt-3">
-                                    All
-                                </div>
+                            <div style={{ maxHeight: '400px',msOverflowStyle: 'none', overflowY: 'scroll', scrollbarWidth: 'none' }}>
+                             <Row >
+                               {store?.getAllComment?.data?.response?.map((ele, ind) => (
+                                   <ul className='m-0 p-0' key={ind} style={{ listStyle: 'none' }}>
+                                       <Row className='mx-auto m-0 p-0'>
+                                           <Col lg={12} className="d-flex pt-2">
+                                               <Col lg={2} className="pt-2 m-0">
+                                                   <span className='rounded-circle py-1 px-1 text-white'
+                                                       style={{
+                                                           backgroundColor: '#605e5a',
+                                                          
+                                                       }}>
+                                                       {ele?.userId?.firstName.charAt(0)}
+                                                       {ele?.userId?.lastName.charAt(0)}
+                                                   </span>
+                                               </Col>
+                                               <Col lg={10} className="m-0 p-0">
+                                                   <div className="d-flex">
+                                                       <h4 className="m-0 p-0"> {ele?.userId?.firstName}</h4>
+                                                       <h4 className="ps-1 m-0 p-0">
+                                                           {' '}
+                                                           {ele?.userId?.lastName}
+                                                       </h4>
+                                                       <p className="ps-1 m-0 p-0">
+                                                           {moment(ele?.createdAt).fromNow()}{' '}
+                                                       </p>
+                                                   </div>
+                                                   <div className="m-0 p-0">
+                                                       <p>{ele?.comment ? ele?.comment.slice(0, 10).charAt(0).toUpperCase() + ele?.comment.slice(1, 10) : ''}</p>
+                                                   </div>
+                                                   <div className="d-flex m-0 p-0">
+                                                       <button className="btn  p-0" onClick={() => setIsUpdate(true)}>
+                                                           Edit
+                                                       </button>
+                                                   </div>
+                                               </Col>
+                                           </Col>
+                                       </Row>
+                                   </ul>
+                               ))}
+                           </Row>
+                           <Row>
+                           <div className="d-flex flex-column justify-content-center my-2">
+                                {store?.getHistoryData?.data?.response?.map((item, index) => (
+                                    <div key={index} className='d-flex gap-2 align-items-center lh-lg'>
+                                        <OverlayTrigger
+                                            placement="top"
+                                            overlay={
+                                                <Tooltip id="tooltip1">
+                                                    {item?.time}
+                                                    {item?.userId?.firstName}
+                                                    {item?.userId?.lastName}
+                                                </Tooltip>
+                                            }>
+                                            <div className="mt-1 cp">
+                                                <span
+                                                    style={{
+                                                        backgroundColor: '#605e5a',
+                                                        borderRadius: '100%',
+                                                        padding: '5px 6px',
+
+                                                        color: 'white',
+                                                        fontWeight: '700',
+                                                    }}>
+                                                    {item?.userId?.firstName.charAt(0).toUpperCase()}
+                                                    {item?.userId?.lastName.charAt(0).toUpperCase()}
+                                                </span>
+                                            </div>
+                                        </OverlayTrigger>
+                                        <Link to={generateLink(item.userActivity, item)}
+                                            className='text-dark'>
+                                            <span>
+                                                {item?.userId?.firstName} {item?.userId?.lastName}
+                                                {item.userActivity === "Created milestone" && <span> created milestone</span>}
+                                                {item.userActivity === "Created Sprint" && <span> created sprint</span>}
+                                                {item.userActivity === "Create Project" && <span> create project</span>}
+                                                {item.userActivity === "Created Task" && <span> created task</span>}
+                                                {' on ' + item?.createdAt}
+                                            </span>
+                                        </Link>
+
+                                    </div>
+                                ))}
+                            </div>
+                           
+                            </Row></div>
                             ) : connectComponent === 'Comments' ? (
                                 <>
                                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -238,8 +333,8 @@ const Taskdetail = (props) => {
                                         </Col>
                                     </Row>
                                 </form>
-                                <Row>
-                                    {getCommentData?.map((ele, ind) => (
+                                <Row style={{ maxHeight: '400px',msOverflowStyle: 'none', overflowY: 'scroll', scrollbarWidth: 'none' }}>
+                                    {store?.getAllComment?.data?.response?.map((ele, ind) => (
                                         <ul key={ind} style={{ listStyle: 'none' }}>
                                             <Row>
                                                 <Col lg={12} className="d-flex pt-2">
@@ -252,7 +347,7 @@ const Taskdetail = (props) => {
                                                                 color: 'white',
                                                                 fontWeight: '800',
                                                             }}>
-                                                            {ele?.comment}
+                                                            {ele?.userId?.firstName.charAt(0)}
                                                             {ele?.userId?.lastName.charAt(0)}
                                                         </span>
                                                     </Col>
@@ -268,7 +363,7 @@ const Taskdetail = (props) => {
                                                             </p>
                                                         </div>
                                                         <div className="m-0 p-0">
-                                                            <li className="font-18  ">{ele?.comment}</li>
+                                                            <p>{ele?.comment ? ele?.comment.slice(0, 10).charAt(0).toUpperCase() + ele?.comment.slice(1, 10) : ''}</p>
                                                         </div>
                                                         <div className="d-flex m-0 p-0">
                                                             <p className=" p-0" onClick={() => setIsUpdate(true)}>
@@ -441,7 +536,7 @@ const Taskdetail = (props) => {
                                 ''
                             )}
                         </Col>
-                        <Col lg={5} className=' d-flex justify-content-end  align-items-end'>
+                        <Col lg={5} className=' '>
                             <div className="table-responsive">
                                 <table className="table lh-sm table-borderless" style={{ fontSize: '14px' }} >
                                     <tbody className='text-start'>
@@ -459,7 +554,8 @@ const Taskdetail = (props) => {
                                         </tr>
                                         <tr className='text-start'>
                                             <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Summary :</th>
-                                            <td>{props?.item?.summary}</td>
+                                            <td title={item?.summary}>
+                                                {props?.item?.summary ? props?.item.summary.slice(0, 10).charAt(0).toUpperCase() + props?.item.summary.slice(1, 10) : ''}</td>
                                         </tr>
                                         <tr className='text-start'>
                                             <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Start Date :</th>
