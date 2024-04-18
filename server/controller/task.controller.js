@@ -443,7 +443,7 @@ const getTasksAccToStatus = async (req, res) => {
           attachmentType: 1,
           createdAt: 1,
           updatedAt: 1,
-          // label: 1,
+          inProgressDate: 1,
           daysLeft: {
             $toInt: {
               $max: [
@@ -1037,10 +1037,6 @@ const userWorkingHours = async (req, res) => {
     }
 
     const tasks = await taskModel.find(query).populate('projectId', 'projectName').populate('assigneeId');
-
-    // const tasks = await taskModel.find({ assigneeId: userId, createdAt: { $gte: startDate }, updatedAt: { $lte: adjustedEndDate } })
-    // .populate('projectId', 'projectName');
-
     let totalHours = 0;
     let totalMinutes = 0;
     let totalSeconds = 0;

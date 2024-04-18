@@ -86,7 +86,8 @@ async function updateTaskStatus(existingUser) {
 const getUsers = async (req, res) => {
   try {
     const result = await userModel.find({ role: { $ne: 'Admin' } }).sort({ createdAt: -1 });
-    return res.status(200).json({ status: "200", message: 'User data fetched successfully', response: result });
+    const totalCount = await userModel.countDocuments({ role: { $ne: 'Admin' } });
+    return res.status(200).json({ status: "200", message: 'User data fetched successfully', response: result,totalCount :totalCount });
   } catch (error) {
     return res.status(500).json({ status: "500", message: 'Something went wrong' });
   }
