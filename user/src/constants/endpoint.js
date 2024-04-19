@@ -54,7 +54,7 @@ export const GetComment = '/comments/getTaskComment?taskId=';
 export const delteTaskComment = '/comments/deleteComment?';
 export const updateTaskComment = '/comments/updateComment';
 
-export const getHistory = '/history/getHistory?taskId=';
+export const getHistory = '/history/getHistory';
 
 export const getPriorityTaskboard = '/task/getPriorityTasks';
 export const getWeekTaskCount = '/task/getTasksWeekCount';
