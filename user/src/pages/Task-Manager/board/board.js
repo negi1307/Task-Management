@@ -6,7 +6,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
 import { getAllTask, updateTask } from '../../../redux/actions';
 import MainLoader from '../../../constants/Loader/loader';
-import { getHistory } from '../../../redux/addcomment/actions';
+import {  getHistoryAction } from '../../../redux/addcomment/actions';
 import { getTaskStatusCount } from '../../../redux/Summary/action';
 import { getComment } from '../../../redux/addcomment/actions';
 import Taskdetail from './taskdetail';
@@ -241,7 +241,7 @@ const Boards = (props) => {
         setshowTaskModel(true);
         setCommentData(item);
         dispatch(getComment(item?.taskId));
-        dispatch(getHistory(item?.taskId));
+        dispatch(getHistoryAction(item?.taskId));
     };
 
     const closeTaskDetailMOdel = () => {

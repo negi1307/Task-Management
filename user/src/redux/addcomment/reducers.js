@@ -17,11 +17,11 @@ const UPDATE_COMMENT = {
     loading: false,
 };
 
-const GETHISTORY_INITAL_STATE = {
+const GET_HISTORY = {
     data: [],
-    message: '',
     loading: false,
-};
+    message: ""
+}
 
 const GET_ALL_COMMENT_INITAL_STATE = {
     data: [],
@@ -146,26 +146,31 @@ export const updateComment = (state = UPDATE_COMMENT, action) => {
     }
 };
 
-export const getHistoryData = (state = GETHISTORY_INITAL_STATE, action) => {
-    console.log(GETHISTORY_INITAL_STATE)
+export const getHistoryReducer = (state = GET_HISTORY, action) => {
+    // console.log(GET_HISTORY,'get')
     switch (action.type) {
         case Addcomment.GET_HISTORY_LOADING:
             return {
-                data: GETHISTORY_INITAL_STATE.data,
-                loading: true,
+                data: GET_HISTORY.data,
+                loading: true
             };
         case Addcomment.GET_HISTORY_SUCCESS:
             return {
                 data: action?.payload,
-                loading: false,
+                loading: false
             };
-
+        case Addcomment.GET_HISTORY_RESET:
+            return {
+                data: GET_HISTORY,
+                loading: false
+            };
         case Addcomment.GET_HISTORY_ERROR:
             return {
                 data: [],
+                status: !200,
                 loading: false,
                 message: action?.payload,
-            };
+            };;
         default:
             return { ...state };
     }

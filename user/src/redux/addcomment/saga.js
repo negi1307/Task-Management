@@ -128,34 +128,46 @@ function* updateTaskFunction({ payload }) {
     }
 }
 
-function* getHistroryFunction({ payload }) {
+function* getHistoryFunction({ payload }) {
+  
+
     try {
         yield put({
             type: Addcomment.GET_HISTORY_LOADING,
-            payload: {},
-        });
+            payload: {}
+        })
         const response = yield call(getHistoryApi, { payload });
-        console.log(response, '444444444')
         if (response.data.status) {
             yield put({
                 type: Addcomment.GET_HISTORY_SUCCESS,
                 payload: { ...response.data },
             });
             // yield put({
-            //     type: Addcomment.GET_ALL_MILESTONES_RESET,
+            //     type: TASK_TYPES.GET_BUGS_RESET,
             //     payload: {},
             // });
-        } else {
             yield put({
-                type: Addcomment.GET_HISTORY_ERROR,
+                type: Addcomment.GET_HISTORY_RESET,
                 payload: { ...response.data },
             });
         }
+        else {
+            yield put({
+                type: Addcomment.GET_HISTORY_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
     } catch (error) {
         yield put({
             type: Addcomment.GET_HISTORY_ERROR,
-            payload: { message: error?.message },
+            payload: { error }
         });
+        yield put({
+            type: Addcomment.GET_HISTORY_RESET,
+            payload: {},
+        });
+
     }
 }
 function* getSubTaskFunction({ payload }) {
@@ -245,8 +257,8 @@ export function* updateTaskCommentsSaga(): any {
     yield takeEvery(Addcomment.UPDATE_COMMENT, updateTaskFunction);
 }
 
-export function* getHistrorySaga(): any {
-    yield takeEvery(Addcomment.GET_HISTORY, getHistroryFunction);
+export function* getHistorySaga(): any {
+    yield takeEvery(Addcomment.GET_HISTORY, getHistoryFunction);
 }
 
 export function* getCommetSaga(): any {
@@ -263,7 +275,7 @@ function* Addcommentsaga(): any {
         fork(addAllTaskCommentsSaga),
         fork(deleteTaskCommentsSaga),
         fork(updateTaskCommentsSaga),
-        fork(getHistrorySaga),
+        fork(getHistorySaga),
         fork(getCommetSaga),
         fork(getBugsSaga),
         fork(getSubTaskSaga)
