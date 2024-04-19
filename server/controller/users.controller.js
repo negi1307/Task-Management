@@ -9,7 +9,7 @@ const { userHistory } = require('../controller/history.controller');
 // Register a user or invite a user 
 const registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, role,designationId,technologyId } = req.body;
+    const { firstName, lastName, email, password, role, designationId, technologyId } = req.body;
     if ((role === 'CTO' || role === 'PM') && (await userModel.findOne({ role }))) {
       return res.status(200).json({ status: "400", message: `${role} already exists` });
     }
@@ -87,7 +87,7 @@ const getUsers = async (req, res) => {
   try {
     const result = await userModel.find({ role: { $ne: 'Admin' } }).sort({ createdAt: -1 });
     const totalCount = await userModel.countDocuments({ role: { $ne: 'Admin' } });
-    return res.status(200).json({ status: "200", message: 'User data fetched successfully', response: result,totalCount :totalCount });
+    return res.status(200).json({ status: "200", message: 'User data fetched successfully', response: result, totalCount: totalCount });
   } catch (error) {
     return res.status(500).json({ status: "500", message: 'Something went wrong' });
   }
@@ -248,7 +248,7 @@ const trackTime = async (req, res) => {
   }
 }
 
-// {
+/*// {
 //   $facet: {
 //     // Branch 1: Original output grouped by project and user
 //     "projectUserTime": [
@@ -349,9 +349,7 @@ const trackTime = async (req, res) => {
 //       },
 //     ],
 //   },
-// },
-
-
+// },*/
 
 
 // list of assignees
@@ -486,13 +484,13 @@ const subTaskTrackTime = async (req, res) => {
               input: '$projects',
               as: 'project',
               in: {
-                projectName: { $arrayElemAt: ['$$project.projectName', 0] }, // Extract the single element from the array
+                projectName: { $arrayElemAt: ['$$project.projectName', 0] },
                 timeSpent: {
                   $concat: [
                     {
                       $toString: {
                         $floor: {
-                          $divide: ['$$project.timeSpent', 3600000], // Convert milliseconds to hours
+                          $divide: ['$$project.timeSpent', 3600000],
                         },
                       },
                     },
@@ -549,6 +547,41 @@ const subTaskTrackTime = async (req, res) => {
   }
 }
 
+
+// specific user tasks and their count
+const getStatusCounts = async (taskQuery) => {
+  const statusMapping = {
+    1: "Todo",
+    2: "In Progress",
+    3: "Testing",
+    4: "Done",
+    5: "Hold"
+  };
+  const statusCounts = {};
+  const statusValues = Object.keys(statusMapping);
+  for (const status of statusValues) {
+    const count = await taskModel.countDocuments({ ...taskQuery, status });
+    statusCounts[statusMapping[status]] = count;
+  }
+  return statusCounts;
+};
+
+const specificUserTask = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    const userTasks = await taskModel.find({ assigneeId: userId });
+    const tasksByStatus = await getStatusCounts({ assigneeId: userId });
+    const response = { totalTasks: userTasks.length, ...tasksByStatus };
+    return res.status(200).json({ status: 200, message: "User's tasks fetched successfully", response });
+  } catch (error) {
+    return res.status(500).json({ status: 500, message: "Internal server error", error: error.message });
+  }
+};
+
+
+
+
+
 module.exports = {
   registerUser,
   logInUser,
@@ -557,5 +590,6 @@ module.exports = {
   trackTime,
   getAssigneesList,
   getReporterList,
-  subTaskTrackTime
+  subTaskTrackTime,
+  specificUserTask
 };
