@@ -38,10 +38,8 @@ const getProjects = async (req, res) => {
     let query = {};
     query.activeStatus = activeStatus;
     query.projectStatus = projectStatus;
-
     const totalCount = await projectModel.countDocuments(query);
     let projects = await projectModel.find(query).sort({ createdAt: -1 }).skip((parseInt(skip) - 1) * pageSize).limit(pageSize);
-
     projects = projects.map(project => {
       const millisecondsPerDay = 1000 * 60 * 60 * 24;
       const endDate = new Date(project.endDate);
@@ -49,25 +47,13 @@ const getProjects = async (req, res) => {
       const daysLeft = Math.max(0, Math.ceil((endDate - startDate) / millisecondsPerDay));
       return { ...project.toObject(), daysLeft };
     });
+    const response = { totalCount, totalPages: Math.ceil(totalCount / pageSize), projects, };
 
-    const totalPages = Math.ceil(totalCount / pageSize);
-
-    return res.status(200).json({
-      status: "200",
-      message: "Projects fetched successfully",
-      response: projects,
-      totalCount,
-      totalPages,
-    });
+    return res.status(200).json({ status: "200", message: "Projects fetched successfully", response });
   } catch (error) {
-    return res.status(500).json({
-      status: "500",
-      message: "Something went wrong",
-      error: error.message,
-    });
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message, });
   }
 };
-
 
 
 // Update a project
@@ -290,8 +276,37 @@ const getUsersProjects = async (req, res) => {
 }
 
 
+// // count the total projects and also according to their status
+// const getProjectCount = async (req, res) => {
+//   try {
+//     const projectCounts = await projectModel.aggregate([
+//       {
+//         $group: {
+//           _id: "$projectStatus",
+//           count: { $sum: 1 }
+//         }
+//       },
+//       {
+//         $group: {
+//           _id: null,
+//           totalProjects: { $sum: "$count" },
+//           projectStatusCounts: { $push: { status: "$_id", count: "$count" } }
+//         }
+//       }
+//     ]);
+
+//     const projectStatusCounts = {};
+//     projectCounts[0].projectStatusCounts.forEach(statusCount => { projectStatusCounts[statusCount.status] = statusCount.count });
+//     const response = { totalProjects: projectCounts[0].totalProjects, projectStatusCounts };
+//     return res.status(200).json({ status: 200, message: "Projects data fetched successfully", response });
+//   } catch (error) {
+//     return res.status(500).json({ status: 500, message: "Something went wrong", error: error.message });
+//   }
+// };
 
 
 
 
-module.exports = { addProject, getProjects, updateProject, uploadProject_File, getallProject, allProjectFiles, projectTotalTime, getUsersProjects };
+
+
+module.exports = { addProject, getProjects, updateProject, uploadProject_File, getallProject, allProjectFiles, projectTotalTime, getUsersProjects};
