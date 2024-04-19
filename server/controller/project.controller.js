@@ -276,37 +276,37 @@ const getUsersProjects = async (req, res) => {
 }
 
 
-// // count the total projects and also according to their status
-// const getProjectCount = async (req, res) => {
-//   try {
-//     const projectCounts = await projectModel.aggregate([
-//       {
-//         $group: {
-//           _id: "$projectStatus",
-//           count: { $sum: 1 }
-//         }
-//       },
-//       {
-//         $group: {
-//           _id: null,
-//           totalProjects: { $sum: "$count" },
-//           projectStatusCounts: { $push: { status: "$_id", count: "$count" } }
-//         }
-//       }
-//     ]);
+// count the total projects and also according to their status
+const getProjectCount = async (req, res) => {
+  try {
+    const projectCounts = await projectModel.aggregate([
+      {
+        $group: {
+          _id: "$projectStatus",
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalProjects: { $sum: "$count" },
+          projectStatusCounts: { $push: { status: "$_id", count: "$count" } }
+        }
+      }
+    ]);
 
-//     const projectStatusCounts = {};
-//     projectCounts[0].projectStatusCounts.forEach(statusCount => { projectStatusCounts[statusCount.status] = statusCount.count });
-//     const response = { totalProjects: projectCounts[0].totalProjects, projectStatusCounts };
-//     return res.status(200).json({ status: 200, message: "Projects data fetched successfully", response });
-//   } catch (error) {
-//     return res.status(500).json({ status: 500, message: "Something went wrong", error: error.message });
-//   }
-// };
-
-
+    const projectStatusCounts = {};
+    projectCounts[0].projectStatusCounts.forEach(statusCount => { projectStatusCounts[statusCount.status] = statusCount.count });
+    const response = { totalProjects: projectCounts[0].totalProjects, projectStatusCounts };
+    return res.status(200).json({ status: 200, message: "Projects data fetched successfully", response });
+  } catch (error) {
+    return res.status(500).json({ status: 500, message: "Something went wrong", error: error.message });
+  }
+};
 
 
 
 
-module.exports = { addProject, getProjects, updateProject, uploadProject_File, getallProject, allProjectFiles, projectTotalTime, getUsersProjects};
+
+
+module.exports = { addProject, getProjects, updateProject, uploadProject_File, getallProject, allProjectFiles, projectTotalTime, getUsersProjects,getProjectCount};
