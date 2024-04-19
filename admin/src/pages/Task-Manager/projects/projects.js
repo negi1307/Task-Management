@@ -188,7 +188,7 @@ const Projects = () => {
                             <div className="row d-flex align-items-center">
                                 <div className={`col-auto  cp ${projectStatus == 'Ongoing' ? 'Active_data' : 'InActive_data'}`}>
                                     <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('1')}>
-                                        Ongoinglkjhg
+                                        Ongoing
                                     </p>
                                 </div>
                                 <div className={`col-auto  cp ${projectStatus == "Support" ? 'Active_data' : 'InActive_data'}`}>

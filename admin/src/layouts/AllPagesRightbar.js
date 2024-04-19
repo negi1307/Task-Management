@@ -125,11 +125,12 @@ export default function Pagesaddtask(props) {
         setStartDate("");
         setEndDate("")
     };
+    const projects = store?.getProject?.data?.response?.projects;
     useEffect(() => {
         // reset({ projectname: projectId, Milestone: mileStoneId, Sprint: sprintId });
         dispatch(getAllRoles());
         dispatch(getAllUsers());
-        dispatch(getAllCategory({status:true}));
+        dispatch(getAllCategory({ status: true }));
         dispatch(getAllProjects({ status: 1, skip: 1, projectStatus: 'Ongoing' }));
         dispatch(getReporterAction())
         // if (projectSelected !== null) {
@@ -202,7 +203,7 @@ export default function Pagesaddtask(props) {
                                                     value={projectSelected || ''}
                                                 >
                                                     <option value=''>Select Project</option>
-                                                    {store?.getProject?.data?.response?.map(project => (
+                                                    {projects?.map(project => (
                                                         <option key={project?._id} value={project?._id}>{project?.projectName}</option>
                                                     ))}
                                                 </Form.Select>
@@ -393,7 +394,7 @@ export default function Pagesaddtask(props) {
                                             {category?.map((ele, ind) => (
                                                 <option value={ele?._id}>
                                                     {' '}
-                                                    {ele?.name} 
+                                                    {ele?.name}
                                                 </option>
                                             ))}
                                         </select>

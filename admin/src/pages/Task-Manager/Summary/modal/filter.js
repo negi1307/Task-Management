@@ -98,7 +98,7 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
             Projectname: data?.projectId?.projectName ? data?.projectId?.projectName : '',
         }));
     } else {
-        console.error("usersData is not an array or not defined");
+        // console.error("usersData is not an array or not defined");
     }
 
     return (

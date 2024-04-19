@@ -357,6 +357,27 @@
         overflow: auto;
     }
 
+    /* CSS for the custom scrollbar */
+    .scrollable-content::-webkit-scrollbar {
+        width: 10px;
+        /* Width of the scrollbar */
+    }
+
+    .scrollable-content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .scrollable-content::-webkit-scrollbar-thumb {
+        background: #4141413c;
+        border-radius: 10px;
+    }
+
+    .scrollable-content::-webkit-scrollbar-thumb:hover {
+        background: #888;
+    }
+
+
+
     .i_f {
         font-size: 38px;
         font-weight: 400;
