@@ -443,7 +443,7 @@ const getTasksAccToStatus = async (req, res) => {
           attachmentType: 1,
           createdAt: 1,
           updatedAt: 1,
-          // label: 1,
+          inProgressDate: 1,
           daysLeft: {
             $toInt: {
               $max: [
@@ -864,24 +864,29 @@ const getUserAssignments = async (req, res) => {
     const { flag, projectId, milestoneId, sprintId, skip, activeStatus } = req.query;
     const pageSize = 10;
     const now = new Date();
+
     let matchQuery = { assigneeId: req.user._id };
+
     matchQuery.activeStatus = JSON.parse(req.query.activeStatus);
     if (flag === 'project') {
       console.log(matchQuery.activeStatus);
+
       const projectIds = await taskModel.distinct('projectId');
+
       console.log(projectIds, matchQuery.activeStatus)
+
       const projects = await projectModel.aggregate([
         {
           $match: { _id: { $in: projectIds }, activeStatus: matchQuery.activeStatus }
         },
-        {
-          $lookup: {
-            from: "technologies",
-            localField: "technology",
-            foreignField: "_id",
-            as: "technologies"
-          }
-        },
+        // {
+        //   $lookup: {
+        //     from: "technologies",
+        //     localField: "technology",
+        //     foreignField: "_id",
+        //     as: "technologies"
+        //   }
+        // },
         {
           $project: {
             _id: 1,
@@ -1037,10 +1042,6 @@ const userWorkingHours = async (req, res) => {
     }
 
     const tasks = await taskModel.find(query).populate('projectId', 'projectName').populate('assigneeId');
-
-    // const tasks = await taskModel.find({ assigneeId: userId, createdAt: { $gte: startDate }, updatedAt: { $lte: adjustedEndDate } })
-    // .populate('projectId', 'projectName');
-
     let totalHours = 0;
     let totalMinutes = 0;
     let totalSeconds = 0;

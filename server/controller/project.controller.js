@@ -2,6 +2,7 @@ const projectModel = require("../models/project.model");
 const projectupload = require('../models/projectupload.model');
 const taskModel = require("../models/task.model")
 const { userHistory } = require('../controller/history.controller');
+const userModel = require("../models/users.model")
 
 // Add a new Project
 const addProject = async (req, res) => {
@@ -162,103 +163,133 @@ const projectTotalTime = async (req, res) => {
 }
 
 
-// users projects record
-// const getUsersProjects = async (req, res) => {
-//   try {
-//     const userIds = await taskModel.distinct("assigneeId");
-//     const userProjects = {};
-//     for (const userId of userIds) {
-//       const userTasks = await taskModel.find({ assigneeId: userId }).populate('assigneeId').populate('projectId');
-
-
-//     console.log(userTasks, "/////////////")
-
-//     const projectIds = Array.from(new Set(userTasks.map(task => task.projectId)));
-//       userProjects[userId] = projectIds;
-//       console.log(projectIds,"=========================")
-//     }
-
-//     return res.status(200).json({ status: 200, message: "Users' projects retrieved successfully", userProjects: userProjects });
-//   } catch (error) {
-//     return res.status(500).json({ status: 500, message: "Something went wrong", error: error.message });
-//   }
-// }
-
-
-
-// const getUsersProjects = async (req, res) => {
-//   try {
-//     const userIds = await taskModel.distinct("assigneeId");
-//     const userProjects = {};
-
-//     for (const userId of userIds) {
-//       const userTasks = await taskModel.aggregate([
-//         { $match: { assigneeId: userId } },
-//         { $lookup: { from: "users", localField: "assigneeId", foreignField: "_id", as: "assigneeInfo" } },
-//         { $unwind: "$assigneeInfo" },
-//         { $lookup: { from: "projects", localField: "projectId", foreignField: "_id", as: "projectInfo" } },
-//         { $unwind: "$projectInfo" },
-//         {
-//           $project: {
-//             "assigneeInfo._id": 1,
-//             "assigneeInfo.firstName": 1,
-//             "assigneeInfo.lastName": 1,
-//             "projectInfo._id": 1,
-//             "projectInfo.name": 1,
-//             "projectInfo.projectStatus": 1,
-//             "projectInfo.projectType": 1
-//           }
-//         }
-//       ]);
-
-//       console.log(userTasks)
-//       const projectIds = Array.from(new Set(userTasks.map(task => task.projectId)));
-//       userProjects[userId] = projectIds;
-//     }
-
-//     return res.status(200).json({ status: 200, message: "Users' projects retrieved successfully", userProjects: userProjects });
-//   } catch (error) {
-//     return res.status(500).json({ status: 500, message: "Something went wrong", error: error.message });
-//   }
-// }
-
+// get the users projects record
 const getUsersProjects = async (req, res) => {
   try {
-    const userIds = await taskModel.distinct("assigneeId");
-    const userProjects = {};
+    let matchStage = {};
+    let skipValue = 0;
+    let limitValue = 10;
 
-    for (const userId of userIds) {
-      const userTasks = await taskModel.aggregate([
-        { $match: { assigneeId: userId } },
-        { $lookup: { from: "users", localField: "assigneeId", foreignField: "_id", as: "assigneeInfo" } },
-        { $unwind: "$assigneeInfo" },
-        { $lookup: { from: "projects", localField: "projectId", foreignField: "_id", as: "projectInfo" } },
+    if (req.query.page && req.query.limit) {
+      const page = parseInt(req.query.page);
+      const limit = parseInt(req.query.limit);
+
+      skipValue = (page - 1) * limit;
+      limitValue = limit;
+    }
+
+    if (req.query.month) {
+      const { month } = req.query;
+      const monthNumber = new Date(Date.parse(month + " 1, 2000")).getMonth() + 1;
+
+      const startDate = new Date(Date.UTC(new Date().getFullYear(), monthNumber - 1, 1));
+      const endDate = new Date(Date.UTC(new Date().getFullYear(), monthNumber, 0, 23, 59, 59));
+
+      matchStage = {
+        createdAt: { $gte: startDate, $lte: endDate }
+      };
+    } else {
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth() + 1;
+      const currentYear = currentDate.getFullYear();
+
+      const startDate = new Date(Date.UTC(currentYear, currentMonth - 1, 1));
+      const endDate = new Date(Date.UTC(currentYear, currentMonth, 0, 23, 59, 59));
+
+      matchStage = {
+        createdAt: { $gte: startDate, $lte: endDate }
+      };
+    }
+
+    const [userTasks, totalCount] = await Promise.all([
+      taskModel.aggregate([
+        { $match: matchStage },
+        {
+          $lookup: {
+            from: "users",
+            localField: "assigneeId",
+            foreignField: "_id",
+            as: "assigneeInfo"
+          }
+        },
+        { $unwind: { path: "$assigneeInfo", preserveNullAndEmptyArrays: true } },
+        {
+          $lookup: {
+            from: "projects",
+            localField: "projectId",
+            foreignField: "_id",
+            as: "projectInfo"
+          }
+        },
         { $unwind: "$projectInfo" },
+        {
+          $lookup: {
+            from: "techcategories",
+            localField: "assigneeInfo.designationId",
+            foreignField: "_id",
+            as: "designation"
+          }
+        },
+        { $unwind: { path: "$designation", preserveNullAndEmptyArrays: true } },
+        {
+          $lookup: {
+            from: "technologies",
+            localField: "assigneeInfo.technologyId",
+            foreignField: "_id",
+            as: "technology"
+          }
+        },
+        { $unwind: { path: "$technology", preserveNullAndEmptyArrays: true } },
         {
           $group: {
             _id: "$assigneeId",
             assigneeFirstName: { $first: "$assigneeInfo.firstName" },
             assigneeLastName: { $first: "$assigneeInfo.lastName" },
+            assigneeDesignationName: { $first: "$designation.name" },
+            assigneeTechnologyName: { $first: "$technology.techName" },
             projects: {
               $addToSet: {
-                projectId: "$projectInfo._id",
                 projectName: "$projectInfo.projectName",
                 projectStatus: "$projectInfo.projectStatus",
                 projectType: "$projectInfo.projectType"
               }
             }
           }
-        }
-      ]);
+        },
+        {
+          $project: {
+            _id: 0,
+            User_First_Name: "$assigneeFirstName",
+            User_Last_Name: "$assigneeLastName",
+            Designation: "$assigneeDesignationName",
+            Technology: "$assigneeTechnologyName",
+            projects: 1
+          }
+        },
+        { $skip: skipValue },
+        { $limit: limitValue }
+      ]),
+      taskModel.aggregate([
+        { $match: matchStage },
+        {
+          $group: {
+            _id: "$assigneeId"
+          }
+        },
+        { $count: "totalCount" }
+      ])
+    ]);
 
-      userProjects[userId] = userTasks.length > 0 ? userTasks[0] : { _id: userId, assigneeFirstName: '', assigneeLastName: '', projects: [] };
-    }
+    const totalUsers = totalCount.length > 0 ? totalCount[0].totalCount : 0;
+    const totalPages = Math.ceil(totalUsers / limitValue); // Calculate total pages
 
-    return res.status(200).json({ status: 200, message: "Users' projects retrieved successfully", userProjects: userProjects });
+    return res.status(200).json({ status: 200, message: "Users' projects retrieved successfully", userProjects: userTasks, totalCount: totalUsers, totalPages: totalPages, currentPage: req.query.page ? parseInt(req.query.page) : 1 });
   } catch (error) {
     return res.status(500).json({ status: 500, message: "Something went wrong", error: error.message });
   }
 }
+
+
 
 
 
