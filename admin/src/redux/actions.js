@@ -9,3 +9,4 @@ export * from './technology/action';
 export * from './Summary/action';
 export * from './clientRepository/action'
 export * from './timeTracker/action'
+export * from './report/action'

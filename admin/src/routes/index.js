@@ -32,6 +32,7 @@ const UserNotFound = React.lazy(() => import('../components/UserNotFound'));
 // dashboard
 const AdminDashboard = React.lazy(() => import('../pages/Task-Manager/Summary/adminSummary'));
 const Projects = React.lazy(() => import('../pages/Task-Manager/projects/projects'));
+const PageNotFound = React.lazy(() => import('../pages/error/PageNotFound'));
 const AnalyticsDashboard = React.lazy(() => import('../pages/dashboard/Analytics'));
 const EcommerceDashboard = React.lazy(() => import('../pages/dashboard/Ecommerce'));
 const ProjectDashboard = React.lazy(() => import('../pages/dashboard/Project'));
@@ -184,7 +185,8 @@ const Widgets = React.lazy(() => import('../pages/uikit/Widgets'));
 // maps
 const GoogleMaps = React.lazy(() => import('../pages/maps/GoogleMaps'));
 const VectorMaps = React.lazy(() => import('../pages/maps/VectorMaps'));
-
+// reports
+const Reports = React.lazy(() => import('../pages/Task-Manager/report/Report'))
 const loading = () => <div className=""></div>;
 
 type LoadComponentProps = {
@@ -286,8 +288,8 @@ const AllRoutes = () => {
                         //     element: <LoadComponent component={ProjectDashboard} />,
                         // },
                         {
-                            path: 'e-wallet',
-                            element: <LoadComponent component={EWalletDashboard} />,
+                            path: 'report',
+                            element: <LoadComponent component={Reports} />,
                         },
 
                         //////////ADMIN DASHBOARD//////////////////////
@@ -300,6 +302,10 @@ const AllRoutes = () => {
                         {
                             path: 'projects',
                             element: <LoadComponent component={Projects} />,
+                        },
+                        {
+                            path: '*',
+                            element: <LoadComponent component={PageNotFound} />,
                         },
                         {
                             path: 'projects/:id',

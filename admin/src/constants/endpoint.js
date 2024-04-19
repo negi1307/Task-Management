@@ -72,3 +72,4 @@ export const Create_subtask = "/subTask/addSubTask"
 export const getAllTaskCount = '/task/getTasksCount'
 export const getUserRecord = '/task/userWorkingHours?'
 
+export const getReport = '/project/usersProjects'

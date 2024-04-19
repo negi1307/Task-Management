@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getPriorityGraphAction, getAllTaskCountAction, getTaskSummmaryDetail, getTaskWeekCountAction } from '../../../redux/Summary/action';
 import { getHistoryAction } from '../../../redux/task/action';
+import { getAllProjects } from '../../../redux/projects/action'
 import Chart from 'react-apexcharts';
-import { ProgressBar } from 'react-bootstrap';
+import { ProgressBar, Col } from 'react-bootstrap';
 import Loader from '../../../components/Loader'
 import HeaderMain from '../header/HeaderMain';
 import { PieChart } from '@mui/x-charts/PieChart';
@@ -15,6 +16,9 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import FilterModal from './modal/filter';
 import Pagesaddtask from '../../../layouts/AllPagesRightbar';
+import { TbReport } from "react-icons/tb";
+import { FaUsers } from "react-icons/fa6";
+import { getAllUsers } from '../../../redux/user/action'
 const AdminDashboard = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -26,16 +30,7 @@ const AdminDashboard = () => {
     const [data, setData] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [filterModal, setFilterModal] = useState(false);
-    // const taskCountData = useSelector(state => state?.getTaskCountReducer?.data?.Response);
-    // console.log({ taskCountData })
-    // const taskCountfe = store?.getTaskCountReducer?.data
-    // console.log({ taskCountfe })
-    // const totalTaskCount = useSelector(state => state.totalTaskCount);
-    // console.log({ totalTaskCount })
 
-    // console.log({ taskCount })
-    // const [skip, setSkip] = useState(0);
-    // const [count, setCount] = useState();
     const {
         register,
         handleSubmit,
@@ -52,24 +47,6 @@ const AdminDashboard = () => {
         }
     }, [successHandle, store?.getHistoryReducer?.data?.response]);
 
-    // useEffect(() => {
-    //     const historyData = store?.getHistoryReducer?.data?.response;
-    //     if (historyData) {
-    //         setHistoryResponse(historyData);
-    //     }
-    // }, [store?.getHistoryReducer?.data?.response]);
-    // useEffect(() => {
-    //     const historyPageCount = store?.getHistoryReducer?.data?.totalPage;
-    //     if (historyPageCount) {
-    //         setCount(historyPageCount);
-    //     }
-    // }, [store?.getHistoryReducer?.data?.totalPage]);
-
-    // const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    //     setSkip(value);
-    //     dispatch(getHistoryAction({ skip: value }));
-    // };
-
     useEffect(() => {
         const taskTotalCount = store?.getTaskSummaryReducer?.data.response;
         if (taskTotalCount) {
@@ -77,9 +54,6 @@ const AdminDashboard = () => {
         }
     }, [store?.getTaskSummaryReducer?.data.response]);
 
-    // if (taskCount !== null) {
-    //     console.log(taskCount, '///task');
-    // }
     const closeaddModal = () => {
         // getalltasks();
     }
@@ -87,13 +61,18 @@ const AdminDashboard = () => {
         setFilterModal(false);
     }
     useEffect(() => {
+        dispatch(getAllProjects({ status: 1, projectStatus: 'Ongoing' }));
+        dispatch(getAllUsers());
         dispatch(getTaskWeekCountAction());
         dispatch(getTaskSummmaryDetail());
         dispatch(getHistoryAction());
         dispatch(getPriorityGraphAction());
         dispatch(getAllTaskCountAction());
     }, [dispatch]);
+    const getProjectList = store?.getProject?.data;
+    const userCount = store?.getAllUsers?.data;
     const priorityData = store?.getPriorityGraphReducer?.data?.response;
+
     function generateLink(userActivity, item) {
         switch (userActivity) {
             case "Created milestone":
@@ -176,42 +155,44 @@ const AdminDashboard = () => {
                             {/* {filterModal && <FilterModal closeModal={() => setFilterModal(false)} />} */}
 
                         </div>
-                        <div className="col all_bg  border_clr m-2 rounded-4 bg-white">
-                            <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
-                                <div className="bg_clr p-3 rounded-circle text-center ">
-                                    <i className="bi bi-check-lg w-size" />
+                        <div className="col  border_clr m-2   rounded-3 bg-white">
+                            <Link to='/dashboard/projects'>
+                                <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
+                                    <div className="bg_clr p-3 rounded-circle text-center ">
+                                        <TbReport className='w-size text-secondary' />
+                                    </div>
+                                    <div className="mx-3 ">
+                                        <strong>
+                                            <h5 className="mb-0 mt-1 text-secondary">
+                                                {getProjectList.totalCount}
+                                            </h5>
+
+                                            <Link to='/dashboard/projects'>
+                                                <span className="m-0 text-secondary">Ongoing Projects</span>
+                                            </Link>
+                                        </strong>
+                                    </div>
                                 </div>
-                                <div className="mx-3 ">
-                                    <strong>
-                                        <h5 className="mb-0 mt-1 text-secondary">
-                                            {lastWeekCount?.doneCount ? lastWeekCount?.doneCount : '0'} task done
-                                        </h5>
-                                    </strong>
-                                    <strong>
-                                        <p className="m-0 text-secondary">in the last 7 days</p>
-                                    </strong>
-                                </div>
-                            </div>
+                            </Link>
                         </div>
-                        <div className="col  border_clr  m-2 rounded-4 bg-white">
-                            <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
-                                <div className="bg_clr  p-3 rounded-circle text-center ">
-                                    <i className="bi bi-pencil-fill w-size" />
+                        <div className="col  border_clr  m-2   rounded-3 bg-white">
+                            <Link to='/dashboard/alluser'>
+                                <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
+                                    <div className="bg_clr  p-3 rounded-circle text-center ">
+                                        <FaUsers className='w-size text-secondary' />
+                                    </div>
+                                    <div className="mx-3 ">
+                                        <strong>
+                                            <h5 className="mb-0 mt-1 text-secondary">
+                                                {userCount?.totalCount}
+                                            </h5>
+                                            <p className="m-0 text-secondary">Total Users</p>
+                                        </strong>
+                                    </div>
                                 </div>
-                                <div className="mx-3 ">
-                                    <b>
-                                        <h5 className="mb-0 mt-1 text-secondary">
-                                            {lastWeekCount?.updatedCount ? lastWeekCount?.updatedCount : '0'} task
-                                            updated
-                                        </h5>
-                                    </b>
-                                    <b>
-                                        <p className="m-0 text-secondary">in the last 7 days</p>
-                                    </b>
-                                </div>
-                            </div>
+                            </Link>
                         </div>
-                        <div className="col  border_clr  m-2 rounded-4 bg-white">
+                        <div className="col  border_clr  m-2   rounded-3 bg-white">
                             <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
                                 <div className="bg_clr  p-3 rounded-circle text-center ">
                                     <i className="bi bi-plus-lg w-size " />
@@ -219,16 +200,14 @@ const AdminDashboard = () => {
                                 <div className="mx-3 ">
                                     <b>
                                         <h5 className="mb-0 mt-1 text-secondary">
-                                            {lastWeekCount?.createdCount ? lastWeekCount?.createdCount : '0'} task Add
+                                            {lastWeekCount?.createdCount ? lastWeekCount?.createdCount : '0'} Tasks added
                                         </h5>
-                                    </b>
-                                    <b>
-                                        <p className="m-0 text-secondary">in the last 7 days</p>
+                                        <p className="m-0 text-secondary">in last 7 days</p>
                                     </b>
                                 </div>
                             </div>
                         </div>
-                        <div className="col  border_clr  m-2 rounded-4 bg-white">
+                        <div className="col  border_clr  m-2   rounded-3 bg-white">
                             <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
                                 <div className="bg_clr  p-3 rounded-circle text-center ">
                                     <i className="bi bi-calendar-week w-size" />
@@ -244,6 +223,11 @@ const AdminDashboard = () => {
                                     </b>
                                 </div>
                             </div>
+                        </div>
+                        <div className="col-12 text-end">
+                            <Link to='/dashboard/report'>
+                                View All
+                            </Link>
                         </div>
                     </div>
                     <div className="row">

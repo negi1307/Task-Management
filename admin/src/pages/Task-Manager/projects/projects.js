@@ -37,14 +37,6 @@ const Projects = () => {
     const [showModal, setShowModal] = useState(false);
     const [formSubmitted, setFormSubmitted] = useState(false);
 
-
-    // const handleFormSubmit = () => {
-    //     dispatch(getAllTask());
-    //     dispatch(getAssignUserAction());
-    //     dispatch(getAllRoles())
-    //     setFormSubmitted(true);
-    // };
-
     const closeaddModal = () => {
         // getalltasks();
     }
@@ -196,7 +188,7 @@ const Projects = () => {
                             <div className="row d-flex align-items-center">
                                 <div className={`col-auto  cp ${projectStatus == 'Ongoing' ? 'Active_data' : 'InActive_data'}`}>
                                     <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('1')}>
-                                        Ongoing
+                                        Ongoinglkjhg
                                     </p>
                                 </div>
                                 <div className={`col-auto  cp ${projectStatus == "Support" ? 'Active_data' : 'InActive_data'}`}>
