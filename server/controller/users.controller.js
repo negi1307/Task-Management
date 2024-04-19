@@ -84,14 +84,25 @@ async function updateTaskStatus(existingUser) {
 
 // Get All Users
 const getUsers = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+
   try {
-    const result = await userModel.find({ role: { $ne: 'Admin' } }).sort({ createdAt: -1 });
-    const totalCount = await userModel.countDocuments({ role: { $ne: 'Admin' } });
-    return res.status(200).json({ status: "200", message: 'User data fetched successfully', response: result, totalCount: totalCount });
+    const query = { role: { $ne: 'Admin' } };
+
+    const totalCount = await userModel.countDocuments(query);
+    const totalPages = Math.ceil(totalCount / limit);
+    const skip = (page - 1) * limit;
+
+    const result = await userModel.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).exec();
+
+    return res.status(200).json({ status: "200", message: 'User data fetched successfully', response: result, totalCount: totalCount, totalPages: totalPages });
   } catch (error) {
     return res.status(500).json({ status: "500", message: 'Something went wrong' });
   }
 }
+
+
 
 // Delete A User
 const deleteUser = async (req, res) => {
@@ -572,7 +583,7 @@ const specificUserTask = async (req, res) => {
     const userTasks = await taskModel.find({ assigneeId: userId });
     const tasksByStatus = await getStatusCounts({ assigneeId: userId });
     const response = { totalTasks: userTasks.length, ...tasksByStatus };
-    return res.status(200).json({ status: 200, message: "User's tasks fetched successfully", response });
+    return res.status(200).json({ status: 200, message: "User's tasks fetched successfully", response, tasks: userTasks });
   } catch (error) {
     return res.status(500).json({ status: 500, message: "Internal server error", error: error.message });
   }
