@@ -5,7 +5,7 @@ import { getPriorityGraphAction, getAllTaskCountAction, getTaskSummmaryDetail, g
 import { getHistoryAction } from '../../../redux/task/action';
 import { getAllProjects } from '../../../redux/projects/action'
 import Chart from 'react-apexcharts';
-import { ProgressBar, Col, Container, Row, Table } from 'react-bootstrap';
+import { ProgressBar, Col, Container, Row, Table, Form } from 'react-bootstrap';
 import Loader from '../../../components/Loader'
 import HeaderMain from '../header/HeaderMain';
 import { PieChart } from '@mui/x-charts/PieChart';
@@ -19,6 +19,8 @@ import Pagesaddtask from '../../../layouts/AllPagesRightbar';
 import { TbReport } from "react-icons/tb";
 import { FaUsers } from "react-icons/fa6";
 import { getAllUsers } from '../../../redux/user/action'
+import moment from 'moment';
+
 const AdminDashboard = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -30,6 +32,9 @@ const AdminDashboard = () => {
     const [data, setData] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [filterModal, setFilterModal] = useState(false);
+    const [skip, setSkip] = useState(1);
+    const [projectStatus, setprojectStatus] = useState(1);
+
 
     const {
         register,
@@ -46,7 +51,7 @@ const AdminDashboard = () => {
             setHistoryResponse(historyData);
         }
     }, [successHandle, store?.getHistoryReducer?.data?.response]);
-
+    // console.log({ taskCount })
     useEffect(() => {
         const taskTotalCount = store?.getTaskSummaryReducer?.data.response;
         // console.log({ taskTotalCount })
@@ -62,7 +67,8 @@ const AdminDashboard = () => {
         setFilterModal(false);
     }
     useEffect(() => {
-        dispatch(getAllProjects({ status: 1, projectStatus: 'Ongoing' }));
+        // dispatch(getAllProjects({ status: 1, projectStatus: 'Support' }));
+        // dispatch(getAllProjects({ status: 1, projectStatus: 'Delivered' }));
         dispatch(getAllUsers());
         dispatch(getTaskWeekCountAction());
         dispatch(getTaskSummmaryDetail());
@@ -74,6 +80,7 @@ const AdminDashboard = () => {
     const totalTasks = store?.getAllTaskCountReducer?.data;
     // console.log({ totalTasks })
     const getProjectList = store?.getProject?.data;
+    // console.log({ getProjectList })
     // console.log({ getProjectList })
     const userCount = store?.getAllUsers?.data;
     const priorityData = store?.getPriorityGraphReducer?.data?.response;
@@ -117,6 +124,26 @@ const AdminDashboard = () => {
             data: priorityData?.map((ele, ind) => ele?.count),
         },
     ];
+    const handleProjectStatus = (val) => {
+        if (val == '1') {
+            setprojectStatus('Ongoing');
+            setSkip(1);
+            dispatch(getAllProjects({ status: 1, projectStatus: 'Ongoing' }));
+        } else if (val == '2') {
+            setprojectStatus('Support');
+            setSkip(1);
+            dispatch(getAllProjects({ status: 1, projectStatus: 'Support' }));
+        } else if (val == '3') {
+            setSkip(1);
+            setprojectStatus('Delivered');
+            dispatch(getAllProjects({ status: 1, projectStatus: 'Delivered' }));
+        }
+        //  else {
+        //     setSkip(1);
+        //     setprojectStatus(4);
+        //     dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 4 }));
+        // }
+    };
     return (
         // <>
         //     <div className="pt-4" style={{ background: 'white', }}>
@@ -390,7 +417,7 @@ const AdminDashboard = () => {
         <>
             <div className='pt-4' style={{ background: 'white' }}>
                 <Container fluid className=''>
-                    <div className="row">
+                    <div className="row pb-3">
                         <div className='col-12 mb-2'>
                             <HeaderMain />
                         </div>
@@ -430,17 +457,22 @@ const AdminDashboard = () => {
 
                         </div>
                     </div>
-                    <Row className='px-3 py-2'>
-                        <Col sm={4} className='border border-1 border-muted'>
+                    <Row className='px-3 '>
+                        <Col sm={6} className='border border-1 border-muted'>
                             <Row className=' p-2'>
                                 <Col sm={12}>
-                                    <h5 className='text-dark'> <strong>All Details </strong></h5>
+                                    <h5 className='text-dark'> <strong>Projects</strong></h5>
+                                    <div className='d-flex gap-2'>
+                                        <button className='btn p-1 web_button' onClick={() => handleProjectStatus('1')}> <strong>Ongoing</strong></button>
+                                        <button className='btn p-1 web_button' onClick={() => handleProjectStatus('2')}> <strong>Support</strong></button>
+                                        <button className='btn p-1 web_button' onClick={() => handleProjectStatus('3')}> <strong>Delivered</strong></button>
+                                    </div>
                                 </Col>
-                                <Col sm={12}>
-                                    <Table className='text-nowrap'>
+                                <Col sm={12} className='scrollable-content'>
+                                    {/* <Table className='text-nowrap'>
                                         <tr className='text-start '>
                                             <th className='fw-bold py-2  text-secondary' scope="row">Ongoing Projects</th>
-                                            <td className='text-secondary py-2'>{getProjectList.totalCount}</td>
+                                            <td className='text-secondary py-2'>{getProjectList?.response?.totalCount}</td>
                                         </tr>
                                         <tr className='text-start '>
                                             <th className='fw-bold py-2  text-secondary' scope="row">Total Users</th>
@@ -454,16 +486,44 @@ const AdminDashboard = () => {
                                             <th className='fw-bold py-2  text-secondary' scope="row">Tasks due in last 7 days</th>
                                             <td className='text-secondary py-2' colspan="2">{lastWeekCount?.dueCount ? lastWeekCount?.dueCount : '0'}</td>
                                         </tr>
+                                    </Table> */}
+                                    <Table className="mb-0 add_Color_font text-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th className='fw-bold text-start'>#</th>
+                                                <th className='fw-bold text-start'> Project Name</th>
+                                                <th className='fw-bold text-start'>Project Start Date</th>
+                                                <th className='fw-bold text-start'>Days Left</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {store?.getProject?.data?.response?.projects?.map((ele, ind) => {
+                                                return (
+                                                    <tr className="align-middle">
+                                                        <th scope="row" className='text-start'>{(skip - 1) * 10 + ind + 1}</th>
+                                                        <td className="cp text-start namelink text-secondary">
+                                                            {ele?.projectName}
+                                                        </td>
+                                                        <td className='text-start text-secondary'>
+                                                            <span className="namelink">
+                                                                {moment(ele?.startDate).format("DD/MM/YYYY")}
+                                                            </span>
+                                                        </td>
+                                                        <td className='text-start text-secondary'>{ele?.daysLeft}</td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
                                     </Table>
                                 </Col>
-                                <Col sm={12} className="text-end mb-2">
+                                <Col sm={12} className="text-end mb-2 ">
                                     <Link to='/dashboard/report'>
                                         View All
                                     </Link>
                                 </Col>
                             </Row>
                         </Col>
-                        <Col sm={4} className='border border-1 border-muted'>
+                        <Col sm={6} className='border border-1 border-muted'>
                             <Row className='p-2'>
                                 <div className='col-12'>
                                     <h5 className="mb-3 text-dark">
@@ -491,7 +551,50 @@ const AdminDashboard = () => {
                                 </div>
                             </Row>
                         </Col>
-                        <Col sm={4} className='border border-1 border-muted'>
+                        <Col sm={6} className='border border-1  border-muted'>
+                            <Row className='p-2'>
+                                <Col sm={12}>
+                                    <h5 className='text-dark'> <strong>All Details</strong></h5>
+                                </Col>
+                                <Col sm={12}>
+                                    <Table className='text-nowrap'>
+                                        <tr className='text-start '>
+                                            <th className='fw-bold py-2  text-secondary' scope="row">Ongoing Projects</th>
+                                            <td className='text-secondary py-2'>{getProjectList.totalCount}</td>
+                                        </tr>
+                                        <tr className='text-start '>
+                                            <th className='fw-bold py-2  text-secondary' scope="row">Total Users</th>
+                                            <td className='text-secondary py-2'>{userCount?.totalCount}</td>
+                                        </tr>
+                                        <tr className='text-start '>
+                                            <th className='fw-bold py-2  text-secondary' scope="row">Total Tasks</th>
+                                            <td className='text-secondary py-2'>{userCount?.totalCount}</td>
+                                        </tr>
+                                        <tr className='text-start '>
+                                            <th className='fw-bold py-2  text-secondary' scope="row">Tasks added in last 7 days</th>
+                                            <td className='text-secondary py-2' colspan="2"> {lastWeekCount?.createdCount ? lastWeekCount?.createdCount : '0'}</td>
+                                        </tr>
+                                        <tr className='text-start '>
+                                            <th className='fw-bold py-2  text-secondary' scope="row">Tasks due in last 7 days</th>
+                                            <td className='text-secondary py-2' colspan="2">{lastWeekCount?.dueCount ? lastWeekCount?.dueCount : '0'}</td>
+                                        </tr>
+                                    </Table>
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                    <Row className='px-3'>
+                        <Col sm={6} className='border border-1 border-muted'>
+                            <Row className='p-2'>
+                                <Col sm={12}>
+                                    <h5 className='text-dark'> <strong>Priority Breakdown</strong></h5>
+                                </Col>
+                                <Col sm={12}>
+                                    <Chart options={options} series={series} type="bar" height={350} />
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col sm={6} className='border border-1 border-muted'>
                             <Row className='p-2'>
                                 <Col sm={12}>
                                     <h5 className='text-dark'>
@@ -547,51 +650,7 @@ const AdminDashboard = () => {
                                 </Col>
                             </Row>
                         </Col>
-
-                    </Row>
-                    <Row className='px-3 py-2'>
-                        <Col sm={4} className='border border-1  border-muted'>
-                            <Row className='p-2'>
-                                <Col sm={12}>
-                                    <h5 className='text-dark'> <strong>All Details</strong></h5>
-                                </Col>
-                                <Col sm={12}>
-                                    <Table className='text-nowrap'>
-                                        <tr className='text-start '>
-                                            <th className='fw-bold py-2  text-secondary' scope="row">Ongoing Projects</th>
-                                            <td className='text-secondary py-2'>{getProjectList.totalCount}</td>
-                                        </tr>
-                                        <tr className='text-start '>
-                                            <th className='fw-bold py-2  text-secondary' scope="row">Total Users</th>
-                                            <td className='text-secondary py-2'>{userCount?.totalCount}</td>
-                                        </tr>
-                                        <tr className='text-start '>
-                                            <th className='fw-bold py-2  text-secondary' scope="row">Total Tasks</th>
-                                            <td className='text-secondary py-2'>{userCount?.totalCount}</td>
-                                        </tr>
-                                        <tr className='text-start '>
-                                            <th className='fw-bold py-2  text-secondary' scope="row">Tasks added in last 7 days</th>
-                                            <td className='text-secondary py-2' colspan="2"> {lastWeekCount?.createdCount ? lastWeekCount?.createdCount : '0'}</td>
-                                        </tr>
-                                        <tr className='text-start '>
-                                            <th className='fw-bold py-2  text-secondary' scope="row">Tasks due in last 7 days</th>
-                                            <td className='text-secondary py-2' colspan="2">{lastWeekCount?.dueCount ? lastWeekCount?.dueCount : '0'}</td>
-                                        </tr>
-                                    </Table>
-                                </Col>
-                            </Row>
-                        </Col>
-                        <Col sm={4} className='border border-1 border-muted'>
-                            <Row className='p-2'>
-                                <Col sm={12}>
-                                    <h5 className='text-dark'> <strong>Priority Breakdown</strong></h5>
-                                </Col>
-                                <Col sm={12}>
-                                    <Chart options={options} series={series} type="bar" height={350} />
-                                </Col>
-                            </Row>
-                        </Col>
-                        <Col sm={4} className='border border-1 border-muted'>
+                        {/* <Col sm={6} className='border border-1 border-muted'>
                             <Row className='p-2'>
                                 <Col sm={12}>
                                     <h5 className='text-dark'><strong>All Details</strong></h5>
@@ -617,7 +676,7 @@ const AdminDashboard = () => {
                                     </Table>
                                 </Col>
                             </Row>
-                        </Col>
+                        </Col> */}
                     </Row>
                 </Container>
             </div>

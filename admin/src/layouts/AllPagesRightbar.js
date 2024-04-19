@@ -113,13 +113,6 @@ export default function Pagesaddtask(props) {
     };
     const handelClose = () => {
         reset();
-        // setValue('Summary', '');
-        // setValue('Assignee', '');
-        // setValue('Reporter', '');
-        // setValue('priority', '');
-        // setValue('start_date', '');
-        // setValue('last_date', '');
-        // setValue('description', '');
         setShowModal(false);
         setSelectedFile('');
         setStartDate("");
@@ -170,7 +163,7 @@ export default function Pagesaddtask(props) {
     // console.log({ milestoneSelected })
 
     const reporter = store?.getReporterReducer?.data?.reporterList
-    const projectName = store?.getProject?.data?.response;
+    const projectName = store?.getProject?.data?.response?.projects;
     // useEffect(() => {
     //     console.log("Milestone Data:", store?.getsingleMileStone?.data?.response);
     // }, [store?.getsingleMileStone?.data?.response]);

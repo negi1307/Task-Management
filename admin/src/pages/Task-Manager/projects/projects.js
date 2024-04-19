@@ -283,7 +283,7 @@ const Projects = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {store?.getProject?.data?.response?.map((ele, ind) => {
+                                    {store?.getProject?.data?.response?.projects?.map((ele, ind) => {
                                         return (
                                             <tr className="align-middle">
                                                 <th scope="row" className='text-start'>{(skip - 1) * 10 + ind + 1}</th>

@@ -161,7 +161,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                             disabled: true,
                                                         })}>
                                                         {/* <option value={''}>--Select--</option> */}
-                                                        {store?.getProject?.data?.response?.map((ele, ind) => (
+                                                        {store?.getProject?.data?.response?.projects?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.projectName} </option>
                                                         ))}
                                                     </Form.Select>

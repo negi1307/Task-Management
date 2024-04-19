@@ -139,7 +139,7 @@ const Create = ({ modal, CloseModal }) => {
     }
     useEffect(() => {
         dispatch(getReporterAction())
-        dispatch(getAllCategory({status:true}));
+        dispatch(getAllCategory({ status: true }));
     }, [])
     const reporter = store?.getReporterReducer?.data?.reporterList
     return (
@@ -176,7 +176,7 @@ const Create = ({ modal, CloseModal }) => {
                                             <Form.Select 
                                                 {...register('projectname', { required: true, })} onChange={handelProject}>
                                                 <option value={''}>--Select--</option>
-                                                {store?.getProject?.data?.response?.map((ele, ind) => (
+                                                {store?.getProject?.data?.response?.projects?.map((ele, ind) => (
                                                     <option value={ele?._id} > {ele?.projectName} </option>
                                                 ))}
                                             </Form.Select>
@@ -308,27 +308,27 @@ const Create = ({ modal, CloseModal }) => {
                                 </Row>
                             </Col>
                             <Col lg={12}>
-                                        <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                {' '}
-                                                label <span className="text-danger">*</span>:
-                                            </Form.Label>
+                                <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                    <Form.Label>
+                                        {' '}
+                                        label <span className="text-danger">*</span>:
+                                    </Form.Label>
 
-                                            <Form.Select {...register('label', { required: true })}>
-                                                <option value={''}>--Select--</option>
-                                                {store?.getAllCategory?.data?.response?.map((ele, ind) => (
-                                                    <option value={ele?._id}>
-                                                        {' '}
-                                                        {ele?.name}
-                                                    </option>
-                                                ))}
-                                            </Form.Select>
-                                            {errors.label?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
-                               
+                                    <Form.Select {...register('label', { required: true })}>
+                                        <option value={''}>--Select--</option>
+                                        {store?.getAllCategory?.data?.response?.map((ele, ind) => (
+                                            <option value={ele?._id}>
+                                                {' '}
+                                                {ele?.name}
+                                            </option>
+                                        ))}
+                                    </Form.Select>
+                                    {errors.label?.type === 'required' && (
+                                        <span className="text-danger"> This feild is required *</span>
+                                    )}
+                                </Form.Group>
+                            </Col>
+
                             <Col lg={12}>
                                 <Row>
 

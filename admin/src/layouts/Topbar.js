@@ -140,7 +140,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [isopen, setIsopen] = useState(false);
-    // const allProjects = store?.getProject?.data?.response;
+    // const allProjects = store?.getProject?.data?.response?.projects;
     // const getsingleMilestoneData = store?.getSigleMileStone?.data?.response;
 
     // const getAllSingleSprints = store?.getAllSingleSprints?.data?.response;
@@ -248,10 +248,10 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             <div className="lefbar_info">
                                 {(layoutType === layoutConstants.LAYOUT_VERTICAL ||
                                     layoutType === layoutConstants.LAYOUT_FULL) && (
-                                    <button className="button-menu-mobile open-left" onClick={handleLeftMenuCallBack}>
-                                        <i className="mdi mdi-menu" />
-                                    </button>
-                                )}
+                                        <button className="button-menu-mobile open-left" onClick={handleLeftMenuCallBack}>
+                                            <i className="mdi mdi-menu" />
+                                        </button>
+                                    )}
                                 <div class="menuinfo">
                                     <ul>
                                         <li className="list_padding">
