@@ -2,6 +2,7 @@ const projectModel = require("../models/project.model");
 const projectupload = require('../models/projectupload.model');
 const taskModel = require("../models/task.model")
 const { userHistory } = require('../controller/history.controller');
+const userModel = require("../models/users.model")
 
 // Add a new Project
 const addProject = async (req, res) => {
@@ -37,10 +38,8 @@ const getProjects = async (req, res) => {
     let query = {};
     query.activeStatus = activeStatus;
     query.projectStatus = projectStatus;
-
     const totalCount = await projectModel.countDocuments(query);
     let projects = await projectModel.find(query).sort({ createdAt: -1 }).skip((parseInt(skip) - 1) * pageSize).limit(pageSize);
-
     projects = projects.map(project => {
       const millisecondsPerDay = 1000 * 60 * 60 * 24;
       const endDate = new Date(project.endDate);
@@ -48,25 +47,13 @@ const getProjects = async (req, res) => {
       const daysLeft = Math.max(0, Math.ceil((endDate - startDate) / millisecondsPerDay));
       return { ...project.toObject(), daysLeft };
     });
+    const response = { totalCount, totalPages: Math.ceil(totalCount / pageSize), projects, };
 
-    const totalPages = Math.ceil(totalCount / pageSize);
-
-    return res.status(200).json({
-      status: "200",
-      message: "Projects fetched successfully",
-      response: projects,
-      totalCount,
-      totalPages,
-    });
+    return res.status(200).json({ status: "200", message: "Projects fetched successfully", response });
   } catch (error) {
-    return res.status(500).json({
-      status: "500",
-      message: "Something went wrong",
-      error: error.message,
-    });
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message, });
   }
 };
-
 
 
 // Update a project
@@ -166,6 +153,16 @@ const projectTotalTime = async (req, res) => {
 const getUsersProjects = async (req, res) => {
   try {
     let matchStage = {};
+    let skipValue = 0;
+    let limitValue = 10;
+
+    if (req.query.page && req.query.limit) {
+      const page = parseInt(req.query.page);
+      const limit = parseInt(req.query.limit);
+
+      skipValue = (page - 1) * limit;
+      limitValue = limit;
+    }
 
     if (req.query.month) {
       const { month } = req.query;
@@ -190,78 +187,126 @@ const getUsersProjects = async (req, res) => {
       };
     }
 
-    const userTasks = await taskModel.aggregate([
-      { $match: matchStage },
-      {
-        $lookup: {
-          from: "users",
-          localField: "assigneeId",
-          foreignField: "_id",
-          as: "assigneeInfo"
-        }
-      },
-      { $unwind: { path: "$assigneeInfo", preserveNullAndEmptyArrays: true } },
-      {
-        $lookup: {
-          from: "projects",
-          localField: "projectId",
-          foreignField: "_id",
-          as: "projectInfo"
-        }
-      },
-      { $unwind: "$projectInfo" },
-      {
-        $lookup: {
-          from: "techcategories",
-          localField: "assigneeInfo.designationId",
-          foreignField: "_id",
-          as: "designation"
-        }
-      },
-      { $unwind: { path: "$designation", preserveNullAndEmptyArrays: true } },
-      {
-        $lookup: {
-          from: "technologies",
-          localField: "assigneeInfo.technologyId",
-          foreignField: "_id",
-          as: "technology"
-        }
-      },
-      { $unwind: { path: "$technology", preserveNullAndEmptyArrays: true } },
-      {
-        $group: {
-          _id: "$assigneeId",
-          assigneeFirstName: { $first: "$assigneeInfo.firstName" },
-          assigneeLastName: { $first: "$assigneeInfo.lastName" },
-          assigneeDesignationName: { $first: "$designation.name" },
-          assigneeTechnologyName: { $first: "$technology.techName" },
-          projects: {
-            $addToSet: {
-              projectName: "$projectInfo.projectName",
-              projectStatus: "$projectInfo.projectStatus",
-              projectType: "$projectInfo.projectType"
+    const [userTasks, totalCount] = await Promise.all([
+      taskModel.aggregate([
+        { $match: matchStage },
+        {
+          $lookup: {
+            from: "users",
+            localField: "assigneeId",
+            foreignField: "_id",
+            as: "assigneeInfo"
+          }
+        },
+        { $unwind: { path: "$assigneeInfo", preserveNullAndEmptyArrays: true } },
+        {
+          $lookup: {
+            from: "projects",
+            localField: "projectId",
+            foreignField: "_id",
+            as: "projectInfo"
+          }
+        },
+        { $unwind: "$projectInfo" },
+        {
+          $lookup: {
+            from: "techcategories",
+            localField: "assigneeInfo.designationId",
+            foreignField: "_id",
+            as: "designation"
+          }
+        },
+        { $unwind: { path: "$designation", preserveNullAndEmptyArrays: true } },
+        {
+          $lookup: {
+            from: "technologies",
+            localField: "assigneeInfo.technologyId",
+            foreignField: "_id",
+            as: "technology"
+          }
+        },
+        { $unwind: { path: "$technology", preserveNullAndEmptyArrays: true } },
+        {
+          $group: {
+            _id: "$assigneeId",
+            assigneeFirstName: { $first: "$assigneeInfo.firstName" },
+            assigneeLastName: { $first: "$assigneeInfo.lastName" },
+            assigneeDesignationName: { $first: "$designation.name" },
+            assigneeTechnologyName: { $first: "$technology.techName" },
+            projects: {
+              $addToSet: {
+                projectName: "$projectInfo.projectName",
+                projectStatus: "$projectInfo.projectStatus",
+                projectType: "$projectInfo.projectType"
+              }
             }
           }
-        }
-      },
-      {
-        $project: {
-          _id: 0,
-          User_First_Name: "$assigneeFirstName",
-          User_Last_Name: "$assigneeLastName",
-          Designation: "$assigneeDesignationName",
-          Technology: "$assigneeTechnologyName",
-          projects: 1
-        }
-      }
+        },
+        {
+          $project: {
+            _id: 0,
+            User_First_Name: "$assigneeFirstName",
+            User_Last_Name: "$assigneeLastName",
+            Designation: "$assigneeDesignationName",
+            Technology: "$assigneeTechnologyName",
+            projects: 1
+          }
+        },
+        { $skip: skipValue },
+        { $limit: limitValue }
+      ]),
+      taskModel.aggregate([
+        { $match: matchStage },
+        {
+          $group: {
+            _id: "$assigneeId"
+          }
+        },
+        { $count: "totalCount" }
+      ])
     ]);
 
-    return res.status(200).json({ status: 200, message: "Users' projects retrieved successfully", userProjects: userTasks });
+    const totalUsers = totalCount.length > 0 ? totalCount[0].totalCount : 0;
+    const totalPages = Math.ceil(totalUsers / limitValue); // Calculate total pages
+
+    return res.status(200).json({ status: 200, message: "Users' projects retrieved successfully", userProjects: userTasks, totalCount: totalUsers, totalPages: totalPages, currentPage: req.query.page ? parseInt(req.query.page) : 1 });
   } catch (error) {
     return res.status(500).json({ status: 500, message: "Something went wrong", error: error.message });
   }
 }
 
 
+// count the total projects and also according to their status
+const getProjectCount = async (req, res) => {
+  try {
+    const projectCounts = await projectModel.aggregate([
+      {
+        $group: {
+          _id: "$projectStatus",
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalProjects: { $sum: "$count" },
+          projectStatusCounts: { $push: { status: "$_id", count: "$count" } }
+        }
+      }
+    ]);
 
-module.exports = { addProject, getProjects, updateProject, uploadProject_File, getallProject, allProjectFiles, projectTotalTime, getUsersProjects };
+    const projectStatusCounts = {};
+    projectCounts[0].projectStatusCounts.forEach(statusCount => { projectStatusCounts[statusCount.status] = statusCount.count });
+    const response = { totalProjects: projectCounts[0].totalProjects, projectStatusCounts };
+    return res.status(200).json({ status: 200, message: "Projects data fetched successfully", response });
+  } catch (error) {
+    return res.status(500).json({ status: 500, message: "Something went wrong", error: error.message });
+  }
+};
+
+
+
+
+
+
+module.exports = { addProject, getProjects, updateProject, uploadProject_File, getallProject, allProjectFiles, projectTotalTime, getUsersProjects,getProjectCount};

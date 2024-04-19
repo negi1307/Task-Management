@@ -8,10 +8,10 @@ userRoute.post("/register", verifyAdmin, users.registerUser);
 userRoute.post("/login", users.logInUser);
 userRoute.get("", verifyAdmin, users.getUsers);
 userRoute.delete("/deleteUser", verifyAdmin, users.deleteUser);
-userRoute.get("/trackTime",verifyUser, users.trackTime);
+userRoute.get("/trackTime", verifyUser, users.trackTime);
 userRoute.get("/getAssigneeList", verifyUser, users.getAssigneesList);
 userRoute.get("/getReporterList", verifyUser, users.getReporterList);
-userRoute.get("/subTaskTrackTime",verifyUser, users.subTaskTrackTime);
-
+userRoute.get("/subTaskTrackTime", verifyUser, users.subTaskTrackTime);
+userRoute.get("/specificUserTask", users.specificUserTask)
 
 module.exports = userRoute;

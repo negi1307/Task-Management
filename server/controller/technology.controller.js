@@ -1,5 +1,6 @@
 const techCategoryModel = require('../models/techCategory.model');
 const technologyModel = require('../models/technology.model');
+const userModel = require("../models/users.model");
 
 // Add  a Technology category
 const addTechCategory = async (req, res) => {
@@ -80,8 +81,22 @@ const getTechCategoryTechnologies = async (req, res) => {
     }
 }
 
-
+// technology wise filter the users
+const getUsersByTechnology = async (req, res) => {
+    try {
+        const techUser = await userModel.find({ technologyId: req.query.technologyId })
+        return res.status(200).json({ status: 200, message: "Users data fetched successfully", response: techUser })
+    } catch (error) {
+        return res.status(500).json({ status: 500, message: error.message })
+    }
+}
 module.exports = {
-    addTechCategory, getTechCategory, updateTechCategory,
-    addTechnology, getTechnology, updateTechnology, getTechCategoryTechnologies
+    addTechCategory,
+    getTechCategory,
+    updateTechCategory,
+    addTechnology,
+    getTechnology,
+    updateTechnology,
+    getTechCategoryTechnologies,
+    getUsersByTechnology
 }
