@@ -183,9 +183,10 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                     <Col lg={12}>
                         <Row>
                             <Col lg={7} className="text-end">
-                                <Modal.Title id="" className="mx-auto modal_titles">
-                                    Task Detail
+                                <Modal.Title id="" className="text-start modal_titles">
+                                    Task Detail : {editData?.summary ? editData.summary.charAt(0).toUpperCase() + editData.summary.slice(1, 10) : ''}
                                 </Modal.Title>
+                             
                             </Col>
                             <Col lg={5} className="text-end pt-2">
                                 <button type="button" className="close border-0 bg-black text-white" onClick={closeModalHandle} aria-label="Close">

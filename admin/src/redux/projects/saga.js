@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import ProjectTypes from './constant';
-import { addProjectApi, deleteProjectApi, getProjectApi, getProjectByIdApi, updateProjectApi } from './api';
+import { addProjectApi, deleteProjectApi, getProjectApi, getProjectsCountApi, getProjectByIdApi, updateProjectApi } from './api';
 
 function* addProjectFunction({ payload }) {
     try {
@@ -67,6 +67,41 @@ function* getProjectFunction({ payload }) {
     } catch (error) {
         yield put({
             type: ProjectTypes.GET_PROJECT_ERROR,
+            payload: { message: error?.message }
+        });
+
+    }
+}
+
+function* getProjectsCountFunction({ payload }) {
+    try {
+        yield put({
+            type: ProjectTypes.GET_PROJECTS_COUNT_LOADING,
+            payload: {}
+        })
+        const response = yield call(getProjectsCountApi, { payload });
+        // console.log(payload, ".......")
+
+        if (response.data.status) {
+            yield put({
+                type: ProjectTypes.GET_PROJECTS_COUNT_SUCCESS,
+                payload: { ...response.data },
+            });
+            // yield put({
+            //     type: ProjectTypes.GET_PROJECT_RESET,
+            //     payload: {},
+            // });
+        }
+        else {
+            yield put({
+                type: ProjectTypes.GET_PROJECTS_COUNT_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: ProjectTypes.GET_PROJECTS_COUNT_ERROR,
             payload: { message: error?.message }
         });
 
@@ -186,6 +221,9 @@ export function* addProjectSaga(): any {
 export function* getProjectSaga(): any {
     yield takeEvery(ProjectTypes.GET_PROJECT, getProjectFunction);
 }
+export function* getProjectsCountSaga(): any {
+    yield takeEvery(ProjectTypes.GET_PROJECTS_COUNT, getProjectsCountFunction);
+}
 export function* updateProjectSaga(): any {
     yield takeEvery(ProjectTypes.UPDATE_PROJECT_DETAILS, updateProjectFunction);
 }
@@ -201,7 +239,8 @@ function* AllProjectSaga(): any {
         fork(getProjectSaga),
         fork(updateProjectSaga),
         fork(deleteProjectSaga),
-        fork(getProjectByIdSaga)
+        fork(getProjectByIdSaga),
+        fork(getProjectsCountSaga),
     ])
 }
 

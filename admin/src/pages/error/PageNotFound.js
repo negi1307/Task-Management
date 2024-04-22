@@ -18,7 +18,7 @@ const ErrorPageNotFound = (): React$Element<React$FragmentType> => {
                                 <Card.Header className="pt-4 pb-4 text-center bg-primary">
                                     <Link to="/">
                                         <span>
-                                            <img src={Logo} alt="" height="18" />
+                                            <img src='../../assets/logo/rowthtech.jpg' alt="" height="18" />
                                         </span>
                                     </Link>
                                 </Card.Header>

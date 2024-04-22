@@ -24,3 +24,7 @@ export function getProjectByIdApi(data): any {
     return api.get(URL.GetProjectById + data?.payload)
 }
 
+export function getProjectsCountApi(data): any {
+    return api.get(URL.getProjectsCount)
+}
+

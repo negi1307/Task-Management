@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getPriorityGraphAction, getAllTaskCountAction, getTaskSummmaryDetail, getTaskWeekCountAction } from '../../../redux/Summary/action';
 import { getHistoryAction } from '../../../redux/task/action';
+import { getAllProjects, getProjectsCount } from '../../../redux/projects/action'
 import Chart from 'react-apexcharts';
-import { ProgressBar } from 'react-bootstrap';
+import { ProgressBar, Col, Container, Row, Table, Form } from 'react-bootstrap';
 import Loader from '../../../components/Loader'
 import HeaderMain from '../header/HeaderMain';
 import { PieChart } from '@mui/x-charts/PieChart';
@@ -12,9 +13,15 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Pagination from '@mui/material/Pagination';
+// import Pagination from '../../../helpers/pagination/Pagination';
 import Stack from '@mui/material/Stack';
 import FilterModal from './modal/filter';
 import Pagesaddtask from '../../../layouts/AllPagesRightbar';
+import { TbReport } from "react-icons/tb";
+import { FaUsers } from "react-icons/fa6";
+import { getAllUsers } from '../../../redux/user/action'
+import moment from 'moment';
+
 const AdminDashboard = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -26,16 +33,10 @@ const AdminDashboard = () => {
     const [data, setData] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [filterModal, setFilterModal] = useState(false);
-    // const taskCountData = useSelector(state => state?.getTaskCountReducer?.data?.Response);
-    // console.log({ taskCountData })
-    // const taskCountfe = store?.getTaskCountReducer?.data
-    // console.log({ taskCountfe })
-    // const totalTaskCount = useSelector(state => state.totalTaskCount);
-    // console.log({ totalTaskCount })
-
-    // console.log({ taskCount })
-    // const [skip, setSkip] = useState(0);
-    // const [count, setCount] = useState();
+    const [skip, setSkip] = useState(1);
+    const [projectStatus, setprojectStatus] = useState(1);
+    // const [data, setData] = useState([]);
+    const getUsers = store?.getAllUsers;
     const {
         register,
         handleSubmit,
@@ -51,35 +52,18 @@ const AdminDashboard = () => {
             setHistoryResponse(historyData);
         }
     }, [successHandle, store?.getHistoryReducer?.data?.response]);
-
-    // useEffect(() => {
-    //     const historyData = store?.getHistoryReducer?.data?.response;
-    //     if (historyData) {
-    //         setHistoryResponse(historyData);
-    //     }
-    // }, [store?.getHistoryReducer?.data?.response]);
-    // useEffect(() => {
-    //     const historyPageCount = store?.getHistoryReducer?.data?.totalPage;
-    //     if (historyPageCount) {
-    //         setCount(historyPageCount);
-    //     }
-    // }, [store?.getHistoryReducer?.data?.totalPage]);
-
-    // const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    //     setSkip(value);
-    //     dispatch(getHistoryAction({ skip: value }));
-    // };
-
+    // console.log({ taskCount })
     useEffect(() => {
         const taskTotalCount = store?.getTaskSummaryReducer?.data.response;
+        // console.log({ taskTotalCount })
         if (taskTotalCount) {
             setTaskCount(taskTotalCount);
         }
-    }, [store?.getTaskSummaryReducer?.data.response]);
+        if (getUsers?.data?.status == 200) {
+            setData(getUsers?.data?.response);
+        }
+    }, [store?.getTaskSummaryReducer?.data.response, getUsers]);
 
-    // if (taskCount !== null) {
-    //     console.log(taskCount, '///task');
-    // }
     const closeaddModal = () => {
         // getalltasks();
     }
@@ -87,12 +71,24 @@ const AdminDashboard = () => {
         setFilterModal(false);
     }
     useEffect(() => {
+
+        dispatch(getAllUsers({ skip: skip }));
         dispatch(getTaskWeekCountAction());
         dispatch(getTaskSummmaryDetail());
         dispatch(getHistoryAction());
+        dispatch(getProjectsCount());
         dispatch(getPriorityGraphAction());
         dispatch(getAllTaskCountAction());
+        dispatch(getAllUsers());
+        // dispatch(getAllProjects({ status: 1, projectStatus: 'Ongoing' }));
+        // dispatch(getAllProjects({ status: 1, projectStatus: 'Support' }));
+        // dispatch(getAllProjects({ status: 1, projectStatus: 'Delivered' }));
     }, [dispatch]);
+
+    const projectsCount = store?.getProjectsCount?.data?.response?.projectStatusCounts;
+    const totalTasks = store?.getAllTaskCountReducer?.data;
+    const getProjectList = store?.getProject?.data;
+    const userCount = store?.getAllUsers?.data;
     const priorityData = store?.getPriorityGraphReducer?.data?.response;
     function generateLink(userActivity, item) {
         switch (userActivity) {
@@ -133,11 +129,312 @@ const AdminDashboard = () => {
             data: priorityData?.map((ele, ind) => ele?.count),
         },
     ];
+
+    const projectDetails = store?.getProject?.data?.response;
+    // const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    //     setSkip(value);
+    //     dispatch(getAllUsers({ page: skip }));
+    // };
+
+    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setSkip(value); // Update skip state with the new page number
+        dispatch(getAllUsers({ page: value })); // Dispatch action with the new page number
+    };
+
+    // const handleProjectStatus = (val) => {
+    //     if (val == '1') {
+    //         setprojectStatus('Ongoing');
+    //         setSkip(1);
+    //         dispatch(getAllProjects({ status: 1, projectStatus: 'Ongoing' }));
+    //     } else if (val == '2') {
+    //         setprojectStatus('Support');
+    //         setSkip(1);
+    //         dispatch(getAllProjects({ status: 1, projectStatus: 'Support' }));
+    //     } else if (val == '3') {
+    //         setSkip(1);
+    //         setprojectStatus('Delivered');
+    //         dispatch(getAllProjects({ status: 1, projectStatus: 'Delivered' }));
+    //     }
+    //     // else {
+    //     //     setSkip(1);
+    //     //     setprojectStatus(4);
+    //     //     dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 4 }));
+    //     // }
+    // };
     return (
+        // <>
+        //     <div className="pt-4" style={{ background: 'white', }}>
+        //         <div className="container-fluid px-5">
+        //             <div className="row">
+        //                 <div className='col-12 mb-2'>
+        //                     <HeaderMain />
+        //                 </div>
+        //                 <hr />
+        //                 <div className='row'>
+        //                     <div className='col-12 d-flex gap-2 justify-content-end'>
+        //                         <button className='mybutton btn p-1 fw-bold py-1 web_button'
+        //                             onClick={() => setFilterModal(true)}>
+        //                             Filter
+        //                         </button>
+        //                         <FilterModal
+        //                             className='d-none'
+        //                             showFilter={filterModal}
+        //                             closeFilter={closefilterModal}
+        //                             setfilterModal={setFilterModal} />
+        //                         <button
+        //                             type="button"
+        //                             className="mybutton btn p-1 fw-bold py-1  web_button"
+        //                             onClick={() => {
+        //                                 // console.log('button click');
+        //                                 // handeladdtask()
+        //                                 setShowModal(!showModal);
+        //                                 // dispatchActions();
+        //                                 // dispatch(getAllTask({ projectId: projectId, mileStoneId: milestoneId, sprintId: spriteId }))
+
+        //                             }}>
+        //                             Add Task
+        //                         </button>
+        //                         <Pagesaddtask
+        //                             className="d-none"
+        //                             showModal={showModal}
+        //                             closeModal={closeaddModal}
+        //                             setShowModal={setShowModal}
+        //                         />
+        //                     </div>
+        //                     {/* {filterModal && <FilterModal closeModal={() => setFilterModal(false)} />} */}
+
+        //                 </div>
+        //                 <div className="col  border_clr m-2   rounded-3 bg-white">
+        //                     <Link to='/dashboard/projects'>
+        //                         <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
+        //                             <div className="bg_clr p-3 rounded-circle text-center ">
+        //                                 <TbReport className='w-size text-secondary' />
+        //                             </div>
+        //                             <div className="mx-3 ">
+        //                                 <strong>
+        //                                     <h5 className="mb-0 mt-1 text-secondary">
+        //                                         {getProjectList.totalCount}
+        //                                     </h5>
+
+        //                                     <Link to='/dashboard/projects'>
+        //                                         <span className="m-0 text-secondary">Ongoing Projects</span>
+        //                                     </Link>
+        //                                 </strong>
+        //                             </div>
+        //                         </div>
+        //                     </Link>
+        //                 </div>
+        //                 <div className="col  border_clr  m-2   rounded-3 bg-white">
+        //                     <Link to='/dashboard/alluser'>
+        //                         <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
+        //                             <div className="bg_clr  p-3 rounded-circle text-center ">
+        //                                 <FaUsers className='w-size text-secondary' />
+        //                             </div>
+        //                             <div className="mx-3 ">
+        //                                 <strong>
+        //                                     <h5 className="mb-0 mt-1 text-secondary">
+        //                                         {userCount?.totalCount}
+        //                                     </h5>
+        //                                     <p className="m-0 text-secondary">Total Users</p>
+        //                                 </strong>
+        //                             </div>
+        //                         </div>
+        //                     </Link>
+        //                 </div>
+        //                 <div className="col  border_clr  m-2   rounded-3 bg-white">
+        //                     <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
+        //                         <div className="bg_clr  p-3 rounded-circle text-center ">
+        //                             <i className="bi bi-plus-lg w-size " />
+        //                         </div>
+        //                         <div className="mx-3 ">
+        //                             <b>
+        //                                 <h5 className="mb-0 mt-1 text-secondary">
+        //                                     {lastWeekCount?.createdCount ? lastWeekCount?.createdCount : '0'} Tasks added
+        //                                 </h5>
+        //                                 <p className="m-0 text-secondary">in last 7 days</p>
+        //                             </b>
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //                 <div className="col  border_clr  m-2   rounded-3 bg-white">
+        //                     <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
+        //                         <div className="bg_clr  p-3 rounded-circle text-center ">
+        //                             <i className="bi bi-calendar-week w-size" />
+        //                         </div>
+        //                         <div className="mx-3 ">
+        //                             <b>
+        //                                 <h5 className="mb-0 mt-1 text-secondary">
+        //                                     {lastWeekCount?.dueCount ? lastWeekCount?.dueCount : '0'} task due
+        //                                 </h5>
+        //                             </b>
+        //                             <b>
+        //                                 <p className="m-0 text-secondary">in the last 7 days</p>
+        //                             </b>
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //                 <div className="col-12 text-end">
+        //                     <Link to='/dashboard/report'>
+        //                         View All
+        //                     </Link>
+        //                 </div>
+        //             </div>
+        //             <div className="row">
+        //                 <div className='col-6  my-2 bg-white'>
+        //                     <div className='row border_clr p-4 h-100 rounded-4'>
+        //                         <div className='col-12'>
+        //                             <h5 className="mb-3">
+        //                                 <b>States overview</b>
+        //                             </h5>
+        //                         </div>
+        //                         <div className='col-12'>
+        //                             {taskCount !== null && (
+        //                                 <PieChart
+        //                                     series={[
+        //                                         {
+        //                                             data: taskCount.map((item, index) => ({
+        //                                                 id: index,
+        //                                                 value: item.taskCount,
+        //                                                 label: item.name,
+        //                                             })),
+        //                                         },
+        //                                     ]}
+        //                                     width={500}
+        //                                     height={300}
+        //                                     colors={['#727cf5', '#0acf97', '#ff00ff', '#fa5c7c', '#ffbc00']}
+        //                                 />
+        //                             )}
+
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //                 <div className="col-6  my-2 px-2  bg-white">
+        //                     <div className="p-4 border_clr rounded-4">
+        //                         <div className="col-10">
+        //                             <h5 className="mb-3">
+        //                                 <b>Recent activity</b>
+        //                             </h5>
+        //                             <h6>Stay up to date with what"s happening across the project.</h6>
+        //                         </div>
+        //                         <div className="scrollable-content">
+
+        //                             {historyResponse && historyResponse.map((item, index) => (
+        //                                 <div key={index} className='d-flex gap-2 align-items-center lh-lg'>
+        //                                     <OverlayTrigger
+        //                                         placement="top"
+        //                                         overlay={
+        //                                             <Tooltip id="tooltip1">
+        //                                                 {item?.userId?.firstName}
+        //                                                 {item?.userId?.lastName}
+        //                                             </Tooltip>
+        //                                         }>
+        //                                         <div className="mt-1 cp">
+        //                                             <span
+        //                                                 style={{
+        //                                                     backgroundColor: '#605e5a',
+        //                                                     borderRadius: '100%',
+        //                                                     padding: '5px 6px',
+
+        //                                                     color: 'white',
+        //                                                     fontWeight: '700',
+        //                                                 }}>
+        //                                                 {item?.userId?.firstName.charAt(0).toUpperCase()}
+        //                                                 {item?.userId?.lastName.charAt(0).toUpperCase()}
+        //                                             </span>
+        //                                         </div>
+        //                                     </OverlayTrigger>
+        //                                     <Link to={generateLink(item.userActivity, item)}
+        //                                         className='text-dark'>
+        //                                         <span>
+        //                                             {item?.userId?.firstName} {item?.userId?.lastName}
+        //                                             {item.userActivity === "Created milestone" && <span> created milestone</span>}
+        //                                             {item.userActivity === "Created Sprint" && <span> created sprint</span>}
+        //                                             {item.userActivity === "Create Project" && <span> create project</span>}
+        //                                             {item.userActivity === "Created Task" && <span> created task</span>}
+        //                                             {' on ' + item?.createdAt}
+        //                                         </span>
+        //                                     </Link>
+
+        //                                 </div>
+        //                             ))}
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //             <div className="row">
+        //                 <div className="col border_clr  m-2 rounded-4 bg-white">
+        //                     <div className="p-4 ">
+        //                         <div className="col-12">
+        //                             <h5 className="mb-3">
+        //                                 <b>Priority breakdown</b>
+        //                             </h5>
+        //                             <Chart options={options} series={series} type="bar" height={350} />
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //                 <div className="col border_clr  m-2 rounded-4 bg-white">
+        //                     <div className="p-4 ">
+        //                         <div className="col-12">
+        //                             <h5 className="mb-3">
+        //                                 <b>Types of work</b>
+        //                             </h5>
+        //                         </div>
+        //                         <div className="p-4">
+        //                             <div className="row ">
+        //                                 <div className="col-5">
+        //                                     <p className="text-secondary">Type</p>
+        //                                     <div className="d-flex mb-4">
+        //                                         <i
+        //                                             className="bi bi-check-square-fill mx-2 icon_s"
+        //                                             style={{ color: '#59d3ec' }}
+        //                                         />
+        //                                         <p className="mb-0">Task</p>
+        //                                     </div>
+        //                                     <div className="d-flex mb-4">
+        //                                         <div
+        //                                             style={{ backgroundColor: '#59d3ec', color: 'aliceblue' }}
+        //                                             className="rounded-2 mx-2">
+        //                                             <i className="bi bi-subtract mx-1   " />
+        //                                         </div>
+        //                                         <p className="mb-0">Sub-task</p>
+        //                                     </div>
+        //                                     <div className="d-flex mb-4">
+        //                                         <div
+        //                                             style={{ backgroundColor: '#59d3ec', color: 'aliceblue' }}
+        //                                             className="rounded-2 mx-2">
+        //                                             <i className="bi bi-gear-wide mx-1" />
+        //                                         </div>
+        //                                         <p className="mb-0 text-nowrap">Manage types</p>
+        //                                     </div>
+        //                                 </div>
+        //                                 <div className="col-4">
+        //                                     <p className="text-secondary">Distribution</p>
+        //                                     <div className="progress-w-percent">
+        //                                         <span className="progress-value fw-bold">90%</span>
+        //                                         <ProgressBar now={90} className="progress-sm" />
+        //                                     </div>
+        //                                     <div className="progress-w-percent">
+        //                                         <span className="progress-value fw-bold">72%</span>
+        //                                         <ProgressBar now={72} className="progress-sm" />
+        //                                     </div>
+        //                                 </div>
+        //                                 <div className="col-3">
+        //                                     <p className="text-secondary">Count</p>
+        //                                     <p className="text-primary  mx-4 mb-4">10</p>
+        //                                     <p className="text-primary mx-4 mb-4 pt-3">8</p>
+        //                                 </div>
+        //                             </div>
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     </div>
+        // </>
         <>
-            <div className="pt-4" style={{ background: 'white', }}>
-                <div className="container-fluid px-5">
-                    <div className="row">
+            <div className='pt-4' style={{ background: 'white' }}>
+                <Container fluid className=''>
+                    <div className="row pb-3">
                         <div className='col-12 mb-2'>
                             <HeaderMain />
                         </div>
@@ -176,227 +473,259 @@ const AdminDashboard = () => {
                             {/* {filterModal && <FilterModal closeModal={() => setFilterModal(false)} />} */}
 
                         </div>
-                        <div className="col all_bg  border_clr m-2 rounded-4 bg-white">
-                            <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
-                                <div className="bg_clr p-3 rounded-circle text-center ">
-                                    <i className="bi bi-check-lg w-size" />
-                                </div>
-                                <div className="mx-3 ">
-                                    <strong>
-                                        <h5 className="mb-0 mt-1 text-secondary">
-                                            {lastWeekCount?.doneCount ? lastWeekCount?.doneCount : '0'} task done
-                                        </h5>
-                                    </strong>
-                                    <strong>
-                                        <p className="m-0 text-secondary">in the last 7 days</p>
-                                    </strong>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col  border_clr  m-2 rounded-4 bg-white">
-                            <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
-                                <div className="bg_clr  p-3 rounded-circle text-center ">
-                                    <i className="bi bi-pencil-fill w-size" />
-                                </div>
-                                <div className="mx-3 ">
-                                    <b>
-                                        <h5 className="mb-0 mt-1 text-secondary">
-                                            {lastWeekCount?.updatedCount ? lastWeekCount?.updatedCount : '0'} task
-                                            updated
-                                        </h5>
-                                    </b>
-                                    <b>
-                                        <p className="m-0 text-secondary">in the last 7 days</p>
-                                    </b>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col  border_clr  m-2 rounded-4 bg-white">
-                            <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
-                                <div className="bg_clr  p-3 rounded-circle text-center ">
-                                    <i className="bi bi-plus-lg w-size " />
-                                </div>
-                                <div className="mx-3 ">
-                                    <b>
-                                        <h5 className="mb-0 mt-1 text-secondary">
-                                            {lastWeekCount?.createdCount ? lastWeekCount?.createdCount : '0'} task Add
-                                        </h5>
-                                    </b>
-                                    <b>
-                                        <p className="m-0 text-secondary">in the last 7 days</p>
-                                    </b>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col  border_clr  m-2 rounded-4 bg-white">
-                            <div className="d-flex  p-4 px-4 align-items-center jusstify-content-center">
-                                <div className="bg_clr  p-3 rounded-circle text-center ">
-                                    <i className="bi bi-calendar-week w-size" />
-                                </div>
-                                <div className="mx-3 ">
-                                    <b>
-                                        <h5 className="mb-0 mt-1 text-secondary">
-                                            {lastWeekCount?.dueCount ? lastWeekCount?.dueCount : '0'} task due
-                                        </h5>
-                                    </b>
-                                    <b>
-                                        <p className="m-0 text-secondary">in the last 7 days</p>
-                                    </b>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                    <div className="row">
-                        <div className='col-6  my-2 bg-white'>
-                            <div className='row border_clr p-4 h-100 rounded-4'>
+                    <Row className='px-3 '>
+                        <Col sm={6} className='border border-1 border-muted'>
+                            <Row className=' p-2'>
+                                <Col sm={12}>
+                                    <h5 className='text-dark'> <strong>Ongoing Projects</strong></h5>
+                                    {/* <div className='d-flex gap-2'>
+                                        <button className='btn p-1 web_button fs-6 ' onClick={() => handleProjectStatus('1')}> <strong>Ongoing</strong></button>
+                                        <button className='btn p-1 web_button fs-6 ' onClick={() => handleProjectStatus('2')}> <strong>Support</strong></button>
+                                        <button className='btn p-1 web_button fs-6 ' onClick={() => handleProjectStatus('3')}> <strong>Delivered</strong></button>
+                                    </div> */}
+                                </Col>
+                                <Col sm={12} className='scrollable-content'>
+                                    {/* <Table className='text-nowrap'>
+                                        <tr className='text-start '>
+                                            <th className='fw-bold py-2  text-secondary' scope="row">Ongoing Projects</th>
+                                            <td className='text-secondary py-2'>{getProjectList?.response?.totalCount}</td>
+                                        </tr>
+                                        <tr className='text-start '>
+                                            <th className='fw-bold py-2  text-secondary' scope="row">Total Users</th>
+                                            <td className='text-secondary py-2'>{userCount?.totalCount}</td>
+                                        </tr>
+                                        <tr className='text-start '>
+                                            <th className='fw-bold py-2  text-secondary' scope="row">Tasks added in last 7 days</th>
+                                            <td className='text-secondary py-2' colspan="2"> {lastWeekCount?.createdCount ? lastWeekCount?.createdCount : '0'}</td>
+                                        </tr>
+                                        <tr className='text-start '>
+                                            <th className='fw-bold py-2  text-secondary' scope="row">Tasks due in last 7 days</th>
+                                            <td className='text-secondary py-2' colspan="2">{lastWeekCount?.dueCount ? lastWeekCount?.dueCount : '0'}</td>
+                                        </tr>
+                                    </Table> */}
+                                    <Table className="mb-0 add_Color_font text-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th className='fw-bold text-start'>#</th>
+                                                <th className='fw-bold text-start'> Project Name</th>
+                                                <th className='fw-bold text-start'>Project Start Date</th>
+                                                <th className='fw-bold text-start'>Days Left</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {store?.getProject?.data?.response?.projects?.map((ele, ind) => {
+                                                return (
+                                                    <tr className="align-middle">
+                                                        <th scope="row" className='text-start'>{(skip - 1) * 10 + ind + 1}</th>
+                                                        <td className="cp text-start namelink text-secondary">
+                                                            {ele?.projectName}
+                                                        </td>
+                                                        <td className='text-start text-secondary'>
+                                                            <span className="namelink">
+                                                                {moment(ele?.startDate).format("DD/MM/YYYY")}
+                                                            </span>
+                                                        </td>
+                                                        <td className='text-start text-secondary'>{ele?.daysLeft}</td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </Table>
+                                </Col>
+                                {/* <Col sm={12} className="text-end mb-2 ">
+                                    <Link to='/dashboard/report'>
+                                        View All
+                                    </Link>
+                                </Col> */}
+                            </Row>
+                        </Col>
+                        <Col sm={6} className='border border-1 border-muted'>
+                            <Row className='p-2'>
                                 <div className='col-12'>
-                                    <h5 className="mb-3">
-                                        <b>States overview</b>
+                                    <h5 className="mb-3 text-dark">
+                                        <strong>Projects Overview</strong>
                                     </h5>
                                 </div>
-                                <div className='col-12'>
+                                <div className='col-12 h-100 d-flex justify-content-center align-items-center'>
                                     {taskCount !== null && (
                                         <PieChart
                                             series={[
                                                 {
-                                                    data: taskCount.map((item, index) => ({
-                                                        id: index,
-                                                        value: item.taskCount,
-                                                        label: item.name,
-                                                    })),
+                                                    data: [
+                                                        { id: 0, value: `${projectsCount?.Ongoing}`, label: 'Ongoing' },
+                                                        { id: 1, value: `${projectsCount?.Support}`, label: 'Support' },
+                                                        { id: 2, value: `${projectsCount?.Delivered}`, label: 'Delivered' },
+                                                    ],
+                                                    highlightScope: { faded: 'global', highlighted: 'item' },
+                                                    faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                                                    color: ['red', 'green', 'yellow']
                                                 },
                                             ]}
-                                            width={500}
-                                            height={300}
-                                            colors={['#727cf5', '#0acf97', '#ff00ff', '#fa5c7c', '#ffbc00']}
+                                            height={250}
+                                            width={600}
                                         />
                                     )}
-
                                 </div>
-                            </div>
-                        </div>
-                        <div className="col-6  my-2 px-2  bg-white">
-                            <div className="p-4 border_clr rounded-4">
-                                <div className="col-10">
-                                    <h5 className="mb-3">
-                                        <b>Recent activity</b>
-                                    </h5>
-                                    <h6>Stay up to date with what"s happening across the project.</h6>
-                                </div>
-                                <div className="scrollable-content">
+                            </Row>
+                        </Col>
+                        <Col sm={6} className='border border-1  border-muted'>
+                            <Row className='p-2 align-items-center '>
+                                <Col sm={6}>
+                                    <h5 className='text-dark'> <strong>Users</strong></h5>
+                                </Col>
+                                <Col sm={6} className='text-end'>
+                                    <Link to='/dashboard/report'>
+                                        Users Report
+                                    </Link>
+                                </Col>
+                                <Col sm={12}>
+                                    <Table className="mb-0 mt-2 add_Color_font" style={{ fontSize: '13px' }}>
+                                        <thead>
+                                            <tr className='text-start'>
+                                                <th className='fw-bold'>#</th>
+                                                <th className='fw-bold'>First Name</th>
+                                                <th className='fw-bold'>Email</th>
+                                                <th className='fw-bold'>Created On</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <>
+                                                {data?.map((ele, ind) => {
+                                                    return (
+                                                        <tr className="align-middle text-start">
+                                                            <th scope="row">{ind + 1}</th>
+                                                            <td className="cp">
+                                                                <span className="namelink">{ele?.firstName.charAt(0).toUpperCase() + ele?.firstName.slice(1)} {ele?.lastName.charAt(0).toUpperCase() + ele?.lastName.slice(1)}</span>
+                                                            </td>
+                                                            <td className="w-20">
+                                                                <span className="namelink"> {ele?.email}</span>
+                                                            </td>
 
-                                    {historyResponse && historyResponse.map((item, index) => (
-                                        <div key={index} className='d-flex gap-2 align-items-center lh-lg'>
-                                            <OverlayTrigger
-                                                placement="top"
-                                                overlay={
-                                                    <Tooltip id="tooltip1">
-                                                        {item?.userId?.firstName}
-                                                        {item?.userId?.lastName}
-                                                    </Tooltip>
-                                                }>
-                                                <div className="mt-1 cp">
-                                                    <span
-                                                        style={{
-                                                            backgroundColor: '#605e5a',
-                                                            borderRadius: '100%',
-                                                            padding: '5px 6px',
-
-                                                            color: 'white',
-                                                            fontWeight: '700',
-                                                        }}>
-                                                        {item?.userId?.firstName.charAt(0).toUpperCase()}
-                                                        {item?.userId?.lastName.charAt(0).toUpperCase()}
-                                                    </span>
-                                                </div>
-                                            </OverlayTrigger>
-                                            <Link to={generateLink(item.userActivity, item)}
-                                                className='text-dark'>
-                                                <span>
-                                                    {item?.userId?.firstName} {item?.userId?.lastName}
-                                                    {item.userActivity === "Created milestone" && <span> created milestone</span>}
-                                                    {item.userActivity === "Created Sprint" && <span> created sprint</span>}
-                                                    {item.userActivity === "Create Project" && <span> create project</span>}
-                                                    {item.userActivity === "Created Task" && <span> created task</span>}
-                                                    {' on ' + item?.createdAt}
-                                                </span>
-                                            </Link>
-
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col border_clr  m-2 rounded-4 bg-white">
-                            <div className="p-4 ">
-                                <div className="col-12">
-                                    <h5 className="mb-3">
-                                        <b>Priority breakdown</b>
-                                    </h5>
+                                                            <td>
+                                                                <span className="namelink">
+                                                                    {moment(ele?.createdAt).format("DD/MM/YYYY")}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                })}
+                                            </>
+                                        </tbody>
+                                    </Table>
+                                </Col>
+                                <Col sm={12} className="text-end my-2 justify-content-end d-flex">
+                                    <Pagination
+                                        showFirstButton
+                                        showLastButton
+                                        defaultPage={skip}
+                                        count={store?.getAllUsers?.data?.totalPages}
+                                        color="primary"
+                                        variant="outlined"
+                                        onChange={handlePaginationChange}
+                                    />
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                    <Row className='px-3'>
+                        <Col sm={6} className='border border-1 border-muted'>
+                            <Row className='p-2'>
+                                <Col sm={12}>
+                                    <h5 className='text-dark'> <strong>Priority Breakdown</strong></h5>
+                                </Col>
+                                <Col sm={12}>
                                     <Chart options={options} series={series} type="bar" height={350} />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col border_clr  m-2 rounded-4 bg-white">
-                            <div className="p-4 ">
-                                <div className="col-12">
-                                    <h5 className="mb-3">
-                                        <b>Types of work</b>
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col sm={6} className='border border-1 border-muted'>
+                            <Row className='p-2'>
+                                <Col sm={12}>
+                                    <h5 className='text-dark'>
+                                        <strong>Recent Activity</strong>
                                     </h5>
-                                </div>
-                                <div className="p-4">
-                                    <div className="row ">
-                                        <div className="col-5">
-                                            <p className="text-secondary">Type</p>
-                                            <div className="d-flex mb-4">
-                                                <i
-                                                    className="bi bi-check-square-fill mx-2 icon_s"
-                                                    style={{ color: '#59d3ec' }}
-                                                />
-                                                <p className="mb-0">Task</p>
+                                    {/* <h6>
+                                        Stay up to date with what"s happening across the project.
+                                    </h6> */}
+                                </Col>
+                                <Col sm={12}>
+                                    <div className="scrollable-content" style={{ fontSize: '14px' }}>
+                                        {historyResponse && historyResponse.map((item, index) => (
+                                            <div key={index} className='d-flex gap-2 align-items-center lh-lg text-nowrap'>
+                                                <OverlayTrigger
+                                                    placement="top"
+                                                    overlay={
+                                                        <Tooltip id="tooltip1">
+                                                            {item?.userId?.firstName}
+                                                            {item?.userId?.lastName}
+                                                        </Tooltip>
+                                                    }>
+                                                    <div className="mt-1 cp">
+                                                        <span
+                                                            style={{
+                                                                backgroundColor: '#605e5a',
+                                                                borderRadius: '100%',
+                                                                padding: '3px 4px',
+
+                                                                color: 'white',
+                                                                fontWeight: '600',
+                                                            }}>
+                                                            {item?.userId?.firstName.charAt(0).toUpperCase()}
+                                                            {item?.userId?.lastName.charAt(0).toUpperCase()}
+                                                        </span>
+                                                    </div>
+                                                </OverlayTrigger>
+                                                <Link to={generateLink(item.userActivity, item)}
+                                                    className='text-dark'>
+                                                    <span>
+                                                        {item?.userId?.firstName && item.userId.firstName.replace(/^\w/, (c) => c.toUpperCase())} {item?.userId?.lastName && item.userId.lastName.replace(/^\w/, (c) => c.toUpperCase())}
+                                                        {item.userActivity === "Created milestone" && <span> created milestone</span>}
+                                                        {item.userActivity === "Created Sprint" && <span> created sprint</span>}
+                                                        {item.userActivity === "Create Project" && <span> create project</span>}
+                                                        {item.userActivity === "Created Task" && <span> created task</span>}
+                                                        {' on ' + new Date(item.createdAt).toLocaleDateString() + '.'} {/* Extracting date portion */}
+                                                    </span>
+
+                                                </Link>
+
                                             </div>
-                                            <div className="d-flex mb-4">
-                                                <div
-                                                    style={{ backgroundColor: '#59d3ec', color: 'aliceblue' }}
-                                                    className="rounded-2 mx-2">
-                                                    <i className="bi bi-subtract mx-1   " />
-                                                </div>
-                                                <p className="mb-0">Sub-task</p>
-                                            </div>
-                                            <div className="d-flex mb-4">
-                                                <div
-                                                    style={{ backgroundColor: '#59d3ec', color: 'aliceblue' }}
-                                                    className="rounded-2 mx-2">
-                                                    <i className="bi bi-gear-wide mx-1" />
-                                                </div>
-                                                <p className="mb-0 text-nowrap">Manage types</p>
-                                            </div>
-                                        </div>
-                                        <div className="col-4">
-                                            <p className="text-secondary">Distribution</p>
-                                            <div className="progress-w-percent">
-                                                <span className="progress-value fw-bold">90%</span>
-                                                <ProgressBar now={90} className="progress-sm" />
-                                            </div>
-                                            <div className="progress-w-percent">
-                                                <span className="progress-value fw-bold">72%</span>
-                                                <ProgressBar now={72} className="progress-sm" />
-                                            </div>
-                                        </div>
-                                        <div className="col-3">
-                                            <p className="text-secondary">Count</p>
-                                            <p className="text-primary  mx-4 mb-4">10</p>
-                                            <p className="text-primary mx-4 mb-4 pt-3">8</p>
-                                        </div>
+                                        ))}
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                </Col>
+                            </Row>
+                        </Col>
+                        {/* <Col sm={6} className='border border-1 border-muted'>
+                            <Row className='p-2'>
+                                <Col sm={12}>
+                                    <h5 className='text-dark'><strong>All Details</strong></h5>
+                                </Col>
+                                <Col sm={12}>
+                                    <Table className='text-nowrap'>
+                                        <tr className='text-start '>
+                                            <th className='fw-bold py-2  text-secondary' scope="row">Ongoing Projects</th>
+                                            <td className='text-secondary py-2'>{getProjectList.totalCount}</td>
+                                        </tr>
+                                        <tr className='text-start '>
+                                            <th className='fw-bold py-2  text-secondary' scope="row">Total Users</th>
+                                            <td className='text-secondary py-2'>{userCount?.totalCount}</td>
+                                        </tr>
+                                        <tr className='text-start '>
+                                            <th className='fw-bold py-2  text-secondary' scope="row">Tasks added in last 7 days</th>
+                                            <td className='text-secondary py-2' colspan="2"> {lastWeekCount?.createdCount ? lastWeekCount?.createdCount : '0'}</td>
+                                        </tr>
+                                        <tr className='text-start '>
+                                            <th className='fw-bold py-2  text-secondary' scope="row">Tasks due in last 7 days</th>
+                                            <td className='text-secondary py-2' colspan="2">{lastWeekCount?.dueCount ? lastWeekCount?.dueCount : '0'}</td>
+                                        </tr>
+                                    </Table>
+                                </Col>
+                            </Row>
+                        </Col> */}
+                    </Row>
+                </Container>
             </div>
+
         </>
     );
 };

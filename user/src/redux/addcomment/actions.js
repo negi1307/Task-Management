@@ -15,7 +15,7 @@ export const updateComment = (data) => ({
     payload: data
 })
 
-export const getHistory = (data) => ({
+export const getHistoryAction = (data): AuthAction => ({
     type: Addcomment.GET_HISTORY,
     payload: data
 })
