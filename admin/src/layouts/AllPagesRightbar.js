@@ -113,23 +113,17 @@ export default function Pagesaddtask(props) {
     };
     const handelClose = () => {
         reset();
-        // setValue('Summary', '');
-        // setValue('Assignee', '');
-        // setValue('Reporter', '');
-        // setValue('priority', '');
-        // setValue('start_date', '');
-        // setValue('last_date', '');
-        // setValue('description', '');
         setShowModal(false);
         setSelectedFile('');
         setStartDate("");
         setEndDate("")
     };
+    const projects = store?.getProject?.data?.response?.projects;
     useEffect(() => {
         // reset({ projectname: projectId, Milestone: mileStoneId, Sprint: sprintId });
         dispatch(getAllRoles());
         dispatch(getAllUsers());
-        dispatch(getAllCategory({status:true}));
+        dispatch(getAllCategory({ status: true }));
         dispatch(getAllProjects({ status: 1, skip: 1, projectStatus: 'Ongoing' }));
         dispatch(getReporterAction())
         // if (projectSelected !== null) {
@@ -169,7 +163,7 @@ export default function Pagesaddtask(props) {
     // console.log({ milestoneSelected })
 
     const reporter = store?.getReporterReducer?.data?.reporterList
-    const projectName = store?.getProject?.data?.response;
+    const projectName = store?.getProject?.data?.response?.projects;
     // useEffect(() => {
     //     console.log("Milestone Data:", store?.getsingleMileStone?.data?.response);
     // }, [store?.getsingleMileStone?.data?.response]);
@@ -202,7 +196,7 @@ export default function Pagesaddtask(props) {
                                                     value={projectSelected || ''}
                                                 >
                                                     <option value=''>Select Project</option>
-                                                    {store?.getProject?.data?.response?.map(project => (
+                                                    {projects?.map(project => (
                                                         <option key={project?._id} value={project?._id}>{project?.projectName}</option>
                                                     ))}
                                                 </Form.Select>
@@ -393,7 +387,7 @@ export default function Pagesaddtask(props) {
                                             {category?.map((ele, ind) => (
                                                 <option value={ele?._id}>
                                                     {' '}
-                                                    {ele?.name} 
+                                                    {ele?.name}
                                                 </option>
                                             ))}
                                         </select>

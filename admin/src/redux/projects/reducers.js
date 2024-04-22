@@ -10,6 +10,11 @@ const GET_PROJECT_INITIAL_STATE = {
     message: "",
     loading: false
 }
+const GET_PROJECTS_COUNT_INITIAL_STATE = {
+    data: [],
+    message: "",
+    loading: false
+}
 const UPDATE_PROJECT_INITIAL_STATE = {
     data: [],
     message: "",
@@ -68,6 +73,31 @@ export const getProject = (state = GET_PROJECT_INITIAL_STATE, action) => {
 
 
         case ProjectTypes.GET_PROJECT_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+export const getProjectsCount = (state = GET_PROJECTS_COUNT_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case ProjectTypes.GET_PROJECTS_COUNT_LOADING:
+            return {
+                data: GET_PROJECTS_COUNT_INITIAL_STATE.data,
+                loading: true,
+            };
+        case ProjectTypes.GET_PROJECTS_COUNT_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case ProjectTypes.GET_PROJECTS_COUNT_ERROR:
             return {
                 data: [],
                 loading: false,
