@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getPriorityGraphAction, getAllTaskCountAction, getTaskSummmaryDetail, getTaskWeekCountAction } from '../../../redux/Summary/action';
 import { getHistoryAction } from '../../../redux/task/action';
-import { getAllProjects } from '../../../redux/projects/action'
+import { getAllProjects, getProjectsCount } from '../../../redux/projects/action'
 import Chart from 'react-apexcharts';
 import { ProgressBar, Col, Container, Row, Table, Form } from 'react-bootstrap';
 import Loader from '../../../components/Loader'
@@ -13,6 +13,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Pagination from '@mui/material/Pagination';
+// import Pagination from '../../../helpers/pagination/Pagination';
 import Stack from '@mui/material/Stack';
 import FilterModal from './modal/filter';
 import Pagesaddtask from '../../../layouts/AllPagesRightbar';
@@ -34,8 +35,8 @@ const AdminDashboard = () => {
     const [filterModal, setFilterModal] = useState(false);
     const [skip, setSkip] = useState(1);
     const [projectStatus, setprojectStatus] = useState(1);
-
-
+    // const [data, setData] = useState([]);
+    const getUsers = store?.getAllUsers;
     const {
         register,
         handleSubmit,
@@ -58,7 +59,10 @@ const AdminDashboard = () => {
         if (taskTotalCount) {
             setTaskCount(taskTotalCount);
         }
-    }, [store?.getTaskSummaryReducer?.data.response]);
+        if (getUsers?.data?.status == 200) {
+            setData(getUsers?.data?.response);
+        }
+    }, [store?.getTaskSummaryReducer?.data.response, getUsers]);
 
     const closeaddModal = () => {
         // getalltasks();
@@ -67,24 +71,25 @@ const AdminDashboard = () => {
         setFilterModal(false);
     }
     useEffect(() => {
-        // dispatch(getAllProjects({ status: 1, projectStatus: 'Support' }));
-        // dispatch(getAllProjects({ status: 1, projectStatus: 'Delivered' }));
-        dispatch(getAllUsers());
+
+        dispatch(getAllUsers({ skip: skip }));
         dispatch(getTaskWeekCountAction());
         dispatch(getTaskSummmaryDetail());
         dispatch(getHistoryAction());
+        dispatch(getProjectsCount());
         dispatch(getPriorityGraphAction());
         dispatch(getAllTaskCountAction());
+        dispatch(getAllUsers());
+        // dispatch(getAllProjects({ status: 1, projectStatus: 'Ongoing' }));
+        // dispatch(getAllProjects({ status: 1, projectStatus: 'Support' }));
+        // dispatch(getAllProjects({ status: 1, projectStatus: 'Delivered' }));
     }, [dispatch]);
 
+    const projectsCount = store?.getProjectsCount?.data?.response?.projectStatusCounts;
     const totalTasks = store?.getAllTaskCountReducer?.data;
-    // console.log({ totalTasks })
     const getProjectList = store?.getProject?.data;
-    // console.log({ getProjectList })
-    // console.log({ getProjectList })
     const userCount = store?.getAllUsers?.data;
     const priorityData = store?.getPriorityGraphReducer?.data?.response;
-    // console.log({ priorityData })
     function generateLink(userActivity, item) {
         switch (userActivity) {
             case "Created milestone":
@@ -124,26 +129,38 @@ const AdminDashboard = () => {
             data: priorityData?.map((ele, ind) => ele?.count),
         },
     ];
-    const handleProjectStatus = (val) => {
-        if (val == '1') {
-            setprojectStatus('Ongoing');
-            setSkip(1);
-            dispatch(getAllProjects({ status: 1, projectStatus: 'Ongoing' }));
-        } else if (val == '2') {
-            setprojectStatus('Support');
-            setSkip(1);
-            dispatch(getAllProjects({ status: 1, projectStatus: 'Support' }));
-        } else if (val == '3') {
-            setSkip(1);
-            setprojectStatus('Delivered');
-            dispatch(getAllProjects({ status: 1, projectStatus: 'Delivered' }));
-        }
-        //  else {
-        //     setSkip(1);
-        //     setprojectStatus(4);
-        //     dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 4 }));
-        // }
+
+    const projectDetails = store?.getProject?.data?.response;
+    // const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    //     setSkip(value);
+    //     dispatch(getAllUsers({ page: skip }));
+    // };
+
+    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setSkip(value); // Update skip state with the new page number
+        dispatch(getAllUsers({ page: value })); // Dispatch action with the new page number
     };
+
+    // const handleProjectStatus = (val) => {
+    //     if (val == '1') {
+    //         setprojectStatus('Ongoing');
+    //         setSkip(1);
+    //         dispatch(getAllProjects({ status: 1, projectStatus: 'Ongoing' }));
+    //     } else if (val == '2') {
+    //         setprojectStatus('Support');
+    //         setSkip(1);
+    //         dispatch(getAllProjects({ status: 1, projectStatus: 'Support' }));
+    //     } else if (val == '3') {
+    //         setSkip(1);
+    //         setprojectStatus('Delivered');
+    //         dispatch(getAllProjects({ status: 1, projectStatus: 'Delivered' }));
+    //     }
+    //     // else {
+    //     //     setSkip(1);
+    //     //     setprojectStatus(4);
+    //     //     dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 4 }));
+    //     // }
+    // };
     return (
         // <>
         //     <div className="pt-4" style={{ background: 'white', }}>
@@ -461,12 +478,12 @@ const AdminDashboard = () => {
                         <Col sm={6} className='border border-1 border-muted'>
                             <Row className=' p-2'>
                                 <Col sm={12}>
-                                    <h5 className='text-dark'> <strong>Projects</strong></h5>
-                                    <div className='d-flex gap-2'>
-                                        <button className='btn p-1 web_button' onClick={() => handleProjectStatus('1')}> <strong>Ongoing</strong></button>
-                                        <button className='btn p-1 web_button' onClick={() => handleProjectStatus('2')}> <strong>Support</strong></button>
-                                        <button className='btn p-1 web_button' onClick={() => handleProjectStatus('3')}> <strong>Delivered</strong></button>
-                                    </div>
+                                    <h5 className='text-dark'> <strong>Ongoing Projects</strong></h5>
+                                    {/* <div className='d-flex gap-2'>
+                                        <button className='btn p-1 web_button fs-6 ' onClick={() => handleProjectStatus('1')}> <strong>Ongoing</strong></button>
+                                        <button className='btn p-1 web_button fs-6 ' onClick={() => handleProjectStatus('2')}> <strong>Support</strong></button>
+                                        <button className='btn p-1 web_button fs-6 ' onClick={() => handleProjectStatus('3')}> <strong>Delivered</strong></button>
+                                    </div> */}
                                 </Col>
                                 <Col sm={12} className='scrollable-content'>
                                     {/* <Table className='text-nowrap'>
@@ -516,11 +533,11 @@ const AdminDashboard = () => {
                                         </tbody>
                                     </Table>
                                 </Col>
-                                <Col sm={12} className="text-end mb-2 ">
+                                {/* <Col sm={12} className="text-end mb-2 ">
                                     <Link to='/dashboard/report'>
                                         View All
                                     </Link>
-                                </Col>
+                                </Col> */}
                             </Row>
                         </Col>
                         <Col sm={6} className='border border-1 border-muted'>
@@ -530,55 +547,83 @@ const AdminDashboard = () => {
                                         <strong>Projects Overview</strong>
                                     </h5>
                                 </div>
-                                <div className='col-12'>
+                                <div className='col-12 h-100 d-flex justify-content-center align-items-center'>
                                     {taskCount !== null && (
                                         <PieChart
                                             series={[
                                                 {
-                                                    data: taskCount.map((item, index) => ({
-                                                        id: index,
-                                                        value: item.taskCount,
-                                                        label: item.name,
-                                                    })),
+                                                    data: [
+                                                        { id: 0, value: `${projectsCount?.Ongoing}`, label: 'Ongoing' },
+                                                        { id: 1, value: `${projectsCount?.Support}`, label: 'Support' },
+                                                        { id: 2, value: `${projectsCount?.Delivered}`, label: 'Delivered' },
+                                                    ],
+                                                    highlightScope: { faded: 'global', highlighted: 'item' },
+                                                    faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                                                    color: ['red', 'green', 'yellow']
                                                 },
                                             ]}
-                                            width={450}
-                                            height={300}
-                                            colors={['#727cf5', '#0acf97', '#ff00ff', '#fa5c7c', '#ffbc00']}
+                                            height={250}
+                                            width={600}
                                         />
                                     )}
-
                                 </div>
                             </Row>
                         </Col>
                         <Col sm={6} className='border border-1  border-muted'>
-                            <Row className='p-2'>
-                                <Col sm={12}>
-                                    <h5 className='text-dark'> <strong>All Details</strong></h5>
+                            <Row className='p-2 align-items-center '>
+                                <Col sm={6}>
+                                    <h5 className='text-dark'> <strong>Users</strong></h5>
+                                </Col>
+                                <Col sm={6} className='text-end'>
+                                    <Link to='/dashboard/report'>
+                                        Users Report
+                                    </Link>
                                 </Col>
                                 <Col sm={12}>
-                                    <Table className='text-nowrap'>
-                                        <tr className='text-start '>
-                                            <th className='fw-bold py-2  text-secondary' scope="row">Ongoing Projects</th>
-                                            <td className='text-secondary py-2'>{getProjectList.totalCount}</td>
-                                        </tr>
-                                        <tr className='text-start '>
-                                            <th className='fw-bold py-2  text-secondary' scope="row">Total Users</th>
-                                            <td className='text-secondary py-2'>{userCount?.totalCount}</td>
-                                        </tr>
-                                        <tr className='text-start '>
-                                            <th className='fw-bold py-2  text-secondary' scope="row">Total Tasks</th>
-                                            <td className='text-secondary py-2'>{userCount?.totalCount}</td>
-                                        </tr>
-                                        <tr className='text-start '>
-                                            <th className='fw-bold py-2  text-secondary' scope="row">Tasks added in last 7 days</th>
-                                            <td className='text-secondary py-2' colspan="2"> {lastWeekCount?.createdCount ? lastWeekCount?.createdCount : '0'}</td>
-                                        </tr>
-                                        <tr className='text-start '>
-                                            <th className='fw-bold py-2  text-secondary' scope="row">Tasks due in last 7 days</th>
-                                            <td className='text-secondary py-2' colspan="2">{lastWeekCount?.dueCount ? lastWeekCount?.dueCount : '0'}</td>
-                                        </tr>
+                                    <Table className="mb-0 mt-2 add_Color_font" style={{ fontSize: '13px' }}>
+                                        <thead>
+                                            <tr className='text-start'>
+                                                <th className='fw-bold'>#</th>
+                                                <th className='fw-bold'>First Name</th>
+                                                <th className='fw-bold'>Email</th>
+                                                <th className='fw-bold'>Created On</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <>
+                                                {data?.map((ele, ind) => {
+                                                    return (
+                                                        <tr className="align-middle text-start">
+                                                            <th scope="row">{ind + 1}</th>
+                                                            <td className="cp">
+                                                                <span className="namelink">{ele?.firstName.charAt(0).toUpperCase() + ele?.firstName.slice(1)} {ele?.lastName.charAt(0).toUpperCase() + ele?.lastName.slice(1)}</span>
+                                                            </td>
+                                                            <td className="w-20">
+                                                                <span className="namelink"> {ele?.email}</span>
+                                                            </td>
+
+                                                            <td>
+                                                                <span className="namelink">
+                                                                    {moment(ele?.createdAt).format("DD/MM/YYYY")}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                })}
+                                            </>
+                                        </tbody>
                                     </Table>
+                                </Col>
+                                <Col sm={12} className="text-end my-2 justify-content-end d-flex">
+                                    <Pagination
+                                        showFirstButton
+                                        showLastButton
+                                        defaultPage={skip}
+                                        count={store?.getAllUsers?.data?.totalPages}
+                                        color="primary"
+                                        variant="outlined"
+                                        onChange={handlePaginationChange}
+                                    />
                                 </Col>
                             </Row>
                         </Col>

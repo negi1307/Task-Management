@@ -6,6 +6,7 @@ import Layout from './layout/reducers';
 import {
     addProject,
     getProject,
+    getProjectsCount,
     updateProject,
     deleteProject,
     getProjectById,
@@ -64,6 +65,7 @@ export default (combineReducers({
     Layout,
     addProject,
     getProject,
+    getProjectsCount,
     updateProject,
     deleteProject,
     getProjectById,

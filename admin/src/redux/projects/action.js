@@ -6,11 +6,15 @@ export const addProject = (data): AuthAction => ({
     type: ProjectTypes.ADD_PROJECT,
     payload: data
 })
-export const getAllProjects= (data): AuthAction => ({
+export const getAllProjects = (data): AuthAction => ({
     type: ProjectTypes.GET_PROJECT,
     payload: data
 })
-export const getProjectId= (data): AuthAction => ({
+export const getProjectsCount = (data): AuthAction => ({
+    type: ProjectTypes.GET_PROJECTS_COUNT,
+    payload: data
+})
+export const getProjectId = (data): AuthAction => ({
     type: "projectId",
     payload: data
 })
@@ -23,7 +27,7 @@ export const deleteProject = (data): AuthAction => ({
     payload: data
 })
 
-export const getProjectsById= (data): AuthAction => ({
-    type: ProjectTypes. GET_PROJECT_BY_ID,
+export const getProjectsById = (data): AuthAction => ({
+    type: ProjectTypes.GET_PROJECT_BY_ID,
     payload: data
 })
