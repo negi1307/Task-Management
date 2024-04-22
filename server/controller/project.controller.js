@@ -305,8 +305,43 @@ const getProjectCount = async (req, res) => {
 };
 
 
+// specific project all tasks and their count also
+const getProjectTasks = async (req, res) => {
+  try {
+    let skip = req.query.skip ? parseInt(req.query.skip) : 1;
+    let pageSize = 10;
+    const { projectId } = req.query;
+    const totalCount = await taskModel.find({ projectId }).countDocuments();
+    const totalPages = Math.ceil(totalCount / pageSize);
+    
+    const allTasks = await taskModel.find({ projectId }).sort({ createdAt: -1 });
+
+    const todoCount = allTasks.filter(task => task.status === 1).length;
+    const inProgressCount = allTasks.filter(task => task.status === 2).length;
+    const testingCount = allTasks.filter(task => task.status === 3).length;
+    const doneCount = allTasks.filter(task => task.status === 4).length;
+    const holdCount = allTasks.filter(task => task.status === 5).length;
+
+    const project = await taskModel.find({ projectId }).sort({ createdAt: -1 }).limit(pageSize).skip((skip - 1) * pageSize);
+
+    return res.status(200).json({ 
+      status: 200, 
+      message: "All task of the project", 
+      totalCount,
+      totalPages, 
+      todoCount, 
+      inProgressCount, 
+      testingCount, 
+      doneCount, 
+      holdCount, 
+      response: project 
+    });
+  } catch (error) {
+    return res.status(500).json({ status: 500, message: error.message });
+  }
+}
 
 
 
 
-module.exports = { addProject, getProjects, updateProject, uploadProject_File, getallProject, allProjectFiles, projectTotalTime, getUsersProjects,getProjectCount};
+module.exports = { addProject, getProjects, updateProject, uploadProject_File, getallProject, allProjectFiles, projectTotalTime, getUsersProjects, getProjectCount, getProjectTasks };
