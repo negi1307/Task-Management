@@ -7,6 +7,7 @@ const sprintModel = require("../models/sprint.model");
 const userModel = require("../models/users.model");
 const subTaskModel = require("../models/subTask.model")
 const breakTimeModel = require("../models/userLogin.model")
+const technology = require("../models/technology.model")
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -444,6 +445,8 @@ const getTasksAccToStatus = async (req, res) => {
           createdAt: 1,
           updatedAt: 1,
           inProgressDate: 1,
+          doneDate: 1,
+          timeTracker: 1,
           daysLeft: {
             $toInt: {
               $max: [
@@ -476,6 +479,7 @@ const getTasksAccToStatus = async (req, res) => {
       },
       { $sort: { createdAt: -1 } },
     ]);
+
     tasks.forEach(task => {
       switch (task.status) {
         case 1:
@@ -867,14 +871,21 @@ const getUserAssignments = async (req, res) => {
 // All assignees of A project
 const projectUserList = async (req, res) => {
   try {
-    const { projectId } = req.query;
+    const { projectId, page = 1, limit = 10 } = req.query;
     const assigneeIds = await taskModel.distinct('assigneeId', { projectId: projectId });
-    const users = await userModel.find({ _id: { $in: assigneeIds } }).select('firstName lastName')
-    return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: users });
+
+    const totalUsers = await userModel.countDocuments({ _id: { $in: assigneeIds } });
+
+    const users = await userModel.find({ _id: { $in: assigneeIds } }).select('firstName lastName email role designationId ').populate('designationId')
+      .skip((page - 1) * limit).limit(limit);
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    return res.status(200).json({ status: 200, message: "Data Fetched Successfully", response: users, totalUsers, totalPages });
   } catch (error) {
-    return res.status(500).json({ status: "400", message: "Fill all the required fields", error: error.message });
+    return res.status(500).json({ status: 500, message: "Error while fetching data", error: error.message });
   }
 };
+
 
 
 // timely task details of User time track

@@ -8,7 +8,7 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
                 type: String
             },
             technology: {
-                type: [mongoose.Types.ObjectId],
+                type: [mongoose.Schema.Types.ObjectId],
                 ref: 'Technology'
             },
             startDate: {
