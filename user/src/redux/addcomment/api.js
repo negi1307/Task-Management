@@ -19,9 +19,12 @@ export function updateTask(data): any {
 }
 
 
+// export function getHistoryApi(data): any {
+//     const { taskId  } = data?.payload;
+//     return api.get(`${URL.getHistory}${taskId}`);
+// }
 export function getHistoryApi(data): any {
-    const { taskId,  } = data?.payload;
-    return api.get(`${URL.getHistory}${taskId}`);
+    return api.get(URL.getHistory, data?.payload);
 }
 
 
