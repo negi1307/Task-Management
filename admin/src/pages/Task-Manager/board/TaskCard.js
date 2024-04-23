@@ -266,13 +266,29 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                     </p>
                                 </div>
 
-                                <div className='col-12 px-1 py-0'
+                                <div className='col-12 col-lg-2 px-1 py-0'
                                     onClick={() => {
                                         handleDetailPage(item);
                                     }}>
-                                    <p className={`task-title text-dark p-0 m-0 ms-1`}>
-                                        {backgroundColorClass}
-                                    </p>
+                                   
+                                    <OverlayTrigger
+                                        placement="top"
+                                        overlay={
+                                            <Tooltip id="tooltip1">
+                                                {priorityWithLetter}
+                                            </Tooltip>
+                                        }>
+                                        <div className="cp"
+                                            onClick={() => {
+                                                handleDetailPage(item);
+                                            }}>
+                                            <span
+                                            >
+                                                {backgroundColorClass}
+
+                                            </span>
+                                        </div>
+                                    </OverlayTrigger>
                                 </div>
                                 <div className="col-12"
                                     onClick={() => {
@@ -286,6 +302,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                         {item?.startDate ? moment(item?.startDate).format("DD/MM/YYYY") : ''}
                                                     </span>
                                                 </p>
+
                                             </div>
                                         </div>
 
@@ -307,8 +324,8 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                     placement="top"
                                                     overlay={
                                                         <Tooltip id="tooltip1">
-                                                            {item?.assignees?.assigneeInfo?.firstName}{' '}
-                                                            {item?.assignees?.assigneeInfo?.lastName}
+                                                            {item?.assigneeInfo?.firstName}
+                                                            {item?.assigneeInfo?.lastName}
                                                         </Tooltip>
                                                     }>
                                                     <div className="cp"
@@ -323,7 +340,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                                 fontSize: '11px',
                                                                 color: 'white',
                                                                 fontWeight: '800',
-                                                            }}>
+                                                            }} title={item?.assignees?.assigneeInfo?.firstName}>
                                                             {item?.assigneeInfo?.firstName.charAt(0)}
                                                             {item?.assigneeInfo?.lastName.charAt(0)}
                                                         </span>
