@@ -14,8 +14,8 @@ import { addComment, getComment, updateComment, deleteComment, getCommentId } fr
 import { getsingleMileStone } from '../../../redux/milestone/action';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { FaCirclePlay } from "react-icons/fa6";
-import { FaCirclePause } from "react-icons/fa6";
+import { FaPlay } from "react-icons/fa6";
+import { FaPause } from "react-icons/fa6";
 import { addLoginTime, addLoginTimeStop } from '../../../redux/user/action'
 import ToastHandle from '../../../constants/toaster/toaster';
 import moment from 'moment-timezone';
@@ -53,7 +53,7 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     const userId = store?.Auth?.user?.userId;
     const getComments = item?.comments;
     const historyData = store?.getHistoryData?.data?.response;
-    const indianDateTime = moment.tz(new Date(), 'Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss');
+    const [isPlaying, setIsPlaying] = useState(false);
     const {
         register,
         handleSubmit,
@@ -117,13 +117,13 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
 
     const startTime = (e) => {
         dispatch(addLoginTime({ taskId: item?._id }))
-        setIsPlay(true);
+        setIsPlaying(true);
         localStorage.setItem(`task_${item?._id}_inProgress`, 'true');
     }
     const stopTime = (e) => {
         let stoptask = item?._id;
         dispatch(addLoginTimeStop(stoptask));
-        setIsPlay(false);
+        setIsPlaying(false);
         localStorage.removeItem(`task_${item?._id}_inProgress`);
     }
 
@@ -156,7 +156,7 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
 
                                         </div>
                                         <div className="col-3 text-center">
-
+                                            {/* <p onClick={startTime}>hbsd</p> */}
                                         </div>
                                     </div>
                                 </div>
@@ -194,9 +194,15 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                             </div>
                                         </div>
                                         <div className="col-4 text-end ">
-                                            <div className=" d-flex">
+                                            <div className=" d-flex gap-2">
+                                                <div>
+                                                    {isPlaying ? (
+                                                        <FaPause onClick={stopTime} />
+                                                    ) : (
+                                                        <FaPlay onClick={startTime} />
+                                                    )}
+                                                </div>
                                                 <div className="cp d-flex align-items-center gap-1">
-                                                   
                                                     <OverlayTrigger
                                                         placement="top"
                                                         overlay={

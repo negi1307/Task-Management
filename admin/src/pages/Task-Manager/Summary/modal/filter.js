@@ -21,7 +21,7 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
     const [selectedValues, setSelectedValues] = useState([]);
     const [userId, setUserId] = useState(null);
     const [filterPayload, setfilterPayload] = useState();
-    const [isSubmitted, setIsSubmitted] = useState(false); // State to track form submission
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const users = store?.getAllUsers?.data?.response;
     const successHandle = store?.getUserRecordReducer;
@@ -98,7 +98,7 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
             Projectname: data?.projectId?.projectName ? data?.projectId?.projectName : '',
         }));
     } else {
-        console.error("usersData is not an array or not defined");
+        // console.error("usersData is not an array or not defined");
     }
 
     return (
