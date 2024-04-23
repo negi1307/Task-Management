@@ -17,5 +17,8 @@ projectRoute.get("/files", verifyAdmin, projectPath.allProjectFiles);
 projectRoute.get("/projectTime", projectPath.projectTotalTime);
 projectRoute.get("/usersProjects", projectPath.getUsersProjects)
 projectRoute.get("/projectsCount", projectPath.getProjectCount)
+projectRoute.get("/projectTasks", projectPath.getProjectTasks)
+
+
 
 module.exports = projectRoute;

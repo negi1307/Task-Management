@@ -28,11 +28,11 @@ const users = mongoose.model(
     },
     designationId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "techcategories"
+      ref: "techCategory"
     },
     technologyId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "technologies"
+      ref: "Technology"
     }
   },
     {
