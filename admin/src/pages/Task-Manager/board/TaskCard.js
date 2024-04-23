@@ -138,7 +138,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                             <div className="row py-2">
                                 <div className="col-12 pb-1">
                                     <div className="row d-flex align-items-center">
-                                        <div className="col-9   m-0 ">
+                                        <div className="col-9 m-0 ">
                                             {/* <span className={`task-title text-dark p-0 m-0 `}>
                                                 {backgroundColorClass}
                                             </span> */}
@@ -153,27 +153,27 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
 
                                         </div>
                                         <div className="col-3 text-center">
-                                            <div className="dropdown">
-                                                <button className="border-0 bg-white icon_buttons" type="button" id="dropdownMenuButton1"
-                                                    data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-                                                    <i className="bi bi-three-dots-vertical fs-5 fw-bold text-dark"></i>
-                                                </button>
-                                                <ul className="dropdown-menu py-0 dropdown-style dropdown-menu-end ps-1 dropdown-menu-lg-start border-0" aria-labelledby="dropdownMenuButton1">
-                                                    <div className='d-flex w-50'>
-                                                        <li className='w-50 ps-2 border-dark border-end border-1 py-0'>
-                                                            <button className="dropdown-item m-0 p-0 border-0 bg-transparent">
-                                                                <i className="uil-edit-alt m-0 p-0  text-dark del_edit" onClick={() => { handelUpdate(item); }}></i>
-                                                            </button>
-                                                        </li>
-                                                        <li className='w-50 ps-2'>
+                                        <div className="dropdown">
+    <button className="border-0 bg-white icon_buttons" type="button" id="dropdownMenuButton1"
+        data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+        <i className="bi bi-three-dots-vertical fs-5 fw-bold text-dark"></i>
+    </button>
+    <ul className="dropdown-menu py-0 dropdown-style dropdown-menu-end ps-1 dropdown-menu-lg-start bg-white border-0" aria-labelledby="dropdownMenuButton1">
+        <div className='d-flex w-100'>
+            <li className='w-50 ps-2 border-dark border-end border-1 py-0'>
+                <button className="dropdown-item m-0 p-0 border-0 bg-transparent">
+                    <i className="uil-edit-alt m-0 p-0  text-dark del_edit" onClick={() => { handelUpdate(item); }}></i>
+                </button>
+            </li>
+            <li className='w-50 ps-2'>
+                <button className="dropdown-item m-0 p-0 border-0 bg-transparent" onClick={() => deleteData(item?.id)}>
+                    <i className="mdi mdi-delete text-dark m-0 p-0  del_edit"></i>
+                </button>
+            </li>
+        </div>
+    </ul>
+</div>
 
-                                                            <button className="dropdown-item m-0 p-0 border-0 bg-transparent" onClick={() => deleteData(item?.id)}>
-                                                                <i className="mdi mdi-delete text-dark m-0 p-0  del_edit"></i>
-                                                            </button>
-                                                        </li>
-                                                    </div>
-                                                </ul>
-                                            </div>
                                         </div>
                                         {/* <div className="col-6 pe-0">
                                             <div className="action_icon position-relative">
@@ -266,7 +266,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                     </p>
                                 </div>
 
-                                <div className='col-12 col-lg-2 px-1 py-0'
+                                <div className='col-12 col-lg-2 px-2 py-0'
                                     onClick={() => {
                                         handleDetailPage(item);
                                     }}>
