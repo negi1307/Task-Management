@@ -141,7 +141,7 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
             <Draggable key={item?.id} draggableId={item?.id} index={index} style={{ width: '260px', }}>
                 {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                        <TaskInformation className=" mt-2 shadow-lg mx-auto rounded-4  " style={{ width: '250px', marginTop: '1px' }}>
+                        <TaskInformation className=" mt-2 shadow-lg mx-auto rounded-2  " style={{ width: '250px', marginTop: '1px' }}>
                             <div className="row py-2">
                                 <div className="col-12 pb-1">
                                     <div className="row d-flex align-items-center">
@@ -176,9 +176,24 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                     onClick={() => {
                                         showTaskDetailMOdel(item);
                                     }}>
-                                    <div>
-                                        {backgroundColorClass}
-                                    </div>
+                                        <OverlayTrigger
+                                        placement="top"
+                                        overlay={
+                                            <Tooltip id="tooltip1">
+                                                {priorityWithLetter}
+                                            </Tooltip>
+                                        }>
+                                        <div className="cp"
+                                            onClick={() => {
+                                                showTaskDetailMOdel(item);
+                                            }}>
+                                            <span
+                                            >
+                                                {backgroundColorClass}
+
+                                            </span>
+                                        </div>
+                                    </OverlayTrigger>
 
 
                                 </div>
