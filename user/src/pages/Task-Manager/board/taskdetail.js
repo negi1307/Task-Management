@@ -44,7 +44,7 @@ const Taskdetail = (props) => {
         setValue('subtasks', "");
         setButtonChange(true);
         if (type === 'History') {
-            dispatch(getHistoryAction(editData?.id));
+            dispatch(getHistoryAction(props?.item?.id));
         }
         const taskId = props.item?.id;
         dispatch(getBugs({ taskId, type: "Bug" }));

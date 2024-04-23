@@ -119,21 +119,25 @@ const allProjectFiles = async (req, res) => {
 
 
 
-// total time in a project
+// total time in a project and the diffrence also calculated
 const projectTotalTime = async (req, res) => {
   try {
     const projectId = req.query.projectId;
-    const project = await taskModel.find({ projectId: projectId });
+    const projectTasks = await taskModel.find({ projectId: projectId });
+
     let totalHours = 0;
     let totalMinutes = 0;
     let totalSeconds = 0;
-    project.forEach(task => {
+    let expectedHoursSum = 0;
+
+    projectTasks.forEach(task => {
       if (task.timeTracker) {
         const timeParts = task.timeTracker.split(' ');
         totalHours += parseInt(timeParts[0]) || 0;
         totalMinutes += parseInt(timeParts[2]) || 0;
         totalSeconds += parseInt(timeParts[4]) || 0;
       }
+      expectedHoursSum += task.expectedHours || 0;
     });
 
     totalMinutes += Math.floor(totalSeconds / 60);
@@ -141,12 +145,23 @@ const projectTotalTime = async (req, res) => {
     totalHours += Math.floor(totalMinutes / 60);
     totalMinutes %= 60;
 
-    const totalTime = `${totalHours} hours ${totalMinutes} minutes ${totalSeconds} seconds`;
-    return res.status(200).json({ status: 200, message: "Project total time calculated", totalTime, project })
+    const totalTimeInSeconds = totalHours * 3600 + totalMinutes * 60 + totalSeconds;
+    const totalTimeFormatted = `${totalHours} hours ${totalMinutes} minutes ${totalSeconds} seconds`;
+    const expectedTimeInSeconds = expectedHoursSum * 3600;
+
+    const differenceInSeconds = expectedTimeInSeconds - totalTimeInSeconds;
+    const differenceHours = Math.floor(differenceInSeconds / 3600);
+    const differenceMinutes = Math.floor((differenceInSeconds % 3600) / 60);
+    const differenceSeconds = differenceInSeconds % 60;
+    const differenceFormatted = `${differenceHours} hours ${differenceMinutes} minutes ${differenceSeconds} seconds`;
+
+    return res.status(200).json({ status: 200, message: "Project total time calculated", totalTime: totalTimeFormatted, expectedTime: expectedHoursSum, difference: differenceFormatted, projectTasks });
   } catch (error) {
-    return res.status(500).json({ status: 500, message: "Something went wrong", error: error.message })
+    return res.status(500).json({ status: 500, message: "Something went wrong", error: error.message });
   }
 }
+
+
 
 
 // get the users projects record
@@ -305,8 +320,43 @@ const getProjectCount = async (req, res) => {
 };
 
 
+// specific project all tasks and their count also
+const getProjectTasks = async (req, res) => {
+  try {
+    let skip = req.query.skip ? parseInt(req.query.skip) : 1;
+    let pageSize = 10;
+    const { projectId } = req.query;
+    const totalCount = await taskModel.find({ projectId }).countDocuments();
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    const allTasks = await taskModel.find({ projectId }).sort({ createdAt: -1 });
+
+    const todoCount = allTasks.filter(task => task.status === 1).length;
+    const inProgressCount = allTasks.filter(task => task.status === 2).length;
+    const testingCount = allTasks.filter(task => task.status === 3).length;
+    const doneCount = allTasks.filter(task => task.status === 4).length;
+    const holdCount = allTasks.filter(task => task.status === 5).length;
+
+    const project = await taskModel.find({ projectId }).sort({ createdAt: -1 }).limit(pageSize).skip((skip - 1) * pageSize);
+
+    return res.status(200).json({
+      status: 200,
+      message: "All task of the project",
+      totalCount,
+      totalPages,
+      todoCount,
+      inProgressCount,
+      testingCount,
+      doneCount,
+      holdCount,
+      response: project
+    });
+  } catch (error) {
+    return res.status(500).json({ status: 500, message: error.message });
+  }
+}
 
 
 
 
-module.exports = { addProject, getProjects, updateProject, uploadProject_File, getallProject, allProjectFiles, projectTotalTime, getUsersProjects,getProjectCount};
+module.exports = { addProject, getProjects, updateProject, uploadProject_File, getallProject, allProjectFiles, projectTotalTime, getUsersProjects, getProjectCount, getProjectTasks };
