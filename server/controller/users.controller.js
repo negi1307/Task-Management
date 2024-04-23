@@ -577,11 +577,17 @@ const getStatusCounts = async (taskQuery) => {
   return statusCounts;
 };
 
+
+// specific User tasks according to the specific project
 const specificUserTask = async (req, res) => {
   try {
-    const { userId } = req.query;
-    const userTasks = await taskModel.find({ assigneeId: userId });
-    const tasksByStatus = await getStatusCounts({ assigneeId: userId });
+    const { userId, projectId } = req.query;
+    const query = { assigneeId: userId };
+        if (projectId) {
+      query.projectId = projectId;
+    }    
+    const userTasks = await taskModel.find(query);
+    const tasksByStatus = await getStatusCounts(query);
     const response = { totalTasks: userTasks.length, ...tasksByStatus };
     return res.status(200).json({ status: 200, message: "User's tasks fetched successfully", response, tasks: userTasks });
   } catch (error) {
