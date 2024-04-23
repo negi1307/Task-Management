@@ -199,7 +199,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                 <hr />
                 <Modal.Body>
                     <Row>
-                        <Col lg={7}>
+                        <Col lg={8}>
                             <h4 className='modal_titles'>Activity</h4>
                             <Row>
                                 <Col lg={12} className='d-flex align-items-center gap-1'>
@@ -209,7 +209,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'All' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        All
+                                    <span><i class="bi bi-people-fill "></i></span> All
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -217,7 +217,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Comments' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        Comments
+                                     <span><i class="bi bi-chat-right-text-fill"></i></span>  Comments
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -225,7 +225,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'History' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        History
+                                      <span><i class="bi bi-clock-history"></i></span>  History
                                     </Button>
 
                                     {/* Add Sub-tasks button */}
@@ -236,7 +236,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }
                                         className={`btn px-2 fw-bold py-1  web_button ${connectComponent === 'AddSubtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        Add Sub-tasks
+                                       <span><i class="bi bi-pencil-square"></i></span> Add Sub-tasks
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -244,7 +244,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Bugs' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        Bugs
+                                      <span><i class="bi bi-bug-fill"></i></span>  Bugs
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -252,7 +252,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Subtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        SubTask
+                                      <span><i class="bi bi-check-square-fill"></i></span>  SubTask
                                     </Button>
 
 
@@ -734,7 +734,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 ''
                             )}
                         </Col>
-                        <Col lg={5}>
+                        <Col lg={4}>
                             <div className="table-responsive">
                                 <table className="table lh-sm table-borderless" style={{ fontSize: '14px' }} >
                                     <tbody className='text-start'>
