@@ -1,37 +1,41 @@
 import MileStoneType from "./constant";
 
-const GET_ALL_MILESTONE_INTIAL_STATE={
+const GET_ALL_MILESTONE_INTIAL_STATE = {
     data: [],
     message: "",
     loading: false
 }
-const ADD_ALL_MILESTONE_INTIAL_STATE={
+const ADD_ALL_MILESTONE_INTIAL_STATE = {
     data: [],
     message: "",
     loading: false
 }
-const GET_MILESTONE_INTIAL_STATE={
+const GET_MILESTONE_INTIAL_STATE = {
     data: [],
     message: "",
     loading: false
 }
-const DELETE_MILESTONE_INTIAL_STATE={
+const DELETE_MILESTONE_INTIAL_STATE = {
     data: [],
     message: "",
     loading: false
 }
-const UPDATE_MILESTONE_INTIAL_STATE={
+const UPDATE_MILESTONE_INTIAL_STATE = {
     data: [],
     message: "",
     loading: false
 }
-const GET_SINGLE_MILESTONE_INTIAL_STATE={
+const GET_SINGLE_MILESTONE_INTIAL_STATE = {
     data: [],
     message: "",
     loading: false
 }
 
-
+const GET_PROJECT_TASKS_INITIAL_STATE = {
+    data: [],
+    message: "",
+    loading: false
+}
 export const getAllMileStones = (state = GET_ALL_MILESTONE_INTIAL_STATE, action) => {
     switch (action.type) {
         case MileStoneType.GET_ALL_MILESTONES_LOADING:
@@ -49,7 +53,34 @@ export const getAllMileStones = (state = GET_ALL_MILESTONE_INTIAL_STATE, action)
         case MileStoneType.GET_ALL_MILESTONES_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+
+export const getProjectTasks = (state = GET_PROJECT_TASKS_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case MileStoneType.GET_PROJECT_TASKS_LOADING:
+            return {
+                data: GET_PROJECT_TASKS_INITIAL_STATE.data,
+                loading: true,
+            };
+        case MileStoneType.GET_PROJECT_TASKS_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case MileStoneType.GET_PROJECT_TASKS_ERROR:
+            return {
+                data: [],
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -79,7 +110,7 @@ export const addAllmilstones = (state = ADD_ALL_MILESTONE_INTIAL_STATE, action) 
         case MileStoneType.ADD_ALL_MILESTONES_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -109,7 +140,7 @@ export const deleteMileStone = (state = DELETE_MILESTONE_INTIAL_STATE, action) =
         case MileStoneType.DELETE_MILE_STONE_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -135,7 +166,7 @@ export const getMileStone = (state = GET_MILESTONE_INTIAL_STATE, action) => {
         case MileStoneType.GET_ALL_MILESTONE_BY_ID_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -165,7 +196,7 @@ export const updateMilestone = (state = UPDATE_MILESTONE_INTIAL_STATE, action) =
         case MileStoneType.UPDATE_MILESTONE_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -191,7 +222,7 @@ export const getSigleMileStone = (state = GET_SINGLE_MILESTONE_INTIAL_STATE, act
         case MileStoneType.GET_SINGLE_MILESTONE_ERROR:
             return {
                 data: [],
-                status:!200,
+                status: !200,
                 loading: false,
                 message: action?.payload,
             };
@@ -200,14 +231,14 @@ export const getSigleMileStone = (state = GET_SINGLE_MILESTONE_INTIAL_STATE, act
 
     }
 };
-export const getMilestoneId = (state = {data:""}, action) => {
+export const getMilestoneId = (state = { data: "" }, action) => {
     switch (action.type) {
         case "milestoneId":
             return {
                 data: action.payload,
-                
+
             };
-      
+
         default:
             return { ...state };
 

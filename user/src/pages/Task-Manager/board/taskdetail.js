@@ -6,7 +6,7 @@ import moment from 'moment';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { addComment, getComment, updateComment, deleteComment, getSubTask, getBugs,  getHistoryAction } from '../../../redux/addcomment/actions';
+import { addComment, getComment, updateComment, deleteComment, getSubTask, getBugs, getHistoryAction } from '../../../redux/addcomment/actions';
 import Attachments from './../../apps/Tasks/Details/Attachments';
 import { Link } from 'react-router-dom';
 
@@ -17,7 +17,7 @@ const Taskdetail = (props) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const bugsdata = store?.getBugsReducer?.data?.response
-    console.log(bugsdata, 'bugsdata')
+    // console.log(bugsdata, 'bugsdata')
     const [inputForUpdate, setInputForUpdate] = useState('');
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
     const [updatedCommentValue, setUpdatedCommentValue] = useState('');
@@ -266,7 +266,7 @@ const Taskdetail = (props) => {
                                                                     {moment(ele?.createdAt).fromNow()}{' '}
                                                                 </p>
                                                             </div>
-                                                               <div className="m-0 p-0" title={ele?.comment}>
+                                                            <div className="m-0 p-0" title={ele?.comment}>
                                                                 <p>{ele?.comment ? ele?.comment.slice(0, 10).charAt(0).toUpperCase() + ele?.comment.slice(1) : ''}</p>
                                                             </div>
                                                             <div className="d-flex m-0 p-0">
@@ -309,16 +309,16 @@ const Taskdetail = (props) => {
                                                         </div>
                                                     </OverlayTrigger>
                                                     <Link to={generateLink(item.userActivity, item)}
-                                                className='text-dark'>
-                                                <span>
-                                                    {item?.userId?.firstName} {item?.userId?.lastName}
-                                                    {item.userActivity === "Created milestone" && <span> created milestone</span>}
-                                                    {item.userActivity === "Created Sprint" && <span> created sprint</span>}
-                                                    {item.userActivity === "Create Project" && <span> create project</span>}
-                                                    {item.userActivity === "Created Task" && <span> created task</span>}
-                                                    {' on ' + item?.createdAt}
-                                                </span>
-                                            </Link>
+                                                        className='text-dark'>
+                                                        <span>
+                                                            {item?.userId?.firstName} {item?.userId?.lastName}
+                                                            {item.userActivity === "Created milestone" && <span> created milestone</span>}
+                                                            {item.userActivity === "Created Sprint" && <span> created sprint</span>}
+                                                            {item.userActivity === "Create Project" && <span> create project</span>}
+                                                            {item.userActivity === "Created Task" && <span> created task</span>}
+                                                            {' on ' + item?.createdAt}
+                                                        </span>
+                                                    </Link>
 
 
                                                 </div>
@@ -356,10 +356,10 @@ const Taskdetail = (props) => {
                                                                 <span title={sub?.description}>{sub?.description.slice(0, 10)}</span>
                                                             </td>
                                                             <td>
-                                                        <span>
-                                                        {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
-                                                        </span>
-                                                    </td>
+                                                                <span>
+                                                                    {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
+                                                                </span>
+                                                            </td>
                                                             <td>
                                                                 <span>
                                                                     {sub?.priority}
@@ -399,10 +399,10 @@ const Taskdetail = (props) => {
                                                                 <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
                                                             </td>
                                                             <td>
-                                                        <span>
-                                                        {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
-                                                        </span>
-                                                    </td>
+                                                                <span>
+                                                                    {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
+                                                                </span>
+                                                            </td>
                                                             <td>
                                                                 <span>
                                                                     {bug?.priority}
@@ -563,10 +563,10 @@ const Taskdetail = (props) => {
                                                     </td>
                                                     <td>
                                                         <span>
-                                                        {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
+                                                            {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
                                                         </span>
                                                     </td>
-                                                 
+
                                                     <td>
                                                         <span>
                                                             {sub?.priority}
@@ -620,7 +620,7 @@ const Taskdetail = (props) => {
                                                     </td>
                                                     <td>
                                                         <span>
-                                                        {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
+                                                            {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
                                                         </span>
                                                     </td>
                                                     <td>

@@ -28,3 +28,10 @@ export function getProjectsCountApi(data): any {
     return api.get(URL.getProjectsCount)
 }
 
+export function getprojectUsersApi(data): any {
+    return api.get(`${URL.projectUsers}?projectId=${data?.payload?.projectId}&page=${data.payload.page}`)
+}
+
+export function getprojectTimeSpentApi(data): any {
+    return api.get(`${URL.projectTimeSpent}?projectId=${data?.payload?.projectId}`)
+}
