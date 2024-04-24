@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import MileStoneType from './constant';
-import { UpdateMileStonesApi, deleteMileStoneApi, getAllMileStonesApi, getMileStoneApi, addAllMilstoneApi, getSinleMileStoneApi } from './api';
+import { UpdateMileStonesApi, deleteMileStoneApi, getAllMileStonesApi, getMileStoneApi, addAllMilstoneApi, getSinleMileStoneApi, getProjectTasksApi } from './api';
 
 function* getAllMileStonesFunction({ payload }) {
     try {
@@ -32,9 +32,41 @@ function* getAllMileStonesFunction({ payload }) {
             payload: { error }
         });
         yield put({
-                type: MileStoneType.GET_ALL_MILESTONES_RESET,
-                payload: {},
+            type: MileStoneType.GET_ALL_MILESTONES_RESET,
+            payload: {},
+        });
+    }
+}
+
+function* getProjectTasksFunction({ payload }) {
+    try {
+        yield put({
+            type: MileStoneType.GET_PROJECT_TASKS_LOADING,
+            payload: {}
+        })
+        const response = yield call(getProjectTasksApi, { payload });
+        if (response.data.status) {
+            yield put({
+                type: MileStoneType.GET_PROJECT_TASKS_SUCCESS,
+                payload: { ...response.data },
             });
+        }
+        else {
+            yield put({
+                type: MileStoneType.GET_PROJECT_TASKS_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: MileStoneType.GET_PROJECT_TASKS_ERROR,
+            payload: { error }
+        });
+        yield put({
+            type: MileStoneType.GET_PROJECT_TASKS_RESET,
+            payload: {},
+        });
     }
 }
 function* addAllMileStonesFunction({ payload }) {
@@ -100,7 +132,7 @@ function* MileStonedeleteFunction({ payload }) {
     } catch (error) {
         yield put({
             type: MileStoneType.DELETE_MILE_STONE_ERROR,
-         payload: { error }
+            payload: { error }
         });
         yield put({
             type: MileStoneType.DELETE_MILE_STONE_RESET,
@@ -137,12 +169,12 @@ function* getMileStoneFunction({ payload }) {
     } catch (error) {
         yield put({
             type: MileStoneType.GET_ALL_MILESTONE_BY_ID_ERROR,
-         payload: { error }
+            payload: { error }
         });
-  yield put({
-                type: MileStoneType.GET_ALL_MILESTONE_BY_ID_RESET,
-                payload: {},
-            });
+        yield put({
+            type: MileStoneType.GET_ALL_MILESTONE_BY_ID_RESET,
+            payload: {},
+        });
     }
 }
 function* updateMileStoneFunction({ payload }) {
@@ -212,12 +244,12 @@ function* getSingleMileStoneFunction({ payload }) {
     } catch (error) {
         yield put({
             type: MileStoneType.GET_SINGLE_MILESTONE_ERROR,
-         payload: { error }
+            payload: { error }
         });
- yield put({
-                type: MileStoneType.GET_SINGLE_MILESTONE_RESET,
-                payload: {},
-            });
+        yield put({
+            type: MileStoneType.GET_SINGLE_MILESTONE_RESET,
+            payload: {},
+        });
     }
 }
 export function* addAllMileStonesSaga(): any {
@@ -238,6 +270,9 @@ export function* updateMileStoneSaga(): any {
 export function* getSingleMileStoneSaga(): any {
     yield takeEvery(MileStoneType.GET_SINGLE_MILESTONE, getSingleMileStoneFunction);
 }
+export function* getProjectTasksSaga(): any {
+    yield takeEvery(MileStoneType.GET_PROJECT_TASKS, getProjectTasksFunction);
+}
 function* AllMileStonesSaga(): any {
     yield all([
 
@@ -247,6 +282,7 @@ function* AllMileStonesSaga(): any {
         fork(updateMileStoneSaga),
         fork(addAllMileStonesSaga),
         fork(getSingleMileStoneSaga),
+        fork(getProjectTasksSaga),
 
     ])
 }

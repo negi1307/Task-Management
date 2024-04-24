@@ -31,3 +31,11 @@ export const getProjectsById = (data): AuthAction => ({
     type: ProjectTypes.GET_PROJECT_BY_ID,
     payload: data
 })
+export const getprojectUsers = (data): AuthAction => ({
+    type: ProjectTypes.GET_PROJECT_USERS,
+    payload: data
+})
+export const getProjectTimeSpentAction = (data): AuthAction => ({
+    type: ProjectTypes.GET_PROJECT_TIME_SPENT,
+    payload: data
+})

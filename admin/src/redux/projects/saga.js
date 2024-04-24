@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import ProjectTypes from './constant';
-import { addProjectApi, deleteProjectApi, getProjectApi, getProjectsCountApi, getProjectByIdApi, updateProjectApi } from './api';
+import { addProjectApi, deleteProjectApi, getProjectApi, getProjectsCountApi, getProjectByIdApi, updateProjectApi, getprojectUsersApi, getprojectTimeSpentApi } from './api';
 
 function* addProjectFunction({ payload }) {
     try {
@@ -215,6 +215,74 @@ function* getProjectByIdFunction({ payload }) {
 
     }
 }
+
+function* getprojectUsersfunction({ payload }) {
+    try {
+        yield put({
+            type: ProjectTypes.GET_PROJECT_USERS_LOADING,
+            payload: {}
+        })
+        const response = yield call(getprojectUsersApi, { payload });
+        // console.log(payload, ".......")
+
+        if (response.data.status) {
+            yield put({
+                type: ProjectTypes.GET_PROJECT_USERS_SUCCESS,
+                payload: { ...response.data },
+            });
+            // yield put({
+            //     type: ProjectTypes.GET_PROJECT_RESET,
+            //     payload: {},
+            // });
+        }
+        else {
+            yield put({
+                type: ProjectTypes.GET_PROJECT_USERS_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: ProjectTypes.GET_PROJECT_USERS_ERROR,
+            payload: { message: error?.message }
+        });
+
+    }
+}
+
+
+function* getprojectTimeSpentfunction({ payload }) {
+    try {
+        yield put({
+            type: ProjectTypes.GET_PROJECT_TIME_SPENT_LOADING,
+            payload: {}
+        })
+        const response = yield call(getprojectTimeSpentApi, { payload });
+        if (response.data.status) {
+            yield put({
+                type: ProjectTypes.GET_PROJECT_TIME_SPENT_SUCCESS,
+                payload: { ...response.data },
+            });
+        }
+        else {
+            yield put({
+                type: ProjectTypes.GET_PROJECT_TIME_SPENT_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: ProjectTypes.GET_PROJECT_TIME_SPENT_ERROR,
+            payload: { message: error?.message }
+        });
+
+    }
+}
+
+
+
 export function* addProjectSaga(): any {
     yield takeEvery(ProjectTypes.ADD_PROJECT, addProjectFunction);
 }
@@ -233,6 +301,13 @@ export function* deleteProjectSaga(): any {
 export function* getProjectByIdSaga(): any {
     yield takeEvery(ProjectTypes.GET_PROJECT_BY_ID, getProjectByIdFunction);
 }
+export function* getprojectUsersSaga(): any {
+    yield takeEvery(ProjectTypes.GET_PROJECT_USERS, getprojectUsersfunction);
+}
+
+export function* getprojectTimeSpentSaga(): any {
+    yield takeEvery(ProjectTypes.GET_PROJECT_TIME_SPENT, getprojectTimeSpentfunction);
+}
 function* AllProjectSaga(): any {
     yield all([
         fork(addProjectSaga),
@@ -241,6 +316,8 @@ function* AllProjectSaga(): any {
         fork(deleteProjectSaga),
         fork(getProjectByIdSaga),
         fork(getProjectsCountSaga),
+        fork(getprojectUsersSaga),
+        fork(getprojectTimeSpentSaga),
     ])
 }
 

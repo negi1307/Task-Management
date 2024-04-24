@@ -1,7 +1,7 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 
 import USERS_TYPES from './constant';
-import { InviteUserApi, deleteUserApi, getCsvDataApi, getallCategoryApi, getallRolesApi, getallUsersApi } from './api';
+import { InviteUserApi, deleteUserApi, getCsvDataApi, getallCategoryApi, getallRolesApi, getallUsersApi, getuserTasksApi } from './api';
 
 function* getAllUsersFunction({ payload }) {
     try {
@@ -40,7 +40,7 @@ function* getAllCategoryFunction({ payload }) {
             payload: {},
         });
         const response = yield call(getallCategoryApi, { payload });
-        console.log(response,'4555')
+        console.log(response, '4555')
 
         if (response.data.status) {
             yield put({
@@ -191,6 +191,37 @@ function* getCsvFunction({ payload }) {
     }
 }
 
+function* getuserTasksFunction({ payload }) {
+    try {
+        yield put({
+            type: USERS_TYPES.GET_USER_TASKS_LOADING,
+            payload: {},
+        });
+        const response = yield call(getuserTasksApi, { payload });
+        // console.log(response?.data?.loginRecords, 'dddddddd');
+        if (response.data.status) {
+            yield put({
+                type: USERS_TYPES.GET_USER_TASKS_SUCCESS,
+                payload: { ...response.data },
+            });
+            yield put({
+                type: USERS_TYPES.GET_USER_TASKS_RESET,
+                payload: {},
+            });
+        } else {
+            yield put({
+                type: USERS_TYPES.GET_USER_TASKS_ERROR,
+                payload: { ...response.data },
+            });
+        }
+    } catch (error) {
+        yield put({
+            type: USERS_TYPES.GET_USER_TASKS_ERROR,
+            payload: { message: error?.message },
+        });
+    }
+}
+
 export function* getAllUsersSaga(): any {
     yield takeEvery(USERS_TYPES.GET_ALL_USERS, getAllUsersFunction);
 }
@@ -209,6 +240,9 @@ export function* getAllRolesSaga(): any {
 export function* getCsvSaga(): any {
     yield takeEvery(USERS_TYPES.GET_CSV_DATA, getCsvFunction);
 }
+export function* getuserTasksSaga(): any {
+    yield takeEvery(USERS_TYPES.GET_USER_TASKS, getuserTasksFunction);
+}
 function* AllUsersSaga(): any {
     yield all([
         fork(getAllUsersSaga),
@@ -217,6 +251,7 @@ function* AllUsersSaga(): any {
         fork(deleteUserSaga),
         fork(inviteuserSaga),
         fork(getCsvSaga),
+        fork(getuserTasksSaga),
     ]);
 }
 export default AllUsersSaga;
