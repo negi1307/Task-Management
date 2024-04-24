@@ -44,7 +44,8 @@ const TaskInformation = styled.div`
         color: #7d7d7d;
     }
 `;
-const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressColumn }) => {
+const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressColumn, onTaskStart }) => {
+    console.log(item,'pankajsingh')
     const store = useSelector(state => state)
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
@@ -160,7 +161,9 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                 <div className="col-12" onClick={() => {
                                     showTaskDetailMOdel(item);
                                 }}>
-                                    <p>
+                                            <p className='m-0'>{item?.projects?.projectName}</p>
+
+                                    <p className='m-0'>
                                         <div className='task-title text-dark p-0' title={item?.description}>
                                             {item?.description ?
                                                 (item.description.length > 25 ? item.description.slice(0, 25) + '...' : item.description)

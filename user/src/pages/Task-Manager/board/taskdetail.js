@@ -199,7 +199,7 @@ const Taskdetail = (props) => {
             >
                 <Modal.Header onClick={() => updateHandle('closeModal')} closeButton>
                     <Modal.Title id="" className="text-start text-dark modal_titles">
-                        Task Detail : {props?.item?.summary ? props?.item.summary.slice(0, 10).charAt(0).toUpperCase() + props?.item.summary.slice(1, 10) : ''}
+                        Task Detail : {props?.item?.summary ? props?.item.summary.charAt(0).toUpperCase() + props?.item.summary.slice(1, 50) : ''}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="cardinfo">
@@ -381,10 +381,28 @@ const Taskdetail = (props) => {
                                                                     </span>
                                                                 </td>
                                                                 <td>
-                                                                    <span>
-                                                                        {sub?.priority}
-                                                                    </span>
-                                                                </td>
+                                                            <span>
+                                                                {sub?.priority}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                            {props?.item?.status == 1 ? 'To-Do' : ''}
+                                                {props?.item?.status == 2 ? 'In-Progress' : ''}
+                                                {props?.item?.status == 3 ? 'Hold' : ''}
+                                                {props?.item?.status == 4 ? 'Done' : ''}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                            {props?.item?.technology?.name} 
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                            {props?.item?.reporterInfo?.firstName} {props?.item?.reporterInfo?.lastName}
+                                                            </span>
+                                                        </td>
                                                                 <td>
                                                                     <span>
                                                                         {sub?.startDate.slice(0, 10)}
@@ -424,10 +442,28 @@ const Taskdetail = (props) => {
                                                                     </span>
                                                                 </td>
                                                                 <td>
-                                                                    <span>
-                                                                        {bug?.priority}
-                                                                    </span>
-                                                                </td>
+                                                            <span>
+                                                                {bug?.priority}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                            {props?.item?.status == 1 ? 'To-Do' : ''}
+                                                {props?.item?.status == 2 ? 'In-Progress' : ''}
+                                                {props?.item?.status == 3 ? 'Hold' : ''}
+                                                {props?.item?.status == 4 ? 'Done' : ''}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                            {props?.item?.technology?.name} 
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                            {props?.item?.reporterInfo?.firstName} {props?.item?.reporterInfo?.lastName}
+                                                            </span>
+                                                        </td>
                                                                 <td>
                                                                     <span>
                                                                         {bug?.startDate.slice(0, 10)}
@@ -599,6 +635,26 @@ const Taskdetail = (props) => {
                                                         </td>
                                                         <td>
                                                             <span>
+                                                            {props?.item?.status == 1 ? 'To-Do' : ''}
+                                                {props?.item?.status == 2 ? 'In-Progress' : ''}
+                                                {props?.item?.status == 3 ? 'Hold' : ''}
+                                                {props?.item?.status == 4 ? 'Done' : ''}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                            {props?.item?.technology?.name} 
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                            {props?.item?.reporterInfo?.firstName} {props?.item?.reporterInfo?.lastName}
+                                                            </span>
+                                                        </td>
+                                                    
+                                                      
+                                                        <td>
+                                                            <span>
                                                                 {sub?.startDate.slice(0, 10)}
                                                             </span>
                                                         </td>
@@ -656,6 +712,24 @@ const Taskdetail = (props) => {
                                                         <td>
                                                             <span>
                                                                 {bug?.priority}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                            {props?.item?.status == 1 ? 'To-Do' : ''}
+                                                {props?.item?.status == 2 ? 'In-Progress' : ''}
+                                                {props?.item?.status == 3 ? 'Hold' : ''}
+                                                {props?.item?.status == 4 ? 'Done' : ''}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                            {props?.item?.technology?.name} 
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                            {props?.item?.reporterInfo?.firstName} {props?.item?.reporterInfo?.lastName}
                                                             </span>
                                                         </td>
                                                         <td>
