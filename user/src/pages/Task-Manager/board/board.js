@@ -6,7 +6,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
 import { getAllTask, updateTask } from '../../../redux/actions';
 import MainLoader from '../../../constants/Loader/loader';
-import {  getHistoryAction } from '../../../redux/addcomment/actions';
+import { getHistoryAction } from '../../../redux/addcomment/actions';
 import { getTaskStatusCount } from '../../../redux/Summary/action';
 import { getComment } from '../../../redux/addcomment/actions';
 import Taskdetail from './taskdetail';
@@ -85,7 +85,7 @@ const Boards = (props) => {
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
     const [commentdata, setCommentData] = useState([]);
-    console.log(commentdata, '66666666666666666666666666666666')
+    // console.log(commentdata, '66666666666666666666666666666666')
     const [showTaskModel, setshowTaskModel] = useState(false);
     const [show, setShow] = useState(false);
     const [search, setSearch] = useState('');
@@ -156,7 +156,7 @@ const Boards = (props) => {
     const handelupdatetask = (ele) => {
         let body = {
             taskId: ele?.draggableId,
-            status: ele?.destination?.droppableId
+            status: parseInt(ele?.destination?.droppableId)
         };
         dispatch(updateTaskStatus(body));
         setloader(false);
@@ -169,6 +169,7 @@ const Boards = (props) => {
 
         // Check if destination column is "In Progress" and if it already has a task
         if (destination.droppableId === '2' && columns['2'].items.length > 0) {
+            ToastHandle('error', 'Only one task allowed in progress at a time')
             return;
         }
 
@@ -178,7 +179,17 @@ const Boards = (props) => {
             const sourceItems = sourceColumn.items?.slice();
             const destItems = destColumn.items?.slice();
             const [removed] = sourceItems?.splice(source.index, 1);
+            const draggedCardId = removed.id; // Get the ID of the dragged card
+
             destItems?.splice(destination.index, 0, removed);
+
+
+            // Dispatch an action when a task is moved to the "In Progress" column
+            // if (destination.droppableId === '2') {
+            //     dispatch(addLoginTime({ taskId: draggedCardId }));
+            // }
+
+
             setColumns({
                 ...columns,
                 [source.droppableId]: {
@@ -192,6 +203,18 @@ const Boards = (props) => {
             });
             handelupdatetask(result);
             setBooleanUpdate(true)
+
+            // // Dispatch an action when a task is moved to columns 4 or 5
+            // if (destination.droppableId === '4' || destination.droppableId === '5') {
+            //     dispatch(addLoginTimeStop({ taskId: draggedCardId }));
+            // }
+
+            // Dispatch an action when a task is moved from "In Progress" to columns 4 or 5
+            // if (source.droppableId === '2' && (destination.droppableId === '4' || destination.droppableId === '5')) {
+            //     dispatch(addLoginTimeStop({ taskId: draggedCardId }));
+            //     ToastHandle('success', 'Stop time recorded')
+            // }
+
 
         } else {
             const column = columns[source.droppableId];
@@ -267,10 +290,10 @@ const Boards = (props) => {
             setRender(!render);
         }
     };
-    const handleTaskStart = (taskId) => {
-        // Dispatch action for task start time
-        dispatch(addLoginTime(taskId)); // Replace with your actual action
-    };
+    // const handleTaskStart = (taskId) => {
+    //     // Dispatch action for task start time
+    //     dispatch(addLoginTime(taskId)); // Replace with your actual action
+    // };
     return (
         <>
             <div className="status">
@@ -321,7 +344,7 @@ const Boards = (props) => {
                                                         closeModal={closeModal}
                                                         showTaskDetailMOdel={showTaskDetailMOdel}
                                                         isInProgressColumn={columnId == '2'}
-                                                        onTaskStart={handleTaskStart}
+                                                    // onTaskStart={handleTaskStart}
                                                     />
                                                 ))}
                                                 {provided?.placeholder}

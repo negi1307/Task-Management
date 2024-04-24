@@ -111,8 +111,7 @@ const Projects = () => {
             activeStatus: true
         };
         dispatch(getAllProjects(body));
-    }, [render]);
-    useEffect(() => {
+
         if (deletehandle?.status == 200) {
             ToastHandle('success', deletehandle?.message);
             closeModal('render');
@@ -121,7 +120,7 @@ const Projects = () => {
         } else if (deletehandle?.status == 500) {
             ToastHandle('error', deletehandle?.message);
         }
-    }, [deletehandle]);
+    }, [render, deletehandle]);
 
     const statusInfo = (status) => {
         let body = {
@@ -144,7 +143,6 @@ const Projects = () => {
         };
         dispatch(getAllProjects(body));
     };
-    // console.log(getProjectList, '11111111111111111111111111111112222222222222222222222')
     return (
         <>
             <div>
