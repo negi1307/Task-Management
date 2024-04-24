@@ -37,6 +37,12 @@ const GET_CSV_FILE_INITIAL_STATE = {
     message: '',
     loading: false,
 };
+
+const GET_USER_TASKS_INITIAL_STATE = {
+    data: [],
+    message: '',
+    loading: false,
+};
 export const getAllUsers = (state = GET_ALL_USER_INITIAL_STATE, action) => {
     switch (action.type) {
         case USERS_TYPES.GET_ALL_USERS_LOADING:
@@ -61,7 +67,7 @@ export const getAllUsers = (state = GET_ALL_USER_INITIAL_STATE, action) => {
     }
 };
 export const getAllCategory = (state = GET_ALL_CATEGORY_INITIAL_STATE, action) => {
-    console.log(GET_ALL_CATEGORY_INITIAL_STATE,'GET_ALL_CATEGORY_INITIAL_STATE11')
+    console.log(GET_ALL_CATEGORY_INITIAL_STATE, 'GET_ALL_CATEGORY_INITIAL_STATE11')
     switch (action.type) {
         case USERS_TYPES.GET_ALL_CATEGORY_LOADING:
             return {
@@ -185,6 +191,58 @@ export const getCsvDataReducer = (state = GET_CSV_FILE_INITIAL_STATE, action) =>
             };
 
         case USERS_TYPES.GET_CSV_DATA_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+    }
+};
+
+// export const getuserTasks = (state = GET_USER_TASKS_INITIAL_STATE, action) => {
+//     switch (action.type) {
+//         case USERS_TYPES.GET_ALL_USERS_LOADING:
+//             return {
+//                 data: GET_USER_TASKS_INITIAL_STATE.data,
+//                 loading: true,
+//             };
+//         case USERS_TYPES.GET_ALL_CATEGORY_SUCCESS:
+//             return {
+//                 data: action?.payload,
+//                 loading: false,
+//             };
+
+//         case USERS_TYPES.GET_USER_TASKS_ERROR:
+//             return {
+//                 data: [],
+//                 loading: false,
+//                 message: action?.payload,
+//             };
+//         default:
+//             return { ...state };
+//     }
+// };
+export const getuserTasks = (state = GET_USER_TASKS_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case USERS_TYPES.GET_USER_TASKS_LOADING:
+            return {
+                data: GET_USER_TASKS_INITIAL_STATE.data,
+                loading: true,
+            };
+        case USERS_TYPES.GET_USER_TASKS_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+        case USERS_TYPES.GET_USER_TASKS_RESET:
+            return {
+                data: GET_USER_TASKS_INITIAL_STATE.data,
+                loading: false,
+            };
+
+        case USERS_TYPES.GET_USER_TASKS_ERROR:
             return {
                 data: [],
                 loading: false,
