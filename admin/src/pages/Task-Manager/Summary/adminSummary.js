@@ -51,7 +51,7 @@ const AdminDashboard = () => {
     const [showTasks, setshowTasks] = useState(false);
     const [selectedProject, setSelectedProject] = useState(null);
     const [selectedProjectName, setselectedProjectName] = useState(null);
-    const [projectSelected, setProjectSelected] = useState(false); // State to track project selection
+    const [projectSelected, setProjectSelected] = useState(false);
     const [projectOverviewChange, setProjectOverviewChange] = useState(false);
     const [sprintDataLoaded, setSprintDataLoaded] = useState(false);
     const [differenceTimeHours, setdifferenceTimeHours] = useState();
