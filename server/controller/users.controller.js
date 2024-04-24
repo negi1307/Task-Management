@@ -84,19 +84,12 @@ async function updateTaskStatus(existingUser) {
 
 // Get All Users
 const getUsers = async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
-
   try {
     const query = { role: { $ne: 'Admin' } };
-
-    const totalCount = await userModel.countDocuments(query);
-    const totalPages = Math.ceil(totalCount / limit);
-    const skip = (page - 1) * limit;
-
-    const result = await userModel.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).exec();
-
-    return res.status(200).json({ status: "200", message: 'User data fetched successfully', response: result, totalCount: totalCount, totalPages: totalPages });
+    const result = await userModel.find(query).sort({ createdAt: -1 })
+    return res.status(200).json({
+      status: "200", message: 'User data fetched successfully', response: result,
+    });
   } catch (error) {
     return res.status(500).json({ status: "500", message: 'Something went wrong' });
   }
@@ -583,9 +576,9 @@ const specificUserTask = async (req, res) => {
   try {
     const { userId, projectId } = req.query;
     const query = { assigneeId: userId };
-        if (projectId) {
+    if (projectId) {
       query.projectId = projectId;
-    }    
+    }
     const userTasks = await taskModel.find(query);
     const tasksByStatus = await getStatusCounts(query);
     const response = { totalTasks: userTasks.length, ...tasksByStatus };
