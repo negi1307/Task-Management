@@ -44,7 +44,7 @@ const TaskInformation = styled.div`
         color: #7d7d7d;
     }
 `;
-const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressColumn, onTaskStart }) => {
+const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressColumn }) => {
     const store = useSelector(state => state)
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
@@ -53,7 +53,8 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     const userId = store?.Auth?.user?.userId;
     const getComments = item?.comments;
     const historyData = store?.getHistoryData?.data?.response;
-    const [isPlaying, setIsPlaying] = useState(false);
+    const [elapsedTime, setElapsedTime] = useState(null);
+
     const {
         register,
         handleSubmit,
@@ -68,19 +69,34 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     const [commentId, setCommentId] = useState('');
     const [showData, setShowData] = useState(false);
     const [timeElapsed, setTimeElapsed] = useState(0);
-    useEffect(() => {
-        let timer;
-        const isTaskInProgress = localStorage.getItem(`task_${item._id}_inProgress`);
-        setIsPlay(isTaskInProgress === 'true');
+    // useEffect(() => {
+    //     let timer;
+    //     const isTaskInProgress = localStorage.getItem(`task_${item._id}_inProgress`);
+    //     setIsPlay(isTaskInProgress === 'true');
 
 
-        return () => clearInterval(timer);
-    }, [isPlay, item._id]);
+    //     return () => clearInterval(timer);
+    // }, [isPlay, item._id]);
 
     const handleCloseData = () => setShowData(false);
     const handleShowData = () => {
         setShowData(true)
     };
+
+    useEffect(() => {
+        if (isInProgressColumn && item.inProgressDate) {
+            const inProgressDate = new Date(item.inProgressDate);
+            const interval = setInterval(() => {
+                const currentTime = new Date();
+                const elapsedMilliseconds = currentTime - inProgressDate;
+                const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000);
+                setElapsedTime(formatTime(elapsedSeconds));
+            }, 1000); // Update every second
+
+            return () => clearInterval(interval);
+        }
+    }, [isInProgressColumn, item.inProgressDate]);
+
 
 
     const EditData = (item) => {
@@ -115,26 +131,6 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
             backgroundColorClass = '';
     }
 
-    const startTime = (e) => {
-        dispatch(addLoginTime({ taskId: item?._id }))
-        setIsPlaying(true);
-        localStorage.setItem(`task_${item?._id}_inProgress`, 'true');
-    }
-    const stopTime = (e) => {
-        let stoptask = item?._id;
-        dispatch(addLoginTimeStop(stoptask));
-        setIsPlaying(false);
-        localStorage.removeItem(`task_${item?._id}_inProgress`);
-    }
-
-    // const formatTime = (milliseconds) => {
-    //     const duration = moment.duration(milliseconds, 'milliseconds');
-    //     const hours = duration.hours().toString().padStart(2, '0');
-    //     const minutes = duration.minutes().toString().padStart(2, '0');
-    //     const seconds = duration.seconds().toString().padStart(2, '0');
-    //     const millis = duration.milliseconds().toString().padStart(3, '0');
-    //     return `${hours}:${minutes}:${seconds}.${millis}`;
-    // };
 
     return (
         <>
@@ -176,7 +172,7 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                     onClick={() => {
                                         showTaskDetailMOdel(item);
                                     }}>
-                                        <OverlayTrigger
+                                    <OverlayTrigger
                                         placement="top"
                                         overlay={
                                             <Tooltip id="tooltip1">
@@ -194,10 +190,24 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                             </span>
                                         </div>
                                     </OverlayTrigger>
-
-
                                 </div>
                                 <div className="col-12">
+                                    <div className="row d-flex align-items-center">
+                                        <div className='col-6 text-start fw-bold'>
+                                            {item?.startDate ? moment(item?.startDate).format("DD/MM/YYYY") : ''}
+                                        </div>
+                                        <div className='col-6 text-end'>
+                                            {isInProgressColumn && (
+                                                <div className=" fw-bold">
+                                                    {elapsedTime}
+                                                </div>
+                                            )}
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* <div className="col-12">
                                     <div className="row d-flex  align-items-center">
                                         <div className="col-8">
                                             <div className="secondary-details ">
@@ -209,15 +219,16 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                             </div>
                                         </div>
                                         <div className="col-4 text-end ">
-                                            <div className=" d-flex gap-2">
-                                                <div>
+                                            <div> */}
+
+                                {/* <div>
                                                     {isPlaying ? (
                                                         <FaPause onClick={stopTime} />
                                                     ) : (
                                                         <FaPlay onClick={startTime} />
                                                     )}
-                                                </div>
-                                                <div className="cp d-flex align-items-center gap-1">
+                                                </div> */}
+                                {/* <div className="cp d-flex align-items-center gap-1">
                                                     <OverlayTrigger
                                                         placement="top"
                                                         overlay={
@@ -241,10 +252,10 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                                     </OverlayTrigger>
                                                 </div>
                                             </div>
-                                        </div>
-                                        {/* </div> */}
-                                    </div>
-                                </div>
+                                        </div> */}
+                                {/* </div> */}
+                                {/* </div> */}
+                                {/* </div> */}
 
                             </div>
 
@@ -255,5 +266,18 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
             <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
         </>
     );
+};
+
+// Function to format seconds into HH:MM:SS format
+const formatTime = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+    return `${pad(hours)}:${pad(minutes)}:${pad(remainingSeconds)}`;
+};
+
+// Function to pad single digit numbers with leading zeros
+const pad = (num) => {
+    return num < 10 ? '0' + num : num;
 };
 export default TaskCard;

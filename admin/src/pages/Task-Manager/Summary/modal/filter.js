@@ -93,12 +93,21 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
     let csvData = [];
     if (Array.isArray(usersData)) {
         csvData = usersData.map(data => ({
-            userName: data?.assigneeId?.firstName + ' ' + data?.assigneeId?.lastName,
-            taskMannualId: data?.taskMannualId,
-            Projectname: data?.projectId?.projectName ? data?.projectId?.projectName : '',
+            [`Username`]: data?.assigneeId?.firstName + ' ' + data?.assigneeId?.lastName,
+            [`Task name`]: data?.summary,
+            [`Project name`]: data?.projectId?.projectName ? data?.projectId?.projectName : '',
+            [`Expected hrs`]: data?.expectedHours,
+            [`In-progress date`]: data?.inProgressDate,
+            [`Done Date`]: data?.doneDate,
+            [`Time Taken`]: data?.timeTracker,
         }));
-    } else {
-        // console.error("usersData is not an array or not defined");
+
+        const totalTime = store?.getUserRecordReducer?.data?.totalTime || 0;
+
+        // Add total time row
+        csvData.push({
+            [`Total Time`]: totalTime
+        });
     }
 
     return (
@@ -163,7 +172,10 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
                         {/* <CSVLink data={csvData} onClick={onSubmit} className='mybutton btn p-1 fw-bold py-1 web_button'>Download Users Data</CSVLink> */}
 
                         {isSubmitted ? (
-                            <CSVLink data={csvData} className='mybutton btn p-1 fw-bold py-1 web_button'>Download</CSVLink>
+                            <CSVLink
+                                data={csvData}
+                                filename='userReport.csv'
+                                className='mybutton btn p-1 fw-bold py-1 web_button'>Download</CSVLink>
                         ) : (
                             <button type="submit" className="mybutton btn p-1 fw-bold py-1 web_button" disabled={isSubmitted}>Export</button>
                         )}
