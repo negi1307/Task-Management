@@ -32,3 +32,8 @@ export const getMilestonetId = (data): AuthAction => ({
     type: "milestoneId",
     payload: data
 })
+
+export const getProjectTasksAction = (data): AuthAction => ({
+    type: MileStoneType.GET_PROJECT_TASKS,
+    payload: data
+})

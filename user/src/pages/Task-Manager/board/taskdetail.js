@@ -17,11 +17,12 @@ const Taskdetail = (props) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const bugsdata = store?.getBugsReducer?.data?.response
+    console.log(bugsdata, 'bugsdata')
     const [inputForUpdate, setInputForUpdate] = useState('');
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
     const [updatedCommentValue, setUpdatedCommentValue] = useState('');
     const [updatedCommentInitialValue, setUpdatedCommentInitialValue] = useState('');
-    console.log(updatedCommentInitialValue,'updatedCommentInitialValue')
+    console.log(updatedCommentInitialValue, 'updatedCommentInitialValue')
     const [unchangeComment, setUnchangeComment] = useState('');
     const [error, setError] = useState('');
     const [connectComponent, setConnectComponent] = useState('All');
@@ -56,7 +57,7 @@ const Taskdetail = (props) => {
 
 
     const [isUpdate, setIsUpdate] = useState(false);
-  
+
 
     const onSubmit = (e) => {
         if (buttonChange) {
@@ -92,7 +93,7 @@ const Taskdetail = (props) => {
         setValue('comment', data?.comment);
         setButtonChange(false);
     };
-    
+
 
 
     const editComment = (item) => {
@@ -213,7 +214,7 @@ const Taskdetail = (props) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'All' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                    <span><i class="bi bi-people-fill "></i></span> All
+                                        <span><i class="bi bi-people-fill "></i></span> All
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -221,7 +222,7 @@ const Taskdetail = (props) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Comments' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                     <span><i class="bi bi-chat-right-text-fill"></i></span>  Comments
+                                        <span><i class="bi bi-chat-right-text-fill"></i></span>  Comments
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -229,7 +230,7 @@ const Taskdetail = (props) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'History' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                      <span><i class="bi bi-clock-history"></i></span>  History
+                                        <span><i class="bi bi-clock-history"></i></span>  History
                                     </Button>
 
                                     <Button
@@ -238,7 +239,7 @@ const Taskdetail = (props) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Bugs' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                      <span><i class="bi bi-bug-fill"></i></span>  Bugs
+                                        <span><i class="bi bi-bug-fill"></i></span>  Bugs
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -246,7 +247,7 @@ const Taskdetail = (props) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Subtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                      <span><i class="bi bi-check-square-fill"></i></span>  SubTask
+                                        <span><i class="bi bi-check-square-fill"></i></span>  SubTask
                                     </Button>
 
 
@@ -255,74 +256,44 @@ const Taskdetail = (props) => {
                             {connectComponent === 'All' ? (
                                 <div style={{ maxHeight: '400px', msOverflowStyle: 'none', overflowY: 'scroll', scrollbarWidth: 'none' }}>
                                     <Row >
-                                    {store?.getAllComment?.data?.response?.map((ele, ind) => (
-                                        <ul style={{ listStyle: 'none' }}>
-                                            <Row>
-                                                <Col lg={12} className="d-flex">
-                                                    <Col lg={2} className="pt-2">
-                                                        <span
-                                                            style={{
-                                                                backgroundColor: '#605e5a',
-                                                                borderRadius: '100%',
-                                                                padding: '11px 15px',
-                                                                color: 'white',
-                                                                fontWeight: '800',
-                                                            }}>
-                                                            {ele?.userId?.firstName.charAt(0)}
-                                                            {ele?.userId?.lastName.charAt(0)}
-                                                        </span>
+                                        {store?.getAllComment?.data?.response?.map((ele, ind) => (
+                                            <ul className='m-0 p-0' key={ind} style={{ listStyle: 'none' }}>
+                                                <Row className='mx-auto m-0 p-0'>
+                                                    <Col lg={12} className="d-flex pt-2">
+                                                        <Col lg={2} className="pt-2 m-0">
+                                                            <span className='rounded-circle py-1 px-1 text-white'
+                                                                style={{
+                                                                    backgroundColor: '#605e5a',
+
+                                                                }}>
+                                                                {ele?.userId?.firstName.charAt(0)}
+                                                                {ele?.userId?.lastName.charAt(0)}
+                                                            </span>
+                                                        </Col>
+                                                        <Col lg={10} className="m-0 p-0">
+                                                            <div className="d-flex">
+                                                                <h4 className="m-0 p-0"> {ele?.userId?.firstName}</h4>
+                                                                <h4 className="ps-1 m-0 p-0">
+                                                                    {' '}
+                                                                    {ele?.userId?.lastName}
+                                                                </h4>
+                                                                <p className="ps-1 m-0 p-0">
+                                                                    {moment(ele?.createdAt).fromNow()}{' '}
+                                                                </p>
+                                                            </div>
+                                                            <div className="m-0 p-0" title={ele?.comment}>
+                                                                <p>{ele?.comment ? ele?.comment.slice(0, 10).charAt(0).toUpperCase() + ele?.comment.slice(1) : ''}</p>
+                                                            </div>
+                                                            <div className="d-flex m-0 p-0">
+                                                                <button className="btn  p-0" onClick={() => setIsUpdate(true)}>
+                                                                    Edit
+                                                                </button>
+                                                            </div>
+                                                        </Col>
                                                     </Col>
-                                                    <Col lg={10} className="m-0 p-0">
-                                                        <div className="d-flex">
-                                                            <h4 className="m-0 p-0"> {ele?.userId?.firstName}</h4>
-                                                            <h4 className="ps-1 m-0 p-0"> {ele?.userId?.lastName}</h4>
-                                                            <p className="ps-1 m-0 p-0">
-                                                                {moment(ele?.createdAt).fromNow()}
-                                                            </p>
-                                                        </div>
-                                                        {inputForUpdate === ind ? (
-                                                            <form onSubmit={handleSubmit(submitUpdateComment)}>
-                                                                <Row className="mt-2 d-flex">
-                                                                    <Col lg={9}>
-                                                                        <Form.Group
-                                                                            className="mb-1"
-                                                                            controlId="exampleForm.ControlInput1">
-                                                                            <Form.Control
-                                                                                type="text"
-                                                                                placeholder="Update comment"
-                                                                                {...register(`updated_comment`)}
-                                                                            />
-                                                                        </Form.Group>
-                                                                    </Col>
-                                                                    <Col className="m-0 p-0" lg={1}>
-                                                                        <Button type="submit">Update</Button>
-                                                                    </Col>
-                                                                </Row>
-                                                            </form>
-                                                        ) : (
-                                                            <>
-                                                                <div className="m-0 p-0">
-                                                                    <li className="font-18  ">{ele?.comment}</li>
-                                                                </div>
-                                                                <div className="d-flex m-0 p-0">
-                                                                    <p
-                                                                        className=" p-0"
-                                                                        onClick={() => handelUpdateAll(ele, ind)}>
-                                                                        Edit
-                                                                    </p>
-                                                                    {/* <p
-                                                                        className=" cp  p-0 ps-2"
-                                                                        onClick={() => handeldelete(ele)}>
-                                                                        Delete
-                                                                    </p> */}
-                                                                </div>
-                                                            </>
-                                                        )}
-                                                    </Col>
-                                                </Col>
-                                            </Row>
-                                        </ul>
-                                    ))}
+                                                </Row>
+                                            </ul>
+                                        ))}
                                     </Row>
                                     <Row>
                                         <div className="d-flex flex-column justify-content-center my-2">
@@ -416,24 +387,6 @@ const Taskdetail = (props) => {
                                                                 </td>
                                                                 <td>
                                                                     <span>
-                                                                        {props?.item?.status == 1 ? 'To-Do' : ''}
-                                                                        {props?.item?.status == 2 ? 'In-Progress' : ''}
-                                                                        {props?.item?.status == 3 ? 'Hold' : ''}
-                                                                        {props?.item?.status == 4 ? 'Done' : ''}
-                                                                    </span>
-                                                                </td>
-                                                                <td>
-                                                                    <span>
-                                                                        {props?.item?.technology?.name}
-                                                                    </span>
-                                                                </td>
-                                                                <td>
-                                                                    <span>
-                                                                        {props?.item?.reporterInfo?.firstName} {props?.item?.reporterInfo?.lastName}
-                                                                    </span>
-                                                                </td>
-                                                                <td>
-                                                                    <span>
                                                                         {sub?.startDate.slice(0, 10)}
                                                                     </span>
                                                                 </td>
@@ -473,24 +426,6 @@ const Taskdetail = (props) => {
                                                                 <td>
                                                                     <span>
                                                                         {bug?.priority}
-                                                                    </span>
-                                                                </td>
-                                                                <td>
-                                                                    <span>
-                                                                        {props?.item?.status == 1 ? 'To-Do' : ''}
-                                                                        {props?.item?.status == 2 ? 'In-Progress' : ''}
-                                                                        {props?.item?.status == 3 ? 'Hold' : ''}
-                                                                        {props?.item?.status == 4 ? 'Done' : ''}
-                                                                    </span>
-                                                                </td>
-                                                                <td>
-                                                                    <span>
-                                                                        {props?.item?.technology?.name}
-                                                                    </span>
-                                                                </td>
-                                                                <td>
-                                                                    <span>
-                                                                        {props?.item?.reporterInfo?.firstName} {props?.item?.reporterInfo?.lastName}
                                                                     </span>
                                                                 </td>
                                                                 <td>
@@ -565,7 +500,7 @@ const Taskdetail = (props) => {
                                                                 <p>{ele?.comment ? ele?.comment.slice(0, 10).charAt(0).toUpperCase() + ele?.comment.slice(1) : ''}</p>
                                                             </div>
                                                             <div className="d-flex m-0 p-0">
-                                                            <p className=" p-0" style={{cursor:'pointer'}} onClick={() => handelUpdate(ele)}>
+                                                                <p className=" p-0" style={{ cursor: 'pointer' }} onClick={() => handelUpdate(ele)}>
                                                                     Edit
                                                                 </p>
                                                             </div>
@@ -664,24 +599,6 @@ const Taskdetail = (props) => {
                                                         </td>
                                                         <td>
                                                             <span>
-                                                                {props?.item?.status == 1 ? 'To-Do' : ''}
-                                                                {props?.item?.status == 2 ? 'In-Progress' : ''}
-                                                                {props?.item?.status == 3 ? 'Hold' : ''}
-                                                                {props?.item?.status == 4 ? 'Done' : ''}
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <span>
-                                                                {props?.item?.technology?.name}
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <span>
-                                                                {props?.item?.reporterInfo?.firstName} {props?.item?.reporterInfo?.lastName}
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <span>
                                                                 {sub?.startDate.slice(0, 10)}
                                                             </span>
                                                         </td>
@@ -739,24 +656,6 @@ const Taskdetail = (props) => {
                                                         <td>
                                                             <span>
                                                                 {bug?.priority}
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <span>
-                                                                {props?.item?.status == 1 ? 'To-Do' : ''}
-                                                                {props?.item?.status == 2 ? 'In-Progress' : ''}
-                                                                {props?.item?.status == 3 ? 'Hold' : ''}
-                                                                {props?.item?.status == 4 ? 'Done' : ''}
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <span>
-                                                                {props?.item?.technology?.name}
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <span>
-                                                                {props?.item?.reporterInfo?.firstName} {props?.item?.reporterInfo?.lastName}
                                                             </span>
                                                         </td>
                                                         <td>

@@ -155,7 +155,6 @@ export default function Pagesaddtask(props) {
         const milestoneTypeselected = e.target.value;
         setmilestoneType(milestoneTypeselected);
     }
-    console.log({ milestoneType })
     const handleSprintChange = (e) => {
         const sprintId = e.target.value;
         setsprintSelected(sprintId);

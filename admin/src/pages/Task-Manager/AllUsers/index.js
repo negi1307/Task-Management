@@ -10,6 +10,8 @@ import ToastHandle from '../../../constants/toaster/toaster';
 import { deleteUser, getAllUsers, getCSVdata } from '../../../redux/user/action';
 import HeaderMain from '../header/HeaderMain';
 import { CSVLink } from 'react-csv';
+import Pagination from '@mui/material/Pagination';
+
 
 const AllUsers = () => {
     const store = useSelector((state) => state);
@@ -26,6 +28,7 @@ const AllUsers = () => {
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const csvdownloaddata = store?.getCsvDataReducer;
+    const [skip, setSkip] = useState(1);
 
     const handeldelete = (ele) => {
         setdeleteId(ele?._id);
@@ -42,11 +45,17 @@ const AllUsers = () => {
         dispatch(getAllUsers());
     }, [render]);
 
+
     useEffect(() => {
         if (getUsers?.data?.status == 200) {
             setData(getUsers?.data?.response);
         }
     }, [getUsers]);
+
+    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setSkip(value);
+        dispatch(getAllUsers({ page: value }));
+    };
 
     useEffect(() => {
         if (deletehandle?.data?.status == 200) {
@@ -161,6 +170,18 @@ const AllUsers = () => {
                             </tbody>
                         </Table>
                     )}
+                    <Col className='d-flex justify-content-end'>
+                        <Pagination
+                            showFirstButton
+                            showLastButton
+                            defaultPage={skip}
+                            count={store?.getAllUsers?.data?.totalPages}
+                            color="primary"
+                            variant="outlined"
+                            onChange={handlePaginationChange}
+                            className='my-3'
+                        />
+                    </Col>
                     <CSVLink
                         data={csvdownload}
                         filename={csvName}
