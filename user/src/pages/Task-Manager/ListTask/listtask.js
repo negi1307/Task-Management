@@ -86,7 +86,8 @@ const ListTask = () => {
                                             <td className='' title={item?.description} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                                 {item?.description.split(' ').slice(0, 2).join(' ')}{item?.description.split(' ').length > 2 ? ' ...' : ''}
                                             </td>
-                                            <td>{item?.summary}</td>
+                                            <td title={item?.summary}>
+                                                {item?.summary ? item?.summary.slice(0, 10).charAt(0).toUpperCase() + item.summary.slice(1, 10) : ''}</td>
                                             <td>{item?.assigneeInfo?.firstName} {item?.assigneeInfo?.lastName}</td>
                                             <td>{item?.reporterInfo?.role}</td>
                                             <td className=''>
