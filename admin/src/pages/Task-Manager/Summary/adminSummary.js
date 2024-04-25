@@ -371,7 +371,7 @@ const AdminDashboard = () => {
                                     setfilterModal={setFilterModal} />
                                 <button
                                     type="button"
-                                    className="mybutton btn p-1 fw-bold py-1  web_button"
+                                    className="mybutton btn p-1 fw-bold py-1 web_button"
                                     onClick={() => {
                                         setShowModal(!showModal);
                                     }}>
@@ -388,12 +388,12 @@ const AdminDashboard = () => {
 
                         </div>
                     </div>
-                    <Row className='px-3 '>
-                        <Col sm={6} className='border border-1 border-muted'>
+                    <Row className='px-2'>
+                        <Col sm={6} className='border border-1 border-muted shadow rounded-4'>
                             <div className='row d-flex flex-column align-items-center justify-content-center'>
                                 <div className='col-12'>
-                                    <h5 className="mb-3 text-dark">
-                                        <strong>Current Projects</strong>
+                                    <h5 className="p-3 text-dark">
+                                        <strong >Current Projects</strong>
                                     </h5>
                                 </div>
                                 <PieChart
@@ -413,8 +413,8 @@ const AdminDashboard = () => {
                                 />
                             </div>
                         </Col>
-                        <Col sm={6} className='border border-1 border-muted'>
-                            <Row className=' p-2'>
+                        <Col sm={6} className='border border-1 border-muted  shadow rounded-4'>
+                            <Row className=' p-3'>
                                 <Col sm={12}>
                                     <h5 className='text-dark'> <strong>Ongoing Projects</strong></h5>
                                     <h6>Click on a project to show its details.</h6>
@@ -463,125 +463,13 @@ const AdminDashboard = () => {
                                 </Col> */}
                             </Row>
                         </Col>
-                        {/* <Col sm={6} className='border border-1 border-muted'> */}
-                        {/* <Row className='p-2'> */}
-
-                        {/* <div className='col-12 h-100 d-flex'> */}
-                        {/* {!projectOverviewChange && taskCount !== null && (
-                                       
-                                    )} */}
-                        {/* {projectOverviewChange && ( */}
-                        {/* <Row> */}
-                        {/* <Col lg={4}>
-                                                <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                                    <Form.Label>
-                                                        {' '}
-                                                        Project<span className="text-danger">*</span>:
-                                                    </Form.Label>
-                                                    <Form.Select
-                                                        {...register('projectname', { required: true })}
-                                                        onChange={(e) => setprojectSelected(e.target.value)}
-                                                        value={projectSelected || ''}
-                                                    >
-                                                        <option value=''>Select Project</option>
-                                                        {store?.getProject?.data?.response?.projects?.map((ele) => (
-                                                            <option key={ele?._id} value={ele?.projectName}>{ele?.projectName}</option>
-                                                        ))}
-                                                    </Form.Select>
-                                                    {errors.projectname?.type === 'required' && (
-                                                        <span className="text-danger"> This field is required *</span>
-                                                    )}
-                                                </Form.Group>
-                                            </Col> */}
-
-                        {/* <Col lg={6}>
-                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                                <Form.Label>
-                                                    {' '}
-                                                    Milestone<span className="text-danger">*</span>:
-                                                </Form.Label>
-                                                <Form.Select
-                                                    {...register('Milestone', { required: true, disabled: !projectSelected })}
-                                                    onChange={(e) => handleMilestoneChange(e)}
-                                                    value={milestoneSelected || ''}
-                                                >
-                                                    <option value=''>Select Milestone</option>
-                                                    {store?.getsingleMileStone?.data?.response?.map(milestone => {
-                                                        // Check if the milestone matches the selected type
-                                                        if (milestone.activeStatus === true) {
-                                                            return (
-                                                                <option key={milestone._id} value={milestone._id}>{milestone.title}</option>
-                                                            );
-                                                        } else {
-                                                            // Handle inactive milestones if needed
-                                                            return null; // Or any logic you need
-                                                        }
-                                                    })}
-                                                </Form.Select>
-                                                {errors.Milestone?.type === 'required' && (
-                                                    <span className="text-danger"> This field is required *</span>
-                                                )}
-                                            </Form.Group>
-                                        </Col> */}
-                        {/* <Col sm={6}>
-                                                <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                                    <Form.Label>
-                                                        {' '}
-                                                        Milestone<span className="text-danger">*</span>:
-                                                    </Form.Label>
-                                                    <Form.Select
-                                                        {...register('Milestone', { required: true })}
-                                                        onChange={(e) => setmilestoneSelected(e.target.value)}
-                                                        value={milestoneSelected || ''} >
-                                                        <option value=''>Select Milestone</option>
-                                                        {store?.getSigleMileStone?.data?.response?.map(milestone => (
-                                                            <option key={milestone?._id} value={milestone?._id}>{milestone?.title}</option>
-                                                        ))}
-                                                    </Form.Select>
-                                                    {errors.Milestone?.type === 'required' && (
-                                                        <span className="text-danger"> This field is required *</span>
-                                                    )}
-                                                </Form.Group>
-                                            </Col>
-                                            <Col sm={6}>
-                                                <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                                    <Form.Label>
-                                                        Sprint <span className="text-danger">*</span>:
-                                                    </Form.Label>
-                                                    <Form.Select
-                                                        {...register('Sprint', { required: true, disabled: !milestoneSelected })}
-                                                        onChange={(e) => setsprintSelected(e.target.value)}
-                                                        value={sprintSelected || ''}>
-                                                        <option value="">Select Sprint</option>
-                                                        {store?.getAllSingleSprints?.data?.response?.map(sprint => (
-                                                            <option key={sprint?._id} value={sprint?._id}>{sprint?.sprintName}</option>
-                                                        )
-                                                        )}
-                                                    </Form.Select>
-                                                    {errors.Sprint?.type === 'required' && (
-                                                        <span className="text-danger"> This field is required *</span>
-                                                    )}
-                                                </Form.Group>
-                                            </Col> */}
-                        {/* )} */}
-                        {/* </Row> */}
-                        {/* )} */}
-
-                        {/* {!projectOverviewChange && (
-                                        <button onClick={() => setProjectOverviewChange(true)}>Show Form</button>
-                                    )} */}
-
-                        {/* </div> */}
-                        {/*  */}
-
-                        {/* </Row> */}
-                        {/* </Col> */}
+                     
                         {projectSelected && (
                             <>
-                                <div className='col-6  d-flex flex-column border border-1 border-muted'>
+                                <div className='col-6 mt-3  d-flex flex-column border border-1 border-muted  shadow rounded-4'>
                                     <div className="row">
                                         <div className='col-12'>
-                                            <h5 className="mb-3 text-dark">
+                                            <h5 className="mb-3 text-dark p-3">
                                                 <strong>Projects Overview</strong>
                                             </h5>
                                         </div>
@@ -604,7 +492,7 @@ const AdminDashboard = () => {
                                         />
                                     </div>
                                 </div>
-                                <Col sm={6} className='border border-1  border-muted'>
+                                <Col sm={6} className='border border-1 mt-3 border-muted  shadow rounded-4'>
                                     <Row>
                                         {/* <Col sm={12}>
                                             <Row>
@@ -641,7 +529,7 @@ const AdminDashboard = () => {
                                             /> */}
                                             <Row>
                                                 <Col sm={12}>
-                                                    <h5 className="mb-3 text-dark">
+                                                    <h5 className="mb-3 p-3 text-dark">
                                                         Selected Project: {selectedProjectName}
                                                         <br />
                                                         {circleTitle} {circleSize}
@@ -695,8 +583,8 @@ const AdminDashboard = () => {
                                         </tbody>
                                     </Table>
                                 </Col> */}
-                                <Col sm={6} className='border border-1  border-muted'>
-                                    <Row className='p-2 align-items-center '>
+                                <Col sm={6} className='border border-1 mt-3  border-muted  shadow rounded-4'>
+                                    <Row className='p-3 align-items-center '>
                                         <Col sm={6}>
                                             <h5 className='text-dark'> <strong>Users</strong></h5>
                                         </Col>
@@ -755,7 +643,7 @@ const AdminDashboard = () => {
                                 </Col>
                                 {showTasks && (
                                     <>
-                                        <Col sm={6} className='border border-1 border-muted d-flex flex-column justify-content-center'>
+                                        <Col sm={6} className='border border-1 border-muted d-flex flex-column justify-content-center mt-3  shadow rounded-4'>
                                             {/* {userDataCount !== undefined ? ( */}
                                             <div className='d-flex justify-content-center'>
                                                 <PieChart
@@ -815,7 +703,7 @@ const AdminDashboard = () => {
                                                 </div>
                                             </div>
                                         </Col>
-                                        <Col sm={12} className='border border-1 border-muted'>
+                                        <Col sm={12} className='border border-1 mt-3 border-muted'>
 
                                         </Col>
                                     </>
@@ -830,8 +718,8 @@ const AdminDashboard = () => {
 
                     </Row>
                     <Row className='px-3'>
-                        <Col sm={6} className='border border-1 border-muted'>
-                            <Row className='p-2'>
+                        <Col sm={6} className='border border-1 border-muted mt-3 shadow rounded-4' >
+                            <Row className='p-3'>
                                 <Col sm={12}>
                                     <h5 className='text-dark'> <strong>Priority Breakdown</strong></h5>
                                 </Col>
@@ -840,10 +728,10 @@ const AdminDashboard = () => {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col sm={6} className='border border-1 border-muted'>
+                        <Col sm={6} className='border border-1 border-muted mt-3 shadow rounded-4'>
                             <Row className='p-2'>
                                 <Col sm={12}>
-                                    <h5 className='text-dark'>
+                                    <h5 className='text-dark p-3'>
                                         <strong>Recent Activity</strong>
                                     </h5>
                                     {/* <h6>
@@ -851,7 +739,7 @@ const AdminDashboard = () => {
                                     </h6> */}
                                 </Col>
                                 <Col sm={12}>
-                                    <div className="scrollable-content" style={{ fontSize: '14px' }}>
+                                    <div className="scrollable-content ms-3" style={{ fontSize: '14px' }}>
                                         {historyResponse && historyResponse.map((item, index) => (
                                             <div key={index} className='d-flex gap-2 align-items-center lh-lg text-nowrap'>
                                                 <OverlayTrigger
