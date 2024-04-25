@@ -99,7 +99,7 @@ const Boards = () => {
     const [projectNameHeading, setProjectName] = useState('Select Project Name');
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
-    console.log(columns, '6666666666666666666666666')
+    // console.log(columns, '6666666666666666666666666')
     const sprintId = store?.getSprintId?.data;
     const taskId = store?.getTaskId?.data;
     const CreateCommenthandel = store?.AddCommentReducer;

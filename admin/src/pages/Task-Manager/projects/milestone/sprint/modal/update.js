@@ -116,7 +116,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 {...register('title', { required: true })}
                                             />
                                             {errors.title?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -133,7 +133,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 {...register('description', { required: true })}
                                             />
                                             {errors.description?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>

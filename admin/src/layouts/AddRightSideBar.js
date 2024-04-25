@@ -1,7 +1,7 @@
 import react, { useEffect, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { createTask, getAllRoles, getAllTask,getAllCategory, getAssignUserAction, getAllUsers, getSingleSprint } from '../redux/actions';
+import { createTask, getAllRoles, getAllTask, getAllCategory, getAssignUserAction, getAllUsers, getSingleSprint } from '../redux/actions';
 import Form from 'react-bootstrap/Form';
 import { Row, Col, Button, CloseButton, Card, FormControl } from 'react-bootstrap';
 import pdfImage from '../../src/assets/images/pdf.png';
@@ -105,6 +105,7 @@ export default function RightBar(props) {
         setSelectedFile('');
         setStartDate("");
         setEndDate("")
+        reset();
     };
     useEffect(() => {
         reset({ projectname: projectId, Milestone: mileStoneId, Sprint: sprintId });
@@ -114,7 +115,7 @@ export default function RightBar(props) {
         dispatch(getAllRoles());
         dispatch(getAllUsers());
         // let status = true
-        dispatch(getAllCategory({status:true}));
+        dispatch(getAllCategory({ status: true }));
     }, []);
     useEffect(() => {
         dispatch(getReporterAction())
@@ -286,7 +287,7 @@ export default function RightBar(props) {
                                             {category?.map((ele, ind) => (
                                                 <option value={ele?._id}>
                                                     {' '}
-                                                    {ele?.name} 
+                                                    {ele?.name}
                                                 </option>
                                             ))}
                                         </select>

@@ -104,7 +104,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     ))}
                                                 </Form.Select>
                                                 {errors.projectname?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
+                                                    <span className="text-danger"> This field is required *</span>
                                                 )}
                                             </Form.Group>
                                         </Col>
@@ -122,7 +122,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     ))}
                                                 </Form.Select>
                                                 {errors.Milestone?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
+                                                    <span className="text-danger"> This field is required *</span>
                                                 )}
                                             </Form.Group>
                                         </Col>
@@ -142,7 +142,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     ))}
                                                 </Form.Select>
                                                 {errors.Sprint?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
+                                                    <span className="text-danger"> This field is required *</span>
                                                 )}
                                             </Form.Group>
                                         </Col>
@@ -158,7 +158,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     {...register('summary', { required: true })}
                                                 />{' '}
                                                 {errors.summary?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
+                                                    <span className="text-danger"> This field is required *</span>
                                                 )}
                                             </Form.Group>
                                         </Col>
@@ -202,7 +202,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     ))}
                                                 </Form.Select>
                                                 {errors.Assignee?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
+                                                    <span className="text-danger"> This field is required *</span>
                                                 )}
                                             </Form.Group>
                                         </Col>
@@ -223,7 +223,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     ))}
                                                 </Form.Select>
                                                 {errors.Reporter?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
+                                                    <span className="text-danger"> This field is required *</span>
                                                 )}
                                             </Form.Group>
                                         </Col>
@@ -240,7 +240,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     <option value="3">Low</option>
                                                 </Form.Select>
                                                 {errors.Priority?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
+                                                    <span className="text-danger"> This field is required *</span>
                                                 )}
                                             </Form.Group>
                                         </Col>
@@ -260,7 +260,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     {...register('startdate', { required: true })}
                                                 />{' '}
                                                 {errors.estimatedate?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
+                                                    <span className="text-danger"> This field is required *</span>
                                                 )}
                                             </Form.Group>
                                         </Col>
@@ -277,7 +277,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     {...register('dueDate', { required: true })}
                                                 />{' '}
                                                 {errors.dueDate?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
+                                                    <span className="text-danger"> This field is required *</span>
                                                 )}
                                             </Form.Group>
                                         </Col>
@@ -297,7 +297,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     {...register('status', { required: true, disabled: true })}
                                                 />
                                                 {errors.status?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
+                                                    <span className="text-danger"> This field is required *</span>
                                                 )}
                                             </Form.Group>
                                         </Col>
@@ -313,7 +313,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     {...register('attachment', { required: true })}
                                                 />
                                                 {errors.attachment?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
+                                                    <span className="text-danger"> This field is required *</span>
                                                 )}
                                             </Form.Group>
                                         </Col>

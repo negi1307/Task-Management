@@ -91,7 +91,7 @@ const Create = ({ modal, closeModal }) => {
                                                         )}
                                                     </Form.Select>
                                                     {errors.category?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Col>
                                             </Row>
@@ -114,7 +114,7 @@ const Create = ({ modal, closeModal }) => {
                                                         {...register('technologyName', { required: true })}
                                                     />
                                                     {errors.technologyName?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Col>
                                             </Row>

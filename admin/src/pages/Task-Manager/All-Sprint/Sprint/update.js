@@ -106,7 +106,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                 {...register('title', { required: true })}
                                             />
                                             {errors.title?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -139,7 +139,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                 placeholder="Please start Date "
                                             />
                                             {errors.startDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -154,7 +154,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                 placeholder="Please end Date"
                                             />
                                             {errors.endDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>

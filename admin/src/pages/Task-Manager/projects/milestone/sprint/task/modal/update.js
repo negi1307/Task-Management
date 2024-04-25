@@ -166,7 +166,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         ))}
                                                     </Form.Select>
                                                     {errors.projectname?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -185,7 +185,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         ))}
                                                     </Form.Select>
                                                     {errors.Milestone?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -207,7 +207,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         ))}
                                                     </Form.Select>
                                                     {errors.Sprint?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -223,7 +223,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         {...register('summary', { required: true })}
                                                     />{' '}
                                                     {errors.summary?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -271,7 +271,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         ))}
                                                     </Form.Select>
                                                     {errors.Assignee?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -292,7 +292,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         ))}
                                                     </Form.Select>
                                                     {errors.Reporter?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -309,7 +309,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         <option value="3">Low</option>
                                                     </Form.Select>
                                                     {errors.priority?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -329,7 +329,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         {...register('startDate', { required: true })}
                                                     />{' '}
                                                     {errors.startDate?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -345,7 +345,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         {...register('dueDate', { required: true })}
                                                     />{' '}
                                                     {errors.dueDate?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
@@ -367,7 +367,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         <option value="4">Done</option>
                                                     </Form.Select>
                                                     {errors.status?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Form.Group>
                                             </Col>
