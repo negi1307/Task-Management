@@ -90,25 +90,31 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
         reset();
     };
 
-    let csvData = [];
+    let mainCsvData = [];
+    let totalTimeCsvData = [];
+
     if (Array.isArray(usersData)) {
-        csvData = usersData.map(data => ({
+        mainCsvData = usersData.map(data => ({
             [`Username`]: data?.assigneeId?.firstName + ' ' + data?.assigneeId?.lastName,
             [`Task name`]: data?.summary,
             [`Project name`]: data?.projectId?.projectName ? data?.projectId?.projectName : '',
             [`Expected hrs`]: data?.expectedHours,
-            [`In-progress date`]: data?.inProgressDate,
-            [`Done Date`]: data?.doneDate,
-            [`Time Taken`]: data?.timeTracker,
+            [`Added to in-progress`]: data?.inProgressDate || 'Not added yet',
+            [`Done Date`]: data?.doneDate || 'Not completed yet',
+            [`Time Taken`]: data?.timeTracker || 'Not started yet',
         }));
 
-        const totalTime = store?.getUserRecordReducer?.data?.totalTime || 0;
+        const totalTime = store?.getusersDataReducer?.data?.totalTime || 0;
 
-        // Add total time row
-        csvData.push({
+        // Add total time row to total time CSV data
+        totalTimeCsvData.push({
             [`Total Time`]: totalTime
         });
     }
+
+    // Concatenate main data and total time CSV data
+    const csvData = mainCsvData.concat(totalTimeCsvData);
+
 
     return (
         <Modal show={showFilter} onHide={handleClose} size="lg">

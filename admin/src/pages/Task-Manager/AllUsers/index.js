@@ -11,8 +11,7 @@ import { deleteUser, getAllUsers, getCSVdata } from '../../../redux/user/action'
 import HeaderMain from '../header/HeaderMain';
 import { CSVLink } from 'react-csv';
 import Pagination from '@mui/material/Pagination';
-
-
+import { BiSolidDownload } from "react-icons/bi";
 const AllUsers = () => {
     const store = useSelector((state) => state);
     const csvLink = useRef();
@@ -109,8 +108,8 @@ const AllUsers = () => {
                             <thead>
                                 <tr className='text-start'>
                                     <th className='fw-bold'>#</th>
-                                    <th className='fw-bold'>First Name</th>
-                                    <th className='fw-bold'>Last Name</th>
+                                    <th className='fw-bold'>Username</th>
+                                    <th className='fw-bold'>Role</th>
                                     <th className='fw-bold'>Email</th>
                                     <th className='fw-bold'>Create Date</th>
                                     <th className='fw-bold'>Action</th>
@@ -124,38 +123,26 @@ const AllUsers = () => {
                                             <tr className="align-middle text-start">
                                                 <th scope="row">{ind + 1}</th>
                                                 <td className="cp">
-                                                    <span className="namelink"> {ele?.firstName} </span>
+                                                    <span className="namelink"> {ele?.firstName.charAt(0).toUpperCase() + ele?.firstName.slice(1)} {ele?.lastName.charAt(0).toUpperCase() + ele?.lastName.slice(1)} </span>
                                                 </td>
-                                                <td className="cp">
-                                                    <span className="namelink"> {ele?.lastName} </span>{' '}
-                                                </td>
+                                                <td className='namelink'>{ele?.role}</td>
                                                 <td className="w-20">
                                                     <span className="namelink"> {ele?.email}</span>
                                                 </td>
-
                                                 <td>
                                                     <span className="namelink">
                                                         {moment(ele?.createdAt).format("DD/MM/YYYY")}
                                                     </span>
                                                 </td>
-
-                                                <td>
-                                                    <Row>
-                                                        <Col>
-                                                            <p className="action-icon m-0 p-0  ">
-                                                                <i
-                                                                    className="mdi mdi-delete m-0 p-0"
-                                                                    onClick={() => {
-                                                                        handeldelete(ele);
-                                                                    }}></i>
-                                                            </p>
-                                                        </Col>
-                                                    </Row>
-                                                </td>
-                                                <td>
+                                                <td className='d-flex align-items-center gap-1'>
                                                     <i
-                                                        className="mdi mdi-download m-0 p-0 cp font-20"
-                                                        onClick={() => handelCsvDownload(ele)}></i>
+                                                        className="mdi mdi-delete cursor_p  fs-5"
+                                                        onClick={() => {
+                                                            handeldelete(ele);
+                                                        }}></i>
+                                                    <BiSolidDownload className='fs-4 cursor_p' onClick={() => {
+                                                        handelCsvDownload(ele);
+                                                    }} />
                                                 </td>
                                             </tr>
                                         );
