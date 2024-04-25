@@ -101,8 +101,7 @@ const getUsers = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const userId = req.query.userId;
-    const user = await userModel.find(userId)
-    await userModel.findByIdAndDelete(userId);
+    const user = await userModel.findByIdAndDelete(userId);
     await userHistory(req, user);
     return res.status(200).json({ status: "200", message: 'User deleted successfully' });
   } catch (error) {
