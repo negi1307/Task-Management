@@ -87,7 +87,7 @@ const CategoryUpdate = ({ modal, closeModal, editData }) => {
                                                         {...register('Category', { required: true })}
                                                     />
                                                     {errors.Category?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Col>
                                             </Row>
