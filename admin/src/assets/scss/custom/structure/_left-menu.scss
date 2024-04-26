@@ -28,23 +28,23 @@
 // Wrapper
 .wrapper {
     height: 100%;
-    overflow: hidden;
+    // overflow: hidden;
     width: 100%;
 }
 
 //Content Page
 .content-page {
     margin-left: $leftbar-width;
-    overflow: hidden;
+    // overflow: hidden;
     // padding: 30px 25px 25px 25px;
     min-height: 100vh;
-    background: black !important;
+    // background: black !important;
 }
 
 // Left Side-menu (Default dark)
 .leftside-menu {
     width: $leftbar-width;
-    z-index: 10;
+    z-index: 0;
     background: $bg-leftbar-gradient;
     bottom: 0;
     position: fixed;

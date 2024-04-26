@@ -75,7 +75,7 @@ const Create = ({ modal, closemodal }) => {
                                                 {...register('fileName', { required: true })}
                                             />
                                             {errors.fileName?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -90,7 +90,7 @@ const Create = ({ modal, closemodal }) => {
                                                 {...register('file', { required: true })}
                                             />
                                             {errors.file?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>

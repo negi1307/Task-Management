@@ -63,7 +63,7 @@ const CustomerCreateFrom = (props) => {
             ToastHandle('success', updatePreSaleMessage);
             checkModel(false, '')
             dispatch(getPreSalesData());
-        }else if(customerCreateStatus==="400"){
+        } else if (customerCreateStatus === "400") {
             ToastHandle('error', customerCreateMessage);
         }
     }, [customerCreateStatus, updatePreSaleStatus])
@@ -138,7 +138,7 @@ const CustomerCreateFrom = (props) => {
                                     {...register('name', { required: true })}
                                 />
                                 {errors?.name?.type === 'required' && (
-                                    <span className="text-danger"> This feild is required *</span>
+                                    <span className="text-danger"> This field is required *</span>
                                 )}
                             </Form.Group>
                         </Col>
@@ -153,7 +153,7 @@ const CustomerCreateFrom = (props) => {
                                     {...register('project', { required: true })}
                                 />
                                 {errors?.project?.type === 'required' && (
-                                    <span className="text-danger"> This feild is required *</span>
+                                    <span className="text-danger"> This field is required *</span>
                                 )}
                             </Form.Group>
                         </Col>
@@ -170,7 +170,7 @@ const CustomerCreateFrom = (props) => {
                                     {...register('description', { required: true })}
                                 />
                                 {errors?.description?.type === 'required' && (
-                                    <span className="text-danger"> This feild is required *</span>
+                                    <span className="text-danger"> This field is required *</span>
                                 )}
                             </Form.Group>
                         </Col>
@@ -185,7 +185,7 @@ const CustomerCreateFrom = (props) => {
                                     <option value="0" selected={showModel?.editData?.status === 0 && true}>NOT-CONVERTED</option>
                                 </Form.Select>
                                 {errors?.status?.type === 'required' && (
-                                    <span className="text-danger"> This feild is required *</span>
+                                    <span className="text-danger"> This field is required *</span>
                                 )}
                             </Form.Group>
                         </Col>
@@ -203,7 +203,7 @@ const CustomerCreateFrom = (props) => {
                                     <option value="3" selected={showModel?.editData?.stage === 3 && true}>MEDIUM</option>
                                 </Form.Select>
                                 {errors?.stage?.type === 'required' && (
-                                    <span className="text-danger"> This feild is required *</span>
+                                    <span className="text-danger"> This field is required *</span>
                                 )}
                             </Form.Group>
                         </Col>
@@ -218,7 +218,7 @@ const CustomerCreateFrom = (props) => {
                                     <option value="2" selected={showModel?.editData?.type?.[0] === 2 && true}>MOBILE</option>
                                 </Form.Select>
                                 {errors?.type?.type === 'required' && (
-                                    <span className="text-danger"> This feild is required *</span>
+                                    <span className="text-danger"> This field is required *</span>
                                 )}
                             </Form.Group>
                         </Col>
