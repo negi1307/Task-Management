@@ -254,10 +254,18 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                         </div> */}
                                     </div>
                                 </div>
+              
+                                <div className="col-12 m-0" onClick={() => {
+                                    handleDetailPage(item);
+                                }}>
+                                    <p className='m-0'>
+                                    {item?.projects?.projectName}
+                                    </p>
+                                </div>
                                 <div className="col-12" onClick={() => {
                                     handleDetailPage(item);
                                 }}>
-                                    <p>
+                                    <p className='m-0'>
                                         <div className='task-title text-dark p-0' title={item?.description}>
                                             {item?.description ?
                                                 (item.description.length > 25 ? item.description.slice(0, 25) + '...' : item.description)

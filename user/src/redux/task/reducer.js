@@ -115,6 +115,7 @@ export const getAllTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) =>
 };
 
 export const getAllAssigneeName = (state = GET_All_ASSIGNEE_INITIAL_STATE, action) => {
+    console.log(GET_All_ASSIGNEE_INITIAL_STATE,'GET_All_ASSIGNEE_INITIAL_STATE')
     switch (action.type) {
         case TASK_TYPES.GET_ALL_ASSIGNEE_NAME_LOADING:
             return {

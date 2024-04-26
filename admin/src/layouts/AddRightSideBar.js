@@ -287,7 +287,7 @@ export default function RightBar(props) {
                                             {category?.map((ele, ind) => (
                                                 <option value={ele?._id}>
                                                     {' '}
-                                                    {ele?.name}
+                                                    {ele?.name} 
                                                 </option>
                                             ))}
                                         </select>
