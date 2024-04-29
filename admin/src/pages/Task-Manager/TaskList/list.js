@@ -299,10 +299,10 @@ const TaskList = () => {
                                                 </td>
                                                 <td className='text-center'> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
                                                 <td className='text-start'>{moment(item?.dueDate).format("DD/MM/YYYY")}</td>
-                                                <td className='text-start'>
+                                                <td className='text-center'>
                                                     <Form.Check
                                                         type="switch"
-                                                        className='text-start'
+                                                        className='text-center pe-1 '
                                                         checked={item?.activeStatus}
                                                         onChange={(e) => handleStatusChange(e, item)}
                                                     />

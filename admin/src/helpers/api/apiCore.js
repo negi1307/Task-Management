@@ -1,7 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 import config from '../../config';
-import { useNavigate } from 'react-router-dom';
 
 // content type
 axios.defaults.headers.post['Content-Type'] = 'application/json';

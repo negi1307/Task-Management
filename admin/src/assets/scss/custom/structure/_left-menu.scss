@@ -44,7 +44,7 @@
 // Left Side-menu (Default dark)
 .leftside-menu {
     width: $leftbar-width;
-    z-index: 0;
+    z-index: 10;
     background: $bg-leftbar-gradient;
     bottom: 0;
     position: fixed;
