@@ -24,7 +24,7 @@ export function updateTask(data): any {
 //     return api.get(`${URL.getHistory}${taskId}`);
 // }
 export function getHistoryApi(data): any {
-    return api.get(URL.getHistory, data?.payload);
+    return api.get(`${URL.getHistory}?taskId=${data.payload.taskId}`);
 }
 
 
