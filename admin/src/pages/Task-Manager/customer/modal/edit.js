@@ -213,7 +213,7 @@ const Edit = ({ modal, editData, closemodal }) => {
                                     <Form.Select
                                         {...register('status', { required: true })}
                                         disabled={editData?.status == 1 ? true : ''}>
-                                        <option value="" hidden selected>
+                                        <option value="" hidden>
                                             {' '}
                                             --select--
                                         </option>
@@ -235,7 +235,7 @@ const Edit = ({ modal, editData, closemodal }) => {
                                         STAGE<span className="text-danger">*</span>:
                                     </Form.Label>
                                     <Form.Select {...register('stage', { required: true })}>
-                                        <option value="" hidden selected>
+                                        <option value="" hidden >
                                             {' '}
                                             --select--
                                         </option>
@@ -280,7 +280,7 @@ const Edit = ({ modal, editData, closemodal }) => {
                                                 Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('project_type', { required: true })}>
-                                                <option hidden selected>
+                                                <option hidden >
                                                     Choose an Project Type{' '}
                                                 </option>
                                                 <option value="T&M">T&M</option>
@@ -354,7 +354,7 @@ const Edit = ({ modal, editData, closemodal }) => {
                                                 Status<span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('Projectstatus', { required: true })}>
-                                                <option hidden selected>
+                                                <option hidden >
                                                     Select Status
                                                 </option>
                                                 <option value="1">To-Do</option>

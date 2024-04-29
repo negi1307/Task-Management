@@ -238,9 +238,9 @@ const Create = ({ modal, closeModal }) => {
                                                 onChange={(date) => handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
                                                 // minDate={today}
+                                                required
                                                 className="add_width_input"
                                             />
-
                                             {/* {errors.pickdate && (<span className='text-danger'>This field is required *</span>)} */}
                                         </Form.Group>
 
@@ -258,6 +258,7 @@ const Create = ({ modal, closeModal }) => {
                                                 onChange={(date) => handleEndDate(date)}
                                                 placeholderText="mm-dd-yyyy"
                                                 minDate={startDate}
+                                                required
                                                 className="add_width_input"
                                             // {...register('end_date', { required: true })}
                                             />

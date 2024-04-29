@@ -303,7 +303,7 @@ export default function Pagesaddtask(props) {
                                     </Form.Group>
                                 </Col>
                                 <div className="mb-2 col-6">
-                                    <label className="form-label" for="exampleForm.ControlTextarea1">
+                                    <label className="form-label" htmlFor="exampleForm.ControlTextarea1">
                                         Summary
                                         <span className="text-danger">*</span>:
                                     </label>
@@ -322,7 +322,7 @@ export default function Pagesaddtask(props) {
                             <div className="row">
                                 <div className="col-lg-12">
                                     <div className="mb-2">
-                                        <label className="form-label" for="exampleForm.ControlInput1">
+                                        <label className="form-label" htmlFor="exampleForm.ControlInput1">
                                             Description:
                                         </label>
                                         <Form.Control
@@ -342,7 +342,7 @@ export default function Pagesaddtask(props) {
                             <div className="">
                                 <div className="">
                                     <div className="mb-2">
-                                        <label className="form-label" for="exampleForm.ControlTextarea1">
+                                        <label className="form-label" htmlFor="exampleForm.ControlTextarea1">
                                             Assignee
                                             <span className="text-danger">*</span>:
                                         </label>
@@ -352,11 +352,11 @@ export default function Pagesaddtask(props) {
                                             className="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('Assignee', { required: true })}>
-                                            <option value={''} hidden selected>
+                                            <option value={''} hidden>
                                                 Select
                                             </option>
                                             {store?.getAllUsers?.data?.response?.map((ele, ind) => (
-                                                <option value={ele?._id}>
+                                                <option value={ele?._id} key={ele?._id}>
                                                     {' '}
                                                     {ele?.firstName} {ele?.lastName}
                                                 </option>
@@ -369,7 +369,7 @@ export default function Pagesaddtask(props) {
                                 </div>
                                 <div className="">
                                     <div className="mb-2">
-                                        <label className="form-label" for="exampleForm.ControlTextarea1">
+                                        <label className="form-label" htmlFor="exampleForm.ControlTextarea1">
                                             label
                                             <span className="text-danger">*</span>:
                                         </label>
@@ -379,12 +379,11 @@ export default function Pagesaddtask(props) {
                                             className="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('label', { required: true })}>
-                                            <option value={''} hidden selected>
+                                            <option value={''} hidden key="defaultOption" >
                                                 Select
-
                                             </option>
                                             {category?.map((ele, ind) => (
-                                                <option value={ele?._id}>
+                                                <option value={ele?._id} key={ele._id}>
                                                     {' '}
                                                     {ele?.name}
                                                 </option>
@@ -397,7 +396,7 @@ export default function Pagesaddtask(props) {
                                 </div>
                                 <div className="">
                                     <div className="mb-2">
-                                        <label className="form-label" for="exampleForm.ControlTextarea1">
+                                        <label className="form-label" htmlFor="exampleForm.ControlTextarea1">
                                             Reporter
                                             <span className="text-danger">*</span>:
                                         </label>
@@ -407,11 +406,11 @@ export default function Pagesaddtask(props) {
                                             className="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('Reporter', { required: true })}>
-                                            <option value={''} hidden selected>
+                                            <option value={''} hidden >
                                                 Select
                                             </option>
                                             {reporter?.map((ele, ind) => (
-                                                <option value={ele?._id}>
+                                                <option value={ele?._id} key={ele?._id}>
                                                     {' '}
                                                     {ele?.firstName} {ele?.lastName}
                                                 </option>
@@ -426,7 +425,7 @@ export default function Pagesaddtask(props) {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="mb-2">
-                                        <label className="form-label" for="exampleForm.ControlInput1">
+                                        <label className="form-label" htmlFor="exampleForm.ControlInput1">
                                             Expected Hours <span className="text-danger">*</span>:
                                         </label>
                                         <input
@@ -477,7 +476,7 @@ export default function Pagesaddtask(props) {
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="mb-1">
-                                        <label className="form-label" for="exampleForm.ControlInput1">
+                                        <label className="form-label" htmlFor="exampleForm.ControlInput1">
                                             {' '}
                                             Priority <span className="text-danger">*</span>:
                                         </label>
@@ -486,7 +485,7 @@ export default function Pagesaddtask(props) {
                                             className="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('priority', { required: true })}>
-                                            <option hidden selected>
+                                            <option hidden >
                                                 Select Priority
                                             </option>
                                             <option value="Critical">

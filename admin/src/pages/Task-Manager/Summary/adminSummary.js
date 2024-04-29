@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getPriorityGraphAction, getAllTaskCountAction, getTaskSummmaryDetail, getTaskWeekCountAction } from '../../../redux/Summary/action';
@@ -15,7 +15,6 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Pagination from '@mui/material/Pagination';
-// import Pagination from '../../../helpers/pagination/Pagination';
 import Stack from '@mui/material/Stack';
 import FilterModal from './modal/filter';
 import Pagesaddtask from '../../../layouts/AllPagesRightbar';
@@ -24,14 +23,8 @@ import { FaUsers } from "react-icons/fa6";
 import { getAllUsers, getuserTasks } from '../../../redux/user/action';
 import moment from 'moment';
 import { extractSets, generateCombinations, VennDiagram } from '@upsetjs/react';
-import { BarChart } from '@mui/x-charts/BarChart';
 import * as d3 from "d3";
-import { FaMessage } from "react-icons/fa6";
-
 import * as venn from "venn.js";
-
-
-
 const AdminDashboard = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -113,13 +106,6 @@ const AdminDashboard = () => {
         dispatch(getPriorityGraphAction());
         dispatch(getAllTaskCountAction());
         dispatch(getAllUsers());
-
-        // if (milestoneSelected !== null) {
-        //     dispatch(getSingleSprint({ activeStatus: true, id: milestoneSelected, skip: 1 }));
-        // }
-        // if (sprintSelected !== null) {
-        //     dispatch(getAllTask({ sprintId: sprintSelected, searchString: '' }));
-        // }
     }, [dispatch]);
     const vennData = [
         {
@@ -183,45 +169,14 @@ const AdminDashboard = () => {
         } else if (d.sets[0] === "Estimated Time") {
             title = "Estimated Time:";
         }
-
-        // console.log(`Hovered over circle with size: ${size}`);
         setCircleSize(size);
         setCircleTitle(title);
     };
 
     const handleCircleMouseLeave = (d, i) => {
-        console.log("Left circle");
-        setCircleSize(null); // Reset the size when leaving the circle
-        setCircleTitle(null); // Reset the title when leaving the circle
+        setCircleSize(null);
+        setCircleTitle(null);
     };
-
-
-
-    // // Event handlers for div hover
-    // const handleMouseEnter = () => {
-    //     console.log("Mouse entered div");
-    // };
-
-    // const handleMouseLeave = () => {
-    //     console.log("Mouse left div");
-    // };
-
-    // // Event handler for circle hover
-    // const handleCircleMouseEnter = (d, i) => {
-    //     let size = d.size;
-    //     console.log(`Hovered over circle with size: ${size}`);
-    //     // You can display the size as a tooltip or directly in the UI
-    //     // For example, set the state to show the size in a tooltip component
-    //     // Or directly update a state variable to render the size in the UI
-    // };
-
-    // const handleCircleMouseLeave = (d, i) => {
-    //     console.log("Left circle");
-    //     // Remove the tooltip or update the state to hide the size
-    // };
-
-
-
     const projectsCount = store?.getProjectsCount?.data?.response?.projectStatusCounts;
     const totalTasks = store?.getAllTaskCountReducer?.data;
     const getProjectList = store?.getProject?.data;
@@ -276,9 +231,6 @@ const AdminDashboard = () => {
         dispatch(getuserTasks({ userId: userId, projectId: selectedProject }));
         setshowTasks(true);
     };
-    // const openuserTasks = () => {
-    //     setshowTasks(!showTasks)
-    // }
 
 
     const handleProjectSelection = (_id, name) => {
@@ -293,50 +245,34 @@ const AdminDashboard = () => {
         }
     };
 
-
-
     const calculateTotalTimeHours = () => {
         const totaltimeString = timeSpent?.totalTime;
         if (totaltimeString) {
-            // Regular expression to extract hours, minutes, and seconds
             const timeRegex = /(\d+) hours (\d+) minutes (\d+) seconds/;
             const match = totaltimeString.match(timeRegex);
-
             if (match) {
                 // Extracting hours, minutes, and seconds from the match
                 const hours = parseInt(match[1]);
                 const minutes = parseInt(match[2]);
                 const seconds = parseInt(match[3]);
-
                 // Converting hours, minutes, and seconds into total hours
                 const totalTimeInHours = hours + minutes / 60 + seconds / 3600;
-
-                // Now totalTimeInHours will hold the total time in hours
-                // console.log({ totalTimeInHours });
                 setTotalTimeHours(totalTimeInHours);
             }
         }
     }
-    // console.log(timeSpent?.difference);
-
     const calculateDifferenceTimeHours = () => {
         const differenceString = timeSpent?.difference;
         if (differenceString) {
             // Regular expression to extract hours, minutes, and seconds
             const difftimeRegex = /(\d+) hours (\d+) minutes (\d+) seconds/;
             const matchdiff = differenceString.match(difftimeRegex);
-
             if (matchdiff) {
                 // Extracting hours, minutes, and seconds from the match
                 const hours = parseInt(matchdiff[1]);
                 const minutes = parseInt(matchdiff[2]);
                 const seconds = parseInt(matchdiff[3]);
-
-                // Converting hours, minutes, and seconds into total hours
                 const differenceTimeInHours = hours + minutes / 60 + seconds / 3600;
-
-                // Now differenceTimeInHours will hold the total time in hours
-                // console.log({ differenceTimeInHours });
                 setdifferenceTimeHours(differenceTimeInHours);
             }
         }
@@ -384,8 +320,6 @@ const AdminDashboard = () => {
                                     setShowModal={setShowModal}
                                 />
                             </div>
-                            {/* {filterModal && <FilterModal closeModal={() => setFilterModal(false)} />} */}
-
                         </div>
                     </div>
                     <Row className='px-2'>
@@ -456,14 +390,9 @@ const AdminDashboard = () => {
                                         </tbody>
                                     </Table>
                                 </Col>
-                                {/* <Col sm={12} className="text-end mb-2 ">
-                                    <Link to='/dashboard/report'>
-                                        View All
-                                    </Link>
-                                </Col> */}
                             </Row>
                         </Col>
-                     
+
                         {projectSelected && (
                             <>
                                 <div className='col-6 mt-3  d-flex flex-column border border-1 border-muted  shadow rounded-4'>
@@ -494,39 +423,7 @@ const AdminDashboard = () => {
                                 </div>
                                 <Col sm={6} className='border border-1 mt-3 border-muted  shadow rounded-4'>
                                     <Row>
-                                        {/* <Col sm={12}>
-                                            <Row>
-                                                <Col sm={4} style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)' }}>
-                                                    <p className='mb-0 mt-2 fw-bold text-black'>Expected Time</p>
-                                                    <p className='mb-0'>{timeSpent?.expectedTime}</p>
-                                                </Col>
-                                                <Col sm={4} style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)' }}>
-                                                    <p className='mb-0 mt-2 fw-bold text-black'>
-                                                        Total Time
-                                                    </p>
-                                                    <p className='mb-0'>
-                                                        {timeSpent?.totalTime}
-                                                    </p>
-                                                </Col>
-                                                <Col sm={4} style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)' }}>
-                                                    <p className='mb-0 mt-2 fw-bold text-black'>
-                                                        Time Difference
-                                                    </p>
-                                                    <p className='mb-0'>
-                                                        {timeSpent?.difference}
-                                                    </p>
-                                                </Col>
-                                            </Row>
-                                        </Col> */}
                                         <Col sm={12} className='d-flex justify-content-center'>
-                                            {/* <VennDiagram
-                                                sets={sets}
-                                                combinations={combinations}
-                                                width={400}
-                                                height={300}
-                                                selection={selection}
-                                                onHover={setSelection}
-                                            /> */}
                                             <Row>
                                                 <Col sm={12}>
                                                     <h5 className="mb-3 p-3 text-dark">
@@ -544,45 +441,6 @@ const AdminDashboard = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                {/* <Col sm={6} className='border border-1 scrollable-content border-muted'>
-                                    <Table className="mb-0 add_Color_font text-nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th className='fw-bold text-start'>#</th>
-                                                <th className='fw-bold text-start'>Name</th>
-                                                <th className='fw-bold text-start'>Description</th>
-                                                <th className='fw-bold text-start'>Start Date</th>
-                                                <th className='fw-bold text-start'>End Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {statusCount.response?.map((ele, ind) => {
-                                                return (
-                                                    <tr className="align-middle" key={ele?._id}>
-                                                        <th scope="row" className='text-start'>{(skip - 1) * 10 + ind + 1}</th>
-                                                        <td className="cp text-start namelink text-secondary">
-                                                            {ele?.summary.charAt(0).toUpperCase() + ele?.summary.slice(1)}
-                                                        </td>
-                                                        <td className="cp text-start namelink text-secondary">
-                                                            {ele?.description.charAt(0).toUpperCase() + ele?.description.slice(1)}
-                                                        </td>
-                                                        <td className='text-start text-secondary'>
-                                                            <span className="namelink">
-                                                                {moment(ele?.startDate).format("DD/MM/YYYY")}
-                                                            </span>
-                                                        </td>
-                                                        <td className='text-start text-secondary'>
-                                                            <span className="namelink">
-                                                                {moment(ele?.dueDate).format("DD/MM/YYYY")}
-                                                            </span>
-                                                        </td>
-                                                        <td className='text-start text-secondary'>{ele?.daysLeft}</td>
-                                                    </tr>
-                                                );
-                                            })}
-                                        </tbody>
-                                    </Table>
-                                </Col> */}
                                 <Col sm={6} className='border border-1 mt-3  border-muted  shadow rounded-4'>
                                     <Row className='p-3 align-items-center '>
                                         <Col sm={6}>
@@ -616,10 +474,6 @@ const AdminDashboard = () => {
                                                                         {ele?.email}
                                                                     </td>
                                                                     <td>{ele?.designationId?.name}</td>
-
-                                                                    {/* <td>
-                                                                <span className="namelink">{moment(ele?.createdAt).format("DD/MM/YYYY")}</span>
-                                                            </td> */}
                                                                 </tr>
                                                             );
                                                         })}
@@ -734,9 +588,6 @@ const AdminDashboard = () => {
                                     <h5 className='text-dark p-3'>
                                         <strong>Recent Activity</strong>
                                     </h5>
-                                    {/* <h6>
-                                        Stay up to date with what"s happening across the project.
-                                    </h6> */}
                                 </Col>
                                 <Col sm={12}>
                                     <div className="scrollable-content ms-3" style={{ fontSize: '14px' }}>
@@ -773,7 +624,7 @@ const AdminDashboard = () => {
                                                         {item.userActivity === "Created Sprint" && <span> created sprint</span>}
                                                         {item.userActivity === "Create Project" && <span> create project</span>}
                                                         {item.userActivity === "Created Task" && <span> created task</span>}
-                                                        {' on ' + new Date(item.createdAt).toLocaleDateString() + '.'} {/* Extracting date portion */}
+                                                        {' on ' + new Date(item.createdAt).toLocaleDateString() + '.'}
                                                     </span>
 
                                                 </Link>
@@ -784,33 +635,6 @@ const AdminDashboard = () => {
                                 </Col>
                             </Row>
                         </Col>
-                        {/* <Col sm={6} className='border border-1 border-muted'>
-                            <Row className='p-2'>
-                                <Col sm={12}>
-                                    <h5 className='text-dark'><strong>All Details</strong></h5>
-                                </Col>
-                                <Col sm={12}>
-                                    <Table className='text-nowrap'>
-                                        <tr className='text-start '>
-                                            <th className='fw-bold py-2  text-secondary' scope="row">Ongoing Projects</th>
-                                            <td className='text-secondary py-2'>{getProjectList.totalCount}</td>
-                                        </tr>
-                                        <tr className='text-start '>
-                                            <th className='fw-bold py-2  text-secondary' scope="row">Total Users</th>
-                                            <td className='text-secondary py-2'>{userCount?.totalCount}</td>
-                                        </tr>
-                                        <tr className='text-start '>
-                                            <th className='fw-bold py-2  text-secondary' scope="row">Tasks added in last 7 days</th>
-                                            <td className='text-secondary py-2' colspan="2"> {lastWeekCount?.createdCount ? lastWeekCount?.createdCount : '0'}</td>
-                                        </tr>
-                                        <tr className='text-start '>
-                                            <th className='fw-bold py-2  text-secondary' scope="row">Tasks due in last 7 days</th>
-                                            <td className='text-secondary py-2' colspan="2">{lastWeekCount?.dueCount ? lastWeekCount?.dueCount : '0'}</td>
-                                        </tr>
-                                    </Table>
-                                </Col>
-                            </Row>
-                        </Col> */}
                     </Row>
                 </Container >
             </div >
