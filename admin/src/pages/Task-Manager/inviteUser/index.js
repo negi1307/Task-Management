@@ -51,15 +51,18 @@ const InviteUser = () => {
                         <Col lg={4}>
                             <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                 <Form.Label>
-                                    Name<span className="text-danger">*</span>:
+                                    First Name<span className="text-danger">*</span>:
                                 </Form.Label>
                                 <Form.Control
                                     type="text"
-                                    placeholder="Please Enter  Name"
-                                    {...register('title', { required: true })}
+                                    placeholder="Please Enter First Name"
+                                    {...register('title', { required: true, pattern: /^[^\s]+$/ })}
                                 />
                                 {errors.title?.type === 'required' && (
                                     <span className="text-danger"> This field is required *</span>
+                                )}
+                                {errors.title?.type === 'pattern' && (
+                                    <span className="text-danger"> Empty fields  / space at first character is not allowed</span>
                                 )}
                             </Form.Group>
                         </Col>
@@ -71,10 +74,13 @@ const InviteUser = () => {
                                 <Form.Control
                                     type="text"
                                     placeholder="Please Enter  Last Name"
-                                    {...register('lastName', { required: true })}
+                                    {...register('lastName', { required: true, pattern: /^[^\s]+$/ })}
                                 />
                                 {errors.lastName?.type === 'required' && (
                                     <span className="text-danger"> This field is required *</span>
+                                )}
+                                {errors.lastName?.type === 'pattern' && (
+                                    <span className="text-danger"> Empty fields  / space at first character is not allowed</span>
                                 )}
                             </Form.Group>
                         </Col>
@@ -88,10 +94,13 @@ const InviteUser = () => {
                                 <Form.Control
                                     type="mail"
                                     placeholder="Please Enter e-mail"
-                                    {...register('email', { required: true })}
+                                    {...register('email', { required: true, pattern: /^[^\s]+$/ })}
                                 />
                                 {errors.email?.type === 'required' && (
                                     <span className="text-danger"> This field is required *</span>
+                                )}
+                                {errors.email?.type === 'pattern' && (
+                                    <span className="text-danger"> Empty fields  / space at first character is not allowed</span>
                                 )}
                             </Form.Group>
                         </Col>
@@ -102,11 +111,14 @@ const InviteUser = () => {
                                 </Form.Label>
                                 <Form.Control
                                     type="password"
-                                    {...register('password', { required: true })}
+                                    {...register('password', { required: true, pattern: /^[^\s]+$/ })}
                                     placeholder="Please enter password"
                                 />
                                 {errors.password?.type === 'required' && (
                                     <span className="text-danger"> This field is required *</span>
+                                )}
+                                {errors.password?.type === 'pattern' && (
+                                    <span className="text-danger"> Empty fields  / space at first character is not allowed</span>
                                 )}
                             </Form.Group>
                         </Col>

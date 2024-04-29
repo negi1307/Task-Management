@@ -49,7 +49,7 @@ export const GetAssignee = '/assignUser/getUserAssignments?assigneeId=';
 
 //add comment data
 export const AddTaskComment = '/comments/addComment';
-export const GetComment = '/comments/getTaskComment?taskId=';
+export const GetComment = '/comments/getTaskComment';
 
 export const delteTaskComment = '/comments/deleteComment?';
 export const updateTaskComment = '/comments/updateComment';
