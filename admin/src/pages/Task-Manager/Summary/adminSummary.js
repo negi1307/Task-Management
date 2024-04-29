@@ -50,7 +50,7 @@ const AdminDashboard = () => {
     const [differenceTimeHours, setdifferenceTimeHours] = useState();
     const [totalTimeHours, setTotalTimeHours] = useState();
     const getUsers = store?.getProjectUsers?.data?.response;
-    const statusCount = store?.getProjectTasks?.data;
+    const statusCount = store?.getAllTaskReducer?.data;
     const timeSpent = store?.getProjectTimeSpent?.data;
     const [circleSize, setCircleSize] = useState(null);
     const [circleTitle, setCircleTitle] = useState(null);

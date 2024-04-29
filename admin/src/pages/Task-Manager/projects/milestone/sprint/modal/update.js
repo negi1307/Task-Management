@@ -113,10 +113,14 @@ const Update = ({ modal, closeModal, editData }) => {
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Please Enter Sprint Name"
-                                                {...register('title', { required: true })}
+                                                {...register('title', { required: true, pattern: /^[^\s]+$/ })}
                                             />
                                             {errors.title?.type === 'required' && (
                                                 <span className="text-danger"> This field is required *</span>
+                                            )}
+
+                                            {errors.title?.type === 'pattern' && (
+                                                <span className="text-danger">Empty fields / space at first character is not allowed</span>
                                             )}
                                         </Form.Group>
                                     </Col>

@@ -312,10 +312,13 @@ export default function Pagesaddtask(props) {
                                         type="text"
                                         id="exampleForm.ControlTextarea1"
                                         className="form-control"
-                                        {...register('Summary', { required: true })}
+                                        {...register('Summary', { required: true, pattern: /^[^\s]+$/ })}
                                     />
                                     {errors.Summary?.type === 'required' && (
                                         <span className="text-danger"> This field is required *</span>
+                                    )}
+                                    {errors.Summary?.type === 'pattern' && (
+                                        <span className="text-danger"> Empty fields / space at first character is not allowed</span>
                                     )}
                                 </div>
                             </div>
@@ -373,7 +376,6 @@ export default function Pagesaddtask(props) {
                                             label
                                             <span className="text-danger">*</span>:
                                         </label>
-
                                         <select
                                             name="label"
                                             className="form-select"

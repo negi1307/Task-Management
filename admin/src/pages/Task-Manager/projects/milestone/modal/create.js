@@ -100,15 +100,18 @@ const Create = ({ modal, closeModal }) => {
                                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
                                                 {' '}
-                                                Milestone Name<span className="text-danger">*</span>:
+                                                Milestone Name:
                                             </Form.Label>
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Please Enter  Milestone Name"
-                                                {...register('Title', { required: true })}
+                                                {...register('Title', { required: true, pattern: /^[^\s]+$/ })}
                                             />
                                             {errors.Title?.type === 'required' && (
                                                 <span className="text-danger"> This field is required *</span>
+                                            )}
+                                            {errors.Title?.type === 'pattern' && (
+                                                <span className="text-danger">Empty fields / space at first character is not allowed</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -142,6 +145,7 @@ const Create = ({ modal, closeModal }) => {
                                                 // onChange={(date) => setStartDate(date)}
                                                 onChange={(date) => handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
+                                                required
                                                 className="add_width_input"
                                             />
 
@@ -158,6 +162,7 @@ const Create = ({ modal, closeModal }) => {
                                                 disabled={startDate == '' || startDate == undefined}
                                                 // onChange={(date) => setEndDate(date)}
                                                 onChange={(date) => handleEndDate(date)}
+                                                required
                                                 placeholderText="mm-dd-yyyy"
                                                 // minDate={startDate}
                                                 className="add_width_input"

@@ -11,6 +11,8 @@ import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Table } from '@mui/material';
+import { MdOutlinePending } from "react-icons/md";
+
 
 const Summary = () => {
     const { projectId, milestoneId, spriteId } = useParams();
@@ -78,18 +80,6 @@ const Summary = () => {
             <div className="container">
                 <div className="row">
                     <div className="col  border_clr  m-2 rounded-4 bg-white date">
-                        <div className="d-flex justify-content-center flex-column countstatus">
-                            <div className="bg_clrr bg_info_clr ">
-                                <i class="fa fa-check" aria-hidden="true"></i>
-                            </div>
-                            <div className="mx-3 class_info text-start">
-                                <h5 className="mb-0 mt-1 text-secondary count">
-                                    {tasks?.doneCount} <span>tasks done</span>
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col  border_clr  m-2 rounded-4 bg-white date">
                         <div className="d-flex flex-column justify-content-center countstatus">
                             <div className="bg_clrr bg_info_clr2">
                                 <i class="fa fa-plus" aria-hidden="true"></i>
@@ -98,6 +88,31 @@ const Summary = () => {
                                 <h5 className="mb-0 mt-1 text-secondary count">
                                     {' '}
                                     {TaskCount?.tasksCount} <span>total tasks</span>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col  border_clr  m-2 rounded-4 bg-white date">
+                        <div className="d-flex justify-content-center flex-column countstatus">
+                            <div className="bg_clrr bg_info_clr4 ">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </div>
+                            <div className="mx-3 text-start">
+                                <h5 className="mb-0 mt-1 text-secondary count">
+                                    {tasks?.todoCount} <span>tasks todo</span>
+                                </h5>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div className="col  border_clr  m-2 rounded-4 bg-white date">
+                        <div className="d-flex justify-content-center flex-column countstatus">
+                            <div className="bg_clrr bg_info_clr ">
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                            </div>
+                            <div className="mx-3 class_info text-start">
+                                <h5 className="mb-0 mt-1 text-secondary count">
+                                    {tasks?.doneCount} <span>tasks done</span>
                                 </h5>
                             </div>
                         </div>
@@ -118,17 +133,17 @@ const Summary = () => {
                         <p className="m-0 text-secondary">Count in the last 7 days</p>
                     </div> */}
                     <div className="col  border_clr  m-2 rounded-4 bg-white date">
-                        <div className="d-flex justify-content-center flex-column countstatus">
-                            <div className="bg_clrr bg_info_clr4 ">
-                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                        <div className="d-flex flex-column justify-content-center countstatus">
+                            <div className="bg_clrr bg_info_clr2">
+                                <MdOutlinePending />
                             </div>
-                            <div className="mx-3 text-start">
+                            <div className="mx-3 ">
                                 <h5 className="mb-0 mt-1 text-secondary count">
-                                    {tasks?.dueTasksCount} <span>tasks due</span>
+                                    {' '}
+                                    {tasks?.holdCount} <span>tasks due</span>
                                 </h5>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div className="row">
@@ -233,7 +248,7 @@ const Summary = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col border_clr  m-2 rounded-4 bg-white">
+                    {/* <div className="col border_clr  m-2 rounded-4 bg-white">
                         <div className="p-4 ">
                             <div className="col-12">
                                 <h5 className="mb-3 states">Types of work</h5>
@@ -272,53 +287,10 @@ const Summary = () => {
                                             </tr>
                                         </tbody>
                                     </Table>
-                                    {/* <div className="col">
-                                        <p className="text-secondary">Type</p>
-                                        <div className="d-flex mb-4 ">
-                                            <i
-                                                class="fa fa-check-square mx-1 icon_s"
-                                                aria-hidden="true"
-                                                style={{ color: '#59d3ec' }}></i>
-
-                                            <p className="mb-0">Task</p>
-                                        </div>
-                                        <div className="d-flex mb-4">
-                                            <div
-                                                style={{ backgroundColor: '#59d3ec', color: 'aliceblue' }}
-                                                className="rounded-2 mx-1">
-                                                <i class="fa fa-clone mx-1" aria-hidden="true"></i>
-                                            </div>
-                                            <p className="mb-0">Sub-task</p>
-                                        </div>
-                                        <div className="d-flex mb-4">
-                                            <div
-                                                style={{ backgroundColor: '#59d3ec', color: 'aliceblue' }}
-                                                className="rounded-2 mx-1 ">
-                                                <i class="fa fa-cog p-1 " aria-hidden="true"></i>
-                                            </div>
-                                            <p className="mb-0">Manage types</p>
-                                        </div>
-                                    </div>
-                                    <div className="col">
-                                        <p className="text-secondary">Distribution</p>
-                                        <div className="progress-w-percent">
-                                            <span className="progress-value fw-bold">0%</span>
-                                            <ProgressBar now={72} className="progress-sm" />
-                                        </div>
-                                        <div className="progress-w-percent">
-                                            <span className="progress-value fw-bold">0%</span>
-                                            <ProgressBar now={72} className="progress-sm" />
-                                        </div>
-                                    </div>
-                                    <div className="col ">
-                                        <p className="text-secondary">Count</p>
-                                        <p className="text-primary  mx-4 mb-4">0</p>
-                                        <p className="text-primary mx-4 mb-4 pt-3">0</p>
-                                    </div> */}
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
