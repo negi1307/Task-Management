@@ -299,25 +299,7 @@ const Boards = (props) => {
             <div className="status">
          
                 <div className="search_info ms-auto ">
-                <select
-                            name="Assignee"
-                            role='button'
-                            className=" me-1 form-select ps-3 border-0 fw-medium"
-                            id="exampleForm.ControlInput1"
-                            {...register('Assignee', { required: true })}
-                            // onChange={handleAssigneefilter}
-                            style={{ backgroundColor: '#F1F3FA' }}
-                        >
-                            <option value={''} selected>
-                                All Tasks
-                            </option>
-                            {store?.getAllUsers?.data?.response?.map((ele, ind) => (
-                                <option value={ele?._id}>
-                                    {' '}
-                                    {ele?.firstName} {ele?.lastName}
-                                </option>
-                            ))}
-                        </select>
+           
                     <input
                         type="search"
                         value={search}
