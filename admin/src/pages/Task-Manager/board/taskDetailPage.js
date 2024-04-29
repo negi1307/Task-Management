@@ -21,7 +21,7 @@ import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 import noimage from '../../../assets/images/noimage.png';
 import { getSingleSprint } from '../../../redux/actions';
 const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
-    console.log(editData,'edit4444')
+    console.log(editData, 'edit4444')
     const store = useSelector((state) => state);
     const technology = store?.getSingleSprintTask?.data?.response;
     const dispatch = useDispatch();
@@ -47,7 +47,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
             dispatch(getHistoryAction(editData?.id));
         }
     };
- 
+
 
 
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
@@ -186,7 +186,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 <Modal.Title id="" className="text-start modal_titles">
                                     Task Detail : {editData?.summary ? editData.summary.charAt(0).toUpperCase() + editData.summary.slice(1, 10) : ''}
                                 </Modal.Title>
-                             
+
                             </Col>
                             <Col lg={5} className="text-end pt-2">
                                 <button type="button" className="close border-0 bg-black text-white" onClick={closeModalHandle} aria-label="Close">
@@ -209,7 +209,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'All' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                    <span><i class="bi bi-people-fill "></i></span> All
+                                        <span><i class="bi bi-people-fill "></i></span> All
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -217,7 +217,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Comments' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                     <span><i class="bi bi-chat-right-text-fill"></i></span>  Comments
+                                        <span><i class="bi bi-chat-right-text-fill"></i></span>  Comments
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -225,7 +225,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'History' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                      <span><i class="bi bi-clock-history"></i></span>  History
+                                        <span><i class="bi bi-clock-history"></i></span>  History
                                     </Button>
 
                                     {/* Add Sub-tasks button */}
@@ -236,7 +236,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }
                                         className={`btn px-2 fw-bold py-1  web_button ${connectComponent === 'AddSubtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                       <span><i class="bi bi-pencil-square"></i></span> Add Sub-tasks
+                                        <span><i class="bi bi-pencil-square"></i></span> Add Sub-tasks
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -244,7 +244,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Bugs' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                      <span><i class="bi bi-bug-fill"></i></span>  Bugs
+                                        <span><i class="bi bi-bug-fill"></i></span>  Bugs
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -252,7 +252,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Subtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                      <span><i class="bi bi-check-square-fill"></i></span>  SubTask
+                                        <span><i class="bi bi-check-square-fill"></i></span>  SubTask
                                     </Button>
 
 
@@ -376,7 +376,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     className="form-select"
                                                     style={{ border: '1px solid #a6b3c3' }}
                                                     {...register('priority', { required: true })}>
-                                                    <option hidden selected>
+                                                    <option hidden>
                                                         Select
                                                     </option>
                                                     <option value="Critical">
@@ -457,7 +457,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     name="type"
                                                     className="form-select"
                                                     {...register('type', { required: true })}>
-                                                    <option hidden selected>
+                                                    <option hidden>
                                                         Select
                                                     </option>
                                                     <option value="SubTask">
@@ -567,7 +567,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 </>
                             ) : connectComponent === 'History' ? (
 
-                         
+
                                 <div className="d-flex flex-column justify-content-center my-2">
                                     {historyResponse && historyResponse.map((item, index) => (
                                         <div key={index} className='d-flex gap-2 align-items-center lh-lg'>
@@ -770,7 +770,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Technology :</th>
                                             <td>{editData?.technology?.name} </td>
                                         </tr>
-                                        
+
                                         <tr className='text-start'>
                                             <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Reporter :</th>
                                             <td>{editData?.reporterInfo?.firstName} {editData?.reporterInfo?.lastName}</td>

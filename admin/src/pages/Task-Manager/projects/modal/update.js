@@ -243,7 +243,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('project_type', { required: true })}>
-                                                <option value="" hidden selected>
+                                                <option value="" hidden >
                                                     Choose an Project Type{' '}
                                                 </option>
                                                 <option value="T&M">T&M</option>
@@ -288,7 +288,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 Status<span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('projectstatus', { required: true })}>
-                                                <option hidden selected>
+                                                <option hidden>
                                                     Choose an Project Status
                                                 </option>
                                                 <option value="Ongoing">Ongoing</option>

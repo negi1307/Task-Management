@@ -132,7 +132,7 @@ const AllMillStones = () => {
                                                         />
                                                         <label
                                                             class="form-check-label text-success"
-                                                            for="flexSwitchCheckChecked">
+                                                            htmlFor="flexSwitchCheckChecked">
                                                             Active
                                                         </label>
                                                     </div>
