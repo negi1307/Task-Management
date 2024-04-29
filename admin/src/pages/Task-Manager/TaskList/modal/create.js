@@ -407,7 +407,7 @@ const Create = ({ modal, CloseModal }) => {
                                     <Col lg={6}>
 
                                         <div class="mb-2">
-                                            <label class="form-label" for="exampleForm.ControlTextarea1">
+                                            <label class="form-label" htmlFor="exampleForm.ControlTextarea1">
                                                 Attachment :
                                             </label>
                                             <div onClick={openFileInput}>

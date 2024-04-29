@@ -180,7 +180,7 @@ const CustomerCreateFrom = (props) => {
                                     Status<span className="text-danger">*</span>:
                                 </Form.Label>
                                 <Form.Select {...register('status', { required: true })}>
-                                    <option value='' hidden selected> --select--</option>
+                                    <option value='' hidden> --select--</option>
                                     <option value="1" selected={showModel?.editData?.status === 1 && true}>CONVERTED</option>
                                     <option value="0" selected={showModel?.editData?.status === 0 && true}>NOT-CONVERTED</option>
                                 </Form.Select>
@@ -197,7 +197,7 @@ const CustomerCreateFrom = (props) => {
                                     STAGE<span className="text-danger">*</span>:
                                 </Form.Label>
                                 <Form.Select {...register('stage', { required: true })}>
-                                    <option value='' hidden selected> --select--</option>
+                                    <option value='' hidden> --select--</option>
                                     <option value="1" selected={showModel?.editData?.stage === 1 && true}>HOT</option>
                                     <option value="2" selected={showModel?.editData?.stage === 2 && true}>COLD</option>
                                     <option value="3" selected={showModel?.editData?.stage === 3 && true}>MEDIUM</option>
@@ -213,7 +213,7 @@ const CustomerCreateFrom = (props) => {
                                     TYPE<span className="text-danger">*</span>:
                                 </Form.Label>
                                 <Form.Select {...register('type', { required: true })}>
-                                    <option value='' hidden selected> --select--</option>
+                                    <option value='' hidden> --select--</option>
                                     <option value="1" selected={showModel?.editData?.type?.[0] === 1 && true}>WEB</option>
                                     <option value="2" selected={showModel?.editData?.type?.[0] === 2 && true}>MOBILE</option>
                                 </Form.Select>

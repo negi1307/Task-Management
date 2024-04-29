@@ -1,65 +1,40 @@
 import React from 'react'
 import { Card, ProgressBar } from 'react-bootstrap';
 import Chart from 'react-apexcharts';
-import { getPriorityTaskBoard, getweekTaskBoard, getTaskStatusCount, getTaskCount } from '../../../redux/Summary/action'
+import { getPriorityTaskBoard, getTaskCount } from '../../../redux/Summary/action';
 import { useDispatch, useSelector, dispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { getAllTask, getHistoryAction } from '../../../redux/actions';
+import { useParams } from 'react-router-dom';
+import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { Table } from '@mui/material';
 
 const Summary = () => {
+    const { projectId, milestoneId, spriteId } = useParams();
     const store = useSelector(state => state)
-    //   console.log("priorty dataaaaaaaaaaaaaaaaaa",store)
-    const [priorityGraph, setPriorityGraph] = useState([])
-    const PriorityGraphDta = store?.getPriorityTaskBoard;
-    const weekTaskCount = store?.getWeekCountTaskBoard?.data?.response
-    const StatusCount = store?.getTaskStatusCount;
+    const weekTaskCount = store?.getWeekCountTaskBoard?.data?.response;
+    const priorityTaskCount = store?.getPriorityTaskBoard?.data?.response;
+    // console.log({ priorityTaskCount })
     const TaskCount = store?.getTaskCount?.data?.response
-    const [StatusCountDonut, setStatusCount] = useState([])
-    console.log("PriorityGraphDtaaa", PriorityGraphDta)
     const dispatch = useDispatch()
-    // useEffect(() => {
-    // dispatch(getPriorityTaskBoard())
-    // dispatch(getweekTaskBoard())
-    // dispatch(getTaskStatusCount())
-    // dispatch(getTaskCount())
-    // }, [])
+    const assigneeId = localStorage.getItem('userId')
+    const tasks = store?.getAllTaskReducer?.data.Response;
+    const [historyResponse, setHistoryResponse] = useState(null);
     useEffect(() => {
-        if (PriorityGraphDta?.data?.status == 200) {
-            setPriorityGraph(PriorityGraphDta?.data?.response)
-        }
-    }, [PriorityGraphDta]);
+        dispatch(getAllTask({ sprintId: spriteId, searchString: '', assigneeId: assigneeId }));
+        dispatch(getTaskCount({ sprintId: spriteId }));
+        dispatch(getPriorityTaskBoard({ sprintId: spriteId }));
+        dispatch(getHistoryAction())
+    }, []);
     useEffect(() => {
-        if (StatusCount?.data?.status == 200) {
-            setStatusCount(StatusCount?.data?.response)
+        const historyData = store?.getHistoryReducer?.data?.response;
+        if (historyData) {
+            setHistoryResponse(historyData);
         }
-    }, [StatusCount]);
-    const apexDonutOpts = {
-        chart: {
-            height: 340,
-            type: 'donut',
-        },
-        labels: StatusCountDonut?.map((ele, i) => {
-            return ele.name;
-        }),
-        colors: ['#727cf5', '#0acf97', '#fa5c7c', '#ffbc00'],
-        legend: {
-            show: false,
-        },
-        responsive: [
-            {
-                breakpoint: 376,
-                options: {
-                    chart: {
-                        width: 250,
-                        height: 250,
-                    },
-                    legend: {
-                        position: 'bottom',
-                    },
-                },
-            },
-        ],
-    };
+    })
     const options = {
         chart: {
             type: 'bar',
@@ -67,59 +42,67 @@ const Summary = () => {
         plotOptions: {
             bar: {
                 horizontal: false,
-                endingShape: 'rounded',
-            },
+            }
         },
-        // colors: ['#FF5733', '#FFC300', '#DAF7A6', '#5DADE2', '#AF7AC5'], // Specify different colors for each bar
         dataLabels: {
             enabled: false,
         },
         xaxis: {
-            categories: priorityGraph?.map((ele, ind) => ele?.name),
+            categories: priorityTaskCount?.map((ele, ind) => ele?.name),
         },
-        colors: ['#727cf5', '#0acf97', '#fa5c7c'],
     };
 
     const series = [
         {
-            name: 'Series 1',
-            data: priorityGraph?.map((ele, ind) => ele?.count),
+            name: 'Count',
+            data: priorityTaskCount?.map((ele, ind) => ele?.count),
         },
     ];
 
-    const apexDonutData = [44, 55, 41, 17];
+    // function generateLink(userActivity, item) {
+    //     switch (userActivity) {
+    //         case "Created milestone":
+    //             return `/dashboard/projects/${item?.sprintId?.projectId}`;
+    //         case "Created Sprint":
+    //             return `/dashboard/singleMilestonesprint/${item?.sprintId?.projectId}/${item?.milestoneId?._id}`;
+    //         case "Created Task":
+    //             return `/dashboard/taskBord/projectId=${item?.sprintId?.projectId}&milestoneId=${item?.milestoneId?._id}&spriteId=${item?.sprintId?._id}`;
+    //         case "Create Project":
+    //             return "/dashboard/projects";
+    //         default:
+    //             return "/dashboard/adminsummary";
+    //     }
+    // }
     return (
         <div className="all_bg add_height_task" style={{ height: '100%' }}>
             <div className="container">
                 <div className="row">
                     <div className="col  border_clr  m-2 rounded-4 bg-white date">
-                        <div className="d-flex countstatus">
+                        <div className="d-flex justify-content-center flex-column countstatus">
                             <div className="bg_clrr bg_info_clr ">
                                 <i class="fa fa-check" aria-hidden="true"></i>
                             </div>
-                            <div className="mx-3 class_info ">
+                            <div className="mx-3 class_info text-start">
                                 <h5 className="mb-0 mt-1 text-secondary count">
-                                    {weekTaskCount?.doneCount} <span>Done</span>
+                                    {tasks?.doneCount} <span>tasks done</span>
                                 </h5>
                             </div>
                         </div>
-                        <p className="m-0 text-secondary">Count in the last 7 days</p>
                     </div>
                     <div className="col  border_clr  m-2 rounded-4 bg-white date">
-                        <div className="d-flex countstatus">
+                        <div className="d-flex flex-column justify-content-center countstatus">
                             <div className="bg_clrr bg_info_clr2">
                                 <i class="fa fa-plus" aria-hidden="true"></i>
                             </div>
                             <div className="mx-3 ">
                                 <h5 className="mb-0 mt-1 text-secondary count">
                                     {' '}
-                                    {weekTaskCount?.createdCount} <span>Created</span>
+                                    {TaskCount?.tasksCount} <span>total tasks</span>
                                 </h5>
                             </div>
                         </div>
-                        <p className="m-0 text-secondary">Count in the last 7 days</p>
                     </div>
-                    <div className="col  border_clr  m-2 rounded-4 bg-white date">
+                    {/* <div className="col  border_clr  m-2 rounded-4 bg-white date">
                         <div className="d-flex countstatus ">
                             <div className="bg_clrr bg_info_clr3">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -133,20 +116,19 @@ const Summary = () => {
                         </div>
 
                         <p className="m-0 text-secondary">Count in the last 7 days</p>
-                    </div>
+                    </div> */}
                     <div className="col  border_clr  m-2 rounded-4 bg-white date">
-                        <div className="d-flex countstatus">
+                        <div className="d-flex justify-content-center flex-column countstatus">
                             <div className="bg_clrr bg_info_clr4 ">
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
                             </div>
-                            <div className="mx-3 ">
+                            <div className="mx-3 text-start">
                                 <h5 className="mb-0 mt-1 text-secondary count">
-                                    {weekTaskCount?.dueCount} <span>Due</span>
+                                    {tasks?.dueTasksCount} <span>tasks due</span>
                                 </h5>
                             </div>
                         </div>
 
-                        <p className="m-0 text-secondary">Count in the last 7 days</p>
                     </div>
                 </div>
                 <div className="row">
@@ -157,45 +139,31 @@ const Summary = () => {
                             </div>
                             <div className="chart_div ">
                                 <div className="donut-chart">
-                                    <Chart
-                                        options={apexDonutOpts}
-                                        series={StatusCountDonut?.map((ele, i) => {
-                                            return ele.count;
-                                        })}
-                                        type="donut"
-                                        height={222}
-                                        className="apex-charts mb-4 mt-4"
+                                    <PieChart
+                                        series={[
+                                            {
+                                                data: [
+                                                    { id: 0, value: `${tasks?.todoCount}`, label: 'Todo', color: '#ADD8E6' },
+                                                    { id: 1, value: `${tasks?.testingCount}`, label: 'Testing', color: '#90EE90' },
+                                                    { id: 2, value: `${tasks?.inProgressCount}`, label: 'In-progress', color: '#FFFF00' },
+                                                    { id: 3, value: `${tasks?.doneCount}`, label: 'Done', color: '#008000' },
+                                                    { id: 4, value: `${tasks?.holdCount}`, label: 'Hold', color: '#FFA500' }
+                                                ],
+                                                highlightScope: { faded: 'global', highlighted: 'item' },
+                                                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                                            },
+                                        ]}
+                                        height={250}
+                                        width={600}
                                     />
-                                    <ul className="legend">
-                                        {/* <li><span className="color" style={{backgroundColor: 'rgb(217, 216, 216)'}} />Open
-                  </li> */}
-                                        <li>
-                                            <span className="color" style={{ backgroundColor: 'rgb(244, 108, 108)' }} />
-                                            To-do
-                                        </li>
-                                        <li>
-                                            <span className="color" style={{ backgroundColor: 'rgb(100, 100, 245)' }} />
-                                            In Progress
-                                        </li>
-                                        <li>
-                                            <span className="color" style={{ backgroundColor: 'rgb(187, 125, 245)' }} />
-                                            Hold
-                                        </li>
-                                        {/* <li><span className="color" style={{backgroundColor: '#71d871'}} />Cancelled</li> */}
-                                        <li>
-                                            <span className="color" style={{ backgroundColor: '#59d3ec' }} />
-                                            done
-                                        </li>
-                                        {/* <li><span className="color" style={{backgroundColor: '#f1cc36'}} />Rejected</li> */}
-                                    </ul>
                                 </div>
                                 <div className="donut-chart2">
                                     <ul className="legend ">
-                                        {StatusCountDonut?.map((item, index) => (
+                                        {/* {StatusCountDonut?.map((item, index) => (
                                             <li>
                                                 <span className="text-primary">{item?.count}</span>
                                             </li>
-                                        ))}
+                                        ))} */}
                                     </ul>
                                 </div>
                             </div>
@@ -214,6 +182,43 @@ const Summary = () => {
                                         </p>
                                     </div>
                                 </div>
+                                <div className="col-12">
+                                    {historyResponse && historyResponse.map((item, index) => (
+                                        <div key={index} className='d-flex gap-2 align-items-center lh-lg text-nowrap'>
+                                            <OverlayTrigger
+                                                placement="top"
+                                                overlay={
+                                                    <Tooltip id="tooltip1">
+                                                        {item?.userId?.firstName}
+                                                        {item?.userId?.lastName}
+                                                    </Tooltip>
+                                                }>
+                                                <div className="mt-1 cp">
+                                                    <span
+                                                        style={{
+                                                            backgroundColor: '#605e5a',
+                                                            borderRadius: '100%',
+                                                            padding: '3px 4px',
+
+                                                            color: 'white',
+                                                            fontWeight: '600',
+                                                        }}>
+                                                        {item?.userId?.firstName.charAt(0).toUpperCase()}
+                                                        {item?.userId?.lastName.charAt(0).toUpperCase()}
+                                                    </span>
+                                                </div>
+                                            </OverlayTrigger>
+                                            <span>
+                                                {item?.userId?.firstName && item.userId.firstName.replace(/^\w/, (c) => c.toUpperCase())} {item?.userId?.lastName && item.userId.lastName.replace(/^\w/, (c) => c.toUpperCase())}
+                                                {item.userActivity === "Created milestone" && <span> created milestone</span>}
+                                                {item.userActivity === "Created Sprint" && <span> created sprint</span>}
+                                                {item.userActivity === "Create Project" && <span> create project</span>}
+                                                {item.userActivity === "Created Task" && <span> created task</span>}
+                                                {' on ' + new Date(item.createdAt).toLocaleDateString() + '.'}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -223,8 +228,8 @@ const Summary = () => {
                         <div className="p-4 ">
                             <div className="col-12">
                                 <h5 className="mb-3 states">Priority breakdown</h5>
-
                                 <Chart options={options} series={series} type="bar" height={350} />
+                                {/* <Chart options={options} series={series} type="bar" height={350} /> */}
                             </div>
                         </div>
                     </div>
@@ -237,7 +242,37 @@ const Summary = () => {
                             </div>
                             <div className="p-4">
                                 <div className="row ">
-                                    <div className="col">
+                                    <Table className='text-nowrap lh-lg'>
+                                        <thead>
+                                            <tr>
+                                                <th className='text-start'>Task</th>
+                                                <th className='text-start'>Count</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td className='text-start'>Todo</td>
+                                                <td className='text-start'>{tasks?.todoCount}</td>
+                                            </tr>
+                                            <tr>
+                                                <td className='text-start'>In-progress</td>
+                                                <td className='text-start'>{tasks?.inProgressCount}</td>
+                                            </tr>
+                                            <tr>
+                                                <td className='text-start'>Testing</td>
+                                                <td className='text-start'>{tasks?.testingCount}</td>
+                                            </tr>
+                                            <tr>
+                                                <td className='text-start'>Done</td>
+                                                <td className='text-start'>{tasks?.doneCount}</td>
+                                            </tr>
+                                            <tr>
+                                                <td className='text-start'>Hold</td>
+                                                <td className='text-start'>{tasks?.holdCount}</td>
+                                            </tr>
+                                        </tbody>
+                                    </Table>
+                                    {/* <div className="col">
                                         <p className="text-secondary">Type</p>
                                         <div className="d-flex mb-4 ">
                                             <i
@@ -279,7 +314,7 @@ const Summary = () => {
                                         <p className="text-secondary">Count</p>
                                         <p className="text-primary  mx-4 mb-4">0</p>
                                         <p className="text-primary mx-4 mb-4 pt-3">0</p>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>

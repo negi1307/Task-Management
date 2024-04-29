@@ -30,7 +30,7 @@ const Update = ({ modal, closeModal, editData }) => {
         });
     }, [modal]);
 
-    console.log(editData, 'pppppp');
+    // console.log(editData, 'pppppp');
     const onSubmit = (data) => {
         let body = {
             id: editData?._id,
@@ -118,11 +118,18 @@ const Update = ({ modal, closeModal, editData }) => {
                                                     <Form.Control
                                                         type="text"
                                                         placeholder="Please Enter Technology Name"
-                                                        {...register('TechnologyName', { required: true })}
+                                                        {...register('TechnologyName', {
+                                                            required: true,
+                                                            pattern: /^[^\s]+$/
+                                                        })}
                                                     />
                                                     {errors.TechnologyName?.type === 'required' && (
                                                         <span className="text-danger"> This field is required *</span>
                                                     )}
+                                                    {errors.TechnologyName?.type === 'pattern' && (
+                                                        <span className="text-danger">Spaces are not allowed</span>
+                                                    )}
+
                                                 </Col>
                                             </Row>
                                         </Form.Group>

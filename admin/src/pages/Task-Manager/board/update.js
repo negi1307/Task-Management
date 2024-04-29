@@ -257,7 +257,7 @@ const UpdateTask = ({ modal, closeModal, editData, projectId, milestoneId, colum
                                                     </Form.Label>
 
                                                     <Form.Select {...register('Assignee', { required: true })}>
-                                                        <option value={''} hidden selected>--Select--</option>
+                                                        <option value={''} hidden>--Select--</option>
                                                         {store?.getAllUsers?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}>
                                                                 {' '}
@@ -281,7 +281,7 @@ const UpdateTask = ({ modal, closeModal, editData, projectId, milestoneId, colum
                                                         Reporter<span className="text-danger">*</span>:
                                                     </Form.Label>
                                                     <Form.Select {...register('Reporter', { required: true })}>
-                                                        <option value={''} hidden selected>--Select--</option>
+                                                        <option value={''} hidden >--Select--</option>
                                                         {store?.getAllRoles?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.role} </option>
                                                         ))}
@@ -365,7 +365,7 @@ const UpdateTask = ({ modal, closeModal, editData, projectId, milestoneId, colum
                                                         Status <span className="text-danger">*</span>:
                                                     </Form.Label>
                                                     <Form.Select {...register('status', { required: true })}>
-                                                        <option hidden selected>-------select----</option>
+                                                        <option hidden>-------select----</option>
                                                         <option value="1" >todo</option>
                                                         <option value="2">inProgress</option>
                                                         <option value="3">Testing</option>
@@ -379,7 +379,7 @@ const UpdateTask = ({ modal, closeModal, editData, projectId, milestoneId, colum
                                             </Col>
                                             <div class="col-lg-6">
                                                 <div class="mb-2">
-                                                    <label class="form-label" for="exampleForm.ControlInput1">
+                                                    <label class="form-label" htmlFor="exampleForm.ControlInput1">
                                                         Expected Hours <span class="text-danger">*</span>:
                                                     </label>
                                                     <input

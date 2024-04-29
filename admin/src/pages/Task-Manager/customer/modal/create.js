@@ -157,7 +157,7 @@ const Create = ({ modal, closemodal }) => {
                                         STAGE<span className="text-danger">*</span>:
                                     </Form.Label>
                                     <Form.Select {...register('stage', { required: true })}>
-                                        <option value="" hidden selected>
+                                        <option value="" hidden>
                                             {' '}
                                             --select--
                                         </option>

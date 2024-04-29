@@ -311,7 +311,7 @@ const Boards = () => {
                             onChange={handleAssigneefilter}
                             style={{ backgroundColor: '#F1F3FA' }}
                         >
-                            <option value={''} selected>
+                            <option value={''} >
                                 All Tasks
                             </option>
                             {store?.getAllUsers?.data?.response?.map((ele, ind) => (

@@ -78,10 +78,16 @@ const CreateCategory = ({ modal, closeModal }) => {
                                                     <Form.Control
                                                         type="text"
                                                         placeholder="Please Enter Category Name"
-                                                        {...register('category', { required: true })}
+                                                        {...register('category', {
+                                                            required: true,
+                                                            pattern: /^[^\s]+$/
+                                                        })}
                                                     />
                                                     {errors.category?.type === 'required' && (
                                                         <span className="text-danger"> This field is required *</span>
+                                                    )}
+                                                    {errors.category?.type === 'pattern' && (
+                                                        <span className="text-danger">Spaces are not allowed</span>
                                                     )}
                                                 </Col>
                                             </Row>

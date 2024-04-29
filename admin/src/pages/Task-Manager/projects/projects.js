@@ -95,8 +95,8 @@ const Projects = () => {
                 projectId: projectId,
                 activeStatus: updatedStatus,
             };
-            await dispatch(updateProject(body));
             await dispatch(getAllProjects({ status: status, skip: skip, projectStatus: projectStatus }));
+            await dispatch(updateProject(body));
             setRender(!render);
             if (isChecked) {
                 ToastHandle('success', 'Project Activated Successfully');
@@ -121,22 +121,14 @@ const Projects = () => {
         }
     };
     // useEffect(() => {
+    //     setprojectStatus('Ongoing');
     //     let body = {
     //         status: status,
     //         skip: skip,
-    //         projectStatus: projectStatus,
+    //         projectStatus: 'Ongoing',
     //     };
     //     dispatch(getAllProjects(body));
-    // }, [render]);
-    useEffect(() => {
-        setprojectStatus('Ongoing');
-        let body = {
-            status: status,
-            skip: skip,
-            projectStatus: 'Ongoing',
-        };
-        dispatch(getAllProjects(body));
-    }, []);
+    // }, [status, skip, projectStatus]);
     useEffect(() => {
         if (deletehandle?.status == 200) {
             ToastHandle('success', deletehandle?.message);
@@ -173,10 +165,6 @@ const Projects = () => {
         }
     };
 
-    // const handeladdtask = () => {
-    //     setShowModal(!showModal);
-    //     dispatch(getAllProjects({ status: 1, skip: 1, projectStatus: 'Ongoing' }));
-    // }
 
     return (
         <>
@@ -272,7 +260,7 @@ const Projects = () => {
                                 <thead>
                                     <tr>
                                         <th className='fw-bold text-start'>#</th>
-                                        <th className='fw-bold text-start'> Project Name</th>
+                                        <th className='fw-bold text-start'>Project Name</th>
                                         <th className='fw-bold text-start'>Client Name</th>
                                         <th className='fw-bold text-start'>Project Type</th>
                                         <th className='fw-bold text-start'>Project Start Date</th>
@@ -285,7 +273,7 @@ const Projects = () => {
                                 <tbody>
                                     {store?.getProject?.data?.response?.projects?.map((ele, ind) => {
                                         return (
-                                            <tr className="align-middle">
+                                            <tr className="align-middle" key={ele._id}>
                                                 <th scope="row" className='text-start'>{(skip - 1) * 10 + ind + 1}</th>
                                                 <td className="cp text-start">
 
