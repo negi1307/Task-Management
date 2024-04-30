@@ -38,26 +38,25 @@ const Create = ({ modal, CloseModal, projectId, milestoneId, }) => {
             startDate: startDate.toISOString(),
             endDate: endDate.toISOString(),
         };
-
         dispatch(addSprint(body));
         reset();
         setStartDate(null); // Reset the startDate state variable
         setEndDate(null);
-        CloseModal();
+        // CloseModal('render');
     };
 
     const handleClose = () => {
         reset();
-        setStartDate(null); // Reset the startDate state variable
+        setStartDate(null);
         setEndDate(null);
-        CloseModal();
+        // CloseModal();
     };
 
     useEffect(() => {
-        if (successHandle?.data?.status === 200) {
+        if (successHandle?.data?.status === '200') {
             ToastHandle('success', successHandle?.data?.message);
             CloseModal('render');
-        } else if (successHandle?.data?.status === 400 || successHandle?.data?.status === 500) {
+        } else if (successHandle?.data?.status === '400' || successHandle?.data?.status === '500') {
             ToastHandle('error', successHandle?.data?.message);
         }
 
@@ -96,7 +95,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId, }) => {
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Please Enter Sprint Name"
-                                                {...register('Name', { required: true, pattern: /^[^\s]+$/ })}
+                                                {...register('Name', { required: true, pattern: /^[^\s].*$/ })}
                                             />
                                             {errors.Name?.type === 'required' && (
                                                 <span className="text-danger"> This field is required *</span>

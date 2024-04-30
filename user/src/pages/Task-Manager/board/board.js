@@ -169,69 +169,34 @@ const Boards = (props) => {
 
         // Check if destination column is "In Progress" and if it already has a task
         if (destination.droppableId === '2' && columns['2'].items.length > 0) {
-            ToastHandle('error', 'Only one task allowed in progress at a time')
+            ToastHandle('error', 'Only one task allowed in progress at a time');
             return;
         }
 
-        if (source.droppableId !== destination.droppableId) {
-            const sourceColumn = columns[source.droppableId];
-            const destColumn = columns[destination.droppableId];
-            const sourceItems = sourceColumn.items?.slice();
-            const destItems = destColumn.items?.slice();
-            const [removed] = sourceItems?.splice(source.index, 1);
-            const draggedCardId = removed.id; // Get the ID of the dragged card
+        const sourceColumn = columns[source.droppableId];
+        const destColumn = columns[destination.droppableId];
+        const sourceItems = sourceColumn.items.slice();
+        const destItems = destColumn.items.slice();
+        const [removed] = sourceItems.splice(source.index, 1);
+        destItems.splice(destination.index, 0, removed);
 
-            destItems?.splice(destination.index, 0, removed);
+        setColumns({
+            ...columns,
+            [source.droppableId]: {
+                ...sourceColumn,
+                items: sourceItems,
+            },
+            [destination.droppableId]: {
+                ...destColumn,
+                items: destItems,
+            },
+        });
 
-
-            // Dispatch an action when a task is moved to the "In Progress" column
-            // if (destination.droppableId === '2') {
-            //     dispatch(addLoginTime({ taskId: draggedCardId }));
-            // }
-
-
-            setColumns({
-                ...columns,
-                [source.droppableId]: {
-                    ...sourceColumn,
-                    items: sourceItems,
-                },
-                [destination.droppableId]: {
-                    ...destColumn,
-                    items: destItems,
-                },
-            });
-            handelupdatetask(result);
-            setBooleanUpdate(true)
-
-            // // Dispatch an action when a task is moved to columns 4 or 5
-            // if (destination.droppableId === '4' || destination.droppableId === '5') {
-            //     dispatch(addLoginTimeStop({ taskId: draggedCardId }));
-            // }
-
-            // Dispatch an action when a task is moved from "In Progress" to columns 4 or 5
-            // if (source.droppableId === '2' && (destination.droppableId === '4' || destination.droppableId === '5')) {
-            //     dispatch(addLoginTimeStop({ taskId: draggedCardId }));
-            //     ToastHandle('success', 'Stop time recorded')
-            // }
-
-
-        } else {
-            const column = columns[source.droppableId];
-            const copiedItems = [...column.items];
-            const [removed] = copiedItems.splice(source.index, 1);
-            copiedItems.splice(destination.index, 0, removed);
-            setColumns({
-                ...columns,
-                [source.droppableId]: {
-                    ...column,
-                    items: copiedItems,
-                },
-            });
-            handelupdatetask(result);
-            setBooleanUpdate(true)
-        }
+        // Update task status and trigger the update
+        handelupdatetask(result);
+        setBooleanUpdate(true);
     };
+
 
     useEffect(() => {
         if (statushandle?.data?.status == 200) {
@@ -297,9 +262,9 @@ const Boards = (props) => {
     return (
         <>
             <div className="status">
-         
+
                 <div className="search_info ms-auto ">
-           
+
                     <input
                         type="search"
                         value={search}

@@ -171,7 +171,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Please Enter Project Name"
-                                                {...register('projectName', { required: true, pattern: /^[^\s]+$/ })}
+                                                {...register('projectName', { required: true, pattern: /^[^\s].*$/ })}
                                             />
                                             {errors.projectName?.type === 'required' && (
                                                 <span className="text-danger"> This field is required *</span>
@@ -189,7 +189,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Please Enter Client Name"
-                                                {...register('clientName', { required: true, pattern: /^[^\s]+$/ })}
+                                                {...register('clientName', { required: true, pattern: /^[^\s].*$/ })}
                                             />
                                             {errors.clientName?.type === 'required' && (
                                                 <span className="text-danger"> This field is required *</span>

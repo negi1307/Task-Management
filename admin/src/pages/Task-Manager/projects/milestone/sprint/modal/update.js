@@ -19,10 +19,7 @@ const Update = ({ modal, closeModal, editData }) => {
 
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
-    // disable previous date
     const today = new Date();
-    // console.log(today, 'today');
-    // end date
     const handleStartDate = (date) => {
         setStartDate(date);
     };
@@ -48,7 +45,6 @@ const Update = ({ modal, closeModal, editData }) => {
             startDate: startDate,
             endDate: endDate,
         };
-        console.log('editsprit', body);
         dispatch(updateSprint(body));
     };
     useEffect(() => {
@@ -113,7 +109,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Please Enter Sprint Name"
-                                                {...register('title', { required: true, pattern: /^[^\s]+$/ })}
+                                                {...register('title', { required: true, pattern: /^[^\s].*$/ })}
                                             />
                                             {errors.title?.type === 'required' && (
                                                 <span className="text-danger"> This field is required *</span>

@@ -36,7 +36,8 @@ const Projects = () => {
     const [statusModal, setStatusModal] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [formSubmitted, setFormSubmitted] = useState(false);
-
+    const updateResponse = store?.updateProject?.data?.status;
+    // console.log({ updateResponse })
     const closeaddModal = () => {
         // getalltasks();
     }
@@ -69,58 +70,31 @@ const Projects = () => {
         setOpenEditModal(false);
         updateProjectList();
     };
-    const handleYes = () => {
-        if (checkedStatus) {
-            let body = {
-                projectId: checkedData._id,
-                activeStatus: true,
-            };
-            dispatch(updateProject(body));
-            // let bodyprojects = {
-            //     status: status,
-            //     skip: skip,
-            //     projectStatus: projectStatus, // Use projectStatus state directly
-            // };
-            // dispatch(getAllProjects(bodyprojects));
-        } else {
-            let body = {
-                projectId: checkedData._id,
-                activeStatus: false,
-            };
-            dispatch(updateProject(body));
-            // let bodyprojects = {
-            //     status: status,
-            //     skip: skip,
-            //     projectStatus: projectStatus, // Use projectStatus state directly
-            // };
-            // dispatch(getAllProjects(bodyprojects));
+    const handleYes = async () => {
+        try {
+            if (checkedStatus) {
+                let body = {
+                    projectId: checkedData._id,
+                    activeStatus: true,
+                };
+                await dispatch(updateProject(body));
+            } else {
+                let body = {
+                    projectId: checkedData._id,
+                    activeStatus: false,
+                };
+                await dispatch(updateProject(body));
+            }
+
+        } catch (error) {
+            console.error("Error updating project:", error);
         }
+
+        // Close the status modal
         setStatusModal(false);
     };
+
     const handleStatusChange = async (e, data) => {
-        // try {
-        //     const isChecked = e.target.checked;
-        //     const projectId = data._id;
-
-        //     const updatedStatus = isChecked ? true : false;
-        //     const body = {
-        //         projectId: projectId,
-        //         activeStatus: updatedStatus,
-        //     };
-        //     await dispatch(getAllProjects({ status: status, skip: skip, projectStatus: projectStatus }));
-
-        //     setRender(!render);
-        //     if (isChecked) {
-        //         await dispatch(updateProject(body));
-        //         ToastHandle('success', 'Project Activated Successfully');
-        //     } else {
-        //         await dispatch(updateProject(body));
-        //         ToastHandle('success', 'Project Deactivated Successfully');
-        //     }
-        // } catch (error) {
-        //     console.error('Error:', error);
-        //     ToastHandle('error', 'An error occurred. Please try again.');
-        // }
         if (e.target.checked) {
             setCheckedStatus(true);
         } else {
@@ -128,7 +102,6 @@ const Projects = () => {
         }
         setCheckedData(data);
         setStatusModal(true);
-
     };
 
     const handleActive = (val) => {
@@ -151,7 +124,10 @@ const Projects = () => {
             projectStatus: 'Ongoing', // Hardcode for initial fetch
         };
         dispatch(getAllProjects(body));
-    }, [status, skip]);
+        if (updateResponse === '200') {
+            dispatch(getAllProjects({ status: status, skip: skip, projectStatus: projectStatus }));
+        }
+    }, [status, skip, updateResponse]);
     useEffect(() => {
         if (deletehandle?.status == 200) {
             ToastHandle('success', deletehandle?.message);
@@ -349,12 +325,12 @@ const Projects = () => {
                                 </tbody>
                             </Table>
                         )}
-                        {getProjectList?.data?.totalPages > 0 && (
+                        {getProjectList?.data?.response?.totalPages > 0 && (
                             <Row>
                                 <Col lg={12} className="d-flex justify-content-end my-3 pe-4">
                                     <Pagination
                                         defaultPage={skip}
-                                        count={store?.getProject?.data?.totalPages}
+                                        count={store?.getProject?.data?.response?.totalPages}
                                         color="primary"
                                         variant="outlined"
                                         onChange={handlePaginationChange}
@@ -371,7 +347,10 @@ const Projects = () => {
                 <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
 
                 {/* Delete confirmation modal */}
-                <Modal show={statusModal} onHide={() => setStatusModal(false)}>
+                <Modal show={statusModal} onHide={() => {
+                    setStatusModal(false)
+                    dispatch(getAllProjects({ status: status, skip: skip, projectStatus: projectStatus }));
+                }}>
                     <Modal.Body>
                         Are you sure you want to {checkedStatus ? 'activate' : 'deactivate'} this Project?
                     </Modal.Body>
@@ -379,12 +358,12 @@ const Projects = () => {
                         <Button variant="secondary" className='border-0'
                             onClick={() => {
                                 setStatusModal(false);
-                                let body = {
-                                    status: status,
-                                    skip: skip,
-                                    projectStatus: projectStatus, // Use projectStatus state directly
-                                };
-                                dispatch(getAllProjects(body));
+                                // let body = {
+                                //     status: status,
+                                //     skip: skip,
+                                //     projectStatus: projectStatus, // Use projectStatus state directly
+                                // };
+                                // dispatch(getAllProjects(body));
                             }}>No</Button>
                         <Button variant="primary" className='web_buttons bg-black text-white border-0' onClick={() => handleYes()}>Yes</Button>
                     </Modal.Footer>

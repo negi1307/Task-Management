@@ -78,6 +78,7 @@ export default function RightBar(props) {
             dispatch(createTask(body));
             ToastHandle('success', 'Task created successfully');
             onFormSubmit();
+            reset();
         } else {
             alert('Please Select Project');
         }

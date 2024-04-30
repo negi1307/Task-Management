@@ -312,7 +312,7 @@ export default function Pagesaddtask(props) {
                                         type="text"
                                         id="exampleForm.ControlTextarea1"
                                         className="form-control"
-                                        {...register('Summary', { required: true, pattern: /^[^\s]+$/ })}
+                                        {...register('Summary', { required: true, pattern: /^[^\s].*$/ })}
                                     />
                                     {errors.Summary?.type === 'required' && (
                                         <span className="text-danger"> This field is required *</span>

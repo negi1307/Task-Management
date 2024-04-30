@@ -43,13 +43,7 @@ const Sprint = () => {
         dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
     }
     // ///////////////////////////
-    const closeupdatemodal = (val) => {
-        if (val == 'render') {
-            setRender(!render);
-        }
-        setOpenEditModal(false);
-        getUpdatedSprints();
-    };
+
 
 
     // CReate nrw sprint modal functions
@@ -65,7 +59,14 @@ const Sprint = () => {
             setRender(!render);
         }
         SetOpenModal(false);
-        getAddedSprints();
+        dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
+    };
+    const closeupdatemodal = (val) => {
+        if (val == 'render') {
+            setRender(!render);
+        }
+        setOpenEditModal(false);
+        getUpdatedSprints();
     };
 
     const handleActive = (val) => {
@@ -99,12 +100,8 @@ const Sprint = () => {
             sprintId: data._id,
             activeStatus: e.target.checked,
         };
-
         await dispatch(updateSprint(body));
-
-
         dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
-
         setStatusModal(false);
     };
 
@@ -150,11 +147,7 @@ const Sprint = () => {
 
 
     useEffect(() => {
-        // console.log("----------called");
         fetchSprintData(); // Fetch initial data
-        // const intervalId = setInterval(fetchSprintData, 50000); // Fetch data every 5 seconds
-
-        // return () => clearInterval(intervalId); // Clean up on unmount
     }, [status, milestoneId, skip]);
 
     const truncateDescription = (description, maxLength = 30) => {
