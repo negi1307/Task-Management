@@ -166,12 +166,12 @@ const Boards = (props) => {
     const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return;
         const { source, destination } = result;
-
-        // Check if destination column is "In Progress" and if it already has a task
-        if (destination.droppableId === '2' && columns['2'].items.length > 0) {
-            ToastHandle('error', 'Only one task allowed in progress at a time')
+        if (source.droppableId === '3' && destination.droppableId === '2') {
+            ToastHandle('error', 'Cannot move tasks from Hold to In Progress');
             return;
-        }
+          }
+          
+          
 
         if (source.droppableId !== destination.droppableId) {
             const sourceColumn = columns[source.droppableId];
