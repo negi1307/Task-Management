@@ -82,7 +82,7 @@ const Create = ({ modal, CloseModal, id, data }) => {
                                             </Form.Label>
                                             <Form.Control type="text" {...register('Name', { required: true })} />
                                             {errors.Name?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -96,7 +96,7 @@ const Create = ({ modal, CloseModal, id, data }) => {
                                                 {...register('Description', { required: true })}
                                             />{' '}
                                             {errors.Description?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -108,7 +108,7 @@ const Create = ({ modal, CloseModal, id, data }) => {
                                             </Form.Label>
                                             <Form.Control type="date" {...register('Startdate', { required: true })} />{' '}
                                             {errors.Startdate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -120,7 +120,7 @@ const Create = ({ modal, CloseModal, id, data }) => {
                                             </Form.Label>
                                             <Form.Control type="date" {...register('Enddate', { required: true })} />{' '}
                                             {errors.Enddate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -132,7 +132,7 @@ const Create = ({ modal, CloseModal, id, data }) => {
                                             </Form.Label>
                                             <Form.Control type="text" {...register('Status', { required: true })} />{' '}
                                             {errors.Status?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>

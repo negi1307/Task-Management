@@ -3,7 +3,7 @@ import { APICore } from '../../helpers/api/apiCore';
 const api = new APICore();
 
 export function getprioritytaskApi(data): any {
-    return api.get(URL.getPriorityTaskboard);
+    return api.get(`${URL.getPriorityTaskboard}?sprintId=${data.payload.sprintId}`);
 }
 
 export function getweektaskApi(data): any {

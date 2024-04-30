@@ -29,9 +29,9 @@ export function getHistoryApi(data): any {
 
 
 export function getTaskCommentApi(data): any {
-    const { taskId, } = data?.payload;
-    return api.get(`${URL.GetComment}${taskId}`);
-    
+    const { taskId } = data?.payload.taskId;
+    return api.get(`${URL.GetComment}?taskId=${taskId}`);
+
 }
 export function getBugsApi(data): any {
     const { taskId, type } = data?.payload;

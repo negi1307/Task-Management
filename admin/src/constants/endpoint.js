@@ -74,3 +74,9 @@ export const getUserRecord = '/task/userWorkingHours?'
 
 export const getReport = '/project/usersProjects'
 export const getProjectsCount = '/project/projectsCount'
+
+export const userTasks = '/users/specificUserTask'
+export const projectUsers = '/task/projectUserList'
+export const projectTasks = '/project/projectTasks'
+
+export const projectTimeSpent = '/project/projectTime'

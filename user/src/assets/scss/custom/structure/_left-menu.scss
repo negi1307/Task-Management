@@ -28,14 +28,14 @@
 // Wrapper
 .wrapper {
     height: 100%;
-    overflow: hidden;
+    // overflow: hidden;
     width: 100%;
 }
 
 //Content Page
 .content-page {
     margin-left: $leftbar-width;
-    overflow: hidden;
+    // overflow: hidden;
     padding: $topbar-height 12px 65px;
     min-height: 100vh;
 }

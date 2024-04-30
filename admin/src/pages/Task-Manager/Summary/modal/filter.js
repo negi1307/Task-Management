@@ -90,16 +90,31 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
         reset();
     };
 
-    let csvData = [];
+    let mainCsvData = [];
+    let totalTimeCsvData = [];
+
     if (Array.isArray(usersData)) {
-        csvData = usersData.map(data => ({
-            userName: data?.assigneeId?.firstName + ' ' + data?.assigneeId?.lastName,
-            taskMannualId: data?.taskMannualId,
-            Projectname: data?.projectId?.projectName ? data?.projectId?.projectName : '',
+        mainCsvData = usersData.map(data => ({
+            [`Username`]: data?.assigneeId?.firstName + ' ' + data?.assigneeId?.lastName,
+            [`Task name`]: data?.summary,
+            [`Project name`]: data?.projectId?.projectName ? data?.projectId?.projectName : '',
+            [`Expected hrs`]: data?.expectedHours,
+            [`Added to in-progress`]: data?.inProgressDate || 'Not added yet',
+            [`Done Date`]: data?.doneDate || 'Not completed yet',
+            [`Time Taken`]: data?.timeTracker || 'Not started yet',
         }));
-    } else {
-        // console.error("usersData is not an array or not defined");
+
+        const totalTime = store?.getusersDataReducer?.data?.totalTime || 0;
+
+        // Add total time row to total time CSV data
+        totalTimeCsvData.push({
+            [`Total Time`]: totalTime
+        });
     }
+
+    // Concatenate main data and total time CSV data
+    const csvData = mainCsvData.concat(totalTimeCsvData);
+
 
     return (
         <Modal show={showFilter} onHide={handleClose} size="lg">
@@ -163,7 +178,10 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
                         {/* <CSVLink data={csvData} onClick={onSubmit} className='mybutton btn p-1 fw-bold py-1 web_button'>Download Users Data</CSVLink> */}
 
                         {isSubmitted ? (
-                            <CSVLink data={csvData} className='mybutton btn p-1 fw-bold py-1 web_button'>Download</CSVLink>
+                            <CSVLink
+                                data={csvData}
+                                filename='userReport.csv'
+                                className='mybutton btn p-1 fw-bold py-1 web_button'>Download</CSVLink>
                         ) : (
                             <button type="submit" className="mybutton btn p-1 fw-bold py-1 web_button" disabled={isSubmitted}>Export</button>
                         )}

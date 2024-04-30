@@ -37,7 +37,7 @@ const Create = ({ modal, closemodal }) => {
     const {
         register,
         handleSubmit,
-        reset,setValue,
+        reset, setValue,
         formState: { errors },
     } = useForm();
     const onSubmit = (data) => {
@@ -51,11 +51,11 @@ const Create = ({ modal, closemodal }) => {
                 status: 0,
             })
         );
-        setValue("name","")
-        setValue("project","")
-        setValue("description","")
-        setValue("type","")
-        setValue("stage","")
+        setValue("name", "")
+        setValue("project", "")
+        setValue("description", "")
+        setValue("type", "")
+        setValue("stage", "")
     };
 
     useEffect(() => {
@@ -94,7 +94,7 @@ const Create = ({ modal, closemodal }) => {
                                         {...register('name', { required: true })}
                                     />
                                     {errors?.name?.type === 'required' && (
-                                        <span className="text-danger"> This feild is required *</span>
+                                        <span className="text-danger"> This field is required *</span>
                                     )}
                                 </Form.Group>
                             </Col>
@@ -109,7 +109,7 @@ const Create = ({ modal, closemodal }) => {
                                         {...register('project', { required: true })}
                                     />
                                     {errors?.project?.type === 'required' && (
-                                        <span className="text-danger"> This feild is required *</span>
+                                        <span className="text-danger"> This field is required *</span>
                                     )}
                                 </Form.Group>
                             </Col>
@@ -126,7 +126,7 @@ const Create = ({ modal, closemodal }) => {
                                         {...register('description', { required: true })}
                                     />
                                     {errors?.description?.type === 'required' && (
-                                        <span className="text-danger"> This feild is required *</span>
+                                        <span className="text-danger"> This field is required *</span>
                                     )}
                                 </Form.Group>
                             </Col>
@@ -144,7 +144,7 @@ const Create = ({ modal, closemodal }) => {
                                     />
 
                                     {errors?.status?.type === 'required' && (
-                                        <span className="text-danger"> This feild is required *</span>
+                                        <span className="text-danger"> This field is required *</span>
                                     )}
                                 </Form.Group>
                             </Col>
@@ -157,7 +157,7 @@ const Create = ({ modal, closemodal }) => {
                                         STAGE<span className="text-danger">*</span>:
                                     </Form.Label>
                                     <Form.Select {...register('stage', { required: true })}>
-                                        <option value="" hidden selected>
+                                        <option value="" hidden>
                                             {' '}
                                             --select--
                                         </option>
@@ -166,7 +166,7 @@ const Create = ({ modal, closemodal }) => {
                                         <option value="3">MEDIUM</option>
                                     </Form.Select>
                                     {errors?.stage?.type === 'required' && (
-                                        <span className="text-danger"> This feild is required *</span>
+                                        <span className="text-danger"> This field is required *</span>
                                     )}
                                 </Form.Group>
                             </Col>
@@ -176,7 +176,7 @@ const Create = ({ modal, closemodal }) => {
                                         TYPE<span className="text-danger">*</span>:
                                     </Form.Label>
 
-                                    
+
                                     <Multiselect
                                         onRemove={removehandle}
                                         onSelect={addhandle}

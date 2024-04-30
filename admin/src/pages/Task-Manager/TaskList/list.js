@@ -47,9 +47,17 @@ const TaskList = () => {
         }));
     }
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
-        setSkip(value);
-        dispatch(getsingleSprintTask({ id: spriteId, taskStatus: taskStatus, activeStatus: true, skip: skip, projectId: projectId, milestoneId: milestoneId }));
+        setSkip(value); // Update skip state with the new page number
+        dispatch(getsingleSprintTask({
+            id: spriteId,
+            taskStatus: taskStatus,
+            activeStatus: true,
+            skip: value, // Use the new page number (value) instead of the current state (skip)
+            projectId: projectId,
+            milestoneId: milestoneId
+        }));
     };
+
     const CloseModal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -276,7 +284,7 @@ const TaskList = () => {
                                                 <td className='text-start'>{item?.reporterInfo?.firstName} {''}
                                                     {item?.reporterInfo?.lastName}
                                                 </td>
-                                                <td className='text-start'>{item?.technology?.name} 
+                                                <td className='text-start'>{item?.technology?.name}
                                                 </td>
                                                 <td className='text-start'>
                                                     {item?.priority == 'Critical'
@@ -291,10 +299,10 @@ const TaskList = () => {
                                                 </td>
                                                 <td className='text-center'> {moment(item?.startDate).format("DD/MM/YYYY")}</td>
                                                 <td className='text-start'>{moment(item?.dueDate).format("DD/MM/YYYY")}</td>
-                                                <td className='text-start'>
+                                                <td className='text-center'>
                                                     <Form.Check
                                                         type="switch"
-                                                        className='text-start'
+                                                        className='text-center pe-1 '
                                                         checked={item?.activeStatus}
                                                         onChange={(e) => handleStatusChange(e, item)}
                                                     />
@@ -323,6 +331,8 @@ const TaskList = () => {
                                 {store?.getSigleSprintTask?.data?.totalPages > 0 && (
                                     <Stack spacing={2}>
                                         <Pagination
+                                            showFirstButton
+                                            showLastButton
                                             defaultPage={skip}
                                             count={store?.getSigleSprintTask?.data?.totalPages}
                                             color="primary"

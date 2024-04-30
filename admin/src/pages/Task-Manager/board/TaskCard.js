@@ -134,11 +134,11 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
             <Draggable key={item.id} draggableId={item?.id} index={index} style={{ width: '260px', }}>
                 {(provided) => (
                     <div ref={provided?.innerRef} {...provided?.draggableProps} {...provided?.dragHandleProps} >
-                        <TaskInformation className="mt-2 shadow-lg mx-auto rounded-4 " style={{ width: '250px', marginTop: '1px' }}>
+                        <TaskInformation className="mt-2 shadow-lg mx-auto rounded-2 " style={{ width: '250px', marginTop: '1px' }}>
                             <div className="row py-2">
                                 <div className="col-12 pb-1">
                                     <div className="row d-flex align-items-center">
-                                        <div className="col-9   m-0 ">
+                                        <div className="col-9 m-0 ">
                                             {/* <span className={`task-title text-dark p-0 m-0 `}>
                                                 {backgroundColorClass}
                                             </span> */}
@@ -158,15 +158,14 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                     data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                                     <i className="bi bi-three-dots-vertical fs-5 fw-bold text-dark"></i>
                                                 </button>
-                                                <ul className="dropdown-menu py-0 dropdown-style dropdown-menu-end ps-1 dropdown-menu-lg-start border-0" aria-labelledby="dropdownMenuButton1">
-                                                    <div className='d-flex w-50'>
+                                                <ul className="dropdown-menu py-0 dropdown-style dropdown-menu-end ps-1 dropdown-menu-lg-start bg-white border-0" aria-labelledby="dropdownMenuButton1">
+                                                    <div className='d-flex w-100'>
                                                         <li className='w-50 ps-2 border-dark border-end border-1 py-0'>
                                                             <button className="dropdown-item m-0 p-0 border-0 bg-transparent">
                                                                 <i className="uil-edit-alt m-0 p-0  text-dark del_edit" onClick={() => { handelUpdate(item); }}></i>
                                                             </button>
                                                         </li>
                                                         <li className='w-50 ps-2'>
-
                                                             <button className="dropdown-item m-0 p-0 border-0 bg-transparent" onClick={() => deleteData(item?.id)}>
                                                                 <i className="mdi mdi-delete text-dark m-0 p-0  del_edit"></i>
                                                             </button>
@@ -174,6 +173,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                     </div>
                                                 </ul>
                                             </div>
+
                                         </div>
                                         {/* <div className="col-6 pe-0">
                                             <div className="action_icon position-relative">
@@ -254,10 +254,18 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                         </div> */}
                                     </div>
                                 </div>
+              
+                                <div className="col-12 m-0" onClick={() => {
+                                    handleDetailPage(item);
+                                }}>
+                                    <p className='m-0'>
+                                    {item?.projects?.projectName}
+                                    </p>
+                                </div>
                                 <div className="col-12" onClick={() => {
                                     handleDetailPage(item);
                                 }}>
-                                    <p>
+                                    <p className='m-0'>
                                         <div className='task-title text-dark p-0' title={item?.description}>
                                             {item?.description ?
                                                 (item.description.length > 25 ? item.description.slice(0, 25) + '...' : item.description)
@@ -266,13 +274,29 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                     </p>
                                 </div>
 
-                                <div className='col-12 px-1 py-0'
+                                <div className='col-12 col-lg-2 px-2 py-0'
                                     onClick={() => {
                                         handleDetailPage(item);
                                     }}>
-                                    <p className={`task-title text-dark p-0 m-0 `}>
-                                        {backgroundColorClass}
-                                    </p>
+
+                                    <OverlayTrigger
+                                        placement="top"
+                                        overlay={
+                                            <Tooltip id="tooltip1">
+                                                {priorityWithLetter}
+                                            </Tooltip>
+                                        }>
+                                        <div className="cp"
+                                            onClick={() => {
+                                                handleDetailPage(item);
+                                            }}>
+                                            <span
+                                            >
+                                                {backgroundColorClass}
+
+                                            </span>
+                                        </div>
+                                    </OverlayTrigger>
                                 </div>
                                 <div className="col-12"
                                     onClick={() => {
@@ -286,6 +310,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                         {item?.startDate ? moment(item?.startDate).format("DD/MM/YYYY") : ''}
                                                     </span>
                                                 </p>
+
                                             </div>
                                         </div>
 
@@ -307,8 +332,8 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                     placement="top"
                                                     overlay={
                                                         <Tooltip id="tooltip1">
-                                                            {item?.assignees?.assigneeInfo?.firstName}{' '}
-                                                            {item?.assignees?.assigneeInfo?.lastName}
+                                                            {item?.assigneeInfo?.firstName}
+                                                            {item?.assigneeInfo?.lastName}
                                                         </Tooltip>
                                                     }>
                                                     <div className="cp"
@@ -323,7 +348,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                                 fontSize: '11px',
                                                                 color: 'white',
                                                                 fontWeight: '800',
-                                                            }}>
+                                                            }} title={item?.assignees?.assigneeInfo?.firstName}>
                                                             {item?.assigneeInfo?.firstName.charAt(0)}
                                                             {item?.assigneeInfo?.lastName.charAt(0)}
                                                         </span>

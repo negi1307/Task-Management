@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import {
     AddComment,
+    getComment,
     UpdateCommentAction,
     createSubTask,
     deleteComment,
@@ -21,7 +22,7 @@ import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 import noimage from '../../../assets/images/noimage.png';
 import { getSingleSprint } from '../../../redux/actions';
 const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
-    console.log(editData,'edit4444')
+    // console.log(editData, 'edit4444')
     const store = useSelector((state) => state);
     const technology = store?.getSingleSprintTask?.data?.response;
     const dispatch = useDispatch();
@@ -47,13 +48,14 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
             dispatch(getHistoryAction(editData?.id));
         }
     };
- 
+
 
 
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
     const [inputForUpdate, setInputForUpdate] = useState('');
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
+    const [submitted, setSubmitted] = useState(false);
     const today = new Date();
     const handleStartDate = (date) => {
         setStartDate(date);
@@ -123,16 +125,23 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                 comment: val?.comment,
             };
             dispatch(AddComment(body));
+            dispatch(getComment({ taskId: editData?._id }))
         } else {
             let body = {
                 commentId: commentId,
                 comment: val?.comment,
             };
             dispatch(UpdateCommentAction(body));
+            dispatch(getComment({ taskId: editData?._id }))
             setButtonChange(true);
         }
         setValue('comment', '');
     };
+    useEffect(() => {
+        if (submitted) {
+            setSubmitted(false);
+        }
+    }, [submitted]);
     const handeldelete = (data) => {
         dispatch(deleteComment({ taskId: data?._id }));
     };
@@ -147,14 +156,15 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
             updated_comment: data?.comment,
         });
         setInputForUpdate(indx);
-
     };
     const submitUpdateComment = (data) => {
+
         let body = {
             commentId: allCommetUpdateId,
             comment: data?.updated_comment,
         };
         dispatch(UpdateCommentAction(body));
+
         setInputForUpdate(false);
     };
     const closeModalHandle = () => {
@@ -184,9 +194,9 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                         <Row>
                             <Col lg={7} className="text-end">
                                 <Modal.Title id="" className="text-start modal_titles">
-                                    Task Detail : {editData?.summary ? editData.summary.charAt(0).toUpperCase() + editData.summary.slice(1, 10) : ''}
+                                    Task Detail : {editData?.summary ? editData.summary.charAt(0).toUpperCase() + editData.summary.slice(1, 50) : ''}
                                 </Modal.Title>
-                             
+
                             </Col>
                             <Col lg={5} className="text-end pt-2">
                                 <button type="button" className="close border-0 bg-black text-white" onClick={closeModalHandle} aria-label="Close">
@@ -199,7 +209,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                 <hr />
                 <Modal.Body>
                     <Row>
-                        <Col lg={7}>
+                        <Col lg={8}>
                             <h4 className='modal_titles'>Activity</h4>
                             <Row>
                                 <Col lg={12} className='d-flex align-items-center gap-1'>
@@ -209,7 +219,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'All' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        All
+                                        <span><i class="bi bi-people-fill "></i></span> All
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -217,7 +227,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Comments' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        Comments
+                                        <span><i class="bi bi-chat-right-text-fill"></i></span>  Comments
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -225,7 +235,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'History' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        History
+                                        <span><i class="bi bi-clock-history"></i></span>  History
                                     </Button>
 
                                     {/* Add Sub-tasks button */}
@@ -236,7 +246,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }
                                         className={`btn px-2 fw-bold py-1  web_button ${connectComponent === 'AddSubtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        Add Sub-tasks
+                                        <span><i class="bi bi-pencil-square"></i></span> Add Sub-tasks
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -244,7 +254,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Bugs' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        Bugs
+                                        <span><i class="bi bi-bug-fill"></i></span>  Bugs
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -252,7 +262,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Subtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        SubTask
+                                        <span><i class="bi bi-check-square-fill"></i></span>  SubTask
                                     </Button>
 
 
@@ -376,7 +386,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     className="form-select"
                                                     style={{ border: '1px solid #a6b3c3' }}
                                                     {...register('priority', { required: true })}>
-                                                    <option hidden selected>
+                                                    <option hidden>
                                                         Select
                                                     </option>
                                                     <option value="Critical">
@@ -457,7 +467,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     name="type"
                                                     className="form-select"
                                                     {...register('type', { required: true })}>
-                                                    <option hidden selected>
+                                                    <option hidden>
                                                         Select
                                                     </option>
                                                     <option value="SubTask">
@@ -567,7 +577,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 </>
                             ) : connectComponent === 'History' ? (
 
-                         
+
                                 <div className="d-flex flex-column justify-content-center my-2">
                                     {historyResponse && historyResponse.map((item, index) => (
                                         <div key={index} className='d-flex gap-2 align-items-center lh-lg'>
@@ -614,127 +624,179 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
 
                             ) : connectComponent === 'Bugs' ? (
 
-                                <Table className="mb-0 add_Color_font" striped>
-                                    <thead>
-                                        <tr>
-                                            <th className='fw-bold'>#</th>
-                                            <th className='fw-bold'>Summary</th>
-                                            <th className='fw-bold'>Decription</th>
-                                            <th className='fw-bold'>Assignee</th>
-                                            <th className='fw-bold'>Priority</th>
-                                            <th className='fw-bold'>Start Date</th>
-                                            <th className='fw-bold'>End Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                <div style={{ overflowX: 'auto' }}>
+                                    <Table className="mb-0 add_Color_font text-nowrap w-100 " striped>
+                                        <thead className=''>
+                                            <tr>
+                                                <th className='fw-bold'>#</th>
+                                                <th className='fw-bold'>Summary</th>
+                                                <th className='fw-bold'>Decription</th>
+                                                <th className='fw-bold'>Assignee</th>
+                                                <th className='fw-bold'>Priority</th>
+                                                <th className='fw-bold'>Status</th>
+                                                <th className='fw-bold'>Technology</th>
+                                                <th className='fw-bold'>Reporter</th>
+                                                <th className='fw-bold'>Start Date</th>
+                                                <th className='fw-bold'>End Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                        {store?.getBugsReducer?.data?.response?.map((bug, ind) => {
-                                            return (
-                                                <tr className="align-middle">
-                                                    <th>{ind + 1}</th>
+                                            {store?.getSubTaskReducer?.data?.response?.map((bug, ind) => {
+                                                return (
+                                                    <tr className="align-middle">
+                                                        <th>{ind + 1}</th>
 
-                                                    <td>
-                                                        <span title={bug?.summary}>
-                                                            {bug?.summary.slice(0, 8)}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                            {bug?.expectedHours}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                            {bug?.priority}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                            {bug?.startDate.slice(0, 10)}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                            {bug?.dueDate.slice(0, 10)}
-                                                        </span>
-                                                    </td>
+                                                        <td>
+                                                            <span title={bug?.summary}>
+                                                                {bug?.summary ? bug.summary.slice(0, 7).charAt(0).toUpperCase() + bug.summary.slice(1, 7) : ''}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {editData?.assigneeInfo?.firstName} {editData?.assigneeInfo?.lastName}
+                                                            </span>
+                                                        </td>
+
+                                                        <td>
+                                                            <span>
+                                                                {bug?.priority}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {editData?.status == 1 ? 'To-Do' : ''}
+                                                                {editData?.status == 2 ? 'In-Progress' : ''}
+                                                                {editData?.status == 3 ? 'Hold' : ''}
+                                                                {editData?.status == 4 ? 'Done' : ''}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {editData?.technology?.name}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {editData?.reporterInfo?.firstName} {editData?.reporterInfo?.lastName}
+                                                            </span>
+                                                        </td>
 
 
-                                                </tr>
-                                            );
-                                        })}
+                                                        <td>
+                                                            <span>
+                                                                {bug?.startDate.slice(0, 10)}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {bug?.dueDate.slice(0, 10)}
+                                                            </span>
+                                                        </td>
 
-                                    </tbody>
-                                </Table>
+
+                                                    </tr>
+                                                );
+                                            })}
+
+                                        </tbody>
+                                    </Table>
+                                </div>
 
 
 
 
                             ) : connectComponent === 'Subtask' ? (
 
-                                <Table className="mb-0 add_Color_font" striped>
-                                    <thead>
-                                        <tr>
-                                            <th className='fw-bold'>#</th>
-                                            <th className='fw-bold'>Summary</th>
-                                            <th className='fw-bold'>Decription</th>
-                                            <th className='fw-bold'>Assignee</th>
-                                            <th className='fw-bold'>Priority</th>
-                                            <th className='fw-bold'>Start Date</th>
-                                            <th className='fw-bold'>End Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                <div style={{ overflowX: 'auto' }}>
+                                    <Table className="mb-0 add_Color_font text-nowrap w-100 " striped>
+                                        <thead className=''>
+                                            <tr>
+                                                <th className='fw-bold'>#</th>
+                                                <th className='fw-bold'>Summary</th>
+                                                <th className='fw-bold'>Decription</th>
+                                                <th className='fw-bold'>Assignee</th>
+                                                <th className='fw-bold'>Priority</th>
+                                                <th className='fw-bold'>Status</th>
+                                                <th className='fw-bold'>Technology</th>
+                                                <th className='fw-bold'>Reporter</th>
+                                                <th className='fw-bold'>Start Date</th>
+                                                <th className='fw-bold'>End Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                        {store?.getSubTaskReducer?.data?.response?.map((bug, ind) => {
-                                            return (
-                                                <tr className="align-middle">
-                                                    <th>{ind + 1}</th>
+                                            {store?.getSubTaskReducer?.data?.response?.map((sub, ind) => {
+                                                return (
+                                                    <tr className="align-middle">
+                                                        <th>{ind + 1}</th>
 
-                                                    <td>
-                                                        <span title={bug?.summary}>
-                                                            {bug?.summary.slice(0, 8)}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                            {bug?.expectedHours}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                            {bug?.priority}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                            {bug?.startDate.slice(0, 10)}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                            {bug?.dueDate.slice(0, 10)}
-                                                        </span>
-                                                    </td>
+                                                        <td>
+                                                            <span title={sub?.summary}>
+                                                                {sub?.summary ? sub.summary.slice(0, 7).charAt(0).toUpperCase() + sub.summary.slice(1, 7) : ''}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span title={sub?.description}>{sub?.description.slice(0, 10)}</span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {editData?.assigneeInfo?.firstName} {editData?.assigneeInfo?.lastName}
+                                                            </span>
+                                                        </td>
+
+                                                        <td>
+                                                            <span>
+                                                                {sub?.priority}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {editData?.status == 1 ? 'To-Do' : ''}
+                                                                {editData?.status == 2 ? 'In-Progress' : ''}
+                                                                {editData?.status == 3 ? 'Hold' : ''}
+                                                                {editData?.status == 4 ? 'Done' : ''}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {editData?.technology?.name}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {editData?.reporterInfo?.firstName} {editData?.reporterInfo?.lastName}
+                                                            </span>
+                                                        </td>
 
 
-                                                </tr>
-                                            );
-                                        })}
+                                                        <td>
+                                                            <span>
+                                                                {sub?.startDate.slice(0, 10)}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {sub?.dueDate.slice(0, 10)}
+                                                            </span>
+                                                        </td>
 
-                                    </tbody>
-                                </Table>
+
+                                                    </tr>
+                                                );
+                                            })}
+
+                                        </tbody>
+                                    </Table>
+                                </div>
                             ) : (
                                 ''
                             )}
                         </Col>
-                        <Col lg={5}>
+                        <Col lg={4}>
                             <div className="table-responsive">
                                 <table className="table lh-sm table-borderless" style={{ fontSize: '14px' }} >
                                     <tbody className='text-start'>
@@ -752,7 +814,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         </tr>
                                         <tr className='text-start'>
                                             <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Summary :</th>
-                                            <td>{editData?.summary}</td>
+                                            <td>   {editData?.summary ? editData?.summary.slice(0, 10).charAt(0).toUpperCase() + editData?.summary.slice(1, 20) : ''}</td>
                                         </tr>
                                         <tr className='text-start'>
                                             <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Start Date :</th>
@@ -770,7 +832,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Technology :</th>
                                             <td>{editData?.technology?.name} </td>
                                         </tr>
-                                        
+
                                         <tr className='text-start'>
                                             <th className='fw-bold text-nowrap' style={{ width: 'fit-content', }}>Reporter :</th>
                                             <td>{editData?.reporterInfo?.firstName} {editData?.reporterInfo?.lastName}</td>

@@ -11,6 +11,8 @@ import {
     deleteProject,
     getProjectById,
     getProjectId,
+    getProjectUsers,
+    getProjectTimeSpent
 } from './projects/reducers';
 import {
     getAllMileStones,
@@ -20,6 +22,7 @@ import {
     addAllmilstones,
     getSigleMileStone,
     getMilestoneId,
+    getProjectTasks,
 } from './milestone/reducer';
 import {
     addSprint,
@@ -44,7 +47,7 @@ import {
     getTaskId,
     updateCommentReducer, getAssignUserReducer, getHistoryReducer, getReporterReducer, getBugsReducer, getSubTaskReducer,
 } from './task/reducer';
-import { getAllUsers, getAllCategory, deleteUser, createUser, getAllRoles, getCsvDataReducer } from './user/reducer';
+import { getAllUsers, getAllCategory, deleteUser, createUser, getAllRoles, getCsvDataReducer, getuserTasks } from './user/reducer';
 import { getTaskSummaryReducer, getPriorityGraphReducer, getTaskWeekCountReducer } from './Summary/reducer';
 import {
     createTechnologyReducer,
@@ -119,5 +122,5 @@ export default (combineReducers({
     updatePreSaleReducer,
     deletePreSaleReducer,
     getProjectNameReducer, uploadProjectDetail, getuploadProjectDetailReducer,
-    getTimeTrackerReducer, getHistoryReducer, getBugsReducer, getSubTaskReducer, getUserRecordReducer, getReport
+    getTimeTrackerReducer, getHistoryReducer, getBugsReducer, getSubTaskReducer, getUserRecordReducer, getReport, getuserTasks, getProjectUsers, getProjectTasks, getProjectTimeSpent
 }): any);

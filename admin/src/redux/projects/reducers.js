@@ -30,6 +30,19 @@ const GET_PROJECT_BY_ID_INITIAL_STATE = {
     message: "",
     loading: false
 }
+
+const GET_PROJECT_USERS_INITIAL_STATE = {
+    data: [],
+    message: "",
+    loading: false
+}
+
+const GET_PROJECT_TIME_SPENT_INITIAL_STATE = {
+    data: [],
+    message: "",
+    loading: false
+}
+
 export const addProject = (state = ADD_PROJECT_INITIAL_STATE, action) => {
     switch (action.type) {
         case ProjectTypes.ADD_PROJECT_LOADING:
@@ -193,6 +206,8 @@ export const getProjectById = (state = GET_PROJECT_BY_ID_INITIAL_STATE, action) 
 
     }
 };
+
+
 export const getProjectId = (state = { data: "" }, action) => {
     switch (action.type) {
         case "projectId":
@@ -201,6 +216,57 @@ export const getProjectId = (state = { data: "" }, action) => {
 
             };
 
+        default:
+            return { ...state };
+
+    }
+};
+
+export const getProjectUsers = (state = GET_PROJECT_USERS_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case ProjectTypes.GET_PROJECT_USERS_LOADING:
+            return {
+                data: GET_PROJECT_USERS_INITIAL_STATE.data,
+                loading: true,
+            };
+        case ProjectTypes.GET_PROJECT_USERS_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case ProjectTypes.GET_PROJECT_USERS_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+export const getProjectTimeSpent = (state = GET_PROJECT_TIME_SPENT_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case ProjectTypes.GET_PROJECT_TIME_SPENT_LOADING:
+            return {
+                data: GET_PROJECT_TIME_SPENT_INITIAL_STATE.data,
+                loading: true,
+            };
+        case ProjectTypes.GET_PROJECT_TIME_SPENT_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case ProjectTypes.GET_PROJECT_TIME_SPENT_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
         default:
             return { ...state };
 

@@ -1,7 +1,7 @@
 import react, { useEffect, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { createTask, getAllRoles, getAllTask,getAllCategory, getAssignUserAction, getAllUsers, getSingleSprint } from '../redux/actions';
+import { createTask, getAllRoles, getAllTask, getAllCategory, getAssignUserAction, getAllUsers, getSingleSprint } from '../redux/actions';
 import Form from 'react-bootstrap/Form';
 import { Row, Col, Button, CloseButton, Card, FormControl } from 'react-bootstrap';
 import pdfImage from '../../src/assets/images/pdf.png';
@@ -105,6 +105,7 @@ export default function RightBar(props) {
         setSelectedFile('');
         setStartDate("");
         setEndDate("")
+        reset();
     };
     useEffect(() => {
         reset({ projectname: projectId, Milestone: mileStoneId, Sprint: sprintId });
@@ -114,7 +115,7 @@ export default function RightBar(props) {
         dispatch(getAllRoles());
         dispatch(getAllUsers());
         // let status = true
-        dispatch(getAllCategory({status:true}));
+        dispatch(getAllCategory({ status: true }));
     }, []);
     useEffect(() => {
         dispatch(getReporterAction())
@@ -201,7 +202,7 @@ export default function RightBar(props) {
                                     </Form.Group>
                                 </Col>
                                 <div className="mb-2 col-6">
-                                    <label className="form-label" for="exampleForm.ControlTextarea1">
+                                    <label className="form-label" htmlFor="exampleForm.ControlTextarea1">
                                         Summary
                                         <span className="text-danger">*</span>:
                                     </label>
@@ -210,17 +211,20 @@ export default function RightBar(props) {
                                         type="text"
                                         id="exampleForm.ControlTextarea1"
                                         className="form-control"
-                                        {...register('Summary', { required: true })}
+                                        {...register('Summary', { required: true, pattern: /^[^\s]+$/ })}
                                     />
                                     {errors.Summary?.type === 'required' && (
                                         <span className="text-danger"> This field is required *</span>
+                                    )}
+                                    {errors.Summary?.type === 'pattern' && (
+                                        <span className="text-danger"> Empty fields not allowed</span>
                                     )}
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-lg-12">
                                     <div className="mb-2">
-                                        <label className="form-label" for="exampleForm.ControlInput1">
+                                        <label className="form-label" htmlFor="exampleForm.ControlInput1">
                                             Description:
                                         </label>
 
@@ -241,7 +245,7 @@ export default function RightBar(props) {
                             <div className="">
                                 <div className="">
                                     <div className="mb-2">
-                                        <label className="form-label" for="exampleForm.ControlTextarea1">
+                                        <label className="form-label" htmlFor="exampleForm.ControlTextarea1">
                                             Assignee
                                             <span className="text-danger">*</span>:
                                         </label>
@@ -251,7 +255,7 @@ export default function RightBar(props) {
                                             className="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('Assignee', { required: true })}>
-                                            <option value={''} hidden selected>
+                                            <option value={''} hidden>
                                                 Select
 
                                             </option>
@@ -269,7 +273,7 @@ export default function RightBar(props) {
                                 </div>
                                 <div className="">
                                     <div className="mb-2">
-                                        <label className="form-label" for="exampleForm.ControlTextarea1">
+                                        <label className="form-label" htmlFor="exampleForm.ControlTextarea1">
                                             label
                                             <span className="text-danger">*</span>:
                                         </label>
@@ -279,14 +283,14 @@ export default function RightBar(props) {
                                             className="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('label', { required: true })}>
-                                            <option value={''} hidden selected>
+                                            <option value={''} hidden>
                                                 Select
 
                                             </option>
                                             {category?.map((ele, ind) => (
                                                 <option value={ele?._id}>
                                                     {' '}
-                                                    {ele?.name} 
+                                                    {ele?.name}
                                                 </option>
                                             ))}
                                         </select>
@@ -297,7 +301,7 @@ export default function RightBar(props) {
                                 </div>
                                 <div className="">
                                     <div className="mb-2">
-                                        <label className="form-label" for="exampleForm.ControlTextarea1">
+                                        <label className="form-label" htmlFor="exampleForm.ControlTextarea1">
                                             Reporter
                                             <span className="text-danger">*</span>:
                                         </label>
@@ -307,7 +311,7 @@ export default function RightBar(props) {
                                             className="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('Reporter', { required: true })}>
-                                            <option value={''} hidden selected>
+                                            <option value={''} hidden >
                                                 Select
                                             </option>
                                             {reporter?.map((ele, ind) => (
@@ -326,7 +330,7 @@ export default function RightBar(props) {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="mb-2">
-                                        <label className="form-label" for="exampleForm.ControlInput1">
+                                        <label className="form-label" htmlFor="exampleForm.ControlInput1">
                                             Expected Hours <span className="text-danger">*</span>:
                                         </label>
                                         <input
@@ -378,7 +382,7 @@ export default function RightBar(props) {
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="mb-1">
-                                        <label className="form-label" for="exampleForm.ControlInput1">
+                                        <label className="form-label" htmlFor="exampleForm.ControlInput1">
                                             {' '}
                                             Priority <span className="text-danger">*</span>:
                                         </label>
@@ -387,8 +391,8 @@ export default function RightBar(props) {
                                             className="form-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('priority', { required: true })}>
-                                            <option hidden selected>
-                                                select
+                                            <option hidden>
+                                                Select
                                             </option>
                                             <option value="Critical">
                                                 &#128308;

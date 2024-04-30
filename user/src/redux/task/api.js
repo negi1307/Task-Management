@@ -35,7 +35,7 @@ export function deleteTaskApi(data): any {
 }
 
 export function updateTaskStatusApi(data): any {
-    console.log("update task status", data)
+    // console.log("update task status", data)
     return api.update(URL.UpdateTaskStatus, data.payload);
 
 }

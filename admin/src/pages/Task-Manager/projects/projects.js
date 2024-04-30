@@ -30,7 +30,7 @@ const Projects = () => {
     const getProjectList = store?.getProject;
     const deletehandle = store?.deleteProject?.data;
     const [status, setStatus] = useState(1);
-    const [projectStatus, setprojectStatus] = useState(1);
+    const [projectStatus, setprojectStatus] = useState();
     const [checkedData, setCheckedData] = useState();
     const [checkedStatus, setCheckedStatus] = useState();
     const [statusModal, setStatusModal] = useState(false);
@@ -76,37 +76,59 @@ const Projects = () => {
                 activeStatus: true,
             };
             dispatch(updateProject(body));
+            // let bodyprojects = {
+            //     status: status,
+            //     skip: skip,
+            //     projectStatus: projectStatus, // Use projectStatus state directly
+            // };
+            // dispatch(getAllProjects(bodyprojects));
         } else {
             let body = {
                 projectId: checkedData._id,
                 activeStatus: false,
             };
             dispatch(updateProject(body));
+            // let bodyprojects = {
+            //     status: status,
+            //     skip: skip,
+            //     projectStatus: projectStatus, // Use projectStatus state directly
+            // };
+            // dispatch(getAllProjects(bodyprojects));
         }
         setStatusModal(false);
     };
     const handleStatusChange = async (e, data) => {
-        try {
-            const isChecked = e.target.checked;
-            const projectId = data._id;
+        // try {
+        //     const isChecked = e.target.checked;
+        //     const projectId = data._id;
 
-            const updatedStatus = isChecked ? true : false;
-            const body = {
-                projectId: projectId,
-                activeStatus: updatedStatus,
-            };
-            await dispatch(updateProject(body));
-            await dispatch(getAllProjects({ status: status, skip: skip, projectStatus: projectStatus }));
-            setRender(!render);
-            if (isChecked) {
-                ToastHandle('success', 'Project Activated Successfully');
-            } else {
-                ToastHandle('success', 'Project Deactivated Successfully');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            ToastHandle('error', 'An error occurred. Please try again.');
+        //     const updatedStatus = isChecked ? true : false;
+        //     const body = {
+        //         projectId: projectId,
+        //         activeStatus: updatedStatus,
+        //     };
+        //     await dispatch(getAllProjects({ status: status, skip: skip, projectStatus: projectStatus }));
+
+        //     setRender(!render);
+        //     if (isChecked) {
+        //         await dispatch(updateProject(body));
+        //         ToastHandle('success', 'Project Activated Successfully');
+        //     } else {
+        //         await dispatch(updateProject(body));
+        //         ToastHandle('success', 'Project Deactivated Successfully');
+        //     }
+        // } catch (error) {
+        //     console.error('Error:', error);
+        //     ToastHandle('error', 'An error occurred. Please try again.');
+        // }
+        if (e.target.checked) {
+            setCheckedStatus(true);
+        } else {
+            setCheckedStatus(false);
         }
+        setCheckedData(data);
+        setStatusModal(true);
+
     };
 
     const handleActive = (val) => {
@@ -120,23 +142,16 @@ const Projects = () => {
             dispatch(getAllProjects({ status: 0, skip: 1, projectStatus: projectStatus }));
         }
     };
-    // useEffect(() => {
-    //     let body = {
-    //         status: status,
-    //         skip: skip,
-    //         projectStatus: projectStatus,
-    //     };
-    //     dispatch(getAllProjects(body));
-    // }, [render]);
     useEffect(() => {
+        // Set initial projectStatus to "Ongoing"
         setprojectStatus('Ongoing');
         let body = {
             status: status,
             skip: skip,
-            projectStatus: 'Ongoing',
+            projectStatus: 'Ongoing', // Hardcode for initial fetch
         };
         dispatch(getAllProjects(body));
-    }, []);
+    }, [status, skip]);
     useEffect(() => {
         if (deletehandle?.status == 200) {
             ToastHandle('success', deletehandle?.message);
@@ -154,36 +169,27 @@ const Projects = () => {
 
 
     const handleProjectStatus = (val) => {
-        if (val == '1') {
+        if (val === '1') {
             setprojectStatus('Ongoing');
             setSkip(1);
             dispatch(getAllProjects({ status: status, skip: 1, projectStatus: "Ongoing" }));
-        } else if (val == '2') {
+        } else if (val === '2') {
             setprojectStatus('Support');
             setSkip(1);
             dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 'Support' }));
-        } else if (val == '3') {
+        } else if (val === '3') {
             setSkip(1);
             setprojectStatus('Delivered');
             dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 'Delivered' }));
-        } else {
-            setSkip(1);
-            setprojectStatus(4);
-            dispatch(getAllProjects({ status: status, skip: 1, projectStatus: 4 }));
         }
     };
 
-    // const handeladdtask = () => {
-    //     setShowModal(!showModal);
-    //     dispatch(getAllProjects({ status: 1, skip: 1, projectStatus: 'Ongoing' }));
-    // }
 
     return (
         <>
             <div>
                 <Card>
                     <Card.Body>
-                        {/* <HeaderMain /> */}
                         <div className="row mx-auto">
                             <div className="row d-flex align-items-center">
                                 <div className={`col-auto  cp ${projectStatus == 'Ongoing' ? 'Active_data' : 'InActive_data'}`}>
@@ -272,7 +278,7 @@ const Projects = () => {
                                 <thead>
                                     <tr>
                                         <th className='fw-bold text-start'>#</th>
-                                        <th className='fw-bold text-start'> Project Name</th>
+                                        <th className='fw-bold text-start'>Project Name</th>
                                         <th className='fw-bold text-start'>Client Name</th>
                                         <th className='fw-bold text-start'>Project Type</th>
                                         <th className='fw-bold text-start'>Project Start Date</th>
@@ -285,7 +291,7 @@ const Projects = () => {
                                 <tbody>
                                     {store?.getProject?.data?.response?.projects?.map((ele, ind) => {
                                         return (
-                                            <tr className="align-middle">
+                                            <tr className="align-middle" key={ele._id}>
                                                 <th scope="row" className='text-start'>{(skip - 1) * 10 + ind + 1}</th>
                                                 <td className="cp text-start">
 
@@ -367,11 +373,20 @@ const Projects = () => {
                 {/* Delete confirmation modal */}
                 <Modal show={statusModal} onHide={() => setStatusModal(false)}>
                     <Modal.Body>
-                        Are you sure you want to {checkedStatus ? 'Inactive' : 'active'} this Project?
+                        Are you sure you want to {checkedStatus ? 'activate' : 'deactivate'} this Project?
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setStatusModal(false)}>No</Button>
-                        <Button variant="primary" onClick={handleYes}>Yes</Button>
+                        <Button variant="secondary" className='border-0'
+                            onClick={() => {
+                                setStatusModal(false);
+                                let body = {
+                                    status: status,
+                                    skip: skip,
+                                    projectStatus: projectStatus, // Use projectStatus state directly
+                                };
+                                dispatch(getAllProjects(body));
+                            }}>No</Button>
+                        <Button variant="primary" className='web_buttons bg-black text-white border-0' onClick={() => handleYes()}>Yes</Button>
                     </Modal.Footer>
                 </Modal>
             </div>

@@ -55,14 +55,15 @@ const Create = ({ modal, closeModal }) => {
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
-                            <Col lg={7} className="text-end">
+                            <Col lg={12} className="text-end pt-2">
+                                <CloseButton onClick={closeModal} />
+                            </Col>
+                            <Col lg={12} className="text-center page_headings mt-1 mb-2">
                                 <Modal.Title id="" className="mx-auto">
                                     Create Technology
                                 </Modal.Title>
                             </Col>
-                            <Col lg={5} className="text-end pt-2">
-                                <CloseButton onClick={closeModal} />
-                            </Col>
+
                         </Row>
                     </Col>
                 </Row>
@@ -91,7 +92,7 @@ const Create = ({ modal, closeModal }) => {
                                                         )}
                                                     </Form.Select>
                                                     {errors.category?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                        <span className="text-danger"> This field is required *</span>
                                                     )}
                                                 </Col>
                                             </Row>
@@ -111,12 +112,19 @@ const Create = ({ modal, closeModal }) => {
                                                     <Form.Control
                                                         type="text"
                                                         placeholder="Please Enter Technology Name"
-                                                        {...register('technologyName', { required: true })}
+                                                        {...register('technologyName', {
+                                                            required: true,
+                                                            pattern: /^[^\s]+$/
+                                                        })}
                                                     />
-                                                    {errors.technologyName?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
+                                                    {errors.technologyName && (
+                                                        <span className="text-danger">
+                                                            {errors.technologyName.type === 'required' && 'This field is required *'}
+                                                            {errors.technologyName.type === 'pattern' && 'Spaces are not allowed'}
+                                                        </span>
                                                     )}
                                                 </Col>
+
                                             </Row>
                                         </Form.Group>
                                     </Col>

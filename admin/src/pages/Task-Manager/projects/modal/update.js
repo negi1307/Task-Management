@@ -171,10 +171,13 @@ const Update = ({ modal, closeModal, editData }) => {
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Please Enter Project Name"
-                                                {...register('projectName', { required: true })}
+                                                {...register('projectName', { required: true, pattern: /^[^\s]+$/ })}
                                             />
                                             {errors.projectName?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
+                                            )}
+                                            {errors.projectName?.type === 'pattern' && (
+                                                <span className="text-danger"> Empty fields / space at first character is not allowed</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -186,10 +189,13 @@ const Update = ({ modal, closeModal, editData }) => {
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Please Enter Client Name"
-                                                {...register('clientName', { required: true })}
+                                                {...register('clientName', { required: true, pattern: /^[^\s]+$/ })}
                                             />
                                             {errors.clientName?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
+                                            )}
+                                            {errors.clientName?.type === 'pattern' && (
+                                                <span className="text-danger"> Empty fields / space at first character is not allowed</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -206,6 +212,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 onChange={(date) => handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
                                                 minDate={today}
+                                                required
                                                 className="add_width_input"
                                             />
                                         </Form.Group>
@@ -222,7 +229,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 placeholder="Please end Date"
                                             />
                                             {errors.endDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )} */}
                                             <DatePicker
                                                 selected={endDate}
@@ -231,6 +238,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 onChange={(date) => handleEndDate(date)}
                                                 placeholderText="mm-dd-yyyy"
                                                 minDate={startDate}
+                                                required
                                                 className="add_width_input"
                                             />
                                         </Form.Group>
@@ -243,7 +251,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('project_type', { required: true })}>
-                                                <option value="" hidden selected>
+                                                <option value="" hidden >
                                                     Choose an Project Type{' '}
                                                 </option>
                                                 <option value="T&M">T&M</option>
@@ -252,7 +260,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 <option value="DT">DT</option>
                                             </Form.Select>
                                             {errors.project_type?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -276,7 +284,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 placeholder="Select Technology"
                                             />
                                             {errors.technology?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -288,7 +296,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 Status<span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Select {...register('projectstatus', { required: true })}>
-                                                <option hidden selected>
+                                                <option hidden>
                                                     Choose an Project Status
                                                 </option>
                                                 <option value="Ongoing">Ongoing</option>
@@ -297,7 +305,7 @@ const Update = ({ modal, closeModal, editData }) => {
 
                                             </Form.Select>
                                             {errors.projectstatus?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>

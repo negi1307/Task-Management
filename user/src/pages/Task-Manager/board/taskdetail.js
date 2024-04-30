@@ -5,10 +5,11 @@ import { useForm } from 'react-hook-form';
 import moment from 'moment';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { addComment, getComment, updateComment, deleteComment, getSubTask, getBugs,  getHistoryAction } from '../../../redux/addcomment/actions';
+import { addComment, getComment, updateComment, deleteComment, getSubTask, getBugs, getHistoryAction } from '../../../redux/addcomment/actions';
 import Attachments from './../../apps/Tasks/Details/Attachments';
 import { Link } from 'react-router-dom';
+import { IoCloseSharp } from "react-icons/io5";
+
 
 const Taskdetail = (props) => {
     const { item, commentData } = props;
@@ -17,15 +18,17 @@ const Taskdetail = (props) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const bugsdata = store?.getBugsReducer?.data?.response
-    console.log(bugsdata, 'bugsdata')
+    // console.log(bugsdata, 'bugsdata')
     const [inputForUpdate, setInputForUpdate] = useState('');
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
     const [updatedCommentValue, setUpdatedCommentValue] = useState('');
     const [updatedCommentInitialValue, setUpdatedCommentInitialValue] = useState('');
+    // console.log(updatedCommentInitialValue, 'updatedCommentInitialValue')
     const [unchangeComment, setUnchangeComment] = useState('');
     const [error, setError] = useState('');
     const [connectComponent, setConnectComponent] = useState('All');
     const [buttonChange, setButtonChange] = useState(true);
+    const [commentId, setCommentId] = useState();
     const [historyResponse, setHistoryResponse] = useState(null);
 
 
@@ -37,6 +40,7 @@ const Taskdetail = (props) => {
         reset,
     } = useForm();
 
+    // alert(props.item._id)
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
         setValue('comment', "");
@@ -44,7 +48,7 @@ const Taskdetail = (props) => {
         setValue('subtasks', "");
         setButtonChange(true);
         if (type === 'History') {
-            dispatch(getHistoryAction(editData?.id));
+            dispatch(getHistoryAction(props?.item?.id));
         }
         const taskId = props.item?.id;
         dispatch(getBugs({ taskId, type: "Bug" }));
@@ -55,17 +59,26 @@ const Taskdetail = (props) => {
 
 
     const [isUpdate, setIsUpdate] = useState(false);
+
+
     const onSubmit = (e) => {
-        const commentData = {
-            userId: props.userId,
-            taskId: props.item?.id,
-            comment: e.comment,
-        };
-
-        dispatch(addComment(commentData)); // Dispatch action to add comment
-        setValue('comment', ''); // Reset comment input field
+        if (buttonChange) {
+            const commentData = {
+                userId: props.userId,
+                taskId: props.item?.id,
+                comment: e.comment,
+            };
+            dispatch(addComment(commentData));
+        } else {
+            let body = {
+                commentId: commentId,
+                comment: e?.comment,
+            };
+            dispatch(updateComment(body));
+            setButtonChange(true);
+        }
+        setValue('comment', '');
     };
-
 
     useEffect(() => {
         // if (successHandle?.data?.status === 200) {
@@ -77,15 +90,12 @@ const Taskdetail = (props) => {
         }
     }, [store?.getHistoryReducer?.data?.response]);
 
-    const handelUpdate = (e) => {
-        const commentData = {
-            taskId: item?.taskId,
-            commentId: e.commentId,
-            comment: e.comment
-        };
-        dispatch(updateComment(commentData)); // Dispatch action to update comment
-        setIsUpdate(false); // Exit update mode
+    const handelUpdate = (data) => {
+        setCommentId(data?._id);
+        setValue('comment', data?.comment);
+        setButtonChange(false);
     };
+
 
 
     const editComment = (item) => {
@@ -152,6 +162,14 @@ const Taskdetail = (props) => {
             setInputForUpdate(false);
         }
     };
+    const submitUpdateComment = (item) => {
+        let body = {
+            commentId: allCommetUpdateId,
+            comment: item?.updated_comment,
+        };
+        dispatch(updateComment(body));
+        setInputForUpdate(false);
+    };
     const handelUpdateAll = (data, indx) => {
         setError('');
         setUnchangeComment(data?.comment);
@@ -181,14 +199,23 @@ const Taskdetail = (props) => {
                 size={'xl'}
                 onHide={props.closeTaskDetailMOdel}
             >
-                <Modal.Header onClick={() => updateHandle('closeModal')} closeButton>
-                    <Modal.Title id="" className="text-start text-dark modal_titles">
-                        Task Detail : {props?.item?.summary ? props?.item.summary.slice(0, 10).charAt(0).toUpperCase() + props?.item.summary.slice(1, 10) : ''}
-                    </Modal.Title>
+                <Modal.Header >
+                    <div className='row'>
+                        <div className="col-12">
+                            <button onClick={props.closeTaskDetailMOdel}>
+                                <IoCloseSharp />
+                            </button>
+                        </div>
+                        <div className="col-12 text-center">
+                            Task Detail : {props?.item?.summary ? props?.item.summary.charAt(0).toUpperCase() + props?.item.summary.slice(1, 50) : ''}
+                        </div>
+                    </div>
+                    {/* <Modal.Title id="" className="text-start text-dark modal_titles"> */}
+                    {/* </Modal.Title> */}
                 </Modal.Header>
                 <Modal.Body className="cardinfo">
                     <div className="row w-100">
-                        <Col lg={7}>
+                        <Col lg={8}>
                             <h4 className='modal_titles'>Activity</h4>
                             <Row>
                                 <Col lg={12} className='d-flex align-items-center gap-1'>
@@ -198,7 +225,7 @@ const Taskdetail = (props) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'All' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        All
+                                        <span><i class="bi bi-people-fill "></i></span> All
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -206,7 +233,7 @@ const Taskdetail = (props) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Comments' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        Comments
+                                        <span><i class="bi bi-chat-right-text-fill"></i></span>  Comments
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -214,9 +241,8 @@ const Taskdetail = (props) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'History' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        History
+                                        <span><i class="bi bi-clock-history"></i></span>  History
                                     </Button>
-
 
                                     <Button
                                         onClick={() => {
@@ -224,7 +250,7 @@ const Taskdetail = (props) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Bugs' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        Bugs
+                                        <span><i class="bi bi-bug-fill"></i></span>  Bugs
                                     </Button>
                                     <Button
                                         onClick={() => {
@@ -232,7 +258,7 @@ const Taskdetail = (props) => {
                                         }}
                                         className={`mybutton btn px-2 fw-bold py-1  web_button ${connectComponent === 'Subtask' ? 'active-button-tdp' : 'inactive-button-tdp'}`}
                                     >
-                                        SubTask
+                                        <span><i class="bi bi-check-square-fill"></i></span>  SubTask
                                     </Button>
 
 
@@ -266,7 +292,7 @@ const Taskdetail = (props) => {
                                                                     {moment(ele?.createdAt).fromNow()}{' '}
                                                                 </p>
                                                             </div>
-                                                               <div className="m-0 p-0" title={ele?.comment}>
+                                                            <div className="m-0 p-0" title={ele?.comment}>
                                                                 <p>{ele?.comment ? ele?.comment.slice(0, 10).charAt(0).toUpperCase() + ele?.comment.slice(1) : ''}</p>
                                                             </div>
                                                             <div className="d-flex m-0 p-0">
@@ -309,16 +335,16 @@ const Taskdetail = (props) => {
                                                         </div>
                                                     </OverlayTrigger>
                                                     <Link to={generateLink(item.userActivity, item)}
-                                                className='text-dark'>
-                                                <span>
-                                                    {item?.userId?.firstName} {item?.userId?.lastName}
-                                                    {item.userActivity === "Created milestone" && <span> created milestone</span>}
-                                                    {item.userActivity === "Created Sprint" && <span> created sprint</span>}
-                                                    {item.userActivity === "Create Project" && <span> create project</span>}
-                                                    {item.userActivity === "Created Task" && <span> created task</span>}
-                                                    {' on ' + item?.createdAt}
-                                                </span>
-                                            </Link>
+                                                        className='text-dark'>
+                                                        <span>
+                                                            {item?.userId?.firstName} {item?.userId?.lastName}
+                                                            {item.userActivity === "Created milestone" && <span> created milestone</span>}
+                                                            {item.userActivity === "Created Sprint" && <span> created sprint</span>}
+                                                            {item.userActivity === "Create Project" && <span> create project</span>}
+                                                            {item.userActivity === "Created Task" && <span> created task</span>}
+                                                            {' on ' + item?.createdAt}
+                                                        </span>
+                                                    </Link>
 
 
                                                 </div>
@@ -327,105 +353,147 @@ const Taskdetail = (props) => {
 
                                     </Row>
                                     <Row>
-                                        <Table className="mb-0 add_Color_font text-nowrap" striped>
-                                            <thead>
-                                                <tr>
-                                                    {/* <th className='fw-bold'>#</th> */}
-                                                    <th className='fw-bold'>Type</th>
-                                                    <th className='fw-bold'>Summary</th>
-                                                    <th className='fw-bold'>Decription</th>
-                                                    <th className='fw-bold'>Assignee</th>
-                                                    <th className='fw-bold'>Priority</th>
-                                                    <th className='fw-bold'>Start Date</th>
-                                                    <th className='fw-bold'>End Date</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                        <div style={{ overflowX: 'auto' }}>
+                                            <Table className="mb-0 add_Color_font text-nowrap w-100" striped>
+                                                <thead>
+                                                    <tr>
+                                                        {/* <th className='fw-bold'>#</th> */}
+                                                        <th className='fw-bold'>Type</th>
+                                                        <th className='fw-bold'>Summary</th>
+                                                        <th className='fw-bold'>Decription</th>
+                                                        <th className='fw-bold'>Assignee</th>
+                                                        <th className='fw-bold'>Priority</th>
 
-                                                {store?.getSubTaskReducer?.data?.response?.map((sub, ind) => {
-                                                    return (
-                                                        <tr className="align-middle">
-                                                            {/* <th>{ind + 1}</th> */}
-                                                            <th>SubTask</th>
-                                                            <td>
-                                                                <span title={sub?.summary}>
-                                                                    {sub?.summary ? sub.summary.slice(0, 7).charAt(0).toUpperCase() + sub.summary.slice(1, 7) : ''}
-                                                                </span>
-                                                            </td>
-                                                            <td>
-                                                                <span title={sub?.description}>{sub?.description.slice(0, 10)}</span>
-                                                            </td>
-                                                            <td>
-                                                        <span>
-                                                        {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
-                                                        </span>
-                                                    </td>
-                                                            <td>
-                                                                <span>
-                                                                    {sub?.priority}
-                                                                </span>
-                                                            </td>
-                                                            <td>
-                                                                <span>
-                                                                    {sub?.startDate.slice(0, 10)}
-                                                                </span>
-                                                            </td>
-                                                            <td>
-                                                                <span>
-                                                                    {sub?.dueDate.slice(0, 10)}
-                                                                </span>
-                                                            </td>
+                                                        <th className='fw-bold'>Status</th>
+                                                        <th className='fw-bold'>Technology</th>
+                                                        <th className='fw-bold'>Reporter</th>
+                                                        <th className='fw-bold'>Start Date</th>
+                                                        <th className='fw-bold'>End Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
 
-
-                                                        </tr>
-                                                    );
-                                                })}
-
-                                            </tbody>
-                                            <tbody>
-
-                                                {bugsdata?.map((bug, ind) => {
-                                                    return (
-                                                        <tr className="align-middle">
-                                                            {/* <th>{ind + 1}</th> */}
-                                                            <th>Bug</th>
-
-                                                            <td>
-                                                                <span title={bug?.summary}>
-                                                                    {bug?.summary ? bug.summary.slice(0, 7).charAt(0).toUpperCase() + bug.summary.slice(1, 7) : ''}
-                                                                </span>
-                                                            </td>
-                                                            <td>
-                                                                <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
-                                                            </td>
-                                                            <td>
-                                                        <span>
-                                                        {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
-                                                        </span>
-                                                    </td>
-                                                            <td>
-                                                                <span>
-                                                                    {bug?.priority}
-                                                                </span>
-                                                            </td>
-                                                            <td>
-                                                                <span>
-                                                                    {bug?.startDate.slice(0, 10)}
-                                                                </span>
-                                                            </td>
-                                                            <td>
-                                                                <span>
-                                                                    {bug?.dueDate.slice(0, 10)}
-                                                                </span>
-                                                            </td>
+                                                    {store?.getSubTaskReducer?.data?.response?.map((sub, ind) => {
+                                                        return (
+                                                            <tr className="align-middle">
+                                                                {/* <th>{ind + 1}</th> */}
+                                                                <th>SubTask</th>
+                                                                <td>
+                                                                    <span title={sub?.summary}>
+                                                                        {sub?.summary ? sub.summary.slice(0, 7).charAt(0).toUpperCase() + sub.summary.slice(1, 7) : ''}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span title={sub?.description}>{sub?.description.slice(0, 10)}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>
+                                                                        {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>
+                                                                        {sub?.priority}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>
+                                                                        {props?.item?.status == 1 ? 'To-Do' : ''}
+                                                                        {props?.item?.status == 2 ? 'In-Progress' : ''}
+                                                                        {props?.item?.status == 3 ? 'Hold' : ''}
+                                                                        {props?.item?.status == 4 ? 'Done' : ''}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>
+                                                                        {props?.item?.technology?.name}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>
+                                                                        {props?.item?.reporterInfo?.firstName} {props?.item?.reporterInfo?.lastName}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>
+                                                                        {sub?.startDate.slice(0, 10)}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>
+                                                                        {sub?.dueDate.slice(0, 10)}
+                                                                    </span>
+                                                                </td>
 
 
-                                                        </tr>
-                                                    );
-                                                })}
+                                                            </tr>
+                                                        );
+                                                    })}
 
-                                            </tbody>
-                                        </Table>
+                                                </tbody>
+                                                <tbody>
+
+                                                    {bugsdata?.map((bug, ind) => {
+                                                        return (
+                                                            <tr className="align-middle">
+                                                                {/* <th>{ind + 1}</th> */}
+                                                                <th>Bug</th>
+
+                                                                <td>
+                                                                    <span title={bug?.summary}>
+                                                                        {bug?.summary ? bug.summary.slice(0, 7).charAt(0).toUpperCase() + bug.summary.slice(1, 7) : ''}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>
+                                                                        {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>
+                                                                        {bug?.priority}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>
+                                                                        {props?.item?.status == 1 ? 'To-Do' : ''}
+                                                                        {props?.item?.status == 2 ? 'In-Progress' : ''}
+                                                                        {props?.item?.status == 3 ? 'Hold' : ''}
+                                                                        {props?.item?.status == 4 ? 'Done' : ''}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>
+                                                                        {props?.item?.technology?.name}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>
+                                                                        {props?.item?.reporterInfo?.firstName} {props?.item?.reporterInfo?.lastName}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>
+                                                                        {bug?.startDate.slice(0, 10)}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>
+                                                                        {bug?.dueDate.slice(0, 10)}
+                                                                    </span>
+                                                                </td>
+
+
+                                                            </tr>
+                                                        );
+                                                    })}
+
+                                                </tbody>
+                                            </Table>
+                                        </div>
                                     </Row>
                                 </div>
                             ) : connectComponent === 'Comments' ? (
@@ -479,7 +547,7 @@ const Taskdetail = (props) => {
                                                                 <p>{ele?.comment ? ele?.comment.slice(0, 10).charAt(0).toUpperCase() + ele?.comment.slice(1) : ''}</p>
                                                             </div>
                                                             <div className="d-flex m-0 p-0">
-                                                                <p className=" p-0" onClick={() => setIsUpdate(true)}>
+                                                                <p className=" p-0" style={{ cursor: 'pointer' }} onClick={() => handelUpdate(ele)}>
                                                                     Edit
                                                                 </p>
                                                             </div>
@@ -534,123 +602,171 @@ const Taskdetail = (props) => {
                                     ))}
                                 </div>
                             ) : connectComponent === 'Subtask' ? (
-                                <Table className="mb-0 add_Color_font text-nowrap " striped>
-                                    <thead className=''>
-                                        <tr>
-                                            <th className='fw-bold'>#</th>
-                                            <th className='fw-bold'>Summary</th>
-                                            <th className='fw-bold'>Decription</th>
-                                            <th className='fw-bold'>Assignee</th>
-                                            <th className='fw-bold'>Priority</th>
-                                            <th className='fw-bold'>Start Date</th>
-                                            <th className='fw-bold'>End Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                <div style={{ overflowX: 'auto' }}>
+                                    <Table className="mb-0 add_Color_font text-nowrap w-100 " striped>
+                                        <thead className=''>
+                                            <tr>
+                                                <th className='fw-bold'>#</th>
+                                                <th className='fw-bold'>Summary</th>
+                                                <th className='fw-bold'>Decription</th>
+                                                <th className='fw-bold'>Assignee</th>
+                                                <th className='fw-bold'>Priority</th>
+                                                <th className='fw-bold'>Status</th>
+                                                <th className='fw-bold'>Technology</th>
+                                                <th className='fw-bold'>Reporter</th>
+                                                <th className='fw-bold'>Start Date</th>
+                                                <th className='fw-bold'>End Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                        {store?.getSubTaskReducer?.data?.response?.map((sub, ind) => {
-                                            return (
-                                                <tr className="align-middle">
-                                                    <th>{ind + 1}</th>
+                                            {store?.getSubTaskReducer?.data?.response?.map((sub, ind) => {
+                                                return (
+                                                    <tr className="align-middle">
+                                                        <th>{ind + 1}</th>
 
-                                                    <td>
-                                                        <span title={sub?.summary}>
-                                                            {sub?.summary ? sub.summary.slice(0, 7).charAt(0).toUpperCase() + sub.summary.slice(1, 7) : ''}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span title={sub?.description}>{sub?.description.slice(0, 10)}</span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                        {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
-                                                        </span>
-                                                    </td>
-                                                 
-                                                    <td>
-                                                        <span>
-                                                            {sub?.priority}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                            {sub?.startDate.slice(0, 10)}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                            {sub?.dueDate.slice(0, 10)}
-                                                        </span>
-                                                    </td>
+                                                        <td>
+                                                            <span title={sub?.summary}>
+                                                                {sub?.summary ? sub.summary.slice(0, 7).charAt(0).toUpperCase() + sub.summary.slice(1, 7) : ''}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span title={sub?.description}>{sub?.description.slice(0, 10)}</span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
+                                                            </span>
+                                                        </td>
+
+                                                        <td>
+                                                            <span>
+                                                                {sub?.priority}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {props?.item?.status == 1 ? 'To-Do' : ''}
+                                                                {props?.item?.status == 2 ? 'In-Progress' : ''}
+                                                                {props?.item?.status == 3 ? 'Hold' : ''}
+                                                                {props?.item?.status == 4 ? 'Done' : ''}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {props?.item?.technology?.name}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {props?.item?.reporterInfo?.firstName} {props?.item?.reporterInfo?.lastName}
+                                                            </span>
+                                                        </td>
 
 
-                                                </tr>
-                                            );
-                                        })}
+                                                        <td>
+                                                            <span>
+                                                                {sub?.startDate.slice(0, 10)}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {sub?.dueDate.slice(0, 10)}
+                                                            </span>
+                                                        </td>
 
-                                    </tbody>
-                                </Table>
+
+                                                    </tr>
+                                                );
+                                            })}
+
+                                        </tbody>
+                                    </Table>
+                                </div>
                             ) : connectComponent === 'Bugs' ? (
-                                <Table className="mb-0 add_Color_font text-nowrap" striped>
-                                    <thead>
-                                        <tr>
-                                            <th className='fw-bold'>#</th>
-                                            <th className='fw-bold'>Summary</th>
-                                            <th className='fw-bold'>Decription</th>
-                                            <th className='fw-bold'>Assignee</th>
-                                            <th className='fw-bold'>Priority</th>
-                                            <th className='fw-bold'>Start Date</th>
-                                            <th className='fw-bold'>End Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                <div style={{ overflowX: 'auto' }}>
+                                    <Table className="mb-0 add_Color_font text-nowrap w-100" striped>
+                                        <thead>
+                                            <tr>
+                                                <th className='fw-bold'>#</th>
+                                                <th className='fw-bold'>Summary</th>
+                                                <th className='fw-bold'>Decription</th>
+                                                <th className='fw-bold'>Assignee</th>
+                                                <th className='fw-bold'>Priority</th>
+                                                <th className='fw-bold'>Status</th>
+                                                <th className='fw-bold'>Technology</th>
+                                                <th className='fw-bold'>Reporter</th>
+                                                <th className='fw-bold'>Start Date</th>
+                                                <th className='fw-bold'>End Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                        {bugsdata?.map((bug, ind) => {
-                                            return (
-                                                <tr className="align-middle">
-                                                    <th>{ind + 1}</th>
+                                            {bugsdata?.map((bug, ind) => {
+                                                return (
+                                                    <tr className="align-middle">
+                                                        <th>{ind + 1}</th>
 
-                                                    <td>
-                                                        <span title={bug?.summary}>
-                                                            {bug?.summary ? bug.summary.slice(0, 7).charAt(0).toUpperCase() + bug.summary.slice(1, 7) : ''}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                        {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                            {bug?.priority}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                            {bug?.startDate.slice(0, 10)}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span>
-                                                            {bug?.dueDate.slice(0, 10)}
-                                                        </span>
-                                                    </td>
+                                                        <td>
+                                                            <span title={bug?.summary}>
+                                                                {bug?.summary ? bug.summary.slice(0, 7).charAt(0).toUpperCase() + bug.summary.slice(1, 7) : ''}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span title={bug?.description}>{bug?.description.slice(0, 10)}</span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {props?.item?.assigneeInfo?.firstName} {props?.item?.assigneeInfo?.lastName}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {bug?.priority}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {props?.item?.status == 1 ? 'To-Do' : ''}
+                                                                {props?.item?.status == 2 ? 'In-Progress' : ''}
+                                                                {props?.item?.status == 3 ? 'Hold' : ''}
+                                                                {props?.item?.status == 4 ? 'Done' : ''}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {props?.item?.technology?.name}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {props?.item?.reporterInfo?.firstName} {props?.item?.reporterInfo?.lastName}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {bug?.startDate.slice(0, 10)}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span>
+                                                                {bug?.dueDate.slice(0, 10)}
+                                                            </span>
+                                                        </td>
 
 
-                                                </tr>
-                                            );
-                                        })}
+                                                    </tr>
+                                                );
+                                            })}
 
-                                    </tbody>
-                                </Table>
+                                        </tbody>
+                                    </Table>
+                                </div>
                             ) : (
                                 ''
                             )}
                         </Col>
-                        <Col lg={5} className=' '>
+                        <Col lg={4} className=' '>
                             <div className="table-responsive">
                                 <table className="table lh-sm table-borderless" style={{ fontSize: '14px' }} >
                                     <tbody className='text-start'>

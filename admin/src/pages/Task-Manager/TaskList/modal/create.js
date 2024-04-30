@@ -181,7 +181,7 @@ const Create = ({ modal, CloseModal }) => {
                                                 ))}
                                             </Form.Select>
                                             {errors.projectname?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -199,7 +199,7 @@ const Create = ({ modal, CloseModal }) => {
                                                 ))}
                                             </Form.Select>
                                             {errors.Milestone?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -220,7 +220,7 @@ const Create = ({ modal, CloseModal }) => {
                                                     ))}
                                                 </Form.Select>
                                                 {errors.Sprint?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
+                                                    <span className="text-danger"> This field is required *</span>
                                                 )}
                                             </Form.Group>
                                         </Col> */}
@@ -233,11 +233,15 @@ const Create = ({ modal, CloseModal }) => {
                                             <Form.Control
                                                 type="text"
                                                 placeholder=" Enter Task Summary"
-                                                {...register('summary', { required: true })}
+                                                {...register('summary', { required: true, pattern: /^[^\s]+$/ })}
                                             />{' '}
                                             {errors.summary?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
+                                            {errors.summary?.type === 'pattern' && (
+                                                <span className="text-danger"> Empty fields / space at first character is not allowed</span>
+                                            )}
+
                                         </Form.Group>
                                     </Col>
                                     <Col lg={6}>
@@ -257,7 +261,7 @@ const Create = ({ modal, CloseModal }) => {
                                                 ))}
                                             </Form.Select>
                                             {errors.Reporter?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -270,17 +274,17 @@ const Create = ({ modal, CloseModal }) => {
                                         <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
                                                 {' '}
-                                                Description<span className="text-danger">*</span>:
+                                                Description:
                                             </Form.Label>
                                             <Form.Control
                                                 as="textarea"
                                                 rows={3}
                                                 type="text"
                                                 placeholder="Please Enter Description"
-                                                {...register('description', { required: true })}
+                                                {...register('description')}
                                             />
                                             {errors.description?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -301,7 +305,7 @@ const Create = ({ modal, CloseModal }) => {
                                                 ))}
                                             </Form.Select>
                                             {errors.Assignee?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -324,7 +328,7 @@ const Create = ({ modal, CloseModal }) => {
                                         ))}
                                     </Form.Select>
                                     {errors.label?.type === 'required' && (
-                                        <span className="text-danger"> This feild is required *</span>
+                                        <span className="text-danger"> This field is required *</span>
                                     )}
                                 </Form.Group>
                             </Col>
@@ -356,7 +360,7 @@ const Create = ({ modal, CloseModal }) => {
                                                     Low</option>
                                             </Form.Select>
                                             {errors.Priority?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
+                                                <span className="text-danger"> This field is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -371,6 +375,7 @@ const Create = ({ modal, CloseModal }) => {
                                                 // onChange={(date) => setStartDate(date)}
                                                 onChange={(date) => handleStartDate(date)}
                                                 placeholderText="mm-dd-yyyy"
+                                                required
                                                 // minDate={today}
                                                 className="add_width_input"
                                             />
@@ -392,6 +397,7 @@ const Create = ({ modal, CloseModal }) => {
                                                 selected={endDate}
                                                 disabled={startDate == '' || startDate == undefined}
                                                 // onChange={(date) => setEndDate(date)}
+                                                required
                                                 onChange={(date) => handleEndDate(date)}
                                                 placeholderText="mm-dd-yyyy"
                                                 // minDate={startDate}
@@ -407,7 +413,7 @@ const Create = ({ modal, CloseModal }) => {
                                     <Col lg={6}>
 
                                         <div class="mb-2">
-                                            <label class="form-label" for="exampleForm.ControlTextarea1">
+                                            <label class="form-label" htmlFor="exampleForm.ControlTextarea1">
                                                 Attachment :
                                             </label>
                                             <div onClick={openFileInput}>
