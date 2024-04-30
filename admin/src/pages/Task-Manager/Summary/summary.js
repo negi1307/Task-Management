@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getPriorityGraphAction, getTaskSummmaryDetail, getTaskWeekCountAction } from '../../../redux/Summary/action';
 import { getHistoryAction } from '../../../redux/task/action';
-
+import { getAllTask } from '../../../redux/actions';
 import Chart from 'react-apexcharts';
 import { ProgressBar } from 'react-bootstrap';
 import { Bar } from 'react-chartjs-2';
@@ -23,7 +23,8 @@ const Summary = () => {
     const lastWeekCount = store?.getTaskWeekCountReducer?.data?.response;
     const [taskCount, setTaskCount] = useState(null);
     const [historyResponse, setHistoryResponse] = useState(null);
-
+    const statusCount = store?.getAllTaskReducer?.data?.Response;
+    // console.log({ statusCount })
     // console.log(lastWeekCount); // Check if data is being fetched
     const [data, setData] = useState([]);
     // const [barGraphData, setBarGraphData] = useState();
@@ -49,14 +50,14 @@ const Summary = () => {
 
     const priorityData = store?.getPriorityGraphReducer?.data?.response;
 
-    console.log({ spriteId })
+    // console.log({ spriteId })
 
     useEffect(() => {
         dispatch(getTaskWeekCountAction({ sprintId: spriteId }));
         dispatch(getTaskSummmaryDetail({ sprintId: spriteId }));
         dispatch(getHistoryAction({ sprintId: spriteId }));
         dispatch(getPriorityGraphAction({ sprintId: spriteId }));
-        // dispatch(getAllTaskCountAction());
+        dispatch(getAllTask({ sprintId: spriteId, searchString: '' }));
     }, [dispatch]);
 
     const apexDonutOpts = {
@@ -166,7 +167,7 @@ const Summary = () => {
                                     <div className="mx-3 ">
                                         <b>
                                             <h5 className="mb-0 mt-1 text-secondary">
-                                                {lastWeekCount?.createdCount ? lastWeekCount?.createdCount : '0'} task Add
+                                                {lastWeekCount?.createdCount ? lastWeekCount?.createdCount : '0'} task added
                                             </h5>
                                         </b>
                                         <b>
@@ -183,7 +184,7 @@ const Summary = () => {
                                     <div className="mx-3 ">
                                         <b>
                                             <h5 className="mb-0 mt-1 text-secondary">
-                                                {lastWeekCount?.dueCount ? lastWeekCount?.dueCount : '0'} task due
+                                                {lastWeekCount?.dueCount ? lastWeekCount?.dueCount : '0'} tasks due
                                             </h5>
                                         </b>
                                         <b>
@@ -203,22 +204,23 @@ const Summary = () => {
                                         </h5>
                                     </div>
                                     <div className='col-12'>
-                                        {taskCount !== null && (
-                                            <PieChart
-                                                series={[
-                                                    {
-                                                        data: taskCount.map((item, index) => ({
-                                                            id: index,
-                                                            value: item.taskCount,
-                                                            label: item.name,
-                                                        })),
-                                                    },
-                                                ]}
-                                                width={500}
-                                                height={300}
-                                                colors={['#727cf5', '#0acf97', '#ff00ff', '#fa5c7c', '#ffbc00']}
-                                            />
-                                        )}
+                                        <PieChart
+                                            series={[
+                                                {
+                                                    data: [
+                                                        { id: 6, value: `${statusCount?.todoCount}`, label: `Todo: ${statusCount?.todoCount}` },
+                                                        { id: 7, value: `${statusCount?.inProgressCount}`, label: `Inprogress: ${statusCount?.inProgressCount}` },
+                                                        { id: 8, value: `${statusCount?.testingCount}`, label: `Testing: ${statusCount?.testingCount}` },
+                                                        { id: 9, value: `${statusCount?.doneCount}`, label: `Done: ${statusCount?.doneCount} ` },
+                                                        { id: 10, value: `${statusCount?.holdCount}`, label: `Hold: ${statusCount?.holdCount}` },
+                                                    ],
+                                                    highlightScope: { faded: 'global', highlighted: 'item' },
+                                                    faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                                                },
+                                            ]}
+                                            height={230}
+                                            width={550}
+                                        />
 
                                     </div>
                                 </div>

@@ -115,17 +115,21 @@ const Update = ({ modal, closeModal, editData }) => {
                                         <Form.Control
                                             type="text"
                                             placeholder="Please Enter  Milestone Name"
-                                            {...register('title', { required: true })}
+                                            {...register('title', { required: true, pattern: /^[^\s]+$/ })}
                                         />
                                         {errors.title?.type === 'required' && (
                                             <span className="text-danger"> This field is required *</span>
+                                        )}
+
+                                        {errors.title?.type === 'pattern' && (
+                                            <span className="text-danger"> Empty fields / space at first character is not allowed</span>
                                         )}
                                     </Form.Group>
                                 </Col>
                                 <Col lg={12}>
                                     <Form.Group className="mb-2 " controlId="exampleForm.ControlTextarea1">
                                         <Form.Label className="mb-0">
-                                            Description <span className="text-danger">*</span>:
+                                            Description :
                                         </Form.Label>
                                         <Form.Control
                                             as="textarea"

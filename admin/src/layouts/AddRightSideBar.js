@@ -211,10 +211,13 @@ export default function RightBar(props) {
                                         type="text"
                                         id="exampleForm.ControlTextarea1"
                                         className="form-control"
-                                        {...register('Summary', { required: true })}
+                                        {...register('Summary', { required: true, pattern: /^[^\s]+$/ })}
                                     />
                                     {errors.Summary?.type === 'required' && (
                                         <span className="text-danger"> This field is required *</span>
+                                    )}
+                                    {errors.Summary?.type === 'pattern' && (
+                                        <span className="text-danger"> Empty fields not allowed</span>
                                     )}
                                 </div>
                             </div>
@@ -287,7 +290,7 @@ export default function RightBar(props) {
                                             {category?.map((ele, ind) => (
                                                 <option value={ele?._id}>
                                                     {' '}
-                                                    {ele?.name} 
+                                                    {ele?.name}
                                                 </option>
                                             ))}
                                         </select>

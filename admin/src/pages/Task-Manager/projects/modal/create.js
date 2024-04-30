@@ -160,10 +160,13 @@ const Create = ({ modal, closeModal }) => {
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Please Enter Project Name"
-                                                {...register('projectName', { required: true })}
+                                                {...register('projectName', { required: true, pattern: /^[^\s]+$/ })}
                                             />
                                             {errors.projectName?.type === 'required' && (
                                                 <span className="text-danger"> This field is required *</span>
+                                            )}
+                                            {errors.projectName?.type === 'pattern' && (
+                                                <span className="text-danger"> Empty fields / space at first character is not allowed</span>
                                             )}
                                         </Form.Group>
                                     </Col>
@@ -175,10 +178,13 @@ const Create = ({ modal, closeModal }) => {
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Please Enter Client Name"
-                                                {...register('clientName', { required: true })}
+                                                {...register('clientName', { required: true, pattern: /^[^\s]+$/ })}
                                             />
                                             {errors.clientName?.type === 'required' && (
                                                 <span className="text-danger"> This field is required *</span>
+                                            )}
+                                            {errors.clientName?.type === 'pattern' && (
+                                                <span className="text-danger"> Empty fields / space at first character is not allowed</span>
                                             )}
                                         </Form.Group>
                                     </Col>
