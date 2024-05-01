@@ -37,7 +37,11 @@ const Projects = () => {
     const [showModal, setShowModal] = useState(false);
     const [formSubmitted, setFormSubmitted] = useState(false);
     const updateResponse = store?.updateProject?.data?.status;
-    // console.log({ updateResponse })
+
+    const sessionData = sessionStorage.getItem('hyper_user');
+    const userData = JSON.parse(sessionData);
+    const userRole = userData.role;
+    console.log(store, 'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu')
     const closeaddModal = () => {
         // getalltasks();
     }
@@ -86,6 +90,7 @@ const Projects = () => {
                 await dispatch(updateProject(body));
             }
 
+
         } catch (error) {
             console.error("Error updating project:", error);
         }
@@ -95,6 +100,13 @@ const Projects = () => {
     };
 
     const handleStatusChange = async (e, data) => {
+        if (userRole === 'Testing') {
+            // Show toast indicating that testing user cannot change status
+            // Adjust the ToastHandle function according to your toast implementation
+            ToastHandle('error', 'Tester is not allowed to change project status');
+            return; // Return early, preventing further execution
+        }
+
         if (e.target.checked) {
             setCheckedStatus(true);
         } else {
@@ -167,29 +179,32 @@ const Projects = () => {
                 <Card>
                     <Card.Body>
                         <div className="row mx-auto">
-                            <div className="row d-flex align-items-center">
-                                <div className={`col-auto  cp ${projectStatus == 'Ongoing' ? 'Active_data' : 'InActive_data'}`}>
-                                    <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('1')}>
-                                        Ongoing
-                                    </p>
-                                </div>
-                                <div className={`col-auto  cp ${projectStatus == "Support" ? 'Active_data' : 'InActive_data'}`}>
-                                    <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('2')}>
-                                        Support
-                                    </p>
-                                </div>
+                            {userRole !== 'Testing' && (
+                                <div className="row d-flex align-items-center">
+                                    <div className={`col-auto  cp ${projectStatus == 'Ongoing' ? 'Active_data' : 'InActive_data'}`}>
+                                        <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('1')}>
+                                            Ongoing
+                                        </p>
+                                    </div>
+                                    <div className={`col-auto  cp ${projectStatus == "Support" ? 'Active_data' : 'InActive_data'}`}>
+                                        <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('2')}>
+                                            Support
+                                        </p>
+                                    </div>
 
-                                <div className={`col-auto  cp ${projectStatus == "Delivered" ? 'Active_data' : 'InActive_data'}`}>
-                                    <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('3')}>
-                                        Delivered
-                                    </p>
-                                </div>
-                                {/* <div className={`col-auto  cp ${projectStatus == 4 ? 'Active_data' : 'InActive_data'}`}>
+                                    <div className={`col-auto  cp ${projectStatus == "Delivered" ? 'Active_data' : 'InActive_data'}`}>
+                                        <p className="p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('3')}>
+                                            Delivered
+                                        </p>
+                                    </div>
+                                    {/* <div className={`col-auto  cp ${projectStatus == 4 ? 'Active_data' : 'InActive_data'}`}>
                                     <p className=" p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('4')}>
                                         Completed
                                     </p>
                                 </div> */}
-                            </div>
+                                </div>
+                            )}
+
                             <div className="d-flex col-6 mt-3">
                                 <div className="row d-flex align-items-center">
                                     <div className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
@@ -206,14 +221,16 @@ const Projects = () => {
                             </div>
                             {status == 1 ? (
                                 <div className="col-6 d-flex align-items-center justify-content-end gap-3 pe-0">
-                                    <Button
-                                        className="mybutton btn p-1 fw-bold py-1  web_button"
-                                        variant="info"
-                                        onClick={() => {
-                                            handelCreate();
-                                        }}>
-                                        Add Projects
-                                    </Button>
+                                    {userRole !== "Testing" && (
+                                        <Button
+                                            className="mybutton btn p-1 fw-bold py-1  web_button"
+                                            variant="info"
+                                            onClick={() => {
+                                                handelCreate();
+                                            }}>
+                                            Add Projects
+                                        </Button>
+                                    )}
                                     <button
                                         type="button"
                                         className="mybutton btn p-1 fw-bold py-1  web_button"
@@ -309,13 +326,15 @@ const Projects = () => {
                                                                     <i className="mdi mdi-eye m-0 p-0"></i>
                                                                 </Link>
                                                             </p>
-                                                            <p className="action-icon m-0 p-0  ">
-                                                                <i
-                                                                    className="uil-edit-alt m-0 p-0"
-                                                                    onClick={() => {
-                                                                        handelUpdate(ele);
-                                                                    }}></i>
-                                                            </p>
+                                                            {userRole !== "Testing" && (
+                                                                <p className="action-icon m-0 p-0  ">
+                                                                    <i
+                                                                        className="uil-edit-alt m-0 p-0"
+                                                                        onClick={() => {
+                                                                            handelUpdate(ele);
+                                                                        }}></i>
+                                                                </p>
+                                                            )}
                                                         </Col>
                                                     </Row>
                                                 </td>

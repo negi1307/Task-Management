@@ -47,11 +47,11 @@ function* login({ payload: { username, password } }) {
             const tokenData = response?.data;
             const userData = {
                 // id: data?.role,
-                username: data?.role,
+                username: data?.firstName,
                 password: 'test',
-                firstName: data?.userName,
-                lastName: 'User',
-                role: 'Admin',
+                firstName: data?.firstName,
+                lastName: data?.lastName,
+                role: data?.role,
                 token: tokenData?.token,
                 // userData: response?.data?.response
             };

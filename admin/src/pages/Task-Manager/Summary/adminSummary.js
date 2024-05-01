@@ -60,6 +60,11 @@ const AdminDashboard = () => {
         reset,
         formState: { errors },
     } = useForm();
+
+    const sessionData = sessionStorage.getItem('hyper_user');
+    const userData = JSON.parse(sessionData);
+    const userRole = userData.role;
+
     useEffect(() => {
         if (successHandle?.data?.status === 200) {
             setData(successHandle?.data?.response);
@@ -81,7 +86,6 @@ const AdminDashboard = () => {
     }, [successHandle, store?.getHistoryReducer?.data?.response]);
     useEffect(() => {
         const taskTotalCount = store?.getTaskSummaryReducer?.data.response;
-        // console.log({ taskTotalCount })
         if (taskTotalCount) {
             setTaskCount(taskTotalCount);
         }
@@ -295,10 +299,13 @@ const AdminDashboard = () => {
                         <hr />
                         <div className='row'>
                             <div className='col-12 d-flex gap-2 justify-content-end'>
-                                <button className='mybutton btn p-1 fw-bold py-1 web_button'
-                                    onClick={() => setFilterModal(true)}>
-                                    Filter
-                                </button>
+                                {userRole !== 'Testing' && (
+                                    <button className='mybutton btn p-1 fw-bold py-1 web_button'
+                                        onClick={() => setFilterModal(true)}>
+                                        Filter
+                                    </button>
+
+                                )}
                                 <FilterModal
                                     className='d-none'
                                     showFilter={filterModal}
@@ -583,16 +590,19 @@ const AdminDashboard = () => {
 
                     </Row>
                     <Row className='px-3'>
-                        <Col sm={6} className='border border-1 border-muted mt-3 shadow rounded-4' >
-                            <Row className='p-3'>
-                                <Col sm={12}>
-                                    <h5 className='text-dark'> <strong>Priority Breakdown</strong></h5>
-                                </Col>
-                                <Col sm={12}>
-                                    <Chart options={options} series={series} type="bar" height={350} />
-                                </Col>
-                            </Row>
-                        </Col>
+                        {userRole !== 'Testing' && (
+                            <Col sm={6} className='border border-1 border-muted mt-3 shadow rounded-4' >
+                                <Row className='p-3'>
+                                    <Col sm={12}>
+                                        <h5 className='text-dark'> <strong>Priority Breakdown</strong></h5>
+                                    </Col>
+                                    <Col sm={12}>
+                                        <Chart options={options} series={series} type="bar" height={350} />
+                                    </Col>
+                                </Row>
+                            </Col>
+                        )}
+
                         <Col sm={6} className='border border-1 border-muted mt-3 shadow rounded-4'>
                             <Row className='p-2'>
                                 <Col sm={12}>
@@ -618,7 +628,6 @@ const AdminDashboard = () => {
                                                                 backgroundColor: '#605e5a',
                                                                 borderRadius: '100%',
                                                                 padding: '3px 4px',
-
                                                                 color: 'white',
                                                                 fontWeight: '600',
                                                             }}>

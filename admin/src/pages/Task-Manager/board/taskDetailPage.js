@@ -39,6 +39,9 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     const getHistory = store?.getHistoryReducer?.data?.response;
     const [historyResponse, setHistoryResponse] = useState(null);
     const updateresponse = store?.updateCommentReducer?.data.status;
+    const sessionData = sessionStorage.getItem('hyper_user');
+    const userData = JSON.parse(sessionData);
+    const userName = userData.firstName + ' ' + userData.lastName;
 
     const historyLoader = store?.getHistoryReducer
     const connectComponentCheck = (type) => {
@@ -100,6 +103,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         subtask_body.append('startDate', startDate);
         subtask_body.append('dueDate', endDate);
         subtask_body.append('type', e.type);
+        subtask_body.append('subtaskCreator', e.subtaskCreator);
 
         const fileInput = document.querySelector('input[type="file"]');
         if (fileInput.files.length > 0) {
@@ -467,6 +471,20 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 {errors.type && (
                                                     <div className="invalid-feedback">This field is required</div>
                                                 )}
+                                            </Form.Group>
+                                        </Col>
+                                        <Col sm={6}>
+                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                <Form.Label className='mb-0'>
+                                                    Created By<span className='text-danger'>*</span>
+                                                </Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    defaultValue={userName}
+                                                    disabled
+                                                    style={{ border: '1px solid #a6b3c3' }}
+                                                    {...register('subtaskCreator')}
+                                                />
                                             </Form.Group>
                                         </Col>
 
