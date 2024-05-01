@@ -249,15 +249,15 @@ const updateTaskStatus = async (req, res) => {
       const task = await taskModel.findById(taskId);
 
       let query = { status };
-      if (status === 2) {
-        const currentStatus = await taskModel.findById(taskId).select('status');
-        if (status <= currentStatus.status && req.user.role !== 'Testing') {
-          return res.status(403).json({ status: "403", message: "You are not authorized to update the task status backwards." });
-        }
+      if (status == 2) {
+        await taskModel.findById(taskId).select('status');
+        // if (status <= currentStatus.status && req.user.role !== 'Testing') {
+        //   return res.status(403).json({ status: "403", message: "You are not authorized to update the task status backwards." });
+        // }
         query.inProgressDate = new Date();
       }
 
-      if (status === 4 || status === 5) {
+      if (status == 4 || status == 5) {
         // if (req.user.role === 'Testing') {
         query.doneDate = new Date();
         if (task && task.inProgressDate) {
