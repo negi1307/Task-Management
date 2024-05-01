@@ -13,7 +13,7 @@ import { IoCloseSharp } from "react-icons/io5";
 
 const Taskdetail = (props) => {
     const { item, commentData } = props;
-
+console.log(props.item,'asdfghjk')
     // console.log(item, 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -30,8 +30,7 @@ const Taskdetail = (props) => {
     const [buttonChange, setButtonChange] = useState(true);
     const [commentId, setCommentId] = useState();
     const [historyResponse, setHistoryResponse] = useState(null);
-
-
+    const getAllComment = store?.getAllComment?.data?.response;
     const {
         register,
         handleSubmit,
@@ -48,12 +47,12 @@ const Taskdetail = (props) => {
         setValue('subtasks', "");
         setButtonChange(true);
         if (type === 'History') {
-            dispatch(getHistoryAction(props?.item?.id));
+            dispatch(getHistoryAction({taskId: props.item._id}));
         }
         const taskId = props.item?.id;
         dispatch(getBugs({ taskId, type: "Bug" }));
         dispatch(getSubTask({ taskId, type: "SubTask" }));
-        dispatch(getComment({ taskId }));
+        dispatch(getComment({ taskId:props?.item?._id }));
 
     };
 
@@ -62,21 +61,24 @@ const Taskdetail = (props) => {
 
 
     const onSubmit = (e) => {
+
         if (buttonChange) {
             const commentData = {
                 userId: props.userId,
-                taskId: props.item?.id,
+                taskId: props.item?._id,
                 comment: e.comment,
             };
+            // let bodyTask = props?.item?.taskId
+// console.log({bodyTask})
             dispatch(addComment(commentData));
+            // dispatch(getComment({taskId:props?.item?._id}));
+
         } else {
-            let body = {
-                commentId: commentId,
-                comment: e?.comment,
-            };
-            dispatch(updateComment(body));
+            dispatch(updateComment({commentId: commentId,comment: e?.comment}));
             setButtonChange(true);
         }
+        dispatch(getComment({taskId:props?.item?._id}));
+
         setValue('comment', '');
     };
 
@@ -88,6 +90,8 @@ const Taskdetail = (props) => {
         if (historyData) {
             setHistoryResponse(historyData);
         }
+        // dispatch(getComment({taskId:props?.item?._id}));
+
     }, [store?.getHistoryReducer?.data?.response]);
 
     const handelUpdate = (data) => {
@@ -97,14 +101,7 @@ const Taskdetail = (props) => {
     };
 
 
-
-    const editComment = (item) => {
-        setValue('comment', item?.comment);
-        setValue('commentId', item?._id);
-        setIsUpdate(true);
-    }
-
-    const downloadFile = (file) => {
+ const downloadFile = (file) => {
         fetch(file).then((response) => {
             response.blob().then((blob) => {
                 const fileURL = window.URL.createObjectURL(blob);
@@ -150,6 +147,7 @@ const Taskdetail = (props) => {
                     comment: updatedCommentInitialValue,
                 };
                 dispatch(updateComment(body));
+                // dispatch(getComment({taskId: props?.item?._id}));
                 // setTimeout(() => {
                 //     dispatch(getComment(item?.taskId));
                 // }, 500);
@@ -162,21 +160,22 @@ const Taskdetail = (props) => {
             setInputForUpdate(false);
         }
     };
-    const submitUpdateComment = (item) => {
-        let body = {
-            commentId: allCommetUpdateId,
-            comment: item?.updated_comment,
-        };
-        dispatch(updateComment(body));
-        setInputForUpdate(false);
-    };
-    const handelUpdateAll = (data, indx) => {
-        setError('');
-        setUnchangeComment(data?.comment);
-        setAllCommetUpdateId(data?._id);
-        setInputForUpdate(indx);
-        setUpdatedCommentInitialValue(data?.comment);
-    };
+    // const submitUpdateComment = (item) => {
+    //     let body = {
+    //         commentId: allCommetUpdateId,
+    //         comment: item?.updated_comment,
+    //     };
+    //     dispatch(updateComment(body));
+    //     dispatch(getComment({taskId: props?.item?._id}));
+    //     setInputForUpdate(false);
+    // };
+    // const handelUpdateAll = (data, indx) => {
+    //     setError('');
+    //     setUnchangeComment(data?.comment);
+    //     setAllCommetUpdateId(data?._id);
+    //     setInputForUpdate(indx);
+    //     setUpdatedCommentInitialValue(data?.comment);
+    // };
     function generateLink(userActivity, item) {
         switch (userActivity) {
             case "Created milestone":
@@ -506,7 +505,15 @@ const Taskdetail = (props) => {
                                                         type="text"
                                                         placeholder="Add comment"
                                                         {...register('comment', { required: true })}
+                                    
                                                     />
+                                                      {errors.comment?.type === 'required' && (
+                                            <span className="text-danger"> This field is required *</span>
+                                        )}
+
+                                        {/* {errors.comment?.type === 'pattern' && (
+                                            <span className="text-danger"> Empty fields are not allowed</span>
+                                        )} */}
                                                 </Form.Group>
                                             </Col>
                                             <Col className="m-0 p-0" lg={2}>
@@ -515,16 +522,16 @@ const Taskdetail = (props) => {
                                         </Row>
                                     </form>
                                     <Row>
-                                        {store?.getAllComment?.data?.response?.map((ele, ind) => (
+                                        {getAllComment&&getAllComment.map((ele, ind) => (
                                             <ul key={ind} style={{ listStyle: 'none' }}>
                                                 <Row>
                                                     <Col lg={12} className="d-flex pt-2">
-                                                        <Col lg={2} className="pt-2">
+                                                        <Col sm={1} className="pt-2">
                                                             <span
                                                                 style={{
                                                                     backgroundColor: '#605e5a',
                                                                     borderRadius: '100%',
-                                                                    padding: '11px 15px',
+                                                                    padding: '10px 10px',
                                                                     color: 'white',
                                                                     fontWeight: '800',
                                                                 }}>
@@ -532,10 +539,10 @@ const Taskdetail = (props) => {
                                                                 {ele?.userId?.lastName.charAt(0)}
                                                             </span>
                                                         </Col>
-                                                        <Col lg={10} className="m-0 p-0">
+                                                        <Col sm={11} className="m-0 p-0">
                                                             <div className="d-flex">
-                                                                <h4 className="m-0 p-0"> {ele?.userId?.firstName}</h4>
-                                                                <h4 className="ps-1 m-0 p-0">
+                                                                <h4 className="m-0 fs-5 p-0"> {ele?.userId?.firstName}</h4>
+                                                                <h4 className="ps-1 fs-5 m-0 p-0">
                                                                     {' '}
                                                                     {ele?.userId?.lastName}
                                                                 </h4>

@@ -122,7 +122,6 @@ function* AllTaskCountfunction({ payload }) {
             payload: {}
         })
         const response = yield call(getAllTaskCountsApi, { payload });
-        // console.log("dssfksf", payload)
         if (response.data.status) {
             yield put({
                 type: SUMMARY_TYPES.GET_ALL_TASK_COUNT_SUCCESS,
