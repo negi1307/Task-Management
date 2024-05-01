@@ -45,7 +45,7 @@ const TaskInformation = styled.div`
     }
 `;
 const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressColumn, onTaskStart }) => {
-    console.log(item, 'pankajsingh')
+    // console.log(item,'pankajsingh')
     const store = useSelector(state => state)
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
