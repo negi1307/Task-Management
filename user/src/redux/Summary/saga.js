@@ -9,7 +9,7 @@ function* getPriorityTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getprioritytaskApi, { payload });
-      
+      console.log(response,'pankajsingh777')
         if (response.data.status) {
             yield put({
                 type: SUMMARY_TYPE.GET_PRIORITY_TASKS_SUCCESS,

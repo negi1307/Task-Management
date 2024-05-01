@@ -49,7 +49,7 @@ console.log(props.item,'asdfghjk')
         if (type === 'History') {
             dispatch(getHistoryAction({taskId: props.item._id}));
         }
-        const taskId = props.item?.id;
+        const taskId = props?.item?.id;
         dispatch(getBugs({ taskId, type: "Bug" }));
         dispatch(getSubTask({ taskId, type: "SubTask" }));
         dispatch(getComment({ taskId:props?.item?._id }));
