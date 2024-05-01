@@ -54,11 +54,6 @@ const AdminDashboard = () => {
     const timeSpent = store?.getProjectTimeSpent?.data;
     const [circleSize, setCircleSize] = useState(null);
     const [circleTitle, setCircleTitle] = useState(null);
-    // console.log({ statusCount })
-    const userInformation = JSON.parse(sessionStorage.getItem('hyper_user'));
-    const userRole = userInformation.role; // This will be "Admin"
-    console.log({ userRole })
-
     const {
         register,
         handleSubmit,
