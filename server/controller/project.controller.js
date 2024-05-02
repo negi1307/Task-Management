@@ -125,41 +125,32 @@ const projectTotalTime = async (req, res) => {
     const projectId = req.query.projectId;
     const projectTasks = await taskModel.find({ projectId: projectId });
 
-    let totalHours = 0;
-    let totalMinutes = 0;
-    let totalSeconds = 0;
+    let totalTimeInMilliseconds = 0;
     let expectedHoursSum = 0;
 
     projectTasks.forEach(task => {
       if (task.timeTracker) {
-        const timeParts = task.timeTracker.split(' ');
-        totalHours += parseInt(timeParts[0]) || 0;
-        totalMinutes += parseInt(timeParts[2]) || 0;
-        totalSeconds += parseInt(timeParts[4]) || 0;
+        totalTimeInMilliseconds += task.timeTracker;
       }
       expectedHoursSum += task.expectedHours || 0;
     });
 
-    totalMinutes += Math.floor(totalSeconds / 60);
-    totalSeconds %= 60;
-    totalHours += Math.floor(totalMinutes / 60);
-    totalMinutes %= 60;
-
-    const totalTimeInSeconds = totalHours * 3600 + totalMinutes * 60 + totalSeconds;
-    const totalTimeFormatted = `${totalHours} hours ${totalMinutes} minutes ${totalSeconds} seconds`;
-    const expectedTimeInSeconds = expectedHoursSum * 3600;
-
-    const differenceInSeconds = expectedTimeInSeconds - totalTimeInSeconds;
-    const differenceHours = Math.floor(differenceInSeconds / 3600);
-    const differenceMinutes = Math.floor((differenceInSeconds % 3600) / 60);
-    const differenceSeconds = differenceInSeconds % 60;
-    const differenceFormatted = `${differenceHours} hours ${differenceMinutes} minutes ${differenceSeconds} seconds`;
-
-    return res.status(200).json({ status: 200, message: "Project total time calculated", totalTime: totalTimeFormatted, expectedTime: expectedHoursSum, difference: differenceFormatted, projectTasks });
+    return res.status(200).json({ 
+      status: 200, 
+      message: "Project total time calculated", 
+      totalTimeInMilliseconds: totalTimeInMilliseconds,
+      expectedTime: expectedHoursSum, 
+      projectTasks 
+    });
   } catch (error) {
-    return res.status(500).json({ status: 500, message: "Something went wrong", error: error.message });
+    return res.status(500).json({ 
+      status: 500, 
+      message: "Something went wrong", 
+      error: error.message 
+    });
   }
 }
+
 
 
 
