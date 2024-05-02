@@ -18,6 +18,7 @@ import logo from '../assets/images/logo.png';
 import helpBoxImage from '../assets/images/help-icon.svg';
 import profileImg from '../assets/images/users/avatar-1.jpg';
 import logoImg from '../assets/images/logo/rowthtech.jpg';
+import MenuItems from '../constants/menu';
 
 type SideBarContentProps = {
     hideUserProfile: boolean,
@@ -75,15 +76,16 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
     /**
      * Handle the click anywhere in doc
      */
-    const handleOtherClick = (e: any) => {
+    function handleOtherClick(e: any) {
         if (menuNodeRef && menuNodeRef.current && menuNodeRef.current.contains(e.target)) return;
         // else hide the menubar
         if (document.body) {
             document.body.classList.remove('sidebar-enable');
         }
-    };
+    }
 
     useEffect(() => {
+        console.log(MenuItems(), "=========we");
         document.addEventListener('mousedown', handleOtherClick, false);
 
         return () => {
@@ -119,7 +121,7 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                 {!isCondensed && (
                     <SimpleBar style={{ maxHeight: '100%' }} timeout={500} scrollbarMaxSize={320}>
                         <SideBarContent
-                            menuClickHandler={() => {}}
+                            menuClickHandler={() => { }}
                             isLight={isLight}
                             hideUserProfile={hideUserProfile}
                         />

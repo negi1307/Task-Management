@@ -251,46 +251,32 @@ const updateTaskStatus = async (req, res) => {
       let query = { status };
       if (status == 2) {
         await taskModel.findById(taskId).select('status');
-        // if (status <= currentStatus.status && req.user.role !== 'Testing') {
-        //   return res.status(403).json({ status: "403", message: "You are not authorized to update the task status backwards." });
-        // }
         query.inProgressDate = new Date();
       }
 
       if (status == 4 || status == 5) {
-        // if (req.user.role === 'Testing') {
         query.doneDate = new Date();
         if (task && task.inProgressDate) {
-          let timeDifference = (query.doneDate.getTime() - task.inProgressDate.getTime()) / 1000;
+          let timeDifference = (query.doneDate.getTime() - task.inProgressDate.getTime())
 
-          const breakRecords = await breakTimeModel.find({ userId: req.user._id, taskId: taskId });
-          let totalBreakTime = 0;
-          for (const breakRecord of breakRecords) {
-            totalBreakTime += breakRecord.break;
-          }
+          console.log(timeDifference, task.timeTracker)
+          const totalTime = timeDifference + task.timeTracker
+          
 
-          timeDifference -= totalBreakTime;
-
-          const hours = Math.floor(timeDifference / 3600);
-          const minutes = Math.floor((timeDifference % 3600) / 60);
-          const seconds = Math.floor(timeDifference % 60);
-
-          query.timeTracker = `${hours} hours ${minutes} minutes ${seconds} seconds`;
+          query.timeTracker = totalTime
 
         }
         if (task && task.logInTime && task.timeTracker) {
           let timeDifference = (query.doneDate.getTime() - task.logInTime.getTime());
           query.timeTracker = task.timeTracker + timeDifference
         }
-        // }
-        // else {
-        //   return res.status(200).json({ status: "200", message: "You are not authorised to do so." });
-        // }
+      
       }
       const result = await taskModel.findByIdAndUpdate({ _id: taskId }, query, { new: true });
       const taskStatus = await taskModel.findById(taskId)
       await userHistory(req, taskStatus);
       return res.status(200).json({ status: "200", message: "Task Status updated successfully", data: result });
+      // }
     } else {
       const tasks = await taskModel.find({ assigneeId: req.user._id, status: 2 });
       if (tasks.length > 0) {

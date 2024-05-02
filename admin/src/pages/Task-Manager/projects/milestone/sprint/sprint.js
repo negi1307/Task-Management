@@ -32,6 +32,10 @@ const Sprint = () => {
     const GetAllSingleSprintData = store?.getAllSingleSprints?.data?.response;
     const deletehandle = store?.deleteSprint?.data;
     const loaderhandel = store?.getAllSingleSprints;
+
+    const sessionData = sessionStorage.getItem('hyper_user');
+    const userData = JSON.parse(sessionData);
+    const userRole = userData?.role;
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
@@ -43,13 +47,7 @@ const Sprint = () => {
         dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
     }
     // ///////////////////////////
-    const closeupdatemodal = (val) => {
-        if (val == 'render') {
-            setRender(!render);
-        }
-        setOpenEditModal(false);
-        getUpdatedSprints();
-    };
+
 
 
     // CReate nrw sprint modal functions
@@ -65,7 +63,14 @@ const Sprint = () => {
             setRender(!render);
         }
         SetOpenModal(false);
-        getAddedSprints();
+        dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
+    };
+    const closeupdatemodal = (val) => {
+        if (val == 'render') {
+            setRender(!render);
+        }
+        setOpenEditModal(false);
+        getUpdatedSprints();
     };
 
     const handleActive = (val) => {
@@ -93,18 +98,18 @@ const Sprint = () => {
 
     };
     const handleStatusChange = async (e, data) => {
+        if (userRole === 'Testing') {
+            ToastHandle('error', 'Tester is not allowed to change sprint status');
+            return;
+        }
         setCheckedStatus(e.target.checked);
         setCheckedData(data);
         const body = {
             sprintId: data._id,
             activeStatus: e.target.checked,
         };
-
         await dispatch(updateSprint(body));
-
-
         dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
-
         setStatusModal(false);
     };
 
@@ -150,11 +155,7 @@ const Sprint = () => {
 
 
     useEffect(() => {
-        // console.log("----------called");
         fetchSprintData(); // Fetch initial data
-        // const intervalId = setInterval(fetchSprintData, 50000); // Fetch data every 5 seconds
-
-        // return () => clearInterval(intervalId); // Clean up on unmount
     }, [status, milestoneId, skip]);
 
     const truncateDescription = (description, maxLength = 30) => {
@@ -189,12 +190,14 @@ const Sprint = () => {
                                 </div>
                                 {status == 1 ? (
                                     <div className="col-6 d-flex align-items-center justify-content-end pe-0">
-                                        <Button
-                                            variant="info"
-                                            onClick={handleCreate}
-                                            className="mybutton btn p-1 fw-bold py-1  web_button">
-                                            Add Sprint
-                                        </Button>
+                                        {userRole !== "Testing" && (
+                                            <Button
+                                                variant="info"
+                                                onClick={handleCreate}
+                                                className="mybutton btn p-1 fw-bold py-1  web_button">
+                                                Add Sprint
+                                            </Button>
+                                        )}
                                     </div>
                                 ) : (
                                     ''
@@ -267,13 +270,16 @@ const Sprint = () => {
                                                                         <i className="mdi mdi-eye m-0 p-0"></i>
                                                                     </Link>
                                                                 </p>
-                                                                <p className="action-icon m-0 p-0  ">
-                                                                    <i
-                                                                        onClick={() => {
-                                                                            handelUpdate(item);
-                                                                        }}
-                                                                        className="uil-edit-alt m-0 p-0"></i>
-                                                                </p>
+                                                                {userRole !== "Testing" && (
+                                                                    <p className="action-icon m-0 p-0  ">
+                                                                        <i
+                                                                            onClick={() => {
+                                                                                handelUpdate(item);
+                                                                            }}
+                                                                            className="uil-edit-alt m-0 p-0"></i>
+                                                                    </p>
+
+                                                                )}
                                                             </Col>
                                                         </Row>
                                                     </td>

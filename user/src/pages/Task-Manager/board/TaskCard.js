@@ -208,7 +208,6 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                             <span
                                             >
                                                 {backgroundColorClass}
-
                                             </span>
                                         </div>
                                     </OverlayTrigger>

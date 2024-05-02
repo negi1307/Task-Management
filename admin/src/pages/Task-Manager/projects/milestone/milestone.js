@@ -35,7 +35,9 @@ const Milestone = () => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [editData, setEditData] = useState();
     const deletehandle = store?.deleteMileStone?.data;
-    // console.log(GetSinglemilstonesData, "GetSinglemilstonesDataGetSinglemilstonesDataGetSinglemilstonesData")
+    const sessionData = sessionStorage.getItem('hyper_user');
+    const userData = JSON.parse(sessionData);
+    const userRole = userData?.role;
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -70,6 +72,10 @@ const Milestone = () => {
         dispatch(getsingleMileStone({ id: id, activeStatus: status, skip: value, mileStoneId: '' }));
     };
     const handleStatusChange = (e, data) => {
+        if (userRole === 'Testing') {
+            ToastHandle('error', 'Tester is not allowed to change milestone status');
+            return;
+        }
         if (e.target.checked) {
             setCheckedStatus(true);
         } else {
@@ -178,15 +184,17 @@ const Milestone = () => {
                                                 </div>
                                             </div>
                                             <div className="col-6 d-flex align-items-center justify-content-end">
-                                                <Button
-                                                    onClick={() => {
-                                                        setOpenModel(true);
-                                                    }}
-                                                    variant="info"
-                                                    type="submit"
-                                                    className="mybutton btn p-1 fw-bold py-1  web_button">
-                                                    Add Milestone
-                                                </Button>
+                                                {userRole !== "Testing" && (
+                                                    <Button
+                                                        onClick={() => {
+                                                            setOpenModel(true);
+                                                        }}
+                                                        variant="info"
+                                                        type="submit"
+                                                        className="mybutton btn p-1 fw-bold py-1  web_button">
+                                                        Add Milestone
+                                                    </Button>
+                                                )}
                                             </div>
                                             <div className="col-12 d-flex align-items-center justify-content-center">
                                                 <h4 className="header-title heading_data page_headings py-1"> Milestones</h4>
@@ -248,14 +256,17 @@ const Milestone = () => {
                                                                                 <i className="mdi mdi-eye m-0 p-0"></i>
                                                                             </Link>
                                                                         </p>
-                                                                        <p className="action-icon m-0 p-0  ">
-                                                                            {/* {console.log(item, 'itemmmmmmmm')} */}
-                                                                            <i
-                                                                                onClick={() => {
-                                                                                    handelUpdate(item);
-                                                                                }}
-                                                                                className="uil-edit-alt m-0 p-0"></i>
-                                                                        </p>
+                                                                        {userRole !== "Testing" && (
+                                                                            <p className="action-icon m-0 p-0  ">
+                                                                                {/* {console.log(item, 'itemmmmmmmm')} */}
+                                                                                <i
+                                                                                    onClick={() => {
+                                                                                        handelUpdate(item);
+                                                                                    }}
+                                                                                    className="uil-edit-alt m-0 p-0"></i>
+                                                                            </p>
+
+                                                                        )}
                                                                     </Col>
                                                                 </Row>
                                                             </td>

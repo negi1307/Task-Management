@@ -58,6 +58,5 @@ export function getBugsApi(data): any {
 }
 export function getSubTaskApi(data): any {
     const { taskId } = data?.payload;
-    console.log(data, 'apiiiiiii')
     return api.get(`${URL.getSubTask}&type=${'SubTask'}&taskId=${taskId}`);
 }
