@@ -41,7 +41,6 @@ const Projects = () => {
     const sessionData = sessionStorage.getItem('hyper_user');
     const userData = JSON.parse(sessionData);
     const userRole = userData.role;
-    console.log(store, 'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu')
     const closeaddModal = () => {
         // getalltasks();
     }

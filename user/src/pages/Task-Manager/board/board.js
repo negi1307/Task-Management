@@ -89,6 +89,8 @@ const Boards = (props) => {
     const [showTaskModel, setshowTaskModel] = useState(false);
     const [show, setShow] = useState(false);
     const [search, setSearch] = useState('');
+    const updateResponse = store?.UpdateTaskReducer?.data?.response;
+    console.log({ updateResponse })
 
 
     const assigneeId = localStorage.getItem('userId')
@@ -163,18 +165,20 @@ const Boards = (props) => {
     };
 
     const [BooleanUpdate, setBooleanUpdate] = useState(false);
+    const persistColumnsToLocalStorage = (columns) => {
+        localStorage.setItem("columns", JSON.stringify(columns));
+    };
+
+
+
     const onDragEnd = (result, columns, setColumns) => {
-        if (!result.destination) return;
         const { source, destination } = result;
 
-        // Check if destination column is "In Progress" and if it already has a task
-        if (destination.droppableId === '2' && columns['2'].items.length > 0) {
-            ToastHandle('error', 'Only one task allowed in progress at a time');
-            return;
-        }
+        if (!destination) return;
 
         const sourceColumn = columns[source.droppableId];
         const destColumn = columns[destination.droppableId];
+
         const sourceItems = sourceColumn.items.slice();
         const destItems = destColumn.items.slice();
         const [removed] = sourceItems.splice(source.index, 1);
@@ -192,10 +196,14 @@ const Boards = (props) => {
             },
         });
 
-        // Update task status and trigger the update
-        handelupdatetask(result);
-        setBooleanUpdate(true);
+        persistColumnsToLocalStorage(columns); // Persist columns to local storage
     };
+
+
+
+
+
+
 
 
     useEffect(() => {
@@ -311,6 +319,7 @@ const Boards = (props) => {
                                                         closeModal={closeModal}
                                                         showTaskDetailMOdel={showTaskDetailMOdel}
                                                         isInProgressColumn={columnId == '2'}
+
                                                     // onTaskStart={handleTaskStart}
                                                     />
                                                 ))}

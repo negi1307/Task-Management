@@ -27,7 +27,7 @@ if (username === "Testing") {
             key: 'logout',
             label: 'Logout',
             url: 'account/logout',
-            icon: 'uil-power',
+            icon: ' uil-entry',
         }
     ]
 } else if (username === "Admin") {
@@ -90,12 +90,12 @@ if (username === "Testing") {
         //     url: 'dashboard/client',
         //     icon: 'uil-users-alt',
         // },
-        {
-            key: 'clientRepository',
-            label: 'Client Repository',
-            url: 'dashboard/clientRepository',
-            icon: 'uil-users-alt',
-        },
+        // {
+        //     key: 'clientRepository',
+        //     label: 'Client Repository',
+        //     url: 'dashboard/clientRepository',
+        //     icon: 'uil-users-alt',
+        // },
         {
             key: 'timeTracker',
             label: 'Time Tracker',
@@ -106,7 +106,7 @@ if (username === "Testing") {
             key: 'logout',
             label: 'Logout',
             url: 'account/logout',
-            icon: 'uil-power',
+            icon: ' uil-entry',
         }
 
     ]
