@@ -44,6 +44,7 @@ const TimeTrackerTable = () => {
     const totalTime = store?.getUserRecordReducer?.data?.totalTime;
     const userfirstName = userRecord?.[0]?.assigneeId?.firstName
     const userLastName = userRecord?.[0]?.assigneeId?.lastName
+    
     return (
         <Card>
             <Card.Body>
@@ -146,6 +147,7 @@ const TimeTrackerTable = () => {
                                     <th className='fw-bold text-start'>Time Taken</th>
                                 </tr>
                             </thead>
+                            
                             {userRecord && userRecord?.map((record, index) => (
                                 <tbody key={index}>
                                     <tr>
