@@ -536,7 +536,7 @@
         transform: translate(-12px, 40px);
         display: flex;
         align-items: center;
-        justify-content: end;
+        justify-content: flex-end;
         /* z-index: 99999; */
     }
 

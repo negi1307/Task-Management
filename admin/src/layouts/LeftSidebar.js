@@ -18,6 +18,7 @@ import logo from '../assets/images/logo.png';
 import helpBoxImage from '../assets/images/help-icon.svg';
 import profileImg from '../assets/images/users/avatar-1.jpg';
 import logoImg from '../assets/images/logo/rowthtech.jpg';
+import MenuItems from '../constants/menu';
 
 type SideBarContentProps = {
     hideUserProfile: boolean,
@@ -84,6 +85,7 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
     }
 
     useEffect(() => {
+        console.log(MenuItems(), "=========we");
         document.addEventListener('mousedown', handleOtherClick, false);
 
         return () => {

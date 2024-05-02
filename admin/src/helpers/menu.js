@@ -1,8 +1,8 @@
-import MENU_ITEMS from '../constants/menu';
+import MenuItems from '../constants/menu';
 
 const getMenuItems = () => {
     // NOTE - You can fetch from server and return here as well
-    return MENU_ITEMS;
+    return MenuItems();
 
 };
 

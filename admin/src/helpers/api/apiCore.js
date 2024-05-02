@@ -124,6 +124,7 @@ const setAuthorization = (token) => {
     if (token) {
         axios.defaults.headers.common['Authorization'] = 'JWT ' + token;
         localStorage.setItem(AUTH_SESSION_KEY, token);
+        // console.log({ AUTH_SESSION_KEY })
     } else {
         delete axios.defaults.headers.common['Authorization'];
         localStorage.removeItem(AUTH_SESSION_KEY); // Remove token from local storage if not available
@@ -133,7 +134,7 @@ const getUserFromSession = () => {
     const token = localStorage.getItem(AUTH_SESSION_KEY); // Retrieve token from local storage
     if (token) {
         const decodedToken = jwtDecode(token);
-        console.log({ decodedToken })
+        // console.log({ decodedToken })
         return { token, ...decodedToken };
     }
     return null;
