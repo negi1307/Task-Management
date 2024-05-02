@@ -90,7 +90,7 @@ const Boards = (props) => {
     const [show, setShow] = useState(false);
     const [search, setSearch] = useState('');
     const updateResponse = store?.UpdateTaskReducer?.data?.response;
-    console.log({updateResponse})
+    console.log({ updateResponse })
 
 
     const assigneeId = localStorage.getItem('userId')
@@ -168,22 +168,22 @@ const Boards = (props) => {
     const persistColumnsToLocalStorage = (columns) => {
         localStorage.setItem("columns", JSON.stringify(columns));
     };
-    
- 
-    
+
+
+
     const onDragEnd = (result, columns, setColumns) => {
         const { source, destination } = result;
-    
+
         if (!destination) return;
-    
+
         const sourceColumn = columns[source.droppableId];
         const destColumn = columns[destination.droppableId];
-    
+
         const sourceItems = sourceColumn.items.slice();
         const destItems = destColumn.items.slice();
         const [removed] = sourceItems.splice(source.index, 1);
         destItems.splice(destination.index, 0, removed);
-    
+
         setColumns({
             ...columns,
             [source.droppableId]: {
@@ -195,15 +195,16 @@ const Boards = (props) => {
                 items: destItems,
             },
         });
-    
+
         persistColumnsToLocalStorage(columns); // Persist columns to local storage
     };
-    
 
-    
-    
-    
-    
+
+
+
+
+
+
 
     useEffect(() => {
         if (statushandle?.data?.status == 200) {
@@ -269,9 +270,9 @@ const Boards = (props) => {
     return (
         <>
             <div className="status">
-         
+
                 <div className="search_info ms-auto ">
-           
+
                     <input
                         type="search"
                         value={search}
@@ -304,7 +305,7 @@ const Boards = (props) => {
                                             {...provided?.droppableProps}
 
                                         >
-                                                <TaskList>
+                                            <TaskList>
                                                 <Title className='text-dark fw-bold ' style={{ position: 'sticky', top: '0', zIndex: '2', backgroundColor: '#F3F3F3' }} >{column.title}   <span className='py-0 p-1  rounded-circle text-dark bg-primary'>{column.count}</span></Title>
                                                 {column.items?.map((item, index) => (
                                                     <TaskCard
@@ -318,7 +319,7 @@ const Boards = (props) => {
                                                         closeModal={closeModal}
                                                         showTaskDetailMOdel={showTaskDetailMOdel}
                                                         isInProgressColumn={columnId == '2'}
-                                                     
+
                                                     // onTaskStart={handleTaskStart}
                                                     />
                                                 ))}

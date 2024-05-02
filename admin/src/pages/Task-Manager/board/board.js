@@ -296,6 +296,9 @@ const Boards = () => {
         setassigneeSelected(true);
     };
 
+    const handleTaskDelete = () => {
+        dispatch(getAllTask({ sprintId: spriteId, searchString: '' }));
+    };
     return (
         <>
             <div className="add_task row d-flex  m-0 ">
@@ -322,7 +325,6 @@ const Boards = () => {
                             ))}
                         </select>
                     </div>
-
                     {AssignUserName?.map((ele, ind) => (
                         <>
                             <OverlayTrigger
@@ -360,7 +362,6 @@ const Boards = () => {
                         </>
                     ))}
                 </div>
-
                 <div className="col-lg-4 d-flex justify-content-end align-items-center">
                     <div className="page-title-box">
                         <div className="">
@@ -383,19 +384,13 @@ const Boards = () => {
                         </div>
                     </div>
                     <div>
-                        {/* <Button className="web_button ms-2" variant="info" onClick={handleSearch}>
-                                    <i className="mdi mdi-magnify search-icon"></i>
-                                 </Button> */}
                     </div>
                     <div className="ms-2 ">
                         <button
                             type="button"
                             className="mybutton btn p-1 fw-bold py-0 px-2 m-0  web_button"
                             onClick={() => {
-                                // console.log('button click');
                                 setShowModal(!showModal);
-                                // dispatch(getAllTask({ projectId: projectId, mileStoneId: milestoneId, sprintId: spriteId }))
-
                             }}>
                             <TiPlus />
                         </button>
@@ -434,7 +429,8 @@ const Boards = () => {
 
                                         >
                                             <TaskList>
-                                                <Title className='text-dark fw-bold' style={{ position: 'sticky', top: '0', zIndex: '2', backgroundColor: '#F3F3F3' }} >{column.title}   <span className='py-0 p-1  rounded-circle text-dark bg-primary'>{column.count}</span></Title>
+
+                                                <Title className='text-dark fw-bold bg-white' style={{ position: 'sticky', top: '0', zIndex: '2', backgroundColor: '#F3F3F3' }} >{column.title}   <span className='py-0 p-1  rounded-circle text-dark bg-primary'>{column.count}</span></Title>
                                                 {column.items?.map((item, index) => (
                                                     <TaskCard
                                                         key={item.id}
@@ -445,6 +441,8 @@ const Boards = () => {
                                                         mileStoneId={milestoneId}
                                                         sprintId={spriteId}
                                                         closeModal={closeModal}
+                                                        isInProgressColumn={columnId == '2'}
+                                                        onTaskDelete={handleTaskDelete}
                                                     />
                                                 ))}
                                                 {provided?.placeholder}

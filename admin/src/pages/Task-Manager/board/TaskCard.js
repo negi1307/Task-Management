@@ -49,7 +49,7 @@ const TaskInformation = styled.div`
     /* } */
 `;
 
-const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sprintId }) => {
+const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sprintId, isInProgressColumn, onTaskDelete }) => {
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState();
     const [editData, setEditData] = useState();
@@ -59,9 +59,11 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
     const [openModal, setOpenModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const store = useSelector((state) => state);
+    const [elapsedTime, setElapsedTime] = useState(null);
+
     // console.log(detailData,'pankaj')
 
-
+    const deleteResponse = store?.deleteTask?.data?.status;
     const dispatch = useDispatch();
 
     const closeOpenModal = () => {
@@ -71,11 +73,11 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
         setDeleteId(id);
         setDeleteModal(true);
         setOpenModal(false);
+
     };
     const handleYes = () => {
         dispatch(deleteTask({ taskId: deleteId }));
         setDeleteModal(false);
-
     };
     const handelUpdate = (data) => {
         setEditData(data);
@@ -126,8 +128,23 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
     }
 
 
+    useEffect(() => {
+        if (isInProgressColumn && item.inProgressDate) {
+            const inProgressDate = new Date(item.inProgressDate);
+            const interval = setInterval(() => {
+                const currentTime = new Date();
+                const elapsedMilliseconds = currentTime - inProgressDate;
+                const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000);
+                setElapsedTime(formatTime(elapsedSeconds));
+            }, 1000); // Update every second
 
-
+            return () => clearInterval(interval);
+        }
+        if (deleteResponse === "200" && deleteResponse !== undefined) {
+            // Pass the taskId to the onTaskDelete function
+            onTaskDelete(item.id);
+        }
+    }, [isInProgressColumn, item.inProgressDate, deleteResponse]);
 
     return (
         <>
@@ -254,12 +271,12 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                         </div> */}
                                     </div>
                                 </div>
-              
+
                                 <div className="col-12 m-0" onClick={() => {
                                     handleDetailPage(item);
                                 }}>
                                     <p className='m-0'>
-                                    {item?.projects?.projectName}
+                                        {item?.projects?.projectName}
                                     </p>
                                 </div>
                                 <div className="col-12" onClick={() => {
@@ -303,7 +320,7 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                         handleDetailPage(item);
                                     }}>
                                     <div className="row d-flex  align-items-center">
-                                        <div className="col-9">
+                                        <div className="col-8">
                                             <div className="secondary-details ">
                                                 <p className="m-0 p-0">
                                                     <span className='task-title text-dark p-0'>
@@ -325,10 +342,10 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                 </p>
                                             </div>
                                         </div> */}
-                                        <div className="col-3 text-center ">
-                                            <div className=" d-flex text-end">
-                                                {/* <h5 className="m-0 p-0"> Assignee :</h5> */}
-                                                <OverlayTrigger
+                                        <div className="col-4">
+                                            {/* <div className=" d-flex"> */}
+                                            {/* <h5 className="m-0 p-0"> Assignee :</h5> */}
+                                            {/* <OverlayTrigger
                                                     placement="top"
                                                     overlay={
                                                         <Tooltip id="tooltip1">
@@ -353,12 +370,17 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
                                                             {item?.assigneeInfo?.lastName.charAt(0)}
                                                         </span>
                                                     </div>
-                                                </OverlayTrigger>
-                                                {/* <p className="ms-2 p-0">
+                                                </OverlayTrigger> */}
+                                            {isInProgressColumn && (
+                                                <div className="fw-bold text-nowrap">
+                                                    {elapsedTime}
+                                                </div>
+                                            )}
+                                            {/* <p className="ms-2 p-0">
                                                     {item?.assignees?.assigneeInfo?.firstName}{' '}
                                                     {item?.assignees?.assigneeInfo?.lastName}
                                                 </p> */}
-                                            </div>
+                                            {/* </div> */}
                                         </div>
                                     </div>
                                 </div>
@@ -389,10 +411,16 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
         </>
     );
 };
+const formatTime = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+    return `${pad(hours)}:${pad(minutes)}:${pad(remainingSeconds)}`;
+};
+
+// Function to pad single digit numbers with leading zeros
+const pad = (num) => {
+    return num < 10 ? '0' + num : num;
+};
 
 export default TaskCard;
-
-// <span className="priority">
-// {item.Priority === 'High' ? (<RedArrow />) : item.Priority === 'Medium' ? (<YellowArrow />) : (<BlueArrow />)}
-// </span>
-// <div><CustomAvatar name={item.Assignee} isTable={false} size={16} /></div>

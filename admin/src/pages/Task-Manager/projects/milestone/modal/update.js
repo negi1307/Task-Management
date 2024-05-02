@@ -115,7 +115,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                         <Form.Control
                                             type="text"
                                             placeholder="Please Enter  Milestone Name"
-                                            {...register('title', { required: true, pattern: /^[^\s]+$/ })}
+                                            {...register('title', { required: true, pattern: /^[^\s].*$/ })}
                                         />
                                         {errors.title?.type === 'required' && (
                                             <span className="text-danger"> This field is required *</span>

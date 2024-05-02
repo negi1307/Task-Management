@@ -50,17 +50,22 @@ const AdminDashboard = () => {
     const [differenceTimeHours, setdifferenceTimeHours] = useState();
     const [totalTimeHours, setTotalTimeHours] = useState();
     const getUsers = store?.getProjectUsers?.data?.response;
-    const statusCount = store?.getAllTaskReducer?.data;
+    const statusCount = store?.getProjectTasks?.data;
     const timeSpent = store?.getProjectTimeSpent?.data;
     const [circleSize, setCircleSize] = useState(null);
     const [circleTitle, setCircleTitle] = useState(null);
-
     const {
         register,
         handleSubmit,
         reset,
         formState: { errors },
     } = useForm();
+
+
+
+    const sessionData = sessionStorage.getItem('hyper_user');
+    const userData = JSON.parse(sessionData);
+    const userRole = userData.role;
     useEffect(() => {
         if (successHandle?.data?.status === 200) {
             setData(successHandle?.data?.response);
@@ -82,7 +87,6 @@ const AdminDashboard = () => {
     }, [successHandle, store?.getHistoryReducer?.data?.response]);
     useEffect(() => {
         const taskTotalCount = store?.getTaskSummaryReducer?.data.response;
-        // console.log({ taskTotalCount })
         if (taskTotalCount) {
             setTaskCount(taskTotalCount);
         }
@@ -296,10 +300,13 @@ const AdminDashboard = () => {
                         <hr />
                         <div className='row'>
                             <div className='col-12 d-flex gap-2 justify-content-end'>
-                                <button className='mybutton btn p-1 fw-bold py-1 web_button'
-                                    onClick={() => setFilterModal(true)}>
-                                    Filter
-                                </button>
+                                {userRole !== 'Testing' && (
+                                    <button className='mybutton btn p-1 fw-bold py-1 web_button'
+                                        onClick={() => setFilterModal(true)}>
+                                        Filter
+                                    </button>
+
+                                )}
                                 <FilterModal
                                     className='d-none'
                                     showFilter={filterModal}
@@ -398,27 +405,39 @@ const AdminDashboard = () => {
                                 <div className='col-6 mt-3  d-flex flex-column border border-1 border-muted  shadow rounded-4'>
                                     <div className="row">
                                         <div className='col-12'>
-                                            <h5 className="mb-3 text-dark p-3">
+                                            <h5 className="mb-0 text-dark pt-3 px-3 pb-0">
                                                 <strong>Projects Overview</strong>
                                             </h5>
                                         </div>
-                                        <PieChart
-                                            series={[
-                                                {
-                                                    data: [
-                                                        { id: 6, value: `${statusCount?.todoCount}`, label: `Todo: ${statusCount?.todoCount}` },
-                                                        { id: 7, value: `${statusCount?.inProgressCount}`, label: `Inprogress: ${statusCount?.inProgressCount}` },
-                                                        { id: 8, value: `${statusCount?.testingCount}`, label: `Testing: ${statusCount?.testingCount}` },
-                                                        { id: 9, value: `${statusCount?.doneCount}`, label: `Done: ${statusCount?.doneCount} ` },
-                                                        { id: 10, value: `${statusCount?.holdCount}`, label: `Hold: ${statusCount?.holdCount}` },
-                                                    ],
-                                                    highlightScope: { faded: 'global', highlighted: 'item' },
-                                                    faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                                                },
-                                            ]}
-                                            height={230}
-                                            width={550}
-                                        />
+                                        {/* {statusCount && statusCount?.map(() => {
+                                            <div className="col-12">
+                                                <h5>Total tasks: {statusCount?.totalCount}</h5>
+                                            </div>
+                                        })} */}
+                                        <div className="col-12">
+                                            <h5 className='text-dark pt-0 px-3 pb-3 mb-0'>Total tasks: {statusCount?.totalCount}</h5>
+                                        </div>
+                                        <div className="col-12 d-flex justify-content-center">
+                                            <PieChart
+                                                className='my-2'
+                                                series={[
+                                                    {
+                                                        data: [
+                                                            // { id: 11, label: `Total tasks: ${statusCount?.totalCount}` },
+                                                            { id: 6, value: `${statusCount?.todoCount}`, label: `Todo: ${statusCount?.todoCount}` },
+                                                            { id: 7, value: `${statusCount?.inProgressCount}`, label: `Inprogress: ${statusCount?.inProgressCount}` },
+                                                            { id: 8, value: `${statusCount?.testingCount}`, label: `Testing: ${statusCount?.testingCount}` },
+                                                            { id: 9, value: `${statusCount?.doneCount}`, label: `Done: ${statusCount?.doneCount} ` },
+                                                            { id: 10, value: `${statusCount?.holdCount}`, label: `Hold: ${statusCount?.holdCount}` },
+                                                        ],
+                                                        highlightScope: { faded: 'global', highlighted: 'item' },
+                                                        faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                                                    },
+                                                ]}
+                                                height={230}
+                                                width={550}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <Col sm={6} className='border border-1 mt-3 border-muted  shadow rounded-4'>
@@ -572,16 +591,19 @@ const AdminDashboard = () => {
 
                     </Row>
                     <Row className='px-3'>
-                        <Col sm={6} className='border border-1 border-muted mt-3 shadow rounded-4' >
-                            <Row className='p-3'>
-                                <Col sm={12}>
-                                    <h5 className='text-dark'> <strong>Priority Breakdown</strong></h5>
-                                </Col>
-                                <Col sm={12}>
-                                    <Chart options={options} series={series} type="bar" height={350} />
-                                </Col>
-                            </Row>
-                        </Col>
+                        {userRole !== 'Testing' && (
+                            <Col sm={6} className='border border-1 border-muted mt-3 shadow rounded-4' >
+                                <Row className='p-3'>
+                                    <Col sm={12}>
+                                        <h5 className='text-dark'> <strong>Priority Breakdown</strong></h5>
+                                    </Col>
+                                    <Col sm={12}>
+                                        <Chart options={options} series={series} type="bar" height={350} />
+                                    </Col>
+                                </Row>
+                            </Col>
+                        )}
+
                         <Col sm={6} className='border border-1 border-muted mt-3 shadow rounded-4'>
                             <Row className='p-2'>
                                 <Col sm={12}>
@@ -607,7 +629,6 @@ const AdminDashboard = () => {
                                                                 backgroundColor: '#605e5a',
                                                                 borderRadius: '100%',
                                                                 padding: '3px 4px',
-
                                                                 color: 'white',
                                                                 fontWeight: '600',
                                                             }}>
