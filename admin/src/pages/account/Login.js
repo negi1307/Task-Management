@@ -14,7 +14,7 @@ import { resetAuth, loginUser } from '../../redux/actions';
 import { VerticalForm, FormInput } from '../../components/';
 
 import AccountLayout from './AccountLayout';
-
+import { getMenuItems } from '../../helpers/menu'
 /* bottom link of account pages */
 const BottomLink = () => {
     const { t } = useTranslation();

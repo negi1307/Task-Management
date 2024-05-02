@@ -233,7 +233,7 @@ const Create = ({ modal, CloseModal }) => {
                                             <Form.Control
                                                 type="text"
                                                 placeholder=" Enter Task Summary"
-                                                {...register('summary', { required: true, pattern: /^[^\s]+$/ })}
+                                                {...register('summary', { required: true, pattern: /^[^\s].*$/ })}
                                             />{' '}
                                             {errors.summary?.type === 'required' && (
                                                 <span className="text-danger"> This field is required *</span>

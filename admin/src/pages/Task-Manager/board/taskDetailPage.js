@@ -11,8 +11,10 @@ import moment from 'moment';
 import {
     AddComment,
     getComment,
+    getBugs,
     UpdateCommentAction,
     createSubTask,
+    getSubTask,
     deleteComment,
     getHistoryAction,
 } from '../../../redux/task/action';
@@ -36,7 +38,10 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     const getCommentData = store?.getComment?.data?.response;
     const getHistory = store?.getHistoryReducer?.data?.response;
     const [historyResponse, setHistoryResponse] = useState(null);
-
+    const updateresponse = store?.updateCommentReducer?.data.status;
+    const sessionData = sessionStorage.getItem('hyper_user');
+    const userData = JSON.parse(sessionData);
+    const userName = userData.firstName + ' ' + userData.lastName;
 
     const historyLoader = store?.getHistoryReducer
     const connectComponentCheck = (type) => {
@@ -46,6 +51,12 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         setButtonChange(true);
         if (type === 'History') {
             dispatch(getHistoryAction(editData?.id));
+        }
+        else if (type === 'Bugs') {
+            dispatch(getBugs({ type: 'Bug', taskId: editData?._id }));
+        }
+        else if (type === 'Subtask') {
+            dispatch(getSubTask({ taskId: editData?._id, type: "SubTask" }));
         }
     };
 
@@ -57,6 +68,8 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     const [endDate, setEndDate] = useState();
     const [submitted, setSubmitted] = useState(false);
     const today = new Date();
+    const bugsResponse = store?.getBugsReducer?.data?.response
+    const subtaskResponse = store?.getSubTaskReducer?.data?.response;
     const handleStartDate = (date) => {
         setStartDate(date);
     };
@@ -90,6 +103,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         subtask_body.append('startDate', startDate);
         subtask_body.append('dueDate', endDate);
         subtask_body.append('type', e.type);
+        subtask_body.append('subtaskCreator', e.subtaskCreator);
 
         const fileInput = document.querySelector('input[type="file"]');
         if (fileInput.files.length > 0) {
@@ -104,6 +118,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         setStartDate("");
         setEndDate("");
         reset();
+        dispatch(getSubTask({ taskId: editData?._id, type: "SubTask" }));
     }
     useEffect(() => {
         // if (successHandle?.data?.status === 200) {
@@ -112,6 +127,9 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         const historyData = store?.getHistoryReducer?.data?.response;
         if (historyData) {
             setHistoryResponse(historyData);
+        }
+        if (updateresponse !== undefined) {
+            dispatch(getComment({ taskId: editData?._id }))
         }
     }, [store?.getHistoryReducer?.data?.response]);
 
@@ -269,76 +287,54 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 </Col>
                             </Row>
                             {connectComponent === 'All' ? (
-                                <Row className="mt-3">
-                                    {getCommentData?.map((ele, ind) => (
-                                        <ul style={{ listStyle: 'none' }}>
-                                            <Row>
-                                                <Col lg={12} className="d-flex">
-                                                    <Col lg={2} className="pt-2">
-                                                        <span
-                                                            style={{
-                                                                backgroundColor: '#605e5a',
-                                                                borderRadius: '100%',
-                                                                padding: '11px 15px',
-                                                                color: 'white',
-                                                                fontWeight: '800',
-                                                            }}>
-                                                            {ele?.userId?.firstName.charAt(0)}
-                                                            {ele?.userId?.lastName.charAt(0)}
-                                                        </span>
+                                <>
+                                    <Row className='scrollable-content mt-2'>
+                                        {getCommentData?.map((ele, ind) => (
+                                            <ul style={{ listStyle: 'none' }}>
+                                                <Row>
+                                                    <Col lg={12} className="d-flex pt-2">
+                                                        <Col lg={1} className="d-flex justify-content-start align-items-center">
+                                                            <span
+                                                                style={{
+                                                                    backgroundColor: '#605e5a',
+                                                                    borderRadius: '100%',
+                                                                    padding: ' 10px',
+                                                                    color: 'white',
+                                                                    fontWeight: '800',
+                                                                }}>
+                                                                {ele?.userId?.firstName.charAt(0)}
+                                                                {ele?.userId?.lastName.charAt(0)}
+                                                            </span>
+                                                        </Col>
+                                                        <Col lg={11} className="m-0 p-0 d-flex flex-column justify-content-center">
+                                                            <div className="d-flex align-items-center">
+                                                                <h5 className="m-0 p-0"> {ele?.userId?.firstName} {ele?.userId?.lastName}</h5>
+                                                                <p className="ps-1 m-0 p-0 ">
+                                                                    ( {moment(ele?.createdAt).fromNow()} )
+                                                                    {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
+                                                                </p>
+                                                                {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
+                                                            </div>
+                                                            <div className="m-0 p-0">
+                                                                <li className="font-18">{ele?.comment}</li>
+                                                            </div>
+                                                            <div className="d-flex m-0 p-0">
+                                                                <p className=" p-0 mb-0" onClick={() => handelUpdate(ele)}>
+                                                                    Edit
+                                                                </p>
+                                                                {/* <p
+                                                                className=" cp  p-0 ps-2"
+                                                                onClick={() => handeldelete(ele)}>
+                                                                Delete
+                                                            </p> */}
+                                                            </div>
+                                                        </Col>
                                                     </Col>
-                                                    <Col lg={10} className="m-0 p-0">
-                                                        <div className="d-flex">
-                                                            <h4 className="m-0 p-0"> {ele?.userId?.firstName}</h4>
-                                                            <h4 className="ps-1 m-0 p-0"> {ele?.userId?.lastName}</h4>
-                                                            <p className="ps-1 m-0 p-0">
-                                                                {moment(ele?.createdAt).fromNow()}
-                                                            </p>
-                                                        </div>
-                                                        {inputForUpdate === ind ? (
-                                                            <form onSubmit={handleSubmit(submitUpdateComment)}>
-                                                                <Row className="mt-2 d-flex">
-                                                                    <Col lg={9}>
-                                                                        <Form.Group
-                                                                            className="mb-1"
-                                                                            controlId="exampleForm.ControlInput1">
-                                                                            <Form.Control
-                                                                                type="text"
-                                                                                placeholder="Update comment"
-                                                                                {...register(`updated_comment`)}
-                                                                            />
-                                                                        </Form.Group>
-                                                                    </Col>
-                                                                    <Col className="m-0 p-0" lg={1}>
-                                                                        <Button type="submit">Update</Button>
-                                                                    </Col>
-                                                                </Row>
-                                                            </form>
-                                                        ) : (
-                                                            <>
-                                                                <div className="m-0 p-0">
-                                                                    <li className="font-18  ">{ele?.comment}</li>
-                                                                </div>
-                                                                <div className="d-flex m-0 p-0">
-                                                                    <p
-                                                                        className=" p-0"
-                                                                        onClick={() => handelUpdateAll(ele, ind)}>
-                                                                        Edit
-                                                                    </p>
-                                                                    {/* <p
-                                                                        className=" cp  p-0 ps-2"
-                                                                        onClick={() => handeldelete(ele)}>
-                                                                        Delete
-                                                                    </p> */}
-                                                                </div>
-                                                            </>
-                                                        )}
-                                                    </Col>
-                                                </Col>
-                                            </Row>
-                                        </ul>
-                                    ))}
-                                </Row>
+                                                </Row>
+                                            </ul>
+                                        ))}
+                                    </Row>
+                                </>
                             ) : connectComponent === 'AddSubtask' ? (
                                 <form onSubmit={handleSubmit(subtasksSubmit)}>
                                     <Row className="mt-2">
@@ -350,12 +346,16 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 <Form.Control
                                                     type="text"
                                                     placeholder="Enter Subtask Name"
-                                                    {...register('summary', { required: true })}
+                                                    {...register('summary', { required: true, pattern: /^[^\s].*$/ })}
                                                     style={{ border: '1px solid #a6b3c3' }}
                                                 />
                                                 {errors.summary?.type === 'required' && (
                                                     <span className="text-danger"> This field is required *</span>
                                                 )}
+                                                {errors.summary?.type === 'pattern' && (
+                                                    <span className="text-danger"> Empty fields / spaces at first character are not allowed</span>
+                                                )}
+
                                             </Form.Group>
                                         </Col>
 
@@ -383,32 +383,23 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 </Form.Label>
                                                 <select
                                                     name="priority"
-                                                    className="form-select"
+                                                    className={`form-select ${errors.priority ? 'is-invalid' : ''}`}
                                                     style={{ border: '1px solid #a6b3c3' }}
-                                                    {...register('priority', { required: true })}>
-                                                    <option hidden>
-                                                        Select
-                                                    </option>
-                                                    <option value="Critical">
-                                                        &#128308;
-                                                        Critical
-                                                    </option>
-                                                    <option value="High">
-                                                        &#128992;
-                                                        High</option>
-                                                    <option value="Medium">
-                                                        &#128993;
-                                                        Medium</option>
-                                                    <option value="Low">
-                                                        &#128994;
-                                                        Low</option>
+                                                    {...register('priority', { required: true })}
+                                                    defaultValue=""
+                                                >
+                                                    <option value="" disabled hidden>Select</option>
+                                                    <option value="Critical">&#128308; Critical</option>
+                                                    <option value="High">&#128992; High</option>
+                                                    <option value="Medium">&#128993; Medium</option>
+                                                    <option value="Low">&#128994; Low</option>
                                                 </select>
-
-                                                {errors?.priority?.type === 'required' && (
-                                                    <span className="text-danger"> This field is required *</span>
+                                                {errors.priority && (
+                                                    <div className="invalid-feedback">This field is required</div>
                                                 )}
                                             </Form.Group>
                                         </Col>
+
                                         <Col sm={6}>
                                             <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                 <Form.Label className='mb-0'>
@@ -418,10 +409,12 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     type="number"
                                                     style={{ border: '1px solid #a6b3c3' }}
                                                     placeholder="Expected Hours"
-                                                    {...register('expectedHours')}
+                                                    {...register('expectedHours', { required: true })}
                                                 />
-
                                             </Form.Group>
+                                            {errors.expectedHours?.type === 'required' && (
+                                                <span className="text-danger"> This field is required *</span>
+                                            )}
                                         </Col>
 
                                         <Col sm={6}>
@@ -436,6 +429,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     onChange={(date) => handleStartDate(date)}
                                                     placeholderText="mm-dd-yyyy"
                                                     // minDate={today}
+                                                    required
                                                     className="add_width_input"
                                                 />
                                             </Form.Group>
@@ -450,6 +444,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                     selected={endDate}
                                                     disabled={startDate == '' || startDate == undefined}
                                                     // onChange={(date) => setEndDate(date)}
+                                                    required
                                                     onChange={(date) => handleEndDate(date)}
                                                     placeholderText="mm-dd-yyyy"
                                                     // minDate={startDate}
@@ -465,24 +460,34 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 <select
                                                     style={{ border: '1px solid #a6b3c3' }}
                                                     name="type"
-                                                    className="form-select"
-                                                    {...register('type', { required: true })}>
-                                                    <option hidden>
-                                                        Select
-                                                    </option>
-                                                    <option value="SubTask">
-                                                        SubTask
-                                                    </option>
-                                                    <option value="Bug">
-                                                        Bug
-                                                    </option>
+                                                    className={`form-select ${errors.type ? 'is-invalid' : ''}`}
+                                                    {...register('type', { required: true })}
+                                                    defaultValue=""
+                                                >
+                                                    <option value="" disabled hidden>Select</option>
+                                                    <option value="SubTask">SubTask</option>
+                                                    <option value="Bug">Bug</option>
                                                 </select>
-
-                                                {errors?.type?.type === 'required' && (
-                                                    <span className="text-danger"> This field is required *</span>
+                                                {errors.type && (
+                                                    <div className="invalid-feedback">This field is required</div>
                                                 )}
                                             </Form.Group>
                                         </Col>
+                                        <Col sm={6}>
+                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                <Form.Label className='mb-0'>
+                                                    Created By<span className='text-danger'>*</span>
+                                                </Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    defaultValue={userName}
+                                                    disabled
+                                                    style={{ border: '1px solid #a6b3c3' }}
+                                                    {...register('subtaskCreator')}
+                                                />
+                                            </Form.Group>
+                                        </Col>
+
                                         <Col sm={6}>
                                             <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                 <Form.Label className='mb-0'>
@@ -524,17 +529,17 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                             </Col>
                                         </Row>
                                     </form>
-                                    <Row>
+                                    <Row className='scrollable-content'>
                                         {getCommentData?.map((ele, ind) => (
                                             <ul style={{ listStyle: 'none' }}>
                                                 <Row>
                                                     <Col lg={12} className="d-flex pt-2">
-                                                        <Col lg={2} className="pt-2">
+                                                        <Col lg={1} className="d-flex justify-content-start align-items-center">
                                                             <span
                                                                 style={{
                                                                     backgroundColor: '#605e5a',
                                                                     borderRadius: '100%',
-                                                                    padding: '11px 15px',
+                                                                    padding: ' 10px',
                                                                     color: 'white',
                                                                     fontWeight: '800',
                                                                 }}>
@@ -542,24 +547,20 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                                 {ele?.userId?.lastName.charAt(0)}
                                                             </span>
                                                         </Col>
-                                                        <Col lg={10} className="m-0 p-0">
-                                                            <div className="d-flex">
-                                                                <h4 className="m-0 p-0"> {ele?.userId?.firstName}</h4>
-                                                                <h4 className="ps-1 m-0 p-0">
-                                                                    {' '}
-                                                                    {ele?.userId?.lastName}
-                                                                </h4>
-                                                                <p className="ps-1 m-0 p-0">
-                                                                    {moment(ele?.createdAt).fromNow()}{' '}
+                                                        <Col lg={11} className="m-0 p-0 d-flex flex-column justify-content-center">
+                                                            <div className="d-flex align-items-center">
+                                                                <h5 className="m-0 p-0"> {ele?.userId?.firstName} {ele?.userId?.lastName}</h5>
+                                                                <p className="ps-1 m-0 p-0 ">
+                                                                    ( {moment(ele?.createdAt).fromNow()} )
                                                                     {/* {moment(ele?.createdAt).add(1, 'days').calendar()}     */}
                                                                 </p>
                                                                 {/* <p className='ps-1 m-0 p-0'>{moment(ele?.createdAt).startOf('hour').fromNow()}</p> */}
                                                             </div>
                                                             <div className="m-0 p-0">
-                                                                <li className="font-18  ">{ele?.comment}</li>
+                                                                <li className="font-18">{ele?.comment}</li>
                                                             </div>
                                                             <div className="d-flex m-0 p-0">
-                                                                <p className=" p-0" onClick={() => handelUpdate(ele)}>
+                                                                <p className=" p-0 mb-0" onClick={() => handelUpdate(ele)}>
                                                                     Edit
                                                                 </p>
                                                                 {/* <p
@@ -642,7 +643,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         </thead>
                                         <tbody>
 
-                                            {store?.getSubTaskReducer?.data?.response?.map((bug, ind) => {
+                                            {bugsResponse && bugsResponse.map((bug, ind) => {
                                                 return (
                                                     <tr className="align-middle">
                                                         <th>{ind + 1}</th>
@@ -705,12 +706,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         </tbody>
                                     </Table>
                                 </div>
-
-
-
-
                             ) : connectComponent === 'Subtask' ? (
-
                                 <div style={{ overflowX: 'auto' }}>
                                     <Table className="mb-0 add_Color_font text-nowrap w-100 " striped>
                                         <thead className=''>
@@ -729,7 +725,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                         </thead>
                                         <tbody>
 
-                                            {store?.getSubTaskReducer?.data?.response?.map((sub, ind) => {
+                                            {subtaskResponse && subtaskResponse.map((sub, ind) => {
                                                 return (
                                                     <tr className="align-middle">
                                                         <th>{ind + 1}</th>

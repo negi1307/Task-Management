@@ -45,7 +45,6 @@ const TaskInformation = styled.div`
     }
 `;
 const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressColumn, onTaskStart }) => {
-    // console.log(item,'pankajsingh')
     const store = useSelector(state => state)
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
@@ -54,7 +53,11 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     const userId = store?.Auth?.user?.userId;
     const getComments = item?.comments;
     const historyData = store?.getHistoryData?.data?.response;
-    const [elapsedTime, setElapsedTime] = useState(null);
+    const [elapsedSeconds, setElapsedSeconds] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [stopTime, setStopTime] = useState('');
+    console.log({stopTime})
+
 
     const {
         register,
@@ -84,20 +87,38 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
         setShowData(true)
     };
 
+ 
+
+   
     useEffect(() => {
-        if (isInProgressColumn && item.inProgressDate) {
-            const inProgressDate = new Date(item.inProgressDate);
-            const interval = setInterval(() => {
-                const currentTime = new Date();
-                const elapsedMilliseconds = currentTime - inProgressDate;
-                const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000);
-                setElapsedTime(formatTime(elapsedSeconds));
-            }, 1000); // Update every second
-
-            return () => clearInterval(interval);
+        // Retrieve stored elapsed time
+        const storedElapsedTime = localStorage.getItem(`task_${item.id}_elapsedTime`);
+        if (storedElapsedTime) {
+            setElapsedSeconds(parseInt(storedElapsedTime, 10));
         }
-    }, [isInProgressColumn, item.inProgressDate]);
 
+        if (isInProgressColumn) {
+            setIsPlaying(true);
+        } else {
+            setIsPlaying(false);
+        }
+    }, [isInProgressColumn]);
+
+    useEffect(() => {
+        let timer;
+        if (isPlaying) {
+            timer = setInterval(() => {
+                setElapsedSeconds((prev) => prev + 1);
+            }, 1000); // Update every second
+        }
+
+        return () => clearInterval(timer);
+    }, [isPlaying]);
+
+    // Save elapsed time to local storage
+    useEffect(() => {
+        localStorage.setItem(`task_${item.id}_elapsedTime`, elapsedSeconds.toString());
+    }, [elapsedSeconds, item.id]);
 
 
     const EditData = (item) => {
@@ -161,7 +182,7 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                 <div className="col-12" onClick={() => {
                                     showTaskDetailMOdel(item);
                                 }}>
-                                            <p className='m-0'>{item?.projects?.projectName}</p>
+                                    <p className='m-0'>{item?.projects?.projectName}</p>
 
                                     <p className='m-0'>
                                         <div className='task-title text-dark p-0' title={item?.description}>
@@ -189,7 +210,6 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                             <span
                                             >
                                                 {backgroundColorClass}
-
                                             </span>
                                         </div>
                                     </OverlayTrigger>
@@ -202,9 +222,14 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                         <div className='col-6 text-end'>
                                             {isInProgressColumn && (
                                                 <div className=" fw-bold">
-                                                    {elapsedTime}
+                                                    {isInProgressColumn && (
+                                                        <div>
+                                                            {formatTime(elapsedSeconds)}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             )}
+                                         
 
                                         </div>
                                     </div>
@@ -271,7 +296,6 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     );
 };
 
-// Function to format seconds into HH:MM:SS format
 const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -279,8 +303,5 @@ const formatTime = (seconds) => {
     return `${pad(hours)}:${pad(minutes)}:${pad(remainingSeconds)}`;
 };
 
-// Function to pad single digit numbers with leading zeros
-const pad = (num) => {
-    return num < 10 ? '0' + num : num;
-};
+const pad = (num) => (num < 10 ? '0' + num : num);
 export default TaskCard;

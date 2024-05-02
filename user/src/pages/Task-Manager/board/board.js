@@ -89,6 +89,8 @@ const Boards = (props) => {
     const [showTaskModel, setshowTaskModel] = useState(false);
     const [show, setShow] = useState(false);
     const [search, setSearch] = useState('');
+    const updateResponse = store?.UpdateTaskReducer?.data?.response;
+    console.log({ updateResponse })
 
 
     const assigneeId = localStorage.getItem('userId')
@@ -163,75 +165,46 @@ const Boards = (props) => {
     };
 
     const [BooleanUpdate, setBooleanUpdate] = useState(false);
+    const persistColumnsToLocalStorage = (columns) => {
+        localStorage.setItem("columns", JSON.stringify(columns));
+    };
+
+
+
     const onDragEnd = (result, columns, setColumns) => {
-        if (!result.destination) return;
         const { source, destination } = result;
 
-        // Check if destination column is "In Progress" and if it already has a task
-        if (destination.droppableId === '2' && columns['2'].items.length > 0) {
-            ToastHandle('error', 'Only one task allowed in progress at a time')
-            return;
-        }
+        if (!destination) return;
 
-        if (source.droppableId !== destination.droppableId) {
-            const sourceColumn = columns[source.droppableId];
-            const destColumn = columns[destination.droppableId];
-            const sourceItems = sourceColumn.items?.slice();
-            const destItems = destColumn.items?.slice();
-            const [removed] = sourceItems?.splice(source.index, 1);
-            const draggedCardId = removed.id; // Get the ID of the dragged card
+        const sourceColumn = columns[source.droppableId];
+        const destColumn = columns[destination.droppableId];
 
-            destItems?.splice(destination.index, 0, removed);
+        const sourceItems = sourceColumn.items.slice();
+        const destItems = destColumn.items.slice();
+        const [removed] = sourceItems.splice(source.index, 1);
+        destItems.splice(destination.index, 0, removed);
 
+        setColumns({
+            ...columns,
+            [source.droppableId]: {
+                ...sourceColumn,
+                items: sourceItems,
+            },
+            [destination.droppableId]: {
+                ...destColumn,
+                items: destItems,
+            },
+        });
 
-            // Dispatch an action when a task is moved to the "In Progress" column
-            // if (destination.droppableId === '2') {
-            //     dispatch(addLoginTime({ taskId: draggedCardId }));
-            // }
-
-
-            setColumns({
-                ...columns,
-                [source.droppableId]: {
-                    ...sourceColumn,
-                    items: sourceItems,
-                },
-                [destination.droppableId]: {
-                    ...destColumn,
-                    items: destItems,
-                },
-            });
-            handelupdatetask(result);
-            setBooleanUpdate(true)
-
-            // // Dispatch an action when a task is moved to columns 4 or 5
-            // if (destination.droppableId === '4' || destination.droppableId === '5') {
-            //     dispatch(addLoginTimeStop({ taskId: draggedCardId }));
-            // }
-
-            // Dispatch an action when a task is moved from "In Progress" to columns 4 or 5
-            // if (source.droppableId === '2' && (destination.droppableId === '4' || destination.droppableId === '5')) {
-            //     dispatch(addLoginTimeStop({ taskId: draggedCardId }));
-            //     ToastHandle('success', 'Stop time recorded')
-            // }
-
-
-        } else {
-            const column = columns[source.droppableId];
-            const copiedItems = [...column.items];
-            const [removed] = copiedItems.splice(source.index, 1);
-            copiedItems.splice(destination.index, 0, removed);
-            setColumns({
-                ...columns,
-                [source.droppableId]: {
-                    ...column,
-                    items: copiedItems,
-                },
-            });
-            handelupdatetask(result);
-            setBooleanUpdate(true)
-        }
+        persistColumnsToLocalStorage(columns); // Persist columns to local storage
     };
+
+
+
+
+
+
+
 
     useEffect(() => {
         if (statushandle?.data?.status == 200) {
@@ -297,9 +270,9 @@ const Boards = (props) => {
     return (
         <>
             <div className="status">
-         
+
                 <div className="search_info ms-auto ">
-           
+
                     <input
                         type="search"
                         value={search}
@@ -346,6 +319,7 @@ const Boards = (props) => {
                                                         closeModal={closeModal}
                                                         showTaskDetailMOdel={showTaskDetailMOdel}
                                                         isInProgressColumn={columnId == '2'}
+
                                                     // onTaskStart={handleTaskStart}
                                                     />
                                                 ))}

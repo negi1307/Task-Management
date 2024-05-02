@@ -14,10 +14,9 @@ type AuthAction = {
     type: string,
     payload: { actionType?: string, data?: any, error?: string },
 };
-type State = { user?: {} | null, loading?: boolean, +value?: boolean };
+type State = { user?: {} | null, loading?: boolean, +value ?: boolean };
 
 const Auth = (state: State = INIT_STATE, action: AuthAction): any => {
-    console.log(action);
     switch (action.type) {
         case AuthActionTypes.API_RESPONSE_SUCCESS:
             switch (action.payload.actionType) {

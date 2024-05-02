@@ -56,7 +56,7 @@ const InviteUser = () => {
                                 <Form.Control
                                     type="text"
                                     placeholder="Please Enter First Name"
-                                    {...register('title', { required: true, pattern: /^[^\s]+$/ })}
+                                    {...register('title', { required: true, pattern: /^[^\s].*$/ })}
                                 />
                                 {errors.title?.type === 'required' && (
                                     <span className="text-danger"> This field is required *</span>
@@ -74,7 +74,7 @@ const InviteUser = () => {
                                 <Form.Control
                                     type="text"
                                     placeholder="Please Enter  Last Name"
-                                    {...register('lastName', { required: true, pattern: /^[^\s]+$/ })}
+                                    {...register('lastName', { required: true, pattern: /^[^\s].*$/ })}
                                 />
                                 {errors.lastName?.type === 'required' && (
                                     <span className="text-danger"> This field is required *</span>
@@ -94,7 +94,7 @@ const InviteUser = () => {
                                 <Form.Control
                                     type="mail"
                                     placeholder="Please Enter e-mail"
-                                    {...register('email', { required: true, pattern: /^[^\s]+$/ })}
+                                    {...register('email', { required: true, pattern: /^[^\s].*$/ })}
                                 />
                                 {errors.email?.type === 'required' && (
                                     <span className="text-danger"> This field is required *</span>
@@ -111,7 +111,7 @@ const InviteUser = () => {
                                 </Form.Label>
                                 <Form.Control
                                     type="password"
-                                    {...register('password', { required: true, pattern: /^[^\s]+$/ })}
+                                    {...register('password', { required: true, pattern: /^[^\s].*$/ })}
                                     placeholder="Please enter password"
                                 />
                                 {errors.password?.type === 'required' && (
