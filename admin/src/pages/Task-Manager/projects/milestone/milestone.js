@@ -37,7 +37,7 @@ const Milestone = () => {
     const deletehandle = store?.deleteMileStone?.data;
     const sessionData = sessionStorage.getItem('hyper_user');
     const userData = JSON.parse(sessionData);
-    const userRole = userData.role;
+    const userRole = userData?.role;
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
