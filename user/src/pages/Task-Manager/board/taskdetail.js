@@ -49,10 +49,10 @@ console.log(props.item,'asdfghjk')
         if (type === 'History') {
             dispatch(getHistoryAction({taskId: props.item._id}));
         }
-        const taskId = props?.item?.id;
+        const taskId = props?.item?._id;
         dispatch(getBugs({ taskId, type: "Bug" }));
         dispatch(getSubTask({ taskId, type: "SubTask" }));
-        dispatch(getComment({ taskId:props?.item?._id }));
+        dispatch(getComment({ taskId:props?.item?._id}));
 
     };
 
@@ -76,8 +76,9 @@ console.log(props.item,'asdfghjk')
         } else {
             dispatch(updateComment({commentId: commentId,comment: e?.comment}));
             setButtonChange(true);
-        }
         dispatch(getComment({taskId:props?.item?._id}));
+
+        }
 
         setValue('comment', '');
     };
@@ -90,6 +91,7 @@ console.log(props.item,'asdfghjk')
         if (historyData) {
             setHistoryResponse(historyData);
         }
+
         // dispatch(getComment({taskId:props?.item?._id}));
 
     }, [store?.getHistoryReducer?.data?.response]);
