@@ -254,29 +254,40 @@ const updateTaskStatus = async (req, res) => {
         query.inProgressDate = new Date();
       }
 
-      if (status == 4 || status == 5) {
+      if (status == 4) {
         query.doneDate = new Date();
         if (task && task.inProgressDate) {
           let timeDifference = (query.doneDate.getTime() - task.inProgressDate.getTime())
-
-          console.log(timeDifference, task.timeTracker)
-          const totalTime = timeDifference + task.timeTracker
-          
-
-          query.timeTracker = totalTime
-
+          query.timeTracker = timeDifference
+          if (task.timeTracker) {
+            const totalTime = timeDifference + task.timeTracker
+            query.timeTracker = totalTime
+          }
         }
         if (task && task.logInTime && task.timeTracker) {
           let timeDifference = (query.doneDate.getTime() - task.logInTime.getTime());
           query.timeTracker = task.timeTracker + timeDifference
         }
-      
       }
+      if (status == 5) {
+        query.doneDate = new Date();
+        if (task && task.inProgressDate) {
+          let timeDifference = (query.doneDate.getTime() - task.inProgressDate.getTime())
+          query.timeTracker = timeDifference
+        } else {
+          const totalTime = timeDifference + task.timeTracker
+          query.timeTracker = totalTime
+        }
+        if (task && task.logInTime && task.timeTracker) {
+          let timeDifference = (query.doneDate.getTime() - task.logInTime.getTime());
+          query.timeTracker = task.timeTracker + timeDifference
+        }
+      }
+
       const result = await taskModel.findByIdAndUpdate({ _id: taskId }, query, { new: true });
       const taskStatus = await taskModel.findById(taskId)
       await userHistory(req, taskStatus);
       return res.status(200).json({ status: "200", message: "Task Status updated successfully", data: result });
-      // }
     } else {
       const tasks = await taskModel.find({ assigneeId: req.user._id, status: 2 });
       if (tasks.length > 0) {
