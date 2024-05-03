@@ -49,7 +49,7 @@ const tasks = mongoose.model(
             type: Date
         },
         timeTracker: {
-            type: String
+            type: Number
         },
         activeStatus: {
             type: Boolean,

@@ -251,46 +251,32 @@ const updateTaskStatus = async (req, res) => {
       let query = { status };
       if (status == 2) {
         await taskModel.findById(taskId).select('status');
-        // if (status <= currentStatus.status && req.user.role !== 'Testing') {
-        //   return res.status(403).json({ status: "403", message: "You are not authorized to update the task status backwards." });
-        // }
         query.inProgressDate = new Date();
       }
 
       if (status == 4 || status == 5) {
-        // if (req.user.role === 'Testing') {
         query.doneDate = new Date();
         if (task && task.inProgressDate) {
-          let timeDifference = (query.doneDate.getTime() - task.inProgressDate.getTime()) / 1000;
+          let timeDifference = (query.doneDate.getTime() - task.inProgressDate.getTime())
 
-          const breakRecords = await breakTimeModel.find({ userId: req.user._id, taskId: taskId });
-          let totalBreakTime = 0;
-          for (const breakRecord of breakRecords) {
-            totalBreakTime += breakRecord.break;
-          }
+          console.log(timeDifference, task.timeTracker)
+          const totalTime = timeDifference + task.timeTracker
+          
 
-          timeDifference -= totalBreakTime;
-
-          const hours = Math.floor(timeDifference / 3600);
-          const minutes = Math.floor((timeDifference % 3600) / 60);
-          const seconds = Math.floor(timeDifference % 60);
-
-          query.timeTracker = `${hours} hours ${minutes} minutes ${seconds} seconds`;
+          query.timeTracker = totalTime
 
         }
         if (task && task.logInTime && task.timeTracker) {
           let timeDifference = (query.doneDate.getTime() - task.logInTime.getTime());
           query.timeTracker = task.timeTracker + timeDifference
         }
-        // }
-        // else {
-        //   return res.status(200).json({ status: "200", message: "You are not authorised to do so." });
-        // }
+      
       }
       const result = await taskModel.findByIdAndUpdate({ _id: taskId }, query, { new: true });
       const taskStatus = await taskModel.findById(taskId)
       await userHistory(req, taskStatus);
       return res.status(200).json({ status: "200", message: "Task Status updated successfully", data: result });
+      // }
     } else {
       const tasks = await taskModel.find({ assigneeId: req.user._id, status: 2 });
       if (tasks.length > 0) {
@@ -906,31 +892,20 @@ const userWorkingHours = async (req, res) => {
     }
 
     const tasks = await taskModel.find(query).populate('projectId', 'projectName').populate('assigneeId');
-    let totalHours = 0;
-    let totalMinutes = 0;
-    let totalSeconds = 0;
+    let totalMilliseconds = 0;
 
     tasks.forEach(task => {
       if (task.timeTracker) {
-        const timeParts = task.timeTracker.split(' ');
-        totalHours += parseInt(timeParts[0]) || 0;
-        totalMinutes += parseInt(timeParts[2]) || 0;
-        totalSeconds += parseInt(timeParts[4]) || 0;
+        totalMilliseconds += task.timeTracker;
       }
     });
 
-    totalMinutes += Math.floor(totalSeconds / 60);
-    totalSeconds %= 60;
-    totalHours += Math.floor(totalMinutes / 60);
-    totalMinutes %= 60;
-
-    const totalTime = `${totalHours} hours ${totalMinutes} minutes ${totalSeconds} seconds`;
-
-    return res.status(200).json({ status: 200, message: "Data fetched successfully", totalTime, data: tasks });
+    return res.status(200).json({ status: 200, message: "Data fetched successfully", totalTime: totalMilliseconds, data: tasks });
   } catch (error) {
     return res.status(500).json({ status: 500, message: error.message });
   }
 };
+
 
 
 
