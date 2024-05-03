@@ -9,6 +9,7 @@ import DatePicker from 'react-datepicker';
 import '../../node_modules/react-datepicker/dist/react-datepicker.css';
 import { getReporterAction } from '../redux/actions';
 import ToastHandle from '../constants/toaster/toaster';
+// import { useSelector } from 'react-redux';
 
 // import { useParams } from 'react-router';
 export default function RightBar(props) {
@@ -16,6 +17,7 @@ export default function RightBar(props) {
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const [taskdata, setTaskData] = useState();
+
     // disable previous date
     const today = new Date();
     // console.log(today, 'today');
@@ -36,6 +38,8 @@ export default function RightBar(props) {
     } = useForm();
     const { showModal, setShowModal, columns, content, projectId, mileStoneId, sprintId, onFormSubmit } = props;
     const [selectedFile, setSelectedFile] = useState('');
+    // const createTaskResponse = store?.createTaskReducer?.data?.response?.status;
+    // console.log(createTaskResponse, 'createTaskResponse')
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -48,6 +52,7 @@ export default function RightBar(props) {
     };
 
     //For the values in the disabled fields
+
     const allDetails = columns?.[1]?.items[0];
     // console.log(allDetails, 'kjbf')
     //////////////////////////

@@ -89,9 +89,9 @@ const Boards = (props) => {
     const [showTaskModel, setshowTaskModel] = useState(false);
     const [show, setShow] = useState(false);
     const [search, setSearch] = useState('');
-    const updateResponse = store?.UpdateTaskReducer?.data?.response;
-    console.log({ updateResponse })
-
+    // const updateResponse = store?.updateTaskStatus;
+    // console.log({ updateResponse })
+    console.log(store?.updateTaskStatus, '&-----------------------------------------')
 
     const assigneeId = localStorage.getItem('userId')
     useEffect(() => {
@@ -158,19 +158,15 @@ const Boards = (props) => {
     const handelupdatetask = (ele) => {
         let body = {
             taskId: ele?.draggableId,
-            status: parseInt(ele?.destination?.droppableId)
+            status: ele?.destination?.droppableId
         };
         dispatch(updateTaskStatus(body));
         setloader(false);
     };
-
     const [BooleanUpdate, setBooleanUpdate] = useState(false);
     const persistColumnsToLocalStorage = (columns) => {
         localStorage.setItem("columns", JSON.stringify(columns));
     };
-
-
-
     const onDragEnd = (result, columns, setColumns) => {
         const { source, destination } = result;
 
@@ -183,7 +179,6 @@ const Boards = (props) => {
         const destItems = destColumn.items.slice();
         const [removed] = sourceItems.splice(source.index, 1);
         destItems.splice(destination.index, 0, removed);
-
         setColumns({
             ...columns,
             [source.droppableId]: {
@@ -196,15 +191,10 @@ const Boards = (props) => {
             },
         });
 
-        persistColumnsToLocalStorage(columns); // Persist columns to local storage
-    };
-
-
-
-
-
-
-
+        // persistColumnsToLocalStorage(columns); // Persist columns to local storage
+        handelupdatetask(result);
+        setBooleanUpdate(true);
+    }
 
     useEffect(() => {
         if (statushandle?.data?.status == 200) {
@@ -213,9 +203,7 @@ const Boards = (props) => {
             ToastHandle('error', statushandle?.data?.message);
         } else if (statushandle?.status !== 200) {
             ToastHandle('error', statushandle?.message?.error);
-
         }
-
     }, [statushandle]);
 
     useEffect(() => {
@@ -226,7 +214,6 @@ const Boards = (props) => {
         }
         setBooleanUpdate(false);
     }, [BooleanUpdate]);
-
 
     const historyData = store?.getHistoryData?.data?.response;
     const userId = store?.Auth?.user?.userId;
