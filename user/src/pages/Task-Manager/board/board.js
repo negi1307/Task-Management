@@ -85,12 +85,11 @@ const Boards = (props) => {
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
     const [commentdata, setCommentData] = useState([]);
-    // console.log(commentdata, '66666666666666666666666666666666')
+    console.log(commentdata, '66666666666666666666666666666666')
     const [showTaskModel, setshowTaskModel] = useState(false);
     const [show, setShow] = useState(false);
     const [search, setSearch] = useState('');
     const updateResponse = store?.UpdateTaskReducer?.data?.response;
-    console.log({ updateResponse })
 
 
     const assigneeId = localStorage.getItem('userId')
@@ -158,45 +157,14 @@ const Boards = (props) => {
     const handelupdatetask = (ele) => {
         let body = {
             taskId: ele?.draggableId,
-            status:ele?.destination?.droppableId
+            status: parseInt(ele?.destination?.droppableId)
         };
         dispatch(updateTaskStatus(body));
         setloader(false);
     };
 
     const [BooleanUpdate, setBooleanUpdate] = useState(false);
-    // const onDragEnd = (result, columns, setColumns) => {
-    //     if (!result.destination) return;
-    //     const { source, destination } = result;
-
-    //     if (!destination) return;
-
-    //     const sourceColumn = columns[source.droppableId];
-    //     const destColumn = columns[destination.droppableId];
-
-    //     const sourceItems = sourceColumn.items.slice();
-    //     const destItems = destColumn.items.slice();
-    //     const [removed] = sourceItems.splice(source.index, 1);
-    //     destItems.splice(destination.index, 0, removed);
-
-    //     setColumns({
-    //         ...columns,
-    //         [source.droppableId]: {
-    //             ...sourceColumn,
-    //             items: sourceItems,
-    //         },
-    //         [destination.droppableId]: {
-    //             ...destColumn,
-    //             items: destItems,
-    //         },
-    //     });
-    //           handelupdatetask()
-    //           setBooleanUpdate(true)
-    //     persistColumnsToLocalStorage(columns); // Persist columns to local storage
-    // };
-
-
-   const onDragEnd = (result, columns, setColumns) => {
+    const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return;
         const { source, destination } = result;
 
@@ -221,16 +189,12 @@ const Boards = (props) => {
                 items: destItems,
             },
         });
-              handelupdatetask()
+              handelupdatetask(result)
               setBooleanUpdate(true)
-        persistColumnsToLocalStorage(columns); // Persist columns to local storage
     };
 
 
-
-
-
-
+ 
     useEffect(() => {
         if (statushandle?.data?.status == 200) {
             closeModal('render');
