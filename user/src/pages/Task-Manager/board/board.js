@@ -91,8 +91,6 @@ const Boards = (props) => {
     const [search, setSearch] = useState('');
     // const updateResponse = store?.updateTaskStatus;
     // console.log({ updateResponse })
-    console.log(store?.updateTaskStatus, '&-----------------------------------------')
-
     const assigneeId = localStorage.getItem('userId')
     useEffect(() => {
         dispatch(getAllTask({ sprintId: spriteId, searchString: '', assigneeId: assigneeId }));

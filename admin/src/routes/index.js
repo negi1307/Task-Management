@@ -348,7 +348,8 @@ const AllRoutes = () => {
                             element: <LoadComponent component={Task} />,
                         },
                         {
-                            path: 'taskBord/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId',
+                            // path: 'taskBord/projectId=/:projectId&milestoneId=/:milestoneId&spriteId=/:spriteId',
+                            path: 'taskBord/:projectId/:milestoneId/:spriteId/:projectName/:milestoneName/:sprintName',
                             element: <LoadComponent component={TaskBoard} />,
                         },
                         {
