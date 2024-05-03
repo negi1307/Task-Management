@@ -254,29 +254,40 @@ const updateTaskStatus = async (req, res) => {
         query.inProgressDate = new Date();
       }
 
-      if (status == 4 || status == 5) {
+      if (status == 4) {
         query.doneDate = new Date();
         if (task && task.inProgressDate) {
           let timeDifference = (query.doneDate.getTime() - task.inProgressDate.getTime())
-
-          console.log(timeDifference, task.timeTracker)
-          const totalTime = timeDifference + task.timeTracker
-          
-
-          query.timeTracker = totalTime
-
+          query.timeTracker = timeDifference
+          if (task.timeTracker) {
+            const totalTime = timeDifference + task.timeTracker
+            query.timeTracker = totalTime
+          }
         }
         if (task && task.logInTime && task.timeTracker) {
           let timeDifference = (query.doneDate.getTime() - task.logInTime.getTime());
           query.timeTracker = task.timeTracker + timeDifference
         }
-      
       }
+      if (status == 5) {
+        query.doneDate = new Date();
+        if (task && task.inProgressDate) {
+          let timeDifference = (query.doneDate.getTime() - task.inProgressDate.getTime())
+          query.timeTracker = timeDifference
+        } else {
+          const totalTime = timeDifference + task.timeTracker
+          query.timeTracker = totalTime
+        }
+        if (task && task.logInTime && task.timeTracker) {
+          let timeDifference = (query.doneDate.getTime() - task.logInTime.getTime());
+          query.timeTracker = task.timeTracker + timeDifference
+        }
+      }
+
       const result = await taskModel.findByIdAndUpdate({ _id: taskId }, query, { new: true });
       const taskStatus = await taskModel.findById(taskId)
       await userHistory(req, taskStatus);
       return res.status(200).json({ status: "200", message: "Task Status updated successfully", data: result });
-      // }
     } else {
       const tasks = await taskModel.find({ assigneeId: req.user._id, status: 2 });
       if (tasks.length > 0) {
@@ -892,31 +903,20 @@ const userWorkingHours = async (req, res) => {
     }
 
     const tasks = await taskModel.find(query).populate('projectId', 'projectName').populate('assigneeId');
-    let totalHours = 0;
-    let totalMinutes = 0;
-    let totalSeconds = 0;
+    let totalMilliseconds = 0;
 
     tasks.forEach(task => {
       if (task.timeTracker) {
-        const timeParts = task.timeTracker.split(' ');
-        totalHours += parseInt(timeParts[0]) || 0;
-        totalMinutes += parseInt(timeParts[2]) || 0;
-        totalSeconds += parseInt(timeParts[4]) || 0;
+        totalMilliseconds += task.timeTracker;
       }
     });
 
-    totalMinutes += Math.floor(totalSeconds / 60);
-    totalSeconds %= 60;
-    totalHours += Math.floor(totalMinutes / 60);
-    totalMinutes %= 60;
-
-    const totalTime = `${totalHours} hours ${totalMinutes} minutes ${totalSeconds} seconds`;
-
-    return res.status(200).json({ status: 200, message: "Data fetched successfully", totalTime, data: tasks });
+    return res.status(200).json({ status: 200, message: "Data fetched successfully", totalTime: totalMilliseconds, data: tasks });
   } catch (error) {
     return res.status(500).json({ status: 500, message: error.message });
   }
 };
+
 
 
 
