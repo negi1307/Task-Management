@@ -124,7 +124,7 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
             [`Time Taken`]: formatTime(data?.timeTracker) || 'Not started yet',
         }));
 
-        const totalTime = store?.getusersDataReducer?.data;
+        const totalTime = store?.getusersDataReducer?.data?.totalTime;
         if (totalTime !== undefined) {
             console.log({ totalTime })
         }

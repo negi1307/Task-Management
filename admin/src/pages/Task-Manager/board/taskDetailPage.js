@@ -77,6 +77,10 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         setEndDate(date);
 
     };
+    const createSubtasksuccess = store?.createTaskReducer?.data?.response;
+    if (createSubtasksuccess !== undefined) {
+        console.log({ createSubtasksuccess })
+    }
     const {
         register,
         handleSubmit,
@@ -114,7 +118,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
             dispatch(createSubTask(subtask_body));
             ToastHandle('success', 'Sub-task created successfully');
         }
-
         setStartDate("");
         setEndDate("");
         reset();
@@ -633,6 +636,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 <th className='fw-bold'>Summary</th>
                                                 <th className='fw-bold'>Decription</th>
                                                 <th className='fw-bold'>Assignee</th>
+                                                <th className='fw-bold'>Assigned By</th>
                                                 <th className='fw-bold'>Priority</th>
                                                 <th className='fw-bold'>Status</th>
                                                 <th className='fw-bold'>Technology</th>
@@ -661,7 +665,11 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                                 {editData?.assigneeInfo?.firstName} {editData?.assigneeInfo?.lastName}
                                                             </span>
                                                         </td>
-
+                                                        <td>
+                                                            <span>
+                                                                {bug?.createdBy?.firstName} {bug?.createdBy?.lastName}
+                                                            </span>
+                                                        </td>
                                                         <td>
                                                             <span>
                                                                 {bug?.priority}
@@ -715,6 +723,7 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                 <th className='fw-bold'>Summary</th>
                                                 <th className='fw-bold'>Decription</th>
                                                 <th className='fw-bold'>Assignee</th>
+                                                <th className='fw-bold'>Assigned By</th>
                                                 <th className='fw-bold'>Priority</th>
                                                 <th className='fw-bold'>Status</th>
                                                 <th className='fw-bold'>Technology</th>
@@ -743,7 +752,11 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                                 {editData?.assigneeInfo?.firstName} {editData?.assigneeInfo?.lastName}
                                                             </span>
                                                         </td>
-
+                                                        <td>
+                                                            <span>
+                                                                {sub?.createdBy?.firstName} {sub?.createdBy?.lastName}
+                                                            </span>
+                                                        </td>
                                                         <td>
                                                             <span>
                                                                 {sub?.priority}
@@ -779,8 +792,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                                                 {sub?.dueDate.slice(0, 10)}
                                                             </span>
                                                         </td>
-
-
                                                     </tr>
                                                 );
                                             })}

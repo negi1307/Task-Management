@@ -115,9 +115,6 @@ const Summary = () => {
         },
     ];
 
-
-
-
     return (
         <>
             <div className="pt-2">
@@ -271,7 +268,7 @@ const Summary = () => {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col border_clr  m-2 rounded-4 bg-white">
+                        <div className="col-6 border_clr  m-2 rounded-4 bg-white">
                             <div className="p-4 ">
                                 <div className="col-12">
                                     <h5 className="mb-3">
@@ -283,7 +280,7 @@ const Summary = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col border_clr  m-2 rounded-4 bg-white">
+                        {/* <div className="col border_clr  m-2 rounded-4 bg-white">
                             <div className="p-4 ">
                                 <div className="col-12">
                                     <h5 className="mb-3">
@@ -337,7 +334,7 @@ const Summary = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div >
             </div >
