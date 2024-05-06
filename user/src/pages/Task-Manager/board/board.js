@@ -157,12 +157,11 @@ const Boards = (props) => {
     const handelupdatetask = (ele) => {
         let body = {
             taskId: ele?.draggableId,
-            status: parseInt(ele?.destination?.droppableId)
+            status: ele?.destination?.droppableId
         };
         dispatch(updateTaskStatus(body));
         setloader(false);
     };
-
     const [BooleanUpdate, setBooleanUpdate] = useState(false);
     const onDragEnd = (result, columns, setColumns) => {
         if (!result.destination) return;
@@ -177,7 +176,6 @@ const Boards = (props) => {
         const destItems = destColumn.items.slice();
         const [removed] = sourceItems.splice(source.index, 1);
         destItems.splice(destination.index, 0, removed);
-
         setColumns({
             ...columns,
             [source.droppableId]: {
@@ -189,12 +187,12 @@ const Boards = (props) => {
                 items: destItems,
             },
         });
-              handelupdatetask(result)
-              setBooleanUpdate(true)
+        handelupdatetask(result)
+        setBooleanUpdate(true)
     };
 
 
- 
+
     useEffect(() => {
         if (statushandle?.data?.status == 200) {
             closeModal('render');
@@ -202,9 +200,7 @@ const Boards = (props) => {
             ToastHandle('error', statushandle?.data?.message);
         } else if (statushandle?.status !== 200) {
             ToastHandle('error', statushandle?.message?.error);
-
         }
-
     }, [statushandle]);
 
     useEffect(() => {
@@ -215,7 +211,6 @@ const Boards = (props) => {
         }
         setBooleanUpdate(false);
     }, [BooleanUpdate]);
-
 
     const historyData = store?.getHistoryData?.data?.response;
     const userId = store?.Auth?.user?.userId;

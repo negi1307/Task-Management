@@ -16,7 +16,7 @@ const TimeTrackerTable = () => {
     const [endDate, setEndDate] = useState();
     const users = store?.getAllUsers?.data?.response;
     const userRecord = store?.getUserRecordReducer?.data?.data;
-    console.log({userRecord})
+    console.log({ userRecord })
     const loading = store?.getUserRecordReducer?.loading;
     // console.log({ userRecord })
     useEffect(() => {
@@ -47,26 +47,26 @@ const TimeTrackerTable = () => {
     function convertMilliseconds(ms) {
         const hours = Math.floor(ms / 3600000); // Number of full hours
         const remainingAfterHours = ms % 3600000;
-    
+
         const minutes = Math.floor(remainingAfterHours / 60000); // Number of full minutes after hours
         const remainingAfterMinutes = remainingAfterHours % 60000;
-    
+
         const seconds = Math.floor(remainingAfterMinutes / 1000); // Number of full seconds after minutes
-    
+
         // Formatting to always show two digits
         const formattedHours = hours.toString().padStart(2, '0');
         const formattedMinutes = minutes.toString().padStart(2, '0');
         const formattedSeconds = seconds.toString().padStart(2, '0');
-    
+
         return `${formattedHours} Hours,${formattedMinutes} Minutes,${formattedSeconds} Seconds`; // Returning as a string in the format HH:MM:SS
     }
-    
+
     // Usage with your Redux store value
     const totalTime = store?.getUserRecordReducer?.data?.totalTime;
-    
+
     // Get the formatted time
     const formattedTime = convertMilliseconds(totalTime);
-    
+
     return (
         <Card>
             <Card.Body>
@@ -154,6 +154,38 @@ const TimeTrackerTable = () => {
                                 </div>
                                 {/* ))} */}
                             </div>
+
+                            <div className="col-12 scrollable-content" >
+                                <Table className='text-nowrap' style={{ overflowX: 'scroll' }}>
+                                    <thead>
+                                        <tr>
+                                            <th className='fw-bold text-start'>#</th>
+                                            <th className='fw-bold text-start'>Project Name</th>
+                                            <th className='fw-bold text-start'>Task Name</th>
+                                            <th className='fw-bold text-start'>Priority</th>
+                                            <th className='fw-bold text-start'>Expected Hours</th>
+                                            <th className='fw-bold text-start'>Added to In-progress</th>
+                                            <th className='fw-bold text-start'>Marked Done</th>
+                                            <th className='fw-bold text-start'>Time Taken</th>
+                                        </tr>
+                                    </thead>
+                                    {userRecord && userRecord?.map((record, index) => (
+                                        <tbody key={index}>
+                                            <tr>
+                                                <td className='text-start'>{index + 1}</td>
+                                                <td className='text-start'>{(record?.projectId?.projectName.charAt(0).toUpperCase() + record?.projectId?.projectName.slice(1)).slice(0, 15)}</td>
+                                                <td className='text-start'>{(record?.summary.charAt(0).toUpperCase() + record?.summary.slice(1)).slice(0, 25) + '...'}</td>
+                                                <td className='text-start'>{record?.priority}</td>
+                                                <td className='text-start'>{record?.expectedHours ? record?.expectedHours : 'N/A'}</td>
+                                                <td className='text-start'>{record?.inProgressDate ? record.inProgressDate.split('T')[0] : 'Not yet added'}</td>
+                                                <td className='text-start'>{record?.doneDate ? record.doneDate.split('T')[0] : 'Not completed yet'}</td>
+                                                <td className='text-start'>{isNaN(record?.timeTracker) ? 'Not started yet' : formatTime(record.timeTracker)}</td>
+                                            </tr>
+                                        </tbody>
+                                    ))}
+
+                                </Table>
+                            </div>
                         </div>
 
                         <Table className='text-nowrap ' style={{ overflowX: 'scroll' }}>
@@ -170,40 +202,40 @@ const TimeTrackerTable = () => {
                                 </tr>
                             </thead>
                             {userRecord && userRecord?.map((record, index) => {
-  const convertMsToTime = (ms) => {
-    const second = 1000;
-    const minute = second * 60;
-    const hour = minute * 60;
+                                const convertMsToTime = (ms) => {
+                                    const second = 1000;
+                                    const minute = second * 60;
+                                    const hour = minute * 60;
 
-    const elapsedHours = Math.floor(ms / hour);
-    const elapsedMinutes = Math.floor((ms % hour) / minute);
-    const elapsedSeconds = Math.floor((ms % minute) / second);
+                                    const elapsedHours = Math.floor(ms / hour);
+                                    const elapsedMinutes = Math.floor((ms % hour) / minute);
+                                    const elapsedSeconds = Math.floor((ms % minute) / second);
 
-    return `${elapsedHours} hours, ${elapsedMinutes} minutes, ${elapsedSeconds} seconds`;
-  };
+                                    return `${elapsedHours} hours, ${elapsedMinutes} minutes, ${elapsedSeconds} seconds`;
+                                };
 
-  const timeTrackerMs = record?.timeTracker ? new Date(record.timeTracker).getTime() : 0;
-  const timeTrackerFormatted = convertMsToTime(timeTrackerMs);
+                                const timeTrackerMs = record?.timeTracker ? new Date(record.timeTracker).getTime() : 0;
+                                const timeTrackerFormatted = convertMsToTime(timeTrackerMs);
 
-  return (
-    <tbody key={index}>
-      <tr>
-        <td className='text-start'>{index + 1}</td>
-        <td className='text-start'>
-          {(record?.projectId?.projectName.charAt(0).toUpperCase() + record?.projectId?.projectName.slice(1)).slice(0, 15)}
-        </td>
-        <td className='text-start'>
-          {(record?.summary.charAt(0).toUpperCase() + record?.summary.slice(1)).slice(0, 25) + '...'}
-        </td>
-        <td className='text-start'>{record?.priority}</td>
-        <td className='text-start'>{record?.expectedHours ? record?.expectedHours : 'N/A'}</td>
-        <td className='text-start'>{record?.inProgressDate ? record.inProgressDate.split('T')[0] : 'Not yet added'}</td>
-        <td className='text-start'>{record?.doneDate ? record.doneDate.split('T')[0] : 'Not completed yet'}</td>
-        <td className='text-start'>{timeTrackerFormatted}</td>
-      </tr>
-    </tbody>
-  );
-})}
+                                return (
+                                    <tbody key={index}>
+                                        <tr>
+                                            <td className='text-start'>{index + 1}</td>
+                                            <td className='text-start'>
+                                                {(record?.projectId?.projectName.charAt(0).toUpperCase() + record?.projectId?.projectName.slice(1)).slice(0, 15)}
+                                            </td>
+                                            <td className='text-start'>
+                                                {(record?.summary.charAt(0).toUpperCase() + record?.summary.slice(1)).slice(0, 25) + '...'}
+                                            </td>
+                                            <td className='text-start'>{record?.priority}</td>
+                                            <td className='text-start'>{record?.expectedHours ? record?.expectedHours : 'N/A'}</td>
+                                            <td className='text-start'>{record?.inProgressDate ? record.inProgressDate.split('T')[0] : 'Not yet added'}</td>
+                                            <td className='text-start'>{record?.doneDate ? record.doneDate.split('T')[0] : 'Not completed yet'}</td>
+                                            <td className='text-start'>{timeTrackerFormatted}</td>
+                                        </tr>
+                                    </tbody>
+                                );
+                            })}
 
                             {/* {userRecord && userRecord?.map((record, index) => (
                                 <tbody key={index}>
@@ -224,7 +256,7 @@ const TimeTrackerTable = () => {
                     </>
                 )}
             </Card.Body>
-        </Card>
+        </Card >
     );
 };
 
