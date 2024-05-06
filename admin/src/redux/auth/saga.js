@@ -38,7 +38,7 @@ function* login({ payload: { username, password } }) {
     try {
         const response = yield call(loginApi, { email: username, password: password });
         // console.log(response, 'api response')
-        if (response?.data?.response?.role === "Admin" || "Testing") {
+        if (response?.data?.response?.role === "Admin" || "Testing" || 'CTO' || 'PM') {
             // const { token, user } = response.data;
 
             // let { role } = user
@@ -59,7 +59,7 @@ function* login({ payload: { username, password } }) {
             setAuthorization(user['token']);
             yield put(authApiResponseSuccess(AuthActionTypes.LOGIN_USER, userData));
         }
-        else if (response?.data?.response?.role === "Employee" || "Sales" || "PM" || "CTO") {
+        else if (response?.data?.response?.role === "Employee" || "Sales") {
             yield put(authApiResponseError(AuthActionTypes.LOGIN_USER, "User Not Found"));
             api.setLoggedInUser(null);
             setAuthorization(null);
