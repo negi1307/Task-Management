@@ -93,7 +93,8 @@ const getHistory = async (req, res) => {
             .populate('commentId')
             .populate('assigneeId')
             .skip(startIndex)
-            .limit(limitNumber);
+            .limit(limitNumber)
+            .sort({ createdAt: -1 });
 
         const totalPages = Math.ceil(totalCount / limitNumber);
 
