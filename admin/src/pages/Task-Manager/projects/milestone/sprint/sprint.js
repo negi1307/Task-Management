@@ -30,26 +30,24 @@ const Sprint = () => {
     const [openModal, SetOpenModal] = useState(false);
     const [editData, setEditData] = useState();
     const GetAllSingleSprintData = store?.getAllSingleSprints?.data?.response;
+    // console.log(GetAllSingleSprintData, '');
+    const projectFromSprint = GetAllSingleSprintData?.[0]?.project?.projectName;
+    const milestoneFromSprint = GetAllSingleSprintData?.[0]?.milestone?.title;
+    // console.log(projectFromSprint, milestoneFromSprint, '././././././././')
     const deletehandle = store?.deleteSprint?.data;
     const loaderhandel = store?.getAllSingleSprints;
-
     const sessionData = sessionStorage.getItem('hyper_user');
     const userData = JSON.parse(sessionData);
-    const userRole = userData.role;
+    const userRole = userData?.role;
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
     };
     // console.log({ GetAllSingleSprintData });
-
     // for getting the sprints on update and after adding new sprints
     const getUpdatedSprints = () => {
         dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
     }
-    // ///////////////////////////
-
-
-
     // CReate nrw sprint modal functions
     const getAddedSprints = () => {
         dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
@@ -230,7 +228,8 @@ const Sprint = () => {
                                                     <td className='text-start'>
                                                         <Link
                                                             className='text-secondary'
-                                                            to={`/dashboard/taskBord/projectId=/${item?.project?._id}&milestoneId=/${item?.milestone?._id}&spriteId=/${item?._id}`}>
+                                                            to={`/dashboard/taskBord/${item?.project?._id}/${item?.milestone?._id}/${item?._id}/${(projectFromSprint)}/${encodeURIComponent(milestoneFromSprint)}/${encodeURIComponent(item?.sprintName)}`}>
+                                                            {/* to={`/dashboard/taskBord/projectId=/${item?.project?._id}&milestoneId=/${item?.milestone?._id}&spriteId=/${item?._id}&projectName=/${(projectFromSprint)}&milestoneName=/${encodeURIComponent(milestoneFromSprint)}`}> */}
                                                             {item?.sprintName}
                                                         </Link>
                                                     </td>
@@ -266,7 +265,7 @@ const Sprint = () => {
                                                             <Col>
                                                                 <p className="action-icon m-0 p-0 ">
                                                                     <Link
-                                                                        to={`/dashboard/taskBord/projectId=/${item?.project?._id}&milestoneId=/${item?.milestone?._id}&spriteId=/${item?._id}`}>
+                                                                        to={`/dashboard/taskBord/projectId=/${item?.project?._id}&milestoneId=/${item?.milestone?._id}&spriteId=/${item?._id}&projectName=${encodeURIComponent(projectFromSprint)}&milestoneName=${encodeURIComponent(milestoneFromSprint)}`}>
                                                                         <i className="mdi mdi-eye m-0 p-0"></i>
                                                                     </Link>
                                                                 </p>

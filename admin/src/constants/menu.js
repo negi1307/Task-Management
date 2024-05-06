@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 const MenuItems = () => {
     const sessionData = sessionStorage.getItem('hyper_user');
     const userData = JSON.parse(sessionData);
-    const username = userData.role;
+    const username = userData?.role || '';
     let MENU_ITEMS = []
     if (username === "Testing") {
         MENU_ITEMS = [

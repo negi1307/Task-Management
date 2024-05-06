@@ -59,7 +59,7 @@ axios.interceptors.response.use(
         if (response?.status === 201) {
             localStorage.clear();
             sessionStorage.clear();
-            window.location.href = '/account/login '; // Navigate using window.location
+            window.location.href = '/account/login ';
             return response;
         }
         return response;

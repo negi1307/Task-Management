@@ -48,15 +48,13 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     const store = useSelector(state => state)
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
-    const [isPlay, setIsPlay] = useState(false);
+    // const [isPlay, setIsPlay] = useState(false);
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
     const userId = store?.Auth?.user?.userId;
     const getComments = item?.comments;
     const historyData = store?.getHistoryData?.data?.response;
-    const [elapsedSeconds, setElapsedSeconds] = useState(0);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [stopTime, setStopTime] = useState('');
-    console.log({stopTime})
+    // const [elapsedSeconds, setElapsedSeconds] = useState(null);
+    // const [isPlaying, setIsPlaying] = useState(false);
 
 
     const {
@@ -72,7 +70,21 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     const dispatch = useDispatch();
     const [commentId, setCommentId] = useState('');
     const [showData, setShowData] = useState(false);
-    const [timeElapsed, setTimeElapsed] = useState(0);
+    const [elapsedTime, setElapsedTime] = useState(null);
+    useEffect(() => {
+        if (isInProgressColumn && item.inProgressDate) {
+            const inProgressDate = new Date(item.inProgressDate);
+            const interval = setInterval(() => {
+                const currentTime = new Date();
+                const elapsedMilliseconds = currentTime - inProgressDate;
+                const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000);
+                setElapsedTime(formatTime(elapsedSeconds));
+            }, 1000); // Update every second
+
+            return () => clearInterval(interval);
+        }
+    }, [isInProgressColumn, item.inProgressDate]);
+    // const [timeElapsed, setTimeElapsed] = useState(0);
     // useEffect(() => {
     //     let timer;
     //     const isTaskInProgress = localStorage.getItem(`task_${item._id}_inProgress`);
@@ -87,38 +99,38 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
         setShowData(true)
     };
 
- 
 
-   
-    useEffect(() => {
-        // Retrieve stored elapsed time
-        const storedElapsedTime = localStorage.getItem(`task_${item.id}_elapsedTime`);
-        if (storedElapsedTime) {
-            setElapsedSeconds(parseInt(storedElapsedTime, 10));
-        }
 
-        if (isInProgressColumn) {
-            setIsPlaying(true);
-        } else {
-            setIsPlaying(false);
-        }
-    }, [isInProgressColumn]);
 
-    useEffect(() => {
-        let timer;
-        if (isPlaying) {
-            timer = setInterval(() => {
-                setElapsedSeconds((prev) => prev + 1);
-            }, 1000); // Update every second
-        }
+    // useEffect(() => {
+    //     // Retrieve stored elapsed time
+    //     const storedElapsedTime = localStorage.getItem(`task_${item.id}_elapsedTime`);
+    //     if (storedElapsedTime) {
+    //         setElapsedSeconds(parseInt(storedElapsedTime, 10));
+    //     }
 
-        return () => clearInterval(timer);
-    }, [isPlaying]);
+    //     if (isInProgressColumn) {
+    //         setIsPlaying(true);
+    //     } else {
+    //         setIsPlaying(false);
+    //     }
+    // }, [isInProgressColumn]);
+
+    // useEffect(() => {
+    //     let timer;
+    //     if (isPlaying) {
+    //         timer = setInterval(() => {
+    //             setElapsedSeconds((prev) => prev + 1);
+    //         }, 1000); // Update every second
+    //     }
+
+    //     return () => clearInterval(timer);
+    // }, [isPlaying]);
 
     // Save elapsed time to local storage
-    useEffect(() => {
-        localStorage.setItem(`task_${item.id}_elapsedTime`, elapsedSeconds.toString());
-    }, [elapsedSeconds, item.id]);
+    // useEffect(() => {
+    //     localStorage.setItem(`task_${item.id}_elapsedTime`, elapsedSeconds.toString());
+    // }, [elapsedSeconds, item.id]);
 
 
     const EditData = (item) => {
@@ -224,12 +236,14 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                                 <div className=" fw-bold">
                                                     {isInProgressColumn && (
                                                         <div>
-                                                            {formatTime(elapsedSeconds)}
+                                                            {elapsedTime}
+
+                                                            {/* {elapsedSeconds} */}
                                                         </div>
                                                     )}
                                                 </div>
                                             )}
-                                         
+
 
                                         </div>
                                     </div>
