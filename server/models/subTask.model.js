@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const users = require('./users.model');
 
 const subTask = mongoose.model(
     'subTask', mongoose.Schema({
@@ -66,6 +67,10 @@ const subTask = mongoose.model(
         type: {
             type: String,
             enum: ['Bug', 'SubTask']
+        },
+        createdBy:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'User'
         }
     },
         {

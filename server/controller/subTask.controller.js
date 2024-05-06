@@ -5,6 +5,7 @@ const { userHistory } = require('../controller/history.controller');
 // create sub task or bug
 const addSubTask = async (req, res) => {
     try {
+        const createdBy = req.user._id;
         const { taskId, summary, description, priority, expectedHours, startDate, dueDate, assigneeId, parentId, reporterId, type } = req.body;
         const attachmentPath = req.file ? `${req.file.originalname}` : req.body.attachment;
         const fileExtension = req.file ? req.file.mimetype : undefined;
@@ -12,6 +13,7 @@ const addSubTask = async (req, res) => {
             taskId, summary, description, priority, expectedHours, startDate, dueDate, parentId, reporterId, assigneeId, type,
             attachment: attachmentPath,
             attachmentType: fileExtension,
+            createdBy
         });
 
         if (type === "Bug") {
@@ -88,7 +90,7 @@ const getSubTask = async (req, res) => {
         const totalPages = Math.ceil(totalCount / limitNumber);
         const skip = (pageNumber - 1) * limitNumber;
 
-        const subTaskList = await subTaskModel.find(query).sort({ updatedAt: -1 }).skip(skip).limit(limitNumber);
+        const subTaskList = await subTaskModel.find(query).populate('createdBy').populate('assigneeId').sort({ updatedAt: -1 }).skip(skip).limit(limitNumber);
 
         const message = type === "Bug" ? "Bug list fetched successfully" : "Sub Task fetched successfully";
 
@@ -148,7 +150,7 @@ const updateSubTaskStatus = async (req, res) => {
                     if (subTask && subTask.inProgressDate) {
                         let timeDifference = (query.doneDate.getTime() - subTask.inProgressDate.getTime());
                         query.timeTracker = timeDifference
-                        
+
                     }
                     if (subTask && subTask.logInTime && subTask.timeTracker) {
                         let timeDifference = (query.doneDate.getTime() - subTask.logInTime.getTime());
