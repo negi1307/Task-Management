@@ -55,9 +55,7 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     const historyData = store?.getHistoryData?.data?.response;
     const [elapsedSeconds, setElapsedSeconds] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [stopTime, setStopTime] = useState('');
-    console.log({stopTime})
-
+   
 
     const {
         register,

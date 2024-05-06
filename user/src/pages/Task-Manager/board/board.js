@@ -85,12 +85,13 @@ const Boards = (props) => {
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
     const [commentdata, setCommentData] = useState([]);
-    // console.log(commentdata, '66666666666666666666666666666666')
+    console.log(commentdata, '66666666666666666666666666666666')
     const [showTaskModel, setshowTaskModel] = useState(false);
     const [show, setShow] = useState(false);
     const [search, setSearch] = useState('');
-    // const updateResponse = store?.updateTaskStatus;
-    // console.log({ updateResponse })
+    const updateResponse = store?.UpdateTaskReducer?.data?.response;
+
+
     const assigneeId = localStorage.getItem('userId')
     useEffect(() => {
         dispatch(getAllTask({ sprintId: spriteId, searchString: '', assigneeId: assigneeId }));
@@ -162,10 +163,8 @@ const Boards = (props) => {
         setloader(false);
     };
     const [BooleanUpdate, setBooleanUpdate] = useState(false);
-    const persistColumnsToLocalStorage = (columns) => {
-        localStorage.setItem("columns", JSON.stringify(columns));
-    };
     const onDragEnd = (result, columns, setColumns) => {
+        if (!result.destination) return;
         const { source, destination } = result;
 
         if (!destination) return;
@@ -188,11 +187,11 @@ const Boards = (props) => {
                 items: destItems,
             },
         });
+        handelupdatetask(result)
+        setBooleanUpdate(true)
+    };
 
-        // persistColumnsToLocalStorage(columns); // Persist columns to local storage
-        handelupdatetask(result);
-        setBooleanUpdate(true);
-    }
+
 
     useEffect(() => {
         if (statushandle?.data?.status == 200) {
@@ -257,7 +256,6 @@ const Boards = (props) => {
             <div className="status">
 
                 <div className="search_info ms-auto ">
-
                     <input
                         type="search"
                         value={search}
@@ -304,7 +302,6 @@ const Boards = (props) => {
                                                         closeModal={closeModal}
                                                         showTaskDetailMOdel={showTaskDetailMOdel}
                                                         isInProgressColumn={columnId == '2'}
-
                                                     // onTaskStart={handleTaskStart}
                                                     />
                                                 ))}
