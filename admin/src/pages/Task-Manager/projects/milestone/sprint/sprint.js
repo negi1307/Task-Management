@@ -265,7 +265,8 @@ const Sprint = () => {
                                                             <Col>
                                                                 <p className="action-icon m-0 p-0 ">
                                                                     <Link
-                                                                        to={`/dashboard/taskBord/projectId=/${item?.project?._id}&milestoneId=/${item?.milestone?._id}&spriteId=/${item?._id}&projectName=${encodeURIComponent(projectFromSprint)}&milestoneName=${encodeURIComponent(milestoneFromSprint)}`}>
+                                                                        className='text-secondary'
+                                                                        to={`/dashboard/taskBord/${item?.project?._id}/${item?.milestone?._id}/${item?._id}/${(projectFromSprint)}/${encodeURIComponent(milestoneFromSprint)}/${encodeURIComponent(item?.sprintName)}`}>
                                                                         <i className="mdi mdi-eye m-0 p-0"></i>
                                                                     </Link>
                                                                 </p>
