@@ -237,7 +237,6 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                                     {isInProgressColumn && (
                                                         <div>
                                                             {elapsedTime}
-
                                                             {/* {elapsedSeconds} */}
                                                         </div>
                                                     )}

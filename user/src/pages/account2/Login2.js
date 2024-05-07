@@ -30,25 +30,20 @@ const BottomLink = () => {
         </footer>
     );
 };
-
 const Login2 = (): React$Element<React$FragmentType> => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-
     const location = useLocation();
     const redirectUrl = location.state && location.state.from ? location.state.from.pathname : '/';
-
     useEffect(() => {
         dispatch(resetAuth());
     }, [dispatch]);
-
     const { loading, userLoggedIn, user, error } = useSelector((state) => ({
         loading: state.Auth.loading,
         user: state.Auth.user,
         error: state.Auth.error,
         userLoggedIn: state.Auth.userLoggedIn,
     }));
-
     /*
      * form validation schema
      */
@@ -58,7 +53,6 @@ const Login2 = (): React$Element<React$FragmentType> => {
             password: yup.string().required(t('Please enter Password')),
         })
     );
-
     /*
      * handle form submission
      */
@@ -98,7 +92,7 @@ const Login2 = (): React$Element<React$FragmentType> => {
                         placeholder={t('Enter your password')}
                         containerClass={'mb-3'}>
                         <Link to="/account/forget-password2" className="text-muted float-end">
-                            <small>{t('Forgot your password?')}</small>
+                            <small className='d-none'> {t('Forgot your password?')}</small>
                         </Link>
                     </FormInput>
 

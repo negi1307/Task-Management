@@ -109,10 +109,9 @@ const Login = (): React$Element<any> => {
                         placeholder={t('Enter your password')}
                         containerClass={'mb-3'}>
                         <Link to="/account/forget-password" className="text-mute float-end">
-                            <small>{t('Forgot your password?')}</small>
+                            <small className='d-none'>{t('Forgot your password?')}</small>
                         </Link>
                     </FormInput>
-
                     <div className="mb-3 mb-0 text-center">
                         <Button variant="primary" className='bg-black border-0' type="submit" disabled={loading}>
                             {t('Log In')}
