@@ -173,7 +173,6 @@ const Boards = () => {
                 },
             });
             handelupdatetask(result);
-
         }
     };
 
@@ -196,7 +195,7 @@ const Boards = () => {
     const getalltasks = () => {
         // dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
         // dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
-        // dispatch(getAllRoles())
+        // dispatch(getAllRoles());
     }
 
     useEffect(() => {

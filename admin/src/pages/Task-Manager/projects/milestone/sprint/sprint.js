@@ -230,7 +230,7 @@ const Sprint = () => {
                                                             className='text-secondary'
                                                             to={`/dashboard/taskBord/${item?.project?._id}/${item?.milestone?._id}/${item?._id}/${(projectFromSprint)}/${encodeURIComponent(milestoneFromSprint)}/${encodeURIComponent(item?.sprintName)}`}>
                                                             {/* to={`/dashboard/taskBord/projectId=/${item?.project?._id}&milestoneId=/${item?.milestone?._id}&spriteId=/${item?._id}&projectName=/${(projectFromSprint)}&milestoneName=/${encodeURIComponent(milestoneFromSprint)}`}> */}
-                                                            {item?.sprintName}
+                                                            {item?.sprintName.charAt(0).toUpperCase() + item?.sprintName.slice(1)}
                                                         </Link>
                                                     </td>
 
@@ -239,11 +239,11 @@ const Sprint = () => {
                                                         <td className='text-start'>
                                                             <OverlayTrigger
                                                                 placement="top"
-                                                                overlay={<Tooltip>{truncateDescription(item?.sprintDesc)}</Tooltip>}
+                                                                overlay={<Tooltip>{truncateDescription(item?.sprintDesc.charAt(0).toUpperCase() + item?.sprintDesc.slice(1))}</Tooltip>}
                                                             >
                                                                 <div>
                                                                     {/* Show only a part of the description */}
-                                                                    <div>{truncateDescription(item?.sprintDesc)}</div>
+                                                                    <div>{truncateDescription(item?.sprintDesc.charAt(0).toUpperCase() + item?.sprintDesc.slice(1))}</div>
                                                                 </div>
                                                             </OverlayTrigger>
                                                         </td>
