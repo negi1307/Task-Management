@@ -26,7 +26,6 @@ const Milestone = () => {
     const [render, setRender] = useState(false);
     const [status, setStatus] = useState(1);
     const GetSinglemilstonesData = store?.getSigleMileStone?.data?.response;
-    // console.log(GetSinglemilstonesData, '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
     const loaderhandel = store?.getSigleMileStone;
     const [skip, setSkip] = useState(1);
     const [checkedStatus, setCheckedStatus] = useState();
@@ -258,7 +257,6 @@ const Milestone = () => {
                                                                         </p>
                                                                         {userRole !== "Testing" && (
                                                                             <p className="action-icon m-0 p-0  ">
-                                                                                {/* {console.log(item, 'itemmmmmmmm')} */}
                                                                                 <i
                                                                                     onClick={() => {
                                                                                         handelUpdate(item);

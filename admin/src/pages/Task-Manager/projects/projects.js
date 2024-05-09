@@ -233,7 +233,6 @@ const Projects = () => {
                                         type="button"
                                         className="mybutton btn p-1 fw-bold py-1  web_button"
                                         onClick={() => {
-                                            // console.log('button click');
                                             // handeladdtask()
                                             setShowModal(!showModal);
                                             // dispatchActions();

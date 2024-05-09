@@ -29,7 +29,6 @@ const CategoryUpdate = ({ modal, closeModal, editData }) => {
         });
     }, [modal]);
 
-    console.log(editData, 'pppppp');
     const onSubmit = (data) => {
         let body = {
             id: editData?._id,

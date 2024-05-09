@@ -30,7 +30,6 @@ const FileUpload = (): React$Element<React$FragmentType> => {
 
                             <FileUploader
                                 onFileUpload={(files) => {
-                                    console.log(files);
                                 }}
                             />
                         </Card.Body>

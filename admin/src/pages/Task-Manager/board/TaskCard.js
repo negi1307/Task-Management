@@ -61,7 +61,6 @@ const TaskCard = ({ item, index, closeModal, columns, projectId, mileStoneId, sp
     const store = useSelector((state) => state);
     const [elapsedTime, setElapsedTime] = useState(null);
 
-    // console.log(detailData,'pankaj')
 
     const deleteResponse = store?.deleteTask?.data?.status;
     const dispatch = useDispatch();

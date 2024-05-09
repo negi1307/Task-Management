@@ -24,7 +24,6 @@ import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
 import noimage from '../../../assets/images/noimage.png';
 import { getSingleSprint } from '../../../redux/actions';
 const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
-    // console.log(editData, 'edit4444')
     const store = useSelector((state) => state);
     const technology = store?.getSingleSprintTask?.data?.response;
     const dispatch = useDispatch();
@@ -79,7 +78,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     };
     const createSubtasksuccess = store?.createTaskReducer?.data?.response;
     if (createSubtasksuccess !== undefined) {
-        console.log({ createSubtasksuccess })
     }
     const {
         register,

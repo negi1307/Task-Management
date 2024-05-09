@@ -37,7 +37,6 @@ const MileStone = () => {
             setData(successHandle?.data?.data);
         }
     }, [successHandle]);
-    console.log(data, 'fhgjklj');
 
     return (
         <>

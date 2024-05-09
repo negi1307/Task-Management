@@ -31,7 +31,6 @@ export const getTaskSummaryReducer = (state = GET_TASK_SUMMARY_INITIAL_STATE, ac
                 loading: true,
             };
         case SUMMARY_TYPES.GET_TASK_SUMMARY_SUCCESS:
-            // console.log(action?.payload, 'reducer')
             return {
                 data: action?.payload,
                 loading: false,

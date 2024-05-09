@@ -16,7 +16,6 @@ const DeactivatedSprintTable = () => {
     // const [editorState, setEditorState] = useState(
     //     () => EditorState.createEmpty(),
     // );
-    // console.log(editorState, 'stttttt')
 
     return (
         <div>Deactivate Sprint

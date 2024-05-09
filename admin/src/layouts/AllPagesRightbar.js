@@ -159,14 +159,8 @@ export default function Pagesaddtask(props) {
         const sprintId = e.target.value;
         setsprintSelected(sprintId);
     }
-    // console.log({ milestoneSelected })
-
     const reporter = store?.getReporterReducer?.data?.reporterList
     const projectName = store?.getProject?.data?.response?.projects;
-    // useEffect(() => {
-    //     console.log("Milestone Data:", store?.getsingleMileStone?.data?.response);
-    // }, [store?.getsingleMileStone?.data?.response]);
-    // console.log({ projectName })
     return (
         <div className={props.showModal ? 'modal d-block blur-background' : 'modal d-none'} tabIndex="-1" role="dialog"  >
             <div className="modal-dialog blur-modal-background modal-lg modal-dialog-centered" role="document">

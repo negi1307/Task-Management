@@ -20,7 +20,6 @@ const Create = ({ modal, closeModal }) => {
     const [endDate, setEndDate] = useState();
     // disable previous date
     const today = new Date();
-    // console.log(today, 'today');
     // end date
     const handleStartDate = (date) => {
         setStartDate(date);
@@ -57,7 +56,6 @@ const Create = ({ modal, closeModal }) => {
 
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
-            console.log(sucesshandel, '//////////////////////////////////////////////////');
             ToastHandle('success', 'Successfully Added');
             closeModal('render');
         } else if (sucesshandel?.data?.status == 400) {
@@ -66,7 +64,6 @@ const Create = ({ modal, closeModal }) => {
             ToastHandle('error', sucesshandel?.data?.message);
         }
     }, [sucesshandel]);
-    // console.log(sucesshandel, '====')
 
     return (
         <>

@@ -4,20 +4,19 @@ const api = new APICore()
 
 
 export function getPreSaleApiEndPoint(data): any {
-    console.log(data ,"mmmmmmmmmmmmmmmmmmmmmmmm")
     return api.get(URL.GetPreSale + data?.payload?.skip)
 }
 export function addPreSaleApiEndPoint(payload): any {
-    const {data}=payload
-    return api.create(URL.AddPreSale,data )
+    const { data } = payload
+    return api.create(URL.AddPreSale, data)
 }
 
 export function updatePreSaleApiEndPoint(payload): any {
-    const {data}=payload
+    const { data } = payload
 
     return api.update(URL.UpdatePreSale, data)
 }
 export function deletePreSaleApiEndPoint(payload): any {
-    const {id}=payload
+    const { id } = payload
     return api.delete(`${URL.DeletePreSale}${id}`)
 }
