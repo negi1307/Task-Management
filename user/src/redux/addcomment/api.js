@@ -40,3 +40,7 @@ export function getSubTaskApi(data): any {
     const { taskId } = data?.payload;
     return api.get(`${URL.getSubTask}&type=${'SubTask'}&taskId=${taskId}`);
 }
+export function getUserRecordApi(data): any {
+    return api.get(`${URL.getUserRecord}userId=${data.payload.userId}&startDate=${data.payload.startTime}&endDate=${data.payload.endTime}`)
+
+}

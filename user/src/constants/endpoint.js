@@ -73,3 +73,4 @@ export const getAllAssigneeName = '/assignUser/getuserListprojectAssigned?projec
 export const updateTaskStatusTime = '/task/updateTaskStatus'
 export const getBugs = "/subTask/getSubTask?"
 export const getSubTask = "/subTask/getSubTask?"
+export const getUserRecord = '/task/userWorkingHours?'

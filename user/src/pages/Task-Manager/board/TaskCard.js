@@ -55,6 +55,9 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     const historyData = store?.getHistoryData?.data?.response;
     const [elapsedSeconds, setElapsedSeconds] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
+    const usertime = store?.getUserRecordReducer?.data?.response;
+    console.log({usertime})
+
    
 
     const {
@@ -89,19 +92,16 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
 
    
     useEffect(() => {
-        // Retrieve stored elapsed time
         const storedElapsedTime = localStorage.getItem(`task_${item.id}_elapsedTime`);
         if (storedElapsedTime) {
-            setElapsedSeconds(parseInt(storedElapsedTime, 10));
+            setElapsedSeconds(parseInt(storedElapsedTime, 10)); // Initialize elapsed time
         }
 
-        if (isInProgressColumn) {
-            setIsPlaying(true);
-        } else {
-            setIsPlaying(false);
-        }
-    }, [isInProgressColumn]);
+        // Start or stop the timer based on task column status
+        setIsPlaying(isInProgressColumn);
+    }, [isInProgressColumn, item.id]);
 
+    // Increment elapsed time by one second if the timer is running
     useEffect(() => {
         let timer;
         if (isPlaying) {
@@ -110,10 +110,11 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
             }, 1000); // Update every second
         }
 
+        // Cleanup the interval to avoid memory leaks
         return () => clearInterval(timer);
     }, [isPlaying]);
 
-    // Save elapsed time to local storage
+    // Save the current elapsed time to localStorage whenever it changes
     useEffect(() => {
         localStorage.setItem(`task_${item.id}_elapsedTime`, elapsedSeconds.toString());
     }, [elapsedSeconds, item.id]);
@@ -298,8 +299,7 @@ const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = seconds % 60;
-    return `${pad(hours)}:${pad(minutes)}:${pad(remainingSeconds)}`;
-};
 
-const pad = (num) => (num < 10 ? '0' + num : num);
+    return `${hours}h ${minutes}m ${remainingSeconds}s`;
+};
 export default TaskCard;
