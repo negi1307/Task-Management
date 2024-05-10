@@ -58,6 +58,9 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         else if (type === 'Subtask') {
             dispatch(getSubTask({ taskId: editData?._id, type: "SubTask" }));
         }
+        else if (type === 'Comments') {
+            dispatch(getComment({ taskId: editData?._id, }));
+        }
     };
 
 
