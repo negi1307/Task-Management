@@ -29,7 +29,7 @@ export function getHistoryApi(data): any {
 
 
 export function getTaskCommentApi(data): any {
-   return api.get(URL.GetComment + data?.payload?.taskId);
+    return api.get(`${URL.GetComment}?taskId=${data.payload.taskId}`)
 
 }
 export function getBugsApi(data): any {

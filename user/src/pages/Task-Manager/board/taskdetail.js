@@ -71,7 +71,7 @@ console.log(props.item,'asdfghjk')
             // let bodyTask = props?.item?.taskId
 // console.log({bodyTask})
             dispatch(addComment(commentData));
-            // dispatch(getComment({taskId:props?.item?._id}));
+            dispatch(getComment({taskId:props?.item?._id}));
 
         } else {
             dispatch(updateComment({commentId: commentId,comment: e?.comment}));
@@ -297,7 +297,7 @@ console.log(props.item,'asdfghjk')
                                                                 <p>{ele?.comment ? ele?.comment.slice(0, 10).charAt(0).toUpperCase() + ele?.comment.slice(1) : ''}</p>
                                                             </div>
                                                             <div className="d-flex m-0 p-0">
-                                                                <button className="btn  p-0" onClick={() => setIsUpdate(true)}>
+                                                                <button className="btn py-0 px-1 btn-secondary" onClick={() => setIsUpdate(true)}>
                                                                     Edit
                                                                 </button>
                                                             </div>
@@ -537,16 +537,16 @@ console.log(props.item,'asdfghjk')
                                                                     color: 'white',
                                                                     fontWeight: '800',
                                                                 }}>
-                                                                {ele?.userId?.firstName.charAt(0)}
-                                                                {ele?.userId?.lastName.charAt(0)}
+                                                                {ele?.userId?.firstName.charAt(0).toUpperCase()}
+                                                                {ele?.userId?.lastName.charAt(0).toUpperCase()}
                                                             </span>
                                                         </Col>
                                                         <Col sm={11} className="m-0 p-0">
                                                             <div className="d-flex">
-                                                                <h4 className="m-0 fs-5 p-0"> {ele?.userId?.firstName}</h4>
+                                                                <h4 className="m-0 fs-5 p-0"> {ele?.userId?.firstName.charAt().slice()} {ele?.userId?.firstName ? ele?.userId?.firstName.slice(0, 7).charAt().toUpperCase() + ele?.userId?.firstName.slice(1, 7) : ''}</h4>
                                                                 <h4 className="ps-1 fs-5 m-0 p-0">
                                                                     {' '}
-                                                                    {ele?.userId?.lastName}
+                                                                    {ele?.userId?.firstName.charAt().slice()} {ele?.userId?.lastName ? ele?.userId?.lastName.slice(0, 7).charAt(0).toUpperCase() + ele?.userId?.lastName.slice(1, 7) : ''}
                                                                 </h4>
                                                                 <p className="ps-1 m-0 p-0">
                                                                     {moment(ele?.createdAt).fromNow()}{' '}
@@ -556,9 +556,10 @@ console.log(props.item,'asdfghjk')
                                                                 <p>{ele?.comment ? ele?.comment.slice(0, 10).charAt(0).toUpperCase() + ele?.comment.slice(1) : ''}</p>
                                                             </div>
                                                             <div className="d-flex m-0 p-0">
-                                                                <p className=" p-0" style={{ cursor: 'pointer' }} onClick={() => handelUpdate(ele)}>
+                                                              
+                                                                <button className="btn py-0 px-1 btn-secondary" onClick={() => handelUpdate(ele)}>
                                                                     Edit
-                                                                </p>
+                                                                </button>
                                                             </div>
                                                         </Col>
                                                     </Col>
