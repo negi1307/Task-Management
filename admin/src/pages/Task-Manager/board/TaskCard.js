@@ -5,13 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteTask, getComment, gettaskId, getBugs, getSubTask } from '../../../redux/task/action';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
-import ToastHandle from '../../../constants/toaster/toaster';
 import UpdateTask from './update';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-// import CustomAvatar from '../TableComponents/CustomAvatar'
-// import { ReactComponent as RedArrow } from '../../assets/icons/High.svg'
-// import { ReactComponent as YellowArrow } from '../../assets/icons/Medium.svg'
-// import { ReactComponent as BlueArrow } from '../../assets/icons/Low.svg'
 import moment from 'moment';
 import TaskDetailPage from './taskDetailPage';
 const TaskInformation = styled.div`

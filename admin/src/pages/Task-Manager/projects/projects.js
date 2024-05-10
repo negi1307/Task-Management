@@ -99,10 +99,8 @@ const Projects = () => {
 
     const handleStatusChange = async (e, data) => {
         if (userRole === 'Testing') {
-            // Show toast indicating that testing user cannot change status
-            // Adjust the ToastHandle function according to your toast implementation
             ToastHandle('error', 'Tester is not allowed to change project status');
-            return; // Return early, preventing further execution
+            return;
         }
 
         if (e.target.checked) {
@@ -195,11 +193,6 @@ const Projects = () => {
                                             Delivered
                                         </p>
                                     </div>
-                                    {/* <div className={`col-auto  cp ${projectStatus == 4 ? 'Active_data' : 'InActive_data'}`}>
-                                        <p className=" p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('4')}>
-                                            Completed
-                                        </p>
-                                    </div> */}
                                 </div>
                             )}
 
@@ -318,6 +311,7 @@ const Projects = () => {
                                                 <td className='text-start'>
                                                     <Row>
                                                         <Col>
+
                                                             <p className="action-icon m-0 p-0 ">
                                                                 <Link to={`/dashboard/projects/${ele?._id}`}>
                                                                     <i className="mdi mdi-eye m-0 p-0"></i>

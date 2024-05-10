@@ -19,55 +19,9 @@ const api = new APICore();
  * Login the user
  * @param {*} payload - username and password
  */
-// function* login({ payload: { username, password } }) {
-//     try {
-//         const response = yield call(loginApi, { username, password });
-//         const user = response.data;
-//         // NOTE - You can change this according to response format from your api
-//         api.setLoggedInUser(user);
-//         setAuthorization(user['token']);
-//         yield put(authApiResponseSuccess(AuthActionTypes.LOGIN_USER, user));
-//     } catch (error) {
-//         yield put(authApiResponseError(AuthActionTypes.LOGIN_USER, error));
-//         api.setLoggedInUser(null);
-//         setAuthorization(null);
-//     }
-// }
-
 function* login({ payload: { username, password } }) {
     try {
         const response = yield call(loginApi, { email: username, password: password });
-        if (response?.data?.response?.role === "Admin" || "Testing" || 'CTO' || 'PM') {
-            // const { token, user } = response.data;
-
-            // let { role } = user
-            const user = response?.data;
-            const data = response?.data?.response;
-            const tokenData = response?.data;
-            const userData = {
-                // id: data?.role,
-                username: data?.firstName,
-                password: 'test',
-                firstName: data?.firstName,
-                lastName: data?.lastName,
-                role: data?.role,
-                token: tokenData?.token,
-                // userData: response?.data?.response
-            };
-            api.setLoggedInUser(userData);
-            setAuthorization(user['token']);
-            yield put(authApiResponseSuccess(AuthActionTypes.LOGIN_USER, userData));
-        }
-        else if (response?.data?.response?.role === "Employee" || "Sales") {
-            yield put(authApiResponseError(AuthActionTypes.LOGIN_USER, "User Not Found"));
-            api.setLoggedInUser(null);
-            setAuthorization(null);
-        }
-        else {
-            yield put(authApiResponseError(AuthActionTypes.LOGIN_USER, response?.data?.message));
-            api.setLoggedInUser(null);
-            setAuthorization(null);
-        }
     } catch (error) {
         yield put(authApiResponseError(AuthActionTypes.LOGIN_USER, error?.message));
         api.setLoggedInUser(null);

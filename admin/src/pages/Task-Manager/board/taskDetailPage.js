@@ -19,10 +19,8 @@ import {
     getHistoryAction,
 } from '../../../redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
-import { Row, Col, Card, Button, Alert, CloseButton, Table } from 'react-bootstrap';
+import { Row, Col, Button, Alert, CloseButton, Table } from 'react-bootstrap';
 import pdfImage from '../../../assets/images/pdff-removebg-preview.png';
-import noimage from '../../../assets/images/noimage.png';
-import { getSingleSprint } from '../../../redux/actions';
 const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     const store = useSelector((state) => state);
     const technology = store?.getSingleSprintTask?.data?.response;
@@ -41,7 +39,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     const sessionData = sessionStorage.getItem('hyper_user');
     const userData = JSON.parse(sessionData);
     const userName = userData.firstName + ' ' + userData.lastName;
-
     const historyLoader = store?.getHistoryReducer
     const connectComponentCheck = (type) => {
         setConnectComponent(type);
@@ -58,9 +55,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
             dispatch(getSubTask({ taskId: editData?._id, type: "SubTask" }));
         }
     };
-
-
-
     const [allCommetUpdateId, setAllCommetUpdateId] = useState('');
     const [inputForUpdate, setInputForUpdate] = useState('');
     const [startDate, setStartDate] = useState();
@@ -74,7 +68,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
     };
     const handleEndDate = (date) => {
         setEndDate(date);
-
     };
     const createSubtasksuccess = store?.createTaskReducer?.data?.response;
     if (createSubtasksuccess !== undefined) {
@@ -84,18 +77,13 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         handleSubmit,
         control,
         setValue,
-        watch,
         reset,
         formState: { errors },
     } = useForm();
-
-
     const subtasksSubmit = (e) => {
         if (!taskId) {
             return;
         }
-
-        // dispatch(getSubtasks())
         let subtask_body = new FormData();
         subtask_body.append('taskId', editData._id);
         subtask_body.append('summary', e.summary);
@@ -106,12 +94,10 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         subtask_body.append('dueDate', endDate);
         subtask_body.append('type', e.type);
         subtask_body.append('subtaskCreator', e.subtaskCreator);
-
         const fileInput = document.querySelector('input[type="file"]');
         if (fileInput.files.length > 0) {
             subtask_body.append('attachment', fileInput.files[0]);
         }
-
         if (editData._id !== '') {
             dispatch(createSubTask(subtask_body));
             ToastHandle('success', 'Sub-task created successfully');
@@ -122,9 +108,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         dispatch(getSubTask({ taskId: editData?._id, type: "SubTask" }));
     }
     useEffect(() => {
-        // if (successHandle?.data?.status === 200) {
-        //     setData(successHandle?.data?.response);
-        // }
         const historyData = store?.getHistoryReducer?.data?.response;
         if (historyData) {
             setHistoryResponse(historyData);
@@ -133,10 +116,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
             dispatch(getComment({ taskId: editData?._id }))
         }
     }, [store?.getHistoryReducer?.data?.response]);
-
-
-
-
     const onSubmit = (val) => {
         if (buttonChange) {
             let body = {
@@ -177,13 +156,11 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
         setInputForUpdate(indx);
     };
     const submitUpdateComment = (data) => {
-
         let body = {
             commentId: allCommetUpdateId,
             comment: data?.updated_comment,
         };
         dispatch(UpdateCommentAction(body));
-
         setInputForUpdate(false);
     };
     const closeModalHandle = () => {
@@ -215,7 +192,6 @@ const TaskDetailPage = ({ modal, editData, closeModal, taskId }) => {
                                 <Modal.Title id="" className="text-start modal_titles">
                                     Task Detail : {editData?.summary ? editData.summary.charAt(0).toUpperCase() + editData.summary.slice(1, 50) : ''}
                                 </Modal.Title>
-
                             </Col>
                             <Col lg={5} className="text-end pt-2">
                                 <button type="button" className="close border-0 bg-black text-white" onClick={closeModalHandle} aria-label="Close">
