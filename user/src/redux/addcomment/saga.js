@@ -245,6 +245,34 @@ function* getBugsFunction({ payload }) {
 
     }
 }
+function* getUserRecordFunction({ payload }) {
+    try {
+        yield put({
+            type: Addcomment.GET_USER_RECORD_LOADING,
+            payload: {}
+        })
+        const response = yield call(getUserRecordApi, { payload });
+        // console.log(response, 'resss')
+        if (response.data.status) {
+            yield put({
+                type: Addcomment.GET_USER_RECORD_SUCCESS,
+                payload: { ...response.data },
+            });
+        }
+        else {
+            yield put({
+                type: Addcomment.GET_USER_RECORD_ERROR,
+                payload: { ...response.data },
+            });
+        }
+    }
+    catch (error) {
+        yield put({
+            type: Addcomment.GET_USER_RECORD_ERROR,
+            payload: { message: error?.message }
+        });
+    }
+}
 export function* addAllTaskCommentsSaga(): any {
     yield takeEvery(Addcomment.ADD_COMMENT, addTaskCommentFunction);
 }
@@ -270,6 +298,9 @@ export function* getBugsSaga() {
 export function* getSubTaskSaga() {
     yield takeEvery(Addcomment.GET_BUGS, getSubTaskFunction);
 }
+export function* getUserRecordsaga(): any {
+    yield takeEvery(Addcomment.GET_USER_RECORD, getUserRecordFunction)
+}
 function* Addcommentsaga(): any {
     yield all([
         fork(addAllTaskCommentsSaga),
@@ -278,7 +309,8 @@ function* Addcommentsaga(): any {
         fork(getHistorySaga),
         fork(getCommetSaga),
         fork(getBugsSaga),
-        fork(getSubTaskSaga)
+        fork(getSubTaskSaga),
+        fork(getUserRecordsaga)
     ]);
 }
 

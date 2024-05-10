@@ -53,9 +53,12 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     const userId = store?.Auth?.user?.userId;
     const getComments = item?.comments;
     const historyData = store?.getHistoryData?.data?.response;
-    // const [elapsedSeconds, setElapsedSeconds] = useState(null);
-    // const [isPlaying, setIsPlaying] = useState(false);
+    const [elapsedSeconds, setElapsedSeconds] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const usertime = store?.getUserRecordReducer?.data?.response;
+    console.log({usertime})
 
+   
 
     const {
         register,
@@ -100,37 +103,34 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     };
 
 
+   
+    useEffect(() => {
+        const storedElapsedTime = localStorage.getItem(`task_${item.id}_elapsedTime`);
+        if (storedElapsedTime) {
+            setElapsedSeconds(parseInt(storedElapsedTime, 10)); // Initialize elapsed time
+        }
 
+        // Start or stop the timer based on task column status
+        setIsPlaying(isInProgressColumn);
+    }, [isInProgressColumn, item.id]);
 
-    // useEffect(() => {
-    //     // Retrieve stored elapsed time
-    //     const storedElapsedTime = localStorage.getItem(`task_${item.id}_elapsedTime`);
-    //     if (storedElapsedTime) {
-    //         setElapsedSeconds(parseInt(storedElapsedTime, 10));
-    //     }
+    // Increment elapsed time by one second if the timer is running
+    useEffect(() => {
+        let timer;
+        if (isPlaying) {
+            timer = setInterval(() => {
+                setElapsedSeconds((prev) => prev + 1);
+            }, 1000); // Update every second
+        }
 
-    //     if (isInProgressColumn) {
-    //         setIsPlaying(true);
-    //     } else {
-    //         setIsPlaying(false);
-    //     }
-    // }, [isInProgressColumn]);
+        // Cleanup the interval to avoid memory leaks
+        return () => clearInterval(timer);
+    }, [isPlaying]);
 
-    // useEffect(() => {
-    //     let timer;
-    //     if (isPlaying) {
-    //         timer = setInterval(() => {
-    //             setElapsedSeconds((prev) => prev + 1);
-    //         }, 1000); // Update every second
-    //     }
-
-    //     return () => clearInterval(timer);
-    // }, [isPlaying]);
-
-    // Save elapsed time to local storage
-    // useEffect(() => {
-    //     localStorage.setItem(`task_${item.id}_elapsedTime`, elapsedSeconds.toString());
-    // }, [elapsedSeconds, item.id]);
+    // Save the current elapsed time to localStorage whenever it changes
+    useEffect(() => {
+        localStorage.setItem(`task_${item.id}_elapsedTime`, elapsedSeconds.toString());
+    }, [elapsedSeconds, item.id]);
 
 
     const EditData = (item) => {
@@ -313,8 +313,7 @@ const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = seconds % 60;
-    return `${pad(hours)}:${pad(minutes)}:${pad(remainingSeconds)}`;
-};
 
-const pad = (num) => (num < 10 ? '0' + num : num);
+    return `${hours}h ${minutes}m ${remainingSeconds}s`;
+};
 export default TaskCard;

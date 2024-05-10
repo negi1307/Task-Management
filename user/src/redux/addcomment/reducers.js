@@ -38,6 +38,11 @@ const GET_SUBTASK = {
     loading: false,
     message: ""
 };
+const GET_USER_RECORD_INITIAL_STATE = {
+    data: [],
+    message: "",
+    loading: false,
+}
 
 export const addComments = (state = ADD_ALL_COMMENT, action) => {
     switch (action.type) {
@@ -244,3 +249,25 @@ export const getBugsReducer = (state = GET_BUGS_INITIAL_STATE, action) => {
             return { ...state };
     }
 };
+export const getUserRecordReducer = (state = GET_USER_RECORD_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case Addcomment.GET_USER_RECORD_LOADING:
+            return {
+                data: GET_USER_RECORD_INITIAL_STATE.data,
+                loading: true,
+            };
+        case Addcomment.GET_USER_RECORD_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+        case Addcomment.GET_USER_RECORD_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            }
+        default:
+            return { ...state };
+    }
+}

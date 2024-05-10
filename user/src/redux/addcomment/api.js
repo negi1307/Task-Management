@@ -29,7 +29,7 @@ export function getHistoryApi(data): any {
 
 
 export function getTaskCommentApi(data): any {
-    return api.get(`${URL.GetComment}?taskId=${data.payload.taskId}`);
+   return api.get(URL.GetComment + data?.payload?.taskId);
 
 }
 export function getBugsApi(data): any {
@@ -39,4 +39,8 @@ export function getBugsApi(data): any {
 export function getSubTaskApi(data): any {
     const { taskId } = data?.payload;
     return api.get(`${URL.getSubTask}&type=${'SubTask'}&taskId=${taskId}`);
+}
+export function getUserRecordApi(data): any {
+    return api.get(`${URL.getUserRecord}userId=${data.payload.userId}&startDate=${data.payload.startTime}&endDate=${data.payload.endTime}`)
+
 }

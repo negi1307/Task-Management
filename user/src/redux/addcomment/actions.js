@@ -39,3 +39,7 @@ export const getSubTask = (data): AuthAction => ({
     type: Addcomment.GET_SUBTASK,
     payload: data
 });
+export const getUserRecord = (data): AuthAction => ({
+    type: Addcomment.GET_USER_RECORD,
+    payload: data
+})

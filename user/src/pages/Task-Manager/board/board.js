@@ -15,6 +15,7 @@ import { useParams } from 'react-router-dom';
 import ToastHandle from '../../../constants/toaster/toaster';
 import { listProjectAssignee, updateTaskStatus } from '../../../redux/task/action';
 import { addLoginTime, addLoginTimeStop } from '../../../redux/user/action'
+import { toast } from 'react-toastify';
 
 const Container = styled.div`
     display: flex;
@@ -171,7 +172,11 @@ const Boards = (props) => {
 
         const sourceColumn = columns[source.droppableId];
         const destColumn = columns[destination.droppableId];
-
+        
+        if (source.droppableId === "3" && destination.droppableId === "4") {
+            toast.error("Cannot move from Testing to Done");
+            return;
+        }
         const sourceItems = sourceColumn.items.slice();
         const destItems = destColumn.items.slice();
         const [removed] = sourceItems.splice(source.index, 1);
