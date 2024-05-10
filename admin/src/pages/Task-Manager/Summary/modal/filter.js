@@ -90,6 +90,26 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
         reset();
     };
 
+    // Function to convert milliseconds to HH:MM:SS format
+    const formatTime = (milliseconds) => {
+        // Convert milliseconds to seconds
+        let seconds = Math.floor(milliseconds / 1000);
+
+        // Calculate hours, minutes, and remaining seconds
+        let hours = Math.floor(seconds / 3600);
+        seconds %= 3600;
+        let minutes = Math.floor(seconds / 60);
+        seconds %= 60;
+
+        // Format hours, minutes, and seconds with leading zeros if necessary
+        hours = String(hours).padStart(2, '0');
+        minutes = String(minutes).padStart(2, '0');
+        seconds = String(seconds).padStart(2, '0');
+
+        // Return the formatted time string
+        return `${hours}hours,${minutes}minutes,${seconds}seconds`;
+    };
+
     let mainCsvData = [];
     let totalTimeCsvData = [];
 
@@ -101,11 +121,13 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
             [`Expected hrs`]: data?.expectedHours,
             [`Added to in-progress`]: data?.inProgressDate || 'Not added yet',
             [`Done Date`]: data?.doneDate || 'Not completed yet',
-            [`Time Taken`]: data?.timeTracker || 'Not started yet',
+            [`Time Taken`]: formatTime(data?.timeTracker) || 'Not started yet',
         }));
 
-        const totalTime = store?.getusersDataReducer?.data?.totalTime || 0;
-
+        const totalTime = store?.getusersDataReducer?.data?.totalTime;
+        if (totalTime !== undefined) {
+            console.log({ totalTime })
+        }
         // Add total time row to total time CSV data
         totalTimeCsvData.push({
             [`Total Time`]: totalTime

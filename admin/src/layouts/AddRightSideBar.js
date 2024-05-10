@@ -9,6 +9,7 @@ import DatePicker from 'react-datepicker';
 import '../../node_modules/react-datepicker/dist/react-datepicker.css';
 import { getReporterAction } from '../redux/actions';
 import ToastHandle from '../constants/toaster/toaster';
+// import { useSelector } from 'react-redux';
 
 // import { useParams } from 'react-router';
 export default function RightBar(props) {
@@ -16,6 +17,7 @@ export default function RightBar(props) {
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const [taskdata, setTaskData] = useState();
+
     // disable previous date
     const today = new Date();
     // console.log(today, 'today');
@@ -34,8 +36,10 @@ export default function RightBar(props) {
         watch,
         formState: { errors },
     } = useForm();
-    const { showModal, setShowModal, columns, content, projectId, mileStoneId, sprintId, onFormSubmit } = props;
+    const { showModal, setShowModal, columns, content, projectId, mileStoneId, sprintId, onFormSubmit, projectName, milestoneName, sprintName } = props;
     const [selectedFile, setSelectedFile] = useState('');
+    // const createTaskResponse = store?.createTaskReducer?.data?.response?.status;
+    // console.log(createTaskResponse, 'createTaskResponse')
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -45,9 +49,8 @@ export default function RightBar(props) {
             alert('File Not selected');
             setSelectedFile('');
         }
-    };
+    };    //For the values in the disabled fields
 
-    //For the values in the disabled fields
     const allDetails = columns?.[1]?.items[0];
     // console.log(allDetails, 'kjbf')
     //////////////////////////
@@ -153,15 +156,18 @@ export default function RightBar(props) {
 
                                                     Project<span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                <Form.Select
+                                                <Form.Control defaultValue={projectName}
+                                                    // {...register('projectname', { required: true })}
+                                                    disabled />
+                                                {/* <Form.Select
                                                     {...register('projectname', { required: true, disabled: true })}>
                                                     {allDetails && allDetails.projects && (
                                                         <option value={allDetails?.projects?._id} defaultValue>{allDetails?.projects?.projectName}</option>
                                                     )}
-                                                </Form.Select>
-                                                {errors.projectName?.type === 'required' && (
+                                                </Form.Select> */}
+                                                {/* {errors.projectName?.type === 'required' && (
                                                     <span className="text-danger"> This field is required *</span>
-                                                )}
+                                                )} */}
                                             </Form.Group>
                                         </Col>
                                         <Col lg={6}>
@@ -170,15 +176,18 @@ export default function RightBar(props) {
                                                     {' '}
                                                     Milestone<span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                <Form.Select
+                                                <Form.Control defaultValue={milestoneName}
+                                                    // {...register('projectname', { required: true })}
+                                                    disabled />
+                                                {/* <Form.Select
                                                     {...register('Milestone', { required: true, disabled: true })}>
                                                     {allDetails && allDetails.milestones && (
                                                         <option value={allDetails?.milestones?._id} defaultValue>{allDetails?.milestones?.title}</option>
                                                     )}
-                                                </Form.Select>
-                                                {errors.Milestone?.type === 'required' && (
+                                                </Form.Select> */}
+                                                {/* {errors.Milestone?.type === 'required' && (
                                                     <span className="text-danger"> This field is required *</span>
-                                                )}
+                                                )} */}
                                             </Form.Group>
                                         </Col>
                                     </Row>
@@ -191,15 +200,18 @@ export default function RightBar(props) {
                                         <Form.Label>
                                             Sprint <span className="text-danger">*</span>:
                                         </Form.Label>
-                                        <Form.Select
+                                        {/* <Form.Select
                                             {...register('Sprint', { required: true, disabled: true })}>
                                             {allDetails && allDetails.sprints && (
                                                 <option value={allDetails?.sprints?._id} defaultValue>{allDetails?.sprints?.sprintName}</option>
                                             )}
-                                        </Form.Select>
-                                        {errors.Sprint?.type === 'required' && (
+                                        </Form.Select> */}
+                                        <Form.Control defaultValue={sprintName}
+                                            // {...register('projectname', { required: true })}
+                                            disabled />
+                                        {/* {errors.Sprint?.type === 'required' && (
                                             <span className="text-danger"> This field is required *</span>
-                                        )}
+                                        )} */}
                                     </Form.Group>
                                 </Col>
                                 <div className="mb-2 col-6">

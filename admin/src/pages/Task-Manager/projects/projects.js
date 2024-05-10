@@ -74,6 +74,8 @@ const Projects = () => {
         updateProjectList();
     };
     const handleYes = async () => {
+        let successMessage = ''; // Define successMessage here
+
         try {
             if (checkedStatus) {
                 let body = {
@@ -81,22 +83,26 @@ const Projects = () => {
                     activeStatus: true,
                 };
                 await dispatch(updateProject(body));
+                successMessage = 'Project activated successfully';
             } else {
                 let body = {
                     projectId: checkedData._id,
                     activeStatus: false,
                 };
                 await dispatch(updateProject(body));
+                successMessage = 'Project deactivated successfully';
             }
-
-
         } catch (error) {
             console.error("Error updating project:", error);
         }
 
+        // Show toast with success message
+        ToastHandle('success', successMessage);
+
         // Close the status modal
         setStatusModal(false);
     };
+
 
     const handleStatusChange = async (e, data) => {
         if (userRole === 'Testing') {
@@ -137,6 +143,7 @@ const Projects = () => {
         dispatch(getAllProjects(body));
         if (updateResponse === '200') {
             dispatch(getAllProjects({ status: status, skip: skip, projectStatus: projectStatus }));
+            // ToastHandle('success', 'Project status updated successfully');
         }
     }, [status, skip, updateResponse]);
     useEffect(() => {

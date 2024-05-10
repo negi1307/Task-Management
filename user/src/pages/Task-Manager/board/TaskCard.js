@@ -48,7 +48,7 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     const store = useSelector(state => state)
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
-    const [isPlay, setIsPlay] = useState(false);
+    // const [isPlay, setIsPlay] = useState(false);
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
     const userId = store?.Auth?.user?.userId;
     const getComments = item?.comments;
@@ -73,7 +73,21 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
     const dispatch = useDispatch();
     const [commentId, setCommentId] = useState('');
     const [showData, setShowData] = useState(false);
-    const [timeElapsed, setTimeElapsed] = useState(0);
+    const [elapsedTime, setElapsedTime] = useState(null);
+    useEffect(() => {
+        if (isInProgressColumn && item.inProgressDate) {
+            const inProgressDate = new Date(item.inProgressDate);
+            const interval = setInterval(() => {
+                const currentTime = new Date();
+                const elapsedMilliseconds = currentTime - inProgressDate;
+                const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000);
+                setElapsedTime(formatTime(elapsedSeconds));
+            }, 1000); // Update every second
+
+            return () => clearInterval(interval);
+        }
+    }, [isInProgressColumn, item.inProgressDate]);
+    // const [timeElapsed, setTimeElapsed] = useState(0);
     // useEffect(() => {
     //     let timer;
     //     const isTaskInProgress = localStorage.getItem(`task_${item._id}_inProgress`);
@@ -88,7 +102,6 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
         setShowData(true)
     };
 
- 
 
    
     useEffect(() => {
@@ -223,12 +236,13 @@ const TaskCard = ({ item, index, closeModal, showTaskDetailMOdel, isInProgressCo
                                                 <div className=" fw-bold">
                                                     {isInProgressColumn && (
                                                         <div>
-                                                            {formatTime(elapsedSeconds)}
+                                                            {elapsedTime}
+                                                            {/* {elapsedSeconds} */}
                                                         </div>
                                                     )}
                                                 </div>
                                             )}
-                                         
+
 
                                         </div>
                                     </div>

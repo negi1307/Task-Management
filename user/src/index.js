@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 ReactDOM.render(
     <Provider store={configureStore({})}>
         <App />
-        <ToastContainer />
+        <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
     </Provider>,
     document.getElementById('root')
 );
