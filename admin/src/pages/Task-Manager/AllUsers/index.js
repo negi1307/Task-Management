@@ -42,7 +42,7 @@ const AllUsers = () => {
     };
 
     useEffect(() => {
-        dispatch(getAllUsers());
+        dispatch(getAllUsers({ name: '' }));
     }, [render]);
 
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {

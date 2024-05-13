@@ -10,6 +10,8 @@ import '../../node_modules/react-datepicker/dist/react-datepicker.css';
 import { getReporterAction } from '../redux/actions';
 import ToastHandle from '../constants/toaster/toaster';
 // import { useSelector } from 'react-redux';
+import $ from 'jquery';
+
 
 // import { useParams } from 'react-router';
 export default function RightBar(props) {
@@ -115,10 +117,10 @@ export default function RightBar(props) {
         dispatch(getAllUsers());
         // let status = true
         dispatch(getAllCategory({ status: true }));
-    }, []);
-    useEffect(() => {
         dispatch(getReporterAction())
-    }, [])
+
+    }, []);
+
     const reporter = store?.getReporterReducer?.data?.reporterList
     return (
         <div className={showModal ? 'rightBar show' : 'rightBar'} role="document">
@@ -260,7 +262,7 @@ export default function RightBar(props) {
 
                                         <select
                                             name="Assignee"
-                                            className="form-select"
+                                            className="form-select chosen-select"
                                             id="exampleForm.ControlInput1"
                                             {...register('Assignee', { required: true })}>
                                             <option value={''} hidden>
@@ -491,4 +493,5 @@ export default function RightBar(props) {
             </div>
         </div>
     );
+    // $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!" });
 }
