@@ -67,7 +67,6 @@ export const getAllUsers = (state = GET_ALL_USER_INITIAL_STATE, action) => {
     }
 };
 export const getAllCategory = (state = GET_ALL_CATEGORY_INITIAL_STATE, action) => {
-    console.log(GET_ALL_CATEGORY_INITIAL_STATE, 'GET_ALL_CATEGORY_INITIAL_STATE11')
     switch (action.type) {
         case USERS_TYPES.GET_ALL_CATEGORY_LOADING:
             return {

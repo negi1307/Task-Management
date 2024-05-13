@@ -16,9 +16,7 @@ const TimeTrackerTable = () => {
     const [endDate, setEndDate] = useState();
     const users = store?.getAllUsers?.data?.response;
     const userRecord = store?.getUserRecordReducer?.data?.data;
-    console.log({ userRecord })
     const loading = store?.getUserRecordReducer?.loading;
-    // console.log({ userRecord })
     useEffect(() => {
         dispatch(getAllUsers());
     }, [dispatch]);
@@ -174,12 +172,13 @@ const TimeTrackerTable = () => {
                                                 <td className='text-start'>{record?.priority}</td>
                                                 <td className='text-start'>{record?.expectedHours ? record?.expectedHours : 'N/A'}</td>
                                                 <td className='text-start'>{record?.inProgressDate ? record.inProgressDate.split('T')[0] : 'Not yet added'}</td>
-                                                <td className='text-start'>{record?.doneDate ? record.doneDate.split('T')[0] : 'Not completed yet'}</td>
+                                                <td className='text-start'>
+                                                    {record?.status === 4 ? (record?.doneDate ? record.doneDate.split('T')[0] : '') : 'Not completed yet'}
+                                                </td>
                                                 <td className='text-start'>{isNaN(record?.timeTracker) ? 'Not started yet' : formatTime(record.timeTracker)}</td>
                                             </tr>
                                         </tbody>
                                     ))}
-
                                 </Table>
                             </div>
                         </div >

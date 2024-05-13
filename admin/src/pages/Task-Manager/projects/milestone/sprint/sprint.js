@@ -16,7 +16,6 @@ import getAllSingleSprints from '../../../../../constants/endpoint';
 
 const Sprint = () => {
     const { projectId, milestoneId } = useParams();
-    // console.log({ projectId, milestoneId });
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
@@ -30,10 +29,8 @@ const Sprint = () => {
     const [openModal, SetOpenModal] = useState(false);
     const [editData, setEditData] = useState();
     const GetAllSingleSprintData = store?.getAllSingleSprints?.data?.response;
-    // console.log(GetAllSingleSprintData, '');
     const projectFromSprint = GetAllSingleSprintData?.[0]?.project?.projectName;
     const milestoneFromSprint = GetAllSingleSprintData?.[0]?.milestone?.title;
-    // console.log(projectFromSprint, milestoneFromSprint, '././././././././')
     const deletehandle = store?.deleteSprint?.data;
     const loaderhandel = store?.getAllSingleSprints;
     const sessionData = sessionStorage.getItem('hyper_user');
@@ -43,7 +40,6 @@ const Sprint = () => {
         setEditData(data);
         setOpenEditModal(true);
     };
-    // console.log({ GetAllSingleSprintData });
     // for getting the sprints on update and after adding new sprints
     const getUpdatedSprints = () => {
         dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
@@ -92,7 +88,6 @@ const Sprint = () => {
             };
             dispatch(getSingleSprint(data));
         }
-        // console.log('9999999999999999999999999********************//////////////////')
 
     };
     const handleStatusChange = async (e, data) => {
@@ -126,7 +121,6 @@ const Sprint = () => {
                 activeStatus: false,
             };
             dispatch(updateSprint(body));
-            // console.log(checkedData, '2222222222222222222222222222222222222222222222222222222222222222222')
         }
         setStatusModal(false);
     };
@@ -136,7 +130,6 @@ const Sprint = () => {
     };
 
     const fetchSprintData = () => {
-        // console.log(status, milestoneId, skip);
         dispatch(getSingleSprint({ activeStatus: status, id: milestoneId, skip }));
     };
 
@@ -230,7 +223,7 @@ const Sprint = () => {
                                                             className='text-secondary'
                                                             to={`/dashboard/taskBord/${item?.project?._id}/${item?.milestone?._id}/${item?._id}/${(projectFromSprint)}/${encodeURIComponent(milestoneFromSprint)}/${encodeURIComponent(item?.sprintName)}`}>
                                                             {/* to={`/dashboard/taskBord/projectId=/${item?.project?._id}&milestoneId=/${item?.milestone?._id}&spriteId=/${item?._id}&projectName=/${(projectFromSprint)}&milestoneName=/${encodeURIComponent(milestoneFromSprint)}`}> */}
-                                                            {item?.sprintName}
+                                                            {item?.sprintName.charAt(0).toUpperCase() + item?.sprintName.slice(1)}
                                                         </Link>
                                                     </td>
 
@@ -239,11 +232,11 @@ const Sprint = () => {
                                                         <td className='text-start'>
                                                             <OverlayTrigger
                                                                 placement="top"
-                                                                overlay={<Tooltip>{truncateDescription(item?.sprintDesc)}</Tooltip>}
+                                                                overlay={<Tooltip>{truncateDescription(item?.sprintDesc.charAt(0).toUpperCase() + item?.sprintDesc.slice(1))}</Tooltip>}
                                                             >
                                                                 <div>
                                                                     {/* Show only a part of the description */}
-                                                                    <div>{truncateDescription(item?.sprintDesc)}</div>
+                                                                    <div>{truncateDescription(item?.sprintDesc.charAt(0).toUpperCase() + item?.sprintDesc.slice(1))}</div>
                                                                 </div>
                                                             </OverlayTrigger>
                                                         </td>

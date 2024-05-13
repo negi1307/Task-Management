@@ -54,7 +54,6 @@ const CustomerTable = (props) => {
                     <tbody>
                         <>
                             {preSaleData?.map((ele, ind) => {
-                                console.log(ele?.stage, '=-');
                                 return (
                                     <tr className="align-middle">
                                         <th scope="row">{ind + 1}</th>

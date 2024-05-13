@@ -27,6 +27,8 @@ const AllUsers = () => {
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const csvdownloaddata = store?.getCsvDataReducer;
+    const [skip, setSkip] = useState(1);
+    const [search, setSearch] = useState('')
 
     const handeldelete = (ele) => {
         setdeleteId(ele?._id);
@@ -43,7 +45,10 @@ const AllUsers = () => {
         dispatch(getAllUsers());
     }, [render]);
 
-
+    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setSkip(value);
+        dispatch(getAllUsers({ page: value }));
+    };
     useEffect(() => {
         if (getUsers?.data?.status == 200) {
             setData(getUsers?.data?.response);
@@ -88,7 +93,11 @@ const AllUsers = () => {
             ToastHandle('error', csvdownloaddata?.data?.message);
         }
     }, [csvdownloaddata]);
-
+    // const handleSearchChange = (e) => {
+    //     e.preventDefault();
+    //     setSearch(e.target.value);
+    //     dispatch(getAllUsers({ name: search }));
+    // };
     return (
         <div>
             <Card>
@@ -104,52 +113,81 @@ const AllUsers = () => {
                     {getUsers?.loading ? (
                         <MainLoader />
                     ) : (
-                        <Table className="mb-0 mt-2 add_Color_font" striped style={{ fontSize: '13px' }}>
-                            <thead>
-                                <tr className='text-start'>
-                                    <th className='fw-bold'>#</th>
-                                    <th className='fw-bold'>Username</th>
-                                    <th className='fw-bold'>Role</th>
-                                    <th className='fw-bold'>Email</th>
-                                    <th className='fw-bold'>Create Date</th>
-                                    <th className='fw-bold'>Action</th>
-                                </tr>
-                            </thead>
+                        <>
+                            <div className="row">
+                                <div className="col-5">
 
-                            <tbody>
-                                <>
-                                    {data?.map((ele, ind) => {
-                                        return (
-                                            <tr className="align-middle text-start">
-                                                <th scope="row">{ind + 1}</th>
-                                                <td className="cp">
-                                                    <span className="namelink"> {ele?.firstName.charAt(0).toUpperCase() + ele?.firstName.slice(1)} {ele?.lastName.charAt(0).toUpperCase() + ele?.lastName.slice(1)} </span>
-                                                </td>
-                                                <td className='namelink'>{ele?.role}</td>
-                                                <td className="w-20">
-                                                    <span className="namelink"> {ele?.email}</span>
-                                                </td>
-                                                <td>
-                                                    <span className="namelink">
-                                                        {moment(ele?.createdAt).format("DD/MM/YYYY")}
-                                                    </span>
-                                                </td>
-                                                <td className='d-flex align-items-center gap-1'>
-                                                    <i
-                                                        className="mdi mdi-delete cursor_p  fs-5"
-                                                        onClick={() => {
-                                                            handeldelete(ele);
-                                                        }}></i>
-                                                    <BiSolidDownload className='fs-4 cursor_p' onClick={() => {
-                                                        handelCsvDownload(ele);
-                                                    }} />
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </>
-                            </tbody>
-                        </Table>
+                                </div>
+                                <div className="col-7 mt-2 d-flex justify-content-end">
+                                    {/* <input
+                                        type="search"
+                                        value={search}
+                                        onChange={(e) => {
+                                            handleSearchChange(e);
+                                        }}
+                                        className="form-control w-25  py-0"
+                                        placeholder="Search users... "
+                                    /> */}
+                                </div>
+                            </div>
+                            <Table className="mb-0 mt-2 add_Color_font" striped style={{ fontSize: '13px' }}>
+                                <thead>
+                                    <tr className='text-start'>
+                                        <th className='fw-bold'>#</th>
+                                        <th className='fw-bold'>Username</th>
+                                        <th className='fw-bold'>Role</th>
+                                        <th className='fw-bold'>Email</th>
+                                        <th className='fw-bold'>Create Date</th>
+                                        <th className='fw-bold'>Action</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <>
+                                        {data?.map((ele, ind) => {
+                                            return (
+                                                <tr className="align-middle text-start">
+                                                    <th scope="row">{ind + 1}</th>
+                                                    <td className="cp">
+                                                        <span className="namelink"> {ele?.firstName.charAt(0).toUpperCase() + ele?.firstName.slice(1)} {ele?.lastName.charAt(0).toUpperCase() + ele?.lastName.slice(1)} </span>
+                                                    </td>
+                                                    <td className='namelink'>{ele?.role}</td>
+                                                    <td className="w-20">
+                                                        <span className="namelink"> {ele?.email}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span className="namelink">
+                                                            {moment(ele?.createdAt).format("DD/MM/YYYY")}
+                                                        </span>
+                                                    </td>
+                                                    <td className='d-flex align-items-center gap-1'>
+                                                        <i
+                                                            className="mdi mdi-delete cursor_p  fs-5"
+                                                            onClick={() => {
+                                                                handeldelete(ele);
+                                                            }}></i>
+                                                        <BiSolidDownload className='fs-4 cursor_p' onClick={() => {
+                                                            handelCsvDownload(ele);
+                                                        }} />
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <Pagination
+                                            defaultPage={skip}
+                                            count={store?.getAllUsers?.data?.totalPages}
+                                            color="primary"
+                                            variant="outlined"
+                                            onChange={handlePaginationChange}
+                                        />
+                                    </tr>
+                                </tfoot>
+                            </Table>
+                        </>
                     )}
                     <CSVLink
                         data={csvdownload}

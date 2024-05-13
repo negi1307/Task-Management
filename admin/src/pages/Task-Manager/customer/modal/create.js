@@ -10,7 +10,6 @@ const Create = ({ modal, closemodal }) => {
     const store = useSelector((state) => state);
     const [selected, setSelected] = useState(['Web', 'Mobile']);
     const [addValue, setAddValue] = useState();
-    // console.log(selected ,"ppppppppppppppppppp")
     const dispatch = useDispatch();
     // create
     const customerCreateStatus = store?.addPreSaleReducer?.data?.status;
@@ -30,7 +29,6 @@ const Create = ({ modal, closemodal }) => {
         });
         setAddValue(remove);
     };
-    console.log(addValue, 'ttttttttttttttttttt');
     const closeModal = () => {
         closemodal();
     };

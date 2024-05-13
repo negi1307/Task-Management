@@ -11,7 +11,7 @@ function* createTechnologyCategoryFunction({ payload }) {
             payload: {}
         })
         const response = yield call(createTechnologyCategoryApi, { payload });
-        
+
         if (response.data.status) {
             yield put({
                 type: TECHNOLOGY_TYPES.CREATE_TECHNOLOGY_CATEGORY_SUCCESS,
@@ -44,7 +44,6 @@ function* getAllTechnologyCategoryFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getAllTechnologyCategoryApi, { payload });
-        console.log(response,"bbbvvv")
         if (response.data.status) {
             yield put({
                 type: TECHNOLOGY_TYPES.GET_TECHNOLOGY_CATEGORY_SUCCESS,
@@ -77,7 +76,6 @@ function* updateTechnologyCategoryFunction({ payload }) {
             payload: {}
         })
         const response = yield call(UpdateTechnologyCategoryApi, { payload });
-        console.log(response,"bbbvvv")
         if (response.data.status) {
             yield put({
                 type: TECHNOLOGY_TYPES.UPDATE_TECHNOLOGY_CATEGORY_SUCCESS,
@@ -148,7 +146,7 @@ function* createTechnologyFunction({ payload }) {
             payload: {}
         })
         const response = yield call(createTechnologyApi, { payload });
-        
+
         if (response.data.status) {
             yield put({
                 type: TECHNOLOGY_TYPES.CREATE_TECHNOLOGY_SUCCESS,
@@ -181,7 +179,6 @@ function* getAllTechnologyFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getAllTechnologyApi, { payload });
-        console.log(response,"bbbvvv")
         if (response.data.status) {
             yield put({
                 type: TECHNOLOGY_TYPES.GET_TECHNOLOGY_SUCCESS,
@@ -214,7 +211,6 @@ function* updateTechnologyFunction({ payload }) {
             payload: {}
         })
         const response = yield call(UpdateTechnologyApi, { payload });
-        console.log(response,"bbbvvv")
         if (response.data.status) {
             yield put({
                 type: TECHNOLOGY_TYPES.UPDATE_TECHNOLOGY_SUCCESS,
@@ -311,12 +307,12 @@ function* AllTechnologySaga(): any {
         fork(createTechnologyCategorySaga),
         fork(getAllTechnologyCategory),
         fork(updateTechnologyCategory),
-        fork (deleteTechnologyCategorySaga),
+        fork(deleteTechnologyCategorySaga),
 
         fork(createTechnologySaga),
         fork(getAllTechnology),
         fork(updateTechnology),
-        fork (deleteTechnologySaga),
+        fork(deleteTechnologySaga),
     ])
 }
 export default AllTechnologySaga;

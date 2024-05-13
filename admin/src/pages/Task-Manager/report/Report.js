@@ -78,7 +78,6 @@ function Report() {
     const dispatch = useDispatch();
     const [skip, setSkip] = useState(1);
     const userReport = store?.getReport?.data?.userProjects;
-    // console.log({ userReport })
     useEffect(() => {
         dispatch(getAllReports({ skip: 1 }));
     }, [dispatch])
@@ -108,7 +107,6 @@ function Report() {
                         </thead>
                         <tbody>
                             {userReport?.map((report, index) => {
-                                console.log(report); // Add console.log statement here
                                 return (
                                     <tr className='text-start' key={index}>
                                         <td className='fw-bold'>{index + 1}</td>

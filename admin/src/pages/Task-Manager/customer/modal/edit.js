@@ -9,7 +9,6 @@ import Multiselect from 'multiselect-react-dropdown';
 import DatePicker from 'react-datepicker';
 import { parseISO } from 'date-fns';
 const Edit = ({ modal, editData, closemodal }) => {
-    console.log(editData, 'mmmmmmmmmmmmmmmmmmm');
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const updatePreSaleStatus = store?.updatePreSaleReducer?.updatePreSale?.status;
@@ -23,7 +22,6 @@ const Edit = ({ modal, editData, closemodal }) => {
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     // disable previous date
     const today = new Date();
-    console.log(today, 'today');
     // end date
     const handleStartDate = (date) => {
         setStartDate(date);
@@ -40,7 +38,6 @@ const Edit = ({ modal, editData, closemodal }) => {
         watch,
         formState: { errors },
     } = useForm();
-    console.log(watch('status'), 'fffffffffffffffffffffff');
     const onSubmit = (data) => {
         dispatch(
             updatePreSalesData({
@@ -111,12 +108,9 @@ const Edit = ({ modal, editData, closemodal }) => {
         const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
         });
-        console.log(add[0]?._id, 'addddd');
         setAddValue([...addValue, add[0]?._id]);
-        console.log(addValue, 'addvalue info');
     };
     const removehandle = (selectedList, removedItem) => {
-        console.log(selectedList);
         const remove = getTechnology.filter((ele, ind) => {
             return ele?.techName !== removedItem;
         });

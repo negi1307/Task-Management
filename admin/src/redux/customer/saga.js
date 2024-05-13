@@ -2,14 +2,13 @@ import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import PreSaleType from './constant';
 import { getPreSaleApiEndPoint, addPreSaleApiEndPoint, updatePreSaleApiEndPoint, deletePreSaleApiEndPoint } from './api';
 
-function* getPreSale({payload}) {
+function* getPreSale({ payload }) {
     try {
         yield put({
             type: PreSaleType.GET_PRE_SALE_LOADING,
             payload: {}
         })
-        const response = yield call(getPreSaleApiEndPoint ,{ payload });
-        console.log(payload, ".......")
+        const response = yield call(getPreSaleApiEndPoint, { payload });
 
         if (response.data.status) {
             yield put({
@@ -47,7 +46,7 @@ function* addPreSale(data) {
             });
             yield put({
                 type: PreSaleType.ADD_PRE_SALE_RESET,
-                payload: {  },
+                payload: {},
             });
         }
         else {
@@ -66,7 +65,7 @@ function* addPreSale(data) {
     }
 }
 
-function* updatePreSale( data ) {
+function* updatePreSale(data) {
 
     try {
         yield put({
@@ -81,7 +80,7 @@ function* updatePreSale( data ) {
             });
             yield put({
                 type: PreSaleType.UPDATE_PRE_SALE_RESET,
-                payload: {  },
+                payload: {},
             });
         }
         else {
@@ -114,7 +113,7 @@ function* deletePreSale(id) {
             });
             yield put({
                 type: PreSaleType.DELETE_PRE_SALE_RESET,
-                payload: {  },
+                payload: {},
             });
         }
         else {

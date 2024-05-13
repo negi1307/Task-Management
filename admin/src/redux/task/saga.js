@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import TASK_TYPES from './constant';
-import { AddCommentApi, GetAssignUserApi,getReporterListApi, GetHistoryApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi,updateTaskStatusApi, getBugsApi,createSubtaskApi, getSubTaskApi, getHistoryApi } from './api';
+import { AddCommentApi, GetAssignUserApi, getReporterListApi, GetHistoryApi, GetTaskSummaryApi, TaskStatusApi, UpdateCommentApi, UpdateTaskApi, createTaskApi, deleteCommentApi, deleteTaskApi, getAllTaskApi, getCommentApi, getSingleSprintTaskApi, updateTaskStatusApi, getBugsApi, createSubtaskApi, getSubTaskApi, getHistoryApi } from './api';
 
 function* createSubTaskFunction({ payload }) {
     try {
@@ -82,7 +82,6 @@ function* getSingleSprintTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getSingleSprintTaskApi, { payload });
-        // console.log(response, "bbbvvv")
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_SINGLE_SPRINT_TASK_SUCCESS,
@@ -533,7 +532,7 @@ function* getReporterFunction({ payload }) {
 
 
 function* getHistoryFunction({ payload }) {
-  
+
 
     try {
         yield put({
@@ -583,7 +582,6 @@ function* getBugsFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getBugsApi, { payload });
-        // console.log(response, '3333333333333333333333333333333333333333333333333333333333')
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_BUGS_SUCCESS,
@@ -623,7 +621,6 @@ function* getSubTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getSubTaskApi, { payload });
-        console.log(response, '3333333333333333333333333333333333333333333333333333333333')
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_SUBTASK_SUCCESS,

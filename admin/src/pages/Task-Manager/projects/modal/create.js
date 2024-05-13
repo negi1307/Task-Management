@@ -4,20 +4,16 @@ import { Controller } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-// import * as yup from 'yup';
-
 import { Row, Col, Card, Button, Alert, CloseButton, FormControl } from 'react-bootstrap';
 import { addProject } from '../../../../redux/projects/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import MainLoader from '../../../../constants/Loader/loader';
-//import Multiselect from 'multiselect-react-dropdown';
 import { getAllTechnology } from '../../../../redux/technology/action';
 import { getAllProjects } from '../../../../redux/projects/action';
 import Multiselect from 'multiselect-react-dropdown';
 import DatePicker from 'react-datepicker';
 import '../../../../../node_modules/react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
-// import "../../../../../node_modules/"
 const Create = ({ modal, closeModal }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -28,12 +24,8 @@ const Create = ({ modal, closeModal }) => {
     const [addValue, setAddValue] = useState('');
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
-    // console.log(startDate, 'hiiiiiiiiiiiiiiiiiiiiiiiiiiii');
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
-    // disable previous date
     const today = new Date();
-    // console.log(today, 'today');
-    // end date
     const handleStartDate = (date) => {
         setStartDate(date);
     };
@@ -41,7 +33,6 @@ const Create = ({ modal, closeModal }) => {
         setEndDate(date);
     };
 
-    //
     // const validationSchema = yup.object().shape({
     //     projectName: yup.string().required('Project Name is required'),
     //     clientName: yup.string().required('Client Name is required'),
@@ -78,7 +69,6 @@ const Create = ({ modal, closeModal }) => {
         if (errorhandel?.data?.status == 200) {
             ToastHandle('success', 'Successfully added');
             closeModal('render');
-            // console.log(addValue)
         } else if (errorhandel?.data?.status == 400) {
             ToastHandle('error', errorhandel?.data?.message);
         } else if (errorhandel?.data?.status == 500) {
@@ -90,7 +80,6 @@ const Create = ({ modal, closeModal }) => {
         setStartDate('');
         setEndDate('');
         setAddValue('')
-        // console.log(addValue)
     }, [modal]);
     const removehandle = (selectedList, removedItem) => {
         const remove = getTechnology.filter((ele, ind) => {
@@ -100,7 +89,6 @@ const Create = ({ modal, closeModal }) => {
         if (index !== -1) {
             addValue.splice(index, 1);
             setAddValue(addValue);
-            // console.log('remove', addValue);
         } else {
             setAddValue(null);
         }
@@ -111,7 +99,6 @@ const Create = ({ modal, closeModal }) => {
             return ele?.techName == selectItem;
         });
         setAddValue([...addValue, add[0]._id]);
-        // reset();
     };
 
     useEffect(() => {
@@ -225,9 +212,8 @@ const Create = ({ modal, closeModal }) => {
                                                 placeholder="Select Technology"
                                                 {...register('technology')}
                                             />
-
                                         </Form.Group>
-                                        {/* {errors.technology && (<span className='text-danger'>This field is required *</span>)} */}
+                                        {errors.technology?.type === 'required' && (<span className='text-danger'>This field is required *</span>)}
                                     </Col>
                                 </Row>
 
@@ -247,10 +233,7 @@ const Create = ({ modal, closeModal }) => {
                                                 required
                                                 className="add_width_input"
                                             />
-                                            {/* {errors.pickdate && (<span className='text-danger'>This field is required *</span>)} */}
                                         </Form.Group>
-
-
                                     </Col>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
@@ -268,7 +251,6 @@ const Create = ({ modal, closeModal }) => {
                                                 className="add_width_input"
                                             // {...register('end_date', { required: true })}
                                             />
-                                            {/* {errors.end_date && (<span className='text-danger'>This field is required *</span>)} */}
 
                                         </Form.Group>
                                     </Col>

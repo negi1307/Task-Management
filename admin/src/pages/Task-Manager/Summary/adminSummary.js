@@ -76,7 +76,6 @@ const AdminDashboard = () => {
         }
         const usertasks = store?.getuserTasks?.data?.response;
         if (usertasks) {
-            // console.log({ usertasks })
             setuserDataCount(usertasks)
         }
 
@@ -156,11 +155,9 @@ const AdminDashboard = () => {
 
     // Event handlers for div hover
     const handleMouseEnter = () => {
-        console.log("Mouse entered div");
     };
 
     const handleMouseLeave = () => {
-        console.log("Mouse left div");
     };
 
     // Event handler for circle hover

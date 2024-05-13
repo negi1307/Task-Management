@@ -21,7 +21,6 @@ const Create = ({ modal, CloseModal }) => {
     const [endDate, setEndDate] = useState();
     // disable previous date
     const today = new Date();
-    // console.log(today, 'today');
     // end date
     const handleStartDate = (date) => {
         setStartDate(date);
@@ -83,7 +82,6 @@ const Create = ({ modal, CloseModal }) => {
         body.append('attachment', selectedFile);
 
         dispatch(createTask(body));
-        // console.log('project', projectId, 'mile', milestoneId, 'sprint', spriteId, 'suummary', e.summary, 'descrip', e.description, 'reporterId', e.Reporter, 'assign', e.Assignee, 'prior', e.Priority,)
         setValue('projectname', '');
         setValue('Milestone', '');
         setsprintDisable(true)
@@ -119,7 +117,6 @@ const Create = ({ modal, CloseModal }) => {
         CloseModal();
     };
     useEffect(() => {
-        // console.log(Createhandel?.data?.status, '////////');
         if (Createhandel?.data?.status == 200) {
             CloseModal('render');
             ToastHandle('success', Createhandel?.data?.message);

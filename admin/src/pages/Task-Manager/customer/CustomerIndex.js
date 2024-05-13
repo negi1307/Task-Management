@@ -122,7 +122,6 @@ const CustomerIndex = () => {
                                     <tbody>
                                         <>
                                             {preSaleData?.map((ele, ind) => {
-                                                console.log(ele?.stage, '=-');
                                                 return (
                                                     <tr className="align-middle">
                                                         <th scope="row">{(skip - 1) * 10 + ind + 1}</th>

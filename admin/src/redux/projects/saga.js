@@ -45,7 +45,6 @@ function* getProjectFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getProjectApi, { payload });
-        // console.log(payload, ".......")
 
         if (response.data.status) {
             yield put({
@@ -80,7 +79,6 @@ function* getProjectsCountFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getProjectsCountApi, { payload });
-        // console.log(payload, ".......")
 
         if (response.data.status) {
             yield put({
@@ -189,7 +187,6 @@ function* getProjectByIdFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getProjectByIdApi, { payload });
-        console.log(response, "bbbvvv")
         if (response.data.status) {
             yield put({
                 type: ProjectTypes.GET_PROJECT_BY_ID_SUCCESS,
@@ -223,7 +220,6 @@ function* getprojectUsersfunction({ payload }) {
             payload: {}
         })
         const response = yield call(getprojectUsersApi, { payload });
-        // console.log(payload, ".......")
 
         if (response.data.status) {
             yield put({

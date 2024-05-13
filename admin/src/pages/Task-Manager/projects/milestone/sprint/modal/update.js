@@ -63,7 +63,6 @@ const Update = ({ modal, closeModal, editData }) => {
             }
         }
     }, [modal]);
-    // console.log(editData, 'pppppp');
 
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {

@@ -13,7 +13,6 @@ const StackedAreaChart = (): React$Element<any> => {
             stacked: true,
             events: {
                 selection: function (chart, e) {
-                    console.log(new Date(e.xaxis.min));
                 },
             },
         },
