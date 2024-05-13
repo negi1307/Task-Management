@@ -14,7 +14,6 @@ import '../../../../../node_modules/react-datepicker/dist/react-datepicker.css';
 import { parseISO } from 'date-fns';
 
 const Update = ({ modal, closeModal, editData }) => {
-    // console.log(editData);
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const sucesshandel = store?.updateProject;
@@ -72,7 +71,6 @@ const Update = ({ modal, closeModal, editData }) => {
         // setEndDate(editData?.endDate);
     }, [modal]);
     const removehandle = (selectedList, removedItem) => {
-        console.log(selectedList);
         const remove = getTechnology.filter((ele, ind) => {
             return ele?.techName !== removedItem;
         });
@@ -90,9 +88,7 @@ const Update = ({ modal, closeModal, editData }) => {
         const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
         });
-        // console.log(add[0], 'addddd');
         setAddValue([...addValue, add[0]]);
-        // console.log(addValue, 'addvalue info');
     };
 
     const onSubmit = (data) => {
@@ -106,16 +102,13 @@ const Update = ({ modal, closeModal, editData }) => {
             technology: addValue,
             projectStatus: data?.projectstatus,
         };
-        // console.log('fsadsadsadsa', addValue);
         dispatch(updateProject(body));
         ToastHandle('success', "Project Updated Successfully");
     };
     const selectedValues = editData?.technology?.map((item) => {
         return item.techName;
     });
-    // console.log(selected, 'aadadasa');
     // useEffect(() => {
-    //     // console.log('llllllllll');
     //     if (sucesshandel?.data?.status == 200) {
     //         ToastHandle('success', 'Project Updated Successfully');
     //         closeModal('render');

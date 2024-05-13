@@ -36,13 +36,11 @@ const Update = ({ modal, CloseModal, editData }) => {
             startDate: data?.startDate,
             endDate: data?.endDate,
         };
-        // console.log('editsprit', body);
         dispatch(updateSprint(body));
     };
     //editor state
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
     const textEditorOnchange = (e) => {
-        console.log(e, 'edi');
     };
     useEffect(() => {
         reset({
@@ -52,7 +50,6 @@ const Update = ({ modal, CloseModal, editData }) => {
             endDate: handleDate(editData?.endDate),
         });
     }, [modal]);
-    // console.log(editData, 'pppppp');
     const handleDate = (data) => {
         let date = new Date(data);
         let year = date.toLocaleString('default', { year: 'numeric' });

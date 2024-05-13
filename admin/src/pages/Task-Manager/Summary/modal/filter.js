@@ -126,7 +126,6 @@ const FilterModal = ({ showFilter, closeFilter, setfilterModal }) => {
 
         const totalTime = store?.getusersDataReducer?.data?.totalTime;
         if (totalTime !== undefined) {
-            console.log({ totalTime })
         }
         // Add total time row to total time CSV data
         totalTimeCsvData.push({

@@ -1,29 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Row, Col, Breadcrumb, Badge } from 'react-bootstrap';
 import styled from '@emotion/styled';
 import { columnsFromBackend } from './data';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
-import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { getAllTask, updateTask } from '../../../redux/actions';
-import { v4 as uuidv4 } from 'uuid';
+import { getAllTask } from '../../../redux/actions';
 import { FaFilter } from "react-icons/fa";
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
-import { getAssignUserAction, getsingleSprintTask, getComment, getHistoryAction, updateTaskStatus } from '../../../../src/redux/task/action';
+import { getAssignUserAction, updateTaskStatus } from '../../../../src/redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
-import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
-import Modal from 'react-bootstrap/Modal';
-import { Button } from 'react-bootstrap';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { deleteTask, getAllProjects, getAllRoles, getAllUsers, getsingleMileStone } from '../../../redux/actions';
-import { getSingleSprint } from '../../../redux/sprint/action';
-import { getSprintId } from '../../../redux/sprint/reducres';
-import { getMilestoneId, getMilestonetId } from '../../../redux/milestone/reducer';
-import { getProjectId } from '../../../redux/projects/reducers';
+import { getAllRoles } from '../../../redux/actions';
 import { TiPlus } from "react-icons/ti";
 import Select from 'react-select';
 
@@ -88,7 +78,6 @@ const Title = styled.span`
 const Boards = () => {
     const { projectId, milestoneId, spriteId, projectName, milestoneName, sprintName } = useParams();
     const projectDetail = projectName;
-    console.log({ sprintName })
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.getAllTaskReducer;
@@ -102,7 +91,6 @@ const Boards = () => {
     const [projectNameHeading, setProjectName] = useState('Select Project Name');
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
-    // console.log(projectName, '6666666666666666666666666')
     const sprintId = store?.getSprintId?.data;
     const taskId = store?.getTaskId?.data;
     const CreateCommenthandel = store?.AddCommentReducer;
@@ -174,7 +162,6 @@ const Boards = () => {
                 },
             });
             handelupdatetask(result);
-
         }
     };
 
@@ -188,18 +175,6 @@ const Boards = () => {
         dispatch(getAllRoles())
         setColumns(columns);
     }, [render]);
-    const closeaddModal = () => {
-        getalltasks();
-    }
-    const deleteTask = () => {
-
-    }
-    const getalltasks = () => {
-        // dispatch(getAllTask({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId, searchString: '' }));
-        // dispatch(getAssignUserAction({ projectId: projectId, milestoneId: milestoneId, sprintId: spriteId }));
-        // dispatch(getAllRoles())
-    }
-
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
             setColumns({
@@ -246,24 +221,19 @@ const Boards = () => {
             });
         }
     }, [successHandle]);
-
     const handelupdatetask = (ele) => {
         let body = {
             taskId: ele?.draggableId,
-            status: ele?.destination?.droppableId
+            status: ele?.destination?.droppableId,
         };
         dispatch(updateTaskStatus(body));
         setloader(false);
-
     };
-
-
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
         }
     };
-
     useEffect(() => {
         if (statushandle?.data?.status == 200) {
             closeModal('render');
@@ -273,7 +243,6 @@ const Boards = () => {
             ToastHandle('error', statushandle?.message?.error);
         }
     }, [statushandle]);
-
     const handleSearchChange = (e) => {
         e.preventDefault();
         setSearch(e.target.value);
@@ -286,7 +255,6 @@ const Boards = () => {
             })
         );
     };
-
     const handleAssigneefilter = (e) => {
         const assigneeId = e.target.value;
         setassigneeId(assigneeId);
@@ -297,7 +265,6 @@ const Boards = () => {
         }));
         setassigneeSelected(true);
     };
-
     const handleTaskDelete = () => {
         dispatch(getAllTask({ sprintId: spriteId, searchString: '' }));
     };
@@ -426,7 +393,6 @@ const Boards = () => {
                             onFormSubmit={handleFormSubmit}
                             showModal={showModal}
                             columns={columns}
-                            closeModal={closeaddModal}
                             setShowModal={setShowModal}
                             centered
                         />

@@ -8,7 +8,6 @@ function* getTimeTrackerFunction() {
             payload: {}
         })
         const response = yield call(getTimeTrackerApi);
-        // console.log(response, 'resss')
         if (response.data.status) {
             yield put({
                 type: TIME_TRACKER_TYPES.GET_TIME_TRACKER_SUCCESS,
@@ -36,7 +35,6 @@ function* getUserRecordFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getUserRecordApi, { payload });
-        // console.log(response, 'resss')
         if (response.data.status) {
             yield put({
                 type: TIME_TRACKER_TYPES.GET_USER_RECORD_SUCCESS,

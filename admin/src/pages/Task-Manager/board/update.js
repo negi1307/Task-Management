@@ -38,7 +38,7 @@ const UpdateTask = ({ modal, closeModal, editData, projectId, milestoneId, colum
     const handleEndDate = (date) => {
         setEndDate(date);
     };
-    // console.log(editData, 'update');
+    // (editData, 'update');
     const [data, setData] = useState({
         image: '',
     });
@@ -74,14 +74,12 @@ const UpdateTask = ({ modal, closeModal, editData, projectId, milestoneId, colum
         body.append('status', val?.status);
         body.append('attachment', data?.image);
 
-        console.log('editsprit', body);
         dispatch(updateTask(body));
         closeModal();
         ToastHandle('success', "Task updated successfully")
     };
 
     useEffect(() => {
-        // console.log(editData, "lalalalalaalalalalalalalala")
         reset({
             projectname: editData?.projectInfo?._id,
             Milestone: editData?.milestoneInfo?._id,

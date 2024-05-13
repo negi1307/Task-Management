@@ -139,10 +139,11 @@ const Projects = () => {
             // projectId: '66026a37b110e4325bc045fc',
             milestoneId: '',
             skip: value,
-            activeStatus: true
+            activeStatus: true,
         };
         dispatch(getAllProjects(body));
     };
+
     return (
         <>
             <div>
@@ -273,12 +274,11 @@ const Projects = () => {
                                                 <td scope="row">{ind + 1}</td>
                                                 <td className="cp">
                                                     <Link to={`/dashboard/projects/${ele._id}`}>
-                                                        <span className="namelink text-dark">{ele.projectName}</span>
+                                                        <span className="namelink text-dark">{ele?.projectName.charAt(0).toUpperCase() + ele?.projectName.slice(1)}</span>
                                                     </Link>
                                                 </td>
-
                                                 <td className="w-20">
-                                                    <span className="namelink">{ele.clientName}</span>
+                                                    <span className="namelink">{ele.clientName.charAt(0).toUpperCase() + ele.clientName.slice(1)}</span>
                                                 </td>
                                                 <td>
                                                     <span className="namelink">{ele.projectType}</span>

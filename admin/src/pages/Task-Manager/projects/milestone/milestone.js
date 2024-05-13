@@ -26,7 +26,6 @@ const Milestone = () => {
     const [render, setRender] = useState(false);
     const [status, setStatus] = useState(1);
     const GetSinglemilstonesData = store?.getSigleMileStone?.data?.response;
-    // console.log(GetSinglemilstonesData, '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
     const loaderhandel = store?.getSigleMileStone;
     const [skip, setSkip] = useState(1);
     const [checkedStatus, setCheckedStatus] = useState();
@@ -221,7 +220,7 @@ const Milestone = () => {
                                                             <td className='text-start'>
                                                                 <Link
                                                                     to={`/dashboard/singleMilestonesprint/${item?.projectId}/${item?._id}`}>
-                                                                    <span className="namelink text-secondary"> {item?.title} </span>
+                                                                    <span className="namelink text-secondary"> {item?.title.charAt(0).toUpperCase() + item?.title.slice(1)} </span>
 
                                                                 </Link>
                                                             </td>
@@ -230,7 +229,7 @@ const Milestone = () => {
                                                                     placement="top"
                                                                     overlay={<Tooltip id={`tooltip-${index}`}>{item?.description}</Tooltip>}
                                                                 >
-                                                                    <span>{truncateDescription(item?.description)}</span>
+                                                                    <span>{truncateDescription(item?.description.charAt(0).toUpperCase() + item?.description.slice(1))}</span>
                                                                 </OverlayTrigger>
                                                             </td>
 
@@ -258,7 +257,6 @@ const Milestone = () => {
                                                                         </p>
                                                                         {userRole !== "Testing" && (
                                                                             <p className="action-icon m-0 p-0  ">
-                                                                                {/* {console.log(item, 'itemmmmmmmm')} */}
                                                                                 <i
                                                                                     onClick={() => {
                                                                                         handelUpdate(item);

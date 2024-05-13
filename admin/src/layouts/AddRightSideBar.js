@@ -20,7 +20,6 @@ export default function RightBar(props) {
 
     // disable previous date
     const today = new Date();
-    // console.log(today, 'today');
     // end date
     const handleStartDate = (date) => {
         setStartDate(date);
@@ -39,7 +38,6 @@ export default function RightBar(props) {
     const { showModal, setShowModal, columns, content, projectId, mileStoneId, sprintId, onFormSubmit, projectName, milestoneName, sprintName } = props;
     const [selectedFile, setSelectedFile] = useState('');
     // const createTaskResponse = store?.createTaskReducer?.data?.response?.status;
-    // console.log(createTaskResponse, 'createTaskResponse')
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -52,9 +50,6 @@ export default function RightBar(props) {
     };    //For the values in the disabled fields
 
     const allDetails = columns?.[1]?.items[0];
-    // console.log(allDetails, 'kjbf')
-    //////////////////////////
-
     const openFileInput = () => {
         document.getElementById('fileInput').click();
     };

@@ -93,10 +93,8 @@ const AllMillStones = () => {
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            console.log('wdfv')
                             <tbody>
                                 {getallmilestones?.map((ele, ind) => {
-                                    console.log(ele?.status, 'apidata');
                                     return (
                                         <tr className="align-middle">
                                             <th scope="row">{ind + 1}</th>

@@ -106,7 +106,7 @@ const AUTH_SESSION_KEY = 'hyper_user';
 
 /**
  * Sets the default authorization
- * @param {*} token
+  @param {} token
  */
 // const setAuthorization = (token) => {
 

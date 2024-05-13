@@ -12,7 +12,6 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
     const dispatch = useDispatch();
     const [description, setDescription] = useState('');
-    // console.log(description,"descriptionnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
     const store = useSelector((state) => state);
     const errorhandel = store?.createTaskReducer;
     // disable previous date

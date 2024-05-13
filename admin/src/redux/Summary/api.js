@@ -4,7 +4,6 @@ const api = new APICore();
 
 export function GetTaskSummaryApi(params: any): any {
     const { data } = params;
-    // console.log(data?.payload, 'apiii')
     return api.get(URL.TaskSummaryDetail, data?.payload);
 }
 export function GetPriorityGraphApi(data): any {

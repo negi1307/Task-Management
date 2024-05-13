@@ -40,7 +40,6 @@ function* getAllCategoryFunction({ payload }) {
             payload: {},
         });
         const response = yield call(getallCategoryApi, { payload });
-        console.log(response, '4555')
 
         if (response.data.status) {
             yield put({
@@ -167,7 +166,6 @@ function* getCsvFunction({ payload }) {
             payload: {},
         });
         const response = yield call(getCsvDataApi, { payload });
-        console.log(response?.data?.loginRecords, 'dddddddd');
         if (response.data.status) {
             yield put({
                 type: USERS_TYPES.GET_CSV_DATA_SUCCESS,
@@ -198,7 +196,6 @@ function* getuserTasksFunction({ payload }) {
             payload: {},
         });
         const response = yield call(getuserTasksApi, { payload });
-        // console.log(response?.data?.loginRecords, 'dddddddd');
         if (response.data.status) {
             yield put({
                 type: USERS_TYPES.GET_USER_TASKS_SUCCESS,

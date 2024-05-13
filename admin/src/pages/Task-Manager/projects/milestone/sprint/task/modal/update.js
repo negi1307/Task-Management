@@ -13,7 +13,6 @@ import { updateTask } from '../../../../../../../redux/actions';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const Update = ({ modal, CloseModal, editData }) => {
-    console.log(editData, 'update');
     const [imageShow, setImageShow] = useState(true);
     const [description, setDescription] = useState('');
     const [data, setData] = useState({
@@ -52,7 +51,6 @@ const Update = ({ modal, CloseModal, editData }) => {
     const CloseModaal = () => {
         CloseModal();
     };
-    console.log(editData?.projectId, ' projecttiddddddddddddddddddddddd');
     const onSubmit = (val) => {
         let body = new FormData();
         body.append('taskId', editData?._id);
@@ -68,7 +66,6 @@ const Update = ({ modal, CloseModal, editData }) => {
         body.append('dueDate', val?.dueDate);
         body.append('status', val?.status);
         body.append('attachment', data?.image);
-        console.log('editsprit', body);
         dispatch(updateTask(body));
     };
     useEffect(() => {
@@ -88,7 +85,6 @@ const Update = ({ modal, CloseModal, editData }) => {
         setData({ ...data, image: editData?.attachment });
         setImageShow(true);
     }, [modal]);
-    console.log(editData, 'pppppp');
     const handleDate = (data) => {
         let date = new Date(data);
         let year = date.toLocaleString('default', { year: 'numeric' });

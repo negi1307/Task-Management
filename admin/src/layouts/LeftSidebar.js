@@ -85,7 +85,6 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
     }
 
     useEffect(() => {
-        console.log(MenuItems(), "=========we");
         document.addEventListener('mousedown', handleOtherClick, false);
 
         return () => {

@@ -13,10 +13,8 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const Summary = () => {
     const { projectId, milestoneId, spriteId } = useParams();
-    // console.log(projectId, milestoneId, spriteId); // Check if URL parameters are correct
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    // console.log(store); // Check store to see if data is being fetched
 
     const successHandle = store?.getTaskSummaryReducer;
     const BarGraphHandel = store?.getPriorityGraphReducer;
@@ -24,8 +22,6 @@ const Summary = () => {
     const [taskCount, setTaskCount] = useState(null);
     const [historyResponse, setHistoryResponse] = useState(null);
     const statusCount = store?.getAllTaskReducer?.data?.Response;
-    // console.log({ statusCount })
-    // console.log(lastWeekCount); // Check if data is being fetched
     const [data, setData] = useState([]);
     // const [barGraphData, setBarGraphData] = useState();
     useEffect(() => {
@@ -50,7 +46,6 @@ const Summary = () => {
 
     const priorityData = store?.getPriorityGraphReducer?.data?.response;
 
-    // console.log({ spriteId })
 
     useEffect(() => {
         dispatch(getTaskWeekCountAction({ sprintId: spriteId }));

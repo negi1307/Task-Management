@@ -57,7 +57,6 @@ export const addSprint = (state = ADD_SPRINT_INITIAL_STATE, action) => {
 };
 // get single sprint--------------------------------
 export const getAllSingleSprints = (state = GET_SINGLE_SPRINT_INITIAL_STATE, action) => {
-    // console.log(action.payload, 'reducer')
 
     switch (action.type) {
         case SprintTypes.GET_ALL_SINGLE_SPRINT_LOADING:

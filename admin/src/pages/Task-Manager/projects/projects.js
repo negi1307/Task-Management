@@ -15,7 +15,6 @@ import HeaderMain from '../header/HeaderMain';
 import Pagesaddtask from '../../../layouts/AllPagesRightbar';
 import { getAssignUserAction } from '../../../redux/task/action';
 import { getAllTask, getAllRoles } from '../../../redux/actions'
-// import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Projects = () => {
     const dispatch = useDispatch();
@@ -37,14 +36,12 @@ const Projects = () => {
     const [showModal, setShowModal] = useState(false);
     const [formSubmitted, setFormSubmitted] = useState(false);
     const updateResponse = store?.updateProject?.data?.status;
-
     const sessionData = sessionStorage.getItem('hyper_user');
     const userData = JSON.parse(sessionData);
     const userRole = userData?.role;
     const closeaddModal = () => {
         // getalltasks();
     }
-
     const handeldelete = (ele) => {
         setdeleteId(ele?._id);
         setDeleteModal(true);
@@ -74,8 +71,7 @@ const Projects = () => {
         updateProjectList();
     };
     const handleYes = async () => {
-        let successMessage = ''; // Define successMessage here
-
+        let successMessage = '';
         try {
             if (checkedStatus) {
                 let body = {
@@ -95,21 +91,16 @@ const Projects = () => {
         } catch (error) {
             console.error("Error updating project:", error);
         }
-
         // Show toast with success message
         ToastHandle('success', successMessage);
-
         // Close the status modal
         setStatusModal(false);
     };
 
-
     const handleStatusChange = async (e, data) => {
         if (userRole === 'Testing') {
-            // Show toast indicating that testing user cannot change status
-            // Adjust the ToastHandle function according to your toast implementation
             ToastHandle('error', 'Tester is not allowed to change project status');
-            return; // Return early, preventing further execution
+            return;
         }
 
         if (e.target.checked) {
@@ -132,20 +123,20 @@ const Projects = () => {
             dispatch(getAllProjects({ status: 0, skip: 1, projectStatus: projectStatus }));
         }
     };
+
     useEffect(() => {
-        // Set initial projectStatus to "Ongoing"
         setprojectStatus('Ongoing');
         let body = {
             status: status,
             skip: skip,
-            projectStatus: 'Ongoing', // Hardcode for initial fetch
+            projectStatus: 'Ongoing',
         };
         dispatch(getAllProjects(body));
         if (updateResponse === '200') {
             dispatch(getAllProjects({ status: status, skip: skip, projectStatus: projectStatus }));
-            // ToastHandle('success', 'Project status updated successfully');
         }
     }, [status, skip, updateResponse]);
+
     useEffect(() => {
         if (deletehandle?.status == 200) {
             ToastHandle('success', deletehandle?.message);
@@ -160,7 +151,6 @@ const Projects = () => {
         setSkip(value);
         dispatch(getAllProjects({ status: status, skip: value, projectStatus: projectStatus }));
     };
-
 
     const handleProjectStatus = (val) => {
         if (val === '1') {
@@ -203,11 +193,6 @@ const Projects = () => {
                                             Delivered
                                         </p>
                                     </div>
-                                    {/* <div className={`col-auto  cp ${projectStatus == 4 ? 'Active_data' : 'InActive_data'}`}>
-                                    <p className=" p-0 m-0 p-1 cp" onClick={() => handleProjectStatus('4')}>
-                                        Completed
-                                    </p>
-                                </div> */}
                                 </div>
                             )}
 
@@ -241,7 +226,6 @@ const Projects = () => {
                                         type="button"
                                         className="mybutton btn p-1 fw-bold py-1  web_button"
                                         onClick={() => {
-                                            // console.log('button click');
                                             // handeladdtask()
                                             setShowModal(!showModal);
                                             // dispatchActions();
@@ -295,11 +279,11 @@ const Projects = () => {
                                                 <td className="cp text-start">
 
                                                     <Link to={`/dashboard/projects/${ele?._id}`}>
-                                                        <span className="namelink text-secondary"> {ele?.projectName} </span>
+                                                        <span className="namelink text-secondary"> {ele?.projectName.charAt(0).toUpperCase() + ele?.projectName.slice(1)} </span>
                                                     </Link>
                                                 </td>
                                                 <td className="text-start w-20">
-                                                    <span className="namelink"> {ele?.clientName}</span>
+                                                    <span className="namelink"> {ele?.clientName.charAt(0).toUpperCase() + ele?.clientName.slice(1)}</span>
                                                 </td>
                                                 <td className='text-start'>
                                                     <span className="text-start namelink"> {ele?.projectType}</span>
@@ -327,6 +311,7 @@ const Projects = () => {
                                                 <td className='text-start'>
                                                     <Row>
                                                         <Col>
+
                                                             <p className="action-icon m-0 p-0 ">
                                                                 <Link to={`/dashboard/projects/${ele?._id}`}>
                                                                     <i className="mdi mdi-eye m-0 p-0"></i>

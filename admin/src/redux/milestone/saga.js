@@ -148,7 +148,6 @@ function* getMileStoneFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getMileStoneApi, { payload });
-        console.log(response, "bbbvvv")
         if (response.data.status) {
             yield put({
                 type: MileStoneType.GET_ALL_MILESTONE_BY_ID_SUCCESS,
@@ -223,7 +222,6 @@ function* getSingleMileStoneFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getSinleMileStoneApi, { payload });
-        console.log(response, "bbbvvv")
         if (response.data.status) {
             yield put({
                 type: MileStoneType.GET_SINGLE_MILESTONE_SUCCESS,

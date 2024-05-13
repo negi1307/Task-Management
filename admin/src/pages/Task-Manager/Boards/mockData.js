@@ -49,7 +49,6 @@ const Done = {
 };
 
 export const authors = [ToDo, InProgress, InReview, Done];
-console.log(authors,"&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&7");
 
 export const quotes = [
   {

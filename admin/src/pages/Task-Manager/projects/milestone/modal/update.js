@@ -20,7 +20,6 @@ const Update = ({ modal, closeModal, editData }) => {
     const [endDate, setEndDate] = useState();
     // disable previous date
     const today = new Date();
-    // console.log(today, 'today');
     // end date
     const handleStartDate = (date) => {
         setStartDate(date);
@@ -74,7 +73,6 @@ const Update = ({ modal, closeModal, editData }) => {
     };
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
-            // console.log(sucesshandel, sucesshandel?.message);
             ToastHandle('success', 'Updated Successfully');
             closeModal('render');
         } else if (sucesshandel?.data?.status == 400) {

@@ -10,7 +10,6 @@ function* TaskSummaryFunction({ payload }) {
             payload: {}
         })
         const response = yield call(GetTaskSummaryApi, { payload });
-        // console.log("dssfksf",payload)
         if (response.data.status) {
             yield put({
                 type: SUMMARY_TYPES.GET_TASK_SUMMARY_SUCCESS,
@@ -47,7 +46,6 @@ function* PriorityGraphFunction({ payload }) {
             payload: {}
         })
         const response = yield call(GetPriorityGraphApi, { payload });
-        console.log("dssfksf", payload)
         if (response.data.status) {
             yield put({
                 type: SUMMARY_TYPES.GET_PRIORITY_GRAPH_SUCCESS,
@@ -84,7 +82,6 @@ function* TaskWeekCountFunction({ payload }) {
             payload: {}
         })
         const response = yield call(GetTaskWeekCountApi, { payload });
-        // console.log("dssfksf", payload)
         if (response.data.status) {
             yield put({
                 type: SUMMARY_TYPES.GET_TASK_WEEK_COUNT_SUCCESS,
