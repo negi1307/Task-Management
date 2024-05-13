@@ -232,7 +232,19 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
 .all_bg {
     padding: 70px 0px;
     background-color: rgb(202 129 255 / 7%);
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+    padding-bottom: 30px;
+    /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
 }
+
+.all_bg::-webkit-scrollbar {
+    display: none; /* WebKit (Chrome, Safari, etc.) */
+}
+
+
 
 .bg_clr {
     background-color: rgb(238, 236, 236);

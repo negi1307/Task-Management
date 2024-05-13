@@ -25,6 +25,7 @@ import { getSprintId } from '../../../redux/sprint/reducres';
 import { getMilestoneId, getMilestonetId } from '../../../redux/milestone/reducer';
 import { getProjectId } from '../../../redux/projects/reducers';
 import { TiPlus } from "react-icons/ti";
+import Select from 'react-select';
 
 const Container = styled.div`
     display: flex;
@@ -300,6 +301,14 @@ const Boards = () => {
     const handleTaskDelete = () => {
         dispatch(getAllTask({ sprintId: spriteId, searchString: '' }));
     };
+    const options = [
+        { value: '', label: 'All Tasks' },
+        ...(store?.getAllUsers?.data?.response || []).map(ele => ({
+          value: ele?._id,
+          label: `${ele?.firstName} ${ele?.lastName}`
+        }))
+      ];
+
     return (
         <>
             <div className="add_task row d-flex  m-0 ">
@@ -325,6 +334,17 @@ const Boards = () => {
                                 </option>
                             ))}
                         </select>
+                        <div className='position-relative'>
+      <FaFilter className='position-absolute fs-6' style={{ left: '4%', top: '30%', fontWeight: '900' }} />
+      <Select
+        options={options}
+        onChange={handleAssigneefilter}
+        placeholder="Search or Select Assignee"
+        isClearable
+        isSearchable
+      />
+    </div>
+                      
                     </div>
                     {AssignUserName?.map((ele, ind) => (
                         <>

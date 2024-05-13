@@ -76,10 +76,10 @@ const Summary = () => {
     //     }
     // }
     return (
-        <div className="all_bg add_height_task" style={{ height: '100%' }}>
-            <div className="container">
+        <div className="all_bg ">
+            <div className="container h-100" >
                 <div className="row">
-                    <div className="col  border_clr  m-2 rounded-4 bg-white date">
+                    <div className="col  border_clr  m-2 rounded-4 bg-white date" >
                         <div className="d-flex flex-column justify-content-center countstatus">
                             <div className="bg_clrr bg_info_clr2">
                                 <i class="fa fa-plus" aria-hidden="true"></i>
@@ -239,7 +239,7 @@ const Summary = () => {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col border_clr  m-2 rounded-4 bg-white">
+                    <div className="col border_clr  m-2 rounded-4 bg-white" style={{height:'100vh'}}>
                         <div className="p-4 ">
                             <div className="col-12">
                                 <h5 className="mb-3 states">Priority breakdown</h5>

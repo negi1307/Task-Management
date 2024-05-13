@@ -11,7 +11,7 @@ const TaskBoard = () => {
     };
     return (
         <>
-            <div className="card">
+            <div className="card" >
                 <div className="card-body">
                     <div className="row mx-auto border-bottom mb-2">
                         <div className="row d-flex align-items-center pb-2">
