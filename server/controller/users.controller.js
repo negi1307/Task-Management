@@ -98,25 +98,32 @@ async function updateTaskStatus(existingUser) {
 
 const getUsers = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-
-    const name = req.query.name;
     let query = { role: { $ne: 'Admin' } };
 
-    if (name) {
-      query.$or = [
-        { firstName: { $regex: new RegExp(name, 'i') } },
-        { lastName: { $regex: new RegExp(name, 'i') } }
-      ];
+    // Check if the request payload is empty
+    if (Object.keys(req.query).length === 0) {
+      // If empty, return all users
+      const result = await userModel.find(query).sort({ createdAt: -1 });
+      return res.status(200).json({ status: "200", message: 'User data fetched successfully', response: result });
+    } else {
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const skip = (page - 1) * limit;
+      const name = req.query.name;
+
+      if (name) {
+        query.$or = [
+          { firstName: { $regex: new RegExp(name, 'i') } },
+          { lastName: { $regex: new RegExp(name, 'i') } }
+        ];
+      }
+
+      const count = await userModel.countDocuments(query);
+      const totalPages = Math.ceil(count / limit);
+      const result = await userModel.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit);
+
+      return res.status(200).json({ status: "200", message: 'User data fetched successfully', response: result, totalPages, page, count });
     }
-
-    const count = await userModel.countDocuments(query);
-    const totalPages = Math.ceil(count / limit);
-    const result = await userModel.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit);
-
-    return res.status(200).json({ status: "200", message: 'User data fetched successfully', response: result, totalPages, page, count });
   } catch (error) {
     return res.status(500).json({ status: "500", message: 'Something went wrong' });
   }
