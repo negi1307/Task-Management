@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import Addcomment from '../addcomment/constants';
-import { addTaskCommentApi, deleteTask, updateTask, getHistoryApi, getTaskCommentApi, getBugsApi, getSubTaskApi } from '../addcomment/api';
+import { addTaskCommentApi, deleteTask, updateTask, getHistoryApi, getTaskCommentApi, getBugsApi, getSubTaskApi, getUserRecordApi } from '../addcomment/api';
 
 function* addTaskCommentFunction({ payload }) {
     try {
@@ -129,7 +129,7 @@ function* updateTaskFunction({ payload }) {
 }
 
 function* getHistoryFunction({ payload }) {
-  
+
 
     try {
         yield put({
@@ -179,7 +179,7 @@ function* getSubTaskFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getSubTaskApi, { payload });
-        
+
         if (response.data.status) {
             yield put({
                 type: Addcomment.GET_SUBTASK_SUCCESS,
@@ -215,7 +215,7 @@ function* getBugsFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getBugsApi, { payload });
-        console.log(response,'3333333333333333333333333')
+        console.log(response, '3333333333333333333333333')
         if (response.data.status) {
             yield put({
                 type: Addcomment.GET_BUGS_SUCCESS,
