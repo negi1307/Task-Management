@@ -37,11 +37,13 @@ const api = new APICore();
 function* login({ payload: { username, password } }) {
     try {
         const response = yield call(loginApi, { email: username, password: password });
-        if (response?.data?.response?.role === "Admin" || "Testing" || 'CTO' || 'PM') {
+        if (response?.data?.response?.role === "Admin" || 'CTO') {
             // const { token, user } = response.data;
 
             // let { role } = user
             const user = response?.data;
+            console.log(user, "user");
+
             const data = response?.data?.response;
             const tokenData = response?.data;
             const userData = {

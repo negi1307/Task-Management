@@ -5,7 +5,7 @@ async function emailSender(user) {
         service: 'gmail',
         auth: {
             user: 'support@rowthtech.com',
-            pass: 'jzkaxixunjohaita'
+            pass: 'xmgcuyvkznuxclgq'
 
         }
     });

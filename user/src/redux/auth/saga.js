@@ -25,7 +25,7 @@ const api = new APICore();
 
 //     try {
 //         const response = yield call(loginApi, { userName: username, password: password });
-   
+
 
 //             if (response?.data?.status === '200') {
 //                 // const { token, user } = response.data;
@@ -42,7 +42,7 @@ const api = new APICore();
 //                     role: "Admin",
 //                     token:tokenData?.token,
 //                     // userData: response?.data?.response
-                    
+
 //                 };
 //             api.setLoggedInUser(userData);
 //             setAuthorization(user['token']);
@@ -63,8 +63,8 @@ function* login({ payload: { username, password } }) {
     try {
         const response = yield call(loginApi, { email: username, password: password });
 
-        if (response?.data?.response?.role === "Employee") {
-      
+        if (response?.data?.response?.role === "Employee" || "Testing" || 'PM') {
+
             // const { token, user } = response.data;
 
             // let { role } = user
@@ -72,22 +72,22 @@ function* login({ payload: { username, password } }) {
             const data = response?.data?.response;
             const tokenData = response?.data;
             const userData = {
-                userId:data?._id,
+                userId: data?._id,
                 // id: data?.roleId?._id,
                 username: data?.role,
                 password: 'test',
                 firstName: data?.firstName,
-                lastName:data?.lastName,
-              
+                lastName: data?.lastName,
+
                 token: tokenData?.token,
                 // userData: response?.data?.response
             };
-            
+
             api.setLoggedInUser(userData);
-                setAuthorization(user['token']);
-                yield put(authApiResponseSuccess(AuthActionTypes.LOGIN_USER, userData));
-        } 
-        else if (response?.data?.response?.role === 1 ){
+            setAuthorization(user['token']);
+            yield put(authApiResponseSuccess(AuthActionTypes.LOGIN_USER, userData));
+        }
+        else if (response?.data?.response?.role === 1) {
             yield put(authApiResponseError(AuthActionTypes.LOGIN_USER, "User Not Found"));
             api.setLoggedInUser(null);
             setAuthorization(null);
